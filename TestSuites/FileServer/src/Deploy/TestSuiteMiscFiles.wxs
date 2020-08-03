@@ -31,6 +31,8 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Pac.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Pac.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Claim.dll"/>
@@ -203,6 +205,12 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="{F1E4B363-7D3E-416C-92EE-B964F30861FE}">
         <File Id="filF1E4B3637D3E416C92EEB964F30861FE" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" Guid="{A364818F-BA8C-462C-8DAE-C1AE6CEA636D}">
+        <File Id="filA4DEC24D6022417982CB3D17A73A46F5" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" Guid="{3E60E8F8-D346-4B96-9D07-C03CB410A001}">
+        <File Id="fil22F8D29AC6A5405A832586FF29FB0A23" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Pac.dll" Guid="{D6DF452D-719D-4603-8460-2A93C5B8E3CE}">
         <File Id="fil931BD3AD2EA7C8DFB318BA83CF744632" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Pac.dll" />

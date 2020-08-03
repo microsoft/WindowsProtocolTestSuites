@@ -106,6 +106,10 @@
       <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
       <Name>Nlmp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MS-SPNG\Spng.csproj">
+      <Project>{16b76101-c213-4c61-91e6-bf0ff92be2c0}</Project>
+      <Name>Spng</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SspiLib\SspiLib.csproj">
       <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
       <Name>SspiLib</Name>

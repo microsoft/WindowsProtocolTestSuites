@@ -74,15 +74,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends NEGOTIATE request.");
             client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
 
+            var credential = TestConfig.AccountCredential;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends SESSION_SETUP request with SESSION_ID set to ZERO.");
-            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, credential, TestConfig.UseServerGssToken);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends another SESSION-SETUP request for reauthentication.");
             client.SessionSetup(
                 testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE, // The second session setup should set signed flag if server supports signing to keep consistency with SDK.
                 TestConfig.DefaultSecurityPackage, 
-                TestConfig.SutComputerName, 
-                TestConfig.AccountCredential, 
+                TestConfig.SutComputerName,
+                credential, 
                 TestConfig.UseServerGssToken,
                 SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 checker:(header, response) =>

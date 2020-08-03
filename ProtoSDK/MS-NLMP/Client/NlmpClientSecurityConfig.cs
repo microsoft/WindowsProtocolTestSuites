@@ -77,12 +77,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             }
         }
 
+        /// <summary>
+        /// Client security context attributes
+        /// </summary>
+        public ClientSecurityContextAttribute SecurityAttributes
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="account">Client account credential.</param>
-        /// <param name="target">Target name.</param>
+        /// <param name="target">SPN of the service to which the client wishes to authenticate.</param>
         public NlmpClientSecurityConfig(
                 AccountCredential account,
                 string target)
@@ -90,6 +98,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         {
             this.clientCredential = account;
             this.targetName = target;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="account">Client account credential.</param>
+        /// <param name="target">SPN of the service to which the client wishes to authenticate.</param>
+        /// <param name="securityAttributes">Security Attributes.</param>
+        public NlmpClientSecurityConfig(
+                AccountCredential account,
+                string target,
+                ClientSecurityContextAttribute securityAttributes)
+            : base(SecurityPackageType.Ntlm)
+        {
+            this.clientCredential = account;
+            this.targetName = target;
+            this.SecurityAttributes = securityAttributes;
         }
     }
 }

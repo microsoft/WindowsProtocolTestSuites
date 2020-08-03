@@ -67,6 +67,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </summary>
         private uint serverSequenceNumber;
 
+        /// <summary>
+        /// Context attribute flags.
+        /// </summary>
+        private ClientSecurityContextAttribute contextAttribute;
         #endregion
 
         #region Properties
@@ -230,6 +234,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             this.client.Context.ClientConfigFlags |= NegotiateTypes.NTLM_NEGOTIATE_OEM;
         }
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="credential">the client credential contains the user information</param>
+        /// <param name="contextAttribute">the client Context Attribute</param>
+        /// <exception cref="ArgumentNullException">the previousContext must be null</exception>
+        public NlmpClientSecurityContext(NlmpClientCredential credential, ClientSecurityContextAttribute contextAttribute)
+            : this(credential)
+        {
+            this.contextAttribute = contextAttribute;
+            this.Context.Integrity = contextAttribute.HasFlag(ClientSecurityContextAttribute.Integrity);
+            this.Context.ReplayDetect = contextAttribute.HasFlag(ClientSecurityContextAttribute.ReplayDetect);
+            this.Context.SequenceDetect = contextAttribute.HasFlag(ClientSecurityContextAttribute.SequenceDetect);
+            this.Context.Confidentiality = contextAttribute.HasFlag(ClientSecurityContextAttribute.Confidentiality);
+            this.Context.Datagram = contextAttribute.HasFlag(ClientSecurityContextAttribute.Datagram);
+            this.Context.Identify = contextAttribute.HasFlag(ClientSecurityContextAttribute.Identify);
+        }
         #endregion
 
         #region Gss Api
@@ -552,9 +573,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
                 flags, challenge.Payload.ServerChallenge, targetInfo, responseKeyNT, responseKeyLM,
                 out lmChallengeResponse, out ntChallengeResponse);
 
-            UpdateLmChallengeResponse(challenge.Payload.TargetInfo, ref lmChallengeResponse);
+            UpdateLmChallengeResponse(targetInfo, ref lmChallengeResponse);
         }
-
 
         /// <summary>
         /// initialize the target info, contains av pairs.
@@ -570,6 +590,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             InitializeMsAvFlags(targetInfo);
 
             InitializeRestriction(targetInfo);
+
+            InitializeMsAvChannelBindings(targetInfo);
+
+            InitializeMsvAvTargetName(targetInfo);
 
             return targetInfo;
         }
@@ -683,16 +707,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// </summary>
         /// <param name="targetInfo">the challenge packet</param>
         /// <param name="lmChallengeResponse">the lm challenge response</param>
+        /// <summary>
         private void UpdateLmChallengeResponse(
-            byte[] targetInfo,
+            ICollection<AV_PAIR> targetInfo,
             ref byte[] lmChallengeResponse
             )
         {
-            // If NTLM v2 authentication is used and the CHALLENGE_MESSAGE contains a TargetInfo 
-            // field, the client SHOULD set the LmChallengeResponse to null.
-            if (NlmpUtility.IsNtlmV2(this.client.Config.Version) && targetInfo != null)
+            // If NTLM v2 authentication is used and the CHALLENGE_MESSAGE TargetInfo field (section 2.2.1.2) has an MsvAvTimestamp present, 
+            // the client SHOULD NOT send the LmChallengeResponse and SHOULD send Z(24) instead
+            if (NlmpUtility.IsNtlmV2(this.client.Config.Version) && targetInfo != null && NlmpUtility.AvPairContains(targetInfo, AV_PAIR_IDs.MsvAvTimestamp))
             {
-                lmChallengeResponse = null;
+                lmChallengeResponse = NlmpUtility.Z(24);
             }
         }
 
@@ -743,6 +768,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             return flags;
         }
 
+        //If the ClientChannelBindingsUnhashed (section 3.1.1.2) is not NULL
+        private void InitializeMsAvChannelBindings(
+            ICollection<AV_PAIR> targetInfo
+            )
+        {
+            // update the MsAvChannelBinding of targetInfo
+            // add an AV_PAIR structure (section 2.2.2.1) and set the AvId field to MsvAvChannelBindings and the Value field to Z(16).
+            var value = NlmpUtility.Z(16);
+            if (NlmpUtility.AvPairContains(targetInfo, AV_PAIR_IDs.MsvChannelBindings))
+            {
+                NlmpUtility.UpdateAvPair(
+                    targetInfo, AV_PAIR_IDs.MsvChannelBindings, (ushort)value.Length, value);
+            }
+            else
+            {
+                NlmpUtility.AddAVPair(
+                    targetInfo, AV_PAIR_IDs.MsvChannelBindings, (ushort)value.Length, value);
+            }
+        }
+
+        // If ClientSuppliedTargetName (section 3.1.1.2) is not NULL
+        private void InitializeMsvAvTargetName(
+            ICollection<AV_PAIR> targetInfo
+            )
+        {
+            // update the MsvAvTargetName of targetInfo
+            // Add an AV_PAIR structure (section 2.2.2.1) and set the AvId field to MsvAvTargetName and the Value field to ClientSuppliedTargetName without terminating NULL.
+            byte[] targetName = NlmpUtility.Unicode(this.credential.TargetName);
+
+            if (NlmpUtility.AvPairContains(targetInfo, AV_PAIR_IDs.MsvAvTargetName))
+            {
+                NlmpUtility.UpdateAvPair(
+                    targetInfo, AV_PAIR_IDs.MsvAvTargetName, (ushort)targetName.Length, targetName);
+            }
+            else
+            {
+                NlmpUtility.AddAVPair(
+                    targetInfo, AV_PAIR_IDs.MsvAvTargetName, (ushort)targetName.Length, targetName);
+            }
+        }
 
         #endregion
 

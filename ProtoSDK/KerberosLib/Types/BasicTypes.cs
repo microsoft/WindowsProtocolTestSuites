@@ -1713,7 +1713,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             {
                 int tokenSize = buffer.Length - tokenBody.Length;
                 tokenSize += Marshal.SizeOf(typeof(TokenHeader4121)); //clearhdr
-                if ((tokenHeader.flags & WrapFlag.Sealed) != 0)
+                
+                if (tokenHeader.flags.HasFlag(WrapFlag.Sealed))
                 {
                     tokenSize += Marshal.SizeOf(typeof(TokenHeader4121)); //enchdr
                     tokenSize += Cryptographic.ConstValue.HMAC_HASH_OUTPUT_SIZE; //checksum
@@ -1785,7 +1786,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             TokenKeyUsage keyUsage;
             if (tokId == TOK_ID.Wrap4121)  // wrap token
             {
-                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                if (tokenHeader.flags.HasFlag(WrapFlag.SentByAcceptor))
                 {
                     keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SEAL;
                 }
@@ -1794,7 +1795,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                     keyUsage = TokenKeyUsage.KG_USAGE_INITIATOR_SEAL;
                 }
 
-                if ((tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.None)
+                if (!tokenHeader.flags.HasFlag(WrapFlag.Sealed))
                 {
                     tokenHeader.ec = 0;
                 }
@@ -1803,7 +1804,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
             else  // mic token
             {
-                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                if (tokenHeader.flags.HasFlag(WrapFlag.SentByAcceptor))
                 {
                     keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SIGN;
                 }
@@ -1855,7 +1856,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
             #region set context key
             EncryptionKey key;
-            if ((tokenHeader.flags & WrapFlag.AcceptorSubkey) == WrapFlag.AcceptorSubkey)
+            if (tokenHeader.flags.HasFlag(WrapFlag.AcceptorSubkey))
             {
                 key = context.AcceptorSubKey;
                 if (key == null)
@@ -1882,14 +1883,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 //The RRC field is chosen such that all the data can be encrypted in place. 
                 //The trailing meta-data H1 is rotated by RRC+EC bytes, 
                 //which is different from RRC alone ([RFC4121] section 4.2.5).
-                if ((tokenHeader.flags & WrapFlag.Sealed) != 0)
+                if (tokenHeader.flags.HasFlag(WrapFlag.Sealed))
                 {
                     rrc += ec;
                 }
                 KerberosUtility.RotateRight(cipher, cipher.Length - rrc);
             }
 
-            if (tokId == TOK_ID.Wrap4121 && (tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.Sealed)
+            if (tokId == TOK_ID.Wrap4121 && (tokenHeader.flags.HasFlag(WrapFlag.Sealed)))
             {
                 GetToBeSignedDataFunc getToBeSignedDataCallback = delegate (byte[] decryptedData)
                 {
@@ -2021,7 +2022,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             TokenKeyUsage keyUsage;
             if (tokenHeader.tok_id == TOK_ID.Wrap4121)  // wrap token
             {
-                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                if (tokenHeader.flags.HasFlag(WrapFlag.SentByAcceptor))
                 {
                     keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SEAL;
                 }
@@ -2030,7 +2031,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                     keyUsage = TokenKeyUsage.KG_USAGE_INITIATOR_SEAL;
                 }
 
-                if ((tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.None)
+                if (!tokenHeader.flags.HasFlag(WrapFlag.Sealed))
                 {
                     header4121.ec = 0;
                 }
@@ -2039,7 +2040,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
             else  // mic token
             {
-                if ((tokenHeader.flags & WrapFlag.SentByAcceptor) == WrapFlag.SentByAcceptor)
+                if (tokenHeader.flags.HasFlag(WrapFlag.SentByAcceptor))
                 {
                     keyUsage = TokenKeyUsage.KG_USAGE_ACCEPTOR_SIGN;
                 }
@@ -2052,7 +2053,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
             #region set context key
             EncryptionKey key;
-            if ((tokenHeader.flags & WrapFlag.AcceptorSubkey) == WrapFlag.AcceptorSubkey)
+            if (tokenHeader.flags.HasFlag(WrapFlag.AcceptorSubkey))
             {
                 key = context.AcceptorSubKey;
                 if (key == null)
@@ -2078,7 +2079,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             byte[] plainBuf = ArrayUtility.ConcatenateArrays(data, headerBuf);
 
             byte[] cipher = null;
-            if (tokenHeader.tok_id == TOK_ID.Wrap4121 && (tokenHeader.flags & WrapFlag.Sealed) == WrapFlag.Sealed)
+            if (tokenHeader.tok_id == TOK_ID.Wrap4121 && (tokenHeader.flags.HasFlag(WrapFlag.Sealed)))
             {
                 // wrap & confidentiality is provided
                 // {"header" | encrypt(plaintext-data | filler | "header")}
@@ -2113,7 +2114,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             #region set rrc
             if (tokenHeader.tok_id == TOK_ID.Wrap4121)
             {
-                KerberosUtility.RotateRight(cipher, tokenHeader.rrc);
+                //The RRC field ([RFC4121] section 4.2.5) is 12 if no encryption is requested or 28 if encryption is requested. 
+                //The RRC field is chosen such that all the data can be encrypted in place. 
+                //The trailing meta-data H1 is rotated by RRC+EC bytes, 
+                //which is different from RRC alone ([RFC4121] section 4.2.5).
+                ushort rrc = tokenHeader.rrc;
+                if (tokenHeader.flags.HasFlag(WrapFlag.Sealed))
+                {
+                    rrc += tokenHeader.ec;
+                }
+                KerberosUtility.RotateRight(cipher, rrc);
                 header4121.rrc = KerberosUtility.ConvertEndian(tokenHeader.rrc);
                 headerBuf = KerberosUtility.StructToBytes(header4121);
             }
