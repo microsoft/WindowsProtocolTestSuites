@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
+using System.Net;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
@@ -1117,7 +1118,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 throw new ArgumentException("Token buffer is not valid.");
             }
 
-            SGN_ALG sgnAlg = GetSgnAlg(kerberosRole.Context.SessionKey);
+            SGN_ALG sgnAlg = GetSgnAlg(kerberosRole.Context.ContextKey);
             KerberosPdu pdu = kerberosRole.GssWrap(true, sgnAlg, message);
 
             byte[] cipherData = null;
@@ -1167,6 +1168,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             return true;
         }
 
+        #endregion
+
+        #region Public
+        /// <summary>
+        /// Get serverName's full FQDN
+        /// </summary>
+        /// <param name="serverName">Server Name</param>
+        /// <param name="domainName">Domain Name</param>
+        /// <returns></returns>
+        public static string GetFullDomainName(string serverName, string domainName)
+        {
+            try
+            {
+                serverName = serverName.Substring(serverName.LastIndexOf("/") + 1);
+                IPHostEntry serverHostInfo = Dns.GetHostEntry(serverName);
+                return serverHostInfo.HostName.Substring(serverHostInfo.HostName.ToLower().IndexOf(domainName.ToLower()));
+            }
+            catch
+            {
+                return domainName;
+            }
+        }
         #endregion
 
         #region private

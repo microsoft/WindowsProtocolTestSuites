@@ -35,6 +35,10 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Messages.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib.dll"/>
@@ -147,6 +151,18 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" Guid="{E4653BDA-D291-4472-B2EE-B8F0755BF6A4}">
         <File Id="fil75461EF360CAE570D1B9C7294EBE6CD7" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" Guid="{5CDC9868-37C2-48E6-A320-C82633EAB265}">
+        <File Id="fil5CDC986837C248E6A320C82633EAB265" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" Guid="{F1E4B363-7D3E-416C-92EE-B964F30861FE}">
+        <File Id="filF1E4B3637D3E416C92EEB964F30861FE" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" Guid="{A364818F-BA8C-462C-8DAE-C1AE6CEA636D}">
+        <File Id="filA4DEC24D6022417982CB3D17A73A46F5" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" Guid="{3E60E8F8-D346-4B96-9D07-C03CB410A001}">
+        <File Id="fil22F8D29AC6A5405A832586FF29FB0A23" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E22D34}">
         <File Id="filAD43C0A340B99F3AD64A722444CFC2F8" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb.dll" />

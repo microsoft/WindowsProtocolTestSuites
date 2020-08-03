@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// </summary>
         /// <param name="pdu">Kerberos pdu</param>
         public virtual void UpdateContext(KerberosPdu pdu)
-        { 
+        {
         }
 
         #region Wrap/UnWrap, GetMic/VerifyMic
@@ -69,7 +69,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosPdu GssWrap(bool isEncrypted, SGN_ALG signAlgorithm, byte[] message)
         {
             KerberosPdu pdu = null;
-            EncryptionKey key = Context.SessionKey;
+            EncryptionKey key = Context.ContextKey;
             switch ((EncryptionType)key.keytype.Value)
             {
                 case EncryptionType.AES128_CTS_HMAC_SHA1_96:
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         internal static KerberosPdu GssUnWrapEx(KerberosContext context, SecurityBuffer[] securityBuffers)
         {
             KerberosPdu pdu = null;
-            EncryptionKey key = context.SessionKey;
+            EncryptionKey key = context.ContextKey;
             switch ((EncryptionType)key.keytype.Value)
             {
                 case EncryptionType.AES128_CTS_HMAC_SHA1_96:
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         public KerberosPdu GssGetMic(SGN_ALG signAlgorithm, byte[] message)
         {
             KerberosPdu pdu = null;
-            EncryptionKey key = Context.SessionKey;
+            EncryptionKey key = Context.ContextKey;
             switch ((EncryptionType)key.keytype.Value)
             {
                 case EncryptionType.AES128_CTS_HMAC_SHA1_96:
@@ -199,7 +199,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 tokenHeader.flags |= WrapFlag.SentByAcceptor;
             }
 
-            if (Context.SessionKey != null)
+            if (Context.AcceptorSubKey != null)
             {
                 tokenHeader.flags |= WrapFlag.AcceptorSubkey;
             }
@@ -230,7 +230,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             pdu = null;
             bool isVerified = true;
-            EncryptionKey key = context.SessionKey;
+            EncryptionKey key = context.ContextKey;
 
             switch ((EncryptionType)key.keytype.Value)
             {
@@ -290,16 +290,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 tokenHeader.flags |= WrapFlag.SentByAcceptor;
             }
 
-            if (Context.SessionKey != null)
+            if (Context.AcceptorSubKey != null)
             {
                 tokenHeader.flags |= WrapFlag.AcceptorSubkey;
             }
 
             tokenHeader.filler = KerberosConstValue.TOKEN_FILLER_1_BYTE;
-            tokenHeader.ec = 0;
-            // The RRC field described in section 4.2.5 of [RFC4121] is 12 if no encryption is requested 
-            // or 16 if encryption is requested.
-            tokenHeader.rrc = isEncrypted ? (ushort)16 : (ushort)12;
+            tokenHeader.ec = 16;
+            // [MS-KILE] The RRC field ([RFC4121] section 4.2.5) is 12 if no encryption is requested or 28 if encryption is requested. 
+            tokenHeader.rrc = isEncrypted ? (ushort)28 : (ushort)12;
             tokenHeader.snd_seq = Context.CurrentLocalSequenceNumber;
 
             token.TokenHeader = tokenHeader;
@@ -345,17 +344,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                     {
                         tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
                         tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.RC4 : SEAL_ALG.NONE;
-                    }break;
+                    }
+                    break;
                 case GssTokenType.Wrap1964:
                     {
                         tokenHeader.tok_id = TOK_ID.Wrap1964_4757;
                         tokenHeader.seal_alg = isEncrypted ? SEAL_ALG.DES : SEAL_ALG.NONE;
-                    }break;
+                    }
+                    break;
                 case GssTokenType.Mic1964_4757:
                     {
                         tokenHeader.tok_id = TOK_ID.Mic1964_4757;
                         tokenHeader.seal_alg = SEAL_ALG.NONE;
-                    }break;
+                    }
+                    break;
             }
             token.TokenHeader = tokenHeader;
             token.Data = message;

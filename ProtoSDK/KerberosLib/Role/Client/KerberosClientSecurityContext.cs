@@ -5,12 +5,17 @@ using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Text;
+using System.Threading;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
     public class KerberosClientSecurityContext : ClientSecurityContext
     {
+
         #region Fields
 
         /// <summary>
@@ -49,6 +54,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// KRB_AP_REQ Authenticator
         /// </summary>
         private Authenticator ApRequestAuthenticator;
+
+        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();
+
+        /// <summary>
+        /// store not expired TGT token for Reauthentication
+        /// </summary>
+        private static Dictionary<CacheTokenKey, KerberosTicket> TGTTokenCache = new Dictionary<CacheTokenKey, KerberosTicket>();
         #endregion
 
         #region Properties
@@ -188,16 +200,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             string salt = null
             )
         {
+            string fullDomainName = KerberosUtility.GetFullDomainName(serverName, kdcAddress);
+
             this.credential = credential;
             this.serverName = serverName;
             this.contextAttribute = contextAttribute;
-            this.client = new KerberosClient(this.credential.DomainName, this.credential.AccountName, this.credential.Password, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt);
+            this.client = new KerberosClient(fullDomainName, this.credential.AccountName, this.credential.Password, accountType, fullDomainName, kdcPort, transportType, oidPkt, salt);
             this.UpdateDefaultSettings();
         }
 
         public static ClientSecurityContext CreateClientSecurityContext(
-            string serverName, 
-            AccountCredential credential, 
+            string serverName,
+            AccountCredential credential,
             ClientSecurityContextAttribute contextAttribute
             )
         {
@@ -214,14 +228,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
         /// <returns></returns>
         public static ClientSecurityContext CreateClientSecurityContext(
-            string serverName, 
-            AccountCredential credential, 
-            KerberosAccountType accountType, 
-            string kdcAddress, 
-            int kdcPort, 
-            TransportType transportType, 
-            ClientSecurityContextAttribute contextAttribute, 
-            KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, 
+            string serverName,
+            AccountCredential credential,
+            KerberosAccountType accountType,
+            string kdcAddress,
+            int kdcPort,
+            TransportType transportType,
+            ClientSecurityContextAttribute contextAttribute,
+            KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken,
             string salt = null
             )
         {
@@ -240,9 +254,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             if (serverToken == null)
             {
-                this.ApRequestAuthenticator = null;
-                // Create and send AS request for pre-authentication
-                KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
+                ClientInitialize();
+            }
+            else
+            {
+                ClientInitialize(serverToken);
+            }
+        }
+
+        public override bool Decrypt(params SecurityBuffer[] securityBuffers)
+        {
+            return KerberosUtility.Decrypt(client, securityBuffers);
+        }
+
+        public override void Encrypt(params SecurityBuffer[] securityBuffers)
+        {
+            KerberosUtility.Encrypt(client, securityBuffers);
+        }
+
+        public override void Sign(params SecurityBuffer[] securityBuffers)
+        {
+            KerberosUtility.Sign(client, securityBuffers);
+        }
+
+        public override bool Verify(params SecurityBuffer[] securityBuffers)
+        {
+            return KerberosUtility.Verify(client, securityBuffers);
+        }
+
+        /// <summary>
+        /// Kerberos Client Initialize without server token
+        /// </summary>
+        private void ClientInitialize()
+        {
+            this.ApRequestAuthenticator = null;
+            // Create and send AS request for pre-authentication
+            KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
+
+            KerberosTicket ticket = this.GetTGTCachedToken(this.credential, this.serverName);
+            if (ticket == null)
+            {
                 this.SendAsRequest(options, null);
 
                 // Expect recieve preauthentication required error
@@ -271,108 +322,102 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
                 // Expect TGS Response from KDC
                 KerberosTgsResponse tgsResponse = this.ExpectTgsResponse();
-
-                ApOptions apOption;
-                GetFlagsByContextAttribute(out apOption);
-
-                AuthorizationData data = null;
-                EncryptionKey subkey = KerberosUtility.GenerateKey(this.client.Context.ContextKey);
-
-                this.token = this.CreateGssApiToken(ApOptions.MutualRequired,
-                    data,
-                    subkey,
-                    this.Context.ChecksumFlag,
-                    KerberosConstValue.GSSToken.GSSAPI);
-
-                bool isMutualAuth = (contextAttribute & ClientSecurityContextAttribute.MutualAuth)
-                    == ClientSecurityContextAttribute.MutualAuth;
-                bool isDceStyle = (contextAttribute & ClientSecurityContextAttribute.DceStyle)
-                    == ClientSecurityContextAttribute.DceStyle;
-
-                if (isMutualAuth || isDceStyle)
-                {
-                    this.needContinueProcessing = true;
-                }
-                else
-                {
-                    this.needContinueProcessing = false;
-                }
+                this.UpdateTGTCachedToken(this.Context.Ticket);
             }
             else
             {
-                KerberosApResponse apRep = this.GetApResponseFromToken(serverToken, KerberosConstValue.GSSToken.GSSAPI);
-                this.VerifyApResponse(apRep);
+                // Restore SessionKey and Ticket from cache
+                this.Context.SessionKey = ticket.SessionKey;
+                this.Context.ApSessionKey = ticket.SessionKey;
+                this.Context.Ticket = ticket;
+                this.Context.SelectedEType = (EncryptionType)Context.Ticket.Ticket.enc_part.etype.Value;
+            }
 
-                token = null;
-                if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
-                {
-                    KerberosApResponse apResponse = this.CreateApResponse(null);
+            // cache this.Context.Ticket;
+            ApOptions apOption;
+            GetFlagsByContextAttribute(out apOption);
 
-                    var apBerBuffer = new Asn1BerEncodingBuffer();
+            AuthorizationData data = null;
+            EncryptionKey subkey = KerberosUtility.GenerateKey(this.client.Context.ContextKey);
 
-                    if (apResponse.ApEncPart != null)
-                    {
-                        // Encode enc_part
-                        apResponse.ApEncPart.BerEncode(apBerBuffer, true);
-                        
-                        EncryptionKey key = this.Context.ApSessionKey;
+            this.token = this.CreateGssApiToken(apOption,
+                data,
+                subkey,
+                this.Context.ChecksumFlag,
+                KerberosConstValue.GSSToken.GSSAPI);
 
-                        if (key == null || key.keytype == null || key.keyvalue == null || key.keyvalue.Value == null)
-                        {
-                            throw new ArgumentException("Ap session key is not valid");
-                        }
+            bool isMutualAuth = (contextAttribute & ClientSecurityContextAttribute.MutualAuth)
+                == ClientSecurityContextAttribute.MutualAuth;
+            bool isDceStyle = (contextAttribute & ClientSecurityContextAttribute.DceStyle)
+                == ClientSecurityContextAttribute.DceStyle;
 
-                        // Encrypt enc_part
-                        EncryptionType eType = (EncryptionType)key.keytype.Value;
-                        byte[] cipherData = KerberosUtility.Encrypt(
-                            eType,
-                            key.keyvalue.ByteArrayValue,
-                            apBerBuffer.Data,
-                            (int)KeyUsageNumber.AP_REP_EncAPRepPart);
-                        apResponse.Response.enc_part = new EncryptedData(new KerbInt32((int)eType), null, new Asn1OctetString(cipherData));
-                    }
-
-                    // Encode AP Response
-                    apResponse.Response.BerEncode(apBerBuffer, true);
-
-                    if ((this.Context.ChecksumFlag & ChecksumFlags.GSS_C_DCE_STYLE) == ChecksumFlags.GSS_C_DCE_STYLE)
-                    {
-                        // In DCE mode, the AP-REP message MUST NOT have GSS-API wrapping. 
-                        // It is sent as is without encapsulating it in a header ([RFC2743] section 3.1).
-                        this.token = apBerBuffer.Data;
-                    }
-                    else
-                    {
-                        this.token = KerberosUtility.AddGssApiTokenHeader(ArrayUtility.ConcatenateArrays(
-                            BitConverter.GetBytes(KerberosUtility.ConvertEndian((ushort)TOK_ID.KRB_AP_REP)),
-                            apBerBuffer.Data));
-                    }
-                }
-
-                this.needContinueProcessing = false;      // SEC_E_OK;
+            if (isMutualAuth || isDceStyle)
+            {
+                this.needContinueProcessing = true;
+            }
+            else
+            {
+                this.needContinueProcessing = false;
             }
         }
 
-        public override bool Decrypt(params SecurityBuffer[] securityBuffers)
+        /// <summary>
+        /// Client initialize with server token
+        /// </summary>
+        /// <param name="serverToken">Server token</param>
+        private void ClientInitialize(byte[] serverToken)
         {
-            return KerberosUtility.Decrypt(client, securityBuffers);
-        }
+            KerberosApResponse apRep = this.GetApResponseFromToken(serverToken, KerberosConstValue.GSSToken.GSSAPI);
+            this.VerifyApResponse(apRep);
 
-        public override void Encrypt(params SecurityBuffer[] securityBuffers)
-        {
-            KerberosUtility.Encrypt(client, securityBuffers);
-        }
+            token = null;
+            if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
+            {
+                KerberosApResponse apResponse = this.CreateApResponse(null);
 
-        public override void Sign(params SecurityBuffer[] securityBuffers)
-        {
-            KerberosUtility.Sign(client, securityBuffers);
-        }
+                var apBerBuffer = new Asn1BerEncodingBuffer();
 
-        public override bool Verify(params SecurityBuffer[] securityBuffers)
-        {
-            return KerberosUtility.Verify(client, securityBuffers);
-        }
+                if (apResponse.ApEncPart != null)
+                {
+                    // Encode enc_part
+                    apResponse.ApEncPart.BerEncode(apBerBuffer, true);
 
+                    EncryptionKey key = this.Context.ApSessionKey;
+
+                    if (key == null || key.keytype == null || key.keyvalue == null || key.keyvalue.Value == null)
+                    {
+                        throw new ArgumentException("Ap session key is not valid");
+                    }
+
+                    // Encrypt enc_part
+                    EncryptionType eType = (EncryptionType)key.keytype.Value;
+                    byte[] cipherData = KerberosUtility.Encrypt(
+                        eType,
+                        key.keyvalue.ByteArrayValue,
+                        apBerBuffer.Data,
+                        (int)KeyUsageNumber.AP_REP_EncAPRepPart);
+                    apResponse.Response.enc_part = new EncryptedData(new KerbInt32((int)eType), null, new Asn1OctetString(cipherData));
+                }
+
+                // Encode AP Response
+                apResponse.Response.BerEncode(apBerBuffer, true);
+
+                if ((this.Context.ChecksumFlag & ChecksumFlags.GSS_C_DCE_STYLE) == ChecksumFlags.GSS_C_DCE_STYLE)
+                {
+                    // In DCE mode, the AP-REP message MUST NOT have GSS-API wrapping. 
+                    // It is sent as is without encapsulating it in a header ([RFC2743] section 3.1).
+                    this.token = apBerBuffer.Data;
+                }
+                else
+                {
+                    this.token = KerberosUtility.AddGssApiTokenHeader(ArrayUtility.ConcatenateArrays(
+                        BitConverter.GetBytes(KerberosUtility.ConvertEndian((ushort)TOK_ID.KRB_AP_REP)),
+                        apBerBuffer.Data));
+                }
+            }
+
+            this.needContinueProcessing = false;      // SEC_E_OK;
+        }
         #endregion
 
         #region AS
@@ -527,7 +572,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 KeyUsageNumber.AP_REQ_Authenticator
                 );
             this.client.UpdateContext(request);
-            return KerberosUtility.AddGssApiTokenHeader(request, this.client.OidPkt, gssToken);
+
+            if ((this.Context.ChecksumFlag & ChecksumFlags.GSS_C_DCE_STYLE) == ChecksumFlags.GSS_C_DCE_STYLE)
+            {
+                return request.ToBytes();
+            }
+            else
+            {
+                return KerberosUtility.AddGssApiTokenHeader(request, this.client.OidPkt, gssToken);
+            }
         }
 
         /// <summary>
@@ -799,6 +852,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             if ((contextAttribute & ClientSecurityContextAttribute.Confidentiality)
                 == ClientSecurityContextAttribute.Confidentiality)
             {
+                apOptions = ApOptions.None;
                 checksumFlags |= ChecksumFlags.GSS_C_CONF_FLAG;
             }
             if ((contextAttribute & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
@@ -822,6 +876,68 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
             this.Context.ChecksumFlag = checksumFlags;
         }
+
+        private void UpdateTGTCachedToken(KerberosTicket tgtToken)
+        {
+            cacheLock.EnterWriteLock();
+            try
+            {
+                CacheTokenKey findedKey = null;
+                int address = this.credential.GetHashCode();
+                foreach (var kvp in TGTTokenCache)
+                {
+                    if (kvp.Key.CredentialAddress.Equals(address) && kvp.Key.ServerPrincipleName.Equals(this.serverName))
+                    {
+                        findedKey = kvp.Key;
+                        break;
+                    }
+                }
+                if (findedKey != null)
+                {
+                    TGTTokenCache[findedKey] = tgtToken;
+                }
+                else
+                {
+                    TGTTokenCache.Add(new CacheTokenKey() { CredentialAddress = address, ServerPrincipleName = serverName }, tgtToken);
+                }
+            }
+            finally
+            {
+                cacheLock.ExitWriteLock();
+            }
+        }
+
+        private KerberosTicket GetTGTCachedToken(AccountCredential inputCredential, string inputServerPrincipleName)
+        {
+            cacheLock.EnterReadLock();
+            KerberosTicket cachedTGTToken = null;
+
+            CacheTokenKey findedKey = null;
+            foreach (var kvp in TGTTokenCache)
+            {
+                int address = this.credential.GetHashCode();
+                if (kvp.Key.CredentialAddress.Equals(inputCredential) && kvp.Key.ServerPrincipleName.Equals(inputServerPrincipleName))
+                {
+                    findedKey = kvp.Key;
+                    break;
+                }
+            }
+            if (findedKey != null)
+            {
+                cachedTGTToken = TGTTokenCache[findedKey];
+                //TODO: Remove from cache if token expired
+            }
+            cacheLock.ExitReadLock();
+
+            return cachedTGTToken;
+        }
         #endregion
+
+        internal class CacheTokenKey
+        {
+            public int CredentialAddress { get; set; }
+
+            public string ServerPrincipleName { get; set; }
+        }
     }
 }
