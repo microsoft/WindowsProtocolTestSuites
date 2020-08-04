@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.Messages;
-using Microsoft.Protocols.TestTools.Messages.Marshaling;
+using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
 {

@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestSuites.Frs2DataTypes;
-using Microsoft.Protocols.TestTools.Messages.Marshaling;
+using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
+
 namespace Microsoft.Protocols.TestSuites.MS_FRS2
 {
 

@@ -4,12 +4,12 @@
 using System;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.Messages;
-using Microsoft.Protocols.TestTools.Messages.Marshaling;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes;
+using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
 {
-    public partial interface IMS_DRSR_RpcAdapter : IRpcAdapter
+    public partial interface IMS_DRSR_RpcAdapter : IAdapter
     {
         /// <summary>
         ///  The IDL_DRSBind method creates a context handle that

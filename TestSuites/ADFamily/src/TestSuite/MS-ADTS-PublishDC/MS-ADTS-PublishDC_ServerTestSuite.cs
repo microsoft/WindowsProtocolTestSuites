@@ -1,10 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.MAAdapter;
 using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.MessageAnalyzer;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts.Asn1CodecV3;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -31,7 +29,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         static PublishDCAdapter publishDCAdapter;
         static AdLdapClient ldapAdapter;
         ICollection<AdtsSearchResultEntryPacket> searchResponse;
-        static IMessageAnalyzerAdapter MaAdapter;
+        //static IMessageAnalyzerAdapter MaAdapter;
 
         // Extracts the required lines from specified file based on the keyword.
         ICollection<string> matchedLines = new List<string>();
@@ -55,7 +53,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             Site.DefaultProtocolDocShortName = "MS-ADTS-PublishDC";
 
             Site.Log.Add(LogEntryKind.Debug, "Initialize Message Analyzer adapter.");
-            MaAdapter = Site.GetAdapter<IMessageAnalyzerAdapter>();
+            //MaAdapter = Site.GetAdapter<IMessageAnalyzerAdapter>();
         }
 
         [ClassCleanup]
@@ -93,322 +91,323 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         [TestCategory("ForestWin2012")]
         [TestCategory("PDC")]
 		[DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
+        [ExpectedException(typeof(NotImplementedException))]
         public void PublishDC_TestCaseSamLogonResponseEx()
         {
-            #region Capture
-            MaAdapter.Reset();
-            MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponseEx);
+//            #region Capture
+//            MaAdapter.Reset();
+//            MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponseEx);
 
-            string exePath = GetResponseTriggerPath();
-            ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
-            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " ex";
-            startInfo.UseShellExecute = false;
-            Process.Start(startInfo);
-            Thread.Sleep(10000);
+//            string exePath = GetResponseTriggerPath();
+//            ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
+//            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " ex";
+//            startInfo.UseShellExecute = false;
+//            Process.Start(startInfo);
+//            Thread.Sleep(10000);
 
-            MaAdapter.StopCapture();
+//            MaAdapter.StopCapture();
 
-            string filter = publishDCAdapter.SamLogonResponseExFilter + " and IPv4.Address == " + publishDCAdapter.PDCIPAddress;
-            Message message = MaAdapter.GetMessages(publishDCAdapter.capturePath_SamLogonResponseEx, filter)[0];
-            #endregion Capture
+//            string filter = publishDCAdapter.SamLogonResponseExFilter + " and IPv4.Address == " + publishDCAdapter.PDCIPAddress;
+//            Message message = MaAdapter.GetMessages(publishDCAdapter.capturePath_SamLogonResponseEx, filter)[0];
+//            #endregion Capture
 
-            #region Sbz
-            object fieldValue = message.TryGetValue<object>(publishDCAdapter.SbzFilter);
-            Site.CaptureRequirementIfAreEqual<UInt16>(0, Convert.ToUInt16(fieldValue),
-            149, "Sbz (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure MUST be set to 0.");
-            #endregion Sbz
+//            #region Sbz
+//            object fieldValue = message.TryGetValue<object>(publishDCAdapter.SbzFilter);
+//            Site.CaptureRequirementIfAreEqual<UInt16>(0, Convert.ToUInt16(fieldValue),
+//            149, "Sbz (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure MUST be set to 0.");
+//            #endregion Sbz
 
-            #region Flags
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.FlagsFilter);
-            Site.CaptureRequirementIfIsNotNull(
-                fieldValue,
-                150,
-                "Flags (4 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure is the DS_FLAG Options.");
-            Site.CaptureRequirementIfIsNotNull(
-                fieldValue,
-                279,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, Bit values of Flags field in Netlogon Attribute of SearchResultEntry are taken 
-                from DS_FLAGS structure.");
-            if (publishDCAdapter.IsSutGc)
-            {
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_GC_FLAG,
-                    281,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                    SearchResultEntry and the server is a global catalog server, then the DS_GC_FLAG bit of Flags field 
-                    in Netlogon Attribute of SearchResultEntry is set.");
-            }
-            // "GlobalCatalogReady" is set to true by default.
-            Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_GC_FLAG,
-                282,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, then DS_GC_FLAG bit of Flags field in Netlogon Attribute of SearchResultEntry is 
-                set if and only if the is GlobalCatalogReady attribute on the rootDSE is true.");
-            if (publishDCAdapter.IsSutKdc)
-            {
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_KDC_FLAG,
-                    283,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                    SearchResultEntry and the server is a KDC, then the DS_KDC_FLAG bit of Flags field in Netlogon 
-                    Attribute of SearchResultEntry is set.");
-            }
-            if (publishDCAdapter.IsSutHostingWin32TimeService)
-            {
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_TIMESERV_FLAG,
-                    284,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                    SearchResultEntry and hosts the Win32 Time Service, then the DS_TIMESERV_FLAG bit of Flags field in 
-                    Netlogon Attribute of SearchResultEntry is set.");
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_TIMESERV_FLAG,
-                    10290,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                    SearchResultEntry and hosts Win32 Time Service, as specified in [MS-W32T], then the DS_TIMESERV_FLAG
-                    bit of DS_FLAGS is set.");
-            }
-//            if (publishDCAdapter.IsSutInSameSiteAsClient)
+//            #region Flags
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.FlagsFilter);
+//            Site.CaptureRequirementIfIsNotNull(
+//                fieldValue,
+//                150,
+//                "Flags (4 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure is the DS_FLAG Options.");
+//            Site.CaptureRequirementIfIsNotNull(
+//                fieldValue,
+//                279,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, Bit values of Flags field in Netlogon Attribute of SearchResultEntry are taken 
+//                from DS_FLAGS structure.");
+//            if (publishDCAdapter.IsSutGc)
 //            {
 //                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_CLOSEST_FLAG,
-//                    285,
+//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_GC_FLAG,
+//                    281,
 //                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-//                    SearchResultEntry and the server is in the same site as the client, then the DS_CLOSEST_FLAG bit 
-//                    of Flags field in Netlogon Attribute of SearchResultEntry is set.");
+//                    SearchResultEntry and the server is a global catalog server, then the DS_GC_FLAG bit of Flags field 
+//                    in Netlogon Attribute of SearchResultEntry is set.");
 //            }
-            if (!publishDCAdapter.IsSutRodc)
-            {
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                   0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_WRITABLE_FLAG,
-                   286,
-                   @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                   SearchResultEntry and the server is not an RODC, then the DS_WRITABLE_FLAG bit of Flags field 
-                   in Netlogon Attribute of SearchResultEntry is set.");
-                Site.CaptureRequirementIfAreEqual<UInt32>(
-                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_SELECT_SECRET_DOMAIN_6_FLAG,
-                    289,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                    SearchResultEntry and the server is an RODC, then the DS_SELECT_SECRET_DOMAIN_6_FLAG bit of Flags 
-                    field in Netlogon Attribute of SearchResultEntry is set.");
-            }
-            if (publishDCAdapter.IsSutRodc)
-            {
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_SELECT_SECRET_DOMAIN_6_FLAG,
-                    289,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                    SearchResultEntry and the server is an RODC, then the DS_SELECT_SECRET_DOMAIN_6_FLAG bit of Flags 
-                    field in Netlogon Attribute of SearchResultEntry is set.");
-            }
-            Site.CaptureRequirementIfIsTrue(
-                (((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_LDAP_FLAG) != 0) && ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_FLAG) != 0)),
-                294,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, Always set the DS_LDAP_FLAG and DS_DS_FLAG bits of Flags field in Netlogon Attribute 
-                of SearchResultEntry.");
-            if (publishDCAdapter.PDCOSVersion >= ServerVersion.Win2008)
-            {
-                if (publishDCAdapter.IsSutWritableDc)
-                {
-                    Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                        0,
-                        Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_FULL_SECRET_DOMAIN_6_FLAG,
-                        290,
-                        @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                        SearchResultEntry and the server is a writable DC and not running Windows Server 2003 operating 
-                        system or Microsoft Windows 2000 Server operating system, then the DS_FULL_SECRET_DOMAIN_6_FLAG 
-                        bit of Flags field in Netlogon Attribute of SearchResultEntry is set.");
-                }
-            }
-            Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_Reserved) == 0,
-                @"X: Reserved for future expansion. The server MUST return zero, and the client MUST ignore.");
-            if (publishDCAdapter.PDCOSVersion >= ServerVersion.Win2012)
-            {
-                Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) !=0,
-                    @"FW8 (DS_DS_8_FLAG, 0x00004000): The server is not running Windows 2000, Windows 2003, Windows Server 2008,
-                or Windows Server 2008 R2 operating system");
+//            // "GlobalCatalogReady" is set to true by default.
+//            Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_GC_FLAG,
+//                282,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, then DS_GC_FLAG bit of Flags field in Netlogon Attribute of SearchResultEntry is 
+//                set if and only if the is GlobalCatalogReady attribute on the rootDSE is true.");
+//            if (publishDCAdapter.IsSutKdc)
+//            {
+//                Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_KDC_FLAG,
+//                    283,
+//                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                    SearchResultEntry and the server is a KDC, then the DS_KDC_FLAG bit of Flags field in Netlogon 
+//                    Attribute of SearchResultEntry is set.");
+//            }
+//            if (publishDCAdapter.IsSutHostingWin32TimeService)
+//            {
+//                Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_TIMESERV_FLAG,
+//                    284,
+//                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                    SearchResultEntry and hosts the Win32 Time Service, then the DS_TIMESERV_FLAG bit of Flags field in 
+//                    Netlogon Attribute of SearchResultEntry is set.");
+//                Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_TIMESERV_FLAG,
+//                    10290,
+//                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                    SearchResultEntry and hosts Win32 Time Service, as specified in [MS-W32T], then the DS_TIMESERV_FLAG
+//                    bit of DS_FLAGS is set.");
+//            }
+////            if (publishDCAdapter.IsSutInSameSiteAsClient)
+////            {
+////                Site.CaptureRequirementIfAreNotEqual<UInt32>(
+////                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_CLOSEST_FLAG,
+////                    285,
+////                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+////                    SearchResultEntry and the server is in the same site as the client, then the DS_CLOSEST_FLAG bit 
+////                    of Flags field in Netlogon Attribute of SearchResultEntry is set.");
+////            }
+//            if (!publishDCAdapter.IsSutRodc)
+//            {
+//                Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                   0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_WRITABLE_FLAG,
+//                   286,
+//                   @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                   SearchResultEntry and the server is not an RODC, then the DS_WRITABLE_FLAG bit of Flags field 
+//                   in Netlogon Attribute of SearchResultEntry is set.");
+//                Site.CaptureRequirementIfAreEqual<UInt32>(
+//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_SELECT_SECRET_DOMAIN_6_FLAG,
+//                    289,
+//                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                    SearchResultEntry and the server is an RODC, then the DS_SELECT_SECRET_DOMAIN_6_FLAG bit of Flags 
+//                    field in Netlogon Attribute of SearchResultEntry is set.");
+//            }
+//            if (publishDCAdapter.IsSutRodc)
+//            {
+//                Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                    0, Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_SELECT_SECRET_DOMAIN_6_FLAG,
+//                    289,
+//                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                    SearchResultEntry and the server is an RODC, then the DS_SELECT_SECRET_DOMAIN_6_FLAG bit of Flags 
+//                    field in Netlogon Attribute of SearchResultEntry is set.");
+//            }
+//            Site.CaptureRequirementIfIsTrue(
+//                (((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_LDAP_FLAG) != 0) && ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_FLAG) != 0)),
+//                294,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, Always set the DS_LDAP_FLAG and DS_DS_FLAG bits of Flags field in Netlogon Attribute 
+//                of SearchResultEntry.");
+//            if (publishDCAdapter.PDCOSVersion >= ServerVersion.Win2008)
+//            {
+//                if (publishDCAdapter.IsSutWritableDc)
+//                {
+//                    Site.CaptureRequirementIfAreNotEqual<UInt32>(
+//                        0,
+//                        Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_FULL_SECRET_DOMAIN_6_FLAG,
+//                        290,
+//                        @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                        SearchResultEntry and the server is a writable DC and not running Windows Server 2003 operating 
+//                        system or Microsoft Windows 2000 Server operating system, then the DS_FULL_SECRET_DOMAIN_6_FLAG 
+//                        bit of Flags field in Netlogon Attribute of SearchResultEntry is set.");
+//                }
+//            }
+//            Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_Reserved) == 0,
+//                @"X: Reserved for future expansion. The server MUST return zero, and the client MUST ignore.");
+//            if (publishDCAdapter.PDCOSVersion >= ServerVersion.Win2012)
+//            {
+//                Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) !=0,
+//                    @"FW8 (DS_DS_8_FLAG, 0x00004000): The server is not running Windows 2000, Windows 2003, Windows Server 2008,
+//                or Windows Server 2008 R2 operating system");
 
-            }
-            else
-            {
-                Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) == 0,
-                    @"DS_DS_8_Flag should be set to 0 when server OS version is lower than Windows Server 2012.");
-            }
-            #endregion Flags
+//            }
+//            else
+//            {
+//                Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) == 0,
+//                    @"DS_DS_8_Flag should be set to 0 when server OS version is lower than Windows Server 2012.");
+//            }
+//            #endregion Flags
 
-            #region NtVersion
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.NtVersionFilter);
-            Site.CaptureRequirementIfIsTrue(
-                (((Convert.ToUInt32(fieldValue) & 0x1) != 0) && ((Convert.ToUInt32(fieldValue) & 0x4) != 0)), 181,
-                @"NtVersion (4 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure is NETLOGON_NT_VERSION_1 | NETLOGON_NT_VERSION_5EX.");
-            #endregion NtVersion
-
-            #region LmNtToken
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.LmNtTokenFilter);
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 182,
-                "LmNtToken (2 bytes] field of NETLOGON_SAM_LOGON_RESPONSE_EX structure MUST be set to 0xFFFF.");
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 311,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, LmNtToken is always set to 0xFFFF.");
-            #endregion LmNtToken
-
-            #region Lm20Token
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.Lm20TokenFilter);
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 183,
-                "Lm20Token (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure MUST be set to 0xFFFF.");
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 312,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, Lm20Token is always set to 0xFFFF.");
-            #endregion Lm20Token
-
-            #region Opcode
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.OpcodeFilter);
-            // 0x17 represents a NETLOGON_SAM_LOGON_RESPONSE_EX structure.
-            Site.CaptureRequirementIfAreEqual<UInt16>(
-                0x17,
-                Convert.ToUInt16(fieldValue),
-                278,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, Operation code is set to LOGON_SAM_LOGON_RESPONSE_EX if t(Refer to algorithm 
-                mentioned in TD Section 7.3.3.2) is not equal to 1 and (u(Refer to algorithm mentioned in TD 
-                Section 7.3.3.2) is NULL and x(Refer to algorithm mentioned in TD Section 7.3.3.2) is not NULL).");
-            #endregion Opcode
-
-            #region DomainGuid
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DomainGuidFilter);
-
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainSrvGUID.ToLower(),
-                fieldValue.ToString().ToLower().Replace("{","").Replace("}",""),
-                296,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, Domain GUID is set to the Guid of NC nc(NC designated by whichever of reqDnsNC 
-                and reqGuidNC that is not NULL).");
-            #endregion DomainGuid
-
-            #region DnsForestName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsForestNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                297,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, DnsForestName is set to the DNS name of the forest.");
-            #endregion DnsForestName
-
-            #region DnsDomainName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsDomainNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                298,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, DnsDomainName is set to the DNS name of the NC nc(NC designated by whichever of 
-                reqDnsNC and reqGuidNC that is not NULL).");
-            #endregion DnsDomainName
-
-            #region DnsHostName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsHostNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PDCFullName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                299,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, DnsHostnName is set to the DNS name of the server.");
-            #endregion DnsHostName
-
-            #region NetbiosDomainName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.NetbiosDomainNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainNetBiosName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                300,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, NetbiosDomainName is set to the NetBIOS name of the NC nc(NC designated by whichever
-                of reqDnsNC and reqGuidNC that is not NULL).");
-            #endregion NetbiosDomainName
-
-            #region NetbiosComputerName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.NetbiosComputerNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PDCNetbiosName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                301,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, NetbiosComputerName is]Set to the NetBIOS name of the server.");
-            #endregion NetbiosComputerName
-
-            #region DcSiteName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DcSiteNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.ActualDcSiteName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                303,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, DcSiteName is set to the site name of the server.");
-            #endregion DcSiteName
-
-//            #region ClientSiteName
+//            #region NtVersion
 //            fieldValue = null;
-//            fieldValue = message.TryGetValue<object>(publishDCAdapter.ClientSiteNameFilter);
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.NtVersionFilter);
+//            Site.CaptureRequirementIfIsTrue(
+//                (((Convert.ToUInt32(fieldValue) & 0x1) != 0) && ((Convert.ToUInt32(fieldValue) & 0x4) != 0)), 181,
+//                @"NtVersion (4 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure is NETLOGON_NT_VERSION_1 | NETLOGON_NT_VERSION_5EX.");
+//            #endregion NtVersion
+
+//            #region LmNtToken
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.LmNtTokenFilter);
+//            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 182,
+//                "LmNtToken (2 bytes] field of NETLOGON_SAM_LOGON_RESPONSE_EX structure MUST be set to 0xFFFF.");
+//            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 311,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, LmNtToken is always set to 0xFFFF.");
+//            #endregion LmNtToken
+
+//            #region Lm20Token
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.Lm20TokenFilter);
+//            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 183,
+//                "Lm20Token (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE_EX structure MUST be set to 0xFFFF.");
+//            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 312,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, Lm20Token is always set to 0xFFFF.");
+//            #endregion Lm20Token
+
+//            #region Opcode
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.OpcodeFilter);
+//            // 0x17 represents a NETLOGON_SAM_LOGON_RESPONSE_EX structure.
+//            Site.CaptureRequirementIfAreEqual<UInt16>(
+//                0x17,
+//                Convert.ToUInt16(fieldValue),
+//                278,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, Operation code is set to LOGON_SAM_LOGON_RESPONSE_EX if t(Refer to algorithm 
+//                mentioned in TD Section 7.3.3.2) is not equal to 1 and (u(Refer to algorithm mentioned in TD 
+//                Section 7.3.3.2) is NULL and x(Refer to algorithm mentioned in TD Section 7.3.3.2) is not NULL).");
+//            #endregion Opcode
+
+//            #region DomainGuid
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DomainGuidFilter);
+
+//            Site.CaptureRequirementIfAreEqual<string>(
+//                publishDCAdapter.PrimaryDomainSrvGUID.ToLower(),
+//                fieldValue.ToString().ToLower().Replace("{","").Replace("}",""),
+//                296,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, Domain GUID is set to the Guid of NC nc(NC designated by whichever of reqDnsNC 
+//                and reqGuidNC that is not NULL).");
+//            #endregion DomainGuid
+
+//            #region DnsForestName
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsForestNameFilter);
+//            Site.CaptureRequirementIfAreEqual<string>(
+//                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
+//                fieldValue.ToString().ToLower(),
+//                297,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, DnsForestName is set to the DNS name of the forest.");
+//            #endregion DnsForestName
+
+//            #region DnsDomainName
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsDomainNameFilter);
+//            Site.CaptureRequirementIfAreEqual<string>(
+//                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
+//                fieldValue.ToString().ToLower(),
+//                298,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, DnsDomainName is set to the DNS name of the NC nc(NC designated by whichever of 
+//                reqDnsNC and reqGuidNC that is not NULL).");
+//            #endregion DnsDomainName
+
+//            #region DnsHostName
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsHostNameFilter);
+//            Site.CaptureRequirementIfAreEqual<string>(
+//                publishDCAdapter.PDCFullName.ToLower(),
+//                fieldValue.ToString().ToLower(),
+//                299,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, DnsHostnName is set to the DNS name of the server.");
+//            #endregion DnsHostName
+
+//            #region NetbiosDomainName
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.NetbiosDomainNameFilter);
+//            Site.CaptureRequirementIfAreEqual<string>(
+//                publishDCAdapter.PrimaryDomainNetBiosName.ToLower(),
+//                fieldValue.ToString().ToLower(),
+//                300,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, NetbiosDomainName is set to the NetBIOS name of the NC nc(NC designated by whichever
+//                of reqDnsNC and reqGuidNC that is not NULL).");
+//            #endregion NetbiosDomainName
+
+//            #region NetbiosComputerName
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.NetbiosComputerNameFilter);
+//            Site.CaptureRequirementIfAreEqual<string>(
+//                publishDCAdapter.PDCNetbiosName.ToLower(),
+//                fieldValue.ToString().ToLower(),
+//                301,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, NetbiosComputerName is]Set to the NetBIOS name of the server.");
+//            #endregion NetbiosComputerName
+
+//            #region DcSiteName
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DcSiteNameFilter);
 //            Site.CaptureRequirementIfAreEqual<string>(
 //                publishDCAdapter.ActualDcSiteName.ToLower(),
 //                fieldValue.ToString().ToLower(),
-//                304,
+//                303,
 //                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-//                SearchResultEntry, ClientSiteName is set to the site s(site containing the client's IP address).");
-//            #endregion ClientSiteName
+//                SearchResultEntry, DcSiteName is set to the site name of the server.");
+//            #endregion DcSiteName
 
-            #region DcSockAddr
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DcSockAddrFilter);
-            ComplexType fieldValueComplex = (ComplexType)fieldValue;
+////            #region ClientSiteName
+////            fieldValue = null;
+////            fieldValue = message.TryGetValue<object>(publishDCAdapter.ClientSiteNameFilter);
+////            Site.CaptureRequirementIfAreEqual<string>(
+////                publishDCAdapter.ActualDcSiteName.ToLower(),
+////                fieldValue.ToString().ToLower(),
+////                304,
+////                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+////                SearchResultEntry, ClientSiteName is set to the site s(site containing the client's IP address).");
+////            #endregion ClientSiteName
 
-            Site.CaptureRequirementIfAreEqual<UInt16>(2, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinFamilyFilter), 165,
-                @"sin_family (2 bytes) field of DcSockAddr SHOULD always be AF_INET (that is, 2).");
-            Site.CaptureRequirementIfAreEqual<UInt16>(2, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinFamilyFilter), 166,
-                @"sin_family (2 bytes) of DcSockAddr does always be AF_INET (that is, 2).");
-            Site.CaptureRequirementIfAreEqual<UInt16>(0, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinPortFilter), 168,
-                @"sin_port (2 bytes) of DcSockAddr SHOULD always be zero.");
-            Site.CaptureRequirementIfAreEqual<UInt16>(0, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinPortFilter), 169,
-                @"sin_port (2 bytes) of DcSockAddr does always be zero.");
-            Site.CaptureRequirementIfAreEqual<UInt64>(0, fieldValueComplex.TryGetValue<UInt64>(publishDCAdapter.SinZeroFilter), 176,
-                "sin_zero (8 bytes) of DcSockAddr MUST set to zero when sending.");
-            string actualAddr = string.Empty;
-            byte[] addrArray = fieldValueComplex.TryGetValue<ComplexType>(publishDCAdapter.SinAddrFilter).TryGetValue<byte[]>("Octets");
-            foreach (byte addrByte in addrArray)
-            {
-                actualAddr += ((int)addrByte).ToString();
-            }
-            Site.CaptureRequirementIfAreEqual<string>(publishDCAdapter.PDCIPAddress.Replace(".",""),
-                actualAddr, 
-                306,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, SockAddr is set to the server's  IP address of the server.");
-            #endregion DcSockAddr
+//            #region DcSockAddr
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DcSockAddrFilter);
+//            ComplexType fieldValueComplex = (ComplexType)fieldValue;
 
-            #region DcSockAddrSize
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DcSockAddrSizeFilter);
-            // Size of the IPAddress is 16 bytes. Hence compared the dcAddressSize with "16"
-            Site.CaptureRequirementIfAreEqual<UInt16>(16, Convert.ToUInt16(fieldValue), 305,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
-                SearchResultEntry, DcSockAddrSize is set to the size of the server's IP address.");
-            #endregion DcSockAddrSize
+//            Site.CaptureRequirementIfAreEqual<UInt16>(2, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinFamilyFilter), 165,
+//                @"sin_family (2 bytes) field of DcSockAddr SHOULD always be AF_INET (that is, 2).");
+//            Site.CaptureRequirementIfAreEqual<UInt16>(2, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinFamilyFilter), 166,
+//                @"sin_family (2 bytes) of DcSockAddr does always be AF_INET (that is, 2).");
+//            Site.CaptureRequirementIfAreEqual<UInt16>(0, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinPortFilter), 168,
+//                @"sin_port (2 bytes) of DcSockAddr SHOULD always be zero.");
+//            Site.CaptureRequirementIfAreEqual<UInt16>(0, fieldValueComplex.TryGetValue<UInt16>(publishDCAdapter.SinPortFilter), 169,
+//                @"sin_port (2 bytes) of DcSockAddr does always be zero.");
+//            Site.CaptureRequirementIfAreEqual<UInt64>(0, fieldValueComplex.TryGetValue<UInt64>(publishDCAdapter.SinZeroFilter), 176,
+//                "sin_zero (8 bytes) of DcSockAddr MUST set to zero when sending.");
+//            string actualAddr = string.Empty;
+//            byte[] addrArray = fieldValueComplex.TryGetValue<ComplexType>(publishDCAdapter.SinAddrFilter).TryGetValue<byte[]>("Octets");
+//            foreach (byte addrByte in addrArray)
+//            {
+//                actualAddr += ((int)addrByte).ToString();
+//            }
+//            Site.CaptureRequirementIfAreEqual<string>(publishDCAdapter.PDCIPAddress.Replace(".",""),
+//                actualAddr, 
+//                306,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, SockAddr is set to the server's  IP address of the server.");
+//            #endregion DcSockAddr
+
+//            #region DcSockAddrSize
+//            fieldValue = null;
+//            fieldValue = message.TryGetValue<object>(publishDCAdapter.DcSockAddrSizeFilter);
+//            // Size of the IPAddress is 16 bytes. Hence compared the dcAddressSize with "16"
+//            Site.CaptureRequirementIfAreEqual<UInt16>(16, Convert.ToUInt16(fieldValue), 305,
+//                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE_EX to pack the value of Netlogon attribute in 
+//                SearchResultEntry, DcSockAddrSize is set to the size of the server's IP address.");
+//            #endregion DcSockAddrSize
         }
 
         /// <summary>
@@ -420,197 +419,198 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         [TestCategory("ForestWin2012")]
         [TestCategory("PDC")]
 		[DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
+        [ExpectedException(typeof(NotImplementedException))]
         public void PublishDC_TestCaseSamLogonResponse()
         {
-            #region Capture
-            MaAdapter.Reset();
-            MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponse);
+            //#region Capture
+            //MaAdapter.Reset();
+            //MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponse);
 
-            string exePath = GetResponseTriggerPath();
-            ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
-            startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " nonex";
-            startInfo.UseShellExecute = false;
-            Process.Start(startInfo);
-            Thread.Sleep(10000);
+            //string exePath = GetResponseTriggerPath();
+            //ProcessStartInfo startInfo = new ProcessStartInfo(exePath);
+            //startInfo.Arguments = publishDCAdapter.PDCIPAddress + " " + publishDCAdapter.PrimaryDomainDnsName + " nonex";
+            //startInfo.UseShellExecute = false;
+            //Process.Start(startInfo);
+            //Thread.Sleep(10000);
 
-            MaAdapter.StopCapture();
+            //MaAdapter.StopCapture();
 
-            string filter = publishDCAdapter.SamLogonResponseFilter + " and IPv4.Address == " + publishDCAdapter.PDCIPAddress;
-            Message message = MaAdapter.GetMessages(publishDCAdapter.capturePath_SamLogonResponse, filter)[0];
-            #endregion Capture
+            //string filter = publishDCAdapter.SamLogonResponseFilter + " and IPv4.Address == " + publishDCAdapter.PDCIPAddress;
+            //Message message = MaAdapter.GetMessages(publishDCAdapter.capturePath_SamLogonResponse, filter)[0];
+            //#endregion Capture
             
-            #region NtVersion
-            object fieldValue = message.TryGetValue<object>(publishDCAdapter.NtVersionFilter);
-            Site.CaptureRequirementIfIsTrue(
-                (((Convert.ToUInt32(fieldValue) & 0x00000001) != 0) && ((Convert.ToUInt32(fieldValue) & 0x00000002) != 0)), 143,
-                @"NtVersion (4 bytes) field of NETLOGON_SAM_LOGON_RESPONSE structure is set to NETLOGON_NT_VERSION_1 | 
-                NETLOGON_NT_VERSION_5.");
-            Site.CaptureRequirementIfIsTrue(
-                (((Convert.ToUInt32(fieldValue) & 0x00000001) != 0) && ((Convert.ToUInt32(fieldValue) & 0x00000002) != 0)), 328,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, NtVersion is set to NETLOGON_NT_VERSION_1 | NETLOGON_NT_VERSION_5.");
-            #endregion NtVersion
+            //#region NtVersion
+            //object fieldValue = message.TryGetValue<object>(publishDCAdapter.NtVersionFilter);
+            //Site.CaptureRequirementIfIsTrue(
+            //    (((Convert.ToUInt32(fieldValue) & 0x00000001) != 0) && ((Convert.ToUInt32(fieldValue) & 0x00000002) != 0)), 143,
+            //    @"NtVersion (4 bytes) field of NETLOGON_SAM_LOGON_RESPONSE structure is set to NETLOGON_NT_VERSION_1 | 
+            //    NETLOGON_NT_VERSION_5.");
+            //Site.CaptureRequirementIfIsTrue(
+            //    (((Convert.ToUInt32(fieldValue) & 0x00000001) != 0) && ((Convert.ToUInt32(fieldValue) & 0x00000002) != 0)), 328,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, NtVersion is set to NETLOGON_NT_VERSION_1 | NETLOGON_NT_VERSION_5.");
+            //#endregion NtVersion
 
-            #region LmNtToken
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.LmNtTokenFilter);
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 144,
-                "LmNtToken (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE structure MUST be set to 0xFFFF.");
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 329,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, LmNtToken is always set to 0xFFFF.");
-            #endregion LmNtToken
+            //#region LmNtToken
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.LmNtTokenFilter);
+            //Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 144,
+            //    "LmNtToken (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE structure MUST be set to 0xFFFF.");
+            //Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 329,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, LmNtToken is always set to 0xFFFF.");
+            //#endregion LmNtToken
 
-            #region Lm20Token
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.Lm20TokenFilter);
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 145,
-                "Lm20Token (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE structure MUST be set to 0xFFFF.");
-            Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 330,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, Lm20Token is always set to 0xFFFF.");
-            #endregion Lm20Token
+            //#region Lm20Token
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.Lm20TokenFilter);
+            //Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 145,
+            //    "Lm20Token (2 bytes) field of NETLOGON_SAM_LOGON_RESPONSE structure MUST be set to 0xFFFF.");
+            //Site.CaptureRequirementIfIsTrue(Convert.ToUInt16(fieldValue) == 0xFFFF, 330,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, Lm20Token is always set to 0xFFFF.");
+            //#endregion Lm20Token
 
-            #region DomainGuid
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DomainGuidFilter);
+            //#region DomainGuid
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.DomainGuidFilter);
 
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainSrvGUID.ToLower(),
-                fieldValue.ToString().ToLower().Replace("{", "").Replace("}", ""),
-                319,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, DomainGuid is set to the GUID of the domain.");
-            #endregion DomainGuid
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    publishDCAdapter.PrimaryDomainSrvGUID.ToLower(),
+            //    fieldValue.ToString().ToLower().Replace("{", "").Replace("}", ""),
+            //    319,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, DomainGuid is set to the GUID of the domain.");
+            //#endregion DomainGuid
 
-            #region NullGuid
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.NullGuidFilter);
-            Site.CaptureRequirementIfAreEqual<Guid>(
-                Guid.Empty,
-                (Guid)fieldValue,
-                320,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, SiteGuid is always set to NULL GUID.");
-            #endregion NullGuid
+            //#region NullGuid
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.NullGuidFilter);
+            //Site.CaptureRequirementIfAreEqual<Guid>(
+            //    Guid.Empty,
+            //    (Guid)fieldValue,
+            //    320,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, SiteGuid is always set to NULL GUID.");
+            //#endregion NullGuid
 
-            #region DnsForestName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsForestNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                321,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, DnsForestName is set to the DNS name of the forest.");
-            #endregion DnsForestName
+            //#region DnsForestName
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsForestNameFilter);
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    publishDCAdapter.PrimaryDomainDnsName.ToLower(),
+            //    fieldValue.ToString().ToLower(),
+            //    321,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, DnsForestName is set to the DNS name of the forest.");
+            //#endregion DnsForestName
 
-            #region DnsDomainName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsDomainNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainDnsName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                322,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, DnsDomainName is set to the DNS name of the domain.");
-            #endregion DnsDomainName
+            //#region DnsDomainName
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsDomainNameFilter);
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    publishDCAdapter.PrimaryDomainDnsName.ToLower(),
+            //    fieldValue.ToString().ToLower(),
+            //    322,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, DnsDomainName is set to the DNS name of the domain.");
+            //#endregion DnsDomainName
 
-            #region DnsHostName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsHostNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PDCFullName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                323,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, DnsHostName is set to the DNS name of the server.");
-            #endregion DnsHostName
+            //#region DnsHostName
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.DnsHostNameFilter);
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    publishDCAdapter.PDCFullName.ToLower(),
+            //    fieldValue.ToString().ToLower(),
+            //    323,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, DnsHostName is set to the DNS name of the server.");
+            //#endregion DnsHostName
 
-            #region Flags
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.FlagsFilter);
-            Site.CaptureRequirementIfIsTrue(
-                ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_FLAG) != 0),
-                326,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the valueof Netlogon attribute in 
-                SearchResultEntry, bit DS_DS_FLAG of Flags field is always set.");
-            Site.CaptureRequirementIfIsTrue(
-                (((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DNS_CONTROLLER_FLAG) == 0)
-                && ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DNS_DOMAIN_FLAG) == 0)
-                && ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DNS_FOREST_FLAG) == 0)),
-                327,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, all the other bits (other than DS_PDC_FLAG, DS_DS_FLAG) of DS_FLAG structure are 
-                set to 0.");
-            if (publishDCAdapter.IsSutPdc)
-            {
-                Site.CaptureRequirementIfAreNotEqual<UInt32>(
-                    0,
-                    Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_PDC_FLAG,
-                    325,
-                    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                    SearchResultEntry, if the server is a PDC, bit DS_PDC_FLAG of Flags field is set");
-            }
-            if (publishDCAdapter.PDCOSVersion >= ServerVersion.Win2012)
-            {
-                Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) != 0,
-                    @"FW8 (DS_DS_8_FLAG, 0x00004000): The server is not running Windows 2000, Windows 2003, Windows Server 2008,
-                or Windows Server 2008 R2 operating system");
-            }
-            else
-            {
-                Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) == 0,
-                    @"DS_DS_8_Flag should be set to 0 when server OS version is lower than Windows Server 2012.");
-            }
-            #endregion Flags
+            //#region Flags
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.FlagsFilter);
+            //Site.CaptureRequirementIfIsTrue(
+            //    ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_FLAG) != 0),
+            //    326,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the valueof Netlogon attribute in 
+            //    SearchResultEntry, bit DS_DS_FLAG of Flags field is always set.");
+            //Site.CaptureRequirementIfIsTrue(
+            //    (((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DNS_CONTROLLER_FLAG) == 0)
+            //    && ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DNS_DOMAIN_FLAG) == 0)
+            //    && ((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DNS_FOREST_FLAG) == 0)),
+            //    327,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, all the other bits (other than DS_PDC_FLAG, DS_DS_FLAG) of DS_FLAG structure are 
+            //    set to 0.");
+            //if (publishDCAdapter.IsSutPdc)
+            //{
+            //    Site.CaptureRequirementIfAreNotEqual<UInt32>(
+            //        0,
+            //        Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_PDC_FLAG,
+            //        325,
+            //        @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //        SearchResultEntry, if the server is a PDC, bit DS_PDC_FLAG of Flags field is set");
+            //}
+            //if (publishDCAdapter.PDCOSVersion >= ServerVersion.Win2012)
+            //{
+            //    Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) != 0,
+            //        @"FW8 (DS_DS_8_FLAG, 0x00004000): The server is not running Windows 2000, Windows 2003, Windows Server 2008,
+            //    or Windows Server 2008 R2 operating system");
+            //}
+            //else
+            //{
+            //    Site.Assert.IsTrue((Convert.ToUInt32(fieldValue) & publishDCAdapter.DS_DS_8_FLAG) == 0,
+            //        @"DS_DS_8_Flag should be set to 0 when server OS version is lower than Windows Server 2012.");
+            //}
+            //#endregion Flags
 
-            #region UnicodeLogonServer
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeLogonServerFilter);
+            //#region UnicodeLogonServer
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeLogonServerFilter);
 
-            Site.CaptureRequirementIfAreEqual<string>(
-                "\\\\" + publishDCAdapter.PDCNetbiosName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                316,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, UnicodeLogonServer is set to the NetBIOS name of the server.");
-            Site.CaptureRequirementIfAreNotEqual<string>(
-                string.Empty,
-                fieldValue.ToString(),
-                127,
-                @"UnicodeLogonServer (variable) field of NETLOGON_SAM_LOGON_RESPONSE structure always contains at least 
-                one character: the null terminator.");
-            #endregion UnicodeLogonServer
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    "\\\\" + publishDCAdapter.PDCNetbiosName.ToLower(),
+            //    fieldValue.ToString().ToLower(),
+            //    316,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, UnicodeLogonServer is set to the NetBIOS name of the server.");
+            //Site.CaptureRequirementIfAreNotEqual<string>(
+            //    string.Empty,
+            //    fieldValue.ToString(),
+            //    127,
+            //    @"UnicodeLogonServer (variable) field of NETLOGON_SAM_LOGON_RESPONSE structure always contains at least 
+            //    one character: the null terminator.");
+            //#endregion UnicodeLogonServer
 
-            #region UnicodeDomainName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeDomainNameFilter);
+            //#region UnicodeDomainName
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeDomainNameFilter);
 
-            Site.CaptureRequirementIfAreEqual<string>(
-                publishDCAdapter.PrimaryDomainNetBiosName.ToLower(),
-                fieldValue.ToString().ToLower(),
-                318,
-                @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
-                SearchResultEntry, UnicodeDomainName is set to the NetBIOS name of the domain.");
-            Site.CaptureRequirementIfAreNotEqual<string>(
-                string.Empty,
-                fieldValue.ToString(),
-                133,
-                @"UnicodeDomainName (variable) field of NETLOGON_SAM_LOGON_RESPONSE structure always contains 
-                at least one character: the null terminator.");
-            #endregion UnicodeDomainName
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    publishDCAdapter.PrimaryDomainNetBiosName.ToLower(),
+            //    fieldValue.ToString().ToLower(),
+            //    318,
+            //    @"If the server uses NETLOGON_SAM_LOGON_RESPONSE to pack the value of Netlogon attribute in 
+            //    SearchResultEntry, UnicodeDomainName is set to the NetBIOS name of the domain.");
+            //Site.CaptureRequirementIfAreNotEqual<string>(
+            //    string.Empty,
+            //    fieldValue.ToString(),
+            //    133,
+            //    @"UnicodeDomainName (variable) field of NETLOGON_SAM_LOGON_RESPONSE structure always contains 
+            //    at least one character: the null terminator.");
+            //#endregion UnicodeDomainName
 
-            #region UnicodeUserName
-            fieldValue = null;
-            fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeUserNameFilter);
-            Site.CaptureRequirementIfAreEqual<string>(
-                string.Empty,
-                fieldValue.ToString().ToLower(),
-                130,
-                @"UnicodeUserName (variable) field of NETLOGON_SAM_LOGON_RESPONSE structure always contains at least one
-                character: the null terminator.");
-            #endregion UnicodeUserName
+            //#region UnicodeUserName
+            //fieldValue = null;
+            //fieldValue = message.TryGetValue<object>(publishDCAdapter.UnicodeUserNameFilter);
+            //Site.CaptureRequirementIfAreEqual<string>(
+            //    string.Empty,
+            //    fieldValue.ToString().ToLower(),
+            //    130,
+            //    @"UnicodeUserName (variable) field of NETLOGON_SAM_LOGON_RESPONSE structure always contains at least one
+            //    character: the null terminator.");
+            //#endregion UnicodeUserName
         }
 
         /// <summary>

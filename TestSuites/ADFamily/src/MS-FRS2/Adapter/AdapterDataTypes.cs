@@ -6,8 +6,8 @@ namespace Microsoft.Protocols.TestSuites.Frs2DataTypes
     using System;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.Messages;
-    using Microsoft.Protocols.TestTools.Messages.Marshaling;
-    using System.Runtime.InteropServices;
+    using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
+    using System.Runtime.InteropServices;    
 
     #region enum
     /// <summary>
@@ -6882,7 +6882,7 @@ namespace Microsoft.Protocols.TestSuites.Frs2DataTypes
     /// <summary>
     /// IFRS2Adapter Interface
     /// </summary>
-    public partial interface IFRS2Adapter : IRpcAdapter
+    public partial interface IFRS2Adapter : IAdapter
     {
        
         /// <summary>

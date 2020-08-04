@@ -1,43 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C2780313-2DBA-473F-A24D-40012AAEA991}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.MS_FRS2</RootNamespace>
     <AssemblyName>MS_FRS2Adapter</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <StartupObject>
-    </StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
+    <StartupObject></StartupObject>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -46,50 +18,13 @@
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AdapterDataTypes.cs" />
-    <Compile Include="FRS2ServerControllerAdapter.cs" />
-    <Compile Include="GenerateMessages.cs" />
-    <Compile Include="Helpers.cs" />
-    <Compile Include="IFRS2ManagedAdapter.cs" />
-    <Compile Include="IFRS2ServerControllerAdapter.cs" />
-    <Compile Include="WindowsDFSRSControlAdapter.cs" />
-    <Compile Include="ModelDataTypes.cs" />
-    <Compile Include="FRS2ManagedAdapter.cs" />
-    <Compile Include="RPCBinding.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Extension">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.Protocols" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\BKUPParser\BKUPParser.csproj" />
+    <ProjectReference Include="..\FileStreamDataParser\FileStreamDataParser.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BKUPParser\BKUPParser.csproj">
-      <Project>{2e94486a-54a4-46a4-b761-0fe7bad40e52}</Project>
-      <Name>BKUPParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FileStreamDataParser\FileStreamDataParser.csproj">
-      <Project>{84CAD0B6-C7C1-42FB-9872-AB309CF178EE}</Project>
-      <Name>FileStreamDataParser</Name>
-    </ProjectReference>
+    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="4.7.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\ADFamily\Bin\" />
-  </Target>
 </Project>
