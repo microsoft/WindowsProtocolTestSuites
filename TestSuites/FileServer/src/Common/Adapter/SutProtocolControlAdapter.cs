@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     checker: (header, response) => { });
                 if (createStatus == Smb2Status.STATUS_SUCCESS)
                 {
-                    client.Write(treeId, fileId, content);
+                    createStatus = client.Write(treeId, fileId, content, checker: (header, response) => { });
                 }
                 DisconnectToShare(treeId, fileId);
             }
@@ -130,9 +130,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     return;
                 }
 
+                // fileName contains a file path and a search pattern. e.g. "data\*.*"
                 string[] filePath = fileName.Split(new char[] { '\\' });
                 // fileName contains wildcard, so get the files by search pattern.
-                string[] files = System.IO.Directory.GetFiles(filePath[0], filePath[1]);
+                string[] files = Directory.GetFiles(filePath[0], filePath[1]);
 
                 foreach (var file in files)
                 {
