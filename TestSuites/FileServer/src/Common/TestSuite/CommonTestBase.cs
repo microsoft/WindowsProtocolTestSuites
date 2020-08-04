@@ -82,19 +82,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
             testFiles.Add(string.Format(@"{0}\{1}", share, fileName));
         }
 
-        protected string CreateTestDirectory(string server, string share)
+        protected string CreateTestDirectory(string server, string share, string parentDirectoryName)
         {
-            return CreateTestDirectory(string.Format(@"\\{0}\{1}", server, share));
+            return CreateTestDirectoryInternal(string.Format(@"\\{0}\{1}", server, share), parentDirectoryName);
         }
 
-        protected string CreateTestDirectory(string share)
+        protected string CreateTestDirectory(string server, string share)
         {
-            string testDirectory = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            string testDirectoryFullPath = string.Format(@"{0}\{1}", share, testDirectory);
+            return CreateTestDirectoryInternal(string.Format(@"\\{0}\{1}", server, share), null);
+        }
+
+        protected string CreateTestDirectory(string uncSharePath)
+        {
+            return CreateTestDirectoryInternal(uncSharePath, null);
+        }
+
+        private string CreateTestDirectoryInternal(string uncSharePath, string parentDirectoryName)
+        {
+            string testDirectory = string.IsNullOrEmpty(parentDirectoryName) ? null : $"{parentDirectoryName}\\";
+            testDirectory += CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
+            string testDirectoryFullPath = string.Format(@"{0}\{1}", uncSharePath, testDirectory);
             testDirectories.Add(testDirectoryFullPath);
-            sutProtocolController.CreateDirectory(share, testDirectory);
+            sutProtocolController.CreateDirectory(uncSharePath, testDirectory);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Create a directory {0} in the share {1}.",
-                testDirectory, share);
+                testDirectory, uncSharePath);
             return testDirectory;
         }
 

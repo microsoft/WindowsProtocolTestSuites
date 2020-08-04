@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="CommonRequirementHelper.cs" />
     <Compile Include="ISutProtocolControlAdapter.cs" />
+    <Compile Include="SutProtocolControlAdapter.cs" />
     <Compile Include="Smb2FunctionalClient.cs" />
     <Compile Include="TestCategories.cs" />
     <Compile Include="TestConfigBase.cs" />
