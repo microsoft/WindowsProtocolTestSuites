@@ -1,15 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -18,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description("This test case is used to ensure SUT drop the connection if the length field within tpktHeader in Server Demand Active PDU is not consistent with the received data.")]
         public void S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_InvalidTKPKLength()
         {
@@ -120,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestMethod]
         [Priority(2)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description("This test case is used to ensure SUT drop the connection if the length field within the MCS Header in Server Demand Active PDU is not consistent with the received data.")]
         public void S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_InvalidMCSLength()
         {
@@ -214,7 +211,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server Demand Active PDU to SUT.");
             this.rdpbcgrAdapter.Server_Demand_Active(NegativeType.InvalidMCSLength);
 
-            RDPClientTryDropConnection("invalid MCS length in Server Demand Active PDU");            
+            RDPClientTryDropConnection("invalid MCS length in Server Demand Active PDU");
             #endregion
             #endregion
         }
@@ -222,7 +219,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description("This test case is used to ensure SUT drop the connection if the MAC signature field within securityHeader in Server Demand Active PDU is incorrect data.")]
         public void S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_IncorrectSignature()
         {
@@ -321,7 +318,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server Demand Active PDU to SUT.");
             this.rdpbcgrAdapter.Server_Demand_Active(NegativeType.InvalidSignatureInSecurityHeader);
 
-            RDPClientTryDropConnection("invalid MAC Signature in Server Demand Active pdu");            
+            RDPClientTryDropConnection("invalid MAC Signature in Server Demand Active pdu");
             #endregion
             #endregion
         }
@@ -329,7 +326,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
-        [TestCategory("RDPBCGR")]        
+        [TestCategory("RDPBCGR")]
         [Description("This test case is used to ensure SUT drop the connection if the total Length field within shareControlHeader in Server Demand Active PDU is invalid.")]
         public void S1_ConnectionTest_CapabilityExchange_NegativeTest_DemandActive_InvalidPDULength()
         {
@@ -425,7 +422,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
 
             #region Wait for Client to drop the connection
-            RDPClientTryDropConnection("invalid pdu length in Server Demand Active pdu");            
+            RDPClientTryDropConnection("invalid pdu length in Server Demand Active pdu");
             #endregion
             #endregion
         }
@@ -468,7 +465,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             capSetCollection.Add(generalCapset);
 
             // Establish RDP connection to test the capability sets
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");            
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
             #endregion
         }
@@ -592,7 +589,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSTYPE_GENERAL);
 
             TS_GENERAL_CAPABILITYSET generalCapset = RdpbcgrCapSet.CreateGeneralCapSet(true, true, true, true, true, false, true, osMajorType_Values.OSMAJORTYPE_WINDOWS, osMinorType_Values.OSMINORTYPE_WINDOWS_NT);
-            capSetCollection.Add(generalCapset);            
+            capSetCollection.Add(generalCapset);
 
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
@@ -720,7 +717,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             TS_BITMAP_CAPABILITYSET bitmapCapset = RdpbcgrCapSet.CreateBitmapCapSet(MaxDesktopWidth, DesktopHeightForCapTest, desktopResizeFlag_Values.TRUE, true, true, true);
             capSetCollection.Add(bitmapCapset);
-           
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -762,7 +759,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             TS_BITMAP_CAPABILITYSET bitmapCapset = RdpbcgrCapSet.CreateBitmapCapSet(DesktopWidthForCapTest, MaxDesktopHeight, desktopResizeFlag_Values.TRUE, true, true, true);
             capSetCollection.Add(bitmapCapset);
-            
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -804,7 +801,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             TS_BITMAP_CAPABILITYSET bitmapCapset = RdpbcgrCapSet.CreateBitmapCapSet(DesktopWidthForCapTest, DesktopHeightForCapTest, desktopResizeFlag_Values.FALSE, true, true, true);
             capSetCollection.Add(bitmapCapset);
-            
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -845,9 +842,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSTYPE_BITMAP);
 
             TS_BITMAP_CAPABILITYSET bitmapCapset = RdpbcgrCapSet.CreateBitmapCapSet(DesktopWidthForCapTest, DesktopHeightForCapTest, desktopResizeFlag_Values.TRUE, false, false, false);
-            bitmapCapset.drawingFlags = drawingFlags_Values.None; 
+            bitmapCapset.drawingFlags = drawingFlags_Values.None;
             capSetCollection.Add(bitmapCapset);
-            
 
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
@@ -888,12 +884,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             // Update TS_GENERAL_CAPABILITYSET
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSTYPE_ORDER);
 
-            TS_ORDER_CAPABILITYSET orderCapset = RdpbcgrCapSet.CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
+            TS_ORDER_CAPABILITYSET orderCapset = RdpbcgrCapSet.CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
                          0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00}, true, true, true, true, true, true, true);
             capSetCollection.Add(orderCapset);
-            
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -933,9 +929,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             // Update TS_GENERAL_CAPABILITYSET
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSTYPE_ORDER);
 
-            TS_ORDER_CAPABILITYSET orderCapset = RdpbcgrCapSet.CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
+            TS_ORDER_CAPABILITYSET orderCapset = RdpbcgrCapSet.CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
                          0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00}, true, true, true, false, false, true, true);
             capSetCollection.Add(orderCapset);
 
@@ -1230,7 +1226,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             // Update TS_GENERAL_CAPABILITYSET
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSTYPE_BITMAPCACHE_HOSTSUPPORT);
-            
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -1389,7 +1385,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             // Update TS_GENERAL_CAPABILITYSET
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER);
-            
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -1431,6 +1427,62 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             TS_LARGE_POINTER_CAPABILITYSET largePointerCap = RdpbcgrCapSet.CreateLargePointerCapSet(largePointerSupportFlags_Values.None);
             capSetCollection.Add(largePointerCap);
+
+            // Establish RDP connection to test the capability sets
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
+            TestCapabilitySets(capSetCollection);
+            #endregion
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("RDP10.7")]
+        [TestCategory("RDPBCGR")]
+        [Description("This test case is used to ensure SUT support extra large pointer when largePointerSupportFlags of TS_LARGE_POINTER_CAPABILITYSET is set to include LARGE_POINTER_FLAG_384x384.")]
+        public void S1_ConnectionTest_CapabilityExchange_PositiveTest_LargePointerCapSet_ExtraLargePointerSupport()
+        {
+            #region Test Description
+            /*
+            This test case is used to ensure SUT support extra large pointer when largePointerSupportFlags of TS_LARGE_POINTER_CAPABILITYSET is set to include LARGE_POINTER_FLAG_384x384.
+            
+            Test Execution Steps:
+            1.	Trigger SUT to initiate a RDP connection and complete the Connection Initiation phase, Basic Setting Exchange phase, 
+                Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase and Licensing phase.
+            2.	Test Suite continues the connection with sending a Server Demand Active PDU to SUT, largePointerSupportFlags of TS_LARGE_POINTER_CAPABILITYSET is set to include LARGE_POINTER_FLAG_384x384.
+            3.	Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU. If LARGE_POINTER_FLAG_96x96 or LARGE_POINTER_FLAG_384x384 is not set, this test case will be inconclusive.
+            4.	Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.
+            */
+            #endregion
+
+            #region Test Sequence
+
+            // Set server capability.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Setting Server Capability.");
+            this.rdpbcgrAdapter.SetServerCapability(true, true, true, true, true, true, true, true, true, true);
+
+            // Generate the capability sets
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Generate Capability sets, largePointerSupportFlags of TS_LARGE_POINTER_CAPABILITYSET is set to include LARGE_POINTER_FLAG_384x384.");
+            Collection<ITsCapsSet> capSetCollection = this.rdpbcgrAdapter.GenerateServerCapSet();
+
+            // Update TS_GENERAL_CAPABILITYSET
+            this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER);
+
+            TS_LARGE_POINTER_CAPABILITYSET largePointerCap = RdpbcgrCapSet.CreateLargePointerCapSet(largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96 | largePointerSupportFlags_Values.LARGE_POINTER_FLAG_384x384);
+            capSetCollection.Add(largePointerCap);
+
+            // Verify the confirm active PDU.
+            rdpbcgrAdapter.ConfirmActiveRequest += confirmActivePdu =>
+            {
+                var largePointerCapSets = confirmActivePdu.confirmActivePduData.capabilitySets.Where(cap => cap.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER);
+
+                TestSite.Assume.AreEqual(1, largePointerCapSets.Count(), "There should be one large pointer capability set in confirm active PDU if SUT supports extra large pointer.");
+
+                var largePointerCapSet = (TS_LARGE_POINTER_CAPABILITYSET)largePointerCapSets.First();
+
+                bool isLargePointerCapabilitySupported = largePointerCapSet.largePointerSupportFlags.HasFlag(largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96 | largePointerSupportFlags_Values.LARGE_POINTER_FLAG_384x384);
+
+                TestSite.Assume.IsTrue(isLargePointerCapabilitySupported, "SUT should set LARGE_POINTER_FLAG_96x96 and LARGE_POINTER_FLAG_384x384 in largePointerSupportFlags if it supports extra large pointer.");
+            };
 
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
@@ -1551,7 +1603,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             // Update TS_GENERAL_CAPABILITYSET
             this.DeleteCapset(capSetCollection, capabilitySetType_Values.CAPSETTYPE_SURFACE_COMMANDS);
-                        
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);
@@ -1676,7 +1728,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             codecCapset.supportedBitmapCodecs.bitmapCodecCount = 0;
             codecCapset.lengthCapability = 5;
             capSetCollection.Add(codecCapset);
-            
+
             // Establish RDP connection to test the capability sets
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establish RDP connection to test capability sets.");
             TestCapabilitySets(capSetCollection);

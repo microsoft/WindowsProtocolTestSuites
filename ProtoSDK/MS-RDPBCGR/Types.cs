@@ -16969,7 +16969,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  ).
         /// </summary>
         FASTPATH_UPDATETYPE_POINTER = 0xB,
-    }
+
+        /// <summary>
+        /// Indicates a Fast-Path Large Pointer Update.
+        /// </summary>
+        FASTPATH_UPDATETYPE_LARGE_POINTER = 0xC,    }
 
     /// <summary>
     /// The type of reserved.
@@ -17753,6 +17757,99 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeStructure(buffer, (ushort)frameMakerData.cmdType);
             RdpbcgrEncoder.EncodeStructure(buffer, (ushort)frameMakerData.frameAction);
             RdpbcgrEncoder.EncodeStructure(buffer, frameMakerData.frameId);
+            return buffer.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// The TS_FP_LARGEPOINTERATTRIBUTE structure is used to transport mouse pointer shapes larger than 96x96 pixels in size.
+    /// </summary>
+    public class TS_FP_LARGEPOINTERATTRIBUTE : TS_FP_UPDATE
+    {
+        /// <summary>
+        /// A 16-bit, unsigned integer. The color depth in bits-per-pixel of the XOR mask contained in the xorMaskData field.
+        /// </summary>
+        public UInt16 xorBpp;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer. The zero-based cache entry in the pointer cache in which to store the pointer image.
+        /// The number of cache entries is specified using the Pointer Capability Set.
+        /// </summary>
+        public UInt16 cacheIndex;
+
+        /// <summary>
+        /// A Point structure containing the x-coordinates and y-coordinates of the pointer hotspot.
+        /// </summary>
+        public TS_POINT16 hotSpot;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer. The width of the pointer in pixels. The maximum allowed pointer width is 384 pixels.
+        /// </summary>
+        public UInt16 width;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer. The height of the pointer in pixels. The maximum allowed pointer height is 384 pixels.
+        /// </summary>
+        public UInt16 height;
+
+        /// <summary>
+        /// A 32-bit, unsigned integer. The size in bytes of the andMaskData field.
+        /// </summary>
+        public UInt32 lengthAndMask;
+
+        /// <summary>
+        /// A 32-bit, unsigned integer. The size in bytes of the xorMaskData field.
+        /// </summary>
+        public UInt32 lengthXorMask;
+
+        /// <summary>
+        /// A variable-length array of bytes. Contains the 24-bpp, bottom-up XOR mask scan-line data.
+        /// The XOR mask is padded to a 2-byte boundary for each encoded scan-line. 
+        /// For example, if a 3x3 pixel cursor is being sent, then each scan-line will consume 10 bytes (3 pixels per scan-line multiplied by 3 bytes per pixel, rounded up to the next even number of bytes).
+        /// </summary>
+        public byte[] xorMaskData;
+
+        /// <summary>
+        /// A variable-length array of bytes. Contains the 1-bpp, bottom-up AND mask scan-line data.
+        /// The AND mask is padded to a 2-byte boundary for each encoded scan-line.
+        /// For example, if a 7x7 pixel cursor is being sent, then each scan-line will consume 2 bytes (7 pixels per scan-line multiplied by 1 byte per pixel, rounded up to the next even number of bytes).
+        /// </summary>
+        public byte[] andMaskData;
+
+        /// <summary>
+        /// An optional 8-bit, unsigned integer used for padding. Values in this field MUST be ignored.
+        /// </summary>
+        public byte? pad;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, xorBpp);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, cacheIndex);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, hotSpot.xPos);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, hotSpot.yPos);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, width);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, height);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, lengthAndMask);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, lengthXorMask);
+
+            RdpbcgrEncoder.EncodeBytes(buffer, xorMaskData);
+
+            RdpbcgrEncoder.EncodeBytes(buffer, andMaskData);
+
+            if (pad != null)
+            {
+                RdpbcgrEncoder.EncodeStructure(buffer, pad);
+            }
+
             return buffer.ToArray();
         }
     }
@@ -19151,6 +19248,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  96 pixel by 96 pixel mouse pointer shapes are supported.
         /// </summary>
         LARGE_POINTER_FLAG_96x96 = 0x00000001,
+
+        /// <summary>
+        /// Mouse pointer shapes of up to 384x384 pixels in size, and the Fast-Path Large Pointer Update, are supported.
+        /// </summary>
+        LARGE_POINTER_FLAG_384x384 = 0x00000002,
     }
 
     /// <summary>
