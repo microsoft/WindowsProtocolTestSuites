@@ -1086,9 +1086,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             var bitmap = RDPBCGROutput.CreateFPUpdateBitmap(left, top, width, height);
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { bitmap });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(bitmap);
         }
 
         /// <summary>
@@ -1100,9 +1098,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             var fpPos = RDPBCGROutput.CreateFPPointerPosAttribute(x, y);
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fpPos });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(fpPos);
         }
 
         /// <summary>
@@ -1112,9 +1108,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             var fpSysPointer = RDPBCGROutput.CreateFPSystemPointerHiddenAttribute();
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fpSysPointer });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(fpSysPointer);
         }
 
         /// <summary>
@@ -1124,9 +1118,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             var fpSysPointer = RDPBCGROutput.CreateFPSystemPointerDefaultAttribute();
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fpSysPointer });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(fpSysPointer);
         }
 
         /// <summary>
@@ -1145,9 +1137,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             var colorAttr = RDPBCGROutput.CreateFPColorPointerAttribute(cacheIndex, hotSpotX, hotSpotY, width, height,
                 xorMaskData, andMaskData);
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { colorAttr });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(colorAttr);
         }
 
         /// <summary>
@@ -1167,9 +1157,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             var pointerAttr = RDPBCGROutput.CreateFPPointerAttribute(xorBpp, cacheIndex, hotSpotX, hotSpotY, width, height,
                 xorMaskData, andMaskData);
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { pointerAttr });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(pointerAttr);
         }
 
         /// <summary>
@@ -1180,9 +1168,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             var cachedPointer = RDPBCGROutput.CreateCachedPointerAttribute(cacheIndex);
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { cachedPointer });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(cachedPointer);
         }
         /// <summary>
         /// Send Fast-Path Surface Commands Update to client.
@@ -1199,9 +1185,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             surfCmds.surfaceCommands[0] = setSurfBits;
 
-            var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { surfCmds });
-
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(surfCmds);
         }
 
         /// <summary>
@@ -1211,12 +1195,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// containing a collection of commands to be processed by the client.</param>
         public void SendSurfaceCommandsUpdate(TS_FP_SURFCMDS surfaceCommands)
         {
-            TS_FP_UPDATE_PDU fpOutput;
-            TS_FP_UPDATE[] updates = new TS_FP_UPDATE[1];
-            updates[0] = surfaceCommands;
-
-            fpOutput = rdpbcgrServerStack.CreateFastPathUpdatePdu(sessionContext, updates);
-            SendPdu(fpOutput);
+            SendFastPathUpdatePdu(surfaceCommands);
         }
 
         /// <summary>
@@ -1261,6 +1240,96 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             surfCmds.AssignUpdateDataAndSize();
 
             SendSurfaceCommandsUpdate(surfCmds);
+        }
+
+        /// <summary>
+        /// Send fast-path large pointer update to client.
+        /// </summary>
+        /// <param name="cacheIndex">The cache index.</param>
+        /// <param name="hotSpotX">The x-coordinates of hotspot.</param>
+        /// <param name="hotSpotY">The y-coordinates of hotspot.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <param name="xorMaskData">The xor mask data.</param>
+        /// <param name="andMaskData">The and mask data.</param>
+        public void FPLargePointer(
+            ushort cacheIndex,
+            ushort hotSpotX,
+            ushort hotSpotY,
+            ushort width,
+            ushort height,
+            byte[] xorMaskData = null,
+            byte[] andMaskData = null
+            )
+        {
+            var largePointerAttribute = RDPBCGROutput.CreateFPLargePointerAttribute(cacheIndex, hotSpotX, hotSpotY, width, height, xorMaskData, andMaskData);
+
+            SendFastPathUpdatePdu(largePointerAttribute);
+        }
+
+        private void SendFastPathUpdatePdu(TS_FP_UPDATE update)
+        {
+            var data = update.EncodeBody();
+
+            // Max length = 16383 - PDU header - FP header.
+            int maxLengthPerFragment = 16364;
+
+            if (data.Length > maxLengthPerFragment)
+            {
+                var maxRequestSize = SessionContext.MultifragmentUpdateMaxRequestSize;
+
+                if (maxRequestSize == null)
+                {
+                    throw new InvalidOperationException("SUT does not support multi-fragment!");
+                }
+
+                if (maxRequestSize < data.Length)
+                {
+                    throw new InvalidOperationException("SUT does not support multi-fragment!");
+                }
+
+                var fragments = data.Select((b, i) => new Tuple<byte, int>(b, i / maxLengthPerFragment)).GroupBy(x => x.Item2).Select(g => g.Select(x => x.Item1).ToArray());
+
+                var pdus = fragments.Select((fragment, i) =>
+                {
+                    fragmentation_Value fragmentation;
+
+                    if (i == 0)
+                    {
+                        fragmentation = fragmentation_Value.FASTPATH_FRAGMENT_FIRST;
+                    }
+                    else if (i == fragments.Count() - 1)
+                    {
+                        fragmentation = fragmentation_Value.FASTPATH_FRAGMENT_LAST;
+                    }
+                    else
+                    {
+                        fragmentation = fragmentation_Value.FASTPATH_FRAGMENT_NEXT;
+                    }
+
+                    var fragmentedPdu = new TS_FP_UPDATE_Fragmented()
+                    {
+                        updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_LARGE_POINTER, fragmentation),
+                        updateData = fragment,
+                        size = (UInt16)fragment.Length,
+                    };
+
+                    var pdu = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { fragmentedPdu });
+
+                    return pdu;
+                });
+
+                foreach (var pdu in pdus)
+                {
+                    SendPdu(pdu);
+                }
+            }
+            else
+            {
+                var fpOutput = RDPBCGROutput.CreateFPUpdatePDU(sessionContext, new TS_FP_UPDATE[] { update });
+
+                SendPdu(fpOutput);
+            }
         }
 
         #endregion "Fast Path Output"

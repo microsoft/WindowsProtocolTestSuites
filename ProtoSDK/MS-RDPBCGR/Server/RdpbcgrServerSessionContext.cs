@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -1702,6 +1700,74 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 lock (contextLock)
                 {
                     isAuthenticatingRDSTLS = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Capability Sets got from Demand Active PDU.
+        /// </summary>
+        public Collection<ITsCapsSet> DemandActiveCapabilitySets
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    if (demandActivePdu != null && demandActivePdu.capabilitySets != null)
+                    {
+                        return demandActivePdu.capabilitySets;
+                    }
+
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The Capability Sets got from Confirm Active PDU.
+        /// </summary>
+        public Collection<ITsCapsSet> ConfirmActiveCapabilitySets
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    if (comfirmActivePdu != null && comfirmActivePdu.capabilitySets != null)
+                    {
+                        TS_CONFIRM_ACTIVE_PDU clonePdu = comfirmActivePdu.Clone();
+                        return clonePdu.capabilitySets;
+                    }
+
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The maximum request size of multiple-fragment.
+        /// </summary>
+        public UInt32? MultifragmentUpdateMaxRequestSize
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    bool hasDemandActiveMultiFragmentUpdateCapSet = DemandActiveCapabilitySets.Any((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    bool hasConfirmActiveMultiFragmentUpdateCapSet = ConfirmActiveCapabilitySets.Any((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    if (!hasDemandActiveMultiFragmentUpdateCapSet || !hasConfirmActiveMultiFragmentUpdateCapSet)
+                    {
+                        return null;
+                    }
+
+                    var demandActiveMultiFragmentUpdateCapSet = (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET)DemandActiveCapabilitySets.First((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    var confirmActiveMultiFragmentUpdateCapSet = (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET)ConfirmActiveCapabilitySets.First((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    UInt32 result = Math.Max(demandActiveMultiFragmentUpdateCapSet.MaxRequestSize, confirmActiveMultiFragmentUpdateCapSet.MaxRequestSize);
+
+                    return result;
                 }
             }
         }

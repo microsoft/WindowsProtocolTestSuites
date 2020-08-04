@@ -112,7 +112,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     return;
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             return result;
         }
-    
+
         private void SendStaticVirtualChannelTraffics(StaticVirtualChannel_InvalidType invalidType)
         {
             if (this.rdpefsAdapter == null)
@@ -172,6 +172,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start to sending ref traffics.");
             this.rdpefsAdapter.GenerateStaticVirtualChannelTraffics(invalidType);
         }
+
+        private enum LargePointerSize : UInt16
+        {
+            Small = 32,
+            Medium = 64,
+            Large = 128,
+            ExtraLarge = 384,
+        }
+
+        // From the section which gives definition of TS_LARGE_POINTER_CAPABILITYSET in [MS-RDPBCGR].
+        private const UInt32 MaxMultiFragmentRequestSizeSupported = 608299;
     }
 }
 ;

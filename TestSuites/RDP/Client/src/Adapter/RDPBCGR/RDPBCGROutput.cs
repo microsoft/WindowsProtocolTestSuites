@@ -319,5 +319,55 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return setSurfBits;
         }
 
+        public static TS_FP_LARGEPOINTERATTRIBUTE CreateFPLargePointerAttribute(ushort cacheIndex, ushort hotSpotX, ushort hotSpotY, ushort width, ushort height, byte[] xorMaskData = null, byte[] andMaskData = null)
+        {
+            var fpLargePointerAttribute = new TS_FP_LARGEPOINTERATTRIBUTE();
+
+            fpLargePointerAttribute.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_LARGE_POINTER);
+
+            fpLargePointerAttribute.xorBpp = 24;
+            fpLargePointerAttribute.cacheIndex = cacheIndex;
+            fpLargePointerAttribute.hotSpot.xPos = hotSpotX;
+            fpLargePointerAttribute.hotSpot.yPos = hotSpotY;
+            fpLargePointerAttribute.width = width;
+            fpLargePointerAttribute.height = height;
+
+            if (xorMaskData != null)
+            {
+                fpLargePointerAttribute.lengthXorMask = (UInt32)xorMaskData.Length;
+                fpLargePointerAttribute.xorMaskData = xorMaskData;
+            }
+            else
+            {
+                // If not provided, generate a pointer with all pixels set to white.
+                fpLargePointerAttribute.lengthXorMask = (UInt32)((width * 3 + 1) / 2 * 2 * height);
+                fpLargePointerAttribute.xorMaskData = new byte[fpLargePointerAttribute.lengthXorMask];
+                for (int i = 0; i < fpLargePointerAttribute.lengthXorMask; i++)
+                {
+                    fpLargePointerAttribute.xorMaskData[i] = 0xff;
+                }
+            }
+
+            if (andMaskData != null)
+            {
+                fpLargePointerAttribute.lengthAndMask = (UInt32)andMaskData.Length;
+                fpLargePointerAttribute.andMaskData = andMaskData;
+            }
+            else
+            {
+                fpLargePointerAttribute.lengthAndMask = (UInt32)(((width + 7) / 8 + 1) / 2 * 2 * height);
+                fpLargePointerAttribute.andMaskData = new byte[fpLargePointerAttribute.lengthAndMask];
+                for (int i = 0; i < fpLargePointerAttribute.lengthAndMask; i++)
+                {
+                    fpLargePointerAttribute.andMaskData[i] = 0xff;
+                }
+            }
+
+            fpLargePointerAttribute.pad = null;
+
+            fpLargePointerAttribute.AssignUpdateDataAndSize();
+
+            return fpLargePointerAttribute;
+        }
     }
 }
