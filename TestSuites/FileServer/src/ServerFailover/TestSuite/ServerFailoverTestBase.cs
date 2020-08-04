@@ -56,6 +56,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 beforeFailover.Disconnect();
             }
 
+            this.sutController.FlushDNS();
             RestoreServer();
 
             base.TestCleanup();

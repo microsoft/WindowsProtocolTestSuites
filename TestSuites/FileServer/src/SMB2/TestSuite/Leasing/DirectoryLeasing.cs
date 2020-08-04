@@ -267,7 +267,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             if (expectedDialect >= DialectRevision.Smb30)
             {
                 // Break the lease with creating another file in the directory
-                sutProtocolController.CreateFile(string.Format(@"{0}\{1}", Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare), testDirectory), CurrentTestCaseName, string.Empty);
+                sutProtocolController.CreateFile(Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare), $"{testDirectory}\\{CurrentTestCaseName}", string.Empty);
 
                 // Wait until LEASE_BREAK_Notification is received
                 BaseTestSite.Assert.IsTrue(

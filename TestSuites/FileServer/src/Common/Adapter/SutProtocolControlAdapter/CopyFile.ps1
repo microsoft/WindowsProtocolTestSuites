@@ -1,9 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-[string]$share
+[string]$uncSharePath
 [string]$fileName
 
-Copy-Item "$fileName" -Destination "$share"
+Copy-Item "$fileName" -Destination "$uncSharePath"
