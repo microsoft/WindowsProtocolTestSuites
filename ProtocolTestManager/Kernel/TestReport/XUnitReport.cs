@@ -50,218 +50,230 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             if (this.testCases.Count() == 0)
             {
-                return false;
+                XmlDocument xmlDoc = new XmlDocument();
+
+                XmlDeclaration declaration;
+                declaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
+                xmlDoc.AppendChild(declaration);
+
+                XmlNode rootNode = xmlDoc.CreateElement("assemblies");
+                xmlDoc.AppendChild(rootNode);
+
+                xmlDoc.Save(filename);
+                return true;
             }
-
-            var groupedByAssembly = this.testCases.GroupBy(c => c.Assembly);
-
-            XmlDocument xmlDoc = new XmlDocument();
-
-            XmlDeclaration declaration;
-            declaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
-            xmlDoc.AppendChild(declaration);
-
-            XmlNode rootNode = xmlDoc.CreateElement("assemblies");
-            xmlDoc.AppendChild(rootNode);
-
-            DateTimeOffset testStartTime = this.testCases.First().StartTime;
-
-            foreach (var assemblyGroup in groupedByAssembly)
+            else
             {
-                XmlNode assemblyNode = xmlDoc.CreateElement("assembly");
+                var groupedByAssembly = this.testCases.GroupBy(c => c.Assembly);
 
-                XmlNode errorsNode = xmlDoc.CreateElement("errors");
-                assemblyNode.AppendChild(errorsNode);
+                XmlDocument xmlDoc = new XmlDocument();
 
-                var groupedByClass = assemblyGroup.GroupBy(c => c.ClassName);
+                XmlDeclaration declaration;
+                declaration = xmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
+                xmlDoc.AppendChild(declaration);
 
-                int totalInAssembly = 0;
-                int passedInAssembly = 0;
-                int failedInAssembly = 0;
-                int skippedInAssembly = 0;
-                TimeSpan assemblyDuration = new TimeSpan();
-                DateTimeOffset assemblyStartTime = assemblyGroup.First().StartTime;
+                XmlNode rootNode = xmlDoc.CreateElement("assemblies");
+                xmlDoc.AppendChild(rootNode);
 
-                foreach (var classGroup in groupedByClass)
+                DateTimeOffset testStartTime = this.testCases.First().StartTime;
+
+                foreach (var assemblyGroup in groupedByAssembly)
                 {
-                    #region <collection> node
-                    XmlNode collectionNode = xmlDoc.CreateElement("collection");
-                    assemblyNode.AppendChild(collectionNode);
+                    XmlNode assemblyNode = xmlDoc.CreateElement("assembly");
 
-                    int totalInClass = 0;
-                    int passedInClass = 0;
-                    int failedInClass = 0;
-                    int skippedInClass = 0;
-                    TimeSpan classDuration = new TimeSpan();
+                    XmlNode errorsNode = xmlDoc.CreateElement("errors");
+                    assemblyNode.AppendChild(errorsNode);
 
-                    foreach (TestCase testcase in classGroup)
+                    var groupedByClass = assemblyGroup.GroupBy(c => c.ClassName);
+
+                    int totalInAssembly = 0;
+                    int passedInAssembly = 0;
+                    int failedInAssembly = 0;
+                    int skippedInAssembly = 0;
+                    TimeSpan assemblyDuration = new TimeSpan();
+                    DateTimeOffset assemblyStartTime = assemblyGroup.First().StartTime;
+
+                    foreach (var classGroup in groupedByClass)
                     {
-                        #region <test> node
-                        XmlNode caseNode = xmlDoc.CreateElement("test");
-                        collectionNode.AppendChild(caseNode);
+                        #region <collection> node
+                        XmlNode collectionNode = xmlDoc.CreateElement("collection");
+                        assemblyNode.AppendChild(collectionNode);
 
-                        TimeSpan caseDuration = testcase.EndTime - testcase.StartTime;
+                        int totalInClass = 0;
+                        int passedInClass = 0;
+                        int failedInClass = 0;
+                        int skippedInClass = 0;
+                        TimeSpan classDuration = new TimeSpan();
 
-                        // test case full name
-                        XmlAttribute caseAttr = xmlDoc.CreateAttribute("name");
-                        caseAttr.Value = testcase.FullName;
-                        caseNode.Attributes.Append(caseAttr);
-
-                        // test case class name
-                        caseAttr = xmlDoc.CreateAttribute("type");
-                        caseAttr.Value = testcase.ClassName;
-                        caseNode.Attributes.Append(caseAttr);
-
-                        // test case method name
-                        caseAttr = xmlDoc.CreateAttribute("method");
-                        caseAttr.Value = testcase.Name;
-                        caseNode.Attributes.Append(caseAttr);
-
-                        // test case duration
-                        caseAttr = xmlDoc.CreateAttribute("time");
-                        caseAttr.Value = $"{caseDuration.TotalSeconds:0.000}";
-                        caseNode.Attributes.Append(caseAttr);
-
-                        // test case result
-                        caseAttr = xmlDoc.CreateAttribute("result");
-                        string result = "";
-                        if (testcase.Status == TestCaseStatus.Passed) result = "Pass";
-                        if (testcase.Status == TestCaseStatus.Failed) result = "Fail";
-                        if (testcase.Status == TestCaseStatus.Other) result = "Skip";
-                        caseAttr.Value = result;
-                        caseNode.Attributes.Append(caseAttr);
-
-                        // standard output of test case
-                        if (!String.IsNullOrEmpty(testcase.StdOut))
+                        foreach (TestCase testcase in classGroup)
                         {
-                            XmlNode stdoutNode = xmlDoc.CreateElement("output");
-                            stdoutNode.InnerText = testcase.StdOut;
-                            caseNode.AppendChild(stdoutNode);
-                        }
+                            #region <test> node
+                            XmlNode caseNode = xmlDoc.CreateElement("test");
+                            collectionNode.AppendChild(caseNode);
 
-                        // failure detail of test case
-                        if (testcase.Status == TestCaseStatus.Failed)
-                        {
-                            XmlNode failureNode = xmlDoc.CreateElement("failure");
-                            caseNode.AppendChild(failureNode);
+                            TimeSpan caseDuration = testcase.EndTime - testcase.StartTime;
 
-                            if (!String.IsNullOrEmpty(testcase.ErrorMessage))
+                            // test case full name
+                            XmlAttribute caseAttr = xmlDoc.CreateAttribute("name");
+                            caseAttr.Value = testcase.FullName;
+                            caseNode.Attributes.Append(caseAttr);
+
+                            // test case class name
+                            caseAttr = xmlDoc.CreateAttribute("type");
+                            caseAttr.Value = testcase.ClassName;
+                            caseNode.Attributes.Append(caseAttr);
+
+                            // test case method name
+                            caseAttr = xmlDoc.CreateAttribute("method");
+                            caseAttr.Value = testcase.Name;
+                            caseNode.Attributes.Append(caseAttr);
+
+                            // test case duration
+                            caseAttr = xmlDoc.CreateAttribute("time");
+                            caseAttr.Value = $"{caseDuration.TotalSeconds:0.000}";
+                            caseNode.Attributes.Append(caseAttr);
+
+                            // test case result
+                            caseAttr = xmlDoc.CreateAttribute("result");
+                            string result = "";
+                            if (testcase.Status == TestCaseStatus.Passed) result = "Pass";
+                            if (testcase.Status == TestCaseStatus.Failed) result = "Fail";
+                            if (testcase.Status == TestCaseStatus.Other) result = "Skip";
+                            caseAttr.Value = result;
+                            caseNode.Attributes.Append(caseAttr);
+
+                            // standard output of test case
+                            if (!String.IsNullOrEmpty(testcase.StdOut))
                             {
-                                XmlNode errMsgNode = xmlDoc.CreateElement("message");
-                                errMsgNode.InnerText = testcase.ErrorMessage;
-                                failureNode.AppendChild(errMsgNode);
+                                XmlNode stdoutNode = xmlDoc.CreateElement("output");
+                                stdoutNode.InnerText = testcase.StdOut;
+                                caseNode.AppendChild(stdoutNode);
                             }
 
-                            if (!String.IsNullOrEmpty(testcase.ErrorStackTrace))
+                            // failure detail of test case
+                            if (testcase.Status == TestCaseStatus.Failed)
                             {
-                                XmlNode errStackNode = xmlDoc.CreateElement("stack-trace");
-                                errStackNode.InnerText = testcase.ErrorStackTrace;
-                                failureNode.AppendChild(errStackNode);
+                                XmlNode failureNode = xmlDoc.CreateElement("failure");
+                                caseNode.AppendChild(failureNode);
+
+                                if (!String.IsNullOrEmpty(testcase.ErrorMessage))
+                                {
+                                    XmlNode errMsgNode = xmlDoc.CreateElement("message");
+                                    errMsgNode.InnerText = testcase.ErrorMessage;
+                                    failureNode.AppendChild(errMsgNode);
+                                }
+
+                                if (!String.IsNullOrEmpty(testcase.ErrorStackTrace))
+                                {
+                                    XmlNode errStackNode = xmlDoc.CreateElement("stack-trace");
+                                    errStackNode.InnerText = testcase.ErrorStackTrace;
+                                    failureNode.AppendChild(errStackNode);
+                                }
                             }
+
+                            // test case category
+                            XmlNode traitsNode = xmlDoc.CreateElement("traits");
+                            caseNode.AppendChild(traitsNode);
+                            foreach (string category in testcase.Category)
+                            {
+                                XmlNode traitNode = xmlDoc.CreateElement("trait");
+
+                                XmlAttribute traitAttr = xmlDoc.CreateAttribute("name");
+                                traitAttr.Value = "Category";
+                                traitNode.Attributes.Append(traitAttr);
+
+                                traitAttr = xmlDoc.CreateAttribute("value");
+                                traitAttr.Value = category;
+                                traitNode.Attributes.Append(traitAttr);
+
+                                traitsNode.AppendChild(traitNode);
+                            }
+                            #endregion
+
+                            if (testcase.Status == TestCaseStatus.Passed) passedInClass++;
+                            if (testcase.Status == TestCaseStatus.Failed) failedInClass++;
+                            if (testcase.Status == TestCaseStatus.Other) skippedInClass++;
+                            totalInClass++;
+                            classDuration += caseDuration;
+
+                            if (testcase.StartTime < testStartTime) testStartTime = testcase.StartTime;
+                            if (testcase.StartTime < assemblyStartTime) assemblyStartTime = testcase.StartTime;
                         }
 
-                        // test case category
-                        XmlNode traitsNode = xmlDoc.CreateElement("traits");
-                        caseNode.AppendChild(traitsNode);
-                        foreach (string category in testcase.Category)
-                        {
-                            XmlNode traitNode = xmlDoc.CreateElement("trait");
+                        XmlAttribute collectionAttr = xmlDoc.CreateAttribute("name");
+                        collectionAttr.Value = $"Test Collection for {classGroup.Key}";
+                        collectionNode.Attributes.Append(collectionAttr);
 
-                            XmlAttribute traitAttr = xmlDoc.CreateAttribute("name");
-                            traitAttr.Value = "Category";
-                            traitNode.Attributes.Append(traitAttr);
+                        collectionAttr = xmlDoc.CreateAttribute("total");
+                        collectionAttr.Value = totalInClass.ToString();
+                        collectionNode.Attributes.Append(collectionAttr);
 
-                            traitAttr = xmlDoc.CreateAttribute("value");
-                            traitAttr.Value = category;
-                            traitNode.Attributes.Append(traitAttr);
+                        collectionAttr = xmlDoc.CreateAttribute("passed");
+                        collectionAttr.Value = passedInClass.ToString();
+                        collectionNode.Attributes.Append(collectionAttr);
 
-                            traitsNode.AppendChild(traitNode);
-                        }
+                        collectionAttr = xmlDoc.CreateAttribute("failed");
+                        collectionAttr.Value = failedInClass.ToString();
+                        collectionNode.Attributes.Append(collectionAttr);
+
+                        collectionAttr = xmlDoc.CreateAttribute("skipped");
+                        collectionAttr.Value = skippedInClass.ToString();
+                        collectionNode.Attributes.Append(collectionAttr);
+
+                        collectionAttr = xmlDoc.CreateAttribute("time");
+                        collectionAttr.Value = $"{classDuration.TotalSeconds:0.000}";
+                        collectionNode.Attributes.Append(collectionAttr);
                         #endregion
 
-                        if (testcase.Status == TestCaseStatus.Passed) passedInClass++;
-                        if (testcase.Status == TestCaseStatus.Failed) failedInClass++;
-                        if (testcase.Status == TestCaseStatus.Other) skippedInClass++;
-                        totalInClass++;
-                        classDuration += caseDuration;
-
-                        if (testcase.StartTime < testStartTime) testStartTime = testcase.StartTime;
-                        if (testcase.StartTime < assemblyStartTime) assemblyStartTime = testcase.StartTime;
+                        totalInAssembly += totalInClass;
+                        passedInAssembly += passedInClass;
+                        failedInAssembly += failedInClass;
+                        skippedInAssembly += skippedInClass;
+                        assemblyDuration += classDuration;
                     }
 
-                    XmlAttribute collectionAttr = xmlDoc.CreateAttribute("name");
-                    collectionAttr.Value = $"Test Collection for {classGroup.Key}";
-                    collectionNode.Attributes.Append(collectionAttr);
+                    XmlAttribute assemblyAttr = xmlDoc.CreateAttribute("name");
+                    assemblyAttr.Value = assemblyGroup.Key;
+                    assemblyNode.Attributes.Append(assemblyAttr);
 
-                    collectionAttr = xmlDoc.CreateAttribute("total");
-                    collectionAttr.Value = totalInClass.ToString();
-                    collectionNode.Attributes.Append(collectionAttr);
+                    assemblyAttr = xmlDoc.CreateAttribute("run-date");
+                    assemblyAttr.Value = assemblyStartTime.ToLocalTime().ToString("yyyy-MM-dd");
+                    assemblyNode.Attributes.Append(assemblyAttr);
 
-                    collectionAttr = xmlDoc.CreateAttribute("passed");
-                    collectionAttr.Value = passedInClass.ToString();
-                    collectionNode.Attributes.Append(collectionAttr);
+                    assemblyAttr = xmlDoc.CreateAttribute("run-time");
+                    assemblyAttr.Value = assemblyStartTime.ToLocalTime().ToString("HH:mm:ss");
+                    assemblyNode.Attributes.Append(assemblyAttr);
 
-                    collectionAttr = xmlDoc.CreateAttribute("failed");
-                    collectionAttr.Value = failedInClass.ToString();
-                    collectionNode.Attributes.Append(collectionAttr);
+                    assemblyAttr = xmlDoc.CreateAttribute("total");
+                    assemblyAttr.Value = totalInAssembly.ToString();
+                    assemblyNode.Attributes.Append(assemblyAttr);
 
-                    collectionAttr = xmlDoc.CreateAttribute("skipped");
-                    collectionAttr.Value = skippedInClass.ToString();
-                    collectionNode.Attributes.Append(collectionAttr);
+                    assemblyAttr = xmlDoc.CreateAttribute("passed");
+                    assemblyAttr.Value = passedInAssembly.ToString();
+                    assemblyNode.Attributes.Append(assemblyAttr);
 
-                    collectionAttr = xmlDoc.CreateAttribute("time");
-                    collectionAttr.Value = $"{classDuration.TotalSeconds:0.000}";
-                    collectionNode.Attributes.Append(collectionAttr);
-                    #endregion
+                    assemblyAttr = xmlDoc.CreateAttribute("failed");
+                    assemblyAttr.Value = failedInAssembly.ToString();
+                    assemblyNode.Attributes.Append(assemblyAttr);
 
-                    totalInAssembly += totalInClass;
-                    passedInAssembly += passedInClass;
-                    failedInAssembly += failedInClass;
-                    skippedInAssembly += skippedInClass;
-                    assemblyDuration += classDuration;
+                    assemblyAttr = xmlDoc.CreateAttribute("skipped");
+                    assemblyAttr.Value = skippedInAssembly.ToString();
+                    assemblyNode.Attributes.Append(assemblyAttr);
+
+                    assemblyAttr = xmlDoc.CreateAttribute("time");
+                    assemblyAttr.Value = $"{assemblyDuration.TotalSeconds:0.000}";
+                    assemblyNode.Attributes.Append(assemblyAttr);
+
+                    rootNode.AppendChild(assemblyNode);
                 }
 
-                XmlAttribute assemblyAttr = xmlDoc.CreateAttribute("name");
-                assemblyAttr.Value = assemblyGroup.Key;
-                assemblyNode.Attributes.Append(assemblyAttr);
+                XmlAttribute rootAttr = xmlDoc.CreateAttribute("timestamp");
+                rootAttr.Value = testStartTime.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss");
+                rootNode.Attributes.Append(rootAttr);
 
-                assemblyAttr = xmlDoc.CreateAttribute("run-date");
-                assemblyAttr.Value = assemblyStartTime.ToLocalTime().ToString("yyyy-MM-dd");
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                assemblyAttr = xmlDoc.CreateAttribute("run-time");
-                assemblyAttr.Value = assemblyStartTime.ToLocalTime().ToString("HH:mm:ss");
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                assemblyAttr = xmlDoc.CreateAttribute("total");
-                assemblyAttr.Value = totalInAssembly.ToString();
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                assemblyAttr = xmlDoc.CreateAttribute("passed");
-                assemblyAttr.Value = passedInAssembly.ToString();
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                assemblyAttr = xmlDoc.CreateAttribute("failed");
-                assemblyAttr.Value = failedInAssembly.ToString();
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                assemblyAttr = xmlDoc.CreateAttribute("skipped");
-                assemblyAttr.Value = skippedInAssembly.ToString();
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                assemblyAttr = xmlDoc.CreateAttribute("time");
-                assemblyAttr.Value = $"{assemblyDuration.TotalSeconds:0.000}";
-                assemblyNode.Attributes.Append(assemblyAttr);
-
-                rootNode.AppendChild(assemblyNode);
+                xmlDoc.Save(filename);
+                return true;
             }
-
-            XmlAttribute rootAttr = xmlDoc.CreateAttribute("timestamp");
-            rootAttr.Value = testStartTime.ToLocalTime().ToString("MM/dd/yyyy HH:mm:ss");
-            rootNode.Attributes.Append(rootAttr);
-
-            xmlDoc.Save(filename);
-            return true;
         }
     }
 }
