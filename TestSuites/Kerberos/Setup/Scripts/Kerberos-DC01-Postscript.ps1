@@ -1,6 +1,6 @@
 ###########################################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ###########################################################################################
 
 #------------------------------------------------------------------------------------------
@@ -13,10 +13,14 @@ Param
 	$WorkingPath      	 = "C:\Temp",
     [int]$Step 			 = 1
 )
+
+$ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
+$ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
 $ConfigFile = "c:\temp\Protocol.xml"
 $Parameters              = @{}
 $CurrentScriptPath 		 = $MyInvocation.MyCommand.Definition
-$ScriptsSignalFile = "$WorkingPath\post.finished.signal" # Config signal file
+$ScriptsSignalFile       = "$WorkingPath\post.finished.signal" # Config signal file
+$LogFileFullPath         = "$ScriptFileFullPath.log"
 $IsAzure                 = $false
 
 try {
@@ -54,6 +58,22 @@ Function Prepare()
 
     Write-Host "Put current dir as $WorkingPath" -ForegroundColor Yellow
     Push-Location $WorkingPath
+
+    # Start logging
+    Start-ConfigLog
+}
+
+#------------------------------------------------------------------------------------------
+# Function: Start-ConfigLog
+# Create log file and start logging
+#------------------------------------------------------------------------------------------
+Function Start-ConfigLog()
+{
+    if (!(Test-Path -Path $LogFileFullPath))
+    {
+        New-Item -ItemType File -path $LogFileFullPath -Force
+    }
+    Start-Transcript $LogFileFullPath -Append 2>&1 | Out-Null
 }
 
 #------------------------------------------------------------------------------------------
@@ -97,6 +117,10 @@ Function RestartAndResume
                         -AutoRestart $true
 }
 
+#------------------------------------------------------------------------------------------
+# Function: Phase1
+# Configure the environment phase 1:
+#------------------------------------------------------------------------------------------
 Function Phase1
 {
 	Write-ConfigLog "Entering Phase 1..."
@@ -116,6 +140,10 @@ Function Phase1
 
 }
 
+#------------------------------------------------------------------------------------------
+# Function: Phase2
+# Configure the environment phase 2:
+#------------------------------------------------------------------------------------------
 Function Phase2
 {
 	Write-ConfigLog "Entering Phase 2..."
@@ -145,7 +173,8 @@ Function Finish
     # Ending script
     Write-Host "post Config finished."
     Write-Host "EXECUTE [Kerberos-DC01-postscript.ps1] FINISHED (NOT VERIFIED)." -ForegroundColor Green
-	
+	Stop-Transcript
+    
     .\RestartAndRunFinish.ps1
 
     if(-not $IsAzure)
