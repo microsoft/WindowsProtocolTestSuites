@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -43,13 +42,13 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
                         KerberosUtility.DumpLevel dumpLevel,
                         byte[] payload) =>
                     {
-                        if (Enum.IsDefined(typeof(DumpLevel), (int)dumpLevel))
-                        {
-                            ExtendedLogger.DumpMessage(messageName,
-                                (DumpLevel)dumpLevel,
-                                messageDescription,
-                                payload);
-                        }
+                        //if (Enum.IsDefined(typeof(DumpLevel), (int)dumpLevel))
+                        //{
+                        //    ExtendedLogger.DumpMessage(messageName,
+                        //        (DumpLevel)dumpLevel,
+                        //        messageDescription,
+                        //        payload);
+                        //}
                     }
                 );
             KerberosUtility.DumpMessage += DumpMessageHandler;

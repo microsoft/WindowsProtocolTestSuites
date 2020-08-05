@@ -1,145 +1,50 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D118ECF2-381D-4D22-90B6-6CB874957B76}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite</RootNamespace>
-    <AssemblyName>MS-FSRVP_ServerTestSuite</AssemblyName>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <!--For CoReXT bcz fxcop settings-->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\fxcop\</OutputPath>
     <DefineConstants>FXCOP;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
-  </PropertyGroup>
+  </PropertyGroup>  
   <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiService\SspiService.csproj" />
+    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
+    <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
+    <ProjectReference Include="..\..\SMB2\Adapter\MS-SMB2_ServerAdapter.csproj" />
+    <ProjectReference Include="..\..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj">
-      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
-      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
-      <Name>FileAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj">
-      <Project>{15162940-F895-48A8-A0F2-49E3A65B632F}</Project>
-      <Name>Fsrvp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
-      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
-      <Name>Nlmp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj">
-      <Project>{A5814E1E-D79C-49A9-A8EA-BA8ED6E0EB39}</Project>
-      <Name>Rpce</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
-      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
-      <Name>Smb2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj">
-      <Project>{C3C96860-5D29-4797-A311-CC568CC8B699}</Project>
-      <Name>Smb</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj">
-      <Project>{5BE7E49E-5CB5-4115-98B1-E7E8B10CFCCB}</Project>
-      <Name>Swn</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
-      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
-      <Name>SspiLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiService\SspiService.csproj">
-      <Project>{1FC8C336-EF82-4F7C-9532-AB8AB268916E}</Project>
-      <Name>SspiService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj">
-      <Project>{3FD566BA-E398-461E-B1B6-464B117ED422}</Project>
-      <Name>CommonAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj">
-      <Project>{CF70C975-EFEA-4B87-B278-1F0B15995F8E}</Project>
-      <Name>CommonTestSuite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SMB2\Adapter\MS-SMB2_ServerAdapter.csproj">
-      <Project>{E7E99C95-1EE5-4E61-BC27-B4D69A31C5BC}</Project>
-      <Name>MS-SMB2_ServerAdapter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.csproj">
-      <Project>{FE3B845F-B07F-483A-986E-91FE7F39460A}</Project>
-      <Name>MS-SMB2_ServerTestSuite</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MS-FSRVP_ServerTestSuite.deployment.ptfconfig">
-    </Content>
-    <Content Include="MS-FSRVP_ServerTestSuite.ptfconfig">
-    </Content>
+    <Content Include="MS-FSRVP_ServerTestSuite.deployment.ptfconfig"></Content>
+    <Content Include="MS-FSRVP_ServerTestSuite.ptfconfig"></Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="VSSAbortShadowCopySet.cs" />
-    <Compile Include="VSSOperateShadowCopySet.cs" />
-    <Compile Include="VSSSetContext.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
 </Project>

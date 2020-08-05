@@ -1,125 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C91DBDA8-6D90-4320-99C4-747DDBC839E8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MS_PCCRC_TestTool</RootNamespace>
-    <AssemblyName>MS-PCCRC_TestTool</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRules>
-    </CodeAnalysisRules>
+    <CodeAnalysisRules></CodeAnalysisRules>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ImportDataForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ImportDataForm.Designer.cs">
+    <Compile Update="ImportDataForm.cs" />
+    <Compile Update="ImportDataForm.Designer.cs">
       <DependentUpon>ImportDataForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="RichTextBoxLogger.cs" />
-    <Compile Include="Utility.cs" />
-    <EmbeddedResource Include="ImportDataForm.resx">
+    <EmbeddedResource Update="ImportDataForm.resx">
       <DependentUpon>ImportDataForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Common\Common.csproj">
-      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
-      <Project>{BF6AFAF0-7592-467F-AD5C-18429D854057}</Project>
-      <Name>CryptoLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
-      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
-      <Name>FileAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
-      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
-      <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
-      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
-      <Name>Nlmp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
-      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
-      <Name>Smb2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
-      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
-      <Name>SspiLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj">
-      <Project>{f3ca3ad9-94a6-4fe1-ba05-0c798e477673}</Project>
-      <Name>CommonStack</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj">
-      <Project>{cd34eb17-a5b5-49a1-a539-e45ef848fab1}</Project>
-      <Name>PccrcStack</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj">
-      <Project>{c87577f2-ffb9-4584-b109-e8d4f62999e2}</Project>
-      <Name>PccrtpStack</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Messages\Messages.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj" />
+    <ProjectReference Include="..\..\..\MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj" />
+    <ProjectReference Include="..\..\..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\BranchCache\Bin\" />
-  </Target>
 </Project>
