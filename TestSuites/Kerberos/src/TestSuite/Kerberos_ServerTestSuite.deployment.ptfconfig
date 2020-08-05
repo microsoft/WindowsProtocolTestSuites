@@ -85,6 +85,26 @@
         The password used to protect the client certificate. Leave it blank if server does not require a client certificate. Applicable when UserProxy is true.
       </Description>
     </Property>
+    <!-- The Windows task name for SUT Control interface: RestoreSupportedEncryptionTypes. -->
+    <Property name="RestoreSupportedEncryptionTypes_Task" value="RestoreSupportedEncryptionTypes">
+      <Description>The Windows task name for SUT Control interface: RestoreSupportedEncryptionTypes.</Description>
+    </Property>
+    <!-- The Windows task name for SUT Control interface: SetSupportedEncryptionTypesAsRc4. -->
+    <Property name="SetSupportedEncryptionTypesAsRc4_Task" value="SetSupportedEncryptionTypesAsRc4">
+      <Description>The Windows task name for SUT Control interface: SetSupportedEncryptionTypesAsRc4.</Description>
+    </Property>
+    <!-- The Windows task name for SUT Control interface: ClearTrustRealmEncType. -->
+    <Property name="ClearTrustRealmEncType_Task" value="ClearTrustRealmEncType">
+      <Description>The Windows task name for SUT Control interface: ClearTrustRealmEncType.</Description>
+    </Property>
+    <!-- The Windows task name for SUT Control interface: SetTrustRealmEncTypeAsAes. -->
+    <Property name="SetTrustRealmEncTypeAsAes_Task" value="SetTrustRealmEncTypeAsAes">
+      <Description>The Windows task name for SUT Control interface: SetTrustRealmEncTypeAsAes.</Description>
+    </Property>
+    <!-- The Windows task name for SUT Control interface: EnableCompoundIdentity. -->
+    <Property name="EnableCompoundIdentity_Task" value="EnableCompoundIdentity">
+      <Description>The Windows task name for SUT Control interface: EnableCompoundIdentity.</Description>
+    </Property>    
     <Group name="LocalRealm" description="Settings for local realm">
       <Property name="RealmName" value="CONTOSO.COM" />
       <Property name="DomainControllerFunctionality" value="7">

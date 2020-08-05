@@ -67,6 +67,10 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
                     TlsClientCertificate = clientCert
                 };
             }
+
+            IClientControlAdapter adapter = BaseTestSite.GetAdapter<IClientControlAdapter>();
+            adapter.RestoreSupportedEncryptionTypes();
+            adapter.EnableCompoundIdentity();
         }
 
         protected override void TestCleanup()

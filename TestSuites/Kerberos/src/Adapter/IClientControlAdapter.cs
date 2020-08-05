@@ -29,6 +29,12 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         /// This method is to restore the SupportedEncryptionTypes settings of the remote computer.
         /// </summary>
         [MethodHelp("This method is to restore the SupportedEncryptionTypes settings of the remote computer.")]
-        void RestoreSupportedEncryptionTypes(string remoteComputerName, string remoteUsername, string remotePassword);
+        void RestoreSupportedEncryptionTypes();
+
+        /// <summary>
+        /// This method is to Enable Compound Identity.
+        /// </summary>
+        [MethodHelp("This method is to Enable Compound Identity.")]
+        void EnableCompoundIdentity();
     }
 }

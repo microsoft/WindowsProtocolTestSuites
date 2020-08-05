@@ -3,8 +3,11 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
-[string]$remoteComputerName
-[string]$remoteUsername
-[string]$remotePassword
+Param(
+[string]$computer, # host name or ip address
+[string]$taskName,
+[string]$userName,
+[string]$userPassword
+)
 
-.\Run-TaskOnRemoteComputer $remoteComputerName $PtfProp_SetSupportedEncryptionTypesAsRc4_Task $remoteUsername $remotePassword
+schtasks /run /s $computer /u $userName /p $userPassword /tn $taskName >> ".\RunTask_$taskName.log"
