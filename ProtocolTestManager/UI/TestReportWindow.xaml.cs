@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 false);
             if (caselist.Count == 0)
             {
-                UserPromptWindow.Show(StringResources.Error, StringResources.NoTestCaseSelected, UserPromptWindow.IconType.Error);
+                UserPromptWindow.Show(StringResources.Error, StringResources.NoTestResults, UserPromptWindow.IconType.Error);
                 return;
             }
 
