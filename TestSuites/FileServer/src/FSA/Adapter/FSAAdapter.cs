@@ -1139,7 +1139,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             uint createAction = 0;
             string randomFile = this.ComposeRandomFileName();
-            MessageStatus returnedStatus = MessageStatus.SUCCESS;
+            MessageStatus returnedStatus;
 
             switch (fileNameStatus)
             {
@@ -1427,26 +1427,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             out byte[] buffer
             )
         {
-            MessageStatus returnedStatus = MessageStatus.INVALID_PARAMETER;
+            MessageStatus returnedStatus = this.transAdapter.Read(
+                (ulong)byteOffset,
+                (uint)byteCount,
+                true,
+                out buffer);
 
-            try
+            if (returnedStatus == MessageStatus.SUCCESS)
             {
-                returnedStatus = this.transAdapter.Read(
-                    (ulong)byteOffset,
-                    (uint)byteCount,
-                    true,
-                    out buffer);
-
-                if (returnedStatus == MessageStatus.SUCCESS)
-                {
-                    bool isReturned = (buffer != null);
-                    this.VerifyServerRequestsRead(isReturned);
-                }
-            }
-            catch (Exception ex)
-            {
-                buffer = new byte[0];
-                site.Log.Add(LogEntryKind.Debug, "Read file get exception: " + ex.Message);
+                bool isReturned = (buffer != null);
+                this.VerifyServerRequestsRead(isReturned);
             }
 
             //When outBuffer is null, byteRead is 0
@@ -1680,7 +1670,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             return returnedStatus;
         }
-    #endregion
+        #endregion
 
         #region 3.1.5.5.2   FileReparsePointInformation
 
@@ -1986,12 +1976,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.gLockIsExclusive = ExclusiveLock;
             long bytesWritten = 0;
 
-            MessageStatus returnedStatus = MessageStatus.SUCCESS;
-
             //To make sure FileOffset + Length + 10 is valid, according to 3.1.5.7
             WriteFile(0, FileOffset + Length + 10, out bytesWritten);
 
-            returnedStatus = transAdapter.LockByteRange(
+            MessageStatus returnedStatus = transAdapter.LockByteRange(
                 (ulong)FileOffset,
                 (ulong)Length,
                 ExclusiveLock,
@@ -5072,7 +5060,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool replaceIfExists = (replacementType == ReplacementType.ReplaceIfExists);
             bool isReturnStatus = false;
 
-            MessageStatus returnedStatus = MessageStatus.SUCCESS;
+            MessageStatus returnedStatus;
 
             if (this.transport == Transport.SMB)
             {
@@ -5580,13 +5568,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
 
             randomFileName = randomFileName + extension;
-                
+
             if (addToList)
             {
                 AddTestFileName(opt, randomFileName);
             }
             return randomFileName;
-        }       
+        }
         /// <summary>
         /// Get SUT platformType.
         /// </summary>
