@@ -5,6 +5,9 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
@@ -70,9 +73,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             var expectedResults = new ulong[]
             {
-                23040,
+                23552,
                 43520,
-                26624
+                32256
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Size), expectedResults, queryResult);
@@ -129,16 +132,56 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Kind property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Storage_System_Kind()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Kind, "kind", totalRows: 6);
+
+            var expectedResults = new string[][]
+            {
+                new string[] { "document" },
+                new string[] { "picture" },
+                new string[] { "music" },
+                new string[] { "video" },
+                new string[] { "contact", "communication" },
+                new string[] { "email", "communication" }
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Kind), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.KindText property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Storage_System_KindText()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_KindText, "kind", totalRows: 6);
+
+            var expectedResults = new string[]
+            {
+                "Document",
+                "Picture",
+                "Music",
+                "Video",
+                "Contact; Communication",
+                "E-mail; Communication"
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_KindText), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to test if System.Category property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Documents_System_Category()
         {
             var queryResult = GetQueryResult(WspConsts.System_Category, "document");
 
-            var expectedResults = new string[]
+            var expectedResults = new string[][]
             {
-                "memo",
-                "schedule",
-                "white paper"
+                new string[] { "memo" },
+                new string[] { "schedule" },
+                new string[] { "white paper" }
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Category), expectedResults, queryResult);
@@ -180,16 +223,80 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Subject property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Documents_System_Subject()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Subject, "document");
+
+            var expectedResults = new string[]
+            {
+                "Important Text",
+                "Important Slide",
+                "Important Chart"
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Subject), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Keywords property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Documents_System_Keywords()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Keywords, "document");
+
+            var expectedResults = new string[][]
+            {
+                new string[] { "important text" },
+                new string[] { "important slide" },
+                new string[] { "important chart" }
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Keywords), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Document.DateCreated property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Documents_System_Document_DateCreated()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Document_DateCreated, "document");
+
+            foreach (var row in queryResult.Rows)
+            {
+                Site.Assert.IsTrue(row.Columns[1].Data is DateTime, $"The System.Document.DateCreated column should be in DateTime form.");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.ContentType property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Documents_System_ContentType()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_ContentType, "img");
+
+            var expectedResults = new string[]
+            {
+                "image/bmp",
+                "image/jpeg",
+                "image/bmp"
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_ContentType), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to test if System.Music.Artist property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Music_System_Music_Artist()
         {
             var queryResult = GetQueryResult(WspConsts.System_Music_Artist, "music");
 
-            var expectedResults = new string[]
+            var expectedResults = new string[][]
             {
-                "AAA",
-                "BBB",
-                "CCC",
+                new string[] { "AAA" },
+                new string[] { "BBB" },
+                new string[] { "CCC" },
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Music_Artist), expectedResults, queryResult);
@@ -219,14 +326,65 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             var queryResult = GetQueryResult(WspConsts.System_Music_Genre, "music");
 
-            var expectedResults = new string[]
+            var expectedResults = new string[][]
             {
-                "Pop",
-                "Dance",
-                "Rock",
+                new string[] { "Pop" },
+                new string[] { "Dance" },
+                new string[] { "Rock" },
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Music_Genre), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Media.Year property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Music_System_Media_Year()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Media_Year, "music");
+
+            var expectedResults = new uint[]
+            {
+                1997,
+                2007,
+                2017,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Media_Year), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Music.TrackNumber property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Music_System_Music_TrackNumber()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Music_TrackNumber, "music");
+
+            var expectedResults = new uint[]
+            {
+                15,
+                4,
+                11,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Music_TrackNumber), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.DRM.IsProtected property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_DRM_System_DRM_IsProtected()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_DRM_IsProtected, "music");
+
+            var expectedResults = new ushort[]
+            {
+                0,
+                0,
+                0,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_DRM_IsProtected), expectedResults, queryResult);
         }
 
         [TestMethod]
@@ -282,6 +440,40 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Image.VerticalSize property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Image_System_Image_VerticalSize()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Image_VerticalSize, "img");
+
+            var expectedResults = new uint[]
+            {
+                64,
+                636,
+                76,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Image_VerticalSize), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Image.VerticalResolution property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Image_System_Image_VerticalResolution()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Image_VerticalResolution, "img");
+
+            var expectedResults = new double[]
+            {
+                96,
+                72,
+                96,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Image_VerticalResolution), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to test if AudioFormat property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Audio_AudioFormat()
         {
@@ -329,6 +521,57 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Audio_EncodingBitrate), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Audio.SampleRate property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Audio_System_Audio_SampleRate()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Audio_SampleRate, "music");
+
+            var expectedResults = new uint[]
+            {
+                44100,
+                44100,
+                44100,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Audio_SampleRate), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Audio.SampleSize property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Audio_System_Audio_SampleSize()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Audio_SampleSize, "music");
+
+            var expectedResults = new uint[]
+            {
+                16,
+                16,
+                16,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Audio_SampleSize), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Audio.ChannelCount property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Audio_System_Audio_ChannelCount()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Audio_ChannelCount, "music");
+
+            var expectedResults = new uint[]
+            {
+                2,
+                1,
+                2,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Audio_ChannelCount), expectedResults, queryResult);
         }
 
         [TestMethod]
@@ -384,10 +627,95 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Video.FrameRate property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Video_System_Video_FrameRate()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Video_FrameRate, "video");
+
+            var expectedResults = new uint[]
+            {
+                30000,
+                30000,
+                30000,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Video_FrameRate), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Video.Compression property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Video_System_Video_Compression()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Video_Compression, "video");
+
+            var expectedResults = new string[]
+            {
+                "{34363248-0000-0010-8000-00AA00389B71}",
+                "{34363248-0000-0010-8000-00AA00389B71}",
+                "{34363248-0000-0010-8000-00AA00389B71}",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Video_Compression), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Video.TotalBitrate property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Video_System_Video_TotalBitrate()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Video_TotalBitrate, "video");
+
+            var expectedResults = new uint[]
+            {
+                139272,
+                111688,
+                101608,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Video_TotalBitrate), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Video.FourCC property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Video_System_Video_FourCC()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Video_FourCC, "video");
+
+            var expectedResults = new uint[]
+            {
+                875967048,
+                875967048,
+                875967048,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Video_FourCC), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Video.Director property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Video_System_Video_Director()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Video_Director, "video");
+
+            var expectedResults = new string[][]
+            {
+                new string[] { "AAA" },
+                new string[] { "BBB" },
+                new string[] { "CCC" },
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Video_Director), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to test if System.Contact.HomeTelephone property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Contact_System_Contact_HomeTelephone()
         {
-            var queryResult = GetQueryResult(WspConsts.System_Contact_HomeTelephone, "contact");
+            var queryResult = GetQueryResult(WspConsts.System_Contact_HomeTelephone, "person");
 
             var expectedResults = new string[]
             {
@@ -404,7 +732,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test if System.Contact.EmailAddress property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Contact_System_Contact_EmailAddress()
         {
-            var queryResult = GetQueryResult(WspConsts.System_Contact_EmailAddress, "contact");
+            var queryResult = GetQueryResult(WspConsts.System_Contact_EmailAddress, "person");
 
             var expectedResults = new string[]
             {
@@ -421,7 +749,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test if System.Contact.FullName property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Contact_System_Contact_FullName()
         {
-            var queryResult = GetQueryResult(WspConsts.System_Contact_FullName, "contact");
+            var queryResult = GetQueryResult(WspConsts.System_Contact_FullName, "person");
 
             var expectedResults = new string[]
             {
@@ -431,6 +759,271 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Contact_FullName), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Contact.NickName property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Contact_System_Contact_NickName()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Contact_NickName, "person");
+
+            var expectedResults = new string[]
+            {
+                "aaa",
+                "ccc",
+                "eee",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Contact_NickName), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Contact.HomeAddressStreet property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Contact_System_Contact_HomeAddressStreet()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Contact_HomeAddressStreet, "person");
+
+            var expectedResults = new string[]
+            {
+                "AAA",
+                "BBB",
+                "CCC",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Contact_HomeAddressStreet), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Search.Store property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Search_System_Search_Store()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Search_Store, "document");
+
+            var expectedResults = new string[]
+            {
+                "file",
+                "file",
+                "file",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Search_Store), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Search.EntryID property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Search_System_Search_EntryID()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Search_EntryID, "document");
+
+            var uniqueIds = new HashSet<int>();
+            foreach (var row in queryResult.Rows)
+            {
+                Site.Assert.IsTrue(row.Columns[1].Data is int, $"The System.Search.EntryID column should be an int value.");
+                uniqueIds.Add((int)row.Columns[1].Data);
+            }
+
+            var areAllIdsUnique = uniqueIds.Count == 3;
+            Site.Assert.IsTrue(areAllIdsUnique, "The values of System.Search.EntryID associated with each file in the query results should be unique.");
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Search.HitCount property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Search_System_Search_HitCount()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Search_HitCount, "document");
+
+            var expectedResults = new int[]
+            {
+                1,
+                1,
+                1,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Search_HitCount), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Search.GatherTime property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Search_System_Search_GatherTime()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Search_GatherTime, "document");
+
+            foreach (var row in queryResult.Rows)
+            {
+                Site.Assert.IsTrue(row.Columns[1].Data is DateTime, $"The System.Search.GatherTime column should be in DateTime form.");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Search.LastIndexedTotalTime property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Search_System_Search_LastIndexedTotalTime()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Search_LastIndexedTotalTime, "document");
+
+            foreach (var row in queryResult.Rows)
+            {
+                Site.Assert.IsTrue(row.Columns[1].Data is double, $"The System.Search.LastIndexedTotalTime column should be a double value.");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.MIMEType property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Search_System_MIMEType()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_MIMEType, "img");
+
+            var expectedResults = new string[]
+            {
+                "image/bmp",
+                "image/jpeg",
+                "image/bmp"
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_MIMEType), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Rating property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Media_System_Rating()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Rating, "music");
+
+            var expectedResults = new uint[]
+            {
+                1,
+                50,
+                99,
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Rating), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.ParentalRating property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Media_System_ParentalRating()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_ParentalRating, "video");
+
+            var expectedResults = new string[]
+            {
+                "AAA",
+                "BBB",
+                "CCC",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_ParentalRating), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Media.Writer property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Media_System_Media_Writer()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Media_Writer, "video");
+
+            var expectedResults = new string[][]
+            {
+                new string[] { "AAA" },
+                new string[] { "BBB" },
+                new string[] { "CCC" },
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Media_Writer), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.Media.DateEncoded property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Media_System_Media_DateEncoded()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_Media_DateEncoded, "video");
+
+            var expectedResults = new DateTime[]
+            {
+                DateTime.Parse("6/23/2020 12:03:23"),
+                DateTime.Parse("7/23/2020 12:03:23"),
+                DateTime.Parse("5/23/2020 12:03:23"),
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_Media_DateEncoded), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.ComputerName property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Shell_System_ComputerName()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_ComputerName, "document");
+
+            var sutComputerName = Site.Properties.Get("ServerComputerName");
+            foreach (var row in queryResult.Rows)
+            {
+                var propValue = row.Columns[1].Data as string;
+                Site.Assert.AreEqual(sutComputerName.ToUpper(), propValue.ToUpper(), $"The System.ComputerName column should be {sutComputerName}.");
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.ItemPathDisplayNarrow property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Shell_System_ItemPathDisplayNarrow()
+        {
+            var queryPath = Site.Properties.Get("QueryPath") + "Data/CreateQuery_CFullPropSpec";
+            var queryFolderPath = queryPath.Replace("file://", @"\\").Replace("/", @"\");
+            var queryResult = GetQueryResult(WspConsts.System_ItemPathDisplayNarrow, "document", queryPath: queryPath);
+
+            var expectedResults = new string[]
+            {
+                $"document1.doc ({queryFolderPath})",
+                $"document2.ppt ({queryFolderPath})",
+                $"document3.xls ({queryFolderPath})",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_ItemPathDisplayNarrow), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.ItemType property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Shell_System_ItemType()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_ItemType, "document");
+
+            var expectedResults = new string[]
+            {
+                ".doc",
+                ".ppt",
+                ".xls",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_ItemType), expectedResults, queryResult);
+        }
+
+        [TestMethod]
+        [TestCategory("CPMCreateQuery")]
+        [Description("This test case is designed to test if System.ParsingName property can be retrieved by CPMCreateQuery.")]
+        public void CPMCreateQuery_CFullPropSpec_Shell_System_ParsingName()
+        {
+            var queryResult = GetQueryResult(WspConsts.System_ParsingName, "document");
+
+            var expectedResults = new string[]
+            {
+                "document1.doc",
+                "document2.ppt",
+                "document3.xls",
+            };
+
+            ValidateQueryResult(nameof(WspConsts.System_ParsingName), expectedResults, queryResult);
         }
 
         #endregion
@@ -505,15 +1098,34 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             for (var i = 0; i < expectedResults.Length; i++)
             {
                 var fileName = queryResult.Rows[i].Columns[2].Data as string;
-                if (queryResult.Rows[i].Columns[1].rowVariant.vType.HasFlag(vType_Values.VT_VECTOR))
-                {
-                    Site.Assert.AreEqual(expectedResults[i], (queryResult.Rows[i].Columns[1].Data as T[])[0], $"The {propertyName} of {fileName} shoulde be {expectedResults[i]}");
-                }
-                else
-                {
-                    Site.Assert.AreEqual(expectedResults[i], (T)queryResult.Rows[i].Columns[1].Data, $"The {propertyName} of {fileName} shoulde be {expectedResults[i]}");
-                }
+                Site.Assert.AreEqual(expectedResults[i], (T)queryResult.Rows[i].Columns[1].Data, $"The {propertyName} of {fileName} shoulde be {expectedResults[i]}");
             }
+        }
+
+        private void ValidateQueryResult<T>(string propertyConstantName, T[][] expectedResults, CPMGetRowsOut queryResult)
+        {
+            var propertyName = propertyConstantName.Replace("_", ".");
+            for (var i = 0; i < expectedResults.Length; i++)
+            {
+                var fileName = queryResult.Rows[i].Columns[2].Data as string;
+                var dataArray = queryResult.Rows[i].Columns[1].Data as T[];
+                var succeed = expectedResults[i].SequenceEqual(dataArray);
+                Site.Assert.IsTrue(succeed, $"The {propertyName} of {fileName} shoulde be {GetPrintableVector(expectedResults[i])}");
+            }
+        }
+
+        private string GetPrintableVector<T>(T[] vector)
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('[');
+            foreach (var element in vector)
+            {
+                stringBuilder.Append($"{element};");
+            }
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            stringBuilder.Append(']');
+
+            return stringBuilder.ToString();
         }
     }
 }
