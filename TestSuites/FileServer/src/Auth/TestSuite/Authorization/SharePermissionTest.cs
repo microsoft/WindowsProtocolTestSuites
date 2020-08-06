@@ -73,7 +73,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_ALLOWED_ACE with user SID exists in share Security Descriptor.")]
         public void BVT_SharePermission_AccessAllow_UserSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
             string shareName;
             if (dynamicallyConfigurableShareExist)
             {
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_ALLOWED_ACE with user's group SID exists in share Security Descriptor.")]
         public void SharePermission_AccessAllow_GroupSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azGroup01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azGroup01Name, testConfig.UserName, testConfig.UserPassword);
             string shareName;
             if (dynamicallyConfigurableShareExist)
             {
@@ -127,7 +127,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_DENIED_ACE with user SID exists in share Security Descriptor.")]
         public void SharePermission_AccessDeny_UserSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
             string shareName;
             if (dynamicallyConfigurableShareExist)
             {
@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_DENIED_ACE with user's group SID exists in share Security Descriptor.")]
         public void SharePermission_AccessDeny_GroupSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azGroup01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azGroup01Name, testConfig.UserName, testConfig.UserPassword);
             string shareName;
             if (dynamicallyConfigurableShareExist)
             {
@@ -181,7 +181,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "user SID does not exist in share Security Descriptor.")]
         public void SharePermission_AccessDeny_SidNoInclude()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
             string shareName;
             if (dynamicallyConfigurableShareExist)
             {
@@ -207,7 +207,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_ALLOWED_ACE with user SID exists in share Security Descriptor.")]
         public void SharePermission_AccessDeny_UserSidWithoutReadPermission()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
             string shareName;
             if (dynamicallyConfigurableShareExist)
             {
@@ -234,7 +234,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [Description("This case is designed to test whether server can handle file deletion request when Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL.")]
         public void SharePermission_CreateClose_DeleteFile_MaximalAccessNotIncludeDeleteOrGenericAll()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name);
+            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
             if (!dynamicallyConfigurableShareExist)
             {
                 BaseTestSite.Assert.Inconclusive("Required share: {0} does not exist!", dynamicallyConfigurableShareName);
