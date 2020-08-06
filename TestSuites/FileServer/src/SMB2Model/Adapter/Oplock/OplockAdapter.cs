@@ -195,7 +195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
 
             fileOperationInvoker = new FileOperationDelegate(FileOperation);
             var task = Task.Run(() => fileOperationInvoker.Invoke(fileOperation, fileName));
-            Task.WaitAll(new Task[] { task }, 500);// Assume that notification will arrive in .5 sec if there's any
+            task.Wait(500);// Assume that notification will arrive in .5 sec if there's any
         }
 
         public void OplockBreakAcknowledgementRequest(OplockVolatilePortion volatilePortion, OplockPersistentPortion persistentPortion, OplockLevel_Values oplockLevel)
