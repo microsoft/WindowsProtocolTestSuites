@@ -3,8 +3,6 @@
 <!-- If need check Visual Studio 2017 Or Higher version" -->
 <?define PTF=1 ?>
 <!-- If need check Protocol Test Framework version" -->
-<?define SE=1 ?>
-<!-- If need check Spec Explorer 2010" -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
 
@@ -54,7 +52,7 @@
 
       <!-- Perform dependency check when installing on test suite machine and clicking Next button. -->
       <Publish Dialog="EndpointDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="2">
-        <![CDATA[TARGET_ENDPOINT="TESTSUITE" AND (($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled)]]>
+        <![CDATA[TARGET_ENDPOINT="TESTSUITE" AND (($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR NOT VSInstalled)]]>
       </Publish>
       <!-- Optional Warning Dialog. -->
       <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="EndpointDlg">1</Publish>
@@ -73,9 +71,6 @@
     <!-- Dependency List -->
     <SetProperty Id="VS2017_VSTA2017_Higher" After="AppSearch" Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;">
       <![CDATA[$(var.VS17H)]]>
-    </SetProperty>
-    <SetProperty Id="SPEC_EXPLORER" After="AppSearch" Value=" • Microsoft Spec Explorer 2010.&#xA;">
-      <![CDATA[$(var.SE)]]>
     </SetProperty>
     <SetProperty Id="PTF_BuildVersion" After="AppSearch" Value=" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;">
       <![CDATA[$(var.PTF)]]>
@@ -104,17 +99,6 @@
                   Property="VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT"
                   Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;" />
 
-    <!-- SET Spec Explorer Warning Message-->
-    <CustomAction Id="SET_SE_NOT_INSTALLED_WARNING_TEXT"
-                  Property="SE_NOT_INSTALLED_WARNING_TEXT"
-                  Value=" • Microsoft Spec Explorer 2010.&#xA;" />
-
-    <InstallUISequence>
-      <Custom Action="SET_SE_NOT_INSTALLED_WARNING_TEXT" After="AppSearch">
-        <![CDATA[$(var.SE) AND NOT SPEC_EXPLORER_INSTALLED]]>
-      </Custom>
-    </InstallUISequence>
-
     <!-- SET PTF Version Warning Message-->
     <Property Id="PTFVERSION">
       <RegistrySearch Id="PTFVersion64Search" Root="HKLM" Win64="yes" Key="SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
@@ -131,14 +115,6 @@
         <![CDATA[$(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)]]>
       </Custom>
     </InstallUISequence>
-
-    <!-- Spec Explorer dependency check-->
-    <Property Id="SPEC_EXPLORER_INSTALLED">
-      <DirectorySearch Id="SeSearch" Path="[ProgramFilesFolder]Spec Explorer 2010" Depth="1">
-        <FileSearch Name="SpecExplorer.exe"
-                    Languages="0" />
-      </DirectorySearch>
-    </Property>
 
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
       <![CDATA[VSTEST]]>

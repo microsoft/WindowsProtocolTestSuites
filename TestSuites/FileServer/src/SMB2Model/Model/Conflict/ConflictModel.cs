@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict;
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Conflict
 {

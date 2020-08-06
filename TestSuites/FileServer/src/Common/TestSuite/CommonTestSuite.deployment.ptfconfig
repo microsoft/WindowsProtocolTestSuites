@@ -79,6 +79,13 @@
         </Description>
       </Property>
 
+      <Property name="DCServerComputerName" value="DC01">
+        <Description>
+          Computer name of DC
+          If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
+        </Description>
+      </Property>
+
       <Property name="AdminUserName" value="Administrator">
         <Description>
           Administrator user account name of the SUT

@@ -3,7 +3,6 @@
 
 using System;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using System.Collections.Generic;

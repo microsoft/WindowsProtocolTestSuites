@@ -7,13 +7,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [TestClassAttribute()]
     public partial class TestScenarioDefunctWin2K8R2 : PtfTestClassBase
     {
@@ -46,7 +44,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.Manager.GetAdapter(typeof(IAD_LDAPModelAdapter))));
+            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.GetAdapter(typeof(IAD_LDAPModelAdapter))));
         }
 
         protected override void TestCleanup()
@@ -74,33 +72,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S2\'");
             ConstrOnAddOpErrs temp0;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DefunctClass3"",""Governs-ID: 1.5.840.111216.1.5.36"",""isDefunct: TRUE"",""subClassOf: top"",""distinguishedName: CN=DefunctClass3,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: classSchema""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DefunctClass3",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Governs-ID: 1.5.840.111216.1.5.36",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "isDefunct: TRUE",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "subClassOf: top",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "distinguishedName: CN=DefunctClass3,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectClass: classSchema",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp0);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DefunctClass3", "Governs-ID: 1.5.840.111216.1.5.36", "isDefunct: TRUE", "subClassOf: top", "distinguishedName: CN=DefunctClass3,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp0);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -124,45 +96,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S4\'");
             ConstrOnAddOpErrs temp1;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: DefunctAttribute"",""attributeId: 1.2.301.15161.1.4.1100.233.26882.28374.8.111927.421.2002441.811270"",""isDefunct: TRUE"",""lDAPDisplayName: DefunctAttribute"",""distinguishedName: CN=DefunctAttribute,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: attributeSchema"",""attributeSyntax: 2.5.5.12"",""oMSyntax: 64"",""isSingleValued: FALSE""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: DefunctAttribute",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "attributeId: 1.2.301.15161.1.4.1100.233.26882.28374.8.111927.421.2002441.811270",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "isDefunct: TRUE",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "lDAPDisplayName: DefunctAttribute",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "distinguishedName: CN=DefunctAttribute,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectClass: attributeSchema",
-                                                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                "Head",
-                                                                                                                "Tail"}, new object[] {
-                                                                                                                "attributeSyntax: 2.5.5.12",
-                                                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                            "Head",
-                                                                                                                            "Tail"}, new object[] {
-                                                                                                                            "oMSyntax: 64",
-                                                                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                                        "Head",
-                                                                                                                                        "Tail"}, new object[] {
-                                                                                                                                        "isSingleValued: FALSE",
-                                                                                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp1);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: DefunctAttribute", "attributeId: 1.2.301.15161.1.4.1100.233.26882.28374.8.111927.421.2002441.811270", "isDefunct: TRUE", "lDAPDisplayName: DefunctAttribute", "distinguishedName: CN=DefunctAttribute,CN=Schema,CN=Configuration,DC=adts88", "objectClass: attributeSchema", "attributeSyntax: 2.5.5.12", "oMSyntax: 64", "isSingleValued: FALSE" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp1);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -186,37 +120,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S6\'");
             ConstrOnAddOpErrs temp2;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: TempClass"",""Governs-ID: 1.3.6.1.4.1.778.64738.24326.45.761.2"",""objectClassCategory: 1"",""isDefunct: <Not Set>"",""subClassOf: user"",""distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: classSchema""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: TempClass",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Governs-ID: 1.3.6.1.4.1.778.64738.24326.45.761.2",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "objectClassCategory: 1",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "isDefunct: <Not Set>",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "subClassOf: user",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                "Head",
-                                                                                                                "Tail"}, new object[] {
-                                                                                                                "objectClass: classSchema",
-                                                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp2);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: TempClass", "Governs-ID: 1.3.6.1.4.1.778.64738.24326.45.761.2", "objectClassCategory: 1", "isDefunct: <Not Set>", "subClassOf: user", "distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp2);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -240,29 +144,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S8\'");
             ConstrOnAddOpErrs temp3;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: TestClass"",""Governs-ID: 1.5.840.1798216.1.5.36.78.5.87"",""subClassOf: top"",""distinguishedName: CN=TestClass,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: classSchema""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: TestClass",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Governs-ID: 1.5.840.1798216.1.5.36.78.5.87",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "subClassOf: top",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=TestClass,CN=Schema,CN=Configuration,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "objectClass: classSchema",
-                                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp3);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: TestClass", "Governs-ID: 1.5.840.1798216.1.5.36.78.5.87", "subClassOf: top", "distinguishedName: CN=TestClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: classSchema" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp3);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -286,33 +168,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S10\'");
             ConstrOnAddOpErrs temp4;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6746"",""objectClass: top;person;DefunctClass3;user"",""sAMAccountName: user6746"",""distinguishedName: CN=user6746,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6746",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;DefunctClass3;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6746",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6746,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp4);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6746", "objectClass: top;person;DefunctClass3;user", "sAMAccountName: user6746", "distinguishedName: CN=user6746,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp4);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -334,21 +190,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S12\'");
             ConstrOnModOpErrs temp5;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""mayContain: DefunctAttribute""->[""distinguishedName: CN=user,CN=Schema,CN=Configuration,DC=adts88"",""mayContain: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "mayContain: DefunctAttribute", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "distinguishedName: CN=user,CN=Schema,CN=Configuration,DC=adts88",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "mayContain: <Not Set>",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp5);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "mayContain: DefunctAttribute", new List<string> { "distinguishedName: CN=user,CN=Schema,CN=Configuration,DC=adts88", "mayContain: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp5);
             this.Manager.Checkpoint("MS-AD_LDAP_R134");
             this.Manager.Checkpoint("MS-AD_LDAP_R136");
             this.Manager.Checkpoint("MS-AD_LDAP_R1489");
@@ -359,29 +201,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S14\'");
             ConstrOnModOpErrs temp6;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName: CN=Reps-From,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;attributeSchema"",""systemFlags: 19"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "isDefunct: TRUE", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "distinguishedName: CN=Reps-From,CN=Schema,CN=Configuration,DC=adts88",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "objectClass: top;attributeSchema",
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                            "Head",
-                                                                                            "Tail"}, new object[] {
-                                                                                            "systemFlags: 19",
-                                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                        "Head",
-                                                                                                        "Tail"}, new object[] {
-                                                                                                        "isDefunct: <Not Set>",
-                                                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp6);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName: CN=Reps-From,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;attributeSchema", "systemFlags: 19", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp6);
             this.Manager.Checkpoint("MS-AD_LDAP_R130");
             this.Manager.Checkpoint("MS-AD_LDAP_R131");
             this.Manager.Comment("reaching state \'S15\'");
@@ -390,29 +210,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S16\'");
             ConstrOnModOpErrs temp7;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName: CN=Site-Link,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema"",""systemFlags: 16"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "isDefunct: TRUE", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "distinguishedName: CN=Site-Link,CN=Schema,CN=Configuration,DC=adts88",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "objectClass: top;classSchema",
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                            "Head",
-                                                                                            "Tail"}, new object[] {
-                                                                                            "systemFlags: 16",
-                                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                        "Head",
-                                                                                                        "Tail"}, new object[] {
-                                                                                                        "isDefunct: <Not Set>",
-                                                                                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp7);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName: CN=Site-Link,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema", "systemFlags: 16", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp7);
             this.Manager.Checkpoint("MS-AD_LDAP_R130");
             this.Manager.Checkpoint("MS-AD_LDAP_R132");
             this.Manager.Comment("reaching state \'S17\'");
@@ -421,33 +219,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S18\'");
             ConstrOnAddOpErrs temp8;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6746"",""objectClass: top;person;NonExistingClass;user"",""sAMAccountName: user6746"",""distinguishedName: CN=user6746,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6746",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;NonExistingClass;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6746",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6746,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp8);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6746", "objectClass: top;person;NonExistingClass;user", "sAMAccountName: user6746", "distinguishedName: CN=user6746,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp8);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -468,33 +240,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S20\'");
             ConstrOnAddOpErrs temp9;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: user6746"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: user6746"",""distinguishedName: CN=user6746,CN=Users,DC=adts88"",""instanceType: 4"",""NonExistingAttribute: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: user6746",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass: top;person;organizationalPerson;user",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "sAMAccountName: user6746",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=user6746,CN=Users,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "instanceType: 4",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "NonExistingAttribute: CN=Person,CN=Schema,CN=Configuration,DC=adts88",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp9);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: user6746", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: user6746", "distinguishedName: CN=user6746,CN=Users,DC=adts88", "instanceType: 4", "NonExistingAttribute: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp9);
             this.Manager.Checkpoint("MS-AD_LDAP_R577");
             this.Manager.Comment("reaching state \'S21\'");
             this.Manager.Comment("checking step \'return AddOperation/[out NoSuchAttribute_ERROR_INVALID_PARAMETER]\'" +
@@ -503,33 +249,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S22\'");
             ConstrOnAddOpErrs temp10;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: AdtsTestTdiClass"",""objectClass:classSchema"",""subClassOf: top"",""distinguishedName: CN=AdtsTestTdiClass,CN=Schema,CN=Configuration,DC=adts88"",""Governs-ID: 1.2.6.1.2.1.12.1.1.11.19"",""mayContain: DefunctAttribute""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: AdtsTestTdiClass",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "objectClass:classSchema",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "subClassOf: top",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "distinguishedName: CN=AdtsTestTdiClass,CN=Schema,CN=Configuration,DC=adts88",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "Governs-ID: 1.2.6.1.2.1.12.1.1.11.19",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "mayContain: DefunctAttribute",
-                                                                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp10);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: AdtsTestTdiClass", "objectClass:classSchema", "subClassOf: top", "distinguishedName: CN=AdtsTestTdiClass,CN=Schema,CN=Configuration,DC=adts88", "Governs-ID: 1.2.6.1.2.1.12.1.1.11.19", "mayContain: DefunctAttribute" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp10);
             this.Manager.Checkpoint("MS-AD_LDAP_R134");
             this.Manager.Checkpoint("MS-AD_LDAP_R135");
             this.Manager.Checkpoint("MS-AD_LDAP_R513");
@@ -539,53 +259,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S24\'");
             ConstrOnModOpErrs temp11;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName: CN=TestClass,CN=Schema,CN=Configuration,DC=adts88"",""objectClass: top;classSchema""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "isDefunct: TRUE", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "distinguishedName: CN=TestClass,CN=Schema,CN=Configuration,DC=adts88",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "objectClass: top;classSchema",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp11);
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
-            this.Manager.Checkpoint("MS-AD_LDAP_R995");
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName: CN=TestClass,CN=Schema,CN=Configuration,DC=adts88", "objectClass: top;classSchema" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp11);
             this.Manager.Checkpoint("MS-AD_LDAP_R995");
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
@@ -595,25 +269,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S26\'");
             ConstrOnAddOpErrs temp12;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: TempObj"",""sAMAccountName: TempObj"",""distinguishedName: CN=TempObj,CN=Users,DC=adts88"",""objectClass: TempClass""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "cn: TempObj",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "sAMAccountName: TempObj",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "distinguishedName: CN=TempObj,CN=Users,DC=adts88",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "objectClass: TempClass",
-                                                                            ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})}), ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp12);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: TempObj", "sAMAccountName: TempObj", "distinguishedName: CN=TempObj,CN=Users,DC=adts88", "objectClass: TempClass" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp12);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R154");
             this.Manager.Checkpoint("MS-AD_LDAP_R155");
@@ -635,21 +291,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S28\'");
             ConstrOnModOpErrs temp13;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""isDefunct: TRUE""->[""distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88"",""isDefunct: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "isDefunct: TRUE", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "isDefunct: <Not Set>",
-                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "isDefunct: TRUE", new List<string> { "distinguishedName: CN=TempClass,CN=Schema,CN=Configuration,DC=adts88", "isDefunct: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp13);
             this.Manager.Checkpoint("MS-AD_LDAP_R66");
             this.Manager.Checkpoint("MS-AD_LDAP_R675");
             this.Manager.Comment("reaching state \'S29\'");
@@ -658,37 +300,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S30\'");
             ConstrOnModOpErrs temp14;
             this.Manager.Comment(@"executing step 'call ModifyOperation({""description: TempObj""->[""cn: TempObj"",""objectClass: TempClass"",""sAMAccountName: TempObj"",""distinguishedName: CN=TempObj,CN=Users,DC=adts88"",""instanceType: 4"",""description: <Not Set>""]},RIGHT_DS_WRITE_PROPERTYwithSE_ENABLE_DELEGATION_PRIVILEGE,NoExtendedControl,AD_DS,Windows2K8R2,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.ModifyOperation(this.Make<Microsoft.Modeling.Map<string, Microsoft.Modeling.Sequence<string>>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Modeling.Sequence<string>>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Modeling.Sequence<string>>(), "description: TempObj", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Modeling.Sequence<string>>>(new string[] {
-                                            "Element"}, new object[] {
-                                            this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                                                        "Rep"}, new object[] {
-                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                    "Head",
-                                                                    "Tail"}, new object[] {
-                                                                    "cn: TempObj",
-                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                "Head",
-                                                                                "Tail"}, new object[] {
-                                                                                "objectClass: TempClass",
-                                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                            "Head",
-                                                                                            "Tail"}, new object[] {
-                                                                                            "sAMAccountName: TempObj",
-                                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                        "Head",
-                                                                                                        "Tail"}, new object[] {
-                                                                                                        "distinguishedName: CN=TempObj,CN=Users,DC=adts88",
-                                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                    "Head",
-                                                                                                                    "Tail"}, new object[] {
-                                                                                                                    "instanceType: 4",
-                                                                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                                "Head",
-                                                                                                                                "Tail"}, new object[] {
-                                                                                                                                "description: <Not Set>",
-                                                                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})})}))}), ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp14);
+            this.IAD_LDAPModelAdapterInstance.ModifyOperation(new Dictionary<string, IList<string>> { { "description: TempObj", new List<string> { "cn: TempObj", "objectClass: TempClass", "sAMAccountName: TempObj", "distinguishedName: CN=TempObj,CN=Users,DC=adts88", "instanceType: 4", "description: <Not Set>" } } }, ((RightsOnAttributes)(0)), null, ((ADImplementations)(0)), ServerVersion.Win2008R2, false, out temp14);
             this.Manager.Checkpoint("MS-AD_LDAP_R692");
             this.Manager.Comment("reaching state \'S31\'");
             this.Manager.Comment("checking step \'return ModifyOperation/[out ObjectClassViolation_ERROR_DS_OBJECT_C" +

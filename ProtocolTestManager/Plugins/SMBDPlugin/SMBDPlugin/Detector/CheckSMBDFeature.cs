@@ -1,19 +1,19 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Linq;
-using System.Net;
-using System.Net.Sockets;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
     partial class SMBDDetector
     {
 
-        public bool CheckSMBDCapability(out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported)
+        public bool CheckSMBDCapability(out RdmaAdapterInfo rdmaAdapterInfo, out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported)
         {
+            rdmaAdapterInfo = null;
             rdmaChannelV1Supported = false;
             rdmaChannelV1InvalidateSupported = false;
 
@@ -25,9 +25,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             DetectorUtil.WriteLog("Check the supported SMBD capabilities of SUT...");
 
-            bool result = false;
+            bool result = CheckSMBDNegotiate(out rdmaAdapterInfo);
 
-            if (CheckSMBDNegotiate())
+            if (result)
             {
                 if (CheckSMBDReadWriteRDMAV1())
                 {
@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
         }
 
-        private bool CheckSMBDNegotiate()
+        private bool CheckSMBDNegotiate(out RdmaAdapterInfo rdmaAdapterInfo)
         {
             try
             {
@@ -61,8 +61,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     var config = DetectionInfo.SMBDClientCapability;
 
-                    client.ConnectOverRDMA(DetectionInfo.DriverRdmaNICIPAddress, DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.SMBDPort, config.MaxReceiveSize);
-
+                    client.ConnectOverRDMA(DetectionInfo.DriverRdmaNICIPAddress, DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.SMBDPort, config.MaxReceiveSize, out rdmaAdapterInfo);
 
                     client.SMBDNegotiate(
                             config.CreditsRequested,
@@ -78,6 +77,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             catch (Exception ex)
             {
                 DetectorUtil.WriteLog(String.Format("CheckSMBDNegotiate threw exception: {0}", ex));
+
+                rdmaAdapterInfo = null;
+
                 return false;
             }
         }
@@ -112,8 +114,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     var config = DetectionInfo.SMBDClientCapability;
 
-                    client.ConnectOverRDMA(DetectionInfo.DriverRdmaNICIPAddress, DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.SMBDPort, config.MaxReceiveSize);
+                    RdmaAdapterInfo rdmaAdapterInfo;
 
+                    client.ConnectOverRDMA(DetectionInfo.DriverRdmaNICIPAddress, DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.SMBDPort, config.MaxReceiveSize, out rdmaAdapterInfo);
 
                     client.SMBDNegotiate(
                             config.CreditsRequested,

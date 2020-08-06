@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     public class TestConfig
     {
         public TimeSpan timeout;
+        public TimeSpan multiTransportTimeout;
         public string domain;
         public string serverName;
         public int serverPort;
@@ -98,6 +99,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 AssumeFailForInvalidPtfProp("Timeout");
             }
             timeout = new TimeSpan(0, 0, waitTime);
+
+            if (!PtfPropUtility.GetIntPtfProperty(Site, "MultiTransportTimeout", out waitTime))
+            {
+                AssumeFailForInvalidPtfProp("MultiTransportTimeout");
+            }
+            multiTransportTimeout = new TimeSpan(0, 0, waitTime);
 
             PtfPropUtility.GetBoolPtfProperty(Site, "IsWindowsImplementation", out isWindowsImplementation);
             PtfPropUtility.GetBoolPtfProperty(Site, "VerifyRdpbcgrMessages", out verifyPduEnabled);

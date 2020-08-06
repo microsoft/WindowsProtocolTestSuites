@@ -555,13 +555,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 return;
             }
 
-            var excludedCompressionAlogrithms = new CompressionAlgorithm[]
-            {
-                CompressionAlgorithm.NONE,
-                CompressionAlgorithm.Unsupported,
-            };
+            var allCompressionAlogrithms = Enum.GetValues(typeof(CompressionAlgorithm)).Cast<CompressionAlgorithm>().ToArray();
 
-            var possibleCompressionAlogrithms = Enum.GetValues(typeof(CompressionAlgorithm)).Cast<CompressionAlgorithm>().Except(excludedCompressionAlogrithms);
+            var possibleCompressionAlogrithms = Smb2Utility.GetSupportedPatternScanningAlgorithms(allCompressionAlogrithms).Concat(Smb2Utility.GetSupportedCompressionAlgorithms(allCompressionAlogrithms));
 
             // Iterate all possible compression algorithm for Windows will only return only one supported compression algorithm in response.
             var result = possibleCompressionAlogrithms.Where(compressionAlgorithm =>

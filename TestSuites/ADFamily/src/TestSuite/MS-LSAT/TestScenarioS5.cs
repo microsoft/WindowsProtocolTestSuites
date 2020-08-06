@@ -7,12 +7,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.4.2965.0")]
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TestScenarioS5 : PtfTestClassBase {
         
@@ -52,7 +50,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ILsatAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter))));
+            this.ILsatAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter))));
         }
         
         protected override void TestCleanup() {
@@ -94,11 +92,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp5;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,LookUpWKSTA,out _,out" +
                         " _)\'");
-                temp5 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp3, out temp4);
+                temp5 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp3, out temp4);
                 this.Manager.Checkpoint("MS-LSAT_R282");
                 this.Manager.Checkpoint("MS-LSAT_R314");
                 this.Manager.Comment("reaching state \'S256\'");
@@ -127,11 +121,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp15;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,LookUpWKSTA,out _,out" +
                         " _)\'");
-                temp15 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp13, out temp14);
+                temp15 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp13, out temp14);
                 this.Manager.Checkpoint("MS-LSAT_R282");
                 this.Manager.Checkpoint("MS-LSAT_R314");
                 this.Manager.Comment("reaching state \'S257\'");
@@ -159,11 +149,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp7;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp8;
             this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},LookUpWKSTA,out _,out _)\'");
-            temp8 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp6, out temp7);
+            temp8 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp6, out temp7);
             this.Manager.Checkpoint("MS-LSAT_R576");
             this.Manager.Checkpoint("MS-LSAT_R621");
             this.Manager.Comment("reaching state \'S350\'");
@@ -209,11 +195,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp17;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp18;
             this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},LookUpWKSTA,out _,out _)\'");
-            temp18 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp16, out temp17);
+            temp18 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp16, out temp17);
             this.Manager.Checkpoint("MS-LSAT_R576");
             this.Manager.Checkpoint("MS-LSAT_R621");
             this.Manager.Comment("reaching state \'S351\'");
@@ -282,15 +264,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp27;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp27 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp25, out temp26);
+                temp27 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp25, out temp26);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S266\'");
@@ -304,17 +278,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp30;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},Invalid,out _,out _)\'");
-                temp30 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp28, out temp29);
+                temp30 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp28, out temp29);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S360\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -342,17 +306,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp37;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp37 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp35, out temp36);
+                temp37 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp35, out temp36);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S267\'");
@@ -366,17 +320,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp40;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},Invalid,out _,out _)\'");
-                temp40 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp38, out temp39);
+                temp40 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp38, out temp39);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S361\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -460,15 +404,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp49;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp49 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp47, out temp48);
+                temp49 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp47, out temp48);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S268\'");
@@ -481,11 +417,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp51;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp52;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},Invalid,out _,out _)\'");
-                temp52 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp50, out temp51);
+                temp52 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp50, out temp51);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S362\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -513,17 +445,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp57;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp57 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp55, out temp56);
+                temp57 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp55, out temp56);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S269\'");
@@ -536,11 +458,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp59;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp60;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},Invalid,out _,out _)\'");
-                temp60 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp58, out temp59);
+                temp60 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp58, out temp59);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S363\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -601,17 +519,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,Invalid,out " +
                         "_,out _)\'");
-                temp67 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp65, out temp66);
+                temp67 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp65, out temp66);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S270\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -624,17 +532,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp70;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},LookUpWKSTA,out _,out _)\'");
-                temp70 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp68, out temp69);
+                temp70 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp68, out temp69);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S364\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -663,17 +561,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,Invalid,out " +
                         "_,out _)\'");
-                temp75 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp73, out temp74);
+                temp75 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp73, out temp74);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S271\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -686,17 +574,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp78;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},LookUpWKSTA,out _,out _)\'");
-                temp78 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp76, out temp77);
+                temp78 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp76, out temp77);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S365\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -757,17 +635,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,LookUpWKSTA," +
                         "out _,out _)\'");
-                temp85 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp83, out temp84);
+                temp85 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp83, out temp84);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S272\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -780,17 +648,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp88;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},Invalid,out _,out _)\'");
-                temp88 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp86, out temp87);
+                temp88 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp86, out temp87);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S366\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -819,17 +677,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,LookUpWKSTA," +
                         "out _,out _)\'");
-                temp93 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp91, out temp92);
+                temp93 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp91, out temp92);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S273\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -842,17 +690,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp96;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},Invalid,out _,out _)\'");
-                temp96 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp94, out temp95);
+                temp96 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp94, out temp95);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S367\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -913,17 +751,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,LookUpWKSTA,out" +
                         " _,out _)\'");
-                temp103 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp101, out temp102);
+                temp103 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp101, out temp102);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S274\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -952,17 +780,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,LookUpWKSTA,out" +
                         " _,out _)\'");
-                temp111 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp109, out temp110);
+                temp111 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp109, out temp110);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S275\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -990,15 +808,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp106;
             this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                     "xist\"},Invalid,out _,out _)\'");
-            temp106 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp104, out temp105);
+            temp106 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp104, out temp105);
             this.Manager.Checkpoint("MS-LSAT_R575");
             this.Manager.Comment("reaching state \'S352\'");
             this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -1020,15 +830,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
             Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp114;
             this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                     "xist\"},Invalid,out _,out _)\'");
-            temp114 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                            "Element"}, new object[] {
-                                            Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp112, out temp113);
+            temp114 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp112, out temp113);
             this.Manager.Checkpoint("MS-LSAT_R575");
             this.Manager.Comment("reaching state \'S353\'");
             this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -1072,17 +874,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp121;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp121 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp119, out temp120);
+                temp121 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp119, out temp120);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S258\'");
@@ -1111,15 +903,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp126;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp126 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp124, out temp125);
+                temp126 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp124, out temp125);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S259\'");
@@ -1181,17 +965,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,Invalid,out _,o" +
                         "ut _)\'");
-                temp133 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp131, out temp132);
+                temp133 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp131, out temp132);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S276\'");
@@ -1221,17 +995,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,Invalid,out _,o" +
                         "ut _)\'");
-                temp138 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp136, out temp137);
+                temp138 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp136, out temp137);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S277\'");
@@ -1292,15 +1056,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp145;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp145 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp143, out temp144);
+                temp145 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp143, out temp144);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S278\'");
@@ -1329,15 +1085,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp150;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp150 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp148, out temp149);
+                temp150 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp148, out temp149);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S279\'");
@@ -1398,15 +1146,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp157;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp157 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp155, out temp156);
+                temp157 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp155, out temp156);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S280\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -1434,15 +1174,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp162;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp162 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp160, out temp161);
+                temp162 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp160, out temp161);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S281\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -1502,17 +1234,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp169;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp169 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp167, out temp168);
+                temp169 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp167, out temp168);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S282\'");
@@ -1541,17 +1263,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp174;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp174 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp172, out temp173);
+                temp174 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp172, out temp173);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S283\'");
@@ -1612,17 +1324,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp181;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp181 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp179, out temp180);
+                temp181 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp179, out temp180);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S284\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -1650,17 +1352,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp186;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp186 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp184, out temp185);
+                temp186 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp184, out temp185);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S285\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -1720,11 +1412,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp193;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,Invalid,out _,out _)\'" +
                         "");
-                temp193 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp191, out temp192);
+                temp193 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp191, out temp192);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S286\'");
@@ -1753,11 +1441,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp198;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,Invalid,out _,out _)\'" +
                         "");
-                temp198 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp196, out temp197);
+                temp198 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp196, out temp197);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S287\'");
@@ -1818,17 +1502,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp205;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp205 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp203, out temp204);
+                temp205 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp203, out temp204);
                 this.Manager.Checkpoint("MS-LSAT_R278");
                 this.Manager.Comment("reaching state \'S288\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Valid,out Valid]:Success\'");
@@ -1856,17 +1530,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp210;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp210 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp208, out temp209);
+                temp210 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp208, out temp209);
                 this.Manager.Checkpoint("MS-LSAT_R278");
                 this.Manager.Comment("reaching state \'S289\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Valid,out Valid]:Success\'");
@@ -1926,17 +1590,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp217;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp217 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp215, out temp216);
+                temp217 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp215, out temp216);
                 this.Manager.Checkpoint("MS-LSAT_R278");
                 this.Manager.Comment("reaching state \'S290\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Valid,out Valid]:Success\'");
@@ -1949,17 +1603,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp220;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},LookUpWKSTA,out _,out _)\'");
-                temp220 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp218, out temp219);
+                temp220 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp218, out temp219);
                 this.Manager.Checkpoint("MS-LSAT_R570");
                 this.Manager.Checkpoint("MS-LSAT_R572");
                 this.Manager.Comment("reaching state \'S368\'");
@@ -1988,17 +1632,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp225;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp225 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp223, out temp224);
+                temp225 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp223, out temp224);
                 this.Manager.Checkpoint("MS-LSAT_R278");
                 this.Manager.Comment("reaching state \'S291\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Valid,out Valid]:Success\'");
@@ -2011,17 +1645,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp228;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},Invalid,out _,out _)\'");
-                temp228 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp226, out temp227);
+                temp228 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp226, out temp227);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S369\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2082,17 +1706,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,Invalid,out " +
                         "_,out _)\'");
-                temp235 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp233, out temp234);
+                temp235 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp233, out temp234);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S292\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2105,17 +1719,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp238;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},Invalid,out _,out _)\'");
-                temp238 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp236, out temp237);
+                temp238 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp236, out temp237);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S370\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2144,17 +1748,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,Invalid,out " +
                         "_,out _)\'");
-                temp243 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp241, out temp242);
+                temp243 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp241, out temp242);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S293\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2167,17 +1761,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp246;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},LookUpWKSTA,out _,out _)\'");
-                temp246 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp244, out temp245);
+                temp246 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp244, out temp245);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S371\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2238,17 +1822,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,LookUpWKSTA," +
                         "out _,out _)\'");
-                temp253 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp251, out temp252);
+                temp253 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp251, out temp252);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S294\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2260,11 +1834,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp255;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp256;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},Invalid,out _,out _)\'");
-                temp256 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp254, out temp255);
+                temp256 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp254, out temp255);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S372\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2293,17 +1863,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBNotSet,LookUpWKSTA," +
                         "out _,out _)\'");
-                temp261 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp259, out temp260);
+                temp261 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp259, out temp260);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S295\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2316,17 +1876,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp264;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},Invalid,out _,out _)\'");
-                temp264 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp262, out temp263);
+                temp264 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp262, out temp263);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S373\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2386,17 +1936,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp271;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp271 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp269, out temp270);
+                temp271 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp269, out temp270);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S260\'");
@@ -2410,17 +1950,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp274;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},LookUpWKSTA,out _,out _)\'");
-                temp274 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp272, out temp273);
+                temp274 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp272, out temp273);
                 this.Manager.Checkpoint("MS-LSAT_R625");
                 this.Manager.Checkpoint("MS-LSAT_R574");
                 this.Manager.Comment("reaching state \'S354\'");
@@ -2449,15 +1979,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp279;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp279 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp277, out temp278);
+                temp279 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp277, out temp278);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S261\'");
@@ -2471,17 +1993,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp282;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"SecurityPrincipalSid2" +
                         "\",\"DomainSid1\",\"DomainSid2\"},LookUpWKSTA,out _,out _)\'");
-                temp282 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp280, out temp281);
+                temp282 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "SecurityPrincipalSid2", "DomainSid1", "DomainSid2" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp280, out temp281);
                 this.Manager.Checkpoint("MS-LSAT_R625");
                 this.Manager.Checkpoint("MS-LSAT_R574");
                 this.Manager.Comment("reaching state \'S355\'");
@@ -2543,17 +2055,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,LookUpWKSTA,out" +
                         " _,out _)\'");
-                temp289 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp287, out temp288);
+                temp289 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp287, out temp288);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S296\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2566,17 +2068,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp292;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},LookUpWKSTA,out _,out _)\'");
-                temp292 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp290, out temp291);
+                temp292 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp290, out temp291);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S374\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2605,17 +2097,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,LookUpWKSTA,out" +
                         " _,out _)\'");
-                temp297 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp295, out temp296);
+                temp297 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp295, out temp296);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S297\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2627,11 +2109,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp299;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp300;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},Invalid,out _,out _)\'");
-                temp300 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp298, out temp299);
+                temp300 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp298, out temp299);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S375\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2692,17 +2170,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,Invalid,out _,o" +
                         "ut _)\'");
-                temp307 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp305, out temp306);
+                temp307 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp305, out temp306);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S298\'");
@@ -2716,17 +2184,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp310;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid2\",\"InvalidSecurityPrinci" +
                         "palSid\",\"DomainSid2\",\"InvalidDomainSid\"},Invalid,out _,out _)\'");
-                temp310 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidSecurityPrincipalSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid2", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidDomainSid", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp308, out temp309);
+                temp310 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid2", "InvalidSecurityPrincipalSid", "DomainSid2", "InvalidDomainSid" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp308, out temp309);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S376\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2755,17 +2213,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"InvalidIsolatedName\",\"InvalidUserPrincipalN" +
                         "ame\",\"InvalidFullQualifiedName\",\"InvalidUnQualifiedName\"},MSBSet,Invalid,out _,o" +
                         "ut _)\'");
-                temp315 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "InvalidIsolatedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUserPrincipalName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidFullQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "InvalidUnQualifiedName", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp313, out temp314);
+                temp315 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "InvalidIsolatedName", "InvalidUserPrincipalName", "InvalidFullQualifiedName", "InvalidUnQualifiedName" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp313, out temp314);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S299\'");
@@ -2779,15 +2227,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp318;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                         "xist\"},Invalid,out _,out _)\'");
-                temp318 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp316, out temp317);
+                temp318 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp316, out temp317);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S377\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2847,15 +2287,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp325;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp325 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp323, out temp324);
+                temp325 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp323, out temp324);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S300\'");
@@ -2869,15 +2301,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp328;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                         "xist\"},Invalid,out _,out _)\'");
-                temp328 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp326, out temp327);
+                temp328 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp326, out temp327);
                 this.Manager.Checkpoint("MS-LSAT_R575");
                 this.Manager.Comment("reaching state \'S378\'");
                 this.Manager.Comment("checking step \'return LookUpSids/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -2905,15 +2329,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp333;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp333 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp331, out temp332);
+                temp333 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp331, out temp332);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S301\'");
@@ -2927,15 +2343,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp336;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                         "xist\"},LookUpWKSTA,out _,out _)\'");
-                temp336 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp334, out temp335);
+                temp336 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp334, out temp335);
                 this.Manager.Checkpoint("MS-LSAT_R573");
                 this.Manager.Checkpoint("MS-LSAT_R622");
                 this.Manager.Comment("reaching state \'S379\'");
@@ -2996,15 +2404,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp343;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp343 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp341, out temp342);
+                temp343 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp341, out temp342);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S302\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3032,15 +2432,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp348;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp348 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp346, out temp347);
+                temp348 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp346, out temp347);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S303\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3100,17 +2492,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp355;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp355 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp353, out temp354);
+                temp355 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp353, out temp354);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S304\'");
@@ -3139,17 +2521,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp360;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBSet,Invalid,out _,out _)\'");
-                temp360 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp358, out temp359);
+                temp360 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp358, out temp359);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S305\'");
@@ -3210,17 +2582,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp367;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp367 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp365, out temp366);
+                temp367 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp365, out temp366);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S306\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3248,17 +2610,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp372;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"FullQualifiedName1\",\"U" +
                         "nQualifiedName1\",\"IsolatedName1\"},MSBNotSet,Invalid,out _,out _)\'");
-                temp372 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp370, out temp371);
+                temp372 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp370, out temp371);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S307\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3318,11 +2670,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp379;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,Invalid,out _,out _)\'" +
                         "");
-                temp379 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp377, out temp378);
+                temp379 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp377, out temp378);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S308\'");
@@ -3351,11 +2699,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp384;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,Invalid,out _,out _)\'" +
                         "");
-                temp384 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp382, out temp383);
+                temp384 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp382, out temp383);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Checkpoint("MS-LSAT_R286");
                 this.Manager.Comment("reaching state \'S309\'");
@@ -3416,11 +2760,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp391;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,Invalid,out _,out " +
                         "_)\'");
-                temp391 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp389, out temp390);
+                temp391 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp389, out temp390);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S310\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3448,11 +2788,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp396;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,Invalid,out _,out " +
                         "_)\'");
-                temp396 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp394, out temp395);
+                temp396 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp394, out temp395);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S311\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3512,15 +2848,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp403;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp403 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp401, out temp402);
+                temp403 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp401, out temp402);
                 this.Manager.Checkpoint("MS-LSAT_R279");
                 this.Manager.Checkpoint("MS-LSAT_R313");
                 this.Manager.Comment("reaching state \'S312\'");
@@ -3549,15 +2877,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp408;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBNotSet,LookUpWKSTA,out _,out _)\'");
-                temp408 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp406, out temp407);
+                temp408 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp406, out temp407);
                 this.Manager.Checkpoint("MS-LSAT_R279");
                 this.Manager.Checkpoint("MS-LSAT_R313");
                 this.Manager.Comment("reaching state \'S313\'");
@@ -3618,15 +2938,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp415;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp415 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp413, out temp414);
+                temp415 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp413, out temp414);
                 this.Manager.Checkpoint("MS-LSAT_R279");
                 this.Manager.Checkpoint("MS-LSAT_R313");
                 this.Manager.Comment("reaching state \'S314\'");
@@ -3655,15 +2967,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp420;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"UserPrincipalName1\",\"DoesNotExist\",\"FullQua" +
                         "lifiedName1\"},MSBSet,LookUpWKSTA,out _,out _)\'");
-                temp420 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp418, out temp419);
+                temp420 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp418, out temp419);
                 this.Manager.Checkpoint("MS-LSAT_R279");
                 this.Manager.Checkpoint("MS-LSAT_R313");
                 this.Manager.Comment("reaching state \'S315\'");
@@ -3724,11 +3028,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp427;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,LookUpWKSTA,out _," +
                         "out _)\'");
-                temp427 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp425, out temp426);
+                temp427 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp425, out temp426);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S262\'");
@@ -3741,11 +3041,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp429;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp430;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},LookUpWKSTA,out _,out _)\'");
-                temp430 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp428, out temp429);
+                temp430 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp428, out temp429);
                 this.Manager.Checkpoint("MS-LSAT_R625");
                 this.Manager.Checkpoint("MS-LSAT_R574");
                 this.Manager.Comment("reaching state \'S356\'");
@@ -3774,11 +3070,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp435;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,LookUpWKSTA,out _,out" +
                         " _)\'");
-                temp435 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp433, out temp434);
+                temp435 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp433, out temp434);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S263\'");
@@ -3792,15 +3084,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp438;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                         "xist\"},LookUpWKSTA,out _,out _)\'");
-                temp438 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp436, out temp437);
+                temp438 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp436, out temp437);
                 this.Manager.Checkpoint("MS-LSAT_R625");
                 this.Manager.Checkpoint("MS-LSAT_R574");
                 this.Manager.Comment("reaching state \'S357\'");
@@ -3861,11 +3145,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp445;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,LookUpWKSTA,out _," +
                         "out _)\'");
-                temp445 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp443, out temp444);
+                temp445 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp443, out temp444);
                 this.Manager.Checkpoint("MS-LSAT_R282");
                 this.Manager.Checkpoint("MS-LSAT_R314");
                 this.Manager.Comment("reaching state \'S316\'");
@@ -3894,11 +3174,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp450;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,LookUpWKSTA,out _," +
                         "out _)\'");
-                temp450 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp448, out temp449);
+                temp450 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp448, out temp449);
                 this.Manager.Checkpoint("MS-LSAT_R282");
                 this.Manager.Checkpoint("MS-LSAT_R314");
                 this.Manager.Comment("reaching state \'S317\'");
@@ -3959,11 +3235,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp457;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,Invalid,out _,out " +
                         "_)\'");
-                temp457 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp455, out temp456);
+                temp457 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp455, out temp456);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S318\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -3991,11 +3263,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp462;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,Invalid,out _,out " +
                         "_)\'");
-                temp462 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp460, out temp461);
+                temp462 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel.Invalid, out temp460, out temp461);
                 this.Manager.Checkpoint("MS-LSAT_R281");
                 this.Manager.Comment("reaching state \'S319\'");
                 this.Manager.Comment("checking step \'return LookUpNames3/[out Invalid,out Invalid]:InvalidParameter\'");
@@ -4055,11 +3323,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp469;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBSet,LookUpWKSTA,out _,out" +
                         " _)\'");
-                temp469 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp467, out temp468);
+                temp469 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(0)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp467, out temp468);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S264\'");
@@ -4073,15 +3337,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp472;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"SecurityPrincipalSid1\",\"DomainSid1\",\"DoesNotE" +
                         "xist\"},LookUpWKSTA,out _,out _)\'");
-                temp472 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "SecurityPrincipalSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DomainSid1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp470, out temp471);
+                temp472 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "SecurityPrincipalSid1", "DomainSid1", "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp470, out temp471);
                 this.Manager.Checkpoint("MS-LSAT_R625");
                 this.Manager.Checkpoint("MS-LSAT_R574");
                 this.Manager.Comment("reaching state \'S358\'");
@@ -4110,11 +3366,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp477;
                 this.Manager.Comment("executing step \'call LookUpNames3(1,{\"DoesNotExist\"},MSBNotSet,LookUpWKSTA,out _," +
                         "out _)\'");
-                temp477 = this.ILsatAdapterInstance.LookUpNames3(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp475, out temp476);
+                temp477 = this.ILsatAdapterInstance.LookUpNames3(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpOption)(1)), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp475, out temp476);
                 this.Manager.Checkpoint("MS-LSAT_R280");
                 this.Manager.Checkpoint("MS-LSAT_R317");
                 this.Manager.Comment("reaching state \'S265\'");
@@ -4127,11 +3379,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp479;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp480;
                 this.Manager.Comment("executing step \'call LookUpSids(1,{\"DoesNotExist\"},LookUpWKSTA,out _,out _)\'");
-                temp480 = this.ILsatAdapterInstance.LookUpSids(1, this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp478, out temp479);
+                temp480 = this.ILsatAdapterInstance.LookUpSids(1, new List<string> { "DoesNotExist" }, ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LookUpLevel)(1)), out temp478, out temp479);
                 this.Manager.Checkpoint("MS-LSAT_R625");
                 this.Manager.Checkpoint("MS-LSAT_R574");
                 this.Manager.Comment("reaching state \'S359\'");

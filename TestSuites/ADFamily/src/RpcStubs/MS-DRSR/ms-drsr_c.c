@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the RPC client stubs */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Tue May 15 11:07:02 2018
+ /* File created by MIDL compiler version 8.01.0622 */
+/* at Thu Apr 2 13:14:07 2020
  */
 /* Compiler settings for ms-drsr.idl:
-    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.00.0595 
+    Oicf, W1, Zp8, env=Win64 (32b run), target_arch=AMD64 8.01.0622 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -869,31 +869,31 @@ static const ms2Ddrsr_MIDL_PROC_FORMAT_STRING ms2Ddrsr__MIDL_ProcFormatString =
 /* 26 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 28 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter rpc_handle */
+	/* Parameter puuidClientDsa */
 
 /* 30 */	NdrFcShort( 0xa ),	/* Flags:  must free, in, */
 /* 32 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 34 */	NdrFcShort( 0x2 ),	/* Type Offset=2 */
 
-	/* Parameter puuidClientDsa */
+	/* Parameter pextClient */
 
 /* 36 */	NdrFcShort( 0xb ),	/* Flags:  must size, must free, in, */
 /* 38 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
 /* 40 */	NdrFcShort( 0x18 ),	/* Type Offset=24 */
 
-	/* Parameter pextClient */
+	/* Parameter ppextServer */
 
 /* 42 */	NdrFcShort( 0x2013 ),	/* Flags:  must size, must free, out, srv alloc size=8 */
 /* 44 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 46 */	NdrFcShort( 0x4a ),	/* Type Offset=74 */
 
-	/* Parameter ppextServer */
+	/* Parameter phDrs */
 
 /* 48 */	NdrFcShort( 0x110 ),	/* Flags:  out, simple ref, */
 /* 50 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
 /* 52 */	NdrFcShort( 0x52 ),	/* Type Offset=82 */
 
-	/* Parameter phDrs */
+	/* Return value */
 
 /* 54 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 56 */	NdrFcShort( 0x28 ),	/* X64 Stack size/offset = 40 */
@@ -901,9 +901,6 @@ static const ms2Ddrsr_MIDL_PROC_FORMAT_STRING ms2Ddrsr__MIDL_ProcFormatString =
 			0x0,		/* 0 */
 
 	/* Procedure IDL_DRSUnbind */
-
-
-	/* Return value */
 
 /* 60 */	0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
@@ -2667,33 +2664,33 @@ static const ms2Ddrsr_MIDL_PROC_FORMAT_STRING ms2Ddrsr__MIDL_ProcFormatString =
 /* 2018 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 2020 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter hRpc */
+	/* Parameter dwInVersion */
 
 /* 2022 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
 /* 2024 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 2026 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter dwInVersion */
+	/* Parameter pmsgIn */
 
 /* 2028 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 2030 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
 /* 2032 */	NdrFcShort( 0x1f20 ),	/* Type Offset=7968 */
 
-	/* Parameter pmsgIn */
+	/* Parameter pdwOutVersion */
 
 /* 2034 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 2036 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 2038 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter pdwOutVersion */
+	/* Parameter pmsgOut */
 
 /* 2040 */	NdrFcShort( 0x113 ),	/* Flags:  must size, must free, out, simple ref, */
 /* 2042 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
 /* 2044 */	NdrFcShort( 0x1f44 ),	/* Type Offset=8004 */
 
-	/* Parameter pmsgOut */
+	/* Return value */
 
 /* 2046 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 2048 */	NdrFcShort( 0x28 ),	/* X64 Stack size/offset = 40 */
@@ -2701,9 +2698,6 @@ static const ms2Ddrsr_MIDL_PROC_FORMAT_STRING ms2Ddrsr__MIDL_ProcFormatString =
 			0x0,		/* 0 */
 
 	/* Procedure IDL_DSAExecuteScript */
-
-
-	/* Return value */
 
 /* 2052 */	0x0,		/* 0 */
 			0x48,		/* Old Flags:  */
@@ -2724,33 +2718,33 @@ static const ms2Ddrsr_MIDL_PROC_FORMAT_STRING ms2Ddrsr__MIDL_ProcFormatString =
 /* 2078 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 2080 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter hRpc */
+	/* Parameter dwInVersion */
 
 /* 2082 */	NdrFcShort( 0x48 ),	/* Flags:  in, base type, */
 /* 2084 */	NdrFcShort( 0x8 ),	/* X64 Stack size/offset = 8 */
 /* 2086 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter dwInVersion */
+	/* Parameter pmsgIn */
 
 /* 2088 */	NdrFcShort( 0x10b ),	/* Flags:  must size, must free, in, simple ref, */
 /* 2090 */	NdrFcShort( 0x10 ),	/* X64 Stack size/offset = 16 */
 /* 2092 */	NdrFcShort( 0x1fe0 ),	/* Type Offset=8160 */
 
-	/* Parameter pmsgIn */
+	/* Parameter pdwOutVersion */
 
 /* 2094 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
 /* 2096 */	NdrFcShort( 0x18 ),	/* X64 Stack size/offset = 24 */
 /* 2098 */	0x8,		/* FC_LONG */
 			0x0,		/* 0 */
 
-	/* Parameter pdwOutVersion */
+	/* Parameter pmsgOut */
 
 /* 2100 */	NdrFcShort( 0x4113 ),	/* Flags:  must size, must free, out, simple ref, srv alloc size=16 */
 /* 2102 */	NdrFcShort( 0x20 ),	/* X64 Stack size/offset = 32 */
 /* 2104 */	NdrFcShort( 0x2022 ),	/* Type Offset=8226 */
 
-	/* Parameter pmsgOut */
+	/* Return value */
 
 /* 2106 */	NdrFcShort( 0x70 ),	/* Flags:  out, return, base type, */
 /* 2108 */	NdrFcShort( 0x28 ),	/* X64 Stack size/offset = 40 */
@@ -8370,7 +8364,7 @@ static const MIDL_STUB_DESC drsuapi_StubDesc =
     1, /* -error bounds_check flag */
     0x60001, /* Ndr library version */
     0,
-    0x8000253, /* MIDL Version 8.0.595 */
+    0x801026e, /* MIDL Version 8.1.622 */
     0,
     0,
     0,  /* notify & notify_flag routine table */
@@ -8401,7 +8395,7 @@ static const MIDL_STUB_DESC dsaop_StubDesc =
     1, /* -error bounds_check flag */
     0x60001, /* Ndr library version */
     0,
-    0x8000253, /* MIDL Version 8.0.595 */
+    0x801026e, /* MIDL Version 8.1.622 */
     0,
     0,
     0,  /* notify & notify_flag routine table */

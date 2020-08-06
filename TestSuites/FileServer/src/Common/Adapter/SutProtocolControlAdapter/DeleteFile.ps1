@@ -1,9 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-[string]$share
+[string]$uncSharePath
 [string]$fileName
 [string]$domain = $PtfProp_Common_DomainName
 [string]$userName = $PtfProp_Common_AdminUserName
@@ -21,14 +19,14 @@ else
 
 Try
 {
-	CMD /C "net.exe use $share $password /user:$account"
+	CMD /C "net.exe use $uncSharePath $password /user:$account"
 
-	if (Test-Path  -Path "$share\$fileName" )
+	if (Test-Path  -Path "$uncSharePath\$fileName" )
 	{
-		Remove-Item "$share\$fileName" -force -ErrorAction SilentlyContinue
+		Remove-Item "$uncSharePath\$fileName" -force -ErrorAction SilentlyContinue
 	}	
 }
 Finally
 {
-    CMD /C "net.exe use $share /delete /yes" | out-null	
+    CMD /C "net.exe use $uncSharePath /delete /yes" | out-null	
 }

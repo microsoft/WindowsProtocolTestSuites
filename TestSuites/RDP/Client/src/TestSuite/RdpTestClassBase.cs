@@ -53,6 +53,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected ushort payloadLength = 15992; //payload length for RDP_BW_PAYLOAD and RDP_BW_STOP
         protected int payloadNum = 10;//How many RDP_BW_PAYLOAD will be sent
 
+        protected bool TurnOffRDPBCGRVerification;
+        protected bool TurnOffRDPEGFXVerification;
+        protected bool TurnOffRDPEIVerification;
+        protected bool TurnOffRDPEUSBVerification;
+        protected bool TurnOffRDPRFXVerification;
+
         // Variable for SUT display verification
         protected bool verifySUTDisplay = false;
         protected Point sutDisplayShift;
@@ -482,6 +488,31 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "VerifyRdpbcgrMessage", out bVerifyRdpbcgrMessage))
             {
                 bVerifyRdpbcgrMessage = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPBCGRVerification", out TurnOffRDPBCGRVerification))
+            {
+                TurnOffRDPBCGRVerification = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPEGFXVerification", out TurnOffRDPEGFXVerification))
+            {
+                TurnOffRDPEGFXVerification = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPEIVerification", out TurnOffRDPEIVerification))
+            {
+                TurnOffRDPEIVerification = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPEUSBVerification", out TurnOffRDPEUSBVerification))
+            {
+                TurnOffRDPEUSBVerification = true; //if property not found, set to true as default value
+            }
+
+            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPRFXVerification", out TurnOffRDPRFXVerification))
+            {
+                TurnOffRDPRFXVerification = true; //if property not found, set to true as default value
             }
 
             String rdprfxImageFile;

@@ -223,6 +223,31 @@
       <Choice>true, false</Choice>
       <Description>Enable or disable the verification of Display on RDP Client(SUT).</Description>
     </Property>
+    <!-- Turn off the RDPBCGR requirements verification for BCGR-->
+    <Property name="TurnOffRDPBCGRVerification" value="false">
+      <Choice>true, false</Choice>
+      <Description>Turn off the RDPBCGR requirements verification for BCGR</Description>
+    </Property>
+    <!-- Turn off the RDPBCGR requirements verification for EGFX-->
+    <Property name="TurnOffRDPEGFXVerification" value="false">
+      <Choice>true, false</Choice>
+      <Description>Turn off the RDPBCGR requirements verification for EGFX</Description>
+    </Property>
+    <!-- Turn off the RDPBCGR requirements verification for EI-->
+    <Property name="TurnOffRDPEIVerification" value="false">
+      <Choice>true, false</Choice>
+      <Description>Turn off the RDPBCGR requirements verification for EI</Description>
+    </Property>
+    <!-- Turn off the RDPBCGR requirements verification for EUSB-->
+    <Property name="TurnOffRDPEUSBVerification" value="false">
+      <Choice>true, false</Choice>
+      <Description>Turn off the RDPBCGR requirements verification for EUSB</Description>
+    </Property>
+    <!-- Turn off the RDPBCGR requirements verification for RFX-->
+    <Property name="TurnOffRDPRFXVerification" value="false">
+      <Choice>true, false</Choice>
+      <Description>Turn off the RDPBCGR requirements verification for RFX</Description>
+    </Property>
     <!-- Path used to save screenshot on SUT-->
     <Property name="VerifySUTDisplay.BitmapSavePath" value="..\..\ScreenShot\">
       <Description>Path used to save screenshot on SUT.</Description>
@@ -325,6 +350,11 @@
     <Property name="RDP.Client.SupportTunnelingStaticVCTraffic" value="true">
       <Choice>true, false</Choice>
       <Description>Static virtual channel traffic can optionally be tunneled over a reliable multitransport tunnel, using dynamic virtual channels, if this capability is supported by the server and client.</Description>
+    </Property>
+
+    <Property name="RDP.Client.SupportCompression" value="false">
+      <Choice>true, false</Choice>
+      <Description>Determines whether bulk compression is enabled when it is transmitted by RDP to the local computer.</Description>
     </Property>
   </Properties>
   <Adapters>

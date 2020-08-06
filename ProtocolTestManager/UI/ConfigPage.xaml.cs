@@ -118,10 +118,11 @@ namespace Microsoft.Protocols.TestManager.UI
             UIElement content = new Label() { Content = "Unknown" };
             Brush bgbrush = GetBgBrush(propertyView.Value != propertyView.DefaultValue);
             Brush fgbrush = GetFgBrush(propertyView.Value != propertyView.DefaultValue);
-            Label label = new Label()
+            TextBlock label = new TextBlock()
             {
                 Margin = new Thickness(7 + indent, 0, 0, 0),
-                Content = propertyView.Name + (propertyView.Value == propertyView.DefaultValue ? "" : " *"),
+                Padding = new Thickness(5),
+                Text = propertyView.Name + (propertyView.Value == propertyView.DefaultValue ? "" : " *"),
                 Width = NameCollumnWidth - indent,
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
                 Background = bgbrush,
@@ -177,7 +178,7 @@ namespace Microsoft.Protocols.TestManager.UI
             propertyView.PropertyChanged += (sender, arg) =>
             {
                 bool modified = propertyView.Value != propertyView.DefaultValue;
-                label.Content = propertyView.Name + (modified ? " *" : "");
+                label.Text = propertyView.Name + (modified ? " *" : "");
                 label.Background = GetBgBrush(modified);
                 label.Foreground = GetFgBrush(modified);
             };

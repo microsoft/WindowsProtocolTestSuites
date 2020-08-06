@@ -716,35 +716,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <param name="type">The type of transport stream.</param>
         internal void UpdateConfig(SecurityStreamType type)
         {
-            foreach (Socket sock in this.receivingStreams.Keys)
+            lock (receivingStreams)
             {
-                if (!(receivingStreams[sock].ReceiveStream is NetworkStream))
+                foreach (Socket sock in this.receivingStreams.Keys)
                 {
-                    //Skip the connections which already were updated to SSL or CredSSP.
-                    continue;
-                }
-                else
-                {
-                    NetworkStream netStream = (NetworkStream)receivingStreams[sock].ReceiveStream;
-
-                    if (type == SecurityStreamType.Ssl)
+                    if (!(receivingStreams[sock].ReceiveStream is NetworkStream))
                     {
-                        SslStream sslStream = new SslStream(new ETWStream(netStream));
-                        ((SslStream)sslStream).AuthenticateAsServer(this.cert);
-                        receivingStreams[sock].ReceiveStream = sslStream;
+                        //Skip the connections which already were updated to SSL or CredSSP.
+                        continue;
                     }
-
-                    else if (type == SecurityStreamType.CredSsp)
+                    else
                     {
-                        string targetSPN = ConstValue.CREDSSP_SERVER_NAME_PREFIX + config.LocalIpAddress;
+                        NetworkStream netStream = (NetworkStream)receivingStreams[sock].ReceiveStream;
 
-                        var csspServer = new CsspServer(new ETWStream(netStream));
+                        if (type == SecurityStreamType.Ssl)
+                        {
+                            SslStream sslStream = new SslStream(new ETWStream(netStream));
+                            ((SslStream)sslStream).AuthenticateAsServer(this.cert);
+                            receivingStreams[sock].ReceiveStream = sslStream;
+                        }
 
-                        var credSspStream = csspServer.GetStream();
+                        else if (type == SecurityStreamType.CredSsp)
+                        {
+                            string targetSPN = ConstValue.CREDSSP_SERVER_NAME_PREFIX + config.LocalIpAddress;
 
-                        receivingStreams[sock].ReceiveStream = credSspStream;
+                            var csspServer = new CsspServer(new ETWStream(netStream));
 
-                        csspServer.Authenticate(cert, targetSPN);
+                            var credSspStream = csspServer.GetStream();
+
+                            receivingStreams[sock].ReceiveStream = credSspStream;
+
+                            csspServer.Authenticate(cert, targetSPN);
+                        }
                     }
                 }
             }

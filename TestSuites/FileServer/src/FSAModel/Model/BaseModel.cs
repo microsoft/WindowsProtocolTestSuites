@@ -1,8 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
@@ -39,7 +40,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// A list of waiting operations that can be canceled by adding them to the 
         /// CancelableOperations.CancelableOperationList as defined in section 3.1.1.12
         /// </summary>
-        static SequenceContainer<IORequest> sequenceIORequest = new SequenceContainer<IORequest>();
+        static List<IORequest> sequenceIORequest = new List<IORequest>();
 
         /// <summary>
         /// Judge if requirement 507 is implemented.
@@ -155,7 +156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// </summary>
         /// Disable warning CA2211, because this action confuses with the actual model design if modify it.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static SequenceContainer<ByteRangeLock> ByteRangeLockList = new SequenceContainer<ByteRangeLock>();
+        public static List<ByteRangeLock> ByteRangeLockList = new List<ByteRangeLock>();
 
         /// <summary>
         /// The type of stream. This value MUST be either DataStream or DirectoryStream.
@@ -430,7 +431,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             sutPlatForm = platForm;
             sutOSInfo = SutOSInfo.FinishGetSutInfo;
 
-            // Force Spec Explorer to expand sutPlatForm.
             Condition.IsTrue(sutPlatForm == PlatformType.NoneWindows || sutPlatForm == PlatformType.Windows);
         }
 

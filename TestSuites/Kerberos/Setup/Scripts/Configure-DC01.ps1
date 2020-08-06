@@ -1,6 +1,6 @@
 #############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
 ###########################################################################################
@@ -169,8 +169,6 @@ Function Complete-Configure
 #------------------------------------------------------------------------------------------
 # Function: Config-DC01
 # Configure the environment DC01:
-# Triggered by remote trusted domain: <AP01>
-#  * Change AP01 computer password
 #------------------------------------------------------------------------------------------
 Function Config-DC01()
 {
@@ -461,17 +459,6 @@ Function Config-DC01()
 	Write-ConfigLog "Creating new user account $user"
 	New-ADUser -Name $user -AccountPassword $pwd -CannotChangePassword $true -DisplayName $user -Enabled $true -KerberosEncryptionType DES -PasswordNeverExpires $true -SamAccountName $user -UserPrincipalName $user@$domainName
 	Set-ADAccountControl $user -UseDESKeyOnly $true
-
-
-
-
-
-
-
-
-
-
-
 
 	$osVersion = Get-OSVersionNumber.ps1
 	$os2012R2 = "6.3"
@@ -792,6 +779,21 @@ Function Config-DC01()
 	REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system\kerberos\Parameters /f
 	REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system\kerberos\Parameters /v EnableCbacAndArmor /t REG_DWORD /d 1 /f
 	REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\policies\system\kerberos\Parameters /v Supportedencryptiontypes /t REG_DWORD /d 0x7fffffff /f
+	
+	#-----------------------------------------------------------------------------------------------
+	# Create Tasks for Update SupportedEncryptionTypes
+	#-----------------------------------------------------------------------------------------------
+	$Rc4Task = "REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters /v SupportedEncryptionTypes /t REG_DWORD /d 0x00000004 /f"
+	schtasks /Create /SC ONCE /ST 00:00 /TN SetSupportedEncryptionTypesAsRc4 /TR $Rc4Task /IT /F
+
+	$RestoreTask = "REG ADD HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Kerberos\Parameters /v SupportedEncryptionTypes /t REG_DWORD /d 0x7fffffff /f"
+	schtasks /Create /SC ONCE /ST 00:00 /TN RestoreSupportedEncryptionTypes /TR $RestoreTask /IT /F
+
+	$ClearTrustRealmEncTypeTask = "ksetup /DelEncTypeAttr $KrbParams.Parameters.TrustRealm.RealmName"
+	schtasks /Create /SC ONCE /ST 00:00 /TN ClearTrustRealmEncType /TR $ClearTrustRealmEncTypeTask /IT /F
+
+	$SetTrustRealmEncTypeAsAesTask = "ksetup.exe /SetEncTypeAttr $KrbParams.Parameters.TrustRealm.RealmName AES256-CTS-HMAC-SHA1-96, AES128-CTS-HMAC-SHA1-96"
+	schtasks /Create /SC ONCE /ST 00:00 /TN SetTrustRealmEncTypeAsAes /TR $SetTrustRealmEncTypeAsAesTask /IT /F
 
 	#-----------------------------------------------------------------------------------------------
 	# Change User Account

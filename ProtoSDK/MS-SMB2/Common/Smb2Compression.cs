@@ -13,11 +13,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
     /// <summary>
     /// SMB2 Compression Utility.
     /// </summary>
-    public static class Smb2Compression
+    public static partial class Smb2Compression
     {
         private static Dictionary<CompressionAlgorithm, XcaCompressor> compressorInstances;
         private static Dictionary<CompressionAlgorithm, XcaDecompressor> decompressorInstances;
 
+        private static int PatternPayloadLength;
+
+        private static int FieldSizeOriginalPayloadSize;
 
         static Smb2Compression()
         {
@@ -33,6 +36,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 [CompressionAlgorithm.LZ77] = new PlainLZ77Decompressor(),
                 [CompressionAlgorithm.LZ77Huffman] = new LZ77HuffmanDecompressor()
             };
+
+            var pattern = new SMB2_COMPRESSION_PATTERN_PAYLOAD_V1();
+
+            PatternPayloadLength = TypeMarshal.GetBlockMemorySize(pattern);
+
+            var payloadHeader = new SMB2_COMPRESSION_PAYLOAD_HEADER();
+
+            FieldSizeOriginalPayloadSize = TypeMarshal.GetBlockMemorySize(payloadHeader.OriginalPayloadSize);
         }
 
         /// <summary>
@@ -58,7 +69,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         {
             if (!compressorInstances.ContainsKey(compressionAlgorithm))
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Invalid decompressor algorithm!");
             }
             return decompressorInstances[compressionAlgorithm];
         }
@@ -69,9 +80,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         /// <param name="packet">The SMB2 packet.</param>
         /// <param name="compressionInfo">Compression info.</param>
         /// <param name="role">SMB2 role.</param>
-        /// <param name="offset">The offset where compression start, default zero.</param>
-        /// <returns></returns>
-        public static Smb2Packet Compress(Smb2CompressiblePacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role, uint offset = 0)
+        /// <returns>The compressed packet, or original packet if compression is not applicable.</returns>
+        public static Smb2Packet Compress(Smb2CompressiblePacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
+        {
+            Smb2Packet compressed;
+
+            if (compressionInfo.SupportChainedCompression)
+            {
+                compressed = CompressForChained(packet, compressionInfo, role);
+            }
+            else
+            {
+                compressed = CompressForNonChained(packet, compressionInfo, role);
+            }
+
+            if (compressed == packet)
+            {
+                // Compression is not applicable.
+                return packet;
+            }
+
+            var originalBytes = packet.ToBytes();
+
+            var compressedBytes = compressed.ToBytes();
+
+            // Check whether compression shrinks the on-wire packet size
+            if (compressedBytes.Length < originalBytes.Length)
+            {
+                return compressed;
+            }
+            else
+            {
+                return packet;
+            }
+        }
+
+        private static Smb2Packet CompressForNonChained(Smb2CompressiblePacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
         {
             var compressionAlgorithm = GetCompressionAlgorithm(packet, compressionInfo, role);
 
@@ -84,27 +128,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             var compressor = GetCompressor(compressionAlgorithm);
 
-            var compressedPacket = new Smb2CompressedPacket();
+            uint offset = 0;
+
+            if (compressionInfo.CompressBufferOnly)
+            {
+                offset = (packet as IPacketBuffer).BufferOffset;
+            }
+
+            var compressedPacket = new Smb2NonChainedCompressedPacket();
             compressedPacket.Header.ProtocolId = Smb2Consts.ProtocolIdInCompressionTransformHeader;
             compressedPacket.Header.OriginalCompressedSegmentSize = (uint)packetBytes.Length;
             compressedPacket.Header.CompressionAlgorithm = compressionAlgorithm;
-            compressedPacket.Header.Reserved = 0;
+            compressedPacket.Header.Flags = Compression_Transform_Header_Flags.SMB2_COMPRESSION_FLAG_NONE;
             compressedPacket.Header.Offset = offset;
             compressedPacket.UncompressedData = packetBytes.Take((int)offset).ToArray();
             compressedPacket.CompressedData = compressor.Compress(packetBytes.Skip((int)offset).ToArray());
 
-            var compressedPackectBytes = compressedPacket.ToBytes();
+            compressedPacket.OriginalPacket = packet;
 
-            // Check whether compression shrinks the on-wire packet size
-            if (compressedPackectBytes.Length < packetBytes.Length)
-            {
-                compressedPacket.OriginalPacket = packet;
-                return compressedPacket;
-            }
-            else
-            {
-                return packet;
-            }
+            return compressedPacket;
         }
 
         /// <summary>
@@ -115,6 +157,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         /// <param name="role">SMB2 role.</param>
         /// <returns>Byte array containing the decompressed packet.</returns>
         public static byte[] Decompress(Smb2CompressedPacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
+        {
+            bool isChained = packet.Header.Flags.HasFlag(Compression_Transform_Header_Flags.SMB2_COMPRESSION_FLAG_CHAINED);
+
+            byte[] decompressedData;
+
+            if (isChained)
+            {
+                decompressedData = DecompressForChained(packet, compressionInfo, role);
+            }
+            else
+            {
+                decompressedData = DecompressForNonChained(packet, compressionInfo, role);
+            }
+
+            if (decompressedData.Length != packet.Header.OriginalCompressedSegmentSize)
+            {
+                throw new InvalidOperationException($"The length of decompressed data (0x{decompressedData.Length:X08}) is inconsistent with compression header (0x{packet.Header.OriginalCompressedSegmentSize:X08}).");
+            }
+
+            return decompressedData;
+        }
+
+        private static byte[] DecompressForNonChained(Smb2CompressedPacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
         {
             if (packet.Header.CompressionAlgorithm == CompressionAlgorithm.NONE)
             {
@@ -128,19 +193,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             var decompressor = GetDecompressor(packet.Header.CompressionAlgorithm);
 
-            var decompressedBytes = decompressor.Decompress(packet.CompressedData);
+            var p = packet as Smb2NonChainedCompressedPacket;
 
-            var originalPacketBytes = packet.UncompressedData.Concat(decompressedBytes).ToArray();
+            var decompressedBytes = decompressor.Decompress(p.CompressedData);
+
+            var originalPacketBytes = p.UncompressedData.Concat(decompressedBytes).ToArray();
 
             return originalPacketBytes;
         }
 
-        private static CompressionAlgorithm GetCompressionAlgorithm(Smb2CompressiblePacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
+        private static bool IsCompressionNeeded(Smb2CompressiblePacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
         {
             bool supportCompression = compressionInfo.CompressionIds.Any(compressionAlgorithm => compressionAlgorithm != CompressionAlgorithm.NONE);
             if (!supportCompression)
             {
-                return CompressionAlgorithm.NONE;
+                return false;
             }
 
             bool needCompression = false;
@@ -178,14 +245,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                     }
             }
 
+            if (needCompression && compressionInfo.CompressBufferOnly)
+            {
+                // Not compress packet if it does not contain buffer.
+                if (!(packet is IPacketBuffer) || (packet as IPacketBuffer).BufferLength == 0)
+                {
+                    needCompression = false;
+                }
+            }
+
+            return needCompression;
+        }
+
+        private static CompressionAlgorithm GetCompressionAlgorithm(Smb2CompressiblePacket packet, Smb2CompressionInfo compressionInfo, Smb2Role role)
+        {
+            bool needCompression = IsCompressionNeeded(packet, compressionInfo, role);
+
             if (!needCompression)
             {
                 return CompressionAlgorithm.NONE;
             }
 
+            var result = GetPreferredCompressionAlgorithm(compressionInfo);
+
+            return result;
+        }
+
+        private static CompressionAlgorithm GetPreferredCompressionAlgorithm(Smb2CompressionInfo compressionInfo)
+        {
             if (compressionInfo.PreferredCompressionAlgorithm == CompressionAlgorithm.NONE)
             {
-                return compressionInfo.CompressionIds.First(compressionAlgorithm => compressionAlgorithm != CompressionAlgorithm.NONE);
+                var commonSupportedCompressionAlgorithms = Smb2Utility.GetSupportedCompressionAlgorithms(compressionInfo.CompressionIds);
+
+                if (commonSupportedCompressionAlgorithms.Length > 0)
+                {
+                    return commonSupportedCompressionAlgorithms.First();
+                }
+                else
+                {
+                    return CompressionAlgorithm.NONE;
+                }
             }
             else
             {

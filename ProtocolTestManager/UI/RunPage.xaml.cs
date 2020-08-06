@@ -102,6 +102,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 i.PropertyChanged += (s, arg) =>
                 {
                     UpdateRunSelectedText(groups);
+                    EnableExportingResult(groups);
 
                     if (arg.PropertyName == "Visibility")
                     {
@@ -164,6 +165,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 TestOutcome.Items.Add(item);
             }
             UpdateRunSelectedText(groups);
+            EnableExportingResult(groups);
         }
 
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -484,6 +486,29 @@ namespace Microsoft.Protocols.TestManager.UI
             {
                 RunSelectedLinkText.Dispatcher.Invoke(
                     new Action(() => RunSelectedMenuItem.Header = text)
+                );
+            }
+        }
+
+        private void EnableExportingResult(List<TestCaseGroup> groups)
+        {
+            var executedCaseCount = groups
+                .SelectMany(g => g.TestCaseList)
+                .Where(c => c.Status != TestCaseStatus.NotRun)
+                .GroupBy(c => c.FullName)
+                .Count();
+
+            bool testSuiteExecuted = (executedCaseCount > 0);
+
+            var dispatcher = ExportTestReport.Dispatcher;
+            if (dispatcher.CheckAccess())
+            {
+                ExportTestReport.IsEnabled = testSuiteExecuted;
+            }
+            else
+            {
+                RunSelectedLinkText.Dispatcher.Invoke(
+                    new Action(() => ExportTestReport.IsEnabled = testSuiteExecuted)
                 );
             }
         }

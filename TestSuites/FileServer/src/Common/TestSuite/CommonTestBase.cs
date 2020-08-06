@@ -73,41 +73,52 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         protected string GetTestFileName(string share)
         {
             string fileName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            testFiles.Add(Path.Combine(share, fileName));
+            testFiles.Add(string.Format(@"{0}\{1}", share, fileName));
             return fileName;
         }
 
         protected void AddTestFileName(string share, string fileName)
         {
-            testFiles.Add(Path.Combine(share, fileName));
+            testFiles.Add(string.Format(@"{0}\{1}", share, fileName));
+        }
+
+        protected string CreateTestDirectory(string server, string share, string parentDirectoryName)
+        {
+            return CreateTestDirectoryInternal(string.Format(@"\\{0}\{1}", server, share), parentDirectoryName);
         }
 
         protected string CreateTestDirectory(string server, string share)
         {
-            return CreateTestDirectory(string.Format(@"\\{0}\{1}", server, share));
+            return CreateTestDirectoryInternal(string.Format(@"\\{0}\{1}", server, share), null);
         }
 
-        protected string CreateTestDirectory(string share)
+        protected string CreateTestDirectory(string uncSharePath)
         {
-            string testDirectory = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            string testDirectoryFullPath = Path.Combine(share, testDirectory);
+            return CreateTestDirectoryInternal(uncSharePath, null);
+        }
+
+        private string CreateTestDirectoryInternal(string uncSharePath, string parentDirectoryName)
+        {
+            string testDirectory = string.IsNullOrEmpty(parentDirectoryName) ? null : $"{parentDirectoryName}\\";
+            testDirectory += CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
+            string testDirectoryFullPath = string.Format(@"{0}\{1}", uncSharePath, testDirectory);
             testDirectories.Add(testDirectoryFullPath);
-            sutProtocolController.CreateDirectory(share, testDirectory);
+            sutProtocolController.CreateDirectory(uncSharePath, testDirectory);
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Create a directory {0} in the share {1}.",
-                testDirectory, share);
+                testDirectory, uncSharePath);
             return testDirectory;
         }
 
         protected string GetTestDirectoryName(string share)
         {
             string directoryName = CurrentTestCaseName + "_" + Guid.NewGuid().ToString();
-            testDirectories.Add(Path.Combine(share, directoryName));
+            testDirectories.Add(string.Format(@"{0}\{1}", share, directoryName));
             return directoryName;
         }
 
         protected void AddTestDirectoryName(string share, string directoryName)
         {
-            testDirectories.Add(Path.Combine(share, directoryName));
+            testDirectories.Add(string.Format(@"{0}\{1}", share, directoryName));
         }
 
         protected uint DoUntilSucceed(Func<uint> func, TimeSpan timeout, string format, params object[] args)

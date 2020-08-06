@@ -262,4 +262,7 @@ New profile is saved as {0}.</value>
   <data name="HintForNoTestSuiteInstalled" xml:space="preserve">
     <value>To configure and run Windows Protocol Test Suites, you should install at least one test suite. You can get the latest released test suites from [https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest]. Restart Protocol Test Manager after you install the test suite.</value>
   </data>
+  <data name="NoTestResults" xml:space="preserve">
+    <value>No test results met the selected criteria.</value>
+  </data>
 </root>

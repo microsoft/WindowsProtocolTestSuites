@@ -157,10 +157,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <summary>
         /// Default max signature size
         /// </summary>
-        public const byte MAX_SIGNATURE_SIZE = 50;
+        public const byte MAX_SIGNATURE_SIZE = 28;
 
         /// <summary>
-        /// Default max signature size
+        /// Integral size of security trailer
         /// </summary>
         public const byte SECURITY_TRAILER_SIZE = 76;
 

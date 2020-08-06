@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Packets
             int minimumLength = Marshal.SizeOf(Header);
             if (data.Length < minimumLength)
             {
-                throw new InvalidOleVariantTypeException("Not enough data for Transform_Header!");
+                throw new InvalidOperationException("Not enough data for Transform_Header!");
             }
 
             Header = Smb2Utility.UnmarshalStructure<Transform_Header>(data.Take(minimumLength).ToArray());

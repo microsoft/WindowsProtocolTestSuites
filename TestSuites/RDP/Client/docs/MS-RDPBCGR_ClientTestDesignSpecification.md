@@ -798,7 +798,7 @@ The following table shows the number of test cases for each scenario.
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
 | -------------| -------------| -------------| -------------| -------------| ------------- |
-| [S1\_Connection](#_Toc427051967)| 87| 7| 11| 31| 27| 
+| [S1\_Connection](#_Toc427051967)| 88| 7| 11| 32| 27| 
 | [S2\_Reactivation](#_Toc427051968)| 2| 1| 1| 1| 0| 
 | [S3\_AutoReconnect](#_Toc427051969)| 2| 1| 1| 1| 0| 
 | [S4\_SlowPathInput](#_Toc427051970)| 6| 1| 1| 4| 1| 
@@ -807,7 +807,7 @@ The following table shows the number of test cases for each scenario.
 | [S7\_StaticVirtualChannel](#_Toc427051973)| 7| 2| 4| 2| 1| 
 | [S8\_ServerRedirection](#_Toc427051974)| 2| 1| 1| 1| 0| 
 | [S9\_HealthMonitoring](#_Toc427051975)| 1| 1| 1| 0| 0| 
-| [S10\_FastPathOutput](#_Toc427051976)| 20| 0| 6| 14| 0| 
+| [S10\_FastPathOutput](#_Toc427051976)| 24| 0| 6| 18| 0| 
 | [S11\_RDSTLSAuthentication](#_Toc427052077)| 2| 1| 0| 2 | 0| 
 
 ### <a name="_Toc427051992"/>Test Cases Description 
@@ -1967,6 +1967,19 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 
 |  **S1\_Connection**| | 
 | -------------| ------------- |
+|  **Test ID**| S1_ConnectionTest_CapabilityExchange_PositiveTest_LargePointerCapSet_ExtraLargePointerSupport| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to ensure SUT support extra large pointer when largePointerSupportFlags of TS_LARGE_POINTER_CAPABILITYSET is set to include LARGE_POINTER_FLAG_384x384.| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Trigger SUT to initiate a RDP connection and complete the Connection Initiation phase, Basic Setting Exchange phase, Channel Connection phase, RDP Security Commencement phase, Secure Setting Exchange phase and Licensing phase.| 
+| | Test Suite continues the connection with sending a Server Demand Active PDU to SUT, largePointerSupportFlags of TS\_LARGE\_POINTER_CAPABILITYSET is set to include LARGE_POINTER_FLAG_384x384.| 
+| | Test Suite expects SUT respond a Client confirm Active PDU. When received, Test Suite verifies this PDU. If LARGE_POINTER_FLAG_96x96 or LARGE_POINTER_FLAG_384x384 is not set, this test case will be inconclusive.| 
+| | Test Suite expects SUT continue the connection with sending a Synchronize PDU or input PDU.| 
+|  **Cleanup**| N/A| 
+
+
+|  **S1\_Connection**| | 
+| -------------| ------------- |
 |  **Test ID**| S1\_ConnectionTest\_CapabilityExchange\_PositiveTest\_DesktopCompositionCapSet_NotPresent| 
 |  **Priority**| P2| 
 |  **Description** | This test case is used to ensure SUT can process Server Demand Active PDU correctly when TS\_COMPDESK\_CAPABILITYSET is not present.| 
@@ -2763,6 +2776,62 @@ This scenario only contains BVT test case.
 | | Test Suite sends another Fast-Path New Pointer Update (TS\_FP\_POINTERATTRIBUTE) to the client to set pointer shape, set cacheIndex to 1.| 
 | | Test Suite sends a Fast-Path Cached Pointer Update (TS\_FP\_CACHEDPOINTERATTRIBUTE) to the client to show the first pointer shape (cacheIndex = 0).| 
 | | Test Suite sends a Fast-Path Cached Pointer Update (TS\_FP\_CACHEDPOINTERATTRIBUTE) to the client to show the second pointer shape (cacheIndex = 1).| 
+|  **Cleanup**| N/A| 
+
+
+
+|  **S10_FastPathOutput**| | 
+| -------------| ------------- |
+|  **Test ID**| S10_FastPathOutput_PositiveTest_LargePointer_Small| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of small size.| 
+|  **Prerequisites**| SUT supports Server Fast-Path Update PDUs, multi-fragment and extra large pointer.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete a RDP connection. | 
+| | After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE\_LOGON (0x00000000), INFOTYPE\_LOGON\_LONG (0x00000001), or INFOTYPE\_LOGON\_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. | 
+| | Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of small size to the client to set pointer shape.| 
+| | Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.| 
+|  **Cleanup**| N/A| 
+
+
+
+|  **S10_FastPathOutput**| | 
+| -------------| ------------- |
+|  **Test ID**| S10_FastPathOutput_PositiveTest_LargePointer_Medium| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of medium size.| 
+|  **Prerequisites**| SUT supports Server Fast-Path Update PDUs, multi-fragment and extra large pointer.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete a RDP connection. | 
+| | After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE\_LOGON (0x00000000), INFOTYPE\_LOGON\_LONG (0x00000001), or INFOTYPE\_LOGON\_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. | 
+| | Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of medium size to the client to set pointer shape.| 
+| | Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.| 
+|  **Cleanup**| N/A| 
+
+
+
+|  **S10_FastPathOutput**| | 
+| -------------| ------------- |
+|  **Test ID**| S10_FastPathOutput_PositiveTest_LargePointer_Large| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of large size.| 
+|  **Prerequisites**| SUT supports Server Fast-Path Update PDUs, multi-fragment and extra large pointer.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete a RDP connection. | 
+| | After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE\_LOGON (0x00000000), INFOTYPE\_LOGON\_LONG (0x00000001), or INFOTYPE\_LOGON\_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. | 
+| | Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of large size to the client to set pointer shape.| 
+| | Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.| 
+|  **Cleanup**| N/A| 
+
+
+
+|  **S10_FastPathOutput**| | 
+| -------------| ------------- |
+|  **Test ID**| S10_FastPathOutput_PositiveTest_LargePointer_ExtraLarge| 
+|  **Priority**| P1| 
+|  **Description** | This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of extra large size.| 
+|  **Prerequisites**| SUT supports Server Fast-Path Update PDUs, multi-fragment and extra large pointer.| 
+|  **Test Execution Steps**| Trigger SUT to initiate and complete a RDP connection. | 
+| | After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE\_LOGON (0x00000000), INFOTYPE\_LOGON\_LONG (0x00000001), or INFOTYPE\_LOGON\_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. | 
+| | Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of extra large size to the client to set pointer shape.| 
+| | Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.| 
 |  **Cleanup**| N/A| 
 
 

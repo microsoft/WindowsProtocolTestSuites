@@ -85,9 +85,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             m_arrCapSet.Add(CreateGeneralCapSet(false, true, true, true, true, true, true, osMajorType_Values.OSMAJORTYPE_WINDOWS, osMinorType_Values.OSMINORTYPE_WINDOWS_NT));
             m_arrCapSet.Add(CreateBitmapCapSet(800, 600, desktopResizeFlag_Values.TRUE, true, true, true));
-            m_arrCapSet.Add(CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
+            m_arrCapSet.Add(CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
                          0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00}, true, true, true, false, true, true, true));
             m_arrCapSet.Add(CreatePointerCapSet(colorPointerFlag_Values.TRUE, 25, 25));
             m_arrCapSet.Add(CreateInputCapSet(true, true, false, true, true));
@@ -110,9 +110,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             m_arrCapSet.Add(CreateGeneralCapSet(true, true, true, capSetting.GeneralCapSet_ExtraFlags_AutoReconnect, true, capSetting.GeneralCapSet_RefreshRectSupport, capSetting.GeneralCapSet_SuppressOutputSupport, osMajorType_Values.OSMAJORTYPE_WINDOWS, osMinorType_Values.OSMINORTYPE_WINDOWS_NT));
             m_arrCapSet.Add(CreateBitmapCapSet(capSetting.DesktopWidth, capSetting.DesktopHeight, desktopResizeFlag_Values.TRUE, true, true, true));
-            m_arrCapSet.Add(CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 
-                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 
+            m_arrCapSet.Add(CreateOrderCapSet(new byte[] { 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01,
+                         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00,
                          0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00}, true, true, true, false, true, true, true));
             m_arrCapSet.Add(CreatePointerCapSet(colorPointerFlag_Values.TRUE, 25, 25));
             m_arrCapSet.Add(CreateInputCapSet(
@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             if (capSetting.LargePointerCapabilitySet)
             {
-                m_arrCapSet.Add(CreateLargePointerCapSet(largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96));
+                m_arrCapSet.Add(CreateLargePointerCapSet(largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96 | largePointerSupportFlags_Values.LARGE_POINTER_FLAG_384x384));
             }
 
             if (capSetting.FrameAcknowledgeCapabilitySet)

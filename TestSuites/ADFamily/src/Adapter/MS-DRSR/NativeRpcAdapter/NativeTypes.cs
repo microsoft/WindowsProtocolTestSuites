@@ -4181,7 +4181,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>
@@ -5768,7 +5769,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>
@@ -6114,7 +6116,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>
@@ -8384,7 +8387,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.NativeTypes
         /// A pointer to a VAR_SIZE_BUFFER_WITH_VERSION structure (section 5.219).
         /// MUST be a null pointer.
         /// </summary>
-        public VAR_SIZE_BUFFER_WITH_VERSION pReservedBuffer;
+        [Indirect()]
+        public VAR_SIZE_BUFFER_WITH_VERSION? pReservedBuffer;
     }
 
     /// <summary>

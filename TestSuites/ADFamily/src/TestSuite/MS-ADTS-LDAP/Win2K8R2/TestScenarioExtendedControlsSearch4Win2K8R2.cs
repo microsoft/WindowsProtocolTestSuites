@@ -7,13 +7,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
 
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [TestClassAttribute()]
     public partial class TestScenarioExtendedControlsSearch4Win2K8R2 : PtfTestClassBase
     {
@@ -54,12 +52,18 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.Manager.GetAdapter(typeof(IAD_LDAPModelAdapter))));
-            this.Manager.Subscribe(SearchOpResponseInfo, this.IAD_LDAPModelAdapterInstance);
+            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.GetAdapter(typeof(IAD_LDAPModelAdapter))));
+            this.IAD_LDAPModelAdapterInstance.SearchOpResponse += IAD_LDAPModelAdapterInstance_SearchOpResponse;
+        }
+
+        private void IAD_LDAPModelAdapterInstance_SearchOpResponse(SearchResp response)
+        {
+            this.Manager.AddEvent(SearchOpResponseInfo, this.IAD_LDAPModelAdapterInstance, new object[] { response });
         }
 
         protected override void TestCleanup()
         {
+            this.IAD_LDAPModelAdapterInstance.SearchOpResponse -= IAD_LDAPModelAdapterInstance_SearchOpResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -82,37 +86,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("checking step \'return Initialize\'");
             this.Manager.Comment("reaching state \'S2\'");
             this.Manager.Comment(@"executing step 'call SearchOpReq(""CN=Administrator,CN=Users,DC=adts88"",""(objectClass=user)"",Subtree,[""sAMAccountName"",""cn"",""ntSecurityDescriptor"",""member;range=10-0"",""msDS-QuotaUsed"",""msDS-QuotaEffective"",""member;range=1-0""],LDAP_SERVER_SD_FLAGS_OID,AD_DS)'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq($"CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "sAMAccountName",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "cn",
-                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                "Head",
-                                                                "Tail"}, new object[] {
-                                                                "ntSecurityDescriptor",
-                                                                this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                            "Head",
-                                                                            "Tail"}, new object[] {
-                                                                            "member;range=10-0",
-                                                                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                        "Head",
-                                                                                        "Tail"}, new object[] {
-                                                                                        "msDS-QuotaUsed",
-                                                                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                    "Head",
-                                                                                                    "Tail"}, new object[] {
-                                                                                                    "msDS-QuotaEffective",
-                                                                                                    this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                                                                                "Head",
-                                                                                                                "Tail"}, new object[] {
-                                                                                                                "member;range=1-0",
-                                                                                                                ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})})})})})})}), ExtendedControl.LDAP_SERVER_SD_FLAGS_OID, ((ADImplementations)(0)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq($"CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "(objectClass=user)", SearchScope.Subtree, new List<string> { "sAMAccountName", "cn", "ntSecurityDescriptor", "member;range=10-0", "msDS-QuotaUsed", "msDS-QuotaEffective", "member;range=1-0" }, ExtendedControl.LDAP_SERVER_SD_FLAGS_OID, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S3\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S4\'");

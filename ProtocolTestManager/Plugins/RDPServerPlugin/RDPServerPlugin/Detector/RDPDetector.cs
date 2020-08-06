@@ -127,15 +127,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
                 DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
 
-                CheckSupportedFeatures();            
+                CheckSupportedFeatures();
 
                 CheckSupportedProtocols();
 
                 config.RDPEDYCSupported = detectInfo.IsSupportRDPEDYC.ToString();
 
                 config.RDPELESupported = detectInfo.IsSupportRDPELE.ToString();
-                
-                SetRdpVersion(config);               
+
+                SetRdpVersion(config);
             }
             catch (Exception e)
             {
@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 config.ServerUserPassword,
                 clientAddress.ToString(),
                 Int32.TryParse(config.ServerPort, out port) ? port : defaultPort
-                );            
+                );
             rdpbcgrClient.TlsVersion = SslProtocols.None;
         }
 
@@ -184,10 +184,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             {
                 clientAddress = Dns.GetHostEntry(clientName).AddressList.First();
             }
-            
+
             requestedProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;
             encryptedProtocol = EncryptedProtocol.Rdp;
-            
+
             string strWaitTime = DetectorUtil.GetPropertyValue("WaitTime");
             if (strWaitTime != null)
             {
@@ -387,7 +387,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private ITsCapsSet GetServerCapSet(capabilitySetType_Values capsetType)
         {
-            Collection<ITsCapsSet> capsets = this.rdpbcgrClient.Context.demandActivemCapabilitySets;
+            Collection<ITsCapsSet> capsets = this.rdpbcgrClient.Context.DemandActiveCapabilitySets;
             if (capsets != null)
             {
                 foreach (ITsCapsSet capSet in capsets)
@@ -468,7 +468,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
         }
-      
+
         private void SetRdpVersion(Configs config)
         {
             DetectorUtil.WriteLog("Detect RDP version...");
@@ -577,7 +577,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 x224ConnectReqPdu.tpktHeader.length += (ushort)x224ConnectReqPdu.rdpCorrelationInfo.length;
                 x224ConnectReqPdu.x224Crq.lengthIndicator += (byte)x224ConnectReqPdu.rdpCorrelationInfo.length;
             }
-            rdpbcgrClient.SendPdu(x224ConnectReqPdu);          
+            rdpbcgrClient.SendPdu(x224ConnectReqPdu);
         }
 
         private void SendClientMCSConnectInitialPDU(
@@ -701,7 +701,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 TS_LICENSE_PDU licensePdu = rdpeleClient.ExpectPdu(timeout);
 
                 if (licensePdu.preamble.bMsgType == bMsgType_Values.ERROR_ALERT)
-                {                    
+                {
                     // If the target machine is a personal terminal server, whether the client sends the license or not, 
                     // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
                     if (dwErrorCode_Values.STATUS_VALID_CLIENT != licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode)

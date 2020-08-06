@@ -21,6 +21,8 @@
     <Content Include="IClientControlAdapter\SetTrustRealmEncTypeAsAes.ps1" />
     <Content Include="IClientControlAdapter\SetSupportedEncryptionTypesAsRc4.ps1" />
     <Content Include="IClientControlAdapter\RestoreSupportedEncryptionTypes.ps1" />
+    <Content Include="IClientControlAdapter\EnableCompoundIdentity.ps1" />    
+    <Content Include="IClientControlAdapter\Run-TaskOnRemoteComputer.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj" />

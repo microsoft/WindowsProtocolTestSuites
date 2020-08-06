@@ -414,6 +414,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="streamCmd">Stream Surface Bits Command.</param>
         void SendStreamSurfaceBitsCommand(TS_SURFCMD_STREAM_SURF_BITS streamCmd);
 
+        /// <summary>
+        /// Send fast-path large pointer update to client.
+        /// </summary>
+        /// <param name="cacheIndex">The cache index.</param>
+        /// <param name="hotSpotX">The x-coordinates of hotspot.</param>
+        /// <param name="hotSpotY">The y-coordinates of hotspot.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <param name="xorMaskData">The xor mask data.</param>
+        /// <param name="andMaskData">The and mask data.</param>
+        void FPLargePointer(
+            ushort cacheIndex,
+            ushort hotSpotX,
+            ushort hotSpotY,
+            ushort width,
+            ushort height,
+            byte[] xorMaskData = null,
+            byte[] andMaskData = null
+            );
+
         #endregion
 
         #region Slow-Path

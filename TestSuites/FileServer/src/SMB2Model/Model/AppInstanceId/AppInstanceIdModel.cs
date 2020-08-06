@@ -2,13 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Text;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId;
-using Microsoft.Xrt.Runtime;
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 
-[assembly: NativeType("System.Diagnostics.Tracing.*")]
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.AppInstanceId
 {
     public static class AppInstanceIdModel

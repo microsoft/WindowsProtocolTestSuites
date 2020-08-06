@@ -1766,5 +1766,5 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// File Fs Attribute Information
         /// </summary>
         FileFsAttributeInformation
-    }
+    }    
 }

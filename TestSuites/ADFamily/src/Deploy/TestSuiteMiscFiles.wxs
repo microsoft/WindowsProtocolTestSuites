@@ -16,6 +16,7 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Kile.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa.dll" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Messages.dll" />
@@ -41,6 +42,7 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Drsr.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Kile.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Lsa.pdb" />
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Messages.pdb" />
@@ -265,6 +267,13 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Kile.pdb" Guid="{01F89989-A8C4-424D-8EB2-47605D648E90}">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Kile.pdb" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Kile.pdb" />
+      </Component>
+
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" Guid="{A364818F-BA8C-462C-8DAE-C1AE6CEA636D}">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" Guid="{3E60E8F8-D346-4B96-9D07-C03CB410A001}">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" Source="$(var.PROTOSDK_TESTSUITE_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       </Component>
 
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E25D34}">

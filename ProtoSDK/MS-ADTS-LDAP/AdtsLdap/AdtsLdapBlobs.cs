@@ -6,7 +6,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
@@ -1897,7 +1896,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
         /// <summary>
         /// The SID of the domain, specified as a SID structure, which is defined in [MS-DTYP] section 2.4.2.
         /// </summary>
-        public SecurityIdentifier DomainSid;
+        public _SID DomainSid;
 
         /// <summary>
         /// NETLOGON_NT_VERSION Options

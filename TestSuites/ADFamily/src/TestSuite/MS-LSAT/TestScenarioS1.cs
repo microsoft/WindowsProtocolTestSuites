@@ -7,12 +7,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.4.2965.0")]
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TestScenarioS1 : PtfTestClassBase {
         
@@ -48,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ILsatAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter))));
+            this.ILsatAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ILsatAdapter))));
         }
         
         protected override void TestCleanup() {
@@ -78,11 +76,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp2;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp3;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Invalid,{\"DoesNotExist\"},out _,out _)\'");
-                temp3 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp1, out temp2);
+                temp3 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), new List<string> { "DoesNotExist" }, out temp1, out temp2);
                 this.Manager.Comment("reaching state \'S24\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:InvalidServerStat" +
                         "e\'");
@@ -98,11 +92,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp5;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp6;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Valid,{\"DoesNotExist\"},out _,out _)\'");
-                temp6 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp4, out temp5);
+                temp6 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), new List<string> { "DoesNotExist" }, out temp4, out temp5);
                 this.Manager.Checkpoint("MS-LSAT_R222");
                 this.Manager.Checkpoint("MS-LSAT_R255");
                 this.Manager.Comment("reaching state \'S25\'");
@@ -160,15 +150,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp11;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Valid,{\"UserPrincipalName1\",\"DoesNotExist\",\"" +
                         "FullQualifiedName1\"},out _,out _)\'");
-                temp11 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp9, out temp10);
+                temp11 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, out temp9, out temp10);
                 this.Manager.Checkpoint("MS-LSAT_R218");
                 this.Manager.Checkpoint("MS-LSAT_R254");
                 this.Manager.Comment("reaching state \'S34\'");
@@ -186,17 +168,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp14;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Valid,{\"UserPrincipalName1\",\"FullQualifiedNa" +
                         "me1\",\"UnQualifiedName1\",\"IsolatedName1\"},out _,out _)\'");
-                temp14 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp12, out temp13);
+                temp14 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, out temp12, out temp13);
                 this.Manager.Comment("reaching state \'S35\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:InvalidServerStat" +
                         "e\'");
@@ -245,17 +217,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp19;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Valid,{\"UserPrincipalName1\",\"FullQualifiedNa" +
                         "me1\",\"UnQualifiedName1\",\"IsolatedName1\"},out _,out _)\'");
-                temp19 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp17, out temp18);
+                temp19 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, out temp17, out temp18);
                 this.Manager.Checkpoint("MS-LSAT_R253");
                 this.Manager.Checkpoint("MS-LSAT_R217");
                 this.Manager.Comment("reaching state \'S26\'");
@@ -272,11 +234,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp21;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp22;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Valid,{\"DoesNotExist\"},out _,out _)\'");
-                temp22 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp20, out temp21);
+                temp22 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), new List<string> { "DoesNotExist" }, out temp20, out temp21);
                 this.Manager.Comment("reaching state \'S27\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:InvalidServerStat" +
                         "e\'");
@@ -325,15 +283,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp27;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Invalid,{\"UserPrincipalName1\",\"DoesNotExist\"" +
                         ",\"FullQualifiedName1\"},out _,out _)\'");
-                temp27 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp25, out temp26);
+                temp27 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, out temp25, out temp26);
                 this.Manager.Checkpoint("MS-LSAT_R220");
                 this.Manager.Comment("reaching state \'S28\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:AccessDenied\'");
@@ -350,15 +300,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp30;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Valid,{\"UserPrincipalName1\",\"DoesNotExist\",\"" +
                         "FullQualifiedName1\"},out _,out _)\'");
-                temp30 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp28, out temp29);
+                temp30 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(0)), new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, out temp28, out temp29);
                 this.Manager.Comment("reaching state \'S29\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:InvalidServerStat" +
                         "e\'");
@@ -407,17 +349,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp35;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Invalid,{\"UserPrincipalName1\",\"FullQualified" +
                         "Name1\",\"UnQualifiedName1\",\"IsolatedName1\"},out _,out _)\'");
-                temp35 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp33, out temp34);
+                temp35 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, out temp33, out temp34);
                 this.Manager.Checkpoint("MS-LSAT_R220");
                 this.Manager.Comment("reaching state \'S30\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:AccessDenied\'");
@@ -434,15 +366,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp38;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Invalid,{\"UserPrincipalName1\",\"DoesNotExist\"" +
                         ",\"FullQualifiedName1\"},out _,out _)\'");
-                temp38 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp36, out temp37);
+                temp38 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), new List<string> { "UserPrincipalName1", "DoesNotExist", "FullQualifiedName1" }, out temp36, out temp37);
                 this.Manager.Comment("reaching state \'S31\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:InvalidServerStat" +
                         "e\'");
@@ -490,11 +414,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.MappedCount temp42;
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp43;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Invalid,{\"DoesNotExist\"},out _,out _)\'");
-                temp43 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "DoesNotExist", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp41, out temp42);
+                temp43 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), new List<string> { "DoesNotExist" }, out temp41, out temp42);
                 this.Manager.Checkpoint("MS-LSAT_R220");
                 this.Manager.Comment("reaching state \'S32\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:AccessDenied\'");
@@ -511,17 +431,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat
                 Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.ErrorStatus temp46;
                 this.Manager.Comment("executing step \'call WinLookUpNames2(Invalid,{\"UserPrincipalName1\",\"FullQualified" +
                         "Name1\",\"UnQualifiedName1\",\"IsolatedName1\"},out _,out _)\'");
-                temp46 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), this.Make<Microsoft.Modeling.Set<string>>(new string[] {
-                                "Rep"}, new object[] {
-                                Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.UpdateMap<string, Microsoft.Xrt.Runtime.Singleton>(Microsoft.Xrt.Runtime.RuntimeSupport.MakeMap<string, Microsoft.Xrt.Runtime.Singleton>(), "UserPrincipalName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                            "Element"}, new object[] {
-                                                            Microsoft.Xrt.Runtime.Singleton.Single})), "FullQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                        "Element"}, new object[] {
-                                                        Microsoft.Xrt.Runtime.Singleton.Single})), "UnQualifiedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                    "Element"}, new object[] {
-                                                    Microsoft.Xrt.Runtime.Singleton.Single})), "IsolatedName1", this.Make<Microsoft.Xrt.Runtime.RuntimeMapElement<Microsoft.Xrt.Runtime.Singleton>>(new string[] {
-                                                "Element"}, new object[] {
-                                                Microsoft.Xrt.Runtime.Singleton.Single}))}), out temp44, out temp45);
+                temp46 = this.ILsatAdapterInstance.WinLookUpNames2(((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LSAHandle)(1)), new List<string> { "UserPrincipalName1", "FullQualifiedName1", "UnQualifiedName1", "IsolatedName1" }, out temp44, out temp45);
                 this.Manager.Comment("reaching state \'S33\'");
                 this.Manager.Comment("checking step \'return WinLookUpNames2/[out Invalid,out Invalid]:InvalidServerStat" +
                         "e\'");

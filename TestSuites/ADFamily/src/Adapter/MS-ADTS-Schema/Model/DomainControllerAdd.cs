@@ -6,8 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
     public partial class ModelDomainController
@@ -66,7 +64,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                     return new ModelResult(ResultCode.EntryAlreadyExists);
                 }
                 AddChild(parent, obj);
-                Consistency.Check(new Sequence<ModelObject>(obj));
+                Consistency.Check(new List<ModelObject> { obj });
             }
             if (Checks.HasDiagnostics)
             {

@@ -7,13 +7,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
 
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [TestClassAttribute()]
     public partial class TestScenarioPoliciesWin2K8R2 : PtfTestClassBase
     {
@@ -54,12 +52,16 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.Manager.GetAdapter(typeof(IAD_LDAPModelAdapter))));
-            this.Manager.Subscribe(SearchOpResponseInfo, this.IAD_LDAPModelAdapterInstance);
+            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.GetAdapter(typeof(IAD_LDAPModelAdapter))));
+            this.IAD_LDAPModelAdapterInstance.SearchOpResponse += IAD_LDAPModelAdapterInstance_SearchOpResponse;
         }
-
+        private void IAD_LDAPModelAdapterInstance_SearchOpResponse(SearchResp response)
+        {
+            this.Manager.AddEvent(SearchOpResponseInfo, this.IAD_LDAPModelAdapterInstance, new object[] { response });
+        }
         protected override void TestCleanup()
         {
+            this.IAD_LDAPModelAdapterInstance.SearchOpResponse -= IAD_LDAPModelAdapterInstance_SearchOpResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -84,13 +86,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Default Query Policy,CN=Query-Policies,CN=Di" +
                     "rectory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88\",\"(objectClass=queryPolicy)\",Subtree,[\"lDAPAdminLimits\"],NoExtendedControl,AD_LDS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Default Query Policy,CN=Query-Policies,CN=Directory Service,CN=Windows NT,CN=S" +
-                    "ervices,CN=Configuration,DC=adts88", "(objectClass=queryPolicy)", SearchScope.Subtree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPAdminLimits",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(1)));
+                    "ervices,CN=Configuration,DC=adts88", "(objectClass=queryPolicy)", SearchScope.Subtree, new List<string> { "lDAPAdminLimits" }, null, ((ADImplementations)(1)));
             this.Manager.Comment("reaching state \'S6\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioPoliciesWin2K8R2S8();
@@ -158,13 +154,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Default Query Policy,CN=Query-Policies,CN=Di" +
                     "rectory Service,CN=Windows NT,CN=Services,CN=Configuration,DC=adts88\",\"(objectClass=queryPolicy)\",Subtree,[\"lDAPAdminLimits\"],NoExtendedControl,AD_DS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Default Query Policy,CN=Query-Policies,CN=Directory Service,CN=Windows NT,CN=S" +
-                    "ervices,CN=Configuration,DC=adts88", "(objectClass=queryPolicy)", SearchScope.Subtree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPAdminLimits",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(0)));
+                    "ervices,CN=Configuration,DC=adts88", "(objectClass=queryPolicy)", SearchScope.Subtree, new List<string> { "lDAPAdminLimits" }, null, ((ADImplementations)(0)));
             this.Manager.Comment("reaching state \'S7\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             TestScenarioPoliciesWin2K8R2S8();

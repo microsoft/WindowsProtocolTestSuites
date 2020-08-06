@@ -230,7 +230,7 @@ All multitransport connections are secured by using either Transport Layer Secur
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**| 
 | -------------| -------------| -------------| -------------| ------------- |
 | S1_Connection| 6| 2| 2| 4| 
-| S2_AutoDetection| 4| 0| 2| 2| 
+| S2_AutoDetection| 5| 0| 2| 3| 
 | S3_Tunneling_StaticVC_Traffic| 0| 0| 0| 1| 
 
 ### <a name="_Toc350340329"/>Test Cases Description 
@@ -346,11 +346,28 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S2_AutoDetect**| | 
 | -------------| ------------- |
-|  **Test ID**| S2\_AutoDetect_RTTMeasure| 
+|  **Test ID**| S2\_AutoDetect_RTTMeasure_Reliable| 
 |  **Priority**| P1| 
 |  **Description** | Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly| 
 |  **Prerequisites**| N/A| 
-|  **Test Execution Steps**| Test suite trigger RDP client to create an encrypted reliable or lossy RDP-UDP connection.| 
+|  **Test Execution Steps**| Test suite trigger RDP client to create an encrypted reliable RDP-UDP connection.| 
+| | Test suite expect for a RDPEMT connection from the client| 
+| | Test suite send a RTT Measure Request message encapsulated in the SubHeaderData field of an RDP_TUNNEL_SUBHEADER structure to the client| 
+| | Test suite expect for a RTT Measure Response PDU embedded in an Auto-Detect Response PDU and verify:| 
+| | The **headerLength** field MUST be set to 0x06| 
+| | The **headerTypeID** field MUST be set to TYPE\_ID\_AUTODETECT_RESPONSE (0x01)| 
+| | The **sequenceNumber** field SHOULD be set to the same value as the sequenceNumber field of the most recent RTT Measure Request message received from the server| 
+| | The **responseType** MUST be set to 0x0000| 
+|  **Cleanup**| N/A| 
+
+
+|  **S2_AutoDetect**| | 
+| -------------| ------------- |
+|  **Test ID**| S2\_AutoDetect_RTTMeasure_Lossy| 
+|  **Priority**| P1| 
+|  **Description** | Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Test suite trigger RDP client to create an encrypted lossy RDP-UDP connection.| 
 | | Test suite expect for a RDPEMT connection from the client| 
 | | Test suite send a RTT Measure Request message encapsulated in the SubHeaderData field of an RDP_TUNNEL_SUBHEADER structure to the client| 
 | | Test suite expect for a RTT Measure Response PDU embedded in an Auto-Detect Response PDU and verify:| 

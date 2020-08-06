@@ -1077,14 +1077,33 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 String.Format("The version field of TS_UD_SC_CORE contains value: {0}.", String.Join(", ", serverVersions.Select(version => String.Format("0x{0:X08}", version)))));
 
 
-            uint flags = (uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
-            uint negFlags = (uint)(~flags);
-            Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
-                + "Available flags: PROTOCOL_RDP (0x00000000), PROTOCOL_SSL (0x00000001), PROTOCOL_HYBRID (0x00000002), PROTOCOL_HYBRID_EX (0x00000008).");
+            if (serverCoreData.clientRequestedProtocols != null)
+            {
+                uint flags = (uint)(requestedProtocols_Values.PROTOCOL_RDP_FLAG | requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX);
+                uint negFlags = (uint)(~flags);
+                Site.Assert.AreEqual<uint>(0, (uint)serverCoreData.clientRequestedProtocols & negFlags, "The clientRequestedProtocols field of TS_UD_SC_CORE, which contains the flags sent by the client in the requestedProtocols field of the RDP Negotiation Request."
+                    + "Available flags: PROTOCOL_RDP (0x00000000), PROTOCOL_SSL (0x00000001), PROTOCOL_HYBRID (0x00000002), PROTOCOL_HYBRID_EX (0x00000008).");
 
-            var validFlags = Enum.GetValues(typeof(SC_earlyCapabilityFlags_Values)).Cast<SC_earlyCapabilityFlags_Values>();
+                if (serverCoreData.earlyCapabilityFlags != null)
+                {
+                    var validFlags = Enum.GetValues(typeof(SC_earlyCapabilityFlags_Values)).Cast<SC_earlyCapabilityFlags_Values>();
 
-            CheckUndefinedFlagValue("earlyCapabilityFlags", "TS_UD_SC_CORE", validFlags, serverCoreData.earlyCapabilityFlags);
+                    CheckUndefinedFlagValue("earlyCapabilityFlags", "TS_UD_SC_CORE", validFlags, serverCoreData.earlyCapabilityFlags.Value);
+                }
+                else
+                {
+                    Site.Log.Add(LogEntryKind.Comment, "The field earlyCapabilityFlags is not present.");
+
+                    if (testConfig.isWindowsImplementation)
+                    {
+                        Site.Assert.AreEqual((uint)rdpbcgrClientStack.Context.RequestedProtocol, (uint)requestedProtocols_Values.PROTOCOL_RDP_FLAG, "For Windows implementation, the requested protocols MUST be RDP if clientRequestedProtocols is not present.");
+                    }
+                }
+            }
+            else
+            {
+                Site.Assert.IsNull(serverCoreData.earlyCapabilityFlags, "If clientRequestedProtocols is not present, the field earlyCapabilityFlags MUST NOT be present.");
+            }
         }
 
         /// <summary>

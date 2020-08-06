@@ -9,6 +9,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
+using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -714,9 +715,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     name = CreateContextNames.SMB2_CREATE_SD_BUFFER;
 
-                    var sid = new SecurityIdentifier(createSdBuffer.SID);
-                    dataBuffer = new byte[sid.BinaryLength];
-                    sid.GetBinaryForm(dataBuffer, 0);
+                    _SID sid = DtypUtility.ToSid(createSdBuffer.SID);
+                    dataBuffer = TypeMarshal.ToBytes(sid);
 
                     goto encapsulateCreateContextStruct;
                 }
@@ -1141,8 +1141,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                                 break;
                             }
                             else
-                            { 
-                                throw new InvalidOperationException("Unexpected create context: " + createContextName + ", the GUID format is: " + createContextGuid.ToString()); 
+                            {
+                                throw new InvalidOperationException("Unexpected create context: " + createContextName + ", the GUID format is: " + createContextGuid.ToString());
                             }
                         }
                 }
@@ -1496,6 +1496,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             DialectRevision[] dialects = allDialects.GetRange(0, index + 1).ToArray();
 
             return dialects;
+        }
+
+        /// <summary>
+        /// Get supported compression algorithms in given compression algorithms.
+        /// </summary>
+        /// <param name="compressionAlgorithms">An array containing compression algorithms.</param>
+        /// <returns>The supported compression algorithms.</returns>
+        public static CompressionAlgorithm[] GetSupportedCompressionAlgorithms(CompressionAlgorithm[] compressionAlgorithms)
+        {
+            var result = compressionAlgorithms.Where(compressionAlgorithm => Smb2Consts.AllCompressionAlgorithms.Contains(compressionAlgorithm));
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Get supported pattern scanning algorithms in given compression algorithms.
+        /// </summary>
+        /// <param name="compressionAlgorithms">An array containing compression algorithms.</param>
+        /// <returns>The supported pattern scanning algorithms.</returns>
+        public static CompressionAlgorithm[] GetSupportedPatternScanningAlgorithms(CompressionAlgorithm[] compressionAlgorithms)
+        {
+            var result = compressionAlgorithms.Where(compressionAlgorithm => Smb2Consts.AllPatternScanningAlgorithms.Contains(compressionAlgorithm));
+
+            return result.ToArray();
         }
     }
 }

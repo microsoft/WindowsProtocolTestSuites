@@ -2071,15 +2071,19 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                 EnvironmentConfig.UseKerberos == true ?
                 (
                 ClientSecurityContextAttribute.Connection
+                | ClientSecurityContextAttribute.DceStyle
                 | ClientSecurityContextAttribute.Integrity
+                | ClientSecurityContextAttribute.ReplayDetect
+                | ClientSecurityContextAttribute.SequenceDetect
                 | ClientSecurityContextAttribute.Confidentiality
-                | ClientSecurityContextAttribute.UseSessionKey
-                | ClientSecurityContextAttribute.DceStyle)
+                | ClientSecurityContextAttribute.UseSessionKey)
                 :
                 (ClientSecurityContextAttribute.Connection
+                | ClientSecurityContextAttribute.DceStyle
                 | ClientSecurityContextAttribute.Integrity
-                | ClientSecurityContextAttribute.Confidentiality
-                | ClientSecurityContextAttribute.DceStyle);
+                | ClientSecurityContextAttribute.ReplayDetect
+                | ClientSecurityContextAttribute.SequenceDetect
+                | ClientSecurityContextAttribute.Confidentiality);
 
             SspiClientSecurityContext securityContext = new SspiClientSecurityContext(
                 EnvironmentConfig.UseKerberos == true ? SecurityPackageType.Kerberos : SecurityPackageType.Negotiate,

@@ -99,6 +99,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 AccessMask.GENERIC_WRITE);
 
             ClientTearDown(alternativeChannelClient, treeId, fileId);
+
+            // Wait until CheckBreakNotification exits;
+            Thread.Sleep(TestConfig.WaitTimeoutInMilliseconds);
         }
         #endregion
 

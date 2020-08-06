@@ -7018,7 +7018,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // This is the value when all unused bits are set, and all used bits are clear.
             uint allUnusedBits = ~(uint)
                 (0x00000001             // A
@@ -7037,6 +7037,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 | 0x00004000            // Q
                 | 0x00008000            // R
                 | 0x00010000            // S
+                | 0x00020000            // T
                 | 0x20000000            // M
                 | 0x40000000            // N
                 | 0x80000000            // O
@@ -7062,7 +7063,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // A: 0x00000001
             // B: 0x00000004
             // D: 0x00000010
@@ -7088,7 +7089,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // A: 0x00000001
             if ((flags & (uint)0x00000001) != 0)
             {
@@ -7122,7 +7123,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // B: 0x00000004
             if ((flags & (uint)0x00000004) != 0)
             {
@@ -7160,7 +7161,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // C: 0x00000008
             if ((flags & (uint)0x00000008) != 0)
             {
@@ -7185,7 +7186,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // D: 0x00000010
             if ((flags & (uint)0x00000010) != 0)
             {
@@ -7223,7 +7224,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // E: 0x00000020
             if ((flags & (uint)0x00000020) != 0)
             {
@@ -7261,7 +7262,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // F: 0x00000040
             if ((flags & (uint)0x00000040) != 0)
             {
@@ -7294,7 +7295,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // G: 0x00000080
             if ((flags & (uint)0x00000080) != 0)
             {
@@ -7319,7 +7320,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // H: 0x00000100
             if ((flags & (uint)0x00000100) != 0)
             {
@@ -7344,7 +7345,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // I: 0x00000200
             // J: 0x00000400
             // Flag I and J cannot be set at the same time.
@@ -7367,7 +7368,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // A: 0x00000001
             // B: 0x00000004
             // D: 0x00000010
@@ -7402,7 +7403,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // L: 0x00001000
             if ((flags & (uint)0x00001000) != 0)
             {
@@ -7441,7 +7442,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
                 //                     1                   2                   3  
                 // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+                // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
                 // M: 0x20000000
                 bool isVerifyR103219 = (flags & (uint)0x20000000) != 0;
 
@@ -7459,7 +7460,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // M: 0x20000000
             if ((flags & (uint)0x20000000) != 0)
             {
@@ -7490,7 +7491,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
                 //                     1                   2                   3  
                 // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+                // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
                 // N: 0x40000000
                 bool isVerifyR103220 = (flags & (uint)0x40000000) != 0;
 
@@ -7508,7 +7509,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // N: 0x40000000
             if ((flags & (uint)0x40000000) != 0)
             {
@@ -7539,7 +7540,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
                 //                     1                   2                   3  
                 // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+                // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
                 // O: 0x80000000
                 bool isVerifyR103221 = (flags & (uint)0x80000000) != 0;
 
@@ -7556,7 +7557,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // O: 0x80000000
             if ((flags & (uint)0x80000000) != 0)
             {
@@ -7578,7 +7579,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // P: 0x00002000
             if ((flags & (uint)0x00002000) != 0)
             {
@@ -7610,7 +7611,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
             // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
             //                     1                   2                   3  
             // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-            // O N M 0 0 0 0 0 0 0 0 0 0 0 0 S R Q P L K J I H G F E D C B 0 A
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
             // J: 0x00000400
             // P: 0x00002000
             bool isPAndJSet = ((flags & (uint)0x00002000) != 0)
@@ -7630,13 +7631,32 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
                 Flags: {0}",
                 flags);
 
+            // Flags: A set of bit flags in little-endian format that describes the features and roles of the DC.
+            //                     1                   2                   3  
+            // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+            // O N M 0 0 0 0 0 0 0 0 0 0 0 T S R Q P L K J I H G F E D C B 0 A
+            // E: 0x00000020
+            // S: 0x00010000
+            // T: 0x00020000
+            if ((flags & (uint)0x00020000) != 0)
+            {
+                bool isEAndSSet = ((flags & (uint)0x00000020) != 0)
+                    && ((flags & (uint)0x00010000) != 0);
+
+                // Verify MS-NRPC requirement:  MS-NRPC_R103222.
+                Site.CaptureRequirementIfIsTrue(
+                    isEAndSSet,
+                    103222,
+                    @"[In DOMAIN_CONTROLLER_INFOW structure]If T bit is set, bit S and bit E must also be set.");
+            }
+
             // Verify MS-NRPC requirement:  MS-NRPC_R97.
             // All other bits[except A to S bits]MUST be set to zero, which is duplicate with 67.
             Site.CaptureRequirementIfAreEqual<uint>(
                 0,
                 (flags & allUnusedBits),
                 97,
-                @"[In DOMAIN_CONTROLLER_INFOW structure]Flags:All other bits[except A to P bits]MUST be set to zero.");
+                @"[In DOMAIN_CONTROLLER_INFOW structure]Flags:All other bits[except A to T bits]MUST be set to zero.");
 
             // Add the debug information.
             Site.Log.Add(

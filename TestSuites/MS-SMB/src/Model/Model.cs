@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.Smb
 {
     /// <summary>
     /// Init State.
     /// </summary>
-    [InitialMode("SmbState.Init")]
+    /// [InitialMode("SmbState.Init")]
     public static partial class BaseModelProgram
     {
         /// <summary>
@@ -155,7 +155,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     // FAT does not support the previous version.
                     Condition.IsTrue(!isSupportPreviousVersion);
 
-                    Requirement.AssumeCaptured("Server doesn't support stream");
+                    Requirement.Capture("Server doesn't support stream");
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     Parameter.isSupportStream = true;
                     // NTFS supports the previous version.
                     Condition.IsTrue(isSupportPreviousVersion);
-                    Requirement.AssumeCaptured("Server doesn't support stream");
+                    Requirement.Capture("Server doesn't support stream");
                 }
             }
 
@@ -218,11 +218,11 @@ namespace Microsoft.Protocol.TestSuites.Smb
             Parameter.isSupportInfoLevelPassThrough = isSupportInfoLevelPassthrough;
             if (!isSupportNtSmb)
             {
-                Requirement.AssumeCaptured("Server doesn't support NT SMBs");
+                Requirement.Capture("Server doesn't support NT SMBs");
             }
             else
             {
-                Requirement.AssumeCaptured("Server supports NT SMBs");
+                Requirement.Capture("Server supports NT SMBs");
             }
 
             Parameter.isSupportNtSmb = isSupportNtSmb;
@@ -246,7 +246,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates the status of create named pipe and mailslot operation.
         /// </param>
         [Rule]
-        public static void CreatePipeAndMailslot(Set<string> pipes, Set<string> mailslot, out bool isCreatePipeStatus)
+        public static void CreatePipeAndMailslot(List<string> pipes, List<string> mailslot, out bool isCreatePipeStatus)
         {
             Condition.IsTrue(smbState == SmbState.ServerSetupSuccess);
             Condition.IsTrue(pipes == PipeNames() && mailslot == MailslotNames());
@@ -274,7 +274,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             bool isSupportExtSecurity,
             SignState clientSignState,
-            Sequence<Dialect> dialectName)
+            List<Dialect> dialectName)
         {
             Checker.CheckNegotiateRequest(smbConnection, messageId, smbState, clientSignState, dialectName);
             smbRequest = new NegotiateRequest(messageId, isSupportExtSecurity, clientSignState, dialectName);
@@ -309,7 +309,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSignatureRequired,
             bool isSignatureEnabled,
             int dialectIndex,
-            [Domain("SutCapabilities")] Set<Capabilities> sutCapabilities,
+            List<Capabilities> sutCapabilities,
             MessageStatus messageStatus)
         {
             Checker.CheckNegotiateResponse(
@@ -437,7 +437,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSignatureRequired,
             bool isSignatureEnabled,
             int dialectIndex,
-            [Domain("SutCapabilitiesForNonextendedSecurity ")] Set<Capabilities> serverCapabilities,
+            List<Capabilities> serverCapabilities,
             MessageStatus messageStatus)
         {
             Condition.IsTrue(!serverCapabilities.Contains(Capabilities.CapExtendedSecurity));
@@ -582,7 +582,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("ClientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceeds,
             bool isWriteBufferSizeExceeds,
             bool flag2)
@@ -641,7 +641,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("ClientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2)
@@ -703,7 +703,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("ClientCapabilitiesForNonextendedSecurity")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceeds,
             bool isWriteBufferSizeExceeds,
             bool flag2)
@@ -948,7 +948,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("ClientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceeds,
             bool isWriteBufferSizeExceeds,
             bool flag2,
@@ -1165,7 +1165,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isTidDisconnectionSet,
             bool isRequestExtSignature,
             bool isRequestExtResponse,
-            [Domain("ShareDomain")] string shareName,
+            string shareName,
             ShareType shareType,
             bool isSigned)
         {
@@ -1406,10 +1406,10 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             int sessionId,
             int treeId,
-            [Domain("DesiredAccess")] int desiredAccess,
+            int desiredAccess,
             CreateDisposition createDisposition,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
-            [Domain("FileDomain")] string fileName,
+            int impersonationLevel,
+            string fileName,
             ShareType shareType,
             bool isSigned,
             bool isOpenByFileId,
@@ -1479,7 +1479,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             int fId,
             bool isSigned,
-            [Domain("ActionTaken")] Set<CreateAction> createAction,
+            List<CreateAction> createAction,
             bool isFileIdZero,
             bool isVolumeGUIDZero,
             bool isDirectoryZero,
@@ -2454,17 +2454,17 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Disable CA1006, because according to current test suite design, it is no need to remove the nested type 
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Set<Capabilities>> ClientCapabilities()
+        public static IEnumerable<List<Capabilities>> ClientCapabilities()
         {
-            Set<Capabilities> capabilities = new Set<Capabilities>();
+            List<Capabilities> capabilities = new List<Capabilities>();
 
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapNtSmbs))
             {
-                capabilities = capabilities.Add(Capabilities.CapNtSmbs);
+                capabilities.Add(Capabilities.CapNtSmbs);
             }
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapExtendedSecurity))
             {
-                capabilities = capabilities.Add(Capabilities.CapExtendedSecurity);
+                capabilities.Add(Capabilities.CapExtendedSecurity);
             }
 
             yield return capabilities;
@@ -2524,12 +2524,12 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Pipe names.
         /// </summary>
         /// <returns>All available pipe names.</returns>
-        public static Set<string> PipeNames()
+        public static List<string> PipeNames()
         {
-            Set<string> s = new Set<string>();
+            List<string> s = new List<string>();
             foreach (string name in Parameter.pipeNames)
             {
-                s = s.Add(name);
+                s.Add(name);
             }
             return s;
         }
@@ -2538,12 +2538,12 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Mailslot names.
         /// </summary>
         /// <returns>All available mailslot names.</returns>
-        public static Set<string> MailslotNames()
+        public static List<string> MailslotNames()
         {
-            Set<string> s = new Set<string>();
+            List<string> s = new List<string>();
             foreach (string name in Parameter.mailslotNames)
             {
-                s = s.Add(name);
+               s.Add(name);
             }
             return s;
         }
@@ -2584,12 +2584,12 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Disable CA1006, because according to current test suite design, it is no need to remove the nested type 
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Set<CreateAction>> ActionTaken()
+        public static IEnumerable<List<CreateAction>> ActionTaken()
         {
-            yield return new Set<CreateAction>(CreateAction.FileSuperseded, CreateAction.FileExists);
-            yield return new Set<CreateAction>(CreateAction.FileOpened, CreateAction.FileExists);
-            yield return new Set<CreateAction>(CreateAction.FileCreated, CreateAction.FileDoesNotExist);
-            yield return new Set<CreateAction>(CreateAction.FileOverwritten, CreateAction.FileExists);
+            yield return new List<CreateAction> { CreateAction.FileSuperseded, CreateAction.FileExists };
+            yield return new List<CreateAction> { CreateAction.FileOpened, CreateAction.FileExists };
+            yield return new List<CreateAction> { CreateAction.FileCreated, CreateAction.FileDoesNotExist };
+            yield return new List<CreateAction> { CreateAction.FileOverwritten, CreateAction.FileExists };
         }
 
 
@@ -2617,28 +2617,28 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Disable CA1006, because according to current test suite design, it is no need to remove the nested type 
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Set<Capabilities>> SutCapabilities()
+        public static IEnumerable<List<Capabilities>> SutCapabilities()
         {
-            Set<Capabilities> capabilities = new Set<Capabilities>();
+            List<Capabilities> capabilities = new List<Capabilities>();
 
             if (Parameter.isSupportDfs)
             {
-                capabilities = capabilities.Add(Capabilities.CapDfs);
+                capabilities.Add(Capabilities.CapDfs);
             }
             if (Parameter.isSupportInfoLevelPassThrough)
             {
-                capabilities = capabilities.Add(Capabilities.CapInfoLevelPassThru);
+                capabilities.Add(Capabilities.CapInfoLevelPassThru);
             }
             if (smbConnection.isClientSupportExtSecurity)
             {
-                capabilities = capabilities.Add(Capabilities.CapExtendedSecurity);
+                capabilities.Add(Capabilities.CapExtendedSecurity);
             }
             if (Parameter.isSupportNtSmb)
             {
-                capabilities = capabilities.Add(Capabilities.CapNtSmbs);
+                capabilities.Add(Capabilities.CapNtSmbs);
             }
             yield return capabilities;
-            yield return new Set<Capabilities>(Capabilities.None);
+            yield return new List<Capabilities> { Capabilities.None };
         }
 
 
@@ -2649,23 +2649,23 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Disable CA1006, because according to current test suite design, it is no need to remove the nested type 
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Set<Capabilities>> SutCapabilitiesForNonextendedSecurity()
+        public static IEnumerable<List<Capabilities>> SutCapabilitiesForNonextendedSecurity()
         {
-            Set<Capabilities> capabilities = new Set<Capabilities>();
+            List<Capabilities> capabilities = new List<Capabilities>();
             if (Parameter.isSupportDfs)
             {
-                capabilities = capabilities.Add(Capabilities.CapDfs);
+                capabilities.Add(Capabilities.CapDfs);
             }
             if (Parameter.isSupportInfoLevelPassThrough)
             {
-                capabilities = capabilities.Add(Capabilities.CapInfoLevelPassThru);
+                capabilities.Add(Capabilities.CapInfoLevelPassThru);
             }
             if (Parameter.isSupportNtSmb)
             {
-                capabilities = capabilities.Add(Capabilities.CapNtSmbs);
+                capabilities.Add(Capabilities.CapNtSmbs);
             }
             yield return capabilities;
-            yield return new Set<Capabilities>(Capabilities.None);
+            yield return new List<Capabilities> { Capabilities.None };
         }
 
         /// <summary>
@@ -2675,32 +2675,32 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// Disable CA1006, because according to current test suite design, it is no need to remove the nested type 
         /// argument.
         [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IEnumerable<Set<Capabilities>> ClientCapabilitiesForNonextendedSecurity()
+        public static IEnumerable<List<Capabilities>> ClientCapabilitiesForNonextendedSecurity()
         {
-            Set<Capabilities> capabilities = new Set<Capabilities>();
+            List<Capabilities> capabilities = new List<Capabilities>();
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapUnicode))
             {
-                capabilities = capabilities.Add(Capabilities.CapUnicode);
+                capabilities.Add(Capabilities.CapUnicode);
             }
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapLargeFiles))
             {
-                capabilities = capabilities.Add(Capabilities.CapLargeFiles);
+                capabilities.Add(Capabilities.CapLargeFiles);
             }
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapNtSmbs))
             {
-                capabilities = capabilities.Add(Capabilities.CapNtSmbs);
+                capabilities.Add(Capabilities.CapNtSmbs);
             }
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapNtFind))
             {
-                capabilities = capabilities.Add(Capabilities.CapNtFind);
+                capabilities.Add(Capabilities.CapNtFind);
             }
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapStatus32))
             {
-                capabilities = capabilities.Add(Capabilities.CapStatus32);
+                capabilities.Add(Capabilities.CapStatus32);
             }
             if (smbConnection.sutCapabilities.Contains(Capabilities.CapLevelIIOplocks))
             {
-                capabilities = capabilities.Add(Capabilities.CapLevelIIOplocks);
+                capabilities.Add(Capabilities.CapLevelIIOplocks);
             }
             yield return capabilities;
         }

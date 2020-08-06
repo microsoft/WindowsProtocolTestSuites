@@ -742,7 +742,7 @@ typedef struct {
 
 typedef struct {
     [ref] DSNAME *pNC;
-    [ref] [string] char *pszDsaSrcpszDsaDest;
+    [ref] [string] char *pszDsaDest;
     UUID uuidDsaObjDest;
     ULONG ulOptions;
     GUID correlationID;

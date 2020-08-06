@@ -22,7 +22,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         #region variables
 
         const string interfaceFullName = "Microsoft.Protocols.TestSuites.Rdp.IRdpSutControlAdapter";
-        const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\ncompression:i:0\nauthentication level:i:0\n";
+        const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\nauthentication level:i:0\n";
+
+        private bool isClientSupportCompression = false;
 
         string localIP;
         ushort localPort;
@@ -262,7 +264,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 connectPayloadType = RDP_Connect_Payload_Type.PARAMETERS_STRUCT;
             }
-                        
+
+            string strIsClientSupportCompression = Site.Properties["RDP.Client.SupportCompression"];
+            if (strIsClientSupportCompression != null)
+            {
+                isClientSupportCompression = Boolean.Parse(strIsClientSupportCompression);
+            }
         }
 
 
@@ -356,6 +363,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 rdpConfigString += "screen mode id:i:1\ndesktopwidth:i:1024\ndesktopheight:i:768\n";
             }
             rdpConfigString += "pinconnectionbar:i:0\n";
+
+            if (isClientSupportCompression)
+            {
+                rdpConfigString += "compression:i:1\n";
+            }
+            else
+            {
+                rdpConfigString += "compression:i:0\n";
+            }
+            
             return rdpConfigString;
         }
 

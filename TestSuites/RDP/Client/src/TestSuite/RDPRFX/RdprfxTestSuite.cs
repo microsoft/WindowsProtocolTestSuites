@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
 
             this.rdprfxAdapter = this.TestSite.GetAdapter<IRdprfxAdapter>();
             this.rdprfxAdapter.Reset();
-            this.rdpbcgrAdapter.TurnVerificationOff(true);
+            this.rdpbcgrAdapter.TurnVerificationOff(TurnOffRDPRFXVerification);
         }
 
         protected override void TestCleanup()

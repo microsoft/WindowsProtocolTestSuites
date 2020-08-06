@@ -1,10 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml", $parameterConfigFile = "$workingDir\Scripts\ParamConfig.xml")
 
 #----------------------------------------------------------------------------
 # Global variables
@@ -23,7 +20,7 @@ if(!(Test-Path "$workingDir"))
 
 if(!(Test-Path "$protocolConfigFile"))
 {
-    $protocolConfigFile = "$workingDir\Protocol.xml"
+    $protocolConfigFile = "$workingDir\Scripts\Protocol.xml"
     if(!(Test-Path "$protocolConfigFile")) 
     {
         .\Write-Error.ps1 "No protocol.xml found."
@@ -31,6 +28,15 @@ if(!(Test-Path "$protocolConfigFile"))
     }
 }
 
+if(!(Test-Path "$parameterConfigFile"))
+{
+    $parameterConfigFile = "$workingDir\Scripts\ParamConfig.xml"
+    if(!(Test-Path "$parameterConfigFile")) 
+    {
+        .\Write-Error.ps1 "No ParamConfig.xml found."
+        exit ExitCode
+    }
+}
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
@@ -46,16 +52,45 @@ function ExitCode()
     return $MyInvocation.ScriptLineNumber 
 }
 
+function StartService($serviceName)
+{
+    $service = Get-Service -Name $serviceName
+    $retryTimes = 0
+    while($service.Status -ne "Running" -and $retryTimes -lt 6)
+    {
+        .\Write-Info.ps1 "Start $serviceName service."
+        Start-Service -InputObj $service -ErrorAction Continue
+        Sleep 10
+        $retryTimes++ 
+        $service = Get-Service -Name $serviceName
+    }
+
+    if($retryTimes -ge 6)
+    {
+        Write-Error.ps1 "Start $serviceName service failed within 1 minute."
+    }
+    else
+    {
+        .\Write-Info.ps1 "Service $serviceName is Running."
+    }
+}
+
 #----------------------------------------------------------------------------
-# Get content from protocol config file
+# Get content from protocol config files
 #----------------------------------------------------------------------------
 [xml]$config = Get-Content "$protocolConfigFile"
 if($config -eq $null)
 {
-    .\Write-Error.ps1 "protocolConfigFile $protocolConfigFile is not a valid XML file."
+    .\Write-Error.ps1 "Protocol config file $protocolConfigFile is not a valid XML file."
     exit ExitCode
 }
 
+[xml]$params = Get-Content "$parameterConfigFile"
+if($params -eq $null)
+{
+    .\Write-Error.ps1 "Param Config file $parameterConfigFile is not a valid XML file."
+    exit ExitCode
+}
 #----------------------------------------------------------------------------
 # Define common variables
 #----------------------------------------------------------------------------
@@ -63,6 +98,42 @@ $password = $config.lab.core.password
 if([System.String]::IsNullOrEmpty($password)) 
 {
     $password = "Password01!"
+}
+
+$azgroups = $params.Parameters.Groups
+$users =  $params.Parameters.Users
+
+#----------------------------------------------------------------------------
+# Start required services
+#----------------------------------------------------------------------------
+.\Write-Info.ps1 "Check and start Active Directory Domain Services"
+StartService "NTDS"
+
+.\Write-Info.ps1 "Check and start Active Directory Web Services"
+StartService "ADWS"
+
+
+#----------------------------------------------------------------------------
+# Create CBAC ENV
+#----------------------------------------------------------------------------
+$domainName = (Get-WmiObject win32_computersystem).Domain
+
+# Retry to wait until the ADWS can respond to PowerShell commands correctly
+$retryTimes = 0
+$domain = $null
+while ($retryTimes -lt 30) {
+    $domain = Get-ADDomain $domainName
+    if ($domain -ne $null) {
+        break;
+    }
+    else {
+        Start-Sleep 10
+        $retryTimes += 1
+    }
+}
+
+if ($domain -eq $null) {
+    .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
 }
 
 #----------------------------------------------------------------------------
@@ -75,17 +146,25 @@ if((gwmi win32_computersystem).partofdomain -eq $true)
 
     $adminDN = dsquery user -name $domainAdmin
 
-    .\Write-Info.ps1 "Create user account: nonadmin"
-    $nonadminDN = $adminDN -Replace $domainAdmin, "nonadmin"
-    CMD /C dsadd user $nonadminDN -pwd $password -desc testaccount -disabled no -mustchpwd no -pwdneverexpires yes 2>&1 | .\Write-Info.ps1
+    foreach($g in $azgroups)
+    {        
+        .\Write-Info.ps1 "Create group: $g.Group.GroupName"
+        $azGroupDN = $g.Group.GroupName 
+        New-ADGroup -Name $azGroupDN -GroupScope Global -GroupCategory Security
+    }
 
-    .\Write-Info.ps1 "Create group: AzGroup01"
-    $azGroup01DN = $adminDN -Replace $domainAdmin, "AzGroup01"
-    CMD /C dsadd group $azGroup01DN 2>&1 | .\Write-Info.ps1
-
-    .\Write-Info.ps1 "Create user account: AzUser01, and add to AzGroup01"
-    $azUser01DN = $adminDN -Replace $domainAdmin, "AzUser01"
-    CMD /C dsadd user $azUser01DN  -pwd $password -desc testaccount -memberof $azGroup01DN -disabled no -mustchpwd no -pwdneverexpires yes 2>&1 | .\Write-Info.ps1
+     foreach($user in $users.User)
+    {        
+        .\Write-Info.ps1 "Create user: $user.Username"
+        $pwd = ConvertTo-SecureString $user.Password -AsPlainText -Force
+        New-ADUser -Name $user.Username -AccountPassword $pwd -CannotChangePassword $true -DisplayName $user -Enabled $true  -PasswordNeverExpires $true 
+	      
+        if($user.Group -ne $null)
+        {
+            $aduser = Get-ADUser -Identity $user.Username
+            Add-ADGroupMember -Identity $user.Group -Members $aduser
+        }      
+    }
 
     .\Write-Info.ps1 "Enable Guest account"
     CMD /C net.exe user Guest /active:yes /Domain 2>&1 | .\Write-Info.ps1
@@ -97,8 +176,11 @@ if((gwmi win32_computersystem).partofdomain -eq $true)
 }
 else
 {
-    .\Write-Info.ps1 "Add nonadmin account"
-    CMD /C net.exe user nonadmin $password /ADD 2>&1 | .\Write-Info.ps1
+    foreach($user in $users.User)
+    {        
+        .\Write-Info.ps1 "Create user account:$user.Username"
+        CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1   
+    }
 
     .\Write-Info.ps1 "Enable Guest account"
     CMD /C net.exe user Guest /active:yes 2>&1 | .\Write-Info.ps1

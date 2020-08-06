@@ -10,7 +10,6 @@ using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -33,13 +32,13 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             #region MS-ADTS-Schema_R73
             //The objectClass attribute of the attributeSchema equals the sequence [top, attributeSchema ]
             //Expected Sequence setting...
-            Sequence<string> expectedSeq = new Sequence<string>();
-            Sequence<string> actualSeq = new Sequence<string>();
+            List<string> expectedSeq = new List<string>();
+            List<string> actualSeq = new List<string>();
             DirectoryEntry serverObject;
             string requiredObjectDN = String.Empty;
 
             expectedSeq.Add("top");
-            expectedSeq.Add("classSchema");
+            expectedSeq.Add("classschema");
 
             //Get attributeSchema from Server.
             requiredObjectDN = "CN=Attribute-Schema,CN=Schema,CN=Configuration," + adAdapter.rootDomainDN;
@@ -53,11 +52,10 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             }
 
             //MS-ADTS-Schema_R73.
-            DataSchemaSite.CaptureRequirementIfAreEqual<Sequence<string>>(
+            CollectionAssert.AreEquivalent(
                 expectedSeq,
                 actualSeq,
-                73,
-                "The objectClass attribute of the attributeSchema equals the sequence [top, classSchema ].");
+                "The objectClass attribute of the attributeSchema equals the sequence [top, classSchema ]. MS-ADTS-Schema_R73");
 
             #endregion
 
@@ -69,18 +67,17 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             {
                 DataSchemaSite.Assume.IsTrue(false, requiredObjectDN + " Object is not found in server");
             }
-            actualSeq = new Sequence<string>();
+            actualSeq = new List<string>();
             foreach (string valueString in serverObject.Properties[StandardNames.objectClass.ToLower()])
             {
                 actualSeq.Add(valueString.ToLower());
             }
 
             //MS-ADTS-Schema_R157.
-            DataSchemaSite.CaptureRequirementIfAreEqual<Sequence<string>>(
+            CollectionAssert.AreEquivalent(
                 expectedSeq,
                 actualSeq,
-                157,
-                "The objectClass attribute of the classSchema equals the sequence [top, classSchema ].");
+                "The objectClass attribute of the classSchema equals the sequence [top, classSchema ]. MS-ADTS-Schema_R157");
 
             #endregion
 
@@ -136,7 +133,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             //system operation.
             DirectoryEntry classSchemaObj;
             bool isAuxiliary = false;
-            SetContainer<string> auxiliaryClassValue = new SetContainer<string>();
+            List<string> auxiliaryClassValue = new List<string>();
 
             //Get class-schema class from server.
             if (!adAdapter.GetObjectByDN("CN=Class-Schema,CN=Schema,CN=Configuration," + adAdapter.rootDomainDN, out classSchemaObj))
@@ -221,12 +218,13 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
             //The objectClass attribute of the attributeSchema equals the sequence [top, attributeSchema ]
             //Expected Sequence setting...
-            Sequence<object> actualSeq = new Sequence<object>();
-            Sequence<object> expectedSeq = new Sequence<object>();
+            List<object> actualSeq = new List<object>();
+            List<object> expectedSeq = new List<object>();
             ModelObject objectFromModel = null;
             string requiredObjectDN = String.Empty;
             DirectoryEntry serverObject;
-            expectedSeq = expectedSeq.Add("top".ToLower()).Add("classSchema".ToLower());
+            expectedSeq.Add("top".ToLower());
+            expectedSeq.Add("classSchema".ToLower());
 
             //Get attributeSchema from Server.
             requiredObjectDN = "CN=Attribute-Schema,CN=Schema,CN=Configuration," + adAdapter.LDSRootObjectName;
@@ -234,25 +232,24 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             {
                 DataSchemaSite.Assume.IsTrue(false, requiredObjectDN + " Object is not found in server");
             }
-            actualSeq = new Sequence<object>();
+            actualSeq = new List<object>();
             foreach (string valueString in serverObject.Properties[StandardNames.objectClass.ToLower()])
             {
-                actualSeq = actualSeq.Add(valueString.ToLower());
+                actualSeq.Add(valueString.ToLower());
             }
             //MS-ADTS-Schema_R73.
-            DataSchemaSite.CaptureRequirementIfAreEqual<Sequence<object>>(
-                expectedSeq,
+            CollectionAssert.AreEquivalent(
+                expectedSeq, 
                 actualSeq,
-                73,
-                "The objectClass attribute of the attributeSchema equals the sequence [top, classSchema ].");
-
+                "The objectClass attribute of the attributeSchema equals the sequence [top, classSchema ]. MS-ADTS-Schema_R73");
             #endregion
 
             #region MS-ADTS-Schema_R157
             //The objectClass attribute of the classSchema equals the sequence [top, classSchema ]. 
             //Expected Sequence setting...
-            expectedSeq = new Sequence<object>();
-            expectedSeq = expectedSeq.Add("top".ToLower()).Add("classSchema".ToLower());
+            expectedSeq = new List<object>();
+            expectedSeq.Add("top".ToLower());
+            expectedSeq.Add("classSchema".ToLower());
 
             //Get classSchema from Server.
             requiredObjectDN = "CN=Class-Schema,CN=Schema,CN=Configuration," + adAdapter.LDSRootObjectName;
@@ -260,18 +257,17 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             {
                 DataSchemaSite.Assume.IsTrue(false, requiredObjectDN + " Object is not found in server");
             }
-            actualSeq = new Sequence<object>();
+            actualSeq = new List<object>();
             foreach (string valueString in serverObject.Properties[StandardNames.objectClass.ToLower()])
             {
-                actualSeq = actualSeq.Add(valueString.ToLower());
+                actualSeq.Add(valueString.ToLower());
             }
 
             //MS-ADTS-Schema_R157.
-            DataSchemaSite.CaptureRequirementIfAreEqual<Sequence<object>>(
+            CollectionAssert.AreEquivalent(
                 expectedSeq,
                 actualSeq,
-                157,
-                "The objectClass attribute of the classSchema equals the sequence [top, classSchema ].");
+                "The objectClass attribute of the classSchema equals the sequence [top, classSchema ]. MS-ADTS-Schema_R157");
 
             #endregion
 
@@ -359,7 +355,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
             DirectoryEntry classSchemaObj;
             bool isAuxiliary = false;
-            SetContainer<string> auxiliaryClassValue = new SetContainer<string>();
+            List<string> auxiliaryClassValue = new List<string>();
 
             //Get class-schema class from server.
             if (!adAdapter.GetLdsObjectByDN(
@@ -872,19 +868,19 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 if (sampleClasses.Contains(serverObj.Name))
                 {
                     //Get possSuperior value
-                    Sequence<string> possSuperiors = new Sequence<string>();
+                    List<string> possSuperiors = new List<string>();
                     if (serverObj.Properties.ContainsKey(StandardNames.possSuperiors.ToLower()))
                     {
                         foreach (string element in serverObj.Properties[StandardNames.possSuperiors.ToLower()])
                         {
-                            possSuperiors = possSuperiors.Add(element);
+                            possSuperiors.Add(element);
                         }
                     }
                     if (serverObj.Properties.ContainsKey(StandardNames.systemPossSuperiors.ToLower()))
                     {
                         foreach (string element in serverObj.Properties[StandardNames.systemPossSuperiors.ToLower()])
                         {
-                            possSuperiors = possSuperiors.Add(element);
+                            possSuperiors.Add(element);
                         }
                     }
 
@@ -966,7 +962,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             bool isContent = true;
 
             //Setting some excluded attributes.
-            SetContainer<string> ExcludedAttributes = new SetContainer<string>();
+            List<string> ExcludedAttributes = new List<string>();
             ExcludedAttributes.Add("creationTime");
             ExcludedAttributes.Add("forceLogoff");
             ExcludedAttributes.Add("lockoutDuration");
@@ -988,8 +984,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             //For each domain NC object...
             foreach (DirectoryEntry entry in childrens)
             {
-                SetContainer<string> mustContain = new SetContainer<string>();
-                SetContainer<string> mayContain = new SetContainer<string>();
+                List<string> mustContain = new List<string>();
+                List<string> mayContain = new List<string>();
 
                 //Get super class chain.
                 object[] superClasses = (object[])entry.Properties[StandardNames.objectClass.ToLower()].Value;

@@ -1,7 +1,5 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Param(
 [String]$scriptsPath  = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
@@ -87,9 +85,14 @@ Write-Host "Turn off firewall"
 cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 
 #-----------------------------------------------------
+# Get IP address of the SUT computer
+#-----------------------------------------------------
+$tcComputerIP = (Test-Connection $tcComputerName -Count 1 | Select -ExpandProperty IPV4Address).IPAddressToString
+
+#-----------------------------------------------------
 # Enable Powershell Remoting
 #-----------------------------------------------------
-if(Test-WSMan -ComputerName $sutSetting.ip){
+if(Test-WSMan -ComputerName $tcComputerIP){
     Write-Host "WinRM is running"
 }else{
     Set-NetConnectionProfile -NetworkCategory Private -ErrorAction Ignore

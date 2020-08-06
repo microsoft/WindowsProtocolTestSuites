@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     /// <summary>
     /// SMB2 compressed packet.
     /// </summary>
-    public class Smb2CompressedPacket : Smb2Packet
+    public abstract class Smb2CompressedPacket : Smb2Packet
     {
         /// <summary>
         /// Header.
@@ -21,66 +21,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public Compression_Transform_Header Header;
 
         /// <summary>
-        /// Uncompressed data part.
-        /// </summary>
-        public byte[] UncompressedData;
-
-        /// <summary>
-        /// Compressed data part.
-        /// </summary>
-        public byte[] CompressedData;
-
-        /// <summary>
         /// The original packet before compression.
         /// </summary>
         public Smb2CompressiblePacket OriginalPacket { get; internal set; }
 
-        /// <summary>
-        /// Marshaling this packet to bytes.
-        /// </summary>
-        /// <returns>The bytes of this packet </returns>
-        public override byte[] ToBytes()
+        public static bool IsChained(byte[] data)
         {
-            var result = new List<byte>();
+            var header = TypeMarshal.ToStruct<Compression_Transform_Header>(data);
 
-            result.AddRange(TypeMarshal.ToBytes(Header));
+            bool result = header.Flags.HasFlag(Compression_Transform_Header_Flags.SMB2_COMPRESSION_FLAG_CHAINED);
 
-            result.AddRange(UncompressedData);
-
-            result.AddRange(CompressedData);
-
-            return result.ToArray();
+            return result;
         }
 
-        /// <summary>
-        /// Build a Smb2CompressedPacket from a byte array.
-        /// </summary>
-        /// <param name="data">The byte array.</param>
-        /// <param name="consumedLen">The consumed data length.</param>
-        /// <param name="expectedLen">The expected data length.</param>
-        internal override void FromBytes(byte[] data, out int consumedLen, out int expectedLen)
+        public static Smb2CompressedPacket Create(byte[] data)
         {
-            int minimumLength = Marshal.SizeOf(Header);
-            if (data.Length < minimumLength)
+            bool isChained = IsChained(data);
+
+            Smb2CompressedPacket result;
+
+            int consumedLength;
+
+            int expectedLength;
+
+            if (isChained)
             {
-                throw new InvalidOleVariantTypeException("Not enough data for Compression_Transform_Header!");
-            }
-            int offset = 0;
-            Header = TypeMarshal.ToStruct<Compression_Transform_Header>(data, ref offset);
+                var compressedPacket = new Smb2ChainedCompressedPacket();
 
-            if (offset + Header.Offset > data.Length)
+                compressedPacket.FromBytes(data, out consumedLength, out expectedLength);
+
+                result = compressedPacket;
+            }
+            else
             {
-                throw new InvalidOleVariantTypeException("Not enough data for Smb2CompressedPacket!");
+                var compressedPacket = new Smb2NonChainedCompressedPacket();
+
+                compressedPacket.FromBytes(data, out consumedLength, out expectedLength);
+
+                result = compressedPacket;
             }
-            UncompressedData = new byte[Header.Offset];
-            Array.Copy(data, offset, UncompressedData, 0, Header.Offset);
 
-            long compressedDataLength = data.Length - offset - Header.Offset;
-            CompressedData = new byte[compressedDataLength];
-            Array.Copy(data, offset + Header.Offset, CompressedData, 0, compressedDataLength);
-
-            consumedLen = data.Length;
-            expectedLen = 0;
+            return result;
         }
     }
 }
