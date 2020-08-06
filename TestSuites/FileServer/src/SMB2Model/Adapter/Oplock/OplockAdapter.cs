@@ -4,6 +4,7 @@
 using System;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -193,12 +194,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             oplockLevelOnOpen = grantedTmp;
 
             fileOperationInvoker = new FileOperationDelegate(FileOperation);
-            fileOperationInvoker.BeginInvoke(fileOperation, fileName, null, null);
-
-            // Assume that notification will arrive in .5 sec if there's any
-            // Without such sleep, OplockBreakNotification would not be expected by SE
-            Thread.Sleep(500);
-
+            var task = Task.Run(() => fileOperationInvoker.Invoke(fileOperation, fileName));
+            task.Wait(500);// Assume that notification will arrive in .5 sec if there's any
         }
 
         public void OplockBreakAcknowledgementRequest(OplockVolatilePortion volatilePortion, OplockPersistentPortion persistentPortion, OplockLevel_Values oplockLevel)
