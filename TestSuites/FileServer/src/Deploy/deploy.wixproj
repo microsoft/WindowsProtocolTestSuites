@@ -404,7 +404,6 @@
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\deploy\" />
   </Target>  
   <ItemGroup>
-	<SutProtocolControlAdapterScriptFiles Include="..\Common\Adapter\SutProtocolControlAdapter\*" />
 	<SutControlAdapterScriptFiles Include="..\ServerFailover\Adapter\WindowsSutControlAdapter\*" />
 	<ShellSutControlAdapterScriptFiles Include="..\ServerFailover\Adapter\ShellSutControlAdapter\*" />
     <SetupScriptFiles Include="..\..\Setup\Scripts\*" />
@@ -437,8 +436,7 @@
 	<Copy SourceFiles="..\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
 	<Copy SourceFiles="..\SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
-	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />
-	<Copy SourceFiles="@(SutProtocolControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Common\Adapter\SutProtocolControlAdapter\" />	
+	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin" />	
 	<Copy SourceFiles="@(SutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\WindowsSutControlAdapter\" />
 	<Copy SourceFiles="@(ShellSutControlAdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\ServerFailover\Adapter\ShellSutControlAdapter\" />
     <Copy SourceFiles="@(SetupScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Scripts" />	

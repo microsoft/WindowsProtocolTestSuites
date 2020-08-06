@@ -3272,10 +3272,11 @@ This path may vary based on your setup. Also, the &lt;version#&gt; placeholder i
 | File or Folder | Description                                                                |
 |----------------|----------------------------------------------------------------------------|
 | Batch          | Command files that you use to run individual test cases or all test cases. |
-| Bin            | Test Suite binaries and configuration files. This folder contains the following sub-folders:<br>&emsp;&emsp;- Common — contains .ps scripts* that are called by specific test cases.<br>&emsp;&emsp;- ServerFailover — contains .ps scripts* that are called by specific test cases.<br>&emsp;&emsp;- Scripts — contains .ps scripts that are used to set up the test environment.                                         |
+| Bin            | Test Suite binaries and configuration files. This folder contains the following sub-folders:<br>&emsp;&emsp;- ServerFailover — contains .ps1 scripts that are called by specific test cases. |
+| Scripts        | The folder contains .ps1 scripts that are used to set up the test environment. |
 | License.rtf    | The End User License Agreement.                                            |
 
-\*PowerShell scripts are located in the **SutProtocolControlAdapter** under the **Common** directory and in the **WindowsSutControlAdapter** folder under the **ServerFailover** directory.
+\*PowerShell scripts are located in the **WindowsSutControlAdapter** folder under the **ServerFailover** directory.
 
 ## <a name="7"/> 7 Configure and Run Test Cases
 

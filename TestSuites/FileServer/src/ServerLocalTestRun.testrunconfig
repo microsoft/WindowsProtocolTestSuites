@@ -2,7 +2,6 @@
 <TestSettings name="ServerLocalTestRun" id="186e2f12-74ac-4d14-9b58-3194076f5c9f" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
-  <DeploymentItem filename="Common\Adapter\SutProtocolControlAdapter\" />
   <DeploymentItem filename="Common\TestSuite\CommonTestSuite.deployment.ptfconfig" />
   <DeploymentItem filename="Common\TestSuite\CommonTestSuite.ptfconfig" />
   <DeploymentItem filename="DFSC\TestSuite\MS-DFSC_ServerTestSuite.deployment.ptfconfig" />
