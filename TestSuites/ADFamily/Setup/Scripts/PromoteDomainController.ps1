@@ -1,9 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#-----------------------------------------------------------------------------
+##############################################################################
 # Function: PromoteDomainController
 # Usage   : Install ADDS feature on the server and promote it to DC.
 # Params  : [string]$DomainName  : The name of the domain.
@@ -12,7 +10,8 @@
 #           [boolean]$IsPrimary  : indicator if its a primary domain.
 #           [string]$ForestMode  : ForestMode of the domain.
 # Remark  : A reboot is needed after promoting to DC.
-#-----------------------------------------------------------------------------
+##############################################################################
+
 Param
 (
     [Parameter(Mandatory=$true)]

@@ -1,9 +1,7 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#-----------------------------------------------------------------------------
+##############################################################################
 # Function: RestartAndRun
 # Usage   : Restart the computer and run the specified script.
 # Params  : -ScriptPath <String> : The path of the script to be executed after
@@ -22,7 +20,7 @@
 # Remark  : After calling this script, if you are not going to use it anymore
 #           in your script, you must call RestartAndRunFinish.ps1 to clean up
 #           the registry entry.
-#-----------------------------------------------------------------------------
+##############################################################################
 
 Param
 (

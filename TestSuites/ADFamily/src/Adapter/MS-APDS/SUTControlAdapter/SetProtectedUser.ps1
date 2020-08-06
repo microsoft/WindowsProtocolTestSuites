@@ -1,7 +1,5 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 $MachineName   = $PTFProp_Common_TDC_NetbiosName
 $DomainName    = $PTFProp_Common_TrustDomain_DNSName

@@ -1,14 +1,13 @@
-﻿########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-####################################################################################
-## 	Microsoft Windows Powershell Scripting
-##  File:		WriteToShareFolder.ps1
-##	Purpose:	To create a file to a shared folder with specified credential.
-##	Version: 	1.0 (18 Jun, 2014)
-####################################################################################
+##############################################################################
+# 	Microsoft Windows Powershell Scripting
+#	File:		WriteToShareFolder.ps1
+#	Purpose:	To create a file to a shared folder with specified credential.
+#	Version: 	1.0 (18 Jun, 2014)
+##############################################################################
+
 #param(
 #		[string]$uncPath,		
 #		[string]$fileName,	

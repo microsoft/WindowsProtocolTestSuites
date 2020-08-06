@@ -1,7 +1,5 @@
-﻿########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 # Remote SUT computer
 $SutIpAddress         = $PTFProp_SUT_SutIPAddress
@@ -53,7 +51,6 @@ $ErrMsg = Invoke-Command -ComputerName $SutIpAddress -Credential $SutCredential 
 if (-not [string]::IsNullOrEmpty($ErrMsg)) {
 	return $false
 }
-
 
 # restart service Restart-Service appproxysvc
 $RunCommand = [ScriptBlock] {

@@ -1,17 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Set-IADComputer.ps1
-## Purpose:        Modify attributes of a computer object in Active Directory.
-## Version:        1.0 (8 Feb, 2012)
-## Requirements:   Windows Powershell 2.0 CTP
-## Supported OS:   Windows 7, Windows 8
-##           
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Set-IADComputer.ps1
+# Purpose:        Modify attributes of a computer object in Active Directory.
+# Version:        1.0 (8 Feb, 2012)
+# Requirements:   Windows Powershell 2.0 CTP
+# Supported OS:   Windows 7, Windows 8
+#           
 ##############################################################################
 
 #================Flags for "userAccountControl" Property===================#
@@ -37,7 +35,6 @@ $DONT_REQ_PREAUTH           = 0x400000
 $PASSWORD_EXPIRED           = 0x800000 
 $TRUSTED_TO_AUTH_FOR_DELEGATION = 0x1000000
 $PRE_AUTHENTICATION_NOT_REQUIRED = 0x2000000
-
 
 #=================================================================#
 

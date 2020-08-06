@@ -1,7 +1,5 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 $computerName = $PTFProp_Common_ENDPOINT_NetbiosName
 $domainName   = $PTFProp_Common_PrimaryDomain_DNSName

@@ -1,17 +1,16 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Sripting
-## File:           UpdateRegistryKey.ps1
-## Purpose:        Remove or add key value to Windows registry.
-## Requirements:   Windows PowerShell 2.0
-## Supported OS:   Windows Server 2012 or later versions
-##
 ##############################################################################
+#
+# Microsoft Windows PowerShell Sripting
+# File:           UpdateRegistryKey.ps1
+# Purpose:        Remove or add key value to Windows registry.
+# Requirements:   Windows PowerShell 2.0
+# Supported OS:   Windows Server 2012 or later versions
+#
+##############################################################################
+
 Param(
     [Parameter(Mandatory=$true)]
     [ValidateSet('Add', 'Remove')]

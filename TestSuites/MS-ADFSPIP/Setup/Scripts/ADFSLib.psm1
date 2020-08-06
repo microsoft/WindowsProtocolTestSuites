@@ -1,15 +1,13 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Sripting
-## File         :   ADFSLib.PSM1
-## Requirements :   Windows Powershell 3.0
-## Supported OS :   Windows Server 2012
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Sripting
+# File         :   ADFSLib.PSM1
+# Requirements :   Windows Powershell 3.0
+# Supported OS :   Windows Server 2012
+#
 ##############################################################################
 
 function Install-DomainController {

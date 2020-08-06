@@ -1,24 +1,23 @@
-#############################################################################
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
 
-###########################################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Configure-DC02.ps1
-## Purpose:        Configure the Trust Realm KDC computer for Kerberos Server test suite.
-## Requirements:   Windows Powershell 2.0
-## Supported OS:   Windows Server 2008 R2, Windows Server 2012, Windows Server 2012 R2,
-##                 Windows Server 2016, and later.
-##
-###########################################################################################
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Configure-DC02.ps1
+# Purpose:        Configure the Trust Realm KDC computer for Kerberos Server test suite.
+# Requirements:   Windows Powershell 2.0
+# Supported OS:   Windows Server 2008 R2, Windows Server 2012, Windows Server 2012 R2,
+#                 Windows Server 2016, and later.
+#
+##############################################################################
 
-#------------------------------------------------------------------------------------------
+##############################################################################
 # Parameters:
 # Help: whether to display the help information
 # Step: Current step for configuration
-#------------------------------------------------------------------------------------------
+##############################################################################
+
 Param
 (
     [alias("h")]
@@ -135,7 +134,6 @@ Function Init-Environment()
     Read-ConfigParameters
 }
 
-
 #------------------------------------------------------------------------------------------
 # Function: Complete-Configure
 # Write signal file, stop the transcript logging and remove the scedule task
@@ -154,7 +152,6 @@ Function Complete-Configure
     # remove the schedule task to execute the script next step after restart
     RestartAndRunFinish.ps1
 }
-
 
 #------------------------------------------------------------------------------------------
 # Function: Config-DC02

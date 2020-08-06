@@ -152,7 +152,6 @@ $securePwd = (ConvertTo-SecureString -string "$certPwd" -Force -AsPlainText)
 Export-PfxCertificate -Cert $cert -Force -Password $securePwd -FilePath "$env:HOMEDRIVE\$certFileName.pfx"
 Export-Certificate -Cert $cert -FilePath "$env:HOMEDRIVE\$certFileName.cer" -Type CERT
 
-
 #-----------------------------------------------------
 # If listening port of test suite is 3389 and the Remote Desktop Service is running, edit registry to change Windows RDP service port and restart TermService
 #-----------------------------------------------------

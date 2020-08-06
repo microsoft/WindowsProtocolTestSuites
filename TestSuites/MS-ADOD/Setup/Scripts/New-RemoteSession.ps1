@@ -1,17 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           New-RemoteSession.ps1
-## Purpose:        This script creates a new PowerShell session on a remote machine for interactive purpose.
-## Scenarios:      1) The server must have Windows Remote Management Server setup already
-##                 2) The Network should be set as "Private" Network
-## Version:        1.0 (15 Feb, 2012)
-##
+##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           New-RemoteSession.ps1
+# Purpose:        This script creates a new PowerShell session on a remote machine for interactive purpose.
+# Scenarios:      1) The server must have Windows Remote Management Server setup already
+#                 2) The Network should be set as "Private" Network
+# Version:        1.0 (15 Feb, 2012)
+#
 ##############################################################################
 
 Param(
@@ -27,7 +25,6 @@ Write-Host "EXECUTING [New-RemoteSession.ps1]." -foregroundcolor cyan
 Write-Host "`$computerName   = $computerName"
 Write-Host "`$userName       = $userName"
 Write-Host "`$password       = $password"
-
 
 #----------------------------------------------------------------------------
 #Function: Show-ScriptUsage

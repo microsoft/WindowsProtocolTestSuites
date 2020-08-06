@@ -1,12 +1,12 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Config-FileSharing.ps1
-## Purpose:        Enable/Disable the FileSharing.
-## Version:        1.1 (26 Jun, 2008)
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Config-FileSharing.ps1
+# Purpose:        Enable/Disable the FileSharing.
+# Version:        1.1 (26 Jun, 2008)
+#
 ##############################################################################
 
 param(

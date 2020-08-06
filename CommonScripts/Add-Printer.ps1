@@ -1,12 +1,12 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Add-Printer.ps1
-## Purpose:        Add a printer
-## Version:        1.2 (20 Aug, 2008)
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Add-Printer.ps1
+# Purpose:        Add a printer
+# Version:        1.2 (20 Aug, 2008)
+#
 ##############################################################################
 
 Param(

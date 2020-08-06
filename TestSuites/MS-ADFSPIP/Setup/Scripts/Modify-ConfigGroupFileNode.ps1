@@ -1,12 +1,12 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Modify-ConfigGroupFileNode.ps1
-## Purpose:        Modify the node value for the ".deployment.ptfconfig" file.
-## Version:        1.1 (26 June, 2008)
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Modify-ConfigGroupFileNode.ps1
+# Purpose:        Modify the node value for the ".deployment.ptfconfig" file.
+# Version:        1.1 (26 June, 2008)
+#
 ##############################################################################
 
 Param(
@@ -64,7 +64,6 @@ if ($nodeName -eq $null -or $nodeName -eq "")
 {
     Throw "Parameter nodeName is required."
 }
-
 
 #----------------------------------------------------------------------------
 # Modify the content of the node

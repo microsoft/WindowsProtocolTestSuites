@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Sripting
-## File         :   PostConfig-Driver.ps1
-## Requirements :   Windows Powershell 3.0
-## Supported OS :   Windows Server 2012R2 or later
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Sripting
+# File         :   PostConfig-Driver.ps1
+# Requirements :   Windows Powershell 3.0
+# Supported OS :   Windows Server 2012R2 or later
+#
 ##############################################################################
 
 Param
@@ -126,7 +126,6 @@ Function Config-Environment {
         .\Enable-WinRM.ps1
     }
 }
-
 
 #------------------------------------------------------------------------------------------
 # Main Function

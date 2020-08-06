@@ -1,14 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Config-Server.ps1
-## Purpose:        Configure sut for MS-SMB test suite.
-## Requirements:   Windows Powershell 2.0 CTP2
-## Supported OS:   Windows Server 2008, Windows Server 2008 R2, and Windows 8 Server
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 ##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Config-Server.ps1
+# Purpose:        Configure sut for MS-SMB test suite.
+# Requirements:   Windows Powershell 2.0 CTP2
+# Supported OS:   Windows Server 2008, Windows Server 2008 R2, and Windows 8 Server
+#
+##############################################################################
+
 $ScriptsSignalFile = "$env:HOMEDRIVE\config.finished.signal"
 $protocolName = "MS-SMB"
 

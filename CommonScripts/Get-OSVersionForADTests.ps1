@@ -1,15 +1,13 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Get-OSVersionForADTests.ps1
-## Purpose:        Get version of current operating system.
-## Version:        1.1 (4 Aug, 2008)
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Get-OSVersionForADTests.ps1
+# Purpose:        Get version of current operating system.
+# Version:        1.1 (4 Aug, 2008)
+#
 ##############################################################################
 
 param(

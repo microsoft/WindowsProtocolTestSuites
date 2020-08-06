@@ -1,15 +1,14 @@
-﻿##################################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##################################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Modify-TestRunConfig.ps1
-## Purpose:        Update .TestRunConfig file to make all deployment items' 
-##                 path refer to current directory, and check if each 
-##                 deployment item exists.
-## Version:        1.0 (11 Sep, 2008)
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Modify-TestRunConfig.ps1
+# Purpose:        Update .TestRunConfig file to make all deployment items' 
+#                 path refer to current directory, and check if each 
+#                 deployment item exists.
+# Version:        1.0 (11 Sep, 2008)
+#
 ##############################################################################
 
 Param(

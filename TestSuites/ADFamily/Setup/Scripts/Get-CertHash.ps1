@@ -1,15 +1,13 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Get-CertHash.ps1
-## Purpose:        Get the cert hash of a certificate in the store.
-## Version:        1.0 (14 July, 2008)
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Get-CertHash.ps1
+# Purpose:        Get the cert hash of a certificate in the store.
+# Version:        1.0 (14 July, 2008)
+#
 ##############################################################################
 
 param(

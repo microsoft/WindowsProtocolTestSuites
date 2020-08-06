@@ -1,16 +1,14 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Config-AP02.ps1
-## Purpose:        Configure trust realm AP for MS-AZOD test suite.
-## Requirements:   Windows Powershell 2.0
-## Supported OS:   Windows Server 2012 +
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Config-AP02.ps1
+# Purpose:        Configure trust realm AP for MS-AZOD test suite.
+# Requirements:   Windows Powershell 2.0
+# Supported OS:   Windows Server 2012 +
+#
 ##############################################################################
 
 Function ConfigFileServer

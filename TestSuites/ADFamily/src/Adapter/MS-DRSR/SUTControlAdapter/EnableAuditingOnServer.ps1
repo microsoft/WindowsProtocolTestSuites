@@ -1,19 +1,17 @@
-﻿#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#------------------------------------------------------------------------------
+##############################################################################
 # Script function description: 
 # This script's function is to enable auditing on SUT.
 # Param $computerName: The computer name of the SUT, string type.
-#------------------------------------------------------------------------------
+##############################################################################
+
 param(
 [string]$computerName = $computerName,
 [string]$usr = $usr,
 [string]$pwd = $pwd
 )
-
 
 #----------------------------------------------------------------------------
 # Connect Remote Computer

@@ -1,9 +1,7 @@
-﻿######################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-######################################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#-------------------------------------------------------------------------------------
+##############################################################################
 # Script function description:
 # Function: Trigger peer client send gGETBLKLIST message.
 #           The peer client is designated from parameter $SUTName's value. 
@@ -17,7 +15,7 @@
 #           in Step 2 on peer client.
 # Step 4:   Run the schedule task "Welcome" created in Step 3 to execute the created  
 #           bache file on peer client.
-#-------------------------------------------------------------------------------------
+##############################################################################
 
 param(
 [string]$ServerComputerName = $SUTName,

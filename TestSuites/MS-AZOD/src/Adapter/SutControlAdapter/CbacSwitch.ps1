@@ -1,15 +1,12 @@
-﻿#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-################################################################################
-## 	Microsoft Windows Powershell Scripting
-##  File:		CBACSwitch.ps1
-##	Purpose:	Turn on or off the cabac of the remote computer by modify registy.
-##	Version: 	1.1 (12 Mar, 2013)
-#################################################################################
-
+##############################################################################
+# 	Microsoft Windows Powershell Scripting
+#  File:		CBACSwitch.ps1
+#	Purpose:	Turn on or off the cabac of the remote computer by modify registy.
+#	Version: 	1.1 (12 Mar, 2013)
+##############################################################################
 
 #-------------------------------------------------------------------------------------#
 # Create $logFile if not exist
