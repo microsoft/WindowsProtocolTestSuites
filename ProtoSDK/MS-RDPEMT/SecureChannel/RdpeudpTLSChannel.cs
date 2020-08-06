@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
     /// </summary>
     internal class SSLInnerStream : Stream
     {
-        
+
         /// <summary>
         /// milliseconds for Read method sleep time when wait for data
         /// </summary>
@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// buffer used to save data not be used in last Read
         /// If the count parameter is smaller than the length of this packet
         /// </summary>
-        byte[] remainData; 
+        byte[] remainData;
 
         /// <summary>
         /// buffer used for received data, which is received from RDPEUDP transport.
@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         {
 
             int readLen = 0;
-            
+
             if (remainData != null)
             {
                 // If had remain data from last received packet, transfer these data directly
@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 
             byte[] receivedData = null;
 
-            
+
             while (receivedData == null)
             {
                 if (receivedBuffer.Count > 0)
@@ -154,7 +154,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             {
                 remainData = new byte[receivedData.Length - readLen];
                 Array.Copy(receivedData, readLen, remainData, 0, receivedData.Length - readLen);
-            }            
+            }
 
             return (int)readLen;
 
@@ -203,7 +203,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         }
 
         #region Methods for transfer data with this stream
-        
+
         /// <summary>
         /// Add received data to this stream
         /// SSL Stream will read this data and decrypt it
@@ -211,10 +211,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="data"></param>
         public void AddReceivedData(byte[] data)
         {
-            if(data != null && data.Length >0)
+            if (data != null && data.Length > 0)
             {
                 byte[] receivedData = (byte[])data.Clone();
-           
+
                 lock (receivedBuffer)
                 {
                     receivedBuffer.Add(receivedData);
@@ -327,6 +327,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             innerStream = new SSLInnerStream();
             isAuthenticated = false;
 
+            rdpeudpSocket.Disconnected += RdpeudpSocket_Disconnected;
+
             if (eudpSocket.AutoHandle)
             {
                 // Check whether there is packets in unprocessed packet buffer
@@ -372,6 +374,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// Event be called when received data
         /// </summary>
         public event ReceiveData Received;
+
+        /// <summary>
+        /// Event triggered when connection is closed.
+        /// </summary>
+        public event DisconnectedHandler Disconnected;
 
         #endregion Implementation of ISecurityChannel Interface
 
@@ -477,7 +484,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                         Received(decryptedData);
                     }
                 }
-                
+
             }
         }
 
@@ -514,7 +521,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             byte[] data = innerStream.GetDataToSent(timeout);
             return data;
         }
- 
+
         /// <summary>
         /// Dispose this object
         /// </summary>
@@ -523,6 +530,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             if (rdpeudpSocket != null)
             {
                 rdpeudpSocket.Received -= ReceiveBytes;
+
+                rdpeudpSocket.Disconnected -= RdpeudpSocket_Disconnected;
             }
             if (sslStream != null)
             {
@@ -535,7 +544,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         {
             return true;
         }
-        
+
         #endregion Public Methods
 
         #region Private Methods
@@ -580,6 +589,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                     // Do not throw exception in not-main thread
                 }
             }
+        }
+
+        private void RdpeudpSocket_Disconnected()
+        {
+            Disconnected?.Invoke();
         }
         #endregion Private Methods
     }

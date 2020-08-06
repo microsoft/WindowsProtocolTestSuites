@@ -1,6 +1,6 @@
 #############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 #############################################################################
 
 #############################################################################
@@ -164,7 +164,7 @@ Function Phase1
     Write-Host "Promoting this computer to DC" -ForegroundColor Yellow
     .\PromoteDomainController.ps1 -DomainName $PDCSetting.domain -AdminPwd $content.lab.core.password
 
-    if($Content.lab.core.environment -ne "Azure"){
+    if($Content.lab.core.regressiontype -ne "Azure"){
         Write-Host "Enable WinRM" -ForegroundColor Yellow
         if (Test-WSMan -ComputerName $PDCSetting.ip)
         {

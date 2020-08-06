@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.Smb
 {
@@ -25,10 +25,10 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="previousVersion">The previous version list will be configured for this file.</param>
         /// <param name="isSuccess">It indicates whether the checking is successful or not.</param>
         [Rule]
-        public static void CheckPreviousVersion(int fId, Set<int> previousVersion, out bool isSuccess)
+        public static void CheckPreviousVersion(int fId, List<int> previousVersion, out bool isSuccess)
         {
-            Modeling.Condition.IsTrue((smbState != SmbState.End) && (smbState != SmbState.Closed));
-            Modeling.Condition.IsTrue(Parameter.isSupportPreviousVersion);
+            Condition.IsTrue((smbState != SmbState.End) && (smbState != SmbState.Closed));
+            Condition.IsTrue(Parameter.isSupportPreviousVersion);
             ModelHelper.CaptureRequirement(
                 8554,
                 "[In Scanning a Path for a the previous version Token] If a request is a path-based operation (for " +
@@ -37,14 +37,14 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 "(section 2.2.1.1.1).");
 
             isSuccess = true;
-            Modeling.Condition.IsTrue(smbConnection.openedFiles.ContainsKey(fId)
+            Condition.IsTrue(smbConnection.openedFiles.ContainsKey(fId)
                                         && smbConnection.openedFiles[fId].name == Parameter.fileNames[2]);
-            Modeling.Condition.IsTrue(smbConnection.sentRequest.Count == 0);
-            Modeling.Condition.IsTrue(previousVersion == new Set<int>(1, 2));
+            Condition.IsTrue(smbConnection.sentRequest.Count == 0);
+            Condition.IsTrue(previousVersion == new List<int> { 1, 2 });
             smbConnection.openedFiles[fId].previousVersionToken = previousVersion;
 
             // Adding "-1" indicates that an invalid time stamp is provided, so the version of file cannot be found.
-            smbConnection.openedFiles[fId].previousVersionToken = smbConnection.openedFiles[fId].previousVersionToken.Add(-1);
+            smbConnection.openedFiles[fId].previousVersionToken.Add(-1);
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isUsePassthrough,
-            [Domain("InfoLevelQueriedByFid")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fId,
             int reserved)
         {
@@ -92,7 +92,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             if (!Parameter.isSupportStream &&
                 informationLevel == InformationLevel.SmbQueryFileStreamInfo)
             {
-                Requirement.AssumeCaptured("MS-SMB_R2073 and MS-SMB_R2076 will be captured under this condition.");
+                Requirement.Capture("MS-SMB_R2073 and MS-SMB_R2076 will be captured under this condition.");
             }
 
             smbRequest = new Trans2QueryFileInfoRequest(
@@ -272,7 +272,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isUsePassthrough,
             bool isReparse,
-            [Domain("InfoLevelQueriedByPath")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex)
         {
             Checker.CheckRequest(smbConnection, messageId, sessionId, treeId, isSigned, smbState);
@@ -497,7 +497,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool relaceEnable,
             bool isUsePassthrough,
-            [Domain("InfoLevelSetByFid")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fId,
             string fileName,
             bool isRootDirecotyNull,
@@ -528,24 +528,24 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 fileName == Parameter.fileNames[2] &&
                 informationLevel == InformationLevel.FileRenameInformation)
             {
-                Requirement.AssumeCaptured("MS-SMB_R9588 will be captured in successful response.");
+                Requirement.Capture("MS-SMB_R9588 will be captured in successful response.");
             }
             else if (!relaceEnable &&
                 fileName == Parameter.fileNames[2] &&
                 informationLevel == InformationLevel.FileRenameInformation)
             {
-                Requirement.AssumeCaptured("MS-SMB_R9587 will be captured in error response with error code ObjectNameNotCollision.");
+                Requirement.Capture("MS-SMB_R9587 will be captured in error response with error code ObjectNameNotCollision.");
             }
 
             if (fileName == Parameter.fileNames[3] &&
                 informationLevel == InformationLevel.FileRenameInformation)
             {
-                Requirement.AssumeCaptured("MS-SMB_R30034 will be captured in error response with error code NotSupported.");
+                Requirement.Capture("MS-SMB_R30034 will be captured in error response with error code NotSupported.");
             }
 
             if (informationLevel == InformationLevel.Invalid)
             {
-                Requirement.AssumeCaptured("MS-SMB_R30035 will be captured in error response with error code StatusOs2InvalidLevel.");
+                Requirement.Capture("MS-SMB_R30035 will be captured in error response with error code StatusOs2InvalidLevel.");
             }
 
             smbRequest = new Trans2SetFileInfoRequest(
@@ -792,7 +792,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isUsePassthrough,
             bool isReparse,
-            [Domain("InfoLevelSetByPath")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex)
         {
             Checker.CheckRequest(smbConnection, messageId, sessionId, treeId, isSigned, smbState);
@@ -970,7 +970,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isUsePassthrough,
-            [Domain("InfoLevelQueriedByFs")]  InformationLevel informationLevel,
+            InformationLevel informationLevel,
             bool otherBits,
             int reserved)
         {
@@ -996,7 +996,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             if (informationLevel == InformationLevel.SmbQueryFsAttributeInfo)
             {
-                Requirement.AssumeCaptured("Adapter Capture for SMB_QUERY_FS_ATTRIBUTE_INFO imformation level");
+                Requirement.Capture("Adapter Capture for SMB_QUERY_FS_ATTRIBUTE_INFO imformation level");
             }
             Update.UpdateRequest(smbConnection, smbRequest);
         }
@@ -1123,7 +1123,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             int fId,
             bool isSigned,
-            [Domain("InfoLevelSetByFsAdditional")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             Trans2SetFsInfoResponseParameter requestPara)
         {
             Condition.IsTrue(smbConnection.openedFiles.ContainsKey(fId));
@@ -1295,7 +1295,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isUsePassthrough,
             bool isRequireDisconnectTreeFlags,
             bool isRequireNoResponseFlags,
-            [Domain("InfoLevelSetByFs")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fId,
             bool otherBits,
             int reserved)
@@ -1454,7 +1454,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isReparse,
-            [Domain("InfoLevelByFind")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex,
             bool isFlagsKnowsLongNameSet,
             bool isGMTPatten)
@@ -1667,7 +1667,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                             }
                         }
                     }
-                    Requirement.AssumeCaptured(
+                    Requirement.Capture(
                         "FileIndex (4 bytes): This field MUST be set to 0 when sending a response");
                     break;
                 case InformationLevel.SmbFindFileBothDirectoryInfo:
@@ -1775,7 +1775,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isReparse,
-            [Domain("InfoLevelByFind")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int searchHandlerId,
             int gmtTokenIndex,
             bool isFlagsKnowsLongNameSet)
@@ -1854,7 +1854,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             const int invalidToken = -1;
             Condition.IsTrue(gmtTokenIndex == invalidToken);
             Update.UpdateRequest(smbConnection, smbRequest);
-            Requirement.AssumeCaptured("Test case for invalid directory token");
+            Requirement.Capture("Test case for invalid directory token");
         }
 
         /// <summary>
@@ -1897,7 +1897,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             const int invalidToken = -1;
             Condition.IsTrue(gmtTokenIndex == invalidToken);
             Update.UpdateRequest(smbConnection, smbRequest);
-            Requirement.AssumeCaptured("Test case for invalid file token");
+            Requirement.Capture("Test case for invalid file token");
         }
 
         /// <summary>
@@ -2056,59 +2056,59 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileAccessInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileAccessInformation");
+                Requirement.Capture("Information level in FSCC is FileAccessInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileAlignmentInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileAlignmentInformation");
+                Requirement.Capture("Information level in FSCC is FileAlignmentInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileAlternateNameInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileAlternateNameInformation");
+                Requirement.Capture("Information level in FSCC is FileAlternateNameInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileAttributeTagInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileAttributeTagInformation");
+                Requirement.Capture("Information level in FSCC is FileAttributeTagInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileBasicInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileBasicInformation");
+                Requirement.Capture("Information level in FSCC is FileBasicInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileCompressionInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileCompressionInformation");
+                Requirement.Capture("Information level in FSCC is FileCompressionInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileEaInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileEaInformation");
+                Requirement.Capture("Information level in FSCC is FileEaInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileInternalInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileInternalInformation");
+                Requirement.Capture("Information level in FSCC is FileInternalInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileModeInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileModeInformation");
+                Requirement.Capture("Information level in FSCC is FileModeInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileNameInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileNameInformation");
+                Requirement.Capture("Information level in FSCC is FileNameInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileNetworkOpenInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileNetworkOpenInformation");
+                Requirement.Capture("Information level in FSCC is FileNetworkOpenInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FilePositionInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FilePositionInformation");
+                Requirement.Capture("Information level in FSCC is FilePositionInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileStandardInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileStandardInformation");
+                Requirement.Capture("Information level in FSCC is FileStandardInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryPathInforLevel.FileStreamInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileStreamInformation");
+                Requirement.Capture("Information level in FSCC is FileStreamInformation");
             }
 
             Update.UpdateRequest(smbConnection, smbRequest);
@@ -2163,19 +2163,19 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             if (informationLevel == FSCCTransaction2QueryFSInforLevel.FileFsAttributeInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileFsAttributeInformation");
+                Requirement.Capture("Information level in FSCC is FileFsAttributeInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryFSInforLevel.FileFsDeviceInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileFsDeviceInformation");
+                Requirement.Capture("Information level in FSCC is FileFsDeviceInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryFSInforLevel.FileFsSizeInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileFsSizeInformation");
+                Requirement.Capture("Information level in FSCC is FileFsSizeInformation");
             }
             else if (informationLevel == FSCCTransaction2QueryFSInforLevel.FileFsVolumeInformation)
             {
-                Requirement.AssumeCaptured("Information level in FSCC is FileFsVolumeInformation");
+                Requirement.Capture("Information level in FSCC is FileFsVolumeInformation");
             }
             smbRequest = new FSCCTrans2QueryFSInfoRequest(messageId, sessionId, treeId, isSigned, informationLevel);
 

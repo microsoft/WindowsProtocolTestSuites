@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.Messages;
 using Microsoft.Protocols.TestTools.Messages.Marshaling;
@@ -165,13 +164,13 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
         /// replicated folder. Key --> FolderID: Value --> ms-DFSR connection property enabled or disabled</param>
         /// <returns>error_status_t</returns>
         error_status_t Initialization(OSVersion osVersion,
-                                      Map<int, connectionProperty> serverConn,
-                                      Map<int, FromServer> fromServConn,
-                                      Map<string, int> replGrpConn,
-                                      Map<string, ReplicationGroupTypes> replGrpType,
-                                      Map<int, string> folderReplGrp,
-                                      Map<int, accessLevels> folderAccLevel,
-                                      Map<int, connectionProperty> folderDFRS);
+                                      IDictionary<int, connectionProperty> serverConn,
+                                      IDictionary<int, FromServer> fromServConn,
+                                      IDictionary<string, int> replGrpConn,
+                                      IDictionary<string, ReplicationGroupTypes> replGrpType,
+                                      IDictionary<int, string> folderReplGrp,
+                                      IDictionary<int, accessLevels> folderAccLevel,
+                                      IDictionary<int, connectionProperty> folderDFRS);
 
         /// <summary>
         /// This method is used for a client to check whether the server is reachable and has been configured to replicate with the server.

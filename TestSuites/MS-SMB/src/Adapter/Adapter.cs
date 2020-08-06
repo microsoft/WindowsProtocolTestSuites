@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb;
@@ -198,9 +197,9 @@ namespace Microsoft.Protocol.TestSuites.Smb
         private TimeSpan timeout = new TimeSpan();
         private TransportType transport = TransportType.DirectTcp;
 
-        private Microsoft.Modeling.Set<Capabilities> negResponseCap;
-        private Microsoft.Modeling.Set<Capabilities> negReturnedCap;
-        private Microsoft.Modeling.Set<CreateAction> createActionInternal;
+        private List<Capabilities> negResponseCap;
+        private List<Capabilities> negReturnedCap;
+        private List<CreateAction> createActionInternal;
 
         #endregion
 
@@ -704,9 +703,9 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             #endregion
 
-            this.createActionInternal = new Microsoft.Modeling.Set<CreateAction>();
-            this.negReturnedCap = new Microsoft.Modeling.Set<Capabilities>();
-            this.negResponseCap = new Microsoft.Modeling.Set<Capabilities>();
+            this.createActionInternal = new List<CreateAction>();
+            this.negReturnedCap = new List<Capabilities>();
+            this.negResponseCap = new List<Capabilities>();
             this.fId = new Dictionary<uint, uint>();
             this.sId = new Dictionary<uint, uint>();
             this.uId = new Dictionary<uint, uint>();
@@ -755,9 +754,9 @@ namespace Microsoft.Protocol.TestSuites.Smb
             this.uId.Clear();
             this.tId.Clear();
 
-            this.negReturnedCap = new Microsoft.Modeling.Set<Capabilities>();
-            this.negResponseCap = new Microsoft.Modeling.Set<Capabilities>();
-            this.createActionInternal = new Set<CreateAction>();
+            this.negReturnedCap = new List<Capabilities>();
+            this.negResponseCap = new List<Capabilities>();
+            this.createActionInternal = new List<CreateAction>();
             // Disconnect the connection.
             if (this.smbClientStack != null)
             {
@@ -862,7 +861,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             bool isSupportExtSecurity,
             SignState clientSignState,
-            Sequence<Dialect> dialectName)
+            List<Dialect> dialectName)
         {
             #region Create SMB Connection
             TestStarted();
@@ -970,7 +969,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                             false,
                             false,
                             int.MinValue,
-                            new Microsoft.Modeling.Set<Capabilities>(Capabilities.None),
+                            new List<Capabilities> { Capabilities.None },
                             (MessageStatus)negotiateResponseHeader.Status);
                     }
                     else
@@ -997,49 +996,49 @@ namespace Microsoft.Protocol.TestSuites.Smb
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapUnicode.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapUnicode.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapUnicode);
+                            this.negReturnedCap.Add(Capabilities.CapUnicode);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapStatus32.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapStatus32.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapStatus32);
+                            this.negReturnedCap.Add(Capabilities.CapStatus32);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapDynamicReauth.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapDynamicReauth.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapDynamicReauth);
+                           this.negReturnedCap.Add(Capabilities.CapDynamicReauth);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapLevelIIOplocks.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapLevelIIOplocks.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapLevelIIOplocks);
+                            this.negReturnedCap.Add(Capabilities.CapLevelIIOplocks);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapNtSmbs.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapNtSmbs.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapNtSmbs);
+                            this.negResponseCap.Add(Capabilities.CapNtSmbs);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapDfs.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapDfs.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapDfs);
+                            this.negResponseCap.Add(Capabilities.CapDfs);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapInfoLevelPassThru.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapInfoLevelPassThru.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapInfoLevelPassThru);
+                            this.negResponseCap.Add(Capabilities.CapInfoLevelPassThru);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapExtendedSecurity.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapExtendedSecurity.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapExtendedSecurity);
+                            this.negResponseCap.Add(Capabilities.CapExtendedSecurity);
                         }
 
                         #endregion
@@ -1103,7 +1102,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                             false,
                             false,
                             int.MinValue,
-                            new Microsoft.Modeling.Set<Capabilities>(Capabilities.None),
+                            new List<Capabilities> { Capabilities.None },
                             (MessageStatus)negotiateImplicitNtlmResponseHeader.Status);
                     }
                     else
@@ -1132,43 +1131,43 @@ namespace Microsoft.Protocol.TestSuites.Smb
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapUnicode.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapUnicode.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapUnicode);
+                            this.negReturnedCap.Add(Capabilities.CapUnicode);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapStatus32.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapStatus32.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapStatus32);
+                            this.negReturnedCap.Add(Capabilities.CapStatus32);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapDynamicReauth.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapDynamicReauth.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapDynamicReauth);
+                            this.negReturnedCap.Add(Capabilities.CapDynamicReauth);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapLevelIIOplocks.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapLevelIIOplocks.ToString("D")))
                         {
-                            this.negReturnedCap = this.negReturnedCap.Add(Capabilities.CapLevelIIOplocks);
+                            this.negReturnedCap.Add(Capabilities.CapLevelIIOplocks);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapNtSmbs.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapNtSmbs.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapNtSmbs);
+                            this.negResponseCap.Add(Capabilities.CapNtSmbs);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapDfs.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapDfs.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapDfs);
+                            this.negResponseCap.Add(Capabilities.CapDfs);
                         }
 
                         if ((capabilities & Convert.ToUInt32(Capabilities.CapInfoLevelPassThru.ToString("D"))) ==
                             Convert.ToUInt32(Capabilities.CapInfoLevelPassThru.ToString("D")))
                         {
-                            this.negResponseCap = this.negResponseCap.Add(Capabilities.CapInfoLevelPassThru);
+                            this.negResponseCap.Add(Capabilities.CapInfoLevelPassThru);
                         }
 
                         bool isAuthenticationSupported = Boolean.Parse(Site.Properties["IsAuthenticationSupported"]);
@@ -1221,7 +1220,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isSigned,
-            [Domain("clientCapabilities")] Microsoft.Modeling.Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2)
@@ -1410,7 +1409,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isSigned,
-            [Domain("clientCapabilitiesForNonextendedSecurity")] Microsoft.Modeling.Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2)
@@ -1547,7 +1546,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("clientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2,
@@ -1766,7 +1765,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("clientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2)
@@ -2372,7 +2371,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             int desiredAccess,
             CreateDisposition createDisposition,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
+            int impersonationLevel,
             string fileName,
             ShareType shareType,
             bool isSigned,
@@ -2393,8 +2392,8 @@ namespace Microsoft.Protocol.TestSuites.Smb
             {
                 if (createDisposition == CreateDisposition.FileOpenIf)
                 {
-                    this.createActionInternal = this.createActionInternal.Add(CreateAction.FileCreated);
-                    this.createActionInternal = this.createActionInternal.Add(CreateAction.FileDoesNotExist);
+                    this.createActionInternal.Add(CreateAction.FileCreated);
+                    this.createActionInternal.Add(CreateAction.FileDoesNotExist);
                 }
             }
 
@@ -2573,43 +2572,43 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 }
 
                 uint creatAction = ntCreateAndXResponsePayload.CreationAction;
-                Microsoft.Modeling.Set<CreateAction> actionSet = new Microsoft.Modeling.Set<CreateAction>();
+                List<CreateAction> actionSet = new List<CreateAction>();
                 if (creatAction == CreateActionSuperseded)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileSuperseded);
+                    actionSet.Add(CreateAction.FileSuperseded);
                 }
 
                 if ((creatAction & CreateActionExists) == CreateActionExists)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileExists);
+                    actionSet.Add(CreateAction.FileExists);
                 }
 
                 if ((creatAction & CreateActionOpened) == CreateActionOpened)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileOpened);
+                    actionSet.Add(CreateAction.FileOpened);
                     if (!actionSet.Contains(CreateAction.FileExists))
                     {
-                        actionSet = actionSet.Add(CreateAction.FileExists);
+                        actionSet.Add(CreateAction.FileExists);
                     }
                 }
 
                 if ((creatAction & CreateActionNotExists) == CreateActionNotExists)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileDoesNotExist);
+                    actionSet.Add(CreateAction.FileDoesNotExist);
                 }
 
                 if ((creatAction & CreateActionCreated) == CreateActionCreated)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileCreated);
+                    actionSet.Add(CreateAction.FileCreated);
                     if (!actionSet.Contains(CreateAction.FileDoesNotExist))
                     {
-                        actionSet = actionSet.Add(CreateAction.FileDoesNotExist);
+                        actionSet.Add(CreateAction.FileDoesNotExist);
                     }
                 }
 
                 if ((creatAction & CreateActionOverwritten) == CreateActionOverwritten)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileOverwritten);
+                    actionSet.Add(CreateAction.FileOverwritten);
                 }
 
                 bool isIdZero = false;
@@ -2716,7 +2715,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                             (MessageStatus)ntCreateAndXResponseHeader.Status);
                     }
                 }
-                this.createActionInternal = new Microsoft.Modeling.Set<CreateAction>();
+                this.createActionInternal = new List<CreateAction>();
             }
 
             #endregion
@@ -2956,7 +2955,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isUsePassthrough,
-            [Domain("InfoLevelQueriedByFid")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fid,
             int reserved)
         {
@@ -3062,7 +3061,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isUsePassthrough,
             bool isReparse,
-            [Domain("InfoLevelQueriedByPath")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex)
         {
             #region Create Packet
@@ -3184,7 +3183,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isReplaceEnable,
             bool isUsePassthrough,
-            [Domain("InfoLevelSetByFid")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int fid,
             string fileName,
             bool isRootDirecotyNull,
@@ -3329,7 +3328,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             bool isSigned,
             bool isUsePassthrough,
             bool isReparse,
-            [Domain("InfoLevelSetByPath")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex)
         {
             #region Create Packet
@@ -3446,7 +3445,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isUsePassthrough,
-            [Domain("InfoLevelQueriedByFS")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             bool otherBits,
             int reserved)
         {
@@ -3738,7 +3737,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isReparse,
-            [Domain("InfoLevelFind")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int gmtTokenIndex,
             bool isFlagsKnowsLongNameSet,
             bool isGmtPatten)
@@ -4416,7 +4415,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             bool isReparse,
-            [Domain("InfoLevelFind")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             int sid,
             int gmtTokenIndex,
             bool isFlagsKnowsLongNameSet)
@@ -4603,7 +4602,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fid">The file identifier.</param>
         /// <param name="previousVersion">The previous version.</param>
         /// <param name="isSucceed">Indicate whether the checking is successful or not.</param>
-        public void CheckPreviousVersion(int fid, Microsoft.Modeling.Set<int> previousVersion, out bool isSucceed)
+        public void CheckPreviousVersion(int fid, List<int> previousVersion, out bool isSucceed)
         {
             string streamString = Site.Properties["SmbTestCasePreviousVersion"] as string;
             if (string.IsNullOrEmpty(streamString))
@@ -4639,7 +4638,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fid">The file identifier.</param>
         /// <param name="snapShots">snapShots.</param>
         /// <param name="isSucceed">If it succeeds, true is returned; Otherwise, false is returned.</param>
-        public void CheckSnapshots(int fid, Microsoft.Modeling.Set<int> snapShots, out bool isSucceed)
+        public void CheckSnapshots(int fid, List<int> snapShots, out bool isSucceed)
         {
             isSucceed = true;
         }
@@ -5332,8 +5331,8 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             int sessionId,
             int treeId,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
-            [Domain("FileDomain")] string fileName,
+            int impersonationLevel,
+            string fileName,
             ShareType shareType,
             bool isSigned)
         {
@@ -5455,43 +5454,43 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 }
 
                 uint creatAction = ntCreateAndXResponsePayload.CreationAction;
-                Microsoft.Modeling.Set<CreateAction> actionSet = new Microsoft.Modeling.Set<CreateAction>();
+                List<CreateAction> actionSet = new List<CreateAction>();
                 if (creatAction == CreateActionSuperseded)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileSuperseded);
+                    actionSet.Add(CreateAction.FileSuperseded);
                 }
 
                 if ((creatAction & CreateActionExists) == CreateActionExists)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileExists);
+                    actionSet.Add(CreateAction.FileExists);
                 }
 
                 if ((creatAction & CreateActionOpened) == CreateActionOpened)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileOpened);
+                    actionSet.Add(CreateAction.FileOpened);
                     if (!actionSet.Contains(CreateAction.FileExists))
                     {
-                        actionSet = actionSet.Add(CreateAction.FileExists);
+                        actionSet.Add(CreateAction.FileExists);
                     }
                 }
 
                 if ((creatAction & CreateActionNotExists) == CreateActionNotExists)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileDoesNotExist);
+                    actionSet.Add(CreateAction.FileDoesNotExist);
                 }
 
                 if ((creatAction & CreateActionCreated) == CreateActionCreated)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileCreated);
+                    actionSet.Add(CreateAction.FileCreated);
                     if (!actionSet.Contains(CreateAction.FileDoesNotExist))
                     {
-                        actionSet = actionSet.Add(CreateAction.FileDoesNotExist);
+                        actionSet.Add(CreateAction.FileDoesNotExist);
                     }
                 }
 
                 if ((creatAction & CreateActionOverwritten) == CreateActionOverwritten)
                 {
-                    actionSet = actionSet.Add(CreateAction.FileOverwritten);
+                   actionSet.Add(CreateAction.FileOverwritten);
                 }
 
                 bool isIDZero = false;
@@ -5716,7 +5715,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             int fid,
             bool isSigned,
-            [Domain("InfoLevelSetByFS")] InformationLevel informationLevel,
+            InformationLevel informationLevel,
             Trans2SetFsInfoResponseParameter requestPara)
         {
             #region Create Packet

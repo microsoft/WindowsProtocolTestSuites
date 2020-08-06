@@ -721,7 +721,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         dest,
                         options
                         );
-            req.V1.pszDsaDest = "";// Invalid value
+
+            // Invalid value
+            switch (ver)
+            {
+                case DrsUpdateRefs_Versions.V1:
+                    req.V1.pszDsaDest = "";
+                    break;
+                case DrsUpdateRefs_Versions.V2:
+                    req.V2.pszDsaDest = "";
+                    break;
+                default:
+                    BaseTestSite.Assert.Fail("The version {0} is not supported.", ver);
+                    break;
+            }
+
             ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
             BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
             options = DRS_OPTIONS.DRS_DEL_REF;
@@ -769,7 +783,21 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
                         dest,
                         options
                         );
-            req.V1.uuidDsaObjDest = Guid.Empty; // Invalid value
+
+            // Invalid value
+            switch (ver)
+            {
+                case DrsUpdateRefs_Versions.V1:
+                    req.V1.uuidDsaObjDest = Guid.Empty;
+                    break;
+                case DrsUpdateRefs_Versions.V2:
+                    req.V2.uuidDsaObjDest = Guid.Empty;
+                    break;
+                default:
+                    BaseTestSite.Assert.Fail("The version {0} is not supported.", ver);
+                    break;
+            }
+
             ret = drsTestClient.DRSClient.DrsUpdateRefs(EnvironmentConfig.DrsContextStore[machine], (uint)ver, req);
             BaseTestSite.Assert.AreEqual<uint>((uint)Win32ErrorCode_32.ERROR_DS_DRA_INVALID_PARAMETER, ret, "the server should return ERROR_DS_DRA_INVALID_PARAMETER");
             options = DRS_OPTIONS.DRS_DEL_REF;

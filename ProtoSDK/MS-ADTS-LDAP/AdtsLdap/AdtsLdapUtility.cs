@@ -10,6 +10,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
 {
@@ -404,8 +405,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts
                     break;
 
                 case AdtsLdapSyntax.StringForSid:
-                    SecurityIdentifier sid = new SecurityIdentifier(buffer, 0);
-                    result = sid.Value;
+                    _SID sid = TypeMarshal.ToStruct<_SID>(buffer);
+                    result = DtypUtility.ToSddlString(sid);
                     break;
 
                 default:

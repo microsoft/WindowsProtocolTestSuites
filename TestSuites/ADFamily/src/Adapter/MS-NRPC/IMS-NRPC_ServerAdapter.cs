@@ -4,8 +4,7 @@
 namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
 {
     using System;
-
-    using Microsoft.Modeling;
+    using System.Collections.Generic;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc;
 
@@ -132,7 +131,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         /// <param name="sutType"> The type of SUT computer receiving the request.</param>
         /// <param name="socketAddresses">A list of socket addresses.</param>
         /// <returns>The method returns 0x00000000 if success; otherwise, it returns a nonzero error code.</returns>
-        HRESULT DsrAddressToSiteNamesW(ComputerType sutType, Set<SocketAddressType> socketAddresses);
+        HRESULT DsrAddressToSiteNamesW(ComputerType sutType, List<SocketAddressType> socketAddresses);
 
         /// <summary>
         ///  The DsrAddressToSiteNamesExW method translates a list of socket addresses into their corresponding 
@@ -141,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         /// <param name="sutType">The type of the SUT computer receiving the request.</param>
         /// <param name="socketAddresses">A list of socket addresses.</param>
         /// <returns>The method returns 0x00000000 if success; otherwise, it returns a nonzero error code.</returns>
-        HRESULT DsrAddressToSiteNamesExW(ComputerType sutType, Set<SocketAddressType> socketAddresses);
+        HRESULT DsrAddressToSiteNamesExW(ComputerType sutType, List<SocketAddressType> socketAddresses);
 
         /// <summary>
         ///  The DsrDeregisterDnsHostRecords method deletes all of the DNS SRV records registered by 

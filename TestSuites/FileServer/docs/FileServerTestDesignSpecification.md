@@ -215,8 +215,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 87         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2609       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 90         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2620       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -557,9 +557,23 @@ This is used to test SMB2 common user scenarios.
 | **Prerequisites**        | The server implements dialect 3.11 and compression feature. |
 | **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms. |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
-|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm supported by the client and server. |
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common compression algorithm and the first common pattern scanning algorithm supported by the client and server. |
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 | **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Negotiate_SMB311_Compression_IsChainedCompressionSupported |
+| **Description**          | This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field of SMB2_COMPRESSION_CAPABILITIES context when chained compression is supported. |
+| **Prerequisites**        | The server implements dialect 3.11, compression and chained compression feature. |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_COMPRESSION_CAPABILITIES context with all supported compression algorithms and SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with the expected SMB2_COMPRESSION_CAPABILITIES, if it supports the compression feature, as below: |
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common compression algorithm and the first common pattern scanning algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field. |
+| **Cleanup**              |                                                                                                                                                                                           |
+
 
 
 #### <a name="3.1.7"> MultipleChannel
@@ -3003,6 +3017,18 @@ This is used to test SMB2 common user scenarios.
 
 |||
 |---|---|
+| **Test ID** | BVT_SMB2Compression_Chained_PatternV1 |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress READ response correctly using chained compression and PatternV1. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to PatternV1 and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write compressible data to server by sending WRITE request chained and compressed with PatternV1. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ response is chained and compressed with PatternV1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
 | **Test ID** | BVT_SMB2Compression_LZNT1_Encrypted |
 | **Description** | This test case is designed to test whether server can decompress WRITE request and compress read response correctly using LZNT1 when encryption is enabled. |
 | **Prerequisites** | The server implements dialect 3.11, encryption and compression feature. |
@@ -3036,6 +3062,19 @@ This is used to test SMB2 common user scenarios.
 |                          | 4.  Verifies the READ reponse is compressed with LZ77 Huffman and data read out are equal to the written one. | 
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_Chained_PatternV1_Encrypted |
+| **Description** | This test case is designed to test whether server can decompress WRITE request and compress READ response correctly using chained compression and PatternV1 when encryption is enabled. |
+| **Prerequisites** | The server implements dialect 3.11, encryption and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with global encryption enabled, compression algorithms set to PatternV1 and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write compressible data to server by sending WRITE request chained and compressed with PatternV1. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ response is chained and compressed with PatternV1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
 
 ### <a name="3.2">SMB2 Feature Test
 
@@ -5146,6 +5185,34 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS and ignore the SMB2_NETNAME_NEGOTIATE_CONTEXT_ID.|
 |**Cleanup**||
 
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_FlagChainedNotSet|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED not set in Flags field of SMB2_COMPRESSION_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set Flags field to SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE.|
+||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS as below,|
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm and the first common pattern scanning algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_ChainedCompressionNotSupported|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field of SMB2_COMPRESSION_CAPABILITIES context when chained compression is not supported.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set Flags field to SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED.|
+||Verify that server returns a Negotiate response with Status set to STATUS_SUCCESS as below,|
+|                          |     a.  If server is Windows, CompressionAlgorithms is set to the first common algorithm and the first common pattern scanning algorithm supported by the client and server. |
+|                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
+|                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
+|**Cleanup**||
+
+
+
 #### <a name="3.2.10">Oplock
 
 **Oplock** model verifies that server handles Oplock request and acknowledgement correctly when client requests different Oplock levels on various types of shares with a follow-up request break previous Oplock.
@@ -6269,6 +6336,69 @@ Scenario see [Scenario](#3.1.57).
 
 |||
 |---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFront|
+|**Description**| This test case is designed to test whether server can handle chained and compressed WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at front. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all compression algorithm supported by SUT as below: 
+|                          |         a.  Client write compressible data to server by sending WRITE request chained and compressed with the given compression algorithm. The PatternV1 compressible data appear at front. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          |         c.  Verifies the data read out are equal to the written one. | 
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtEnd|
+|**Description**| This test case is designed to test whether server can handle chained and compressed WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at end. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all compression algorithm supported by SUT as below: 
+|                          |         a.  Client write compressible data to server by sending WRITE request chained and compressed with the given compression algorithm. The PatternV1 compressible data appear at end. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          |         c.  Verifies the data read out are equal to the written one. | 
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFrontAndEnd|
+|**Description**| This test case is designed to test whether server can handle chained and compressed WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at both front and end. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all compression algorithm supported by SUT as below: 
+|                          |         a.  Client write compressible data to server by sending WRITE request chained and compressed with the given compression algorithm. The PatternV1 compressible data appear at both front and end. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          |         c.  Verifies the data read out are equal to the written one. | 
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressibleReadResponse |
+|**Description**| This test case is designed to test whether server can chain and compress read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write compressible data to server by sending uncompressed WRITE request. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ response is chained and compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_IncompressibleReadResponse |
+|**Description**| This test case is designed to test whether server will not chain or compress read request if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is incompressible. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write incompressible data to server by sending uncompressed WRITE request. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ response is not chained or compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
 |**Test ID**| SMB2Compression_InvalidCompressedPacketLength |
 |**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid length. |
 | **Prerequisites** | The server implements dialect 3.11 and compression feature. |
@@ -6294,6 +6424,36 @@ Scenario see [Scenario](#3.1.57).
 | **Prerequisites** | The server implements dialect 3.11 and compression feature. |
 | **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
 |                          | 2.  Client sends a compressed message with invalid CompressionAlgorithm with value 0x0004, which should be unsupported by SUT. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_InvalidCompressionAlgorithmInCompressionPayloadHeader |
+|**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid CompressionAlgorithm in compression payload header. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client sends a compressed message with invalid CompressionAlgorithm in compression payload header. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_InvalidLengthInCompressionPayloadHeader |
+|**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid Length in compression payload header. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client sends a compressed message with invalid Length in compression payload header. |
+|                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_InvalidCompressionPatternPayloadV1Repetitions |
+|**Description**| This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid Repetitions in compression pattern payload V1. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client sends a compressed message with invalid Repetitions in compression pattern payload V1. |
 |                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
 | **Cleanup**              ||
 

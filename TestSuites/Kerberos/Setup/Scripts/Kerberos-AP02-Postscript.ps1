@@ -1,6 +1,6 @@
 ###########################################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 ###########################################################################################
 
 #------------------------------------------------------------------------------------------
@@ -15,9 +15,12 @@ Param
 
 Push-Location $WorkingPath
 
-$ConfigFile = "c:\temp\Protocol.xml"
+$ScriptFileFullPath      = $MyInvocation.MyCommand.Definition
+$ScriptName              = [System.IO.Path]::GetFileName($ScriptFileFullPath)
+$ConfigFile              = "c:\temp\Protocol.xml"
 $Parameters              = @{}
-$ScriptsSignalFile = "$WorkingPath\post.finished.signal" # Config signal file
+$ScriptsSignalFile       = "$WorkingPath\post.finished.signal" # Config signal file
+$LogFileFullPath         = "$ScriptFileFullPath.log"
 $IsAzure                 = $false
 try {
     [xml]$content = Get-Content $ConfigFile -ErrorAction Stop
@@ -29,6 +32,19 @@ try {
 }
 catch {
     
+}
+
+#------------------------------------------------------------------------------------------
+# Function: Start-ConfigLog
+# Create log file and start logging
+#------------------------------------------------------------------------------------------
+Function Start-ConfigLog()
+{
+    if (!(Test-Path -Path $LogFileFullPath))
+    {
+        New-Item -ItemType File -path $LogFileFullPath -Force
+    }
+    Start-Transcript $LogFileFullPath -Append 2>&1 | Out-Null
 }
 
 #------------------------------------------------------------------------------------------
@@ -66,11 +82,6 @@ Function Read-ConfigParameters()
 #------------------------------------------------------------------------------------------
 # Function: Config-Phase1
 # Configure the environment phase 1:
-#  * Set execution policy as unrestricted
-#  * Set network configurations
-#  * Set autologon
-#  * Join this computer to domain
-#  * Register Windbg dbgsrv for debugging purpose
 #------------------------------------------------------------------------------------------
 Function Config-Phase1()
 {
@@ -97,8 +108,6 @@ Function Config-Phase1()
 	# Turn off firewall
     Write-ConfigLog "Turn off firewall..." -ForegroundColor Yellow
     .\Disable_Firewall.ps1
-
-
 }
 
 #------------------------------------------------------------------------------------------
@@ -116,6 +125,9 @@ Function Main
 	Write-ConfigLog "Switching to $WorkingPath..." -ForegroundColor Yellow
     Push-Location $WorkingPath
 	
+    # Start logging
+    Start-ConfigLog
+
 	Read-ConfigParameters
 
 	Config-Phase1
@@ -123,6 +135,11 @@ Function Main
     # Write signal file
 	Write-ConfigLog "Write signal file`: post.finished.signal to hard drive."
 	cmd /C ECHO CONFIG FINISHED > $ScriptsSignalFile
+
+    # Ending script
+    Write-ConfigLog "Config finished."
+    Write-ConfigLog "EXECUTE [$ScriptName] FINISHED (NOT VERIFIED)." -ForegroundColor Green
+    Stop-Transcript
 
     if(-not $IsAzure)
     {

@@ -7,13 +7,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
 
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [TestClassAttribute()]
     public partial class TestScenarioSearchAD_LDSWin2K8R2 : PtfTestClassBase
     {
@@ -54,12 +52,16 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.Manager.GetAdapter(typeof(IAD_LDAPModelAdapter))));
-            this.Manager.Subscribe(SearchOpResponseInfo, this.IAD_LDAPModelAdapterInstance);
+            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.GetAdapter(typeof(IAD_LDAPModelAdapter))));
+            this.IAD_LDAPModelAdapterInstance.SearchOpResponse += IAD_LDAPModelAdapterInstance_SearchOpResponse;
         }
-
+        private void IAD_LDAPModelAdapterInstance_SearchOpResponse(SearchResp response)
+        {
+            this.Manager.AddEvent(SearchOpResponseInfo, this.IAD_LDAPModelAdapterInstance, new object[] { response });
+        }
         protected override void TestCleanup()
         {
+            this.IAD_LDAPModelAdapterInstance.SearchOpResponse -= IAD_LDAPModelAdapterInstance_SearchOpResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -84,13 +86,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("executing step \'call SearchOpReq(\"CN=Schema,CN=Configuration,DC=adts88\",\"(&(objec" +
                     "tClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))\",WholeTree,[\"lDA" +
                     "PDisplayName\"],NoExtendedControl,AD_LDS)\'");
-            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "lDAPDisplayName",
-                                        ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})}), null, ((ADImplementations)(1)));
+            this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Schema,CN=Configuration,DC=adts88", "(&(objectClass=attributeSchema)(systemFlags:1.2.840.113556.1.4.804:=4))", SearchScope.WholeTree, new List<string> { "lDAPDisplayName" }, null, ((ADImplementations)(1)));
             this.Manager.Comment("reaching state \'S3\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S4\'");
@@ -98,17 +94,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
                     "tion,CN={368E6FB2-DBCB-41A1-B65B-18FAC4B5516E}\",\"objectClass: crossRef\",WholeTre" +
                     "e,[\"dnsRoot\",\"Enabled\"],NoExtendedControl,AD_LDS)\'");
             this.IAD_LDAPModelAdapterInstance.SearchOpReq("CN=Enterprise Schema,CN=Partitions,CN=Configuration,CN={368E6FB2-DBCB-41A1-B65B-1" +
-                    "8FAC4B5516E}", "objectClass: crossRef", SearchScope.WholeTree, this.Make<Microsoft.Modeling.Sequence<string>>(new string[] {
-                            "Rep"}, new object[] {
-                            this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                        "Head",
-                                        "Tail"}, new object[] {
-                                        "dnsRoot",
-                                        this.Make<Microsoft.Xrt.Runtime.RuntimeList<string>>(new string[] {
-                                                    "Head",
-                                                    "Tail"}, new object[] {
-                                                    "Enabled",
-                                                    ((Microsoft.Xrt.Runtime.RuntimeList<string>)(null))})})}), null, ((ADImplementations)(1)));
+                    "8FAC4B5516E}", "objectClass: crossRef", SearchScope.WholeTree, new List<string> { "dnsRoot", "Enabled" }, null, ((ADImplementations)(1)));
             this.Manager.Comment("reaching state \'S5\'");
             this.Manager.Comment("checking step \'return SearchOpReq\'");
             this.Manager.Comment("reaching state \'S6\'");

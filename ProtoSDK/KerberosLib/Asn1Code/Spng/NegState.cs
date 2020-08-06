@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
         }
         
         public NegState(long val)
-            : base()
+            : base(val)
         {
         }
     }

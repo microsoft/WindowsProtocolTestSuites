@@ -31,16 +31,8 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
         public void TestInitialize()
         {
             IClientControlAdapter adapter = BaseTestSite.GetAdapter<IClientControlAdapter>();
-            adapter.SetSupportedEncryptionTypesAsRc4(testConfig.LocalRealm.KDC[0].FQDN, testConfig.LocalRealm.Admin.Username, testConfig.LocalRealm.Admin.Password);
-            adapter.SetSupportedEncryptionTypesAsRc4(testConfig.TrustedRealm.KDC[0].FQDN, testConfig.TrustedRealm.Admin.Username + "@" + testConfig.TrustedRealm.RealmName, testConfig.TrustedRealm.Admin.Password);
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-            IClientControlAdapter adapter = BaseTestSite.GetAdapter<IClientControlAdapter>();
-            adapter.RestoreSupportedEncryptionTypes(testConfig.LocalRealm.KDC[0].FQDN, testConfig.LocalRealm.Admin.Username, testConfig.LocalRealm.Admin.Password);
-            adapter.RestoreSupportedEncryptionTypes(testConfig.TrustedRealm.KDC[0].FQDN, testConfig.TrustedRealm.Admin.Username + "@" + testConfig.TrustedRealm.RealmName, testConfig.TrustedRealm.Admin.Password);
+            adapter.SetSupportedEncryptionTypesAsRc4(testConfig.LocalRealm.KDC[0].FQDN, testConfig.LocalRealm.RealmName + "\\" + testConfig.LocalRealm.Admin.Username, testConfig.LocalRealm.Admin.Password);
+            adapter.SetSupportedEncryptionTypesAsRc4(testConfig.TrustedRealm.KDC[0].FQDN, testConfig.TrustedRealm.RealmName + "\\" + testConfig.TrustedRealm.Admin.Username, testConfig.TrustedRealm.Admin.Password);
         }
 
         #region KileTestSuite in RC4

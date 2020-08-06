@@ -1,14 +1,36 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc;
-using System.Net;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
+    /// <summary>
+    /// Fragmentation state for server fast-path update PDU.
+    /// </summary>
+    public class ServerFastPathUpdatePduFragmentationState
+    {
+        public ServerFastPathUpdatePduFragmentationState(TS_FP_UPDATE_Fragmented current, uint totalLength)
+        {
+            CurrentLink = current;
+            TotalLength = totalLength;
+        }
+
+
+        /// <summary>
+        /// Current link.
+        /// </summary>
+        public TS_FP_UPDATE_Fragmented CurrentLink { get; }
+
+        /// <summary>
+        /// Total length.
+        /// </summary>
+        public UInt32 TotalLength { get; }
+    }
+
     /// <summary>
     /// Maintain the important parameters during RDPBCGR transport, 
     /// including the main sent or received PDUs, Channel Manager, the selected Encryption Algorithm etc.
@@ -139,6 +161,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private RdpbcgrClient client;
         private bool isAuthenticatingRDSTLS;
         private bool isExpectingEarlyUserAuthorizationResultPDU;
+
+        private ServerFastPathUpdatePduFragmentationState fragmentationState;
 
         #endregion private members
 
@@ -428,7 +452,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         /// <summary>
         /// The requested protocol to be used for following PDUs.
-        /// Got from server MCS Connect Response PDU with GCC Conference.
         /// </summary>
         public requestedProtocols_Values RequestedProtocol
         {
@@ -436,11 +459,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
-                    if (mcsConnectResponsePdu != null)
-                    {
-                        return mcsConnectResponsePdu.mcsCrsp.gccPdu.serverCoreData.clientRequestedProtocols;
-                    }
-                    else if (x224ConnectionRequestPdu != null && x224ConnectionRequestPdu.rdpNegData != null)
+                    if (x224ConnectionRequestPdu != null && x224ConnectionRequestPdu.rdpNegData != null)
                     {
                         return x224ConnectionRequestPdu.rdpNegData.requestedProtocols;
                     }
@@ -904,7 +923,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The Capability Sets got from Confirm Active PDU.
         /// </summary>
-        public Collection<ITsCapsSet> ConfirmCapabilitySets
+        public Collection<ITsCapsSet> ConfirmActiveCapabilitySets
         {
             get
             {
@@ -924,7 +943,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The Capability Sets got from Demand Active PDU.
         /// </summary>
-        public Collection<ITsCapsSet> demandActivemCapabilitySets
+        public Collection<ITsCapsSet> DemandActiveCapabilitySets
         {
             get
             {
@@ -939,6 +958,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
             }
         }
+
+        /// <summary>
+        /// The maximum request size of multiple-fragment.
+        /// </summary>
+        public UInt32? MultifragmentUpdateMaxRequestSize
+        {
+            get
+            {
+                lock (contextLock)
+                {
+                    bool hasDemandActiveMultiFragmentUpdateCapSet = DemandActiveCapabilitySets.Any((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    bool hasConfirmActiveMultiFragmentUpdateCapSet = ConfirmActiveCapabilitySets.Any((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    if (!hasDemandActiveMultiFragmentUpdateCapSet || !hasConfirmActiveMultiFragmentUpdateCapSet)
+                    {
+                        return null;
+                    }
+
+                    var demandActiveMultiFragmentUpdateCapSet = (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET)DemandActiveCapabilitySets.First((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    var confirmActiveMultiFragmentUpdateCapSet = (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET)ConfirmActiveCapabilitySets.First((capSet) => capSet.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                    UInt32 result = Math.Max(demandActiveMultiFragmentUpdateCapSet.MaxRequestSize, confirmActiveMultiFragmentUpdateCapSet.MaxRequestSize);
+
+                    return result;
+                }
+            }
+        }
+
         /// <summary>
         /// The LogonId field of auto reconnect cookie which is got from Save Session Info PDU.
         /// </summary>
@@ -1225,7 +1274,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pduCountToUpdate = ConstValue.PDU_COUNT_TO_UPDATE_SESSION_KEY;
             this.client = bcgrClient;
             isSwitchOn = true;
-            unprocessedPacketBuffer = new List<StackPacket>(); ;
+            unprocessedPacketBuffer = new List<StackPacket>();
+
+            fragmentationState = new ServerFastPathUpdatePduFragmentationState(null, 0);
         }
         #endregion constructor
 
@@ -1628,6 +1679,129 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
                 // no compression
                 return data;
+            }
+        }
+
+        /// <summary>
+        /// Update server fast-path update PDU fragmentation state.
+        /// </summary>
+        /// <param name="update">The current TS_FP_UPDATE instance.</param>
+        /// <returns>The chained current TS_FP_UPDATE if it is the last in multiple fragmentation.</returns>
+        internal TS_FP_UPDATE_Fragmented UpdateServerFastPathUpdatePduFragmentationState(
+            TS_FP_UPDATE_Fragmented update
+            )
+        {
+            TS_FP_UPDATE_Fragmented result;
+
+            lock (contextLock)
+            {
+                if (MultifragmentUpdateMaxRequestSize == null)
+                {
+                    throw new InvalidOperationException("Multifragment is not supported!");
+                }
+
+                UInt32 maxRequestSize = MultifragmentUpdateMaxRequestSize.Value;
+
+                switch (update.updateHeader.fragmentation)
+                {
+                    case fragmentation_Value.FASTPATH_FRAGMENT_FIRST:
+                        {
+                            if (fragmentationState.CurrentLink != null)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            UInt32 newLength = (UInt32)update.FragmentedUpdateData.Length;
+
+                            if (newLength > maxRequestSize)
+                            {
+                                throw new InvalidOperationException("Fragmentation data length exceeded capability!");
+                            }
+
+                            update.First = update;
+
+                            fragmentationState = new ServerFastPathUpdatePduFragmentationState(update, newLength);
+
+                            result = null;
+                        }
+                        break;
+
+                    case fragmentation_Value.FASTPATH_FRAGMENT_NEXT:
+                        {
+                            if (fragmentationState.CurrentLink == null)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            if (update.updateHeader.updateCode != fragmentationState.CurrentLink.updateHeader.updateCode)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            if (update.updateHeader.compression != fragmentationState.CurrentLink.updateHeader.compression)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            UInt32 newLength = fragmentationState.TotalLength + (UInt32)update.FragmentedUpdateData.Length;
+
+                            if (newLength > maxRequestSize)
+                            {
+                                throw new InvalidOperationException("Fragmentation data length exceeded capability!");
+                            }
+
+                            fragmentationState.CurrentLink.Next = update;
+
+                            update.First = fragmentationState.CurrentLink.First;
+
+                            fragmentationState = new ServerFastPathUpdatePduFragmentationState(update, newLength);
+
+                            result = null;
+                        }
+                        break;
+
+                    case fragmentation_Value.FASTPATH_FRAGMENT_LAST:
+                        {
+                            if (fragmentationState.CurrentLink == null)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            if (update.updateHeader.updateCode != fragmentationState.CurrentLink.updateHeader.updateCode)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            if (update.updateHeader.compression != fragmentationState.CurrentLink.updateHeader.compression)
+                            {
+                                throw new InvalidOperationException("Unexpected fragmentation is received!");
+                            }
+
+                            UInt32 newLength = fragmentationState.TotalLength + (UInt32)update.FragmentedUpdateData.Length;
+
+                            if (newLength > maxRequestSize)
+                            {
+                                throw new InvalidOperationException("Fragmentation data length exceeded capability!");
+                            }
+
+                            fragmentationState.CurrentLink.Next = update;
+
+                            update.First = fragmentationState.CurrentLink.First;
+
+                            result = update;
+
+                            fragmentationState = new ServerFastPathUpdatePduFragmentationState(null, 0);
+                        }
+                        break;
+
+                    default:
+                        {
+                            throw new InvalidOperationException("Unexpected fragmentation value!");
+                        }
+                        break;
+                }
+
+                return result;
             }
         }
     }

@@ -1,9 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-[string]$share
+[string]$uncSharePath
 [string]$directoryName
 [string]$domain = $PtfProp_Common_DomainName
 [string]$userName = $PtfProp_Common_AdminUserName
@@ -19,19 +17,19 @@ else
     $account = "$NetBiosName\$UserName"
 }
 
-$exist = Test-Path -Path "$share\$directoryName"
+$exist = Test-Path -Path "$uncSharePath\$directoryName"
 if ($exist -eq $true)
 {
 	Try
 	{
-		CMD /C "net.exe use $share $password /user:$account"
-		if (Test-Path  -Path "$share\$directoryName" )
+		CMD /C "net.exe use $uncSharePath $password /user:$account"
+		if (Test-Path  -Path "$uncSharePath\$directoryName" )
 		{
-			Remove-Item -path "$share\$directoryName" -Force -Recurse -ErrorAction SilentlyContinue
+			Remove-Item -path "$uncSharePath\$directoryName" -Force -Recurse -ErrorAction SilentlyContinue
 		}
 	}
 	Finally
 	{
-		CMD /C "net.exe use $share /delete /yes" | out-null	
+		CMD /C "net.exe use $uncSharePath /delete /yes" | out-null	
 	}
 }

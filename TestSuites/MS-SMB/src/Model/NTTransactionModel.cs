@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.Smb
 {
@@ -36,14 +35,14 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="snapShots">The snapshots for the corresponding file.</param>
         /// <param name="isSucceed">It indicates whether the checking is successful or not.</param>
         [Rule]
-        public static void CheckSnapshots(int fId, Set<int> snapShots, out bool isSucceed)
+        public static void CheckSnapshots(int fId, List<int> snapShots, out bool isSucceed)
         {
             Condition.IsTrue((smbState != SmbState.End) && (smbState != SmbState.Closed));
             isSucceed = true;
             Condition.IsTrue(smbConnection.openedFiles.ContainsKey(fId)
                                 && smbConnection.openedFiles[fId].name == Parameter.fileNames[2]);
             Condition.IsTrue(smbConnection.sentRequest.Count == 0);
-            Condition.IsTrue(snapShots == new Set<int>(1, 2));
+            Condition.IsTrue(snapShots == new List<int> { 1, 2 });
             smbConnection.openedFiles[fId].previousVersionToken = snapShots;
         }
 
@@ -94,11 +93,11 @@ namespace Microsoft.Protocol.TestSuites.Smb
             Condition.IsTrue(sIdListLength == 0 || startSidLength == 0);
             if (returnSingle)
             {
-                Requirement.AssumeCaptured("Allowed to restart the scan of the quota information");
+                Requirement.Capture("Allowed to restart the scan of the quota information");
             }
             else
             {
-                Requirement.AssumeCaptured("Don't allowed to restart the scan of the quota information");
+                Requirement.Capture("Don't allowed to restart the scan of the quota information");
             }
             Checker.CheckRequest(smbConnection, messageId, sessionId, treeId, isSigned, smbState);
             smbRequest = new NtTransactQueryQuotaRequest(
@@ -641,7 +640,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
                 Condition.IsTrue(NumberOfSnapShotsCompared == IntegerCompare.Equal);
 
-                Requirement.AssumeCaptured(
+                Requirement.Capture(
                     @"If MaxDataCount is large enough, the adapter will return all snapshots in a 
                     FSCTLSrvEnumSnapshotsResponse");
             }
@@ -765,7 +764,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int treeId,
             bool isSigned,
-            [Domain("ValidKeys")]string copychunkResumeKey,
+            string copychunkResumeKey,
             MessageStatus messageStatus)
         {
             FsctlSrvResumeKeyRequest request = null;
@@ -874,7 +873,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             int fId,
-            [Domain("ValidKeys")]string copyChunkResumeKey,
+            string copyChunkResumeKey,
             int sourceOffset,
             int targetOffset,
             int length)
@@ -1083,8 +1082,8 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             int sessionId,
             int treeId,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
-            [Domain("FileDomain")] string fileName,
+            int impersonationLevel,
+            string fileName,
             ShareType shareType,
             bool isSigned)
         {
@@ -1105,7 +1104,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 isSigned,
                 fileName,
                 smbState);
-            Requirement.AssumeCaptured("Send NT_TRANSACT_CREATE request");
+            Requirement.Capture("Send NT_TRANSACT_CREATE request");
             Update.UpdateNTTransactCreateRequest(smbConnection, smbRequest);
         }
 
@@ -1240,51 +1239,51 @@ namespace Microsoft.Protocol.TestSuites.Smb
 
             if (request.fsctlName == FSCCFSCTLName.FSCTL_CREATE_OR_GET_OBJECT_ID)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_CREATE_OR_GET_OBJECT_ID");
+                Requirement.Capture("FSCTL Name is FSCTL_CREATE_OR_GET_OBJECT_ID");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_DELETE_OBJECT_ID)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_DELETE_OBJECT_ID");
+                Requirement.Capture("FSCTL Name is FSCTL_DELETE_OBJECT_ID");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_FILESYSTEM_GET_STATISTICS)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_FILESYSTEM_GET_STATISTICS");
+                Requirement.Capture("FSCTL Name is FSCTL_FILESYSTEM_GET_STATISTICS");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_GET_COMPRESSION)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_GET_COMPRESSION");
+                Requirement.Capture("FSCTL Name is FSCTL_GET_COMPRESSION");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_GET_NTFS_VOLUME_DATA)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_GET_NTFS_VOLUME_DATA");
+                Requirement.Capture("FSCTL Name is FSCTL_GET_NTFS_VOLUME_DATA");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_IS_PATHNAME_VALID)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_IS_PATHNAME_VALID");
+                Requirement.Capture("FSCTL Name is FSCTL_IS_PATHNAME_VALID");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_READ_FILE_USN_DATA)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_READ_FILE_USN_DATA");
+                Requirement.Capture("FSCTL Name is FSCTL_READ_FILE_USN_DATA");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_COMPRESSION)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_COMPRESSION");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_COMPRESSION");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_SPARSE)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_SPARSE");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_SPARSE");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_ZERO_DATA)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_ZERO_DATA");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_ZERO_DATA");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_SET_ZERO_ON_DEALLOCATION)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_SET_ZERO_ON_DEALLOCATION");
+                Requirement.Capture("FSCTL Name is FSCTL_SET_ZERO_ON_DEALLOCATION");
             }
             else if (request.fsctlName == FSCCFSCTLName.FSCTL_WRITE_USN_CLOSE_RECORD)
             {
-                Requirement.AssumeCaptured("FSCTL Name is FSCTL_WRITE_USN_CLOSE_RECORD");
+                Requirement.Capture("FSCTL Name is FSCTL_WRITE_USN_CLOSE_RECORD");
             }
 
             Update.UpdateResponse(smbConnection, messageId);

@@ -728,6 +728,11 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.Adapter
         {
             var response = this.ExpectPdu(KerberosConstValue.TIMEOUT_DEFAULT, typeof(KerberosTgsResponse));
             this.testSite.Assert.IsNotNull(response, "Response should not be null");
+            if (response is KerberosKrbError)
+            {
+                KerberosKrbError error = response as KerberosKrbError;
+                this.testSite.Log.Add(LogEntryKind.Comment, "ERROR CODE: {0}", error.ErrorCode.ToString());
+            }
             this.testSite.Assert.IsInstanceOfType(response, typeof(KerberosTgsResponse), "Response type mismatches");
             KerberosTgsResponse tgsResponse = response as KerberosTgsResponse;
             this.testSite.Log.Add(LogEntryKind.Comment, "Recieve TGS response.");

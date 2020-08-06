@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KerberosLib\KerberosLib.csproj" />
     <ProjectReference Include="..\MS-NLMP\Nlmp.csproj" />
+    <ProjectReference Include="..\MS-SPNG\Spng.csproj" />
     <ProjectReference Include="..\Sspi\Sspi.csproj" />
   </ItemGroup>
 

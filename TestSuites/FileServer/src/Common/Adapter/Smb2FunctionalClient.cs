@@ -600,7 +600,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     netNameContext.Header.Reserved = 0;
                     netNameContext.NetName = testConfig.SutComputerName.ToArray();
                     netNameContext.Header.DataLength = netNameContext.GetDataLength();
-                }               
+                }
             }
 
             return NegotiateWithContexts
@@ -612,7 +612,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 clientGuid,
                 preauthHashAlgs,
                 encryptionAlgs,
-                null,               
+                null,
+                SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
                 checker,
                 ifHandleRejectUnencryptedAccessSeparately,
                 ifAddGLOBAL_CAP_ENCRYPTION,
@@ -629,8 +630,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Guid? clientGuid = null,
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
-            CompressionAlgorithm[] compressionAlgorithms = null,            
-            ResponseChecker<NEGOTIATE_Response> checker = null,            
+            CompressionAlgorithm[] compressionAlgorithms = null,
+            SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
+            ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
             bool addDefaultEncryption = false,
@@ -677,7 +679,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Smb2NegotiateRequestPacket negotiateRequest;
             Smb2NegotiateResponsePacket negotiateResponse;
 
-            uint status = client.Negotiate(              
+            uint status = client.Negotiate(
                creditCharge,
                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
                headerFlag,
@@ -693,9 +695,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                preauthHashAlgs: preauthHashAlgs,
                encryptionAlgs: encryptionAlgs,
                compressionAlgorithms: compressionAlgorithms,
+               compressionFlags: compressionFlags,
                addDefaultEncryption: addDefaultEncryption,
                netNameContext: netNameContext
-               );           
+               );
 
             if (!ifHandleRejectUnencryptedAccessSeparately)
             {

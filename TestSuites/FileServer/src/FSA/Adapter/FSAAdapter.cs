@@ -1,12 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
-using Microsoft.SpecExplorer.Runtime.Testing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -1157,7 +1155,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomFile = randomFile + @"<+>";
                     break;
 
-                case FileNameStatus.PathNameTraiblack:
+                case FileNameStatus.PathNameTrailBack:
                     randomFile = randomFile + @"\";
                     break;
 
@@ -5938,7 +5936,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="expected">The expected value.</param>
         /// <param name="actual">The actual value.</param>
         /// <param name="context">The description of the context under which both values are compared.</param>
-        public void AssertAreEqual<T>(ITestManager manager, T expected, T actual, string context)
+        public void AssertAreEqual<T>(IProtocolTestsManager manager, T expected, T actual, string context)
         {
             TestManagerHelpers.AssertAreEqual(manager, expected, actual, context);
         }
@@ -5951,7 +5949,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="expected">The expected value.</param>
         /// <param name="actual">The actual value.</param>
         /// <param name="context">The description of the context under which both values are compared.</param>
-        public void AssertAreEqual(ITestManager manager, MessageStatus expected, MessageStatus actual, string context)
+        public void AssertAreEqual(IProtocolTestsManager manager, MessageStatus expected, MessageStatus actual, string context)
         {
             if (this.isErrorCodeMappingRequired)
             {

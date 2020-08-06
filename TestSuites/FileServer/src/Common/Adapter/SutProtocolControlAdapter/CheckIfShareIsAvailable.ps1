@@ -1,9 +1,7 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-[string]$share
+[string]$uncSharePath
 [string]$domain = $PtfProp_Common_DomainName
 [string]$userName = $PtfProp_Common_AdminUserName
 [string]$password = $PtfProp_Common_PasswordForAllUsers
@@ -21,7 +19,7 @@ else
 $result = $FALSE
 Try
 {
-	CMD /C "net.exe use $share $password /user:$account"
+	CMD /C "net.exe use $uncSharePath $password /user:$account"
 	# LastExitCode 0 - Connect succeed 
 	# LastExitCode 2 - Get error "multiple connections to a server or shared resource by the same user", but this error does not block New-Item
 	if($LastExitCode -eq 0 -or $LastExitCode -eq 2)
@@ -35,7 +33,7 @@ Catch
 }
 Finally
 {
-   CMD /C "net.exe use $share /delete /yes" | out-null
+   CMD /C "net.exe use $uncSharePath /delete /yes" | out-null
 }
 
 return $result

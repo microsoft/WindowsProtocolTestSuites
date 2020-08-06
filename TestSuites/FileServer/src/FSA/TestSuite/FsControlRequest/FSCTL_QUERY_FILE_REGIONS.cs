@@ -22,6 +22,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_QUERY_FILE_REGIONS request to SUT and check the response.")]
         public void BVT_FsCtl_Query_File_Regions()
         {
+            if (fsaAdapter.FileSystem == FileSystem.REFS && fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            {
+                BaseTestSite.Assert.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2012 R2");
+            }
             QueryFileRegions(false); 
         }
 

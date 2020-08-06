@@ -1,10 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-using Microsoft.Modeling;
 
 namespace Microsoft.Protocol.TestSuites.Smb
 {
@@ -27,7 +28,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             SmbState smbState,
             SignState signState,
-            Sequence<Dialect> dialectNames)
+            List<Dialect> dialectNames)
         {
             Condition.IsTrue(smbState == SmbState.CreateNamePipeAndMailslotSucceed);
             Condition.IsTrue(smbState == SmbState.CreateNamePipeAndMailslotSucceed);
@@ -48,7 +49,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             {
                 case Platform.NonWindows:
                     Condition.IsTrue(
-                        (dialectNames == new Sequence<Dialect>(
+                        (dialectNames == new List<Dialect> {
                             Dialect.DosLanMan12,
                             Dialect.DosLanMan21,
                             Dialect.XenixCore,
@@ -60,12 +61,12 @@ namespace Microsoft.Protocol.TestSuites.Smb
                             Dialect.NtLanMan,
                             Dialect.PcLan1,
                             Dialect.PcNet1,
-                            Dialect.Wfw10))
-                        || (dialectNames == new Sequence<Dialect>(Dialect.Invalid)));
+                            Dialect.Wfw10})
+                        || (dialectNames == new List<Dialect> { Dialect.Invalid }));
                     break;
                 case Platform.WinNt:
                     Condition.IsTrue(
-                        (dialectNames == new Sequence<Dialect>(
+                        (dialectNames == new List<Dialect> {
                             Dialect.PcNet1,
                             Dialect.XenixCore,
                             Dialect.MsNet103,
@@ -73,32 +74,32 @@ namespace Microsoft.Protocol.TestSuites.Smb
                             Dialect.Wfw10,
                             Dialect.LanMan12,
                             Dialect.LanMan21,
-                            Dialect.NtLanMan))
-                        || (dialectNames == new Sequence<Dialect>(Dialect.Invalid)));
+                            Dialect.NtLanMan})
+                        || (dialectNames == new List<Dialect> { Dialect.Invalid }));
                     break;
                 case Platform.Win2K:
                 case Platform.WinXP:
                     Condition.IsTrue(
-                        (dialectNames == new Sequence<Dialect>(
+                        (dialectNames == new List<Dialect>{
                             Dialect.PcNet1,
                             Dialect.LanMan10,
                             Dialect.Wfw10,
                             Dialect.LanMan12,
                             Dialect.LanMan21,
-                            Dialect.NtLanMan))
-                        || (dialectNames == new Sequence<Dialect>(Dialect.Invalid)));
+                            Dialect.NtLanMan })
+                        || (dialectNames == new List<Dialect> { Dialect.Invalid }));
                     break;
                 case Platform.Win7:
                 case Platform.WinVista:
                     Condition.IsTrue(
-                        (dialectNames == new Sequence<Dialect>(
+                        (dialectNames == new List<Dialect> {
                             Dialect.PcNet1,
                             Dialect.LanMan10,
                             Dialect.Wfw10,
                             Dialect.LanMan12,
                             Dialect.LanMan21,
-                            Dialect.NtLanMan))
-                        || (dialectNames == new Sequence<Dialect>(Dialect.Invalid)));
+                            Dialect.NtLanMan})
+                        || (dialectNames == new List<Dialect> { Dialect.Invalid }));
                     break;
                 default: break;
             }
@@ -124,7 +125,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         {
             Condition.IsTrue(smbState == SmbState.NegotiateSent);
             Condition.IsTrue(connection.sentRequest.ContainsKey(messageId));
-            Condition.IsTrue(new Set<MessageStatus>(validMessageStatus).Contains(messageStatus));
+            Condition.IsTrue(new List<MessageStatus>(validMessageStatus).Contains(messageStatus));
             Condition.IsTrue(connection.isNegotiateSent);
             Condition.IsTrue(connection.SutSendSequenceNumber.Contains(messageId));
         }
@@ -153,7 +154,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             SmbState smbState,
             bool isRequireSign,
-            Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceeds,
             bool isWriteBufferSizeExceeds)
         {
@@ -202,7 +203,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             int sessionId, SmbState smbState,
             bool isRequireSign,
-            Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize)
         {
@@ -263,7 +264,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         {
             Condition.IsTrue(smbState == SmbState.SessionSetupSent);
             Condition.IsTrue(!connection.sutCapabilities.Contains(Capabilities.CapExtendedSecurity));
-            Condition.IsTrue(new Set<MessageStatus>(validMessageStatus).Contains(messageStatus));
+            Condition.IsTrue(new List<MessageStatus>(validMessageStatus).Contains(messageStatus));
             Condition.IsTrue(connection.sentRequest.ContainsKey(messageId));
             Condition.IsTrue(connection.sentRequest[messageId].command == Command.SmbComSessionSetup);
             NonExtendedSessionSetupRequest sentRequest
@@ -329,7 +330,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         {
             Condition.IsTrue(smbState == SmbState.SessionSetupSent);
             Condition.IsTrue(connection.sutCapabilities.Contains(Capabilities.CapExtendedSecurity));
-            Condition.IsTrue(new Set<MessageStatus>(validMessageStatus).Contains(messageStatus));
+            Condition.IsTrue(new List<MessageStatus>(validMessageStatus).Contains(messageStatus));
             Condition.IsTrue(connection.sentRequest.ContainsKey(messageId));
             Condition.IsTrue(connection.sentRequest[messageId].command == Command.SmbComSessionSetup);
             SessionSetupRequest sentRequest = (SessionSetupRequest)connection.sentRequest[messageId];
@@ -404,7 +405,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         {
             Condition.IsTrue(smbState == SmbState.SessionSetupSent);
             Condition.IsTrue(connection.sutCapabilities.Contains(Capabilities.CapExtendedSecurity));
-            Condition.IsTrue(new Set<MessageStatus>(validMessageStatus).Contains(messageStatus));
+            Condition.IsTrue(new List<MessageStatus>(validMessageStatus).Contains(messageStatus));
             Condition.IsTrue(connection.sentRequest.ContainsKey(messageId));
             Condition.IsTrue(connection.sentRequest[messageId].command == Command.SmbComSessionSetupAdditional);
             SessionSetupRequestAdditional sentRequest
@@ -623,7 +624,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
                 Condition.IsTrue(!isSigned);
             }
 
-            Condition.IsTrue(new Set<MessageStatus>(validMessageStatus).Contains(messageStatus));
+            Condition.IsTrue(new List<MessageStatus>(validMessageStatus).Contains(messageStatus));
         }
 
 
@@ -730,7 +731,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int treeId,
             bool isSigned,
             int fId,
-            Set<CreateAction> createAction,
+            List<CreateAction> createAction,
             bool isFileIdZero,
             bool isVolumeGUIDZero,
             bool isDirectoryZero,
@@ -825,51 +826,51 @@ namespace Microsoft.Protocol.TestSuites.Smb
                     if (fileExist)
                     {
                         Condition.IsTrue(createAction
-                            == new Set<CreateAction>(CreateAction.FileSuperseded, CreateAction.FileExists));
+                            == new List<CreateAction> { CreateAction.FileSuperseded, CreateAction.FileExists });
                     }
                     else
                     {
                         Condition.IsTrue(createAction
-                            == new Set<CreateAction>(CreateAction.FileCreated, CreateAction.FileDoesNotExist));
+                            == new List<CreateAction> { CreateAction.FileCreated, CreateAction.FileDoesNotExist });
                     }
                     break;
                 case CreateDisposition.FileOpen:
                     Condition.IsTrue(fileExist);
                     Condition.IsTrue(createAction
-                        == new Set<CreateAction>(CreateAction.FileOpened, CreateAction.FileExists));
+                        == new List<CreateAction> { CreateAction.FileOpened, CreateAction.FileExists });
                     break;
                 case CreateDisposition.FileCreate:
                     Condition.IsTrue(!fileExist);
                     Condition.IsTrue(createAction
-                        == new Set<CreateAction>(CreateAction.FileCreated, CreateAction.FileDoesNotExist));
+                        == new List<CreateAction> { CreateAction.FileCreated, CreateAction.FileDoesNotExist });
                     break;
                 case CreateDisposition.FileOpenIf:
                     if (fileExist)
                     {
                         Condition.IsTrue(createAction
-                            == new Set<CreateAction>(CreateAction.FileOpened, CreateAction.FileExists));
+                            == new List<CreateAction> { CreateAction.FileOpened, CreateAction.FileExists });
                     }
                     else
                     {
                         Condition.IsTrue(createAction
-                            == new Set<CreateAction>(CreateAction.FileCreated, CreateAction.FileDoesNotExist));
+                            == new List<CreateAction> { CreateAction.FileCreated, CreateAction.FileDoesNotExist });
                     }
                     break;
                 case CreateDisposition.FileOverwrite:
                     Condition.IsTrue(fileExist);
                     Condition.IsTrue(createAction
-                        == new Set<CreateAction>(CreateAction.FileOverwritten, CreateAction.FileExists));
+                        == new List<CreateAction> { CreateAction.FileOverwritten, CreateAction.FileExists });
                     break;
                 case CreateDisposition.FileOverwriteIf:
                     if (fileExist)
                     {
                         Condition.IsTrue(createAction
-                            == new Set<CreateAction>(CreateAction.FileOverwritten, CreateAction.FileExists));
+                            == new List<CreateAction> { CreateAction.FileOverwritten, CreateAction.FileExists });
                     }
                     else
                     {
                         Condition.IsTrue(createAction
-                            == new Set<CreateAction>(CreateAction.FileCreated, CreateAction.FileDoesNotExist));
+                            == new List<CreateAction> { CreateAction.FileCreated, CreateAction.FileDoesNotExist });
                     }
                     break;
                 default:
@@ -1078,7 +1079,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             out RequestType request,
             params MessageStatus[] validStatus) where RequestType : SmbRequest
         {
-            Condition.IsTrue(new Set<MessageStatus>(validStatus).Contains(messageStatus));
+            Condition.IsTrue(new List<MessageStatus>(validStatus).Contains(messageStatus));
             Condition.IsTrue(connection.sentRequest.ContainsKey(messageId));
             Condition.IsTrue(connection.treeConnectList.ContainsKey(treeId));
             Condition.IsTrue(connection.treeConnectList[treeId].sessionId == sessionId);

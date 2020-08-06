@@ -1,0 +1,43 @@
+<Parameters>
+	<Groups>
+			<Group>
+				<GroupName>AzGroup01</GroupName>
+			</Group>
+		</Groups>
+
+	<Users>
+		<User>
+			<Username>nonadmin</Username>
+			 <Password>Password01!</Password>
+		</User>
+		<User>
+			<Username>AzUser01</Username>
+			<Password>Password01!</Password>
+			<Group>AzGroup01</Group>
+		</User>
+
+		<User>    
+			<Username>9L7!MNZ%}wq4iZ</Username>
+			<Password>Password01^</Password>
+			<Group>AzGroup01</Group>
+		</User>
+		<User>
+			<Username>XJ(x1SjZ{INM!RpPrQ^c</Username>
+			<Password>Password01^</Password>
+			<Group>AzGroup01</Group>
+		</User>
+		<User>
+			<Username>p9jwB3A@U)i2z~LzTd</Username>
+			<Password>Password01^</Password>        
+		</User>
+
+		<User>
+			<Username>$I1Q73_VjdSJ!vGn7Q</Username>
+			<Password>Password01^</Password>        
+		</User>
+		<User>
+			<Username>@0o2^w@w^-t%abwos31</Username>
+			<Password>Password01^</Password>        
+		</User>
+	</Users>
+</Parameters>

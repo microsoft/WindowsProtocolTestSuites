@@ -10,6 +10,18 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 {
+    /// <summary>
+    /// Exception thrown when connection is closed during expecting packet.
+    /// </summary>
+    public class DisconnectedExcpetion : Exception
+    {
+        public DisconnectedExcpetion()
+            : base()
+        {
+
+        }
+    }
+
     public class RdpemtClient : RdpemtTransport
     {
         #region Private variables
@@ -33,11 +45,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="secChannel">secure channel</param>
         /// <param name="autoHandle">Whether it is an auto handle connection</param>
         public RdpemtClient(ISecureChannel secChannel, bool autoHandle = true)
-            :base(secChannel, autoHandle)
+            : base(secChannel, autoHandle)
         {
-            bandwidthMeasureStartTime = DateTime.Now;
-            bandwidthMeasurePayloadByteCount = 0;
-            detectBandwidth = false;
+            Initialize();
         }
 
         /// <summary>
@@ -47,13 +57,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="targetHost"></param>
         /// <param name="autoHandle"></param>
         public RdpemtClient(RdpeudpSocket socket, string targetHost, bool autoHandle = true)
-            :base(autoHandle)
+            : base(autoHandle)
         {
             if (!socket.AutoHandle)
             {
                 throw new NotSupportedException("To Create RDPEMT Server, RDPEUDP Socket must be auto handle.");
             }
-            
+
             if (socket.TransMode == TransportMode.Reliable)
             {
                 RdpeudpTLSChannel secChannel = new RdpeudpTLSChannel(socket);
@@ -69,9 +79,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 this.secureChannel = secChannel;
             }
 
-            bandwidthMeasureStartTime = DateTime.Now;
-            bandwidthMeasurePayloadByteCount = 0;
-            detectBandwidth = false;
+            Initialize();
         }
         #endregion Constructor
 
@@ -84,6 +92,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 return detectBandwidth;
             }
         }
+
+        /// <summary>
+        /// A boolean value indicating whether the underlying connection is closed or not.
+        /// </summary>
+        public bool Disconnected { get; private set; }
 
         #endregion Properties
 
@@ -142,7 +155,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 return null;
             }
         }
-                
+
         /// <summary>
         /// Expect a RDP_TUNNEL_CREATERESPONSE structure
         /// </summary>
@@ -177,6 +190,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                         }
                     }
                 }
+
+                if (Disconnected)
+                {
+                    // No more packet since the connection is closed.
+                    throw new DisconnectedExcpetion();
+                }
+
                 Thread.Sleep(waitInterval);
             }
 
@@ -221,7 +241,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                             responseType == (uint)AUTO_DETECT_REQUEST_TYPE.RDP_BW_STOP_AFTER_CONNECTTIME_OR_RELIABLEUDP)
                         {
                             detectBandwidth = false;
-                            TimeSpan duration =  DateTime.Now - bandwidthMeasureStartTime;
+                            TimeSpan duration = DateTime.Now - bandwidthMeasureStartTime;
                             this.timeDelta = (uint)duration.TotalMilliseconds;
                             bwStopSequenceNumber = (ushort)sequenceNumber;
                             // Send RDP_BW_RESULTS
@@ -232,8 +252,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                                 subHeaders.Add(subHeader);
                                 RDP_TUNNEL_DATA tunnelData = CreateTunnelDataPdu(null, subHeaders, RDP_TUNNEL_SUBHEADER_TYPE_Values.TYPE_ID_AUTODETECT_RESPONSE);
                                 this.SendRdpemtPacket(tunnelData);
-                            }                           
-                            
+                            }
+
                         }
                         else if (responseType == (uint)AUTO_DETECT_REQUEST_TYPE.RDP_NETCHAR_RESULT_BANDWIDTH_AVERAGERTT ||
                             responseType == (uint)AUTO_DETECT_REQUEST_TYPE.RDP_NETCHAR_RESULT_BASERTT_BANDWIDTH_AVERAGERTT)
@@ -246,7 +266,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 }
             }
         }
-        
+
         /// <summary>
         /// Generate sub header Data of BW result
         /// </summary>
@@ -259,6 +279,34 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             return subHeaderbytes;
         }
 
+        /// <summary>
+        /// Dispose resources.
+        /// </summary>
+        public new void Dispose()
+        {
+            secureChannel.Disconnected -= Socket_Disconnected;
+
+            base.Dispose();
+        }
+
         #endregion Public Methods
+
+        #region Private methods
+        public void Initialize()
+        {
+            Disconnected = false;
+
+            secureChannel.Disconnected += Socket_Disconnected;
+
+            bandwidthMeasureStartTime = DateTime.Now;
+            bandwidthMeasurePayloadByteCount = 0;
+            detectBandwidth = false;
+        }
+
+        private void Socket_Disconnected()
+        {
+            Disconnected = true;
+        }
+        #endregion
     }
 }

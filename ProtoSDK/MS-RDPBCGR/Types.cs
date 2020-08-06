@@ -2009,10 +2009,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 List<byte> coreData = new List<byte>();
                 RdpbcgrEncoder.EncodeStructure(coreData, gccPdu.serverCoreData.header);
                 RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.version);
-                RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.clientRequestedProtocols);
-                //earlyCapabilityFlags is optional.
-                if (gccPdu.serverCoreData.earlyCapabilityFlags != 0)
+
+                // The field clientRequestedProtocols is optional
+                if (gccPdu.serverCoreData.clientRequestedProtocols != null)
+                {
+                    RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.clientRequestedProtocols);
+                }
+
+                //The field earlyCapabilityFlags is optional.
+                if (gccPdu.serverCoreData.earlyCapabilityFlags != null)
+                {
                     RdpbcgrEncoder.EncodeStructure(coreData, (uint)gccPdu.serverCoreData.earlyCapabilityFlags);
+                }
 
                 userData.AddRange(coreData.ToArray());
             }
@@ -7825,13 +7833,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  RDP Negotiation Request structure was not sent, this
         ///  field MUST be initialized to PROTOCOL_RDP (0).
         /// </summary>
-        public requestedProtocols_Values clientRequestedProtocols;
+        public requestedProtocols_Values? clientRequestedProtocols;
 
         /// <summary>
         /// A 32-bit, unsigned integer that specifies capabilities early in the connection sequence.
         /// If this field is present, all of the preceding fields MUST also be present.
         /// </summary>
-        public SC_earlyCapabilityFlags_Values earlyCapabilityFlags;
+        public SC_earlyCapabilityFlags_Values? earlyCapabilityFlags;
     }
 
     /// <summary>
@@ -16574,446 +16582,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             List<byte> fastpathOutputData = new List<byte>();
             if (fpOutputUpdates != null)
             {
-                for (int i = 0; i < fpOutputUpdates.Length; ++i)
+                foreach (var update in fpOutputUpdates)
                 {
-                    if (fpOutputUpdates[i].GetType() == typeof(TS_FP_UPDATE_PALETTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData,
-                            EncodePalette((TS_FP_UPDATE_PALETTE)fpOutputUpdates[i]));
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_UPDATE_BITMAP))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData,
-                            EncodeBitmap((TS_FP_UPDATE_BITMAP)fpOutputUpdates[i]));
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_UPDATE_SYNCHRONIZE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_POINTERPOSATTRIBUTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData,
-                            EncodePtrPos((TS_FP_POINTERPOSATTRIBUTE)fpOutputUpdates[i]));
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_COLORPOINTERATTRIBUTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData,
-                            EncodeColorPtr((TS_FP_COLORPOINTERATTRIBUTE)fpOutputUpdates[i]));
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_POINTERATTRIBUTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData,
-                            EncodeNewPtr((TS_FP_POINTERATTRIBUTE)fpOutputUpdates[i]));
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_CACHEDPOINTERATTRIBUTE))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData,
-                            EncodeCachedPtr((TS_FP_CACHEDPOINTERATTRIBUTE)fpOutputUpdates[i]));
-                    }
-
-                    else if (fpOutputUpdates[i].GetType() == typeof(TS_FP_SURFCMDS))
-                    {
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].updateHeader);
-
-                        if (fpOutputUpdates[i].updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
-                        {
-                            RdpbcgrEncoder.EncodeStructure(fastpathOutputData, (byte)fpOutputUpdates[i].compressionFlags);
-                        }
-                        byte[] surfUpdateData = EncodeSurfCmds((TS_FP_SURFCMDS)fpOutputUpdates[i]);
-                        fpOutputUpdates[i].size = (ushort)surfUpdateData.Length;
-                        RdpbcgrEncoder.EncodeStructure(fastpathOutputData, fpOutputUpdates[i].size);
-                        RdpbcgrEncoder.EncodeBytes(fastpathOutputData, surfUpdateData);
-                    }
+                    RdpbcgrEncoder.EncodeBytes(fastpathOutputData, update.ToBytes());
                 }
             }
 
             return fastpathOutputData.ToArray();
-        }
-
-        private byte[] EncodePalette(TS_FP_UPDATE_PALETTE paletteData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-
-            List<byte> buffer = new List<byte>();
-            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)paletteData.paletteUpdateData.updateType);
-            RdpbcgrEncoder.EncodeStructure(buffer, paletteData.paletteUpdateData.pad2Octets);
-            RdpbcgrEncoder.EncodeStructure(buffer, paletteData.paletteUpdateData.numberColors);
-            if (paletteData.paletteUpdateData.paletteEntries != null)
-            {
-                for (int i = 0; i < paletteData.paletteUpdateData.paletteEntries.Length; ++i)
-                {
-                    RdpbcgrEncoder.EncodeStructure(buffer, paletteData.paletteUpdateData.paletteEntries[i].red);
-                    RdpbcgrEncoder.EncodeStructure(buffer, paletteData.paletteUpdateData.paletteEntries[i].green);
-                    RdpbcgrEncoder.EncodeStructure(buffer, paletteData.paletteUpdateData.paletteEntries[i].blue);
-                }
-            }
-
-            if (paletteData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(paletteData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodeBitmap(TS_FP_UPDATE_BITMAP bitmapData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)bitmapData.bitmapUpdateData.updateType);
-            RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.numberRectangles);
-            if (bitmapData.bitmapUpdateData.rectangles != null)
-            {
-                for (int i = 0; i < bitmapData.bitmapUpdateData.rectangles.Length; ++i)
-                {
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].destLeft);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].destTop);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].destRight);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].destBottom);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].width);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].height);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].bitsPerPixel);
-                    RdpbcgrEncoder.EncodeStructure(buffer, (ushort)bitmapData.bitmapUpdateData.rectangles[i].Flags);
-                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapData.bitmapUpdateData.rectangles[i].bitmapLength);
-                    if ((bitmapData.bitmapUpdateData.rectangles[i].Flags & TS_BITMAP_DATA_Flags_Values.NO_BITMAP_COMPRESSION_HDR)
-                        == TS_BITMAP_DATA_Flags_Values.None)
-                    {
-                        RdpbcgrEncoder.EncodeStructure(
-                            buffer, (ushort)bitmapData.bitmapUpdateData.rectangles[i].bitmapComprHdr.cbCompFirstRowSize);
-                        RdpbcgrEncoder.EncodeStructure(
-                            buffer, bitmapData.bitmapUpdateData.rectangles[i].bitmapComprHdr.cbCompMainBodySize);
-                        RdpbcgrEncoder.EncodeStructure(
-                            buffer, bitmapData.bitmapUpdateData.rectangles[i].bitmapComprHdr.cbScanWidth);
-                        RdpbcgrEncoder.EncodeStructure(
-                            buffer, bitmapData.bitmapUpdateData.rectangles[i].bitmapComprHdr.cbUncompressedSize);
-                    }
-                    if (bitmapData.bitmapUpdateData.rectangles[i].bitmapDataStream != null)
-                    {
-                        if ((bitmapData.bitmapUpdateData.rectangles[i].Flags & TS_BITMAP_DATA_Flags_Values.BITMAP_COMPRESSION)
-                            == TS_BITMAP_DATA_Flags_Values.BITMAP_COMPRESSION)
-                        {
-                            byte[] temp = serverSessionContext.Compress(bitmapData.compressionFlags, bitmapData.bitmapUpdateData.rectangles[i].bitmapDataStream);
-                            bitmapData.bitmapUpdateData.rectangles[i].bitmapDataStream = temp;
-                            RdpbcgrEncoder.EncodeBytes(buffer, bitmapData.bitmapUpdateData.rectangles[i].bitmapDataStream);
-                        }
-                        else
-                        {
-                            RdpbcgrEncoder.EncodeBytes(buffer, bitmapData.bitmapUpdateData.rectangles[i].bitmapDataStream);
-                        }
-                    }
-                }
-            }
-
-            if (bitmapData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(bitmapData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodePtrPos(TS_FP_POINTERPOSATTRIBUTE ptrData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.pointerPositionUpdateData.position.xPos);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.pointerPositionUpdateData.position.yPos);
-
-            if (ptrData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(ptrData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodeColorPtr(TS_FP_COLORPOINTERATTRIBUTE ptrData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.cacheIndex);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.hotSpot.xPos);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.hotSpot.yPos);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.width);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.height);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.lengthAndMask);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.lengthXorMask);
-            if (ptrData.colorPointerUpdateData.andMaskData != null)
-            {
-                RdpbcgrEncoder.EncodeBytes(buffer, ptrData.colorPointerUpdateData.andMaskData);
-            }
-            if (ptrData.colorPointerUpdateData.xorMaskData != null)
-            {
-                RdpbcgrEncoder.EncodeBytes(buffer, ptrData.colorPointerUpdateData.xorMaskData);
-            }
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.colorPointerUpdateData.pad);
-
-            if (ptrData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(ptrData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodeNewPtr(TS_FP_POINTERATTRIBUTE ptrData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.xorBpp);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.cacheIndex);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.hotSpot.xPos);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.hotSpot.yPos);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.width);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.height);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.lengthAndMask);
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.lengthXorMask);
-            if (ptrData.newPointerUpdateData.colorPtrAttr.xorMaskData != null)
-            {
-                RdpbcgrEncoder.EncodeBytes(buffer, ptrData.newPointerUpdateData.colorPtrAttr.xorMaskData);
-            }
-            if (ptrData.newPointerUpdateData.colorPtrAttr.andMaskData != null)
-            {
-                RdpbcgrEncoder.EncodeBytes(buffer, ptrData.newPointerUpdateData.colorPtrAttr.andMaskData);
-            }
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.newPointerUpdateData.colorPtrAttr.pad);
-
-            if (ptrData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(ptrData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodeCachedPtr(TS_FP_CACHEDPOINTERATTRIBUTE ptrData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, ptrData.cachedPointerUpdateData.cacheIndex);
-
-            if (ptrData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(ptrData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodeSurfCmds(TS_FP_SURFCMDS surfCmdsData)
-        {
-            List<byte> totalBuffer = new List<byte>();
-            List<byte> buffer = new List<byte>();
-
-            if (surfCmdsData.surfaceCommands != null)
-            {
-                for (int i = 0; i < surfCmdsData.surfaceCommands.Length; ++i)
-                {
-                    if (surfCmdsData.surfaceCommands[i].GetType() == typeof(TS_SURFCMD_SET_SURF_BITS))
-                    {
-                        RdpbcgrEncoder.EncodeBytes(
-                            buffer, EncodeSurfBits((TS_SURFCMD_SET_SURF_BITS)surfCmdsData.surfaceCommands[i]));
-                    }
-                    else if (surfCmdsData.surfaceCommands[i].GetType() == typeof(TS_SURFCMD_STREAM_SURF_BITS))
-                    {
-                        RdpbcgrEncoder.EncodeBytes(
-                            buffer, EncodeSurfStream((TS_SURFCMD_STREAM_SURF_BITS)surfCmdsData.surfaceCommands[i]));
-                    }
-                    else
-                    {
-                        RdpbcgrEncoder.EncodeBytes(
-                            buffer, EncodeSurfFrameMaker((TS_FRAME_MARKER)surfCmdsData.surfaceCommands[i]));
-                    }
-
-                }
-            }
-
-            if (surfCmdsData.compressionFlags != compressedType_Values.None)
-            {
-                RdpbcgrEncoder.EncodeBytes(
-                    totalBuffer, serverSessionContext.Compress(surfCmdsData.compressionFlags, buffer.ToArray()));
-            }
-            else
-            {
-                RdpbcgrEncoder.EncodeBytes(totalBuffer, buffer.ToArray());
-            }
-
-            return totalBuffer.ToArray();
-        }
-
-        private byte[] EncodeSurfBits(TS_SURFCMD_SET_SURF_BITS surfBitsData)
-        {
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)surfBitsData.cmdType);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destLeft);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destTop);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destRight);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destBottom);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.bpp);
-            RdpbcgrEncoder.EncodeStructure(buffer, (byte)surfBitsData.bitmapData.flags);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.reserved);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.codecID);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.width);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.height);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.bitmapDataLength);
-            if (surfBitsData.bitmapData.exBitmapDataHeader != null)
-            {
-                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.highUniqueId);
-                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.lowUniqueId);
-                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.tmMilliseconds);
-                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.tmSeconds);
-            }
-            if (surfBitsData.bitmapData.bitmapData != null)
-            {
-                RdpbcgrEncoder.EncodeBytes(buffer, surfBitsData.bitmapData.bitmapData);
-            }
-
-            return buffer.ToArray();
-        }
-
-        private byte[] EncodeSurfStream(TS_SURFCMD_STREAM_SURF_BITS surfStreamData)
-        {
-            List<byte> buffer = new List<byte>();
-
-            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)surfStreamData.cmdType);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destLeft);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destTop);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destRight);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destBottom);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bpp);
-            RdpbcgrEncoder.EncodeStructure(buffer, (byte)surfStreamData.bitmapData.flags);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.reserved);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.codecID);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.width);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.height);
-            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bitmapDataLength);
-            if (surfStreamData.bitmapData.exBitmapDataHeader != null)
-            {
-                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.highUniqueId);
-                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.lowUniqueId);
-                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.tmMilliseconds);
-                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.tmSeconds);
-            }
-            if (surfStreamData.bitmapData.bitmapData != null)
-            {
-                RdpbcgrEncoder.EncodeBytes(buffer, surfStreamData.bitmapData.bitmapData);
-            }
-
-            return buffer.ToArray();
-        }
-
-        private byte[] EncodeSurfFrameMaker(TS_FRAME_MARKER frameMakerData)
-        {
-            List<byte> buffer = new List<byte>();
-            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)frameMakerData.cmdType);
-            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)frameMakerData.frameAction);
-            RdpbcgrEncoder.EncodeStructure(buffer, frameMakerData.frameId);
-            return buffer.ToArray();
         }
     }
 
@@ -17201,7 +16776,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     //   file:///C:/ts_dev/TestSuites/MS-RDPBCGR/TestSuite/Src/TD/latest_XMLS_16may/RDPBCGR/
     //   _rfc_ms-rdpbcgr2_1_8_1_2_1.xml
     //  </remarks>
-    public partial class TS_FP_UPDATE
+    public abstract partial class TS_FP_UPDATE
     {
 
         /// <summary>
@@ -17231,6 +16806,98 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Optional and variable-length data specific to the update.
         /// </summary>
         public byte[] updateData;
+
+        /// <summary>
+        /// Fragmented update data before compression.
+        /// </summary>
+        public byte[] FragmentedUpdateData;
+
+        /// <summary>
+        /// Used to link to first in multiple fragmentation.
+        /// </summary>
+        public TS_FP_UPDATE_Fragmented First;
+
+        /// <summary>
+        /// Encode body.
+        /// </summary>
+        /// <returns>A byte array containing encoded body.</returns>
+        public abstract byte[] EncodeBody();
+
+        /// <summary>
+        /// Parse the whole PDU to bytes.
+        /// </summary>
+        /// <returns>A byte array containing the whole PDU.</returns>
+        public byte[] ToBytes()
+        {
+            var result = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(result, updateHeader);
+
+            if (updateHeader.compression == compression_Values.FASTPATH_OUTPUT_COMPRESSION_USED)
+            {
+                RdpbcgrEncoder.EncodeStructure(result, (byte)compressionFlags);
+            }
+
+            RdpbcgrEncoder.EncodeStructure(result, size);
+
+            RdpbcgrEncoder.EncodeBytes(result, updateData);
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Get the complete update data.
+        /// </summary>
+        /// <returns>A byte array containing the complete update data.</returns>
+        public virtual byte[] GetUpdateData()
+        {
+            if (First == null)
+            {
+                return FragmentedUpdateData;
+            }
+
+            var current = First;
+
+            IEnumerable<byte> result = new byte[] { };
+
+            while (current != null)
+            {
+                result = result.Concat(current.FragmentedUpdateData);
+
+                current = current.Next;
+            }
+
+            return result.ToArray();
+        }
+
+        /// <summary>
+        /// Assign updateData and size when data is not compressed or fragmented.
+        /// </summary>
+        public void AssignUpdateDataAndSize()
+        {
+            updateData = EncodeBody();
+
+            size = (ushort)updateData.Length;
+        }
+
+        /// <summary>
+        /// Clone fields from an existing TS_FP_UPDATE.
+        /// </summary>
+        /// <param name="update">A TS_FP_UPDATE instance to clone from.</param>
+        public void Clone(TS_FP_UPDATE update)
+        {
+            updateHeader = update.updateHeader;
+
+            compressionFlags = update.compressionFlags;
+
+            size = update.size;
+
+            updateData = update.updateData;
+
+            FragmentedUpdateData = update.FragmentedUpdateData;
+
+            First = update.First;
+        }
     }
 
     /// <summary>
@@ -17302,7 +16969,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  ).
         /// </summary>
         FASTPATH_UPDATETYPE_POINTER = 0xB,
-    }
+
+        /// <summary>
+        /// Indicates a Fast-Path Large Pointer Update.
+        /// </summary>
+        FASTPATH_UPDATETYPE_LARGE_POINTER = 0xC,    }
 
     /// <summary>
     /// The type of reserved.
@@ -17359,6 +17030,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  Indicates that the compressionFlags field is present.
         /// </summary>
         FASTPATH_OUTPUT_COMPRESSION_USED = 0x2,
+    }
+
+    /// <summary>
+    /// TS_FP_UPDATE which is not fragmented.
+    /// </summary>
+    public class TS_FP_UPDATE_Single : TS_FP_UPDATE
+    {
+        /// <summary>
+        /// Get update data from fragmentation.
+        /// </summary>
+        /// <returns>The update data.</returns>
+        public override byte[] GetUpdateData()
+        {
+            return FragmentedUpdateData;
+        }
+
+        public override byte[] EncodeBody()
+        {
+            throw new InvalidCastException();
+        }
+    }
+
+    /// <summary>
+    /// TS_FP_UPDATE which is fragmented.
+    /// </summary>
+    public class TS_FP_UPDATE_Fragmented : TS_FP_UPDATE
+    {
+        /// <summary>
+        /// Used to link up multiple fragmentation.
+        /// </summary>
+        public TS_FP_UPDATE_Fragmented Next;
+
+        /// <summary>
+        /// Get update data from fragmentation.
+        /// </summary>
+        /// <returns>The update data.</returns>
+        public override byte[] GetUpdateData()
+        {
+            throw new InvalidOperationException("Unexpected invoke.");
+        }
+
+        public override byte[] EncodeBody()
+        {
+            return FragmentedUpdateData;
+        }
     }
 
     /// <summary>
@@ -17656,6 +17372,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  to represent this information.
         /// </summary>
         public TS_UPDATE_PALETTE_DATA paletteUpdateData;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)paletteUpdateData.updateType);
+            RdpbcgrEncoder.EncodeStructure(buffer, paletteUpdateData.pad2Octets);
+            RdpbcgrEncoder.EncodeStructure(buffer, paletteUpdateData.numberColors);
+            if (paletteUpdateData.paletteEntries != null)
+            {
+                for (int i = 0; i < paletteUpdateData.paletteEntries.Length; ++i)
+                {
+                    RdpbcgrEncoder.EncodeStructure(buffer, paletteUpdateData.paletteEntries[i].red);
+                    RdpbcgrEncoder.EncodeStructure(buffer, paletteUpdateData.paletteEntries[i].green);
+                    RdpbcgrEncoder.EncodeStructure(buffer, paletteUpdateData.paletteEntries[i].blue);
+                }
+            }
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -17674,6 +17409,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  to represent this information.
         /// </summary>
         public TS_UPDATE_BITMAP_DATA bitmapUpdateData;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)bitmapUpdateData.updateType);
+            RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.numberRectangles);
+            if (bitmapUpdateData.rectangles != null)
+            {
+                for (int i = 0; i < bitmapUpdateData.rectangles.Length; ++i)
+                {
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].destLeft);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].destTop);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].destRight);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].destBottom);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].width);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].height);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].bitsPerPixel);
+                    RdpbcgrEncoder.EncodeStructure(buffer, (ushort)bitmapUpdateData.rectangles[i].Flags);
+                    RdpbcgrEncoder.EncodeStructure(buffer, bitmapUpdateData.rectangles[i].bitmapLength);
+                    if ((bitmapUpdateData.rectangles[i].Flags & TS_BITMAP_DATA_Flags_Values.NO_BITMAP_COMPRESSION_HDR)
+                        == TS_BITMAP_DATA_Flags_Values.None)
+                    {
+                        RdpbcgrEncoder.EncodeStructure(
+                            buffer, (ushort)bitmapUpdateData.rectangles[i].bitmapComprHdr.cbCompFirstRowSize);
+                        RdpbcgrEncoder.EncodeStructure(
+                            buffer, bitmapUpdateData.rectangles[i].bitmapComprHdr.cbCompMainBodySize);
+                        RdpbcgrEncoder.EncodeStructure(
+                            buffer, bitmapUpdateData.rectangles[i].bitmapComprHdr.cbScanWidth);
+                        RdpbcgrEncoder.EncodeStructure(
+                            buffer, bitmapUpdateData.rectangles[i].bitmapComprHdr.cbUncompressedSize);
+                    }
+                    if (bitmapUpdateData.rectangles[i].bitmapDataStream != null)
+                    {
+                        RdpbcgrEncoder.EncodeBytes(buffer, bitmapUpdateData.rectangles[i].bitmapDataStream);
+                    }
+                }
+            }
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -17686,6 +17462,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     //  </remarks>
     public partial class TS_FP_UPDATE_SYNCHRONIZE : TS_FP_UPDATE
     {
+        public override byte[] EncodeBody()
+        {
+            return new byte[] { };
+        }
     }
 
     /// <summary>
@@ -17706,6 +17486,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  represent this information.
         /// </summary>
         public TS_POINTERPOSATTRIBUTE pointerPositionUpdateData;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, pointerPositionUpdateData.position.xPos);
+            RdpbcgrEncoder.EncodeStructure(buffer, pointerPositionUpdateData.position.yPos);
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -17720,6 +17510,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     //  </remarks>
     public partial class TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE : TS_FP_UPDATE
     {
+        public override byte[] EncodeBody()
+        {
+            return new byte[] { };
+        }
     }
 
     /// <summary>
@@ -17734,6 +17528,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     //  </remarks>
     public partial class TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE : TS_FP_UPDATE
     {
+        public override byte[] EncodeBody()
+        {
+            return new byte[] { };
+        }
     }
 
     /// <summary>
@@ -17752,6 +17550,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  to represent this information.
         /// </summary>
         public TS_COLORPOINTERATTRIBUTE colorPointerUpdateData;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.cacheIndex);
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.hotSpot.xPos);
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.hotSpot.yPos);
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.width);
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.height);
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.lengthAndMask);
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.lengthXorMask);
+            if (colorPointerUpdateData.andMaskData != null)
+            {
+                RdpbcgrEncoder.EncodeBytes(buffer, colorPointerUpdateData.andMaskData);
+            }
+            if (colorPointerUpdateData.xorMaskData != null)
+            {
+                RdpbcgrEncoder.EncodeBytes(buffer, colorPointerUpdateData.xorMaskData);
+            }
+            RdpbcgrEncoder.EncodeStructure(buffer, colorPointerUpdateData.pad);
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -17770,6 +17592,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  Update structure to represent this information.
         /// </summary>
         public TS_POINTERATTRIBUTE newPointerUpdateData;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.xorBpp);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.cacheIndex);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.hotSpot.xPos);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.hotSpot.yPos);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.width);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.height);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.lengthAndMask);
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.lengthXorMask);
+            if (newPointerUpdateData.colorPtrAttr.xorMaskData != null)
+            {
+                RdpbcgrEncoder.EncodeBytes(buffer, newPointerUpdateData.colorPtrAttr.xorMaskData);
+            }
+            if (newPointerUpdateData.colorPtrAttr.andMaskData != null)
+            {
+                RdpbcgrEncoder.EncodeBytes(buffer, newPointerUpdateData.colorPtrAttr.andMaskData);
+            }
+            RdpbcgrEncoder.EncodeStructure(buffer, newPointerUpdateData.colorPtrAttr.pad);
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -17789,6 +17636,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  to represent this information.
         /// </summary>
         public TS_CACHEDPOINTERATTRIBUTE cachedPointerUpdateData;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, cachedPointerUpdateData.cacheIndex);
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -17803,6 +17659,199 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// a server to a client.
         /// </summary>
         public TS_SURFCMD[] surfaceCommands;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            if (surfaceCommands != null)
+            {
+                for (int i = 0; i < surfaceCommands.Length; ++i)
+                {
+                    if (surfaceCommands[i].GetType() == typeof(TS_SURFCMD_SET_SURF_BITS))
+                    {
+                        RdpbcgrEncoder.EncodeBytes(
+                            buffer, EncodeSurfBits((TS_SURFCMD_SET_SURF_BITS)surfaceCommands[i]));
+                    }
+                    else if (surfaceCommands[i].GetType() == typeof(TS_SURFCMD_STREAM_SURF_BITS))
+                    {
+                        RdpbcgrEncoder.EncodeBytes(
+                            buffer, EncodeSurfStream((TS_SURFCMD_STREAM_SURF_BITS)surfaceCommands[i]));
+                    }
+                    else
+                    {
+                        RdpbcgrEncoder.EncodeBytes(
+                            buffer, EncodeSurfFrameMaker((TS_FRAME_MARKER)surfaceCommands[i]));
+                    }
+                }
+            }
+
+            return buffer.ToArray();
+        }
+
+        private byte[] EncodeSurfBits(TS_SURFCMD_SET_SURF_BITS surfBitsData)
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)surfBitsData.cmdType);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destLeft);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destTop);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destRight);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.destBottom);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.bpp);
+            RdpbcgrEncoder.EncodeStructure(buffer, (byte)surfBitsData.bitmapData.flags);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.reserved);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.codecID);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.width);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.height);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.bitmapDataLength);
+            if (surfBitsData.bitmapData.exBitmapDataHeader != null)
+            {
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.highUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.lowUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.tmMilliseconds);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfBitsData.bitmapData.exBitmapDataHeader.tmSeconds);
+            }
+            if (surfBitsData.bitmapData.bitmapData != null)
+            {
+                RdpbcgrEncoder.EncodeBytes(buffer, surfBitsData.bitmapData.bitmapData);
+            }
+
+            return buffer.ToArray();
+        }
+
+        private byte[] EncodeSurfStream(TS_SURFCMD_STREAM_SURF_BITS surfStreamData)
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)surfStreamData.cmdType);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destLeft);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destTop);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destRight);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.destBottom);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bpp);
+            RdpbcgrEncoder.EncodeStructure(buffer, (byte)surfStreamData.bitmapData.flags);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.reserved);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.codecID);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.width);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.height);
+            RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.bitmapDataLength);
+            if (surfStreamData.bitmapData.exBitmapDataHeader != null)
+            {
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.highUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.lowUniqueId);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.tmMilliseconds);
+                RdpbcgrEncoder.EncodeStructure(buffer, surfStreamData.bitmapData.exBitmapDataHeader.tmSeconds);
+            }
+            if (surfStreamData.bitmapData.bitmapData != null)
+            {
+                RdpbcgrEncoder.EncodeBytes(buffer, surfStreamData.bitmapData.bitmapData);
+            }
+
+            return buffer.ToArray();
+        }
+
+        private byte[] EncodeSurfFrameMaker(TS_FRAME_MARKER frameMakerData)
+        {
+            List<byte> buffer = new List<byte>();
+            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)frameMakerData.cmdType);
+            RdpbcgrEncoder.EncodeStructure(buffer, (ushort)frameMakerData.frameAction);
+            RdpbcgrEncoder.EncodeStructure(buffer, frameMakerData.frameId);
+            return buffer.ToArray();
+        }
+    }
+
+    /// <summary>
+    /// The TS_FP_LARGEPOINTERATTRIBUTE structure is used to transport mouse pointer shapes larger than 96x96 pixels in size.
+    /// </summary>
+    public class TS_FP_LARGEPOINTERATTRIBUTE : TS_FP_UPDATE
+    {
+        /// <summary>
+        /// A 16-bit, unsigned integer. The color depth in bits-per-pixel of the XOR mask contained in the xorMaskData field.
+        /// </summary>
+        public UInt16 xorBpp;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer. The zero-based cache entry in the pointer cache in which to store the pointer image.
+        /// The number of cache entries is specified using the Pointer Capability Set.
+        /// </summary>
+        public UInt16 cacheIndex;
+
+        /// <summary>
+        /// A Point structure containing the x-coordinates and y-coordinates of the pointer hotspot.
+        /// </summary>
+        public TS_POINT16 hotSpot;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer. The width of the pointer in pixels. The maximum allowed pointer width is 384 pixels.
+        /// </summary>
+        public UInt16 width;
+
+        /// <summary>
+        /// A 16-bit, unsigned integer. The height of the pointer in pixels. The maximum allowed pointer height is 384 pixels.
+        /// </summary>
+        public UInt16 height;
+
+        /// <summary>
+        /// A 32-bit, unsigned integer. The size in bytes of the andMaskData field.
+        /// </summary>
+        public UInt32 lengthAndMask;
+
+        /// <summary>
+        /// A 32-bit, unsigned integer. The size in bytes of the xorMaskData field.
+        /// </summary>
+        public UInt32 lengthXorMask;
+
+        /// <summary>
+        /// A variable-length array of bytes. Contains the 24-bpp, bottom-up XOR mask scan-line data.
+        /// The XOR mask is padded to a 2-byte boundary for each encoded scan-line. 
+        /// For example, if a 3x3 pixel cursor is being sent, then each scan-line will consume 10 bytes (3 pixels per scan-line multiplied by 3 bytes per pixel, rounded up to the next even number of bytes).
+        /// </summary>
+        public byte[] xorMaskData;
+
+        /// <summary>
+        /// A variable-length array of bytes. Contains the 1-bpp, bottom-up AND mask scan-line data.
+        /// The AND mask is padded to a 2-byte boundary for each encoded scan-line.
+        /// For example, if a 7x7 pixel cursor is being sent, then each scan-line will consume 2 bytes (7 pixels per scan-line multiplied by 1 byte per pixel, rounded up to the next even number of bytes).
+        /// </summary>
+        public byte[] andMaskData;
+
+        /// <summary>
+        /// An optional 8-bit, unsigned integer used for padding. Values in this field MUST be ignored.
+        /// </summary>
+        public byte? pad;
+
+        public override byte[] EncodeBody()
+        {
+            List<byte> buffer = new List<byte>();
+
+            RdpbcgrEncoder.EncodeStructure(buffer, xorBpp);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, cacheIndex);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, hotSpot.xPos);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, hotSpot.yPos);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, width);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, height);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, lengthAndMask);
+
+            RdpbcgrEncoder.EncodeStructure(buffer, lengthXorMask);
+
+            RdpbcgrEncoder.EncodeBytes(buffer, xorMaskData);
+
+            RdpbcgrEncoder.EncodeBytes(buffer, andMaskData);
+
+            if (pad != null)
+            {
+                RdpbcgrEncoder.EncodeStructure(buffer, pad);
+            }
+
+            return buffer.ToArray();
+        }
     }
 
     /// <summary>
@@ -19199,6 +19248,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  96 pixel by 96 pixel mouse pointer shapes are supported.
         /// </summary>
         LARGE_POINTER_FLAG_96x96 = 0x00000001,
+
+        /// <summary>
+        /// Mouse pointer shapes of up to 384x384 pixels in size, and the Fast-Path Large Pointer Update, are supported.
+        /// </summary>
+        LARGE_POINTER_FLAG_384x384 = 0x00000002,
     }
 
     /// <summary>
@@ -21275,6 +21329,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  see [MS-RDPEGDI] section 2.2.2.3
         /// </summary>
         public byte[] updateOrders;
+
+        public override byte[] EncodeBody()
+        {
+            var result = new List<byte>();
+
+            RdpbcgrEncoder.EncodeBytes(result, updateOrders);
+
+            return result.ToArray();
+        }
     }
 
     #region Temporary Enum need Future Redefinition

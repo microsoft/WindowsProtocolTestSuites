@@ -201,12 +201,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public void SendCompressedData(uint channelId, DynamicVC_TransportType transportType)
         {
             // Generate the data based on TD examples
-            byte[] data = new byte[] { 0x64, 0x03, 0x7b, 0x0c, 0xe0, 0x26, 0x38, 0xc4, 0x3f, 0xf4, 0x74, 0x01 };
+            byte[] data = new byte[] { 0xe0, 0x26, 0x38, 0xc4, 0x3f, 0xf4, 0x74, 0x01 };
 
-            SendFirstCompressedDataPdu(channelId, data, transportType);
+            SendFirstCompressedDataPdu(channelId, 0x0c7b, data, transportType);
 
             // Generate the data based on TD examples
-            data = new byte[] { 0x70, 0x03, 0xe0, 0x26, 0x88, 0x7f, 0xe8, 0xf4, 0x02 };
+            data = new byte[] { 0xe0, 0x26, 0x88, 0x7f, 0xe8, 0xf4, 0x02 };
 
             SendDataCompressedReqPdu(channelId, data, transportType);
         }
@@ -527,7 +527,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             Send(pdu, transportType);
         }
 
-        private void SendFirstCompressedDataPdu(uint channelId, byte[] data, DynamicVC_TransportType transport)
+        private void SendFirstCompressedDataPdu(uint channelId, uint uncomprressedDataLength, byte[] rawChannelData,  DynamicVC_TransportType transport)
+        {
+            //Assume that only the raw channel data of a single DataFirstCompressedDvcPdu are passed.
+            DataFirstCompressedDvcPdu firstCompressedPdu = new DataFirstCompressedDvcPdu(channelId, uncomprressedDataLength, rawChannelData);
+            firstCompressedPdu.GetNonDataSize();
+            Send(firstCompressedPdu, transport);
+        }
+
+        private void SendFirstCompressedDataPdu(uint channelId, byte[] data, DynamicVC_TransportType transport, uint? dataLength = null)
         {
             //According to section 3.1.5.1.4 of MS-RDPEDYC,
             //If the total uncompressed length of the message exceeds 1,590 bytes, 

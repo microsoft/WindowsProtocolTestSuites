@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
@@ -134,8 +135,8 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="mailslot">All the mailslots will be created on SMB server.</param>
         /// <param name="isCreatePipeStatus">Indicate the status of Create named pipe and mailslot operation.</param>
         public void CreatePipeAndMailslot(
-            Microsoft.Modeling.Set<string> pipes,
-            Microsoft.Modeling.Set<string> mailslot,
+            List<string> pipes,
+            List<string> mailslot,
             out bool isCreatePipeStatus)
         {
             isCreatePipeStatus = true;

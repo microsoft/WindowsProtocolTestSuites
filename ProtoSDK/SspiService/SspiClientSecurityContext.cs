@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 
@@ -241,8 +242,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                         }
                         return;
                     }
-                    //case SecurityPackageType.Negotiate:
-                    //    throw new NotImplementedException();
+                case SecurityPackageType.Negotiate:
+                    {
+                        if (accountCredential is AccountCredential)
+                        {
+                            if (this.securityContextAttributes == ClientSecurityContextAttribute.None)
+                            {
+                                this.securityContextAttributes = ClientSecurityContextAttribute.MutualAuth; // MS-SPNG 3.3.3 The client MUST request Mutual Authentication services
+                            }
+
+                            var credential = accountCredential as AccountCredential;
+                            NlmpClientSecurityConfig nlmpSecurityConfig = new NlmpClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
+                            KerberosClientSecurityConfig kerberosSecurityConfig = new KerberosClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
+
+                            this.Context = new SpngClientSecurityContext(this.securityContextAttributes, nlmpSecurityConfig, kerberosSecurityConfig);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException("Negotiate SSP only support AccountCredential, Please provide an AccountCredential and try again.");
+                        }
+                        return;
+                    }
                     //case SecurityPackageType.Schannel:
                     //    throw new NotImplementedException();
                     //case SecurityPackageType.CredSsp:

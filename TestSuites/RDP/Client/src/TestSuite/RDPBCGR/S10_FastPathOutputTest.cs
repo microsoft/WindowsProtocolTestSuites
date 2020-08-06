@@ -1,12 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -129,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Sending TS_FP_POINTERPOSATTRIBUTE to the client to set pointer to ({0}, {1}).", x, PointerPos.yPos);
                 this.rdpbcgrAdapter.FPPointerPosition(x, PointerPos.yPos);
-            }            
+            }
 
             #endregion
         }
@@ -324,7 +321,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #endregion
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
@@ -500,7 +497,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending TS_FP_POINTERPOSATTRIBUTE to the client to set pointer to ({0}, {1}).", PointerPos.xPos, PointerPos.yPos);
             this.rdpbcgrAdapter.FPPointerPosition(PointerPos.xPos, PointerPos.yPos);
-            
+
             #endregion
         }
 
@@ -678,7 +675,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #endregion
         }
-           
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.0")]
@@ -1239,6 +1236,154 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending TS_FP_CACHEDPOINTERATTRIBUTE to the client to show the pointer from cache index 1, the pointer should be the second pointer.");
             this.rdpbcgrAdapter.FPCachedPointer(1);
             #endregion
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("RDP10.7")]
+        [TestCategory("RDPBCGR")]
+        [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of small size.")]
+        public void S10_FastPathOutput_PositiveTest_LargePointer_Small()
+        {
+            #region Test Description
+            /*
+            This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of small size.
+            
+            Test Execution Steps:  
+            1.	Trigger SUT to initiate and complete a RDP connection. 
+            2.	After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE_LOGON (0x00000000), INFOTYPE_LOGON_LONG (0x00000001), or INFOTYPE_LOGON_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. 
+            3.	Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of small size to the client to set pointer shape.
+            4.	Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.
+            */
+            #endregion
+
+            S10_FastPathOutput_PositiveTest_LargePointer_Varaint(LargePointerSize.Small);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("RDP10.7")]
+        [TestCategory("RDPBCGR")]
+        [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of medium size.")]
+        public void S10_FastPathOutput_PositiveTest_LargePointer_Medium()
+        {
+            #region Test Description
+            /*
+            This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of medium size.
+            
+            Test Execution Steps:  
+            1.	Trigger SUT to initiate and complete a RDP connection. 
+            2.	After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE_LOGON (0x00000000), INFOTYPE_LOGON_LONG (0x00000001), or INFOTYPE_LOGON_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. 
+            3.	Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of medium size to the client to set pointer shape.
+            4.	Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.
+            */
+            #endregion
+
+            S10_FastPathOutput_PositiveTest_LargePointer_Varaint(LargePointerSize.Medium);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("RDP10.7")]
+        [TestCategory("RDPBCGR")]
+        [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of large size.")]
+        public void S10_FastPathOutput_PositiveTest_LargePointer_Large()
+        {
+            #region Test Description
+            /*
+            This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of large size.
+            
+            Test Execution Steps:  
+            1.	Trigger SUT to initiate and complete a RDP connection. 
+            2.	After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE_LOGON (0x00000000), INFOTYPE_LOGON_LONG (0x00000001), or INFOTYPE_LOGON_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. 
+            3.	Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of large size to the client to set pointer shape.
+            4.	Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.
+            */
+            #endregion
+
+            S10_FastPathOutput_PositiveTest_LargePointer_Varaint(LargePointerSize.Large);
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("RDP10.7")]
+        [TestCategory("RDPBCGR")]
+        [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of extra-large size.")]
+        public void S10_FastPathOutput_PositiveTest_LargePointer_ExtraLarge()
+        {
+            #region Test Description
+            /*
+            This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of extra-large size.
+            
+            Test Execution Steps:  
+            1.	Trigger SUT to initiate and complete a RDP connection. 
+            2.	After the connection sequence has been finished, Test Suite sends a Save Session Info PDU with a notification type of the INFOTYPE_LOGON (0x00000000), INFOTYPE_LOGON_LONG (0x00000001), or INFOTYPE_LOGON_PLAINNOTIFY (0x00000002) to notify the SUT that the user has logged on. 
+            3.	Test Suite sends a Fast-Path Large Pointer Update (TS_FP_LARGEPOINTERATTRIBUTE) of extra-large size to the client to set pointer shape.
+            4.	Test Suite sends a Fast-Path Pointer Position Update (TS_FP_POINTERPOSATTRIBUTE) to the client to show the pointer on a specific position.
+            */
+            #endregion
+
+            S10_FastPathOutput_PositiveTest_LargePointer_Varaint(LargePointerSize.ExtraLarge);
+        }
+
+        private void S10_FastPathOutput_PositiveTest_LargePointer_Varaint(LargePointerSize largePointerSize)
+        {
+            //Start RDP listening.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
+            this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
+
+            #region Trigger client to connect
+            //Trigger client to connect.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
+            triggerClientRDPConnect(transportProtocol);
+            #endregion
+
+            //Waiting for the transport level connection request.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting the transport layer connection request.");
+            this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal);
+
+            //Set Server Capability with Bitmap Host Cache supported.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Setting Server Capability. Virtual Channel compression is not supported.");
+            this.rdpbcgrAdapter.SetServerCapability(true, true, true, true, true, true, true, true, true, true,
+                true, MaxMultiFragmentRequestSizeSupported, // support multi-fragment
+                true,                                       // support large pointer
+                true, 1,
+                true, CmdFlags_Values.SURFCMDS_FRAMEMARKER | CmdFlags_Values.SURFCMDS_SETSURFACEBITS | CmdFlags_Values.SURFCMDS_STREAMSURFACEBITS,
+                true, true, true);
+
+            // Verify the confirm active PDU.
+            rdpbcgrAdapter.ConfirmActiveRequest += confirmActivePdu =>
+            {
+                var largePointerCapSets = confirmActivePdu.confirmActivePduData.capabilitySets.Where(cap => cap.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER);
+
+                TestSite.Assume.AreEqual(1, largePointerCapSets.Count(), "There should be one large pointer capability set in confirm active PDU if SUT supports extra large pointer.");
+
+                var largePointerCapSet = (TS_LARGE_POINTER_CAPABILITYSET)largePointerCapSets.First();
+
+                bool isLargePointerCapabilitySupported = largePointerCapSet.largePointerSupportFlags.HasFlag(largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96 | largePointerSupportFlags_Values.LARGE_POINTER_FLAG_384x384);
+
+                TestSite.Assume.IsTrue(isLargePointerCapabilitySupported, "SUT should set LARGE_POINTER_FLAG_96x96 and LARGE_POINTER_FLAG_384x384 in largePointerSupportFlags if it supports extra large pointer.");
+
+                var multiFragmentCapSets = confirmActivePdu.confirmActivePduData.capabilitySets.Where(cap => cap.GetCapabilityType() == capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE);
+
+                TestSite.Assume.AreEqual(1, multiFragmentCapSets.Count(), "There should be one multi-fragment capability set in confirm active PDU if SUT supports extra large pointer.");
+            };
+
+            //Waiting for the RDP connection sequence.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
+            this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
+            this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
+
+            this.Site.Assume.IsTrue(this.rdpbcgrAdapter.SessionContext.IsFastPathOutputSupported, "Capability check failed, this test case need RDP client to support fast-path output.");
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending TS_LARGE_POINTER_CAPABILITYSET to the client.");
+            ushort size = (ushort)largePointerSize;
+            this.rdpbcgrAdapter.FPLargePointer(0, (ushort)(size / 2), (ushort)(size / 2), size, size);
+
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending TS_FP_POINTERPOSATTRIBUTE to the client to set pointer to ({0}, {1}).", PointerPos.xPos, PointerPos.yPos);
+            this.rdpbcgrAdapter.FPPointerPosition(PointerPos.xPos, PointerPos.yPos);
         }
     }
 }

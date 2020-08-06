@@ -6,11 +6,10 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.4.2965.0")]
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
+
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TestScenarioS9 : PtfTestClassBase {
         
@@ -50,11 +49,17 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ILsadManagedAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter))));
-            this.Manager.Subscribe(EnumerateAccountsInfo, this.ILsadManagedAdapterInstance);
+            this.ILsadManagedAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.ILsadManagedAdapter))));
+            this.ILsadManagedAdapterInstance.EnumerateAccounts += ILsadManagedAdapterInstance_EnumerateAccounts;
         }
-        
+
+        private void ILsadManagedAdapterInstance_EnumerateAccounts(int handleInput, enumerateResponse actionResponse)
+        {
+            this.Manager.AddEvent(EnumerateAccountsInfo, this.ILsadManagedAdapterInstance, new object[] { handleInput, actionResponse });
+        }
+
         protected override void TestCleanup() {
+            this.ILsadManagedAdapterInstance.EnumerateAccounts -= ILsadManagedAdapterInstance_EnumerateAccounts;
             base.TestCleanup();
             this.CleanupTestManager();
         }

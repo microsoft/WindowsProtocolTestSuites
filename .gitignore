@@ -59,6 +59,7 @@ drop/
 # Generated files
 ProtocolTestManager/Kernel/Microsoft.Protocols.TestManager.Kernel.XML
 ProtocolTestManager/PropertyValueDetector/Microsoft.Protocols.TestManager.Detector.XML
+TestSuites/ADFamily/src/Deploy/WINV1803_TD_FILES.wxs
 TestSuites/ADFamily/src/Deploy/CommonBatch.wxs
 TestSuites/ADFamily/src/Deploy/WINBLUE_TD_FILES.wxs
 TestSuites/ADFamily/src/Deploy/WIN8_TD_FILES.wxs

@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 
 namespace Microsoft.Protocol.TestSuites.Smb
@@ -170,7 +170,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         bool isSignatureRequired,
         bool isSignatureEnabled,
         int dialectIndex,
-        [Domain("serverCapabilities")] Microsoft.Modeling.Set<Capabilities> serverCapabilities,
+        List<Capabilities> serverCapabilities,
         MessageStatus messageStatus);
 
     /// <summary>
@@ -201,7 +201,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         bool isSignatureRequired,
         bool isSignatureEnabled,
         int dialectIndex,
-        [Domain("serverCapabilitiesForNonextendedSecurity")] Microsoft.Modeling.Set<Capabilities> serverCapabilities,
+        List<Capabilities> serverCapabilities,
         MessageStatus messageStatus);
 
     /// <summary>
@@ -330,7 +330,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         int treeId,
         int fid,
         bool isSigned,
-        [Domain("ActionTaken")] Microsoft.Modeling.Set<CreateAction> createAction,
+        List<CreateAction> createAction,
         bool isFileIdZero,
         bool isVolumeGuidZero,
         bool isDirectoryZero,
@@ -518,7 +518,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             bool isSupportExtSecurity,
             SignState clientSignState,
-            Sequence<Dialect> dialectName);
+            List<Dialect> dialectName);
 
         /// <summary>
         /// Session setup request.
@@ -549,7 +549,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("clientCapabilities")] Microsoft.Modeling.Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2);
@@ -583,7 +583,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("clientCapabilitiesForNonextendedSecurity")] Microsoft.Modeling.Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2);
@@ -614,7 +614,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("clientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2);
@@ -710,10 +710,10 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int messageId,
             int sessionId,
             int treeId,
-            [Domain("DesiredAccess")] int desiredAccess,
+            int desiredAccess,
             CreateDisposition createDisposition,
-            [Domain("ImpersonationLevel")] int impersonationLevel,
-            [Domain("FileDomain")] string name,
+            int impersonationLevel,
+            string name,
             ShareType shareType,
             bool isSigned,
             bool isOpenByFileId,
@@ -850,7 +850,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
             int sessionId,
             int securitySignature,
             bool isRequireSign,
-            [Domain("clientCapabilities")] Set<Capabilities> capabilities,
+            List<Capabilities> capabilities,
             bool isSendBufferSizeExceedMaxBufferSize,
             bool isWriteBufferSizeExceedMaxBufferSize,
             bool flag2,

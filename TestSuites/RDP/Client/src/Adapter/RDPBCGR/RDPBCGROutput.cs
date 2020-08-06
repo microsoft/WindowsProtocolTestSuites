@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System;
 using System.Runtime.InteropServices;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return bitmap;
         }
 
-        public static TS_FP_UPDATE_PDU CreateFPUpdatePDU(RdpbcgrServerSessionContext context, int updates)
+        public static TS_FP_UPDATE_PDU CreateFPUpdatePDU(RdpbcgrServerSessionContext context, TS_FP_UPDATE[] updates)
         {
             TS_FP_UPDATE_PDU fpOutput = new TS_FP_UPDATE_PDU(context);
 
@@ -43,8 +43,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             fpOutput.length1 = 0;
             fpOutput.length2 = 0;
 
-            if (updates != 0)
-                fpOutput.fpOutputUpdates = new TS_FP_UPDATE[updates];
+            if (updates != null)
+            {
+                fpOutput.fpOutputUpdates = updates;
+            }
 
             return fpOutput;
         }
@@ -77,11 +79,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bitmap.bitmapUpdateData.rectangles = new TS_BITMAP_DATA[1];
             bitmap.bitmapUpdateData.rectangles[0] = data;
 
-            bitmap.size = (ushort)(22 + bitmap.bitmapUpdateData.rectangles[0].bitmapLength);
-            if (bitmap.bitmapUpdateData.rectangles[0].Flags != TS_BITMAP_DATA_Flags_Values.NO_BITMAP_COMPRESSION_HDR)
-            {
-                bitmap.size += (ushort)Marshal.SizeOf(bitmap.bitmapUpdateData.rectangles[0].bitmapComprHdr);
-            }
+            bitmap.AssignUpdateDataAndSize();
 
             return bitmap;
         }
@@ -101,12 +99,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bdata = CreateBitmapData(left, top, width, height);
             bitmap.bitmapUpdateData.rectangles[0] = bdata;
 
-            //calculate the bitmap.size, which is the size of TS_UPDATE_BITMAP_DATA.bitmapUpdateData.
-            bitmap.size = (ushort)(22 + bitmap.bitmapUpdateData.rectangles[0].bitmapLength);
-            if (bitmap.bitmapUpdateData.rectangles[0].Flags != TS_BITMAP_DATA_Flags_Values.NO_BITMAP_COMPRESSION_HDR)
-            {
-                bitmap.size += (ushort)Marshal.SizeOf(bitmap.bitmapUpdateData.rectangles[0].bitmapComprHdr);
-            }
+            bitmap.AssignUpdateDataAndSize();
 
             return bitmap;
         }
@@ -120,7 +113,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             fpPos.compressionFlags = compressedType_Values.None;
             fpPos.pointerPositionUpdateData.position.xPos = (ushort)x;
             fpPos.pointerPositionUpdateData.position.yPos = (ushort)y;
-            fpPos.size = 4;
+
+            fpPos.AssignUpdateDataAndSize();
 
             return fpPos;
         }
@@ -131,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             fpSysPointer.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_PTR_NULL);
 
-            fpSysPointer.size = 0;
+            fpSysPointer.AssignUpdateDataAndSize();
 
             return fpSysPointer;
         }
@@ -142,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             fpSysPointer.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_PTR_DEFAULT);
 
-            fpSysPointer.size = 0;
+            fpSysPointer.AssignUpdateDataAndSize();
 
             return fpSysPointer;
         }
@@ -198,7 +192,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             fpPtr.newPointerUpdateData.colorPtrAttr.pad = 0;
-            fpPtr.size = (ushort)(17 + fpPtr.newPointerUpdateData.colorPtrAttr.lengthXorMask + fpPtr.newPointerUpdateData.colorPtrAttr.lengthAndMask);
+
+            fpPtr.AssignUpdateDataAndSize();
 
             return fpPtr;
         }
@@ -243,7 +238,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
 
             fpColorPtr.colorPointerUpdateData.pad = 0;
-            fpColorPtr.size = (ushort)(15 + fpColorPtr.colorPointerUpdateData.lengthXorMask + fpColorPtr.colorPointerUpdateData.lengthAndMask);
+
+            fpColorPtr.AssignUpdateDataAndSize();
 
             return fpColorPtr;
         }
@@ -255,7 +251,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             fpColorPtr.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_COLOR);
 
-            fpColorPtr.size = 0;
             fpColorPtr.colorPointerUpdateData.cacheIndex = 0;
             fpColorPtr.colorPointerUpdateData.hotSpot.xPos = 5;
             fpColorPtr.colorPointerUpdateData.hotSpot.yPos = 5;
@@ -270,7 +265,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             for (int i = 0; i < fpColorPtr.colorPointerUpdateData.lengthAndMask; i++)
                 fpColorPtr.colorPointerUpdateData.andMaskData[i] = 0x1f;
             fpColorPtr.colorPointerUpdateData.pad = 0;
-            fpColorPtr.size = (ushort)(15 + fpColorPtr.colorPointerUpdateData.lengthXorMask + fpColorPtr.colorPointerUpdateData.lengthAndMask);
+
+            fpColorPtr.AssignUpdateDataAndSize();
 
             return fpColorPtr;
         }
@@ -281,8 +277,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             cachePtr.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_CACHED);
 
-            cachePtr.size = 2;
             cachePtr.cachedPointerUpdateData.cacheIndex = cacheIndex;
+
+            cachePtr.AssignUpdateDataAndSize();
 
             return cachePtr;
         }
@@ -295,12 +292,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             surfCmds.compressionFlags = compressedType_Values.None;
             surfCmds.surfaceCommands = new TS_SURFCMD[1];
             surfCmds.surfaceCommands[0] = setSurfBits;
-            int subLength = 22;
-            if (setSurfBits.bitmapData.exBitmapDataHeader != null)
-            {
-                subLength += 24;
-            }
-            surfCmds.size = (ushort)(subLength + setSurfBits.bitmapData.bitmapDataLength);
+
+            surfCmds.AssignUpdateDataAndSize();
 
             return surfCmds;
         }
@@ -326,5 +319,55 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             return setSurfBits;
         }
 
+        public static TS_FP_LARGEPOINTERATTRIBUTE CreateFPLargePointerAttribute(ushort cacheIndex, ushort hotSpotX, ushort hotSpotY, ushort width, ushort height, byte[] xorMaskData = null, byte[] andMaskData = null)
+        {
+            var fpLargePointerAttribute = new TS_FP_LARGEPOINTERATTRIBUTE();
+
+            fpLargePointerAttribute.updateHeader = new nested_TS_FP_UPDATE_updateHeader(updateCode_Values.FASTPATH_UPDATETYPE_LARGE_POINTER);
+
+            fpLargePointerAttribute.xorBpp = 24;
+            fpLargePointerAttribute.cacheIndex = cacheIndex;
+            fpLargePointerAttribute.hotSpot.xPos = hotSpotX;
+            fpLargePointerAttribute.hotSpot.yPos = hotSpotY;
+            fpLargePointerAttribute.width = width;
+            fpLargePointerAttribute.height = height;
+
+            if (xorMaskData != null)
+            {
+                fpLargePointerAttribute.lengthXorMask = (UInt32)xorMaskData.Length;
+                fpLargePointerAttribute.xorMaskData = xorMaskData;
+            }
+            else
+            {
+                // If not provided, generate a pointer with all pixels set to white.
+                fpLargePointerAttribute.lengthXorMask = (UInt32)((width * 3 + 1) / 2 * 2 * height);
+                fpLargePointerAttribute.xorMaskData = new byte[fpLargePointerAttribute.lengthXorMask];
+                for (int i = 0; i < fpLargePointerAttribute.lengthXorMask; i++)
+                {
+                    fpLargePointerAttribute.xorMaskData[i] = 0xff;
+                }
+            }
+
+            if (andMaskData != null)
+            {
+                fpLargePointerAttribute.lengthAndMask = (UInt32)andMaskData.Length;
+                fpLargePointerAttribute.andMaskData = andMaskData;
+            }
+            else
+            {
+                fpLargePointerAttribute.lengthAndMask = (UInt32)(((width + 7) / 8 + 1) / 2 * 2 * height);
+                fpLargePointerAttribute.andMaskData = new byte[fpLargePointerAttribute.lengthAndMask];
+                for (int i = 0; i < fpLargePointerAttribute.lengthAndMask; i++)
+                {
+                    fpLargePointerAttribute.andMaskData[i] = 0xff;
+                }
+            }
+
+            fpLargePointerAttribute.pad = null;
+
+            fpLargePointerAttribute.AssignUpdateDataAndSize();
+
+            return fpLargePointerAttribute;
+        }
     }
 }

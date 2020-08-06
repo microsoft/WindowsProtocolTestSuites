@@ -18,4 +18,5 @@
 	<Parameter Name="workgroupDomain" Value="Workgroup" Comment="Indicates the test environment is in Domain or Workgroup." />
 	<Parameter Name="tcSystemDrive" Value="C" Comment="The system drive of terminal client. A example is C." />
     <Parameter Name="compressionInTC" Value="No" Comment="Whether compression is used in terminal client" />
+	<Parameter Name="agentPort" Value="4488" Comment="The listening port of SUT Agent." />
 </Parameters>

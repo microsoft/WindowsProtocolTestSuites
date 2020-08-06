@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rdprfx", "..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj", "{9DD86DE1-3231-4713-9B45-493F4FE4199C}"
 EndProject
@@ -43,6 +43,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodecToolSet.Tests", "CodecToolSet.Tests\CodecToolSet.Tests.csproj", "{A82D2712-A6B6-4D43-95C3-5C6E3899F0F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPToolSet.Web", "RDPToolSet.Web\RDPToolSet.Web.csproj", "{BF801081-BB5E-41AD-873D-593735C04C00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cssp", "..\..\..\..\ProtoSDK\MS-CSSP\Cssp.csproj", "{EADACA3F-9082-43E1-9864-755CEAB4C942}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -246,6 +248,18 @@ Global
 		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|x64.ActiveCfg = Release|Any CPU
 		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|x64.Build.0 = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|x64.ActiveCfg = Debug|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|x64.Build.0 = Debug|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.fxcop|Any CPU.ActiveCfg = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.fxcop|Any CPU.Build.0 = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.fxcop|x64.ActiveCfg = Release|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.fxcop|x64.Build.0 = Release|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|x64.ActiveCfg = Release|x64
+		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -264,6 +278,7 @@ Global
 		{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
 		{C89AC3FB-7FFC-49D8-B99B-A76C9411AEC6} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
 		{E5A90E66-44B4-4F13-B2A6-F7990770A977} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
+		{EADACA3F-9082-43E1-9864-755CEAB4C942} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0B89693-AF4A-41B6-AA46-06DEE21EFE3C}

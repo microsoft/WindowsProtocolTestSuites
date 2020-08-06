@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
             this.rdpeiSUTControlAdapter = this.TestSite.GetAdapter<IRdpeiSUTControlAdapter>();
             this.rdpeiSUTControlAdapter.Reset();
-            this.rdpbcgrAdapter.TurnVerificationOff(false);
+            this.rdpbcgrAdapter.TurnVerificationOff(TurnOffRDPEIVerification);
             RdpeiUtility.Initialized(this.TestSite);
 
             isManagedAdapter = Site.Config.GetAdapterConfig("IRdpeiSUTControlAdapter").GetType().Name.Equals("ManagedAdapterConfig");

@@ -33,6 +33,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
             ByteArrayValue = new byte[4];
         }
 
+        public ContextFlags(string val)
+            : base(val)
+        {
+        }
+
         protected override bool VerifyConstraints()
         {
             return this.Length == 32;

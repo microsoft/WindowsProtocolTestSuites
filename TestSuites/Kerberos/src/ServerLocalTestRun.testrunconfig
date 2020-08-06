@@ -8,6 +8,8 @@
     <DeploymentItem filename="Adapter\IClientControlAdapter\ClearTrustRealmEncType.ps1" />
     <DeploymentItem filename="Adapter\IClientControlAdapter\SetSupportedEncryptionTypesAsRc4.ps1" />
     <DeploymentItem filename="Adapter\IClientControlAdapter\RestoreSupportedEncryptionTypes.ps1" />
+    <DeploymentItem filename="Adapter\IClientControlAdapter\EnableCompoundIdentity.ps1" />
+    <DeploymentItem filename="Adapter\IClientControlAdapter\Run-TaskOnRemoteComputer.ps1" />    
   </Deployment>
   <Execution>
     <Hosts skipUnhostableTests="false" />

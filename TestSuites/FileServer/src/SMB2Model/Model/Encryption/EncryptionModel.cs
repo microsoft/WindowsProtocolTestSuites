@@ -3,14 +3,12 @@
 
 using System.Collections;
 using System.Text;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryption;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Xrt.Runtime;
+using Microsoft.Protocols.TestTools.StackSdk.Messages;
 
-[assembly: NativeType("System.Diagnostics.Tracing.*")]
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model.Encryption
 {
     public static class EncryptionModel

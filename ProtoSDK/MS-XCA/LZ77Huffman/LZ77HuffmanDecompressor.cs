@@ -100,15 +100,55 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
 	            End of decoding loop
              */
 
+            HuffmanHeader header = null;
+
+            uint NextBits = 0;
+
+            int BlockEnd = 0;
+
             while (CurrentPosition < data.Length)
             {
-                var header = new HuffmanHeader(data, CurrentPosition);
+                int remainingLength = data.Length - CurrentPosition;
+
+                if (remainingLength < 256)
+                {
+                    /*
+                     Processing for the unhandled EOF in the last block if:
+                     1. The decompressed size of last block is 65536.
+                     2. Only two bytes are remained.
+                     3. The unhandled symbol is EOF.
+                     4. All remaining bits are zero.
+                     */ 
+                    if (result.Count == BlockEnd && remainingLength == 2 && header != null)
+                    {
+                        uint Next15Bits = NextBits >> (32 - 15);
+
+                        int HuffmanSymbol = header.DecodingTable[Next15Bits];
+
+                        int HuffmanSymbolBitLength = header.len[HuffmanSymbol];
+
+                        NextBits <<= HuffmanSymbolBitLength;
+
+                        uint remainingBytes = Read16Bits(data, CurrentPosition);
+
+                        CurrentPosition += 2;
+
+                        if (HuffmanSymbol == 256 && NextBits == 0 && remainingBytes == 0)
+                        {
+                            continue;
+                        }
+                    }
+
+                    throw new XcaException("[Data error]: Data in buffer is less than expected!");
+                }
+
+                header = new HuffmanHeader(data, CurrentPosition);
 
                 header.buildDecodingTable();
 
                 CurrentPosition += 256;
 
-                uint NextBits = Read16Bits(data, CurrentPosition);
+                NextBits = Read16Bits(data, CurrentPosition);
 
                 CurrentPosition += 2;
 
@@ -120,7 +160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress
 
                 int ExtraBits = 16;
 
-                int BlockEnd = result.Count + 65536;
+                BlockEnd = result.Count + 65536;
 
                 while (result.Count < BlockEnd)
                 {

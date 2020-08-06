@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
     /// <summary>
     /// Represents an LDAP filter expression.
     /// </summary>
-    public abstract class Filter : CompoundValue
+    public abstract class Filter 
     {
         /// <summary>
         /// Determines match of object against filter.
@@ -32,7 +30,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             /// OperandsAnd
             /// </summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-            public readonly Sequence<Filter> operandsAnd;
+            public readonly List<Filter> operandsAnd;
 
             /// <summary>
             /// And filter
@@ -40,7 +38,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             /// <param name="operands">Filter operands</param>
             public And(params Filter[] operands)
             {
-                operandsAnd = new Sequence<Filter>(operands);
+                operandsAnd = new List<Filter>(operands);
             }
 
             /// <summary>
@@ -72,7 +70,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             /// OperandsOr
             /// </summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-            public readonly Sequence<Filter> operandsOr;
+            public readonly List<Filter> operandsOr;
 
             /// <summary>
             /// Or method.
@@ -80,7 +78,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             /// <param name="operands">Or operation operands.</param>
             public Or(params Filter[] operands)
             {
-                operandsOr = new Sequence<Filter>(operands);
+                operandsOr = new List<Filter>(operands);
             }
 
             /// <summary>
@@ -199,7 +197,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             /// Any
             /// </summary>
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-            public readonly Sequence<string> any;
+            public readonly List<string> any;
 
             /// <summary>
             /// FinalForSubStr
@@ -217,7 +215,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             {
                 this.attributeForSubStr = attribute;
                 this.initialForSubStr = initial;
-                this.any = new Sequence<string>(any);
+                this.any = new List<string>(any);
                 this.finalForSubStr = final;
             }
 
@@ -332,7 +330,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
     /// <summary>
     /// A structure to represent the result of search.
     /// </summary>
-    public class SearchResult : CompoundValue
+    public class SearchResult 
     {
         /// <summary>
         /// ObjectName
@@ -342,14 +340,14 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// AttributeList
         /// </summary>
-        public Map<string, string> attributeList;
+        public IDictionary<string, string> attributeList;
 
         /// <summary>
         /// Search relative attributes for object name.
         /// </summary>
         /// <param name="objectName">The name of object.</param>
         /// <param name="attributeList">The list of attributes.</param>
-        public SearchResult(string objectName, Map<string,string> attributeList)
+        public SearchResult(string objectName, IDictionary<string,string> attributeList)
         {
             this.objectName = objectName;
             this.attributeList = attributeList;
@@ -372,8 +370,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <param name="searchResult">Search result.</param>
         /// <returns>Returns performing result of searching LDAP.</returns>
         public ModelResult Search(string baseObjectName, SearchScope scope, 
-                int sizeLimit, bool typesOnly, Filter filter, Sequence<string> selection,
-                out Sequence<SearchResult> searchResult)
+                int sizeLimit, bool typesOnly, Filter filter, List<string> selection,
+                out List<SearchResult> searchResult)
         {
             searchResult = null;
             int count = 0;
@@ -387,7 +385,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             switch (scope)
             {
                 case SearchScope.BaseObject:
-                    objects = new Sequence<ModelObject>(obj);
+                    objects = new List<ModelObject> { obj };
                     break;
                 case SearchScope.SingleLevel:
                     objects = obj.childs.Values;
@@ -396,7 +394,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                     objects = GetChildsAndObject(obj);
                     break;
             }
-            searchResult = new Sequence<SearchResult>();
+            searchResult = new List<SearchResult>();
             foreach (ModelObject sobj in objects)
             {
                 if (count >= sizeLimit)
@@ -405,42 +403,42 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                 }
                 if (filter.Match(sobj))
                 {
-                    searchResult = searchResult.Add(SelectResult(sobj, typesOnly, selection));
+                    searchResult.Add(SelectResult(sobj, typesOnly, selection));
                 }
             }
 
             return ModelResult.Success;
         }
 
-        SearchResult SelectResult(ModelObject obj, bool typesOnly, Sequence<string> selection)
+        SearchResult SelectResult(ModelObject obj, bool typesOnly, List<string> selection)
         {
-            Set<string> includedAttributes;
+            List<string> includedAttributes;
 
             if (selection.Count == 0)
             {
-                includedAttributes = new Set<string>(obj.attributes.Keys);
+                includedAttributes = new List<string>(obj.attributes.Keys);
             }
             else if (selection.Count == 1 && selection[0] == "1.1")
             {
-                includedAttributes = new Set<string>();
+                includedAttributes = new List<string>();
             }
             else
             {
-                includedAttributes = new Set<string>();
+                includedAttributes = new List<string>();
 
                 foreach (string sel in selection)
                 {
                     if (sel == "*")
                     {
-                        includedAttributes = includedAttributes.Union(new Set<string>(obj.attributes.Keys));
+                        includedAttributes.Union(new List<string>(obj.attributes.Keys));
                     }
                     else
                     {
-                        includedAttributes = includedAttributes.Add(sel.ToLower().Trim());
+                        includedAttributes.Add(sel.ToLower().Trim());
                     }
                 }
             }
-            MapContainer<string, string> map = new MapContainer<string,string>();
+            IDictionary<string, string> map = new Dictionary<string,string>();
 
             foreach (string attr in obj.attributes.Keys)
             {
@@ -454,7 +452,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
                         map[attr] = obj.attributes[attr].ToString();
                 }
             }
-            return new SearchResult((string)obj[StandardNames.distinguishedName], map.ToMap());
+            return new SearchResult((string)obj[StandardNames.distinguishedName], map);
         }
 
     }

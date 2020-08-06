@@ -1632,7 +1632,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <returns></returns>
         private ITsCapsSet GetServerCapSet(capabilitySetType_Values capsetType)
         {
-            Collection<ITsCapsSet> capsets = this.rdpbcgrClientStack.Context.demandActivemCapabilitySets;
+            Collection<ITsCapsSet> capsets = this.rdpbcgrClientStack.Context.DemandActiveCapabilitySets;
             if (capsets != null)
             {
                 foreach (ITsCapsSet capSet in capsets)

@@ -26,6 +26,8 @@
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.dll" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.dll" />
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_KerberosLib.dll"/>
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Spng.dll" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.dll"/>
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.dll"/>
@@ -45,6 +47,8 @@
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_CryptoLib.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Cssp.pdb" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.pdb" />
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_KerberosLib.pdb"/>
+    <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Spng.pdb" />
 	  <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" />
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiLib.pdb"/>
     <ComponentRef Id="Microsoft_Protocols_TestTools_StackSdk_Security_SspiService.pdb"/>
@@ -118,6 +122,16 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.dll" Guid="{58B3D860-053F-4624-9E36-9879C1E25D34}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.dll" 
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.dll" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_KerberosLib.dll" Guid="{5CDC9868-37C2-48E6-A320-C82633EAB265}">
+        <File Id="fil5CDC986837C248E6A320C82633EAB265" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.dll" />
+      </Component>
+      
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Spng.dll" Guid="{A364818F-BA8C-462C-8DAE-C1AE6CEA636D}">
+        <File Id="filA4DEC24D6022417982CB3D17A73A46F5" 
+                Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.dll" Guid="{A4DCD01B-138F-4708-9B57-EFEDBEE21EDF}">
@@ -208,6 +222,15 @@
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.pdb" Guid="{BD158C52-F6BA-4544-ABBB-D4F1FB6F8EC6}">
         <File Id="Microsoft_Protocols_TestTools_StackSdk_Security_Nlmp.pdb" 
               Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp.pdb" />
+      </Component>
+
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_KerberosLib.pdb" Guid="{F1E4B363-7D3E-416C-92EE-B964F30861FE}">
+        <File Id="filF1E4B3637D3E416C92EEB964F30861FE" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.pdb" />
+      </Component>
+      <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Spng.pdb" Guid="{3E60E8F8-D346-4B96-9D07-C03CB410A001}">
+        <File Id="fil22F8D29AC6A5405A832586FF29FB0A23" 
+              Source="$(var.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
       </Component>
 
       <Component Id="Microsoft_Protocols_TestTools_StackSdk_Security_Sspi.pdb" Guid="{73988523-325C-4893-B707-4FE5427171CC}">

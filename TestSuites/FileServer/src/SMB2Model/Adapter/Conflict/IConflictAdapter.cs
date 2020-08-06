@@ -3,7 +3,6 @@
 
 using System;
 using System.Text;
-using Microsoft.Modeling;
 using Microsoft.Protocols.TestTools;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict

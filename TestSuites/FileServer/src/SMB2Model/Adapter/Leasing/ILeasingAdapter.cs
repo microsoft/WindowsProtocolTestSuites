@@ -4,7 +4,6 @@
 using System;
 using System.Linq;
 using System.Text;
-using Microsoft.Modeling;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;

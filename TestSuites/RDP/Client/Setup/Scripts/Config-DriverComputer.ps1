@@ -34,6 +34,8 @@ if(Test-Path -Path $settingFile)
 	$RDPVersion         = .\Get-Parameter.ps1 $settingFile RDPVersion
     $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
     $tcSystemDrive      = .\Get-Parameter.ps1 $settingFile tcSystemDrive
+    $agentPort          = .\Get-Parameter.ps1 $settingFile agentPort
+    $compressionInTC    = .\Get-Parameter.ps1 $settingFile compressionInTC
     .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
 }
 else
@@ -99,6 +101,8 @@ Write-Host "`$osVersion          = $osVersion"
 Write-Host "`$RDPVersion         = $RDPVersion" 
 Write-Host "`$workgroupDomain    = $workgroupDomain"
 Write-Host "`$tcSystemDrive      = $tcSystemDrive"
+Write-Host "`$agentPort          = $agentPort"
+Write-Host "`$compressionInTC    = $compressionInTC"
 
 #-----------------------------------------------------
 # Begin to config Driver Computer
@@ -173,6 +177,14 @@ if($listeningPort -eq "3389")
 $binPath         = $scriptsPath + "\..\Bin"
 $dataPath        = $scriptsPath + "\..\Data"
 $DepPtfConfig    = "$binPath\RDP_ClientTestSuite.deployment.ptfconfig"
+$PtfConfig       = "$binPath\RDP_ClientTestSuite.ptfconfig"
+
+Write-Host  "TurnOff FileReadonly for $PtfConfig..."
+.\TurnOff-FileReadonly.ps1 $PtfConfig
+
+$agentAddress    = "$tcComputerName" + ":" + $agentPort
+Write-Host "Begin to update RDP_ClientTestSuite.ptfconfig..."
+.\Modify-ConfigFileNode.ps1 $PtfConfig "SUTControl.AgentAddress"     $agentAddress
 
 Write-Host  "TurnOff FileReadonly for $DepPtfConfig..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
@@ -191,6 +203,11 @@ Write-Host "Begin to update RDP_ClientTestSuite.deployment.ptfconfig..."
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserName"        $CredSSPUser
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserPassword"    $CredSSPPwd
 .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Version"               $RDPVersion
+
+if ($compressionInTC.ToUpper() -eq "YES")
+{
+    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Client.SupportCompression"  "true"
+}
 
 if ($osVersion.ToUpper() -eq "NONWINDOWS")
 {

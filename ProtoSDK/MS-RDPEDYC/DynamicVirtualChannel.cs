@@ -225,6 +225,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                     dataFragmentManager.AppendData(pdu.Data);
                 }
             }
+            else if(pdu is DataCompressedDvcPdu)
+            {
+                CompressFactory Compressor = new CompressFactory();
+                if (dataFragmentManager == null)
+                {
+                    RDP_SEGMENTED_DATA segData = new RDP_SEGMENTED_DATA();
+                    bool fResult = PduMarshaler.Unmarshal(pdu.Data, segData);
+                    if (fResult)
+                    {
+                        if (segData.descriptor == DescriptorTypes.SINGLE)
+                        {
+                            byte[] rawData = Compressor.Decompress(segData.bulkData.data, segData.bulkData.header);
+                            // Single data PDU which is not fragmented.
+                            if (this.Received != null)
+                            {
+                                this.Received(rawData, this.ChannelId);
+                            }
+                            return;
+                        }
+                    }                   
+                }
+                else
+                {
+                    // Received a fragment.
+                    dataFragmentManager.AppendData(pdu.Data);
+                }
+            }
 
             if (dataFragmentManager.Completed)
             {

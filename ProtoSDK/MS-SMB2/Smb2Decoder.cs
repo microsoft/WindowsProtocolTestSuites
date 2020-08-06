@@ -439,22 +439,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Transform_Header? transformHeader
             )
         {
-            var compressedPacket = new Smb2CompressedPacket();
-            compressedPacket.FromBytes(messageBytes, out consumedLength, out expectedLength);
+            var compressedPacket = Smb2CompressedPacket.Create(messageBytes);
+
             var orignialPacketBytes = Smb2Compression.Decompress(compressedPacket, compressionInfo, role);
+
+            int innerConsumedLength;
+
+            int innerExpectedLength;
+
             var decodedPacket = DecodeSmb2Packet(
                         orignialPacketBytes,
                         role,
                         realSessionId,
                         realTreeId,
-                        out consumedLength,
-                        out expectedLength,
+                        out innerConsumedLength,
+                        out innerExpectedLength,
                         transformHeader
                         );
 
 
             decodedPacket.Compressed = true;
             decodedPacket.CompressedPacket = compressedPacket;
+
+            consumedLength = messageBytes.Length;
+
+            expectedLength = messageBytes.Length;
 
             return decodedPacket;
         }

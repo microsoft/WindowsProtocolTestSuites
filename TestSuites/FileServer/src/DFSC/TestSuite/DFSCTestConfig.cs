@@ -209,14 +209,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             }
         }
 
-        public string DCServerName
-        {
-            get
-            {
-                return GetProperty("DCServerComputerName");
-            }
-        }
-
         public string DomainNamespace
         {
             get

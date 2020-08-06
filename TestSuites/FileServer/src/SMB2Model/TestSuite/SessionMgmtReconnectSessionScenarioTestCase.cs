@@ -17,11 +17,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
-    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
+    using Microsoft.Protocols.TestTools.Messages.Runtime;
 
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class SessionMgmtReconnectSessionScenarioTestCase : PtfTestClassBase
     {
@@ -80,16 +78,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.ISessionMgmtAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ISessionMgmtAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ISessionMgmtAdapter))));
-            this.Manager.Subscribe(SessionSetupResponseInfo, this.ISessionMgmtAdapterInstance);
+            this.ISessionMgmtAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ISessionMgmtAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ISessionMgmtAdapter))));
+            this.ISessionMgmtAdapterInstance.SessionSetupResponse += ISessionMgmtAdapterInstance_SessionSetupResponse;
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>("c1");
             this.v = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>("v");
             this.v1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>("v1");
         }
 
+        private void ISessionMgmtAdapterInstance_SessionSetupResponse(Adapter.ModelSmb2Status status, Adapter.SessionMgmt.ModelConnectionId connectionId, Adapter.SessionMgmt.SessionMgmtConfig c)
+        {
+            this.Manager.AddEvent(SessionSetupResponseInfo, this.ISessionMgmtAdapterInstance, new object[] { status, connectionId, c });
+        }
+
         protected override void TestCleanup()
         {
+            this.ISessionMgmtAdapterInstance.SessionSetupResponse -= ISessionMgmtAdapterInstance_SessionSetupResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -404,7 +408,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS0SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -423,9 +427,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -490,9 +494,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -549,9 +553,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -592,9 +596,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -665,9 +669,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -724,9 +728,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -757,7 +761,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS0SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -776,9 +780,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -873,9 +877,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -930,9 +934,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -973,9 +977,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1051,9 +1055,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1103,9 +1107,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1136,8 +1140,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS0SessionSetupResponseChecker12(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -1155,10 +1159,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1195,8 +1199,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1238,8 +1242,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1289,10 +1293,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1360,8 +1364,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1415,8 +1419,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1447,8 +1451,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS0SessionSetupResponseChecker18(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -1466,10 +1470,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1506,8 +1510,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1554,8 +1558,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1595,10 +1599,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1678,8 +1682,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1731,8 +1735,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -1946,8 +1950,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S161");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS123()
@@ -1995,10 +1999,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2071,8 +2075,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2119,8 +2123,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2156,10 +2160,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2253,8 +2257,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2308,8 +2312,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2340,8 +2344,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S161");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS141()
@@ -2389,10 +2393,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2465,8 +2469,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2513,8 +2517,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2555,10 +2559,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2652,8 +2656,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2707,8 +2711,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2739,7 +2743,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S161");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS160SessionSetupResponseChecker12(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -2758,9 +2762,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2797,9 +2801,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2869,9 +2873,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -2927,9 +2931,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3002,9 +3006,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3061,9 +3065,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3089,7 +3093,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S161");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS160SessionSetupResponseChecker18(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -3108,9 +3112,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3147,9 +3151,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3191,9 +3195,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3239,9 +3243,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3314,9 +3318,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3363,9 +3367,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3545,8 +3549,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S201");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS200ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -3554,8 +3558,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S201");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS200ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -3563,7 +3567,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S201");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS200SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -3582,9 +3586,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3621,9 +3625,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3665,9 +3669,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3713,9 +3717,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3788,9 +3792,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3837,9 +3841,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3870,7 +3874,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S201");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS200SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -3888,9 +3892,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -3973,9 +3977,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4025,9 +4029,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4069,9 +4073,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4289,8 +4293,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S239");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS238ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4298,8 +4302,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S239");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS238ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4307,7 +4311,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S239");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS238SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4325,9 +4329,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4369,9 +4373,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4434,9 +4438,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4490,9 +4494,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4529,9 +4533,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4578,9 +4582,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4611,7 +4615,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S239");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS238SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4630,9 +4634,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4669,9 +4673,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4716,9 +4720,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4754,9 +4758,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -4946,8 +4950,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S272");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS271ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4955,8 +4959,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S272");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS271ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4964,7 +4968,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S272");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS271SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -4982,9 +4986,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5064,9 +5068,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5103,9 +5107,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5152,9 +5156,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5191,9 +5195,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5256,9 +5260,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5301,7 +5305,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S272");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS271SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -5320,9 +5324,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5359,9 +5363,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5411,9 +5415,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5449,9 +5453,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5677,8 +5681,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S302");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS301ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -5686,7 +5690,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S302");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS301SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -5704,9 +5708,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5748,9 +5752,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5776,8 +5780,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S302");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS301SessionSetupResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -5795,10 +5799,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5833,10 +5837,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5903,8 +5907,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5958,8 +5962,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -5985,7 +5989,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S302");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS301SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -6004,9 +6008,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6043,9 +6047,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6092,9 +6096,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6135,9 +6139,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6210,9 +6214,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6259,9 +6263,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6413,8 +6417,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S341");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS340ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -6422,8 +6426,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S341");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS340SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -6441,10 +6445,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6481,8 +6485,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6519,8 +6523,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6565,10 +6569,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6610,8 +6614,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6674,8 +6678,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6718,7 +6722,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S341");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS359()
@@ -6793,9 +6797,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6837,9 +6841,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6902,9 +6906,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6958,9 +6962,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -6991,7 +6995,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S341");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS371()
@@ -7040,9 +7044,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7084,9 +7088,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7180,9 +7184,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7236,9 +7240,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7452,8 +7456,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S384");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS383ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -7461,7 +7465,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S384");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS383ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -7469,7 +7473,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S384");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS383SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -7488,9 +7492,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7527,9 +7531,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7566,9 +7570,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7614,9 +7618,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7683,9 +7687,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7739,9 +7743,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7767,8 +7771,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S384");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS383SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -7786,10 +7790,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7826,8 +7830,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7869,8 +7873,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7905,10 +7909,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -7981,8 +7985,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8029,8 +8033,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8243,8 +8247,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S421");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS420ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -8252,7 +8256,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S421");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS420ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -8260,7 +8264,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S421");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS420SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -8279,9 +8283,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8356,9 +8360,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8405,9 +8409,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8443,9 +8447,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8487,9 +8491,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8552,9 +8556,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8597,8 +8601,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S421");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS420SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -8615,10 +8619,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8660,8 +8664,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8724,8 +8728,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8778,10 +8782,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8843,8 +8847,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -8898,8 +8902,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9091,8 +9095,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S457");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS456ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9100,7 +9104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S457");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS456ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9108,7 +9112,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S457");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS456SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9127,9 +9131,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9166,9 +9170,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9215,9 +9219,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9258,9 +9262,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9333,9 +9337,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9382,9 +9386,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9415,8 +9419,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S457");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS456SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9434,10 +9438,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9474,8 +9478,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9537,8 +9541,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9590,10 +9594,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9673,8 +9677,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9726,8 +9730,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9905,8 +9909,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S499");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS498ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9914,7 +9918,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S499");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS498ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9922,7 +9926,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S499");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS498SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -9941,9 +9945,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -9980,9 +9984,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10052,9 +10056,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10115,9 +10119,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10193,9 +10197,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10245,9 +10249,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10278,8 +10282,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S499");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS498SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -10296,10 +10300,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10340,10 +10344,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10380,8 +10384,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10418,8 +10422,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10628,8 +10632,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S531");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS530ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -10637,7 +10641,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S531");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS530ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -10645,7 +10649,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S531");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS530SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -10664,9 +10668,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10703,9 +10707,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10742,9 +10746,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10788,9 +10792,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10835,9 +10839,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10902,9 +10906,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -10950,8 +10954,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S531");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS530SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -10969,10 +10973,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11007,10 +11011,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11077,8 +11081,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11132,8 +11136,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11308,8 +11312,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S559");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS558ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11317,7 +11321,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S559");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS558ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11325,7 +11329,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S559");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS558SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11343,9 +11347,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11390,9 +11394,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11449,9 +11453,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11501,9 +11505,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11529,8 +11533,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S559");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS558SessionSetupResponseChecker4(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11547,10 +11551,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11630,8 +11634,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11668,8 +11672,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11710,10 +11714,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -11938,8 +11942,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S586");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS585ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11947,7 +11951,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S586");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS585ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11955,7 +11959,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S586");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS585SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -11974,9 +11978,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12013,9 +12017,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12052,9 +12056,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12100,9 +12104,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12144,9 +12148,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12209,9 +12213,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12254,8 +12258,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S586");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS585SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -12272,10 +12276,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12342,8 +12346,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12397,8 +12401,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12434,10 +12438,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12500,8 +12504,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12555,8 +12559,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12722,8 +12726,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S621");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS620ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -12731,7 +12735,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S621");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS620ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -12739,7 +12743,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S621");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS620SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -12758,9 +12762,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12796,9 +12800,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12878,9 +12882,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12917,9 +12921,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -12955,8 +12959,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S621");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS620SessionSetupResponseChecker4(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -12973,10 +12977,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13017,10 +13021,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13057,8 +13061,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13100,8 +13104,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13283,8 +13287,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S647");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS646ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13292,8 +13296,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S647");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS646ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13301,7 +13305,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S647");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS646SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13319,9 +13323,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13363,9 +13367,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13391,7 +13395,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S647");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS646SessionSetupResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13410,9 +13414,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13449,9 +13453,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13498,9 +13502,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13541,9 +13545,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13610,9 +13614,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13666,9 +13670,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13850,8 +13854,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S672");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS671ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13859,8 +13863,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S672");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS671ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13868,7 +13872,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S672");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS671SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -13887,9 +13891,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13926,9 +13930,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -13965,9 +13969,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14016,9 +14020,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14094,9 +14098,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14146,9 +14150,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14174,7 +14178,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S672");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS671SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -14193,9 +14197,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14232,9 +14236,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14297,9 +14301,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14352,9 +14356,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14434,9 +14438,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14483,9 +14487,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14650,8 +14654,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S708");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS707ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -14659,8 +14663,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S708");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS707ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -14668,7 +14672,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S708");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS707SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -14687,9 +14691,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14726,9 +14730,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14793,9 +14797,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14851,9 +14855,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -14956,9 +14960,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15013,9 +15017,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15046,7 +15050,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S708");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS707SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15064,9 +15068,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15108,9 +15112,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15249,8 +15253,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S733");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS732ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15258,7 +15262,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S733");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS732ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15266,7 +15270,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S733");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS732SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15284,9 +15288,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15331,9 +15335,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15359,8 +15363,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S733");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS732SessionSetupResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15377,10 +15381,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15421,10 +15425,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15580,7 +15584,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S747");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS746ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15588,7 +15592,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S747");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS746ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15596,8 +15600,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S747");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS746SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15614,10 +15618,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15658,10 +15662,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15687,8 +15691,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S747");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS746SessionSetupResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -15705,10 +15709,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. "", ""[MS-SMB2] If Session.IsAnonymous is FALSE, the server MUST set Connection.ConstrainedConnection to FALSE."", ""[TestInfo] Session.IsAnonymous is FALSE, so set Connection.ConstrainedConnection to FALSE"", ""[MS-SMB2] 13. Session.State MUST be set to Valid.""");
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15749,10 +15753,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, the server MUST process the authentication request as specified in section 3.3.5.5.1."", ""[TestInfo] The SessionId of the SessionSetup Request is zero"", ""[MS-SMB2] 3.3.5.5.1: A session object MUST be allocated for this request. "", ""[MS-SMB2] The other values MUST be initialized as follows:"", ""[MS-SMB2] Session.State is set to InProgress."", ""[MS-SMB2] The session MUST be inserted into the GlobalSessionTable and a unique Session.SessionId is assigned to serve as a lookup key in the table. "", ""[MS-SMB2] The session MUST be inserted into Connection.SessionTable. "", ""[MS-SMB2] Using this session, authentication is continued as specified in section 3.3.5.5.3."", ""[MS-SMB2] 3.3.5.5.3: 1. The status code in the SMB2 header of the response MUST be set to STATUS_SUCCESS. """);
                 throw;
             }
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : c.IsMultiChannelCapable == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15789,8 +15793,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -15852,8 +15856,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v1.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16095,8 +16099,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S765");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS764ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -16104,8 +16108,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S765");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS764ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -16113,7 +16117,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S765");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS764SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -16131,9 +16135,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16206,9 +16210,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16265,9 +16269,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16304,9 +16308,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16343,9 +16347,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16410,9 +16414,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16458,7 +16462,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S765");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS764SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -16477,9 +16481,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16541,9 +16545,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16597,9 +16601,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16635,9 +16639,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16704,9 +16708,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16760,9 +16764,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -16970,8 +16974,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S798");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS797ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -16979,8 +16983,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S798");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS797ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -16988,7 +16992,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S798");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS797SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -17006,9 +17010,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17050,9 +17054,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17089,9 +17093,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17153,9 +17157,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17198,7 +17202,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S798");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS797SessionSetupResponseChecker4(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -17216,9 +17220,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17285,9 +17289,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17341,9 +17345,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17380,9 +17384,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17419,9 +17423,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17483,9 +17487,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17649,8 +17653,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S826");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS825ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -17658,8 +17662,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S826");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS825ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -17667,7 +17671,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S826");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS825ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -17675,7 +17679,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S826");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS825SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -17693,9 +17697,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17737,9 +17741,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17802,9 +17806,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17858,9 +17862,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17922,9 +17926,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -17978,9 +17982,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18215,7 +18219,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS84SessionSetupResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -18234,9 +18238,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18301,9 +18305,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18360,9 +18364,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18398,9 +18402,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18473,9 +18477,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18532,9 +18536,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18560,8 +18564,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS84ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -18569,8 +18573,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsMultiChannelCapable))), ((object)(0))), "Fail to check the assumption : v.IsMultiChannelCapable == 0");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS84ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -18578,7 +18582,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
 
         private void SessionMgmtReconnectSessionScenarioTestCaseS84SessionSetupResponseChecker6(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.ModelConnectionId connectionId, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig c)
@@ -18596,9 +18600,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18671,9 +18675,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18730,9 +18734,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18769,9 +18773,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18808,9 +18812,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");
@@ -18855,9 +18859,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.SessionMgmt.SessionMgmtConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsMultiChannelCapable))), ((object)(System.Convert.ToInt32(this.c.Value.IsMultiChannelCapable)))), "Fail to check the assumption : v1.IsMultiChannelCapable == c.IsMultiChannelCapabl" +
                     "e");
-            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.5: 3. If SessionId in the SMB2 header of the request is zero, th" +
                     "e server MUST process the authentication request as specified in section 3.3.5.5" +
                     ".1.\"");

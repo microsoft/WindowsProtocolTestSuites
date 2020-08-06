@@ -2228,6 +2228,26 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
             }
 
         }
+
+        /// <summary>
+        /// Repeat the method until the condition is met
+        /// </summary>
+        /// <param name="retryTimes">Retry time (seconds)</param>
+        /// <param name="action">Execution method</param>
+        public static void RetryAction(int retryTimes, Func<bool> action)
+        {
+            int retryCount = 0;
+            bool needContinue;
+            do
+            {
+                needContinue = action();
+                if (needContinue)
+                {
+                    System.Threading.Thread.Sleep(1000);
+                    retryCount++;
+                }
+            } while (needContinue && retryCount < retryTimes);
+        }
     }
     public class NtSecurityDescriptorItem
     {

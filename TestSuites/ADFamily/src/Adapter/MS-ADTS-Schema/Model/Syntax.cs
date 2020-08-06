@@ -9,8 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using Microsoft.Modeling;
-
 namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 {
 
@@ -124,7 +122,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
     /// <summary>
     /// Abstract type representing the syntax of a value.
     /// </summary>
-    public abstract class Syntax : CompoundValue
+    public abstract class Syntax 
     {
         /// <summary>
         /// The attribute syntax identifier (as in 1.1.5.6)
@@ -174,7 +172,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <returns>Returns parsed value.</returns>
         public Value Parse(AttributeContext context, string repr)
         {
-            Sequence<object> result = new Sequence<object>();
+            List<object> result = new List<object>();
 
             if (!context.isSingleValued)
             {
@@ -182,12 +180,12 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
 
                 foreach (string value in values)
                 {
-                    result = result.Add(ParseOne(context, value.Trim()));
+                    result.Add(ParseOne(context, value.Trim()));
                 }
             }
             else
             {
-                result = result.Add(ParseOne(context, repr));
+                result.Add(ParseOne(context, repr));
             }
 
             return new Value(this, result);
@@ -229,8 +227,8 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
             }
             else
             {
-                SequenceContainer<object> uvs1 = new SequenceContainer<object>(value1.UnderlyingValues);
-                SequenceContainer<object> uvs2 = new SequenceContainer<object>(value2.UnderlyingValues);
+                List<object> uvs1 = new List<object>(value1.UnderlyingValues);
+                List<object> uvs2 = new List<object>(value2.UnderlyingValues);
 
                 if (uvs1.Count != uvs2.Count)
                 {
@@ -284,7 +282,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <summary>
         /// The sequence of registered syntax.
         /// </summary>
-        protected static SequenceContainer<Syntax> Available = new SequenceContainer<Syntax>();
+        protected static List<Syntax> Available = new List<Syntax>();
 
        
         /// <summary>
@@ -447,7 +445,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
     /// NOTE: this type has implicit and explicit conversions attached. A string or
     /// int implicitly converts into a value; a value can be explicitly converted to a string or int.
     /// </summary>
-    public class Value : CompoundValue
+    public class Value 
     {
         /// <summary>
         /// Syntax of this Value object.
@@ -459,14 +457,14 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// The values of this Value object.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
-        public readonly Sequence<object> UnderlyingValues;
+        public readonly List<object> UnderlyingValues;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="syntax">Syntax object</param>
         /// <param name="underlyingValues">Underlying values.</param>
-        public Value(Syntax syntax, Sequence<object> underlyingValues)
+        public Value(Syntax syntax, List<object> underlyingValues)
         {
             this.Syntax = syntax;
             this.UnderlyingValues = underlyingValues;
@@ -480,7 +478,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         public Value(Syntax syntax, params object[] underlyingValues)
         {
             this.Syntax = syntax;
-            this.UnderlyingValues = new Sequence<object>(underlyingValues);
+            this.UnderlyingValues = new List<object>(underlyingValues);
         }
 
         /// <summary>

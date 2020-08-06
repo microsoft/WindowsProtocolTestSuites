@@ -2637,7 +2637,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             TS_FP_UPDATE_PDU fastpathOutputPdu = new TS_FP_UPDATE_PDU(sessionContext);
             List<TS_FP_UPDATE> outputUpdateList = new List<TS_FP_UPDATE>();
-            TS_FP_UPDATE outputUpdate = new TS_FP_UPDATE();
 
             fastpathOutputPdu.fpOutputHeader = new nested_TS_FP_UPDATE_PDU_fpOutputHeader();
 

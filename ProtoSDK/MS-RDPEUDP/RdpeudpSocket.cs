@@ -84,6 +84,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     public delegate void RdpeudpSocketSender(IPEndPoint remoteEP, StackPacket packet);
 
     public delegate void ReceiveData(byte[] data);
+
+    /// <summary>
+    /// The delegate used to handle disconnection.
+    /// </summary>
+    public delegate void DisconnectedHandler();
     #endregion Delegates definitions
 
     public class RdpeudpSocket : IDisposable
@@ -333,6 +338,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// An Event will be called when receive Data bytes from this specified UDP transport
         /// </summary>
         public event ReceiveData Received;
+
+        /// <summary>
+        /// An event triggered when the connection is closed.
+        /// </summary>
+        public event DisconnectedHandler Disconnected;
 
         #endregion Methods for Auto-handle Socket
 
@@ -763,6 +773,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public void Close()
         {
             connected = false;
+
+            Disconnected?.Invoke();
+
             DisposeTimers();
         }
 
