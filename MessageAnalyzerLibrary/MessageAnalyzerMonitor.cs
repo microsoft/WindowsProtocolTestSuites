@@ -8,7 +8,6 @@ using Microsoft.Opn.Runtime.Utilities;
 using Microsoft.Protocols.Tools.Compiler;
 using Microsoft.Protocols.Tools.Framework;
 using Microsoft.Protocols.Tools.Modeling;
-using Microsoft.Protocols.Tools.UI.Services;
 using Microsoft.Protocols.Tools.Utilities;
 using System;
 using System.Collections.Generic;

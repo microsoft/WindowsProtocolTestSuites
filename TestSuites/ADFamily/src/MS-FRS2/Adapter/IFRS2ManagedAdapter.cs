@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.Messages;
-using Microsoft.Protocols.TestTools.Messages.Marshaling;
 using Microsoft.Protocols.TestSuites.Frs2DataTypes;
 using FRS2Model;
 using FileStreamDataParser;

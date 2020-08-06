@@ -1,72 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C01EEE45-E013-4108-9B3B-ED8D0A6D8793}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MS_SMB_ServerAdapter</RootNamespace>
-    <AssemblyName>MS-SMB_ServerAdapter</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\MS-SMB_ServerAdapter.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Adapter.cs" />
-    <Compile Include="Capture\MS_FSCCCaptureCode.cs" />
-    <Compile Include="Enum\Enum.cs" />
-    <Compile Include="ISMBAdapter.cs" />
-    <Compile Include="ISMBInteractiveAdapter.cs" />
-    <Compile Include="ISMBNTTransactionAdapter.cs" />
-    <Compile Include="ISMBTransaction2Adapter.cs" />
-    <Compile Include="ServerRoleCaptureCode.cs" />
-    <Compile Include="ServerSetup\IServerSetupAdapter.cs" />
-    <Compile Include="ServerSetup\ServerSetupAdapterCallPS.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Extension">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.XML" />
-  </ItemGroup>
+  </ItemGroup> 
   <ItemGroup>
     <Content Include="ServerSetup\ConfigSignState.ps1" />
     <Content Include="ServerSetup\DeleteFiles.ps1" />
@@ -74,38 +20,15 @@
     <Content Include="ServerSetup\NonWindowsSUTImplementation\EmptyDeleteFiles.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
-      <Project>{FE653643-6342-4300-871E-683C7BA31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
-      <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
-      <Name>FileAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
-      <Project>{75544419-3F4E-4308-A676-165F45C1462E}</Project>
-      <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-CIFS\Cifs.csproj">
-      <Project>{0129B48E-2977-4E87-ADB0-A024A69C1CCC}</Project>
-      <Name>Cifs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj">
-      <Project>{124E0F6D-57D7-4582-AF9A-3DE11B358E76}</Project>
-      <Name>Fscc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
-      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
-      <Name>Nlmp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj">
-      <Project>{C3C96860-5D29-4797-A311-CC568CC8B699}</Project>
-      <Name>Smb</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-CIFS\Cifs.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin\" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
+  </ItemGroup>
 </Project>

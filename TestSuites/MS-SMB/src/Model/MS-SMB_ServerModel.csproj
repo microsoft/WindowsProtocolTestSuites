@@ -1,37 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2BD83D81-2635-41C3-95BB-DC9090C483C6}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Model.Model</RootNamespace>
-    <AssemblyName>MS-SMB_ServerModel</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\MS-SMB_ServerModel.XML</DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Config.cord" />
@@ -40,48 +15,15 @@
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Common\AbstractData\Connection.cs" />
-    <Compile Include="Common\AbstractData\File.cs" />
-    <Compile Include="Common\AbstractData\Pipe.cs" />
-    <Compile Include="Common\AbstractData\Session.cs" />
-    <Compile Include="Common\AbstractData\Share.cs" />
-    <Compile Include="Common\AbstractData\Tree.cs" />
-    <Compile Include="Common\Helper\Checker.cs" />
-    <Compile Include="Common\Helper\Parameters.cs" />
-    <Compile Include="Common\Helper\Update.cs" />
-    <Compile Include="Common\Message\Messages.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="Model.cs" />
-    <Compile Include="NTTransactionModel.cs" />
-    <Compile Include="Transaction2Model.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
+  </ItemGroup>  
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
-      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
-      <Name>Messages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Adapter\MS-SMB_ServerAdapter.csproj">
-      <Project>{C01EEE45-E013-4108-9B3B-ED8D0A6D8793}</Project>
-      <Name>MS-SMB_ServerAdapter</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj" />
+    <ProjectReference Include="..\Adapter\MS-SMB_ServerAdapter.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-SMB\Bin\" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
+  </ItemGroup>
 </Project>

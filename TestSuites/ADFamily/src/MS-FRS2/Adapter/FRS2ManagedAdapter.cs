@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.Messages;
-using Microsoft.Protocols.TestTools.Messages.Marshaling;
 using Microsoft.Protocols.TestSuites.Frs2DataTypes;
 using FRS2Model;
 using System.DirectoryServices.Protocols;
