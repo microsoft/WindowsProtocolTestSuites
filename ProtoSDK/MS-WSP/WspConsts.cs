@@ -61,6 +61,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         private static readonly Guid DocPropSetGuid2 = new Guid("D5CDD502-2E9C-101B-9397-08002B2CF9AE");
 
         /// <summary>
+        /// Document characterization
+        /// </summary>
+        private static readonly Guid DocCharacterGuid = new Guid("560C36C0-503A-11CF-BAA1-00004C752A9A");
+
+        /// <summary>
         /// Music Property Set
         /// </summary>
         private static readonly Guid PSGUID_MUSIC = new Guid("56A3372E-CE9C-11d2-9F0E-006097C686F6");
@@ -318,6 +323,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// System.ContentType
         /// </summary>
         public static readonly CFullPropSpec System_ContentType = new CFullPropSpec(DocPropSetGuid2, 26);
+
+        /// <summary>
+        /// System.Search.Autosummary
+        /// A characterization or abstract of the document.
+        /// </summary>
+        public static readonly CFullPropSpec System_Search_Autosummary = new CFullPropSpec(DocCharacterGuid, 2);
 
         /// <summary>
         /// System.Music.Artist

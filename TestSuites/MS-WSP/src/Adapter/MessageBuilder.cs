@@ -326,50 +326,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Gets CPMFetchValueIn Message BLOB
+        /// Gets CPMFetchValueIn Message
         /// </summary>
         /// <param name="workID">Document ID</param>
-        /// <param name="cbSoFar">Number of bytes 
-        /// previously transferred</param>
-        /// <param name="cbChunk">Maximum number of bytes that the sender 
-        /// can accept in a CPMFetchValueOut message</param>
-        /// <returns>CPMFetchValueIn BLOB</returns>
-        public byte[] GetCPMFetchValueIn(uint workID,
-            uint cbSoFar, uint cbChunk)
+        /// <param name="cbSoFar">Number of bytes previously transferred</param>
+        /// <param name="cbChunk">Maximum number of bytes that the sender can accept in a CPMFetchValueOut message</param>
+        /// <param name="propSpec">The proptery to fetch</param>
+        /// <returns>CPMFetchValueIn Message</returns>
+        public CPMFetchValueIn GetCPMFetchValueIn(uint workID, uint cbSoFar, uint cbChunk, CFullPropSpec propSpec)
         {
-            byte[] padding = null;
-            int messageOffset = 0;
-            messageOffset += 4 * Constant.SIZE_OF_UINT;
-            byte[] propSpec = GetFullPropSec(WspConsts.System_ItemName._guidPropSet,
-                PROPERTY_ID, (int)WspConsts.System_ItemName.PrSpec, ref messageOffset);
-            if (messageOffset % OFFSET_4 != 0)
+            var message = new CPMFetchValueIn
             {
-                padding = new byte[OFFSET_4 - messageOffset % OFFSET_4];
-                for (int i = 0; i < padding.Length; i++)
+                Header = new WspMessageHeader
                 {
-                    padding[i] = 0;
-                }
-                messageOffset += padding.Length;
-            }
-            byte[] mainBlob = new byte[messageOffset];
-            uint cbPropSpec = (uint)propSpec.Length;
-            //================ Converting values into Bytes ================
-            int index = 0;
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(workID));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cbSoFar));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cbPropSpec));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(cbChunk));
-            Helper.CopyBytes(mainBlob, ref index, propSpec);
-            if (padding != null)
-            {
-                //byte[] paddingValue = new byte[padding];
-                Helper.CopyBytes(mainBlob, ref index, padding);
-            }
-            return AddMessageHeader(MessageType.CPMFetchValueIn, mainBlob);
+                    _msg = WspMessageHeader_msg_Values.CPMFetchValueIn
+                },
+                _wid = workID,
+                _cbSoFar = cbSoFar,
+                _cbChunk = cbChunk,
+                PropSpec = propSpec
+            };
+
+            return message;
         }
 
         /// <summary>

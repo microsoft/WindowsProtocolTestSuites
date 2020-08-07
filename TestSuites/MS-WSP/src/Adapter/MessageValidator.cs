@@ -1115,10 +1115,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         ///  Validates CPMGetRowsOut message
         /// </summary>
         /// <param name="rowsOutResponse">Rowsout response blob obtained</param>
-        /// <param name="workId">out parameter workId </param>
-        public void ValidateGetRowsOut(CPMGetRowsOut rowsOutResponse, out uint workId)
+        public void ValidateGetRowsOut(CPMGetRowsOut rowsOutResponse)
         {
-            workId = 0xfffffff0; // TODO: set this value correctly
             ValidateHeader(rowsOutResponse.Header, WspMessageHeader_msg_Values.CPMGetRowsOut);
         }
 
@@ -1987,105 +1985,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (valueExists > 0)
             {
-                //--------------------         vType     --
                 site.CaptureRequirementIfAreEqual<uint>(1, valueExists, 733,
                     "When the server receives a CPMFetchValueIn message " +
                     "request from a client, the server MUST  if the property" +
                     "ID value is available, the server MUST set " +
                     "_fValueExists to 0x00000001.");
-                uint vType = Helper.GetUInt(bytes, ref startingIndex);
-                // last 2 bits of 4 Bytes vType are vData1 and vData2
-                byte vData1 = bytes[startingIndex - 1];
-                byte vData2 = bytes[startingIndex - 2];
-                if ((vType_Values)vType != vType_Values.VT_DECIMAL)
-                {
-                    site.CaptureRequirementIfAreEqual<byte>(0, vData1, 9,
-                        "The value of 1 byte field 'vData1' of " +
-                        "CBaseStorageVariant structure MUST be set to 0X00" +
-                        "when vType is not VT_DECIMAL.");
-                    site.CaptureRequirementIfAreEqual<byte>(0, vData2, 10,
-                        "The value of 1 byte field 'vData2'  of " +
-                        "CBaseStorageVariant structure MUST be set to 0x00" +
-                        "when vType is not VT_DECIMAL.");
-                }
-                bool isValidVType = GetValidVType(vType);
-
-                //Update by v-aliche for delta testing
-                //site.CaptureRequirementIfIsTrue(isValidVType, 566, 
-                //    "The 4 bytes 'vType' field of the" +
-                //    "CPMFetchValueOut message is one of the following:"+
-                //    "VT_EMPTY(0x0000), VT_NULL(0x0001)," +
-                //    "VT_I1(0x0010),VT_UI1(0x0011), VT_I2(0x0002), "+
-                //    "VT_UI2(0x0012), VT_BOOL( 0x000B), VT_I4(0x0003)," +
-                //    " VT_UI4(0x0013), VT_R4(0x0004), VT_INT(0x0016), "+
-                //    "VT_UINT( 0x0017), VT_ERROR(0x000A)," +
-                //    "VT_I8(0x0014), VT_UI8(0x0015), VT_R8(0x0005),"+
-                //    "VT_CY(0x0006), VT_DATE(0x0007), " +
-                //    "VT_FILETIME(0x0040), VT_DECIMAL(0x000E) , "+
-                //    "VT_CLSID(0x0048), VT_BLOB(0x0041), " +
-                //    "VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008), "+
-                //    "VT_LPSTR(0x001E), VT_LPWSTR(0x001F), " +
-                //    "VT_COMPRESSED_LPWSTR(0x0023), VT_VARIANT(0x000C)");
-                // Validation check is same as previous requirement capture
-
-                //Update by v-aliche for delta testing
-                //site.CaptureRequirement(738, 
-                //    "When the server receives a CPMFetchValueIn message"+
-                //    "request from a client, if _fValueExists is equal to "+
-                //    "0x00000001, the server MUST set vType to the property"+
-                //    "type of the property value.");
-
-                site.CaptureRequirementIfIsTrue(isValidVType, 6,
-                    "The 2 byte field 'VType' field of" +
-                    "CBaseStorageVariant structure MUST have one of" +
-                    "these values:VT_EMPTY(0x0000), VT_NULL(0x0001)" +
-                    ", VT_I1(0x0010), VT_UI1(0x0011), VT_I2(0x0002), " +
-                    "VT_UI2(0x0012), VT_BOOL( 0x000B)," +
-                    "VT_I4(0x0003), VT_UI4(0x0013), VT_R4(0x0004)," +
-                    "VT_INT(0x0016), VT_UINT( 0x0017)," +
-                    "VT_ERROR(0x000A), VT_I8(0x0014), VT_UI8(0x0015)," +
-                    "VT_R8(0x0005), VT_CY(0x0006), " +
-                    "VT_DATE(0x0007), VT_FILETIME(0x0040), VT_DECIMAL(0x000E)" +
-                    ", VT_CLSID(0x0048), VT_BLOB(0x0041)" +
-                    ", VT_BLOB_OBJECT (0x0046), VT_BSTR(0x0008), " +
-                    "VT_LPSTR(0x001E), VT_LPWSTR(0x001F)," +
-                    " VT_COMPRESSED_LPWSTR(0x0023), VT_VARIANT(0x000C)" +
-                    "or these Ored with VT_VECTOR(0x1000)" +
-                    "and VT_ARRAY(0x2000).");
-
-                int obtainedLength = GetStorageWidth(bytes,
-                    (uint)startingIndex, vType);
-                if (IsVariableLengthType((ushort)vType))
-                {
-                    // SIZE of the length field
-                    startingIndex += Constant.SIZE_OF_UINT;
-                }
-                int lengthToRead = 0;
-                if (obtainedLength > bytes.Length - startingIndex)
-                {
-                    site.CaptureRequirementIfIsTrue(moreExists == 1, 739,
-                        "When the server receives a CPMFetchValueIn message" +
-                        "request from a client,  if _fValueExists is equal to" +
-                        "0x00000001 and if the length of the serialized " +
-                        "property is greater than _cbSoFar added to _cbValue," +
-                        "the server MUST set _fMoreExists to 0x00000001.");
-                    lengthToRead = bytes.Length - startingIndex;
-                }
-                else
-                {
-                    site.CaptureRequirementIfIsTrue(moreExists == 0, 740,
-                        "When the server receives a CPMFetchValueIn message" +
-                        "request from a client,  if _fValueExists is equal" +
-                        "to 0x00000001 and if the length of the serialized" +
-                        "property is not greater than _cbSoFar added to " +
-                        "_cbValue, the server MUST set _fMoreExists to " +
-                        "0x00000000.");
-                    // Removing VType and Length field
-                    lengthToRead
-                        = (int)cbValue - 2 * Constant.SIZE_OF_UINT;
-                }
-                byte[] variableData = ReadVariableDataFromBuffer(bytes,
-                    (uint)startingIndex, lengthToRead);
                 // If ReadVariableDataFromBuffer is able to read 
                 // data of length cbValue
                 // then requirement 737 and 735 are validated
@@ -2106,38 +2010,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "bytes (but not past the end of the serialized " +
                     "property) to the vValue field.");
 
-
-                if ((vType_Values)vType == vType_Values.VT_LPSTR
-                    || (vType_Values)vType == vType_Values.VT_LPWSTR)
-                {
-                    string unicodeString
-                        = Encoding.Unicode.GetString(variableData);
-                    // If the VariableData is encoded as Unicode string
-                    // Requirement 35
-                    site.CaptureRequirement(35,
-                        "If vType is set to VT_LPSTR, then 'cLen' field" +
-                        "of CBaseStorageVariant structure indicates the" +
-                        "size of the string in ANSI characters and string" +
-                        "is a null-terminated ANSI string.");
-                    // Validation step is same as Requirement captured above
-                    site.CaptureRequirement(37,
-                        "The 4 bytes 'cLen' field of the CBaseStorageVariant" +
-                        "structure specifies the size of the string field" +
-                        "including the terminating null.");
-                }
                 int constantFields
                     = Constant.SIZE_OF_HEADER + 3 * Constant.SIZE_OF_UINT;
                 uint variableLength = (uint)(cbChunk - constantFields);
 
                 if (moreExists == 0)
                 {
-                    bool IsNullTerminated
-                        = (variableData[variableData.Length - 1] == 0)
-                        && (variableData[variableData.Length - 2] == 0);
-                    site.CaptureRequirementIfIsTrue(IsNullTerminated, 38,
-                        "The variable sized 'string' field of the " +
-                        "CBaseStorageVariant structure  is the " +
-                        "Null-terminated string.");
                     site.CaptureRequirementIfIsTrue(cbValue < cbChunk, 568,
                         "If _fMoreExists is set to 0x00000000, the length of" +
                         "the 'vValue' field of the CPMFetchValueOut message," +
@@ -2153,13 +2031,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "the CPMFetchValueOut message, indicated by the " +
                         "_cbValue field, MUST be equal to the value of " +
                         "_cbChunk in CPMFetchValueIn.");
-                }
-                if (obtainedLength == 0)
-                {
-                    site.CaptureRequirementIfIsTrue(variableData.Length == 0,
-                        39, "The variable sized 'string' field of the " +
-                        "CBaseStorageVariant structure  MUST be absent" +
-                        "if 'cLen' equals 0x00000000.");
                 }
             }
             else

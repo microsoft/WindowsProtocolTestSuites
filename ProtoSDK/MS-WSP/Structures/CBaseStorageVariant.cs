@@ -174,8 +174,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A type indicator that indicates the type of vValue.
         /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
         public vType_Values vType;
 
         /// <summary>

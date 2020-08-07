@@ -99,10 +99,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         TableColumn[] tableColumns = null;
         /// <summary>
-        /// WorkId of the current row
-        /// </summary>
-        uint lastDocumentWorkId = 0;
-        /// <summary>
         /// Language locale
         /// </summary>
         string locale = null;
@@ -573,7 +569,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 int error = Marshal.GetLastWin32Error();
             }
-            
+
             if (sender == defaultSender)
             {
                 // This means that disconnect message has been sent
@@ -587,16 +583,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                    "in a CPMConnectOut message.");
 
             }
-            
+
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                             "transported using a named pipe: \\pipe\\MSFTEWDS");
-            
+
             if (CPMGetQueryStatusExOutResponse != null)
             {
                 int startingIndex = 0;
                 uint msgId = Helper.GetUInt(statusExOutMessage, ref startingIndex);
                 uint msgStatus = Helper.GetUInt(statusExOutMessage, ref startingIndex);
-                
+
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
@@ -605,7 +601,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "message sent by a client, the server MUST respond " +
                         "with the message header (only) of the message sent " +
                         "by the client, keeping the _msg field intact.");
-                                    
+
                     //If 4 byte Non Zero field is read as status
                     // The requirement 620 gets validated
                     wspTestSite.CaptureRequirement(620,
@@ -613,7 +609,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "message sent by a client, the server MUST set the " +
                         "_status field to the error code value.");
                 }
-                
+
                 if ((msgId == (uint)MessageType.CPMGetQueryStatusExOut)
                     && (msgStatus == 0x00000000))
                 {
@@ -920,16 +916,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
             client.SendCPMGetRowsIn(
-                getRowsInMessage._hCursor, 
-                getRowsInMessage._cRowsToTransfer, 
-                getRowsInMessage._cbRowWidth, 
-                getRowsInMessage._cbSeek, 
-                getRowsInMessage._cbReserved, 
-                getRowsInMessage._cbReadBuffer, 
-                getRowsInMessage._ulClientBase, 
-                getRowsInMessage._fBwdFetch, 
-                getRowsInMessage.eType, 
-                getRowsInMessage._chapt, 
+                getRowsInMessage._hCursor,
+                getRowsInMessage._cRowsToTransfer,
+                getRowsInMessage._cbRowWidth,
+                getRowsInMessage._cbSeek,
+                getRowsInMessage._cbReserved,
+                getRowsInMessage._cbReadBuffer,
+                getRowsInMessage._ulClientBase,
+                getRowsInMessage._fBwdFetch,
+                getRowsInMessage.eType,
+                getRowsInMessage._chapt,
                 getRowsInMessage.SeekDescription);
 
             if (client == defaultClient)
@@ -949,13 +945,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            
+
             if (CPMGetRowsOut != null)
             {
                 client.ExpectMessage<CPMGetRowsOut>(out response);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(response, out lastDocumentWorkId);
+                validator.ValidateGetRowsOut(response);
 
                 // Fire Response Event
                 CPMGetRowsOut(response.Header._status);
@@ -972,43 +968,106 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         #region CPMFetchValueIn and CPMFetchValueOut
 
         /// <summary>
-        /// CPMFetchValueIn() requests for the property value that 
-        /// was too large
-        /// to return in a rowset.
+        /// CPMFetchValueIn() requests for the property value that was too large to return in a rowset.
         /// </summary>
-        /// <param name="isCursorValid">Indicates whether the client 
-        /// has a valid cursor associated</param>
+        /// <param name="isCursorValid">Indicates whether the client has a valid cursor associated</param>
         public void CPMFetchValueIn(bool isCursorValid)
         {
+            uint workId = 0xfffffff0;
             uint cbSoFar = 0;
-            uint cbChunk
-                = Convert.ToUInt32(wspTestSite.Properties["CbChunk"]);
-            uint cursor = GetCursor(clientMachineName);
-            uint workId = GetWorkIdFromRowsOutMessage();
-            byte[] fetchValueOut = null;
+            uint cbChunk = Convert.ToUInt32(wspTestSite.Properties["CbChunk"]);
+
+            CPMFetchValueIn(workId, cbSoFar, cbChunk, WspConsts.System_ItemName, out _);
+        }
+
+        /// <summary>
+        /// CPMFetchValueIn() requests for the property value that was too large to return in a rowset.
+        /// </summary>
+        /// <param name="workId">The document work Id.</param>
+        /// <param name="propSpec">The property to fetch.</param>
+        /// <param name="serializedPropertyValue">The serialized property value</param>
+        public void CPMFetchValueIn(uint workId, CFullPropSpec propSpec, out SERIALIZEDPROPERTYVALUE? serializedPropertyValue)
+        {
+            uint cbChunk = 0x4000;
+            CPMFetchValueIn(workId, cbChunk, propSpec, out serializedPropertyValue);
+        }
+
+        /// <summary>
+        /// CPMFetchValueIn() requests for the property value that was too large to return in a rowset.
+        /// Multiple CPMFetchValueIn messages may be sent if cbChunk indicates a buffer that is not enough to be filled by the whole property value. 
+        /// </summary>
+        /// <param name="workId">The document work Id.</param>
+        /// <param name="cbChunk">The buffer length for a single CPMFetchValueIn message.</param>
+        /// <param name="propSpec">The property to fetch.</param>
+        /// <param name="serializedPropertyValue">The serialized property value</param>
+        public void CPMFetchValueIn(uint workId, uint cbChunk, CFullPropSpec propSpec, out SERIALIZEDPROPERTYVALUE? serializedPropertyValue)
+        {
+            serializedPropertyValue = null;
+
+            var consequentByteArrays = new List<byte[]>();
+            uint cbSofar = 0;
+            while (true)
+            {
+                CPMFetchValueIn(workId, cbSofar, cbChunk, propSpec, out var fetchValueOut);
+
+                if (fetchValueOut._fValueExists == 1)
+                {
+                    consequentByteArrays.Add(fetchValueOut.vValue);
+                }
+
+                if (fetchValueOut._fMoreExists == 1)
+                {
+                    cbSofar += fetchValueOut._cbValue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (consequentByteArrays.Any())
+            {
+                serializedPropertyValue = SERIALIZEDPROPERTYVALUE.GetSerializedPropertyValue(consequentByteArrays);
+            }
+        }
+
+        /// <summary>
+        /// CPMFetchValueIn() requests for the property value that was too large to return in a rowset.
+        /// </summary>
+        /// <param name="workId">The document work Id.</param>
+        /// <param name="cbSoFar">The current offset of the property value.</param>
+        /// <param name="cbChunk">The buffer length for a single CPMFetchValueIn message.</param>
+        /// <param name="propSpec">The property to fetch.</param>
+        /// <param name="fetchValueOut">The CPMFetchValueOut response to the request.</param>
+        public void CPMFetchValueIn(uint workId, uint cbSoFar, uint cbChunk, CFullPropSpec propSpec, out CPMFetchValueOut fetchValueOut)
+        {
+            fetchValueOut = null;
             byte[] value = null;
-            byte[] fetchValueIn
-                = builder.GetCPMFetchValueIn(workId, cbSoFar, cbChunk);
-            uint checkSum = GetCheckSumField(fetchValueIn);
+
+            CPMFetchValueIn fetchValueIn = builder.GetCPMFetchValueIn(workId, cbSoFar, cbChunk, propSpec);
+            var tempBuffer = new WspBuffer();
+            fetchValueIn.ToBytes(tempBuffer);
+            var fetchValueInBytes = tempBuffer.GetBytes();
+
+            uint checkSum = GetCheckSumField(fetchValueInBytes);
             RequestSender sender = GetRequestSender(isClientConnected);
-            bytesRead = sender.SendMessage(fetchValueIn, out fetchValueOut);
+            bytesRead = sender.SendMessage(fetchValueInBytes, out var fetchValueOutBytes);
             value = new byte[bytesRead];
-            Array.Copy(fetchValueOut, 0, value, 0, bytesRead);
+            Array.Copy(fetchValueOutBytes, 0, value, 0, bytesRead);
             int index = 4;
             // Read the message Response 
-            uint msgStatus = Helper.GetUInt(fetchValueOut, ref index);
+            uint msgStatus = Helper.GetUInt(fetchValueOutBytes, ref index);
             if (msgStatus == 0)
             {
-                validator.ValidateFetchValueOut(value,
-                    checkSum, cbSoFar, cbChunk);
+                validator.ValidateFetchValueOut(value, checkSum, cbSoFar, cbChunk);
+
+                fetchValueOut = new CPMFetchValueOut();
+                fetchValueOut.FromBytes(new WspBuffer(fetchValueOutBytes));
             }
+
             CPMFetchValueOutResponse(msgStatus);
         }
 
-        private uint GetWorkIdFromRowsOutMessage()
-        {
-            return lastDocumentWorkId;
-        }
         /// <summary>
         /// this event is used to get the response from 
         /// cpmfetchvaluein request.
@@ -1804,7 +1863,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             value = new byte[bytesRead];
             Array.Copy(restartPositionInResponse, 0, value, 0, bytesRead);
             uint checkSum = GetCheckSumField(restartPositionInResponse);
-            
+
             // Read the message Response           
             int startingIndex = 0;
             uint msgId = Helper.GetUInt(restartPositionInResponse, ref startingIndex);
@@ -1978,7 +2037,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         private WspMessageHeader? GetWspMessageHeader(WspMessageHeader_msg_Values _msg, uint _status, uint _ulChecksum)
         {
             WspMessageHeader? header = null;
-            
+
             if (sendInvalidMsg)
             {
                 header = new WspMessageHeader
@@ -1988,7 +2047,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     _ulChecksum = _ulChecksum
                 };
             }
-            
+
             if (sendInvalidStatus)
             {
                 header = new WspMessageHeader
@@ -1998,7 +2057,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     _ulChecksum = _ulChecksum
                 };
             }
-            
+
             if (sendInvalidUlChecksum)
             {
                 header = new WspMessageHeader

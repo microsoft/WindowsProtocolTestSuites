@@ -6,12 +6,30 @@ using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 {
+    public enum StoreStatus : int
+    {
+        /// <summary>
+        /// The property value is present for this row.
+        /// </summary>
+        StoreStatusOK = 0x00,
+
+        /// <summary>
+        /// The value is too big to be transferred in the CPMGetRowsOut message (greater than 2048 bytes).
+        /// </summary>
+        StoreStatusDeferred = 0x01,
+
+        /// <summary>
+        /// The property value is absent for this row.
+        /// </summary>
+        StoreStatusNull = 0x02
+    }
+
     /// <summary>
     /// The column returned in CPMGetRowsOut message.
     /// </summary>
     public struct Column
     {
-        public int? Status;
+        public StoreStatus? Status;
         public int? Length;
         public CTableVariant rowVariant;
         public object Data;
@@ -138,7 +156,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 {
                     if (BindingRequest.aColumns[j].StatusOffset != null)
                     {
-                        Rows[i].Columns[j].Status = buffer.Peek<byte>(rowStartIndex + BindingRequest.aColumns[j].StatusOffset.Value);
+                        Rows[i].Columns[j].Status = (StoreStatus)buffer.Peek<byte>(rowStartIndex + BindingRequest.aColumns[j].StatusOffset.Value);
                     }
 
                     if (BindingRequest.aColumns[j].LengthOffset != null)

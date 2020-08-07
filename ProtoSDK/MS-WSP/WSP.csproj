@@ -72,6 +72,8 @@
     <Compile Include="Messages\CPMConnectOut.cs" />
     <Compile Include="Messages\CPMCreateQueryIn.cs" />
     <Compile Include="Messages\CPMCreateQueryOut.cs" />
+    <Compile Include="Messages\CPMFetchValueIn.cs" />
+    <Compile Include="Messages\CPMFetchValueOut.cs" />
     <Compile Include="Messages\CPMFreeCursorIn.cs" />
     <Compile Include="Messages\CPMFreeCursorOut.cs" />
     <Compile Include="Messages\CPMGetQueryStatusExIn.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Structures\DECIMAL.cs" />
     <Compile Include="Structures\RANGEBOUNDARY.cs" />
     <Compile Include="Structures\SAFEARRAYBOUND.cs" />
+    <Compile Include="Structures\SERIALIZEDPROPERTYVALUE.cs" />
     <Compile Include="Structures\SProperty.cs" />
     <Compile Include="Structures\VT_BLOB.cs" />
     <Compile Include="Structures\VT_BLOB_OBJECT.cs" />
