@@ -11,13 +11,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
-{
-    using Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId;
-    using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
+namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System;
-
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
+    using Microsoft.Protocols.TestTools;
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class AppInstanceIdTestCase : PtfTestClassBase {
         
@@ -61,17 +64,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IAppInstanceIdAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.IAppInstanceIdAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.IAppInstanceIdAdapter))));
-            this.IAppInstanceIdAdapterInstance.OpenResponse += IAppInstanceIdAdapterInstance_OpenResponse;
+            this.IAppInstanceIdAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.IAppInstanceIdAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstanceId.IAppInstanceIdAdapter))));
+            this.Manager.Subscribe(OpenResponseInfo, this.IAppInstanceIdAdapterInstance);
         }
-
-        private void IAppInstanceIdAdapterInstance_OpenResponse(OpenStatus status)
-        {
-            this.Manager.AddEvent(OpenResponseInfo, this.IAppInstanceIdAdapterInstance, status);
-        }
-
+        
         protected override void TestCleanup() {
-            this.IAppInstanceIdAdapterInstance.OpenResponse -= IAppInstanceIdAdapterInstance_OpenResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }

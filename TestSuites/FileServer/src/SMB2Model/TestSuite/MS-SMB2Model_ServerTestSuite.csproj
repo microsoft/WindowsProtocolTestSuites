@@ -53,8 +53,10 @@
     <Reference Include="Microsoft.Protocols.TestTools">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.Messages.Runtime, Version=1.0.8000.0, Culture=neutral, PublicKeyToken=8cbb7324f9d2f801, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Protocols.TestTools.VSTS">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -74,10 +76,6 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
       <Project>{AB191B32-B12D-42CB-976D-CEA2C5BAD8BE}</Project>
       <Name>FileAccessService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Messages\Messages.csproj">
-      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
-      <Name>Messages</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj">
       <Project>{FFB198E5-2B91-48D9-97AF-27114F8961DD}</Project>

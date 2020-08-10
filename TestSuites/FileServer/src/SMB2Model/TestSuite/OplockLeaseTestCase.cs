@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class OplockLeaseTestCase : PtfTestClassBase {
         
@@ -64,19 +66,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IMixedOplockLeaseAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplockLease.IMixedOplockLeaseAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplockLease.IMixedOplockLeaseAdapter))));
-            this.IMixedOplockLeaseAdapterInstance.Verification += IMixedOplockLeaseAdapterInstance_Verification;
+            this.IMixedOplockLeaseAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplockLease.IMixedOplockLeaseAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplockLease.IMixedOplockLeaseAdapter))));
+            this.Manager.Subscribe(VerificationInfo, this.IMixedOplockLeaseAdapterInstance);
             this.grantedOplockType = this.Manager.CreateVariable<int>("grantedOplockType");
             this.v = this.Manager.CreateVariable<int>("v");
         }
-
-        private void IMixedOplockLeaseAdapterInstance_Verification(Adapter.MixedOplockLease.ModelBreakType breakType, TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockType, Adapter.MixedOplockLease.ModelLeaseStateType grantedLeaseType)
-        {
-            this.Manager.AddEvent(VerificationInfo, this.IMixedOplockLeaseAdapterInstance, new object[] { breakType, grantedOplockType, grantedLeaseType });
-        }
-
+        
         protected override void TestCleanup() {
-            this.IMixedOplockLeaseAdapterInstance.Verification -= IMixedOplockLeaseAdapterInstance_Verification;
             base.TestCleanup();
             this.CleanupTestManager();
         }

@@ -16,11 +16,11 @@ namespace GeneratedTests {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-    using Microsoft.Protocol.TestSuites.Smb;
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.2.2498.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class RequirementCoverage_FSCC_FSCTLName_Win7_Win2K8R2 : PtfTestClassBase {
         
@@ -86,65 +86,19 @@ namespace GeneratedTests {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ISmbAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.ISmbAdapter)(this.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.ISmbAdapter))));
-            this.IServerSetupAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter)(this.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter))));
-            this.IServerSetupAdapterInstance.ServerSetupResponse += IServerSetupAdapterInstance_ServerSetupResponse;
-            this.ISmbAdapterInstance.CreateResponse += ISmbAdapterInstance_CreateResponse;
-            this.ISmbAdapterInstance.ErrorResponse += ISmbAdapterInstance_ErrorResponse;
-            this.ISmbAdapterInstance.FSCCFSCTLNameResponse += ISmbAdapterInstance_FSCCFSCTLNameResponse;
-            this.ISmbAdapterInstance.NegotiateResponse += ISmbAdapterInstance_NegotiateResponse;
-            this.ISmbAdapterInstance.SessionSetupResponse += ISmbAdapterInstance_SessionSetupResponse;
-            this.ISmbAdapterInstance.SmbConnectionResponse += ISmbAdapterInstance_SmbConnectionResponse;
-            this.ISmbAdapterInstance.TreeConnectResponse += ISmbAdapterInstance_TreeConnectResponse;
+            this.ISmbAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.ISmbAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.ISmbAdapter))));
+            this.IServerSetupAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter))));
+            this.Manager.Subscribe(ServerSetupResponseInfo, this.IServerSetupAdapterInstance);
+            this.Manager.Subscribe(CreateResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(ErrorResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(FSCCFSCTLNameResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(NegotiateResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(SessionSetupResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(SmbConnectionResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(TreeConnectResponseInfo, this.ISmbAdapterInstance);
         }
-
-        private void ISmbAdapterInstance_FSCCFSCTLNameResponse(int messageId, int sessionId, int treeId, bool isSigned, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(FSCCFSCTLNameResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, sessionId, treeId, isSigned, messageStatus });
-        }
-
-        private void IServerSetupAdapterInstance_ServerSetupResponse(int totalBytesWritten, bool isSupportInfoLevelPassthru, bool isSupportNtSmb, bool isRapServerActive, bool isSupportResumeKey, bool isSupportCopyChunk)
-        {
-            this.Manager.AddEvent(ServerSetupResponseInfo, this.IServerSetupAdapterInstance, new object[] { totalBytesWritten, isSupportInfoLevelPassthru, isSupportNtSmb, isRapServerActive, isSupportResumeKey, isSupportCopyChunk });
-        }
-
-        private void ISmbAdapterInstance_CreateResponse(int messageId, int sessionId, int treeId, int fid, bool isSigned, List<CreateAction> createAction, bool isFileIdZero, bool isVolumeGuidZero, bool isDirectoryZero, bool isByteCountZero, bool isNoStream, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(CreateResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, sessionId, treeId, fid, isSigned, createAction, isFileIdZero, isVolumeGuidZero, isDirectoryZero, isByteCountZero, isNoStream, messageStatus });
-        }
-        private void ISmbAdapterInstance_ErrorResponse(int messageId, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(ErrorResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, messageStatus });
-        }
-
-        private void ISmbAdapterInstance_SmbConnectionResponse(Platform clientPlatform, Platform sutPlatform)
-        {
-            this.Manager.AddEvent(SmbConnectionResponseInfo, this.ISmbAdapterInstance, new object[] { clientPlatform, sutPlatform });
-        }
-
-        private void ISmbAdapterInstance_TreeConnectResponse(int messageId, int sessionId, int treeId, bool isSecuritySignatureZero, ShareType shareType, MessageStatus messageStatus, bool isSigned, bool isInDfs, bool isSupportExtSignature)
-        {
-            this.Manager.AddEvent(TreeConnectResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, sessionId, treeId, isSecuritySignatureZero, shareType, messageStatus, isSigned, isInDfs, isSupportExtSignature });
-        }
-
-        private void ISmbAdapterInstance_NegotiateResponse(int messageId, bool isSignatureRequired, bool isSignatureEnabled, int dialectIndex, List<Capabilities> serverCapabilities, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(NegotiateResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, isSignatureRequired, isSignatureEnabled, dialectIndex, serverCapabilities, messageStatus });
-        }
-
-        private void ISmbAdapterInstance_SessionSetupResponse(int messageId, int sessionId, int securitySignatureValue, bool isSigned, bool isGuestAccount, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(SessionSetupResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, sessionId, securitySignatureValue, isSigned, isGuestAccount, messageStatus });
-        }
+        
         protected override void TestCleanup() {
-            this.IServerSetupAdapterInstance.ServerSetupResponse -= IServerSetupAdapterInstance_ServerSetupResponse;
-            this.ISmbAdapterInstance.CreateResponse -= ISmbAdapterInstance_CreateResponse;
-            this.ISmbAdapterInstance.ErrorResponse -= ISmbAdapterInstance_ErrorResponse;
-            this.ISmbAdapterInstance.FSCCFSCTLNameResponse -= ISmbAdapterInstance_FSCCFSCTLNameResponse;
-            this.ISmbAdapterInstance.NegotiateResponse -= ISmbAdapterInstance_NegotiateResponse;
-            this.ISmbAdapterInstance.SessionSetupResponse -= ISmbAdapterInstance_SessionSetupResponse;
-            this.ISmbAdapterInstance.SmbConnectionResponse -= ISmbAdapterInstance_SmbConnectionResponse;
-            this.ISmbAdapterInstance.TreeConnectResponse -= ISmbAdapterInstance_TreeConnectResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -292,7 +246,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S120");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S120");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S120");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S120, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S120, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S120");
             }
             catch (TransactionFailedException ) {
@@ -351,7 +305,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S240");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S240");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S240");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S240, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S240, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S240");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S240");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S240");
@@ -517,7 +471,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S125");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S125");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S125");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S125, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S125, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S125");
             }
             catch (TransactionFailedException ) {
@@ -576,7 +530,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S245");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S245");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S245");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S245, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S245, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S245");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S245");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S245");
@@ -742,7 +696,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S126");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S126");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S126");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S126, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S126, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S126");
             }
             catch (TransactionFailedException ) {
@@ -801,7 +755,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S246");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S246");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S246");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S246, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S246, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S246");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S246");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S246");
@@ -968,7 +922,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S127");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S127");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S127");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S127, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S127, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S127");
             }
             catch (TransactionFailedException ) {
@@ -1027,7 +981,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S247");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S247");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S247");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S247, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S247, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S247");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S247");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S247");
@@ -1193,7 +1147,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S128");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S128");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S128");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S128, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S128, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S128");
             }
             catch (TransactionFailedException ) {
@@ -1252,7 +1206,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S248");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S248");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S248");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S248, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S248, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S248");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S248");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S248");
@@ -1418,7 +1372,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S129");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S129");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S129");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S129, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S129, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S129");
             }
             catch (TransactionFailedException ) {
@@ -1477,7 +1431,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S249");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S249");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S249");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S249, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S249, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S249");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S249");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S249");
@@ -1644,7 +1598,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S121");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S121");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S121");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S121, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S121, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S121");
             }
             catch (TransactionFailedException ) {
@@ -1703,7 +1657,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S241");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S241");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S241");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S241, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S241, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S241");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S241");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S241");
@@ -1869,7 +1823,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S130");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S130");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S130");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S130, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S130, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S130");
             }
             catch (TransactionFailedException ) {
@@ -1928,7 +1882,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S250");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S250");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S250");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S250, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S250, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S250");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S250");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S250");
@@ -2095,7 +2049,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S131");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S131");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S131");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S131, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S131, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S131");
             }
             catch (TransactionFailedException ) {
@@ -2154,7 +2108,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S251");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S251");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S251");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S251, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S251, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S251");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S251");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S251");
@@ -2320,7 +2274,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S122");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S122");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S122");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S122, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S122, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S122");
             }
             catch (TransactionFailedException ) {
@@ -2379,7 +2333,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S242");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S242");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S242");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S242, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S242, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S242");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S242");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S242");
@@ -2546,7 +2500,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S123");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S123");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S123");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S123, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S123, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S123");
             }
             catch (TransactionFailedException ) {
@@ -2605,7 +2559,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S243");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S243");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S243");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S243, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S243, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S243");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S243");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S243");
@@ -2771,7 +2725,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSignatureEnabled, "isSignatureEnabled of NegotiateResponse, state S124");
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NegotiateResponse, state S124");
                 TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NegotiateResponse, state S124");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S124, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapExtendedSecurity, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities, "serverCapabilities of NegotiateResponse, state S124, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NegotiateResponse, state S124");
             }
             catch (TransactionFailedException ) {
@@ -2830,7 +2784,7 @@ namespace GeneratedTests {
                 TestManagerHelpers.AssertAreEqual<int>(this.Manager, 0, fid, "fid of CreateResponse, state S244");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSigned, "isSigned of CreateResponse, state S244");
                 TestManagerHelpers.AssertNotNull(this.Manager, createAction, "createAction of CreateResponse, state S244");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.CreateAction>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S244, field selection Rep");
+                CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.CreateAction> { Microsoft.Protocol.TestSuites.Smb.CreateAction.FileCreated, Microsoft.Protocol.TestSuites.Smb.CreateAction.FileDoesNotExist }, createAction, "createAction of CreateResponse, state S244, field selection Rep");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isFileIdZero, "isFileIdZero of CreateResponse, state S244");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isVolumeGuidZero, "isVolumeGuidZero of CreateResponse, state S244");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isDirectoryZero, "isDirectoryZero of CreateResponse, state S244");

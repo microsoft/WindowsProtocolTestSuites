@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class OplockOnShareWithoutForceLevel2OrSOFSTestCase : PtfTestClassBase {
         
@@ -96,9 +98,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IOplockAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.IOplockAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.IOplockAdapter))));
-            this.IOplockAdapterInstance.OplockBreakNotification += IOplockAdapterInstance_OplockBreakNotification;
-            this.IOplockAdapterInstance.OplockBreakResponse += IOplockAdapterInstance_OplockBreakResponse;
+            this.IOplockAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.IOplockAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.IOplockAdapter))));
+            this.Manager.Subscribe(OplockBreakNotificationInfo, this.IOplockAdapterInstance);
+            this.Manager.Subscribe(OplockBreakResponseInfo, this.IOplockAdapterInstance);
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>("c1");
             this.grantedOplockLevel = this.Manager.CreateVariable<int>("grantedOplockLevel");
@@ -112,20 +114,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v4 = this.Manager.CreateVariable<int>("v4");
             this.v5 = this.Manager.CreateVariable<int>("v5");
         }
-
-        private void IOplockAdapterInstance_OplockBreakResponse(Adapter.ModelSmb2Status status, TestTools.StackSdk.FileAccessService.Smb2.OPLOCK_BREAK_Response_OplockLevel_Values oplockLevel, TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values oplockLevelOnOpen)
-        {
-            this.Manager.AddEvent(OplockBreakResponseInfo, this.IOplockAdapterInstance, new object[] { status, oplockLevel, oplockLevelOnOpen });
-        }
-
-        private void IOplockAdapterInstance_OplockBreakNotification(TestTools.StackSdk.FileAccessService.Smb2.OPLOCK_BREAK_Notification_Packet_OplockLevel_Values acceptableAckOplockLevel)
-        {
-            this.Manager.AddEvent(OplockBreakNotificationInfo, this.IOplockAdapterInstance, acceptableAckOplockLevel);
-        }
-
+        
         protected override void TestCleanup() {
-            this.IOplockAdapterInstance.OplockBreakNotification -= IOplockAdapterInstance_OplockBreakNotification;
-            this.IOplockAdapterInstance.OplockBreakResponse -= IOplockAdapterInstance_OplockBreakResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -224,7 +214,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS5() {
@@ -256,7 +246,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -394,7 +384,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -515,11 +505,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -622,7 +612,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -658,9 +648,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -693,7 +683,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -728,9 +718,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -787,7 +777,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -820,7 +810,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -845,7 +835,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS29() {
@@ -877,7 +867,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -1001,7 +991,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -1123,7 +1113,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -1194,11 +1184,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -1303,7 +1293,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -1345,9 +1335,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -1386,7 +1376,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -1423,9 +1413,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -1484,7 +1474,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -1519,7 +1509,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -1546,7 +1536,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS53() {
@@ -1601,7 +1591,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -1706,7 +1696,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -1797,11 +1787,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -1906,7 +1896,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -1948,9 +1938,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -1989,7 +1979,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -2026,9 +2016,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -2087,7 +2077,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -2122,7 +2112,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -2149,7 +2139,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS73() {
@@ -2181,11 +2171,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -2290,7 +2280,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -2332,9 +2322,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -2373,7 +2363,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -2410,9 +2400,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -2471,7 +2461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -2506,7 +2496,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -2542,7 +2532,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -2674,7 +2664,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -2919,7 +2909,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1034");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1033RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -2935,11 +2925,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -3086,7 +3076,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -3225,7 +3215,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1034");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1033RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -3241,11 +3231,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -3313,7 +3303,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -3350,7 +3340,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -3388,9 +3378,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -3449,7 +3439,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -3484,7 +3474,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -3520,7 +3510,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -3686,7 +3676,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1034");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS112() {
@@ -3777,7 +3767,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -3921,11 +3911,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -4063,7 +4053,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1034");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS131() {
@@ -4154,7 +4144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -4298,11 +4288,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -4568,7 +4558,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1064");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1063RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -4584,11 +4574,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -4652,7 +4642,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -4690,7 +4680,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -4744,7 +4734,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -4779,7 +4769,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -4815,7 +4805,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -4941,7 +4931,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1064");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1087() {
@@ -4996,11 +4986,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -5105,7 +5095,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -5143,9 +5133,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -5184,7 +5174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -5221,9 +5211,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -5282,7 +5272,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -5313,7 +5303,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -5345,7 +5335,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -5430,14 +5420,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1064");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1063ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1064");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -5572,7 +5562,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1098");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1097RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -5588,11 +5578,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -5660,9 +5650,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -5700,7 +5690,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -5734,7 +5724,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -5792,7 +5782,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -5823,7 +5813,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -5856,7 +5846,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -5977,7 +5967,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1098");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1119() {
@@ -6062,11 +6052,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -6089,7 +6079,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -6168,7 +6158,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -6282,14 +6272,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1098");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1097ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1098");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -6424,14 +6414,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1130");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1129ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1130");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1129RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -6447,11 +6437,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -6515,7 +6505,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -6549,7 +6539,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -6603,7 +6593,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -6634,7 +6624,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -6667,7 +6657,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -6793,14 +6783,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1130");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1129ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1130");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -6922,14 +6912,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1151");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1150ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1151");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1150RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -6945,11 +6935,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -7013,7 +7003,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -7046,7 +7036,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -7100,7 +7090,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -7131,7 +7121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -7163,7 +7153,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -7227,7 +7217,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -7346,14 +7336,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1151");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1150ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1151");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS472() {
@@ -7414,7 +7404,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -7438,11 +7428,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -7724,14 +7714,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1170");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1169ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1170");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1174() {
@@ -7763,7 +7753,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -7891,7 +7881,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -7982,11 +7972,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -8107,7 +8097,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -8145,9 +8135,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -8186,7 +8176,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -8223,9 +8213,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -8264,7 +8254,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -8295,7 +8285,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -8318,7 +8308,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1170");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1169RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -8334,11 +8324,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -8446,7 +8436,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -8478,7 +8468,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -8510,7 +8500,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -8641,7 +8631,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1170");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -8770,14 +8760,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1204");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1203ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1204");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1208() {
@@ -8809,7 +8799,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -8833,11 +8823,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -8851,7 +8841,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1204");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1203RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -8867,11 +8857,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -8935,7 +8925,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -8969,7 +8959,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -9054,7 +9044,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -9175,7 +9165,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1204");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -9310,21 +9300,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1226");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1225ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1226");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1225ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1226");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1225RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -9340,11 +9330,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -9408,7 +9398,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -9442,7 +9432,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -9496,7 +9486,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -9528,7 +9518,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -9560,7 +9550,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -9681,7 +9671,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1226");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -9816,14 +9806,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1247");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1246ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1247");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1251() {
@@ -9855,11 +9845,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -9964,7 +9954,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -10002,7 +9992,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -10090,7 +10080,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -10125,7 +10115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -10161,7 +10151,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -10289,7 +10279,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -10370,7 +10360,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -10469,7 +10459,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1247");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1246RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -10485,11 +10475,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -10553,7 +10543,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -10586,7 +10576,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -10640,7 +10630,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -10671,7 +10661,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -10703,7 +10693,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -10836,7 +10826,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1247");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -10971,14 +10961,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1284");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1283ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1284");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1288() {
@@ -11010,11 +11000,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -11037,7 +11027,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -11052,7 +11042,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1284");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1283RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -11068,11 +11058,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -11140,7 +11130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -11177,7 +11167,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -11211,9 +11201,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -11272,7 +11262,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -11303,7 +11293,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -11335,7 +11325,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -11420,7 +11410,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1284");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -11503,21 +11493,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1304");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1303ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1304");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1303ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1304");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1303RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -11533,11 +11523,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -11634,7 +11624,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -11671,7 +11661,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -11725,7 +11715,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -11760,7 +11750,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -11796,7 +11786,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -11962,7 +11952,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1304");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -12033,14 +12023,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1319");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1318ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1319");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1323() {
@@ -12072,11 +12062,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -12099,7 +12089,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -12190,7 +12180,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -12304,7 +12294,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1319");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1327() {
@@ -12359,11 +12349,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -12386,7 +12376,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -12471,7 +12461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1319");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -12542,21 +12532,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1331ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1331ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1339() {
@@ -12670,11 +12660,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -12746,7 +12736,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -12784,9 +12774,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -12825,7 +12815,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -12862,9 +12852,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -12923,7 +12913,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -12954,7 +12944,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -12986,7 +12976,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -13065,7 +13055,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -13177,7 +13167,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -13248,28 +13238,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1356");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1355ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1356");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1355ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1356");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1355ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1356");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -13340,14 +13330,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1364");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1363ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1364");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS960() {
@@ -13379,11 +13369,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -13496,7 +13486,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -13538,9 +13528,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -13579,7 +13569,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -13616,9 +13606,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -13711,7 +13701,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -13746,7 +13736,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -13782,7 +13772,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -13980,7 +13970,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -14042,7 +14032,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1364");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1371() {
@@ -14074,7 +14064,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -14098,11 +14088,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -14116,7 +14106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1364");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -14187,28 +14177,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1373");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1372ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1373");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1372ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1373");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1372ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1373");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -14279,28 +14269,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1381");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1380ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1381");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1380ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1381");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1380ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1381");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -14371,28 +14361,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1389");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1388ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1389");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1388ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1389");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1388ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1389");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS150() {
@@ -14483,7 +14473,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -14627,11 +14617,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -14816,21 +14806,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1397");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1396ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1397");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1396ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1397");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1401() {
@@ -14862,7 +14852,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -14886,11 +14876,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -14904,7 +14894,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1397");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -14962,28 +14952,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1403");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1402ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1403");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1402ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1403");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1402ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1403");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -15041,21 +15031,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1408");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1407ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1408");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1407ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1408");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS408() {
@@ -15087,11 +15077,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -15214,7 +15204,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -15256,9 +15246,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -15297,7 +15287,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -15334,9 +15324,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -15395,7 +15385,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -15428,7 +15418,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -15462,7 +15452,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -15497,7 +15487,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -15533,7 +15523,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -15673,7 +15663,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -15789,7 +15779,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1408");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -15847,28 +15837,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1413");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1412ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1413");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1412ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1413");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS1412ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1413");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -16055,21 +16045,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S171");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS170ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S171");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS170ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S171");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS170RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -16085,7 +16075,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -16225,11 +16215,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -16367,7 +16357,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S171");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS170RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -16383,7 +16373,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -16523,11 +16513,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -16849,21 +16839,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S207");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS206ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S207");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS206ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S207");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS206RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -16879,7 +16869,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -17009,11 +16999,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -17121,7 +17111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -17153,7 +17143,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -17176,7 +17166,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S207");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS206RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -17192,7 +17182,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -17322,11 +17312,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -17390,7 +17380,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -17424,7 +17414,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -17478,7 +17468,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -17509,7 +17499,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -17725,21 +17715,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S243");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS242ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S243");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS242ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S243");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS242RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -17755,7 +17745,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -17885,11 +17875,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -17953,7 +17943,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -17987,7 +17977,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -18041,7 +18031,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -18073,7 +18063,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -18096,7 +18086,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S243");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS242RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -18112,7 +18102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -18242,11 +18232,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -18310,7 +18300,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -18344,7 +18334,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -18398,7 +18388,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -18429,7 +18419,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -18645,21 +18635,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S277");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS276ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S277");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS276ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S277");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS276RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -18675,7 +18665,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -18817,11 +18807,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -18889,9 +18879,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -18929,7 +18919,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -18963,7 +18953,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -19021,7 +19011,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -19052,7 +19042,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -19075,7 +19065,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S277");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS276RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -19091,7 +19081,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -19233,11 +19223,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -19301,7 +19291,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -19334,7 +19324,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -19388,7 +19378,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -19419,7 +19409,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -19634,21 +19624,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S312");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS311ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S312");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS311ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S312");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS311RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -19664,7 +19654,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -19758,11 +19748,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -19824,7 +19814,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -19855,7 +19845,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -19878,7 +19868,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S312");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS311RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -19894,7 +19884,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -19995,7 +19985,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -20086,11 +20076,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -20158,7 +20148,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -20195,7 +20185,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -20229,9 +20219,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -20290,7 +20280,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -20321,7 +20311,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -20466,21 +20456,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S345");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS344ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S345");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS344ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S345");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS344RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -20496,11 +20486,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -20643,7 +20633,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -20707,7 +20697,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -20826,7 +20816,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S345");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS369() {
@@ -20858,11 +20848,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -20885,7 +20875,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -21022,21 +21012,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S386");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS385ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S386");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS385ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S386");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS385RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -21052,11 +21042,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -21120,7 +21110,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -21154,7 +21144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -21239,7 +21229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -21370,7 +21360,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S386");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -21505,21 +21495,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S410");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS409ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S410");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS409ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S410");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS409RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -21535,11 +21525,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -21603,7 +21593,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -21637,7 +21627,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -21691,7 +21681,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -21722,7 +21712,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -21755,7 +21745,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -21876,7 +21866,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S410");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -22052,14 +22042,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S433");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS432ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S433");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS432RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -22075,11 +22065,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -22143,7 +22133,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -22176,7 +22166,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -22230,7 +22220,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -22261,7 +22251,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -22294,7 +22284,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -22415,7 +22405,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S433");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS432RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -22431,11 +22421,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -22503,9 +22493,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -22543,7 +22533,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -22577,7 +22567,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -22635,7 +22625,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -22667,7 +22657,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -22699,7 +22689,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -22714,7 +22704,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S433");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -22907,21 +22897,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S493");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS492ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S493");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS492ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S493");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS492RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -22937,11 +22927,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -23009,9 +22999,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -23049,7 +23039,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -23083,7 +23073,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -23141,7 +23131,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -23172,7 +23162,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -23204,7 +23194,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -23337,7 +23327,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S493");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS492RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -23353,7 +23343,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -23488,11 +23478,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -23816,21 +23806,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S530");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS529ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S530");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS529ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S530");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS529RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -23846,11 +23836,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -23912,7 +23902,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -23943,7 +23933,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -23975,7 +23965,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -24060,7 +24050,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S530");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS529RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -24076,7 +24066,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -24206,11 +24196,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -24455,28 +24445,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS560ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS560ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS560ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS560RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -24492,7 +24482,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -24629,11 +24619,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -24697,7 +24687,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -24731,7 +24721,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -24785,7 +24775,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -24817,7 +24807,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -25026,21 +25016,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S579");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS578ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S579");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS578ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S579");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS578RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -25056,7 +25046,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -25196,11 +25186,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -25264,7 +25254,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -25298,7 +25288,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -25374,7 +25364,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S579");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS578RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -25390,7 +25380,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -25454,7 +25444,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -25582,11 +25572,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -25650,7 +25640,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -25684,7 +25674,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -25738,7 +25728,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -25769,7 +25759,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -25948,21 +25938,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S615");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS614ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S615");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS614ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S615");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS614RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -25978,7 +25968,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -26108,11 +26098,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -26176,7 +26166,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -26209,7 +26199,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -26263,7 +26253,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -26295,7 +26285,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -26318,7 +26308,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S615");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS614RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -26334,7 +26324,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -26358,11 +26348,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -26426,7 +26416,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -26460,7 +26450,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -26692,21 +26682,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S644");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS643ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S644");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS643ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S644");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS643RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -26722,7 +26712,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -26852,11 +26842,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -26923,7 +26913,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -26957,9 +26947,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -26998,7 +26988,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -27056,7 +27046,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -27088,7 +27078,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -27111,7 +27101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S644");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS643RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -27127,7 +27117,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -27267,11 +27257,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -27547,21 +27537,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S676");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS675ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S676");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS675ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S676");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS675RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -27577,7 +27567,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -27719,11 +27709,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -27795,7 +27785,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -27833,9 +27823,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -27874,7 +27864,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_NONE, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and the Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_NONE.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -27911,9 +27901,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -27972,7 +27962,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -28003,7 +27993,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -28026,7 +28016,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S676");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS675RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -28042,7 +28032,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -28172,11 +28162,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -28284,7 +28274,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -28316,7 +28306,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -28531,21 +28521,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S712");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS711ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S712");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS711ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S712");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS711RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -28561,7 +28551,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -28655,11 +28645,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -28721,7 +28711,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -28752,7 +28742,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -28775,7 +28765,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S712");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS711RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -28791,7 +28781,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -28921,11 +28911,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -28989,7 +28979,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -29023,7 +29013,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -29077,7 +29067,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -29109,7 +29099,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -29324,21 +29314,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S744");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS743ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S744");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS743ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S744");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS743RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -29354,11 +29344,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -29470,7 +29460,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -29502,7 +29492,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -29534,7 +29524,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -29669,7 +29659,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S744");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS743RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -29685,7 +29675,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -29749,7 +29739,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -29877,11 +29867,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -29945,7 +29935,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -29978,7 +29968,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -30032,7 +30022,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -30063,7 +30053,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -30208,21 +30198,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S781");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS780ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S781");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS780ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S781");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS780RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -30238,11 +30228,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -30310,9 +30300,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -30350,7 +30340,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -30384,7 +30374,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -30477,7 +30467,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -30608,7 +30598,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S781");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS803() {
@@ -30640,11 +30630,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -30667,7 +30657,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -30781,21 +30771,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S805");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS804ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S805");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS804ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S805");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS804RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -30811,11 +30801,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -30954,7 +30944,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -30969,7 +30959,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S805");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         #endregion
         
@@ -31104,21 +31094,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S827");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS826ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S827");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS826ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S827");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS826RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -31134,11 +31124,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -31202,7 +31192,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -31236,7 +31226,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -31290,7 +31280,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -31322,7 +31312,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -31354,7 +31344,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -31475,7 +31465,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S827");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         #endregion
         
@@ -31674,21 +31664,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S848");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS847ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S848");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS847ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S848");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS847RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -31704,11 +31694,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -31772,7 +31762,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -31806,7 +31796,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -31860,7 +31850,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -31891,7 +31881,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -31923,7 +31913,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -32049,7 +32039,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S848");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS847RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -32065,7 +32055,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -32129,7 +32119,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -32257,11 +32247,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -32325,7 +32315,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -32359,7 +32349,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -32413,7 +32403,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -32444,7 +32434,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -32654,21 +32644,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S883");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS882ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S883");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS882ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S883");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS882RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -32684,11 +32674,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -32752,7 +32742,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -32785,7 +32775,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -32839,7 +32829,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -32870,7 +32860,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -32902,7 +32892,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -33035,7 +33025,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S883");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS882RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -33051,7 +33041,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -33191,11 +33181,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -33442,28 +33432,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S91");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS90ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S91");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS90ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S91");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS90ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S91");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS90RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -33479,11 +33469,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -33547,7 +33537,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -33581,7 +33571,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -33664,7 +33654,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -33728,7 +33718,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
@@ -33969,21 +33959,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S919");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS918ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S919");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS918ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S919");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS923() {
@@ -34015,11 +34005,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -34042,7 +34032,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -34057,7 +34047,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S919");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS918RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -34073,7 +34063,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -34203,11 +34193,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -34465,28 +34455,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S956");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS955ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S956");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS955ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S956");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS955ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S956");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS955RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -34502,7 +34492,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -34632,11 +34622,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -34700,7 +34690,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<351> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -34734,7 +34724,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -34788,7 +34778,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -34819,7 +34809,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or SMB2_OPLOCK_LEVE" +
@@ -34971,28 +34961,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S978");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS977ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S978");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS977ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S978");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS977ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S978");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS977RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -35008,7 +34998,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -35150,11 +35140,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -35218,7 +35208,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -35251,7 +35241,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<350> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -35305,7 +35295,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -35336,7 +35326,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_PARAMETER."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the OplockLevel in the acknowledgment is SMB2_OPLOCK_LEVEL_LEASE, t" +
@@ -35545,7 +35535,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S999");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS998RequestOplockAndOperateFileRequestChecker(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -35561,11 +35551,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -35704,7 +35694,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -35837,7 +35827,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S999");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS998RequestOplockAndOperateFileRequestChecker2(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.OplockLevel_Values grantedOplockLevel, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
@@ -35853,7 +35843,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -35947,11 +35937,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ockState is set to Held.\"");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.grantedOplockLevel.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(grantedOplockLevel == 0)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.grantedOplockLevel, "v1 == grantedOplockLevel");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v2, this.c1, "v2 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v2.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v2.Platform == c.Platform");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to None.\"");
             this.Manager.Checkpoint("\"[TestInfo] Open.OplockState is set to Held.\"");
@@ -36018,7 +36008,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store, as described in section 3.3.4.6, with a new level SMB2_OPLOCK_LEVEL_NONE in an implementation-specific manner,<352> and set Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE and Open.OplockState to None."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -36052,9 +36042,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates an error, set the Open.OplockLevel to SMB2_OPLOCK_LEVEL_NONE, the Open.OplockState to None, and send the error response with the error code received."", ""[TestInfo] Open.OplockLevel is set to SMB2_OPLOCK_LEVEL_NONE, and Open.OplockState is set to None""");
                 throw;
             }
-            this.Manager.Assert(((~(System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
+            this.Manager.Assert(((~(System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0))))) == 0) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v5, this.status, "v5 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
@@ -36093,7 +36083,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Breaking."", ""[MS-SMB2] If Open.OplockState is Breaking, complete the oplock break request received from the object store as described in section 3.3.4.6, with a new level received in OplockLevel in an implementation-specific manner.<353>"", ""[MS-SMB2] If the object store indicates success, update Open.OplockLevel and Open.OplockState as follows:"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II, set Open.OplockLevel to SMB2_OPLOCK_LEVEL_II and Open.OplockState to Held."", ""[TestInfo] Open.OplockLevel is set to OPLOCK_LEVEL_II, and Open.OplockState is set to None"", ""[MS-SMB2] The server then MUST construct an oplock break response using the syntax specified in section 2.2.25 with the following value:"", ""[MS-SMB2] OplockLevel MUST be set to Open.OplockLevel."", ""[TestInfo] Open.OplockLevel is OPLOCK_LEVEL_II.""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
                     "server MUST do the following:\"");
@@ -36151,7 +36141,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_OPLOCK_PROTOCOL."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(1))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 1");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel is not" +
@@ -36182,7 +36172,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment"", ""[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:"", ""[TestInfo] Open.OplockState is Held."", ""[MS-SMB2] If Open.OplockState is not Breaking, stop processing the acknowledgment, and send an error response with STATUS_INVALID_DEVICE_STATE."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(((byte)(((int)(((byte)(this.grantedOplockLevel.Value)))))))))), ((object)(9))), "Fail to check the assumption : (byte)(byte)grantedOplockLevel == 9");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.oplockLevel1, "v3 == oplockLevel1");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.22.1   Processing an Oplock Acknowledgment\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE, the " +
@@ -36205,14 +36195,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S999");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void OplockOnShareWithoutForceLevel2OrSOFSTestCaseS998ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.c, c, "c of ReadConfig, state S999");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock.OplockConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
     }

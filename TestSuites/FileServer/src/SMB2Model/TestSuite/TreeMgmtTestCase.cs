@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TreeMgmtTestCase : PtfTestClassBase {
         
@@ -76,9 +78,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ITreeMgmtAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.ITreeMgmtAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.ITreeMgmtAdapter))));
-            this.ITreeMgmtAdapterInstance.TreeConnectResponse += ITreeMgmtAdapterInstance_TreeConnectResponse;
-            this.ITreeMgmtAdapterInstance.TreeDisconnectResponse += ITreeMgmtAdapterInstance_TreeDisconnectResponse;
+            this.ITreeMgmtAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.ITreeMgmtAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.ITreeMgmtAdapter))));
+            this.Manager.Subscribe(TreeConnectResponseInfo, this.ITreeMgmtAdapterInstance);
+            this.Manager.Subscribe(TreeDisconnectResponseInfo, this.ITreeMgmtAdapterInstance);
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>("c");
             this.config = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>("config");
             this.shareType = this.Manager.CreateVariable<int>("shareType");
@@ -86,20 +88,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>("v1");
             this.v2 = this.Manager.CreateVariable<int>("v2");
         }
-
-        private void ITreeMgmtAdapterInstance_TreeDisconnectResponse(Adapter.ModelSmb2Status status)
-        {
-            this.Manager.AddEvent(TreeDisconnectResponseInfo, this.ITreeMgmtAdapterInstance, status);
-        }
-
-        private void ITreeMgmtAdapterInstance_TreeConnectResponse(Adapter.ModelSmb2Status status, TestTools.StackSdk.FileAccessService.Smb2.ShareType_Values shareType, Adapter.TreeMgmt.TreeMgmtServerConfig config)
-        {
-            this.Manager.AddEvent(TreeConnectResponseInfo, this.ITreeMgmtAdapterInstance, new object[] { status, shareType, config });
-        }
-
+        
         protected override void TestCleanup() {
-            this.ITreeMgmtAdapterInstance.TreeConnectResponse -= ITreeMgmtAdapterInstance_TreeConnectResponse;
-            this.ITreeMgmtAdapterInstance.TreeDisconnectResponse -= ITreeMgmtAdapterInstance_TreeDisconnectResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -308,7 +298,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
         }
         
         private void TreeMgmtTestCaseS19() {
@@ -494,7 +484,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Comment("Unbinding variable \'config\'");
             this.config.Unbind();
             this.Manager.Comment("Unbinding variable \'shareType\'");
@@ -704,7 +694,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.shareType, "v2 == shareType");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.7: The server MUST determine whether the user represented by Session.SecurityContext should be granted access based on the authorization policy specified in Share.ConnectSecurity. If the server determines that access should not be granted, the server MUST fail the request with STATUS_ACCESS_DENIED.""");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.4.13: If Share.Name is equal to ""IPC$"" or Share.Type does not have the STYPE_SPECIAL bit set, then Share.ConnectSecurity SHOULD be set to a security descriptor allowing all users. Otherwise, Share.ConnectSecurity SHOULD be set to a security descriptor allowing only administrators.""");
@@ -901,7 +891,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.shareType, "v2 == shareType");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.7: Otherwise, the server MUST provide the tuple <hostname, sharename> parsed from the request message to invoke the event specified in [MS-SRVS] section 3.1.6.8, to normalize the hostname by resolving server aliases and evaluating share scope. The server MUST use <normalized hostname, sharename> to look up the Share in ShareList. If no share with a matching share name and server name is found, the server MUST fail the request with STATUS_BAD_NETWORK_NAME""");
             this.Manager.Checkpoint("\"[TestInfo] Share path is an invalid share path\"");
@@ -969,7 +959,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Comment("Unbinding variable \'config\'");
             this.config.Unbind();
             this.Manager.Comment("Unbinding variable \'shareType\'");
@@ -1039,7 +1029,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.shareType, "v2 == shareType");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.7: The server MUST determine whether the user represented by Session.SecurityContext should be granted access based on the authorization policy specified in Share.ConnectSecurity. If the server determines that access should not be granted, the server MUST fail the request with STATUS_ACCESS_DENIED.""");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.4.13: If Share.Name is equal to ""IPC$"" or Share.Type does not have the STYPE_SPECIAL bit set, then Share.ConnectSecurity SHOULD be set to a security descriptor allowing all users. Otherwise, Share.ConnectSecurity SHOULD be set to a security descriptor allowing only administrators.""");
@@ -1141,7 +1131,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Comment("Unbinding variable \'config\'");
             this.config.Unbind();
             this.Manager.Comment("Unbinding variable \'shareType\'");
@@ -1264,7 +1254,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.shareType, "v2 == shareType");
             this.Manager.Comment("Unbinding variable \'config\'");
             this.config.Unbind();
@@ -1371,7 +1361,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(this.Manager, this.v1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.TreeMgmt.TreeMgmtServerConfig>(new string[] {
                             "Platform"}, new object[] {
                             this.c.Value.Platform}), "v1 == TreeMgmtServerConfig(Platform=c.Platform)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.shareType, "v2 == shareType");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.5.7: Otherwise, the server MUST provide the tuple <hostname, sharename> parsed from the request message to invoke the event specified in [MS-SRVS] section 3.1.6.8, to normalize the hostname by resolving server aliases and evaluating share scope. The server MUST use <normalized hostname, sharename> to look up the Share in ShareList. If no share with a matching share name and server name is found, the server MUST fail the request with STATUS_BAD_NETWORK_NAME""");
             this.Manager.Checkpoint("\"[TestInfo] Share path is an invalid share path\"");

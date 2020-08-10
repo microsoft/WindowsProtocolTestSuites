@@ -16,11 +16,11 @@ namespace GeneratedTests {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-    using Microsoft.Protocol.TestSuites.Smb;
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.2.2498.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class NoSignNonExtendRequirementCoverage_Create_Win7_Win2K8_InvalidImpersonalLevel : PtfTestClassBase {
         
@@ -78,51 +78,17 @@ namespace GeneratedTests {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ISmbAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.ISmbAdapter)(this.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.ISmbAdapter))));
-            this.IServerSetupAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter)(this.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter))));
-            this.IServerSetupAdapterInstance.ServerSetupResponse += IServerSetupAdapterInstance_ServerSetupResponse;
-            this.ISmbAdapterInstance.ErrorResponse += ISmbAdapterInstance_ErrorResponse;
-            this.ISmbAdapterInstance.NonExtendedNegotiateResponse += ISmbAdapterInstance_NonExtendedNegotiateResponse;
-            this.ISmbAdapterInstance.NonExtendedSessionSetupResponse += ISmbAdapterInstance_NonExtendedSessionSetupResponse;
-            this.ISmbAdapterInstance.SmbConnectionResponse += ISmbAdapterInstance_SmbConnectionResponse;
-            this.ISmbAdapterInstance.TreeConnectResponse += ISmbAdapterInstance_TreeConnectResponse;
+            this.ISmbAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.ISmbAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.ISmbAdapter))));
+            this.IServerSetupAdapterInstance = ((Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocol.TestSuites.Smb.IServerSetupAdapter))));
+            this.Manager.Subscribe(ServerSetupResponseInfo, this.IServerSetupAdapterInstance);
+            this.Manager.Subscribe(ErrorResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(NonExtendedNegotiateResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(NonExtendedSessionSetupResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(SmbConnectionResponseInfo, this.ISmbAdapterInstance);
+            this.Manager.Subscribe(TreeConnectResponseInfo, this.ISmbAdapterInstance);
         }
-
-        private void IServerSetupAdapterInstance_ServerSetupResponse(int totalBytesWritten, bool isSupportInfoLevelPassthru, bool isSupportNtSmb, bool isRapServerActive, bool isSupportResumeKey, bool isSupportCopyChunk)
-        {
-            this.Manager.AddEvent(ServerSetupResponseInfo, this.IServerSetupAdapterInstance, new object[] { totalBytesWritten, isSupportInfoLevelPassthru, isSupportNtSmb, isRapServerActive, isSupportResumeKey, isSupportCopyChunk });
-        }
-
-        private void ISmbAdapterInstance_ErrorResponse(int messageId, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(ErrorResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, messageStatus });
-        }
-        private void ISmbAdapterInstance_NonExtendedNegotiateResponse(int messageId, bool isSignatureRequired, bool isSignatureEnabled, int dialectIndex, List<Capabilities> serverCapabilities, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(NonExtendedNegotiateResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, isSignatureRequired, isSignatureEnabled, dialectIndex, serverCapabilities, messageStatus });
-        }
-
-        private void ISmbAdapterInstance_NonExtendedSessionSetupResponse(int messageId, int sessionId, int securitySignatureValue, bool isSigned, bool isGuestAccount, bool isRS2322Implemented, MessageStatus messageStatus)
-        {
-            this.Manager.AddEvent(NonExtendedSessionSetupResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, sessionId, securitySignatureValue, isSigned, isGuestAccount, isRS2322Implemented, messageStatus });
-        }
-
-        private void ISmbAdapterInstance_SmbConnectionResponse(Platform clientPlatform, Platform sutPlatform)
-        {
-            this.Manager.AddEvent(SmbConnectionResponseInfo, this.ISmbAdapterInstance, new object[] { clientPlatform, sutPlatform });
-        }
-
-        private void ISmbAdapterInstance_TreeConnectResponse(int messageId, int sessionId, int treeId, bool isSecuritySignatureZero, ShareType shareType, MessageStatus messageStatus, bool isSigned, bool isInDfs, bool isSupportExtSignature)
-        {
-            this.Manager.AddEvent(TreeConnectResponseInfo, this.ISmbAdapterInstance, new object[] { messageId, sessionId, treeId, isSecuritySignatureZero, shareType, messageStatus, isSigned, isInDfs, isSupportExtSignature });
-        }
+        
         protected override void TestCleanup() {
-            this.IServerSetupAdapterInstance.ServerSetupResponse -= IServerSetupAdapterInstance_ServerSetupResponse;
-            this.ISmbAdapterInstance.ErrorResponse -= ISmbAdapterInstance_ErrorResponse;
-            this.ISmbAdapterInstance.NonExtendedNegotiateResponse -= ISmbAdapterInstance_NonExtendedNegotiateResponse;
-            this.ISmbAdapterInstance.NonExtendedSessionSetupResponse -= ISmbAdapterInstance_NonExtendedSessionSetupResponse;
-            this.ISmbAdapterInstance.SmbConnectionResponse -= ISmbAdapterInstance_SmbConnectionResponse;
-            this.ISmbAdapterInstance.TreeConnectResponse -= ISmbAdapterInstance_TreeConnectResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -228,7 +194,7 @@ namespace GeneratedTests {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSignatureEnabled, "isSignatureEnabled of NonExtendedNegotiateResponse, state S20");
             TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NonExtendedNegotiateResponse, state S20");
             TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NonExtendedNegotiateResponse, state S20");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities,  "serverCapabilities of NonExtendedNegotiateResponse, state S20, field selection Re" +
+            CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities,  "serverCapabilities of NonExtendedNegotiateResponse, state S20, field selection Re" +
                     "p");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NonExtendedNegotiateResponse, state S20");
         }
@@ -553,7 +519,7 @@ namespace GeneratedTests {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSignatureEnabled, "isSignatureEnabled of NonExtendedNegotiateResponse, state S21");
             TestManagerHelpers.AssertAreEqual<int>(this.Manager, 5, dialectIndex, "dialectIndex of NonExtendedNegotiateResponse, state S21");
             TestManagerHelpers.AssertNotNull(this.Manager, serverCapabilities, "serverCapabilities of NonExtendedNegotiateResponse, state S21");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.Capabilities>(this.Manager, new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities,  "serverCapabilities of NonExtendedNegotiateResponse, state S21, field selection Re" +
+            CollectionAssert.AreEquivalent( new List<Microsoft.Protocol.TestSuites.Smb.Capabilities> { Microsoft.Protocol.TestSuites.Smb.Capabilities.CapNtSmbs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapDfs, Microsoft.Protocol.TestSuites.Smb.Capabilities.CapInfoLevelPassThru }, serverCapabilities,  "serverCapabilities of NonExtendedNegotiateResponse, state S21, field selection Re" +
                     "p");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocol.TestSuites.Smb.MessageStatus>(this.Manager, ((Microsoft.Protocol.TestSuites.Smb.MessageStatus)(0)), messageStatus, "messageStatus of NonExtendedNegotiateResponse, state S21");
         }

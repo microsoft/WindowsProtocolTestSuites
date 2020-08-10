@@ -172,7 +172,8 @@
       <maximumram>4096</maximumram>
       <tools>
         <tool name="MMA" MSIName="MessageAnalyzer64.msi" version="4.0.8112.0" CPUArchitecture="x64" />
-        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.8000.0" />
+        <tool name="SE" MSIName="SpecExplorer.msi" version="3.5.3146.0" CPUArchitecture="x86" />
+        <tool name="PTF" MSIName="ProtocolTestFrameworkInstaller.msi" version="1.0.6000.0" CPUArchitecture="x86" />
         <TestsuiteMSI MSIName="FileServer-TestSuite-ServerEP.msi" targetEndpoint="" />
       </tools>
     </vm>

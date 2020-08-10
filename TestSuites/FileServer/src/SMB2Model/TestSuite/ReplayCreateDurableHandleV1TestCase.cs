@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class ReplayCreateDurableHandleV1TestCase : PtfTestClassBase {
         
@@ -74,8 +76,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IReplayAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter))));
-            this.IReplayAdapterInstance.CreateResponse += IReplayAdapterInstance_CreateResponse;
+            this.IReplayAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.IReplayAdapter))));
+            this.Manager.Subscribe(CreateResponseInfo, this.IReplayAdapterInstance);
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>("c1");
             this.durableHandleResponse = this.Manager.CreateVariable<int>("durableHandleResponse");
@@ -85,14 +87,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v2 = this.Manager.CreateVariable<int>("v2");
             this.v3 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>("v3");
         }
-
-        private void IReplayAdapterInstance_CreateResponse(Adapter.ModelSmb2Status status, Adapter.Replay.ReplayModelDurableHandle durableHandleResponse, Adapter.Replay.ReplayServerConfig c)
-        {
-            this.Manager.AddEvent(CreateResponseInfo, this.IReplayAdapterInstance, new object[] { status, durableHandleResponse, c });
-        }
-
+        
         protected override void TestCleanup() {
-            this.IReplayAdapterInstance.CreateResponse -= IReplayAdapterInstance_CreateResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -113,7 +109,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S1\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp0, "c of ReadConfig, state S1");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S2\'");
@@ -265,7 +261,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -281,13 +277,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -336,11 +332,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -375,7 +371,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -390,11 +386,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -442,7 +438,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -477,7 +473,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker2() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -515,11 +511,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -592,7 +588,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -641,7 +637,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -656,11 +652,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelII"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -708,7 +704,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelII"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -756,7 +752,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S102\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp6, "c of ReadConfig, state S102");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S103\'");
@@ -862,7 +858,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -897,7 +893,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -966,11 +962,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1015,7 +1011,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -1030,11 +1026,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1080,7 +1076,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -1113,7 +1109,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker6() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -1164,11 +1160,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1213,7 +1209,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -1246,7 +1242,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -1299,11 +1295,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1344,7 +1340,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -1389,7 +1385,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S118\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp12, "c of ReadConfig, state S118");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S119\'");
@@ -1486,7 +1482,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -1502,11 +1498,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1555,7 +1551,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -1593,7 +1589,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -1608,11 +1604,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1657,7 +1653,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -1689,7 +1685,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker10() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -1699,7 +1695,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -1719,7 +1715,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S133\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp16, "c of ReadConfig, state S133");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S134\'");
@@ -1816,7 +1812,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -1857,11 +1853,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -1948,7 +1944,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -1999,7 +1995,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -2014,11 +2010,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -2060,7 +2056,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -2089,7 +2085,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker14() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -2099,7 +2095,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -2119,7 +2115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S148\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp20, "c of ReadConfig, state S148");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S149\'");
@@ -2210,7 +2206,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -2251,11 +2247,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "equest command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -2334,7 +2330,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "equest command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -2381,7 +2377,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -2420,7 +2416,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -2475,7 +2471,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker18() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -2485,7 +2481,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -2505,7 +2501,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S161\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp23, "c of ReadConfig, state S161");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S162\'");
@@ -2586,7 +2582,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -2626,7 +2622,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -2683,7 +2679,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -2698,13 +2694,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -2749,11 +2745,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -2783,7 +2779,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker22() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -2793,7 +2789,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -2813,7 +2809,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S175\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp26, "c of ReadConfig, state S175");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S176\'");
@@ -2913,7 +2909,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -2929,11 +2925,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -2974,13 +2970,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -3018,7 +3014,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -3063,7 +3059,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "nd is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -3118,7 +3114,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker26() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -3128,7 +3124,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -3148,7 +3144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S189\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp29, "c of ReadConfig, state S189");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S190\'");
@@ -3235,7 +3231,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -3251,13 +3247,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -3302,11 +3298,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -3338,7 +3334,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -3374,11 +3370,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -3459,7 +3455,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -3506,7 +3502,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker30() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -3516,7 +3512,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -3536,7 +3532,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S204\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp33, "c of ReadConfig, state S204");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S205\'");
@@ -3632,7 +3628,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -3648,11 +3644,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb302, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -3700,7 +3696,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb302, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -3737,7 +3733,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -3778,11 +3774,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -3870,7 +3866,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -3919,7 +3915,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker34() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -3929,7 +3925,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -3949,7 +3945,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S219\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp37, "c of ReadConfig, state S219");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S220\'");
@@ -4046,7 +4042,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -4087,11 +4083,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "te\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -4180,7 +4176,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "te\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -4233,7 +4229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -4248,13 +4244,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -4303,11 +4299,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -4341,7 +4337,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker38() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -4351,7 +4347,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -4371,7 +4367,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S234\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp41, "c of ReadConfig, state S234");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S235\'");
@@ -4458,7 +4454,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -4474,11 +4470,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -4520,7 +4516,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -4551,7 +4547,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -4585,11 +4581,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -4666,7 +4662,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -4711,7 +4707,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker42() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -4721,7 +4717,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -4741,7 +4737,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S249\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp45, "c of ReadConfig, state S249");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S250\'");
@@ -4837,7 +4833,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -4874,13 +4870,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "tion.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -4955,11 +4951,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "tion.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -5004,7 +5000,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -5038,11 +5034,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "skipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -5115,7 +5111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "skipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -5160,7 +5156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker46() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -5170,7 +5166,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -5190,7 +5186,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S264\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp49, "c of ReadConfig, state S264");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S265\'");
@@ -5286,7 +5282,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -5302,11 +5298,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV2"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -5350,7 +5346,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV2"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -5387,7 +5383,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -5402,11 +5398,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -5451,7 +5447,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -5487,7 +5483,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker50() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -5497,7 +5493,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -5517,7 +5513,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S28\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp53, "c of ReadConfig, state S28");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S29\'");
@@ -5592,7 +5588,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -5632,7 +5628,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -5685,7 +5681,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -5724,7 +5720,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -5775,7 +5771,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker54() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -5785,7 +5781,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -5805,7 +5801,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S279\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp55, "c of ReadConfig, state S279");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S280\'");
@@ -5892,7 +5888,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -5908,11 +5904,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb302, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -5956,7 +5952,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb302, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -5993,7 +5989,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -6008,11 +6004,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -6053,7 +6049,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -6085,7 +6081,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker58() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -6095,7 +6091,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -6115,7 +6111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S292\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp59, "c of ReadConfig, state S292");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S293\'");
@@ -6202,7 +6198,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -6237,11 +6233,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "kipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -6318,7 +6314,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "kipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -6365,7 +6361,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -6380,11 +6376,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -6422,7 +6418,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -6451,7 +6447,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker62() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -6461,7 +6457,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -6481,7 +6477,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S306\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp63, "c of ReadConfig, state S306");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S307\'");
@@ -6556,7 +6552,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -6596,7 +6592,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -6649,7 +6645,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -6687,7 +6683,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -6736,7 +6732,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker66() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -6746,7 +6742,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -6766,7 +6762,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S320\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp65, "c of ReadConfig, state S320");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S321\'");
@@ -6863,7 +6859,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -6879,11 +6875,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -6925,7 +6921,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -6960,7 +6956,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -6975,11 +6971,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelII"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -7023,7 +7019,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelII"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -7058,7 +7054,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker70() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -7068,7 +7064,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -7088,7 +7084,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S333\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp69, "c of ReadConfig, state S333");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S334\'");
@@ -7154,7 +7150,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -7169,11 +7165,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -7218,13 +7214,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -7266,7 +7262,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -7316,7 +7312,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -7353,11 +7349,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -7387,7 +7383,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker74() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -7397,7 +7393,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -7417,7 +7413,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S346\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp73, "c of ReadConfig, state S346");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S347\'");
@@ -7514,7 +7510,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -7530,11 +7526,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -7572,7 +7568,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -7603,7 +7599,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -7648,11 +7644,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "Info] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -7747,7 +7743,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "Info] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -7799,7 +7795,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker78() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -7809,7 +7805,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -7829,7 +7825,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S360\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp77, "c of ReadConfig, state S360");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S361\'");
@@ -7934,7 +7930,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -7950,13 +7946,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -8000,11 +7996,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -8039,7 +8035,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -8073,11 +8069,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "kipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -8143,7 +8139,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "kipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -8181,7 +8177,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker82() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -8191,7 +8187,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -8211,7 +8207,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S373\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp81, "c of ReadConfig, state S373");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S374\'");
@@ -8307,7 +8303,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -8323,13 +8319,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -8370,11 +8366,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -8406,7 +8402,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -8421,7 +8417,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -8461,11 +8457,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -8498,7 +8494,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker86() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -8508,7 +8504,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -8528,7 +8524,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S386\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp85, "c of ReadConfig, state S386");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S387\'");
@@ -8625,7 +8621,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -8641,13 +8637,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -8688,11 +8684,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -8724,7 +8720,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -8759,11 +8755,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "est command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -8831,7 +8827,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "est command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -8870,7 +8866,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker90() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -8880,7 +8876,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -8900,7 +8896,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S399\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp89, "c of ReadConfig, state S399");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S400\'");
@@ -8987,7 +8983,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -9003,13 +8999,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -9050,11 +9046,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -9086,7 +9082,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -9101,13 +9097,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -9148,11 +9144,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -9182,7 +9178,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker94() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -9192,7 +9188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -9212,7 +9208,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S412\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp93, "c of ReadConfig, state S412");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S413\'");
@@ -9308,7 +9304,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -9324,7 +9320,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -9364,11 +9360,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -9403,7 +9399,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -9418,11 +9414,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -9466,7 +9462,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -9501,7 +9497,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker98() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -9511,7 +9507,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -9531,7 +9527,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S425\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp97, "c of ReadConfig, state S425");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S426\'");
@@ -9610,7 +9606,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker100() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -9621,7 +9617,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -9661,7 +9657,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -9718,7 +9714,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -9752,11 +9748,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "skipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -9829,7 +9825,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "skipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -9875,7 +9871,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -9895,7 +9891,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S438\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp100, "c of ReadConfig, state S438");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S439\'");
@@ -9980,7 +9976,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker104() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -9991,7 +9987,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -10007,11 +10003,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -10055,7 +10051,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -10092,7 +10088,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -10107,13 +10103,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -10154,11 +10150,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -10189,7 +10185,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -10209,7 +10205,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S451\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp104, "c of ReadConfig, state S451");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S452\'");
@@ -10297,7 +10293,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker108() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -10308,7 +10304,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -10344,11 +10340,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -10415,7 +10411,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -10455,7 +10451,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -10494,7 +10490,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -10546,7 +10542,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -10566,7 +10562,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S465\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp107, "c of ReadConfig, state S465");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S466\'");
@@ -10660,7 +10656,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker112() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -10671,7 +10667,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -10687,13 +10683,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -10737,11 +10733,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -10776,7 +10772,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -10791,11 +10787,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -10839,7 +10835,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -10875,7 +10871,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         #endregion
@@ -10895,7 +10891,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S480\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp111, "c of ReadConfig, state S480");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S481\'");
@@ -10970,7 +10966,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -10979,7 +10975,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -10988,7 +10984,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -11027,7 +11023,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "d is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -11078,7 +11074,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker119() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -11119,7 +11115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -11187,7 +11183,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S495\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp113, "c of ReadConfig, state S495");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S496\'");
@@ -11281,7 +11277,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -11290,7 +11286,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -11299,7 +11295,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -11344,7 +11340,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "eate\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -11399,7 +11395,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker123() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -11441,7 +11437,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "tion.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -11506,7 +11502,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S509\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp115, "c of ReadConfig, state S509");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S510\'");
@@ -11597,7 +11593,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -11606,7 +11602,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -11615,7 +11611,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -11653,7 +11649,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "te\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -11706,7 +11702,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker127() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -11750,11 +11746,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "nd is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -11845,7 +11841,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "nd is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -11909,7 +11905,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S524\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp118, "c of ReadConfig, state S524");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S525\'");
@@ -11999,7 +11995,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -12008,7 +12004,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -12017,7 +12013,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -12032,11 +12028,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -12081,13 +12077,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -12127,7 +12123,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker131() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -12168,7 +12164,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -12236,7 +12232,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S540\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp121, "c of ReadConfig, state S540");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S541\'");
@@ -12341,7 +12337,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -12350,7 +12346,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -12359,7 +12355,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -12396,11 +12392,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "nfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -12483,7 +12479,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "nfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -12531,7 +12527,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker135() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -12548,11 +12544,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -12597,7 +12593,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -12646,7 +12642,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S56\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp125, "c of ReadConfig, state S56");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S57\'");
@@ -12737,7 +12733,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker136() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -12747,7 +12743,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -12756,7 +12752,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -12797,7 +12793,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "nfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -12851,7 +12847,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -12891,7 +12887,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "fo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -12956,7 +12952,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S556\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp127, "c of ReadConfig, state S556");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S557\'");
@@ -13046,7 +13042,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -13055,7 +13051,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -13064,7 +13060,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -13105,11 +13101,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "2, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -13197,7 +13193,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "2, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -13246,7 +13242,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker143() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -13287,7 +13283,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -13351,7 +13347,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S571\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp130, "c of ReadConfig, state S571");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S572\'");
@@ -13457,7 +13453,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -13466,7 +13462,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -13475,7 +13471,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -13490,11 +13486,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -13540,7 +13536,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -13573,7 +13569,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker147() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -13616,11 +13612,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ct is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -13711,7 +13707,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ct is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -13776,7 +13772,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S586\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp134, "c of ReadConfig, state S586");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S587\'");
@@ -13873,7 +13869,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -13882,7 +13878,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -13891,7 +13887,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -13906,13 +13902,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -13953,11 +13949,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -13987,7 +13983,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker151() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -14004,11 +14000,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -14057,7 +14053,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -14106,7 +14102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S600\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp138, "c of ReadConfig, state S600");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S601\'");
@@ -14203,7 +14199,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -14212,7 +14208,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -14221,7 +14217,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -14236,13 +14232,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -14287,11 +14283,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -14321,7 +14317,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker155() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -14338,13 +14334,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -14393,11 +14389,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -14444,7 +14440,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S615\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp142, "c of ReadConfig, state S615");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S616\'");
@@ -14511,7 +14507,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -14519,7 +14515,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker157() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -14529,7 +14525,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -14538,7 +14534,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -14553,11 +14549,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -14599,7 +14595,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -14645,7 +14641,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S623\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp145, "c of ReadConfig, state S623");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S624\'");
@@ -14707,7 +14703,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -14716,14 +14712,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
         private void PreConstraintChecker162() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -14740,11 +14736,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -14792,7 +14788,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -14829,7 +14825,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -14883,7 +14879,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -14924,11 +14920,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -14975,7 +14971,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S637\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp149, "c of ReadConfig, state S637");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S638\'");
@@ -15071,7 +15067,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -15080,7 +15076,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -15089,7 +15085,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -15123,11 +15119,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " skipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -15204,7 +15200,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " skipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -15249,7 +15245,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker167() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -15266,13 +15262,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -15316,11 +15312,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -15366,7 +15362,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S653\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp153, "c of ReadConfig, state S653");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S654\'");
@@ -15463,7 +15459,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -15472,7 +15468,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -15481,7 +15477,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -15496,13 +15492,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -15551,11 +15547,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -15589,7 +15585,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker171() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -15606,13 +15602,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -15663,11 +15659,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelII, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -15716,7 +15712,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S668\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp157, "c of ReadConfig, state S668");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S669\'");
@@ -15803,7 +15799,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -15812,7 +15808,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -15821,7 +15817,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -15836,11 +15832,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -15888,7 +15884,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -15923,7 +15919,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker175() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -15940,13 +15936,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -15987,11 +15983,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -16034,7 +16030,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S682\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp161, "c of ReadConfig, state S682");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S683\'");
@@ -16130,7 +16126,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -16139,7 +16135,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -16148,7 +16144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -16184,11 +16180,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -16264,7 +16260,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -16310,7 +16306,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker179() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -16327,13 +16323,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -16378,11 +16374,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -16425,7 +16421,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S696\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp165, "c of ReadConfig, state S696");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S697\'");
@@ -16512,7 +16508,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -16521,7 +16517,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -16530,7 +16526,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -16545,11 +16541,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -16590,7 +16586,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -16622,7 +16618,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker183() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -16658,11 +16654,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "skipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -16739,7 +16735,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "skipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -16797,7 +16793,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S71\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp169, "c of ReadConfig, state S71");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S72\'");
@@ -16901,7 +16897,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker184() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -16911,7 +16907,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -16920,7 +16916,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -16936,11 +16932,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -16986,7 +16982,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -17021,7 +17017,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -17036,7 +17032,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -17076,11 +17072,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -17126,7 +17122,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S710\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp173, "c of ReadConfig, state S710");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S711\'");
@@ -17223,7 +17219,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -17232,7 +17228,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -17241,7 +17237,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -17283,11 +17279,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "mand is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -17378,7 +17374,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "mand is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -17429,7 +17425,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker191() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -17465,11 +17461,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -17542,7 +17538,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "ipped\", \"[TestInfo] Connection.Dialect is Smb30, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -17600,7 +17596,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S724\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp177, "c of ReadConfig, state S724");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S725\'");
@@ -17700,7 +17696,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -17709,7 +17705,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -17718,7 +17714,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -17763,7 +17759,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "mand is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -17818,7 +17814,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker195() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -17835,13 +17831,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -17885,11 +17881,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV2, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -17935,7 +17931,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S738\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp180, "c of ReadConfig, state S738");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S739\'");
@@ -18022,7 +18018,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -18031,7 +18027,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -18040,7 +18036,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -18055,11 +18051,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -18097,7 +18093,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -18126,7 +18122,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker199() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -18164,11 +18160,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -18249,7 +18245,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -18309,7 +18305,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S752\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp184, "c of ReadConfig, state S752");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S753\'");
@@ -18405,7 +18401,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -18414,7 +18410,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -18423,7 +18419,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -18438,13 +18434,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -18488,11 +18484,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelLeaseV1, LeaseState is LeaseStateNotIncludeH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -18525,7 +18521,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker203() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -18542,11 +18538,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -18584,7 +18580,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -18626,7 +18622,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S767\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp188, "c of ReadConfig, state S767");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S768\'");
@@ -18707,7 +18703,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -18716,7 +18712,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -18725,7 +18721,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -18740,11 +18736,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -18788,7 +18784,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -18823,7 +18819,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker207() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -18864,7 +18860,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -18928,7 +18924,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S780\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp191, "c of ReadConfig, state S780");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S781\'");
@@ -19015,7 +19011,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -19024,7 +19020,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -19033,7 +19029,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -19048,11 +19044,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -19090,7 +19086,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -19119,7 +19115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker211() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -19155,11 +19151,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "0, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -19228,7 +19224,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "0, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -19282,7 +19278,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S793\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp195, "c of ReadConfig, state S793");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S794\'");
@@ -19379,7 +19375,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -19388,7 +19384,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -19397,7 +19393,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -19412,13 +19408,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -19459,11 +19455,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6: If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section"", ""[TestInfo] RequestedOplockLevel is OplockLevelNone, LeaseState is LeaseStateIsNone"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponse == 1)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.durableHandleResponse, "v2 == durableHandleResponse");
@@ -19493,7 +19489,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker215() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -19530,11 +19526,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -19606,7 +19602,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         " command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -19658,7 +19654,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S807\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp199, "c of ReadConfig, state S807");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S808\'");
@@ -19745,7 +19741,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -19754,7 +19750,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -19763,7 +19759,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -19778,11 +19774,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -19823,7 +19819,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -19855,7 +19851,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker219() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -19872,11 +19868,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelII"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -19920,7 +19916,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelII"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -19968,7 +19964,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S820\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp203, "c of ReadConfig, state S820");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S821\'");
@@ -20055,7 +20051,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -20064,7 +20060,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -20073,7 +20069,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -20088,11 +20084,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -20130,7 +20126,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -20159,7 +20155,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker223() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -20176,11 +20172,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -20224,7 +20220,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelNone"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -20272,7 +20268,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S833\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp207, "c of ReadConfig, state S833");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S834\'");
@@ -20359,7 +20355,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -20368,7 +20364,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -20377,7 +20373,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -20411,11 +20407,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "kipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -20488,7 +20484,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "kipped\", \"[TestInfo] Connection.Dialect is Smb302, request command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -20533,7 +20529,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker227() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -20550,11 +20546,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV2"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -20598,7 +20594,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV2"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -20646,7 +20642,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S846\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp211, "c of ReadConfig, state S846");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S847\'");
@@ -20742,7 +20738,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -20751,7 +20747,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -20760,7 +20756,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -20775,7 +20771,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -20815,11 +20811,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -20852,7 +20848,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker231() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -20869,11 +20865,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -20917,7 +20913,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -20965,7 +20961,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S859\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp215, "c of ReadConfig, state S859");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S860\'");
@@ -21061,7 +21057,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -21070,7 +21066,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -21079,7 +21075,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -21094,11 +21090,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -21139,7 +21135,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is ReconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -21174,7 +21170,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker235() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -21191,11 +21187,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -21239,7 +21235,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -21287,7 +21283,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S87\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp219, "c of ReadConfig, state S87");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S88\'");
@@ -21372,7 +21368,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker236() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -21382,7 +21378,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -21391,7 +21387,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -21428,11 +21424,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "est command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -21513,7 +21509,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "est command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -21562,7 +21558,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -21577,11 +21573,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -21619,7 +21615,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -21661,7 +21657,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S872\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp223, "c of ReadConfig, state S872");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S873\'");
@@ -21768,7 +21764,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -21777,7 +21773,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -21786,7 +21782,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -21801,11 +21797,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -21850,7 +21846,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb302, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -21886,7 +21882,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker243() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -21903,11 +21899,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -21955,7 +21951,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[TestInfo] When switchChannelType == AlternativeChannelWithDisconnectMainChannel or switchChannelType == ReconnectMainChannel (i.e. experiencing connection drop), the server will send oplock/lease break notification to the client, but currently test cases do not send acknowledgement request, so the oplock break acknowledgment timer always expires."", ""[TestInfo] createRequest.switchChannelType is AlternativeChannelWithDisconnectMainChannel"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9: If Connection.Dialect belongs to the SMB 3.x dialect family TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH, the server MUST set RequestedOplockLevel to SMB2_OPLOCK_LEVEL_II"", ""[TestInfo] Connection.Dialect is Smb30, TreeConnect.Share.Type includes STYPE_CLUSTER_SOFS and the RequestedOplockLevel is SMB2_OPLOCK_LEVEL_BATCH"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -22007,7 +22003,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S885\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp227, "c of ReadConfig, state S885");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S886\'");
@@ -22094,7 +22090,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -22103,7 +22099,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -22112,7 +22108,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -22148,11 +22144,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -22233,7 +22229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                         "t command is Create\"");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -22280,7 +22276,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         private void PreConstraintChecker247() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -22297,11 +22293,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -22346,7 +22342,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.6 In the ""Successful Open Initialization"" phase, the server MUST set Open.IsDurable to TRUE."", ""[TestInfo] Open.IsDurable is set to TRUE"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
@@ -22391,7 +22387,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("reaching state \'S900\'");
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c, temp231, "c of ReadConfig, state S900");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.c.Value)), ((object)(null)))) 
                             == false), "Fail to check the assumption : !(c == null)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.v, this.c, "v == c");
             this.Manager.Comment("reaching state \'S901\'");
@@ -22453,7 +22449,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
         }
@@ -22462,7 +22458,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
@@ -22471,14 +22467,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 770)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0))), "Fail to check preconstraint : c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS" +
                     " == 0");
         }
         
         private void PreConstraintChecker251() {
             this.Manager.Assert((((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 768)) 
                             == false), "Fail to check preconstraint : !((ushort)c.MaxSmbVersionSupported < 768)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SOFS))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !(c.TreeConnect_Share_Type_Include_STYPE_CLUSTER_SO" +
                     "FS == 0)");
             this.Manager.Assert((((int)(((ushort)(((int)(this.c.Value.MaxSmbVersionSupported)))))) < 770), "Fail to check preconstraint : (ushort)c.MaxSmbVersionSupported < 770");
@@ -22495,11 +22491,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((0 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((0 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay.ReplayServerConfig>(this.Manager, this.c1, this.c, "c1 == c");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.status, "v1 == status");
@@ -22543,7 +22539,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.2.10: If Connection.Dialect is equal to ""2.002"" or ""2.100"", or the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30. The request command is Create"", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.10: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 Create Context"", ""[TestInfo] createRequest.modelDurableHandle is DurableHandleV2"", ""[TestInfo] createRequest.requestedOplockLevel is OplockLevelLeaseV1"", ""[MS-SMB2] 3.3.5.9.10: If the SMB2_DHANDLE_FLAG_PERSISTENT bit is not set in the Flags field of this create context, if RequestedOplockLevel in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH, and if the create request does not include a SMB2_CREATE_REQUEST_LEASE or SMB2_CREATE_REQUEST_LEASE_V2 create context with a LeaseState field that includes SMB2_LEASE_HANDLE_CACHING, the server MUST ignore this create context and skip this section"", ""[TestTag] Compatibility"", ""[TestInfo] If the command request does not include FileId, this section MUST be skipped"", ""[TestInfo] Connection.Dialect is Smb30, request command is Create""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((1 | System.Convert.ToInt32((((System.Convert.ToInt32(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponse.Value)), ((object)(0)))) == 0) 
             == false)) ? (true) : (true))))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !((1 | ((durableHandleResponse == 0) ? 1 : 0)) == " +
                     "0)");

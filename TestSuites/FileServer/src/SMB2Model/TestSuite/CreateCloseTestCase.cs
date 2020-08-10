@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class CreateCloseTestCase : PtfTestClassBase {
         
@@ -80,9 +82,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ICreateCloseAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.ICreateCloseAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.ICreateCloseAdapter))));
-            this.ICreateCloseAdapterInstance.CloseResponse += ICreateCloseAdapterInstance_CloseResponse;
-            this.ICreateCloseAdapterInstance.CreateResponse += ICreateCloseAdapterInstance_CreateResponse;
+            this.ICreateCloseAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.ICreateCloseAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.ICreateCloseAdapter))));
+            this.Manager.Subscribe(CloseResponseInfo, this.ICreateCloseAdapterInstance);
+            this.Manager.Subscribe(CreateResponseInfo, this.ICreateCloseAdapterInstance);
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>("c1");
             this.queryResponseStatus = this.Manager.CreateVariable<int>("queryResponseStatus");
@@ -92,20 +94,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v2 = this.Manager.CreateVariable<int>("v2");
             this.v3 = this.Manager.CreateVariable<int>("v3");
         }
-
-        private void ICreateCloseAdapterInstance_CreateResponse(Adapter.ModelSmb2Status status, Adapter.CreateClose.CreateCloseConfig config)
-        {
-            this.Manager.AddEvent(CreateResponseInfo, this.ICreateCloseAdapterInstance, new object[] { status, config });
-        }
-
-        private void ICreateCloseAdapterInstance_CloseResponse(Adapter.ModelSmb2Status status, Adapter.CreateClose.QueryResponseStatus queryResponseStatus)
-        {
-            this.Manager.AddEvent(CloseResponseInfo, this.ICreateCloseAdapterInstance, new object[] { status, queryResponseStatus });
-        }
-
+        
         protected override void TestCleanup() {
-            this.ICreateCloseAdapterInstance.CloseResponse -= ICreateCloseAdapterInstance_CloseResponse;
-            this.ICreateCloseAdapterInstance.CreateResponse -= ICreateCloseAdapterInstance_CreateResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -405,7 +395,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS0CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -419,7 +409,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -615,7 +605,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS0CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -629,7 +619,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -735,7 +725,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS0CreateResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -748,11 +738,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
@@ -920,10 +910,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
             this.Manager.Checkpoint("\"[TestInfo] The create context of Create Request is invalid\"");
@@ -1028,7 +1018,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS0CreateResponseChecker4(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -1041,11 +1031,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -1216,12 +1206,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -1337,9 +1327,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -1681,7 +1671,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S123");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS122CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -1694,9 +1684,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -1787,11 +1777,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -1819,12 +1809,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -1843,7 +1833,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S123");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS122CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -1856,9 +1846,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -2088,11 +2078,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -2124,12 +2114,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -2152,7 +2142,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S123");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS167() {
@@ -2187,7 +2177,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -2210,7 +2200,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S123");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS173() {
@@ -2245,7 +2235,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -2434,7 +2424,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S180");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS179CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -2447,9 +2437,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -2679,12 +2669,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -2713,11 +2703,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -2739,7 +2729,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S180");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS179CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -2752,9 +2742,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -2984,11 +2974,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -3020,12 +3010,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -3048,7 +3038,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S180");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS238() {
@@ -3083,7 +3073,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -3102,7 +3092,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S180");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS243() {
@@ -3137,7 +3127,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -3232,21 +3222,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S250");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS249ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S250");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS249ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S250");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS249CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -3260,7 +3250,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -3279,7 +3269,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S250");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS249CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -3293,7 +3283,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -3523,21 +3513,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S274");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS273ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S274");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS273ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S274");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS273CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -3551,7 +3541,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
                     " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
                     "with STATUS_OBJECT_NAME_INVALID.\"");
@@ -3569,7 +3559,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S274");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS273CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -3583,7 +3573,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the size of each individual create context is not equal to" +
                     " the DataLength of the create context, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -3763,21 +3753,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S286");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS285ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S286");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS285ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S286");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS285CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -3790,11 +3780,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
@@ -3960,10 +3950,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
             this.Manager.Checkpoint("\"[TestInfo] The create context of Create Request is invalid\"");
@@ -4068,7 +4058,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S286");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS285CreateResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4082,7 +4072,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -4239,21 +4229,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS331ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS331ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS331CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4267,7 +4257,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the size of each individual create context is not equal to" +
                     " the DataLength of the create context, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -4285,7 +4275,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S332");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS331CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4299,7 +4289,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -4460,21 +4450,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S347");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS346ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S347");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS346ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S347");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS346CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4488,7 +4478,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -4573,7 +4563,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S347");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS346CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4587,7 +4577,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -4676,21 +4666,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S368");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS367ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S368");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS367ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S368");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS367CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4704,7 +4694,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -4721,7 +4711,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S368");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS367CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4735,7 +4725,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -4896,21 +4886,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S380");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS379ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S380");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS379ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S380");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS379CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -4923,11 +4913,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -4955,9 +4945,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -5000,12 +4990,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -5111,7 +5101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S380");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS379CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5125,7 +5115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -5214,21 +5204,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S407");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS406ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S407");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS406ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S407");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS406CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5242,7 +5232,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -5259,7 +5249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S407");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS406CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5273,7 +5263,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -5416,21 +5406,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S419");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS418ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S419");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS418ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S419");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS418CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5444,7 +5434,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -5461,7 +5451,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S419");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS418CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5474,10 +5464,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
             this.Manager.Checkpoint("\"[TestInfo] The create context of Create Request is invalid\"");
@@ -5588,11 +5578,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
@@ -5734,21 +5724,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S444");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS443ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S444");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS443ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S444");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS443CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5762,7 +5752,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -5779,7 +5769,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S444");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS443CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -5793,7 +5783,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
                     " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
                     "with STATUS_OBJECT_NAME_INVALID.\"");
@@ -6006,21 +5996,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S469");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS468ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S469");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS468ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S469");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS468CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6034,7 +6024,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -6258,7 +6248,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S469");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS468CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6272,7 +6262,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -6502,21 +6492,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S514");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS513ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S514");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS513ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S514");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS513CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6530,7 +6520,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name length is greater than zero and the first ch" +
                     "aracter is a path separator character, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -6549,7 +6539,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S514");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS513CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6563,7 +6553,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
                     " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
                     "with STATUS_OBJECT_NAME_INVALID.\"");
@@ -6653,21 +6643,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S526");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS525ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S526");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS525ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S526");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS525CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6681,7 +6671,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
                     " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
                     "with STATUS_OBJECT_NAME_INVALID.\"");
@@ -6699,7 +6689,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S526");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS525CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6713,7 +6703,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the size of each individual create context is not equal to" +
                     " the DataLength of the create context, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -6857,21 +6847,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S538");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS537ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S538");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS537ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S538");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS537CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6885,7 +6875,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the size of each individual create context is not equal to" +
                     " the DataLength of the create context, the server MUST fail the request with STA" +
                     "TUS_INVALID_PARAMETER.\"");
@@ -6903,7 +6893,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S538");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS537CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -6916,10 +6906,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
             this.Manager.Checkpoint("\"[TestInfo] The create context of Create Request is invalid\"");
@@ -7030,11 +7020,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
@@ -7337,21 +7327,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S575");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS574ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S575");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS574ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S575");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS574CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -7365,7 +7355,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -7418,7 +7408,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S575");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS574CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -7431,11 +7421,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -7463,9 +7453,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -7508,12 +7498,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -7727,21 +7717,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S605");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS604ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S605");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS604ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S605");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS604CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -7755,7 +7745,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -7772,7 +7762,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S605");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS604CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -7786,7 +7776,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -7944,21 +7934,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S626");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS625ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S626");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS625ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S626");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS625CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -7972,7 +7962,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -7989,7 +7979,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S626");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS625CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -8003,7 +7993,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -8199,21 +8189,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S641");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS640ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S641");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS640ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S641");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS640CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -8226,11 +8216,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -8258,9 +8248,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -8303,12 +8293,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -8414,7 +8404,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S641");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS640CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -8428,7 +8418,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -8577,21 +8567,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S668");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS667ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S668");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS667ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S668");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS667CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -8605,7 +8595,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -8622,7 +8612,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S668");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS667CreateResponseChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -8636,7 +8626,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -8935,21 +8925,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S696");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS695ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S696");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS695ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S696");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS695CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -8962,11 +8952,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
@@ -9080,10 +9070,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context not specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error."", ""[TestInfo] The create context of Create Request is invalid"", ""[TestTag] UnexpectedContext"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: The server SHOULD fail any request having a create context no" +
                     "t specified in section 2.2.13.2, with a STATUS_INVALID_PARAMETER error.\"");
             this.Manager.Checkpoint("\"[TestInfo] The create context of Create Request is invalid\"");
@@ -9188,7 +9178,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S696");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS695CreateResponseChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -9202,7 +9192,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -9441,28 +9431,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S734");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS733ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S734");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS733ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S734");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS733ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S734");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS733CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -9475,9 +9465,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open object for this open and insert it into Session.OpenTable and GlobalOpenTable. "", ""[TestInfo] The Create Request doesn't contain any invalid fields, the open is created successfully and server should return STATUS_SUCCESS""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v1.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
@@ -9607,11 +9597,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is NonWindows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v1.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
@@ -9726,12 +9716,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the values specified in section 2.2.13, the server SHOULD fail the request with STATUS_BAD_IMPERSONATION_LEVEL."", ""[TestInfo] The ImpersonationLevel of the Create Request is invalid."", ""[TestTag] UnexpectedFields"", ""[TestInfo] The SUT platform is Windows""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 0)");
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458)))) 
                             == false), "Fail to check the assumption : !(c.Platform == 268435458)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the ImpersonationLevel in the request is not one of the va" +
                     "lues specified in section 2.2.13, the server SHOULD fail the request with STATUS" +
                     "_BAD_IMPERSONATION_LEVEL.\"");
@@ -9952,28 +9942,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S783");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 768");
         }
         
         private void CreateCloseTestCaseS782ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S783");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 514");
         }
         
         private void CreateCloseTestCaseS782ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S783");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 528");
         }
         
         private void CreateCloseTestCaseS782ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c, c, "c of ReadConfig, state S783");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionServerSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionServerSupported == 770");
         }
         
         private void CreateCloseTestCaseS782CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig config) {
@@ -9987,7 +9977,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the open is successful, the server MUST allocate an open o" +
                     "bject for this open and insert it into Session.OpenTable and GlobalOpenTable. \"");
             this.Manager.Checkpoint("\"[TestInfo] The Create Request doesn\'t contain any invalid fields, the open is cr" +
