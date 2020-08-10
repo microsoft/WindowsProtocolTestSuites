@@ -7,11 +7,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using Microsoft.Protocols.TestTools;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [TestClassAttribute()]
     public partial class TestScenarioExtendedOperationsWin2K8R2 : PtfTestClassBase
     {
@@ -44,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.GetAdapter(typeof(IAD_LDAPModelAdapter))));
+            this.IAD_LDAPModelAdapterInstance = ((IAD_LDAPModelAdapter)(this.Manager.GetAdapter(typeof(IAD_LDAPModelAdapter))));
         }
 
         protected override void TestCleanup()

@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class ConflictTestCase : PtfTestClassBase {
         
@@ -58,17 +60,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IConflictAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict.IConflictAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict.IConflictAdapter))));
-            this.IConflictAdapterInstance.ConflictResponse += IConflictAdapterInstance_ConflictResponse;
+            this.IConflictAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict.IConflictAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Conflict.IConflictAdapter))));
+            this.Manager.Subscribe(ConflictResponseInfo, this.IConflictAdapterInstance);
         }
-
-        private void IConflictAdapterInstance_ConflictResponse(Adapter.ModelSmb2Status status, Adapter.Conflict.LeaseBreakState leaseBreakState)
-        {
-            this.Manager.AddEvent(ConflictResponseInfo, this.IConflictAdapterInstance, new object[] { status, leaseBreakState });
-        }
-
+        
         protected override void TestCleanup() {
-            this.IConflictAdapterInstance.ConflictResponse -= IConflictAdapterInstance_ConflictResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }

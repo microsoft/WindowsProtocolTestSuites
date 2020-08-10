@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class BreakReadWriteLeaseV2TestCase : PtfTestClassBase {
         
@@ -88,10 +90,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.ILeasingAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ILeasingAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ILeasingAdapter))));
-            this.ILeasingAdapterInstance.CreateResponse += ILeasingAdapterInstance_CreateResponse;
-            this.ILeasingAdapterInstance.LeaseBreakResponse += ILeasingAdapterInstance_LeaseBreakResponse;
-            this.ILeasingAdapterInstance.OnLeaseBreakNotification += ILeasingAdapterInstance_OnLeaseBreakNotification;
+            this.ILeasingAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ILeasingAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ILeasingAdapter))));
+            this.Manager.Subscribe(CreateResponseInfo, this.ILeasingAdapterInstance);
+            this.Manager.Subscribe(LeaseBreakResponseInfo, this.ILeasingAdapterInstance);
+            this.Manager.Subscribe(OnLeaseBreakNotificationInfo, this.ILeasingAdapterInstance);
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>("c1");
             this.leaseFlags = this.Manager.CreateVariable<int>("leaseFlags");
@@ -103,26 +105,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v3 = this.Manager.CreateVariable<int>("v3");
             this.v4 = this.Manager.CreateVariable<int>("v4");
         }
-
-        private void ILeasingAdapterInstance_OnLeaseBreakNotification(ushort newEpoch, TestTools.StackSdk.FileAccessService.Smb2.LEASE_BREAK_Notification_Packet_Flags_Values flags, uint currentLeaseState, uint newLeaseState)
-        {
-            this.Manager.AddEvent(OnLeaseBreakNotificationInfo, this.ILeasingAdapterInstance, new object[] { newEpoch, flags, currentLeaseState, newLeaseState });
-        }
-
-        private void ILeasingAdapterInstance_LeaseBreakResponse(Adapter.ModelSmb2Status status, uint leaseState)
-        {
-            this.Manager.AddEvent(LeaseBreakResponseInfo, this.ILeasingAdapterInstance, new object[] { status, leaseState });
-        }
-
-        private void ILeasingAdapterInstance_CreateResponse(Adapter.ModelSmb2Status status, Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Adapter.Leasing.LeasingConfig c)
-        {
-            this.Manager.AddEvent(CreateResponseInfo, this.ILeasingAdapterInstance, new object[] { status, returnLeaseContextType, leaseState, leaseFlags, c });
-        }
-
+        
         protected override void TestCleanup() {
-            this.ILeasingAdapterInstance.CreateResponse -= ILeasingAdapterInstance_CreateResponse;
-            this.ILeasingAdapterInstance.LeaseBreakResponse -= ILeasingAdapterInstance_LeaseBreakResponse;
-            this.ILeasingAdapterInstance.OnLeaseBreakNotification -= ILeasingAdapterInstance_OnLeaseBreakNotification;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -174,7 +158,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                                     this.c.Value.IsLeasingSupported,
                                     this.c.Value.IsDirectoryLeasingSupported}), temp1, "c of FileOperationToBreakLeaseRequest, state S32");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
                     TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                                     "MaxSmbVersionSupported",
                                     "IsLeasingSupported",
@@ -193,10 +177,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Comment("Unbinding variable \'c1\'");
                     this.c1.Unbind();
                     this.Manager.Comment("Unbinding variable \'v1\'");
@@ -266,10 +250,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -311,7 +295,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                                     this.c.Value.IsLeasingSupported,
                                     this.c.Value.IsDirectoryLeasingSupported}), temp5, "c of FileOperationToBreakLeaseRequest, state S8");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
                     TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                                     "MaxSmbVersionSupported",
                                     "IsLeasingSupported",
@@ -330,10 +314,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Comment("Unbinding variable \'c1\'");
                     this.c1.Unbind();
                     this.Manager.Comment("Unbinding variable \'v1\'");
@@ -403,10 +387,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -467,7 +451,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                                     this.c.Value.IsLeasingSupported,
                                     this.c.Value.IsDirectoryLeasingSupported}), temp8, "c of FileOperationToBreakLeaseRequest, state S44");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
                     TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                                     "MaxSmbVersionSupported",
                                     "IsLeasingSupported",
@@ -486,10 +470,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Comment("Unbinding variable \'c1\'");
                     this.c1.Unbind();
                     this.Manager.Comment("Unbinding variable \'v1\'");
@@ -559,10 +543,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -657,10 +641,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                                     "ed \r\n");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                                     "singSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -712,7 +696,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                                     this.c.Value.IsLeasingSupported,
                                     this.c.Value.IsDirectoryLeasingSupported}), temp12, "c of FileOperationToBreakLeaseRequest, state S68");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
                     TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                                     "MaxSmbVersionSupported",
                                     "IsLeasingSupported",
@@ -731,10 +715,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Comment("Unbinding variable \'c1\'");
                     this.c1.Unbind();
                     this.Manager.Comment("Unbinding variable \'v1\'");
@@ -804,10 +788,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -906,10 +890,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                                     "ed \r\n");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                                     "singSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -967,7 +951,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS0CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -984,12 +968,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -1083,10 +1067,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -1270,11 +1254,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -1313,12 +1297,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -1338,7 +1322,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS0CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -1355,12 +1339,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -1543,12 +1527,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -1654,11 +1638,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -1713,8 +1697,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS83() {
@@ -1826,7 +1810,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S136");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS135CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -1843,11 +1827,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -1892,12 +1876,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -1938,7 +1922,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp19, "c of FileOperationToBreakLeaseRequest, state S143");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -1957,10 +1941,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -2030,10 +2014,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -2132,10 +2116,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -2325,12 +2309,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -2358,7 +2342,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S136");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS135CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -2375,12 +2359,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -2421,7 +2405,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp24, "c of FileOperationToBreakLeaseRequest, state S162");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -2440,10 +2424,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -2513,10 +2497,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -2611,10 +2595,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -2731,12 +2715,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -2774,11 +2758,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -2824,8 +2808,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S136");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -2932,7 +2916,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S176");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS175CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -2949,11 +2933,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -2994,12 +2978,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -3040,7 +3024,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp31, "c of FileOperationToBreakLeaseRequest, state S183");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -3059,10 +3043,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -3132,10 +3116,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -3234,10 +3218,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -3350,12 +3334,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -3383,7 +3367,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S176");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS175CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -3400,12 +3384,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -3446,7 +3430,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp36, "c of FileOperationToBreakLeaseRequest, state S202");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -3465,10 +3449,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -3538,10 +3522,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -3636,10 +3620,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -3756,12 +3740,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -3799,11 +3783,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -3849,8 +3833,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S176");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -3957,7 +3941,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S216");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS215CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -3974,11 +3958,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -4019,12 +4003,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -4065,7 +4049,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp43, "c of FileOperationToBreakLeaseRequest, state S223");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -4084,10 +4068,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -4157,10 +4141,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -4259,10 +4243,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -4375,12 +4359,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -4408,7 +4392,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S216");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS215CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -4425,12 +4409,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -4471,7 +4455,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp48, "c of FileOperationToBreakLeaseRequest, state S242");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -4490,10 +4474,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -4563,10 +4547,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -4661,10 +4645,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -4781,12 +4765,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -4824,11 +4808,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -4874,8 +4858,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S216");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -4982,7 +4966,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S256");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS255CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -4999,11 +4983,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -5044,12 +5028,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -5090,7 +5074,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp55, "c of FileOperationToBreakLeaseRequest, state S263");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -5109,10 +5093,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -5182,10 +5166,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -5284,10 +5268,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -5400,12 +5384,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -5433,7 +5417,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S256");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS255CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -5450,12 +5434,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -5496,7 +5480,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp60, "c of FileOperationToBreakLeaseRequest, state S282");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -5515,10 +5499,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -5588,10 +5572,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -5690,10 +5674,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -5806,12 +5790,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -5849,11 +5833,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -5899,8 +5883,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S256");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -6007,7 +5991,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S296");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS295CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -6024,11 +6008,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -6069,12 +6053,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -6115,7 +6099,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp67, "c of FileOperationToBreakLeaseRequest, state S303");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -6134,10 +6118,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -6211,10 +6195,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -6330,12 +6314,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -6363,7 +6347,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S296");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS295CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -6380,12 +6364,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -6426,7 +6410,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp70, "c of FileOperationToBreakLeaseRequest, state S321");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -6445,10 +6429,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -6518,10 +6502,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -6620,10 +6604,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -6736,12 +6720,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -6779,11 +6763,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -6829,8 +6813,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S296");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -6937,7 +6921,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S335");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS334CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -6954,11 +6938,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -6999,12 +6983,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -7045,7 +7029,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp77, "c of FileOperationToBreakLeaseRequest, state S342");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -7064,10 +7048,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -7141,10 +7125,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -7186,12 +7170,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -7219,7 +7203,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S335");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS334CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -7236,12 +7220,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -7282,7 +7266,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp80, "c of FileOperationToBreakLeaseRequest, state S353");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -7301,10 +7285,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -7374,10 +7358,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -7476,10 +7460,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -7592,12 +7576,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -7635,11 +7619,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -7685,8 +7669,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S335");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -7793,7 +7777,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S367");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS366CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -7810,11 +7794,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -7855,12 +7839,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -7901,7 +7885,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp87, "c of FileOperationToBreakLeaseRequest, state S374");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -7920,10 +7904,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -7993,10 +7977,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -8095,10 +8079,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -8211,12 +8195,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -8244,7 +8228,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S367");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS366CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -8261,11 +8245,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -8306,12 +8290,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -8352,7 +8336,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp92, "c of FileOperationToBreakLeaseRequest, state S393");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -8371,10 +8355,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -8448,10 +8432,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -8567,12 +8551,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -8615,8 +8599,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S367");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -8723,7 +8707,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S406");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS405CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -8740,12 +8724,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -8786,7 +8770,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp97, "c of FileOperationToBreakLeaseRequest, state S413");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -8805,10 +8789,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -8878,10 +8862,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -8976,10 +8960,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -9096,12 +9080,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -9139,11 +9123,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -9174,7 +9158,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S406");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS405CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -9191,11 +9175,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -9236,12 +9220,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -9282,7 +9266,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp102, "c of FileOperationToBreakLeaseRequest, state S432");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -9301,10 +9285,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -9378,10 +9362,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -9423,12 +9407,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -9471,8 +9455,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S406");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -9548,7 +9532,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S438");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS437CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -9565,12 +9549,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -9611,7 +9595,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp107, "c of FileOperationToBreakLeaseRequest, state S445");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -9630,10 +9614,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -9703,10 +9687,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -9801,10 +9785,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -9921,12 +9905,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -9964,11 +9948,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -9999,7 +9983,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S438");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS458() {
@@ -10051,11 +10035,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -10096,12 +10080,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -10143,12 +10127,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -10191,8 +10175,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S438");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -10268,14 +10252,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S465");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS464ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S465");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS464CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -10292,12 +10276,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -10338,7 +10322,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp115, "c of FileOperationToBreakLeaseRequest, state S472");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -10357,10 +10341,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -10430,10 +10414,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -10528,10 +10512,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -10648,12 +10632,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -10691,11 +10675,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -10741,8 +10725,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S465");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -10818,14 +10802,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S486");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS485ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S486");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS485CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -10842,12 +10826,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -10888,7 +10872,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp122, "c of FileOperationToBreakLeaseRequest, state S493");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -10907,10 +10891,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -10980,10 +10964,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -11078,10 +11062,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -11198,12 +11182,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -11241,11 +11225,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -11291,8 +11275,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S486");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -11368,14 +11352,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S507");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS506ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S507");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS506CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -11392,12 +11376,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -11438,7 +11422,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp129, "c of FileOperationToBreakLeaseRequest, state S514");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -11457,10 +11441,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -11530,10 +11514,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -11628,10 +11612,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -11748,12 +11732,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -11791,11 +11775,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -11841,8 +11825,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S507");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -11918,14 +11902,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S528");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS527ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S528");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS527CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -11942,12 +11926,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -11988,7 +11972,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp136, "c of FileOperationToBreakLeaseRequest, state S535");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -12007,10 +11991,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -12084,10 +12068,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -12203,12 +12187,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -12246,11 +12230,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -12296,8 +12280,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S528");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -12373,14 +12357,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S548");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS547ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S548");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS547CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -12397,12 +12381,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -12443,7 +12427,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp141, "c of FileOperationToBreakLeaseRequest, state S555");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -12462,10 +12446,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -12539,10 +12523,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -12584,12 +12568,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -12627,11 +12611,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -12677,8 +12661,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S548");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -12754,14 +12738,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS560ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS560CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -12778,12 +12762,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -12824,7 +12808,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp146, "c of FileOperationToBreakLeaseRequest, state S568");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -12843,10 +12827,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -12916,10 +12900,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -13014,10 +12998,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -13134,12 +13118,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -13177,11 +13161,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -13227,8 +13211,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S561");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -13290,7 +13274,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                                     this.c.Value.IsLeasingSupported,
                                     this.c.Value.IsDirectoryLeasingSupported}), temp153, "c of FileOperationToBreakLeaseRequest, state S589");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
                     TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                                     "MaxSmbVersionSupported",
                                     "IsLeasingSupported",
@@ -13309,10 +13293,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Comment("Unbinding variable \'c1\'");
                     this.c1.Unbind();
                     this.Manager.Comment("Unbinding variable \'v1\'");
@@ -13382,10 +13366,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -13484,10 +13468,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                                     "ed \r\n");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                                     "singSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -13535,7 +13519,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                                     this.c.Value.IsLeasingSupported,
                                     this.c.Value.IsDirectoryLeasingSupported}), temp157, "c of FileOperationToBreakLeaseRequest, state S603");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
                     TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                                     "MaxSmbVersionSupported",
                                     "IsLeasingSupported",
@@ -13554,10 +13538,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Comment("Unbinding variable \'c1\'");
                     this.c1.Unbind();
                     this.Manager.Comment("Unbinding variable \'v1\'");
@@ -13627,10 +13611,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -13729,10 +13713,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                                     "ed \r\n");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                                     "singSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                             this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                             this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -13786,14 +13770,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S582");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS581ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S582");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS581CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -13810,11 +13794,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -13855,12 +13839,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -13966,12 +13950,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -14082,8 +14066,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S582");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -14190,7 +14174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS84CreateResponseChecker(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -14207,12 +14191,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -14253,7 +14237,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb30,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp164, "c of FileOperationToBreakLeaseRequest, state S122");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : c.MaxSmbVersionSupported == 768");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -14272,10 +14256,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -14345,10 +14329,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                     "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                     "d \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -14443,10 +14427,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb30 \r\nIsLeasingSupported: " +
                             "c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupporte" +
                             "d \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 768");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -14563,12 +14547,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -14606,11 +14590,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -14656,15 +14640,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v.Value.IsDirectoryLeasingSupported))), ((object)(0))), "Fail to check the assumption : v.IsDirectoryLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS84ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c, c, "c of ReadConfig, state S85");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void BreakReadWriteLeaseV2TestCaseS84CreateResponseChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelSmb2Status status, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.ReturnLeaseContextType returnLeaseContextType, uint leaseState, Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.LeaseFlagsValues leaseFlags, Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig c) {
@@ -14681,11 +14665,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server does not support leasing and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST ignore the ""RqLs"" create context."", ""[TestInfo] The above conditions are met."", ""[TestTag] Compatibility""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : c.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(0))), "Fail to check the assumption : v1.IsLeasingSupported == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.status, "v2 == status");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v3, this.leaseState, "v3 == leaseState");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.leaseFlags, "v4 == leaseFlags");
@@ -14726,12 +14710,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");
@@ -14772,7 +14756,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.ModelDialectRevision.Smb302,
                             this.c.Value.IsLeasingSupported,
                             this.c.Value.IsDirectoryLeasingSupported}), temp169, "c of FileOperationToBreakLeaseRequest, state S92");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : c.MaxSmbVersionSupported == 770");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.c1, this.Make<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(new string[] {
                             "MaxSmbVersionSupported",
                             "IsLeasingSupported",
@@ -14791,10 +14775,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Comment("Unbinding variable \'c1\'");
             this.c1.Unbind();
             this.Manager.Comment("Unbinding variable \'v1\'");
@@ -14864,10 +14848,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                             this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                     " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                     "ed \r\n");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
             this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
             this.Manager.Checkpoint(@"""[MS-SMB2] WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:""");
             this.Manager.Checkpoint("\"[MS-SMB2] The file is opened by a local application or via another protocol, or " +
@@ -14966,10 +14950,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                                     this.c.Value.IsDirectoryLeasingSupported}), "v1 == LeasingConfig State: \r\nMaxSmbVersionSupported: Smb302 \r\nIsLeasingSupported:" +
                             " c.IsLeasingSupported \r\nIsDirectoryLeasingSupported: c.IsDirectoryLeasingSupport" +
                             "ed \r\n");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                             "singSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
-                    this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+                    this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v1.MaxSmbVersionSupported == 770");
                     this.Manager.Checkpoint(@"""[MS-SMB2] 3.3.1.4: READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:""");
                     this.Manager.Checkpoint("\"[MS-SMB2] READ caching on a file:\"");
                     this.Manager.Checkpoint("\"[MS-SMB2] \tThe file is opened in a manner that overwrites the existing file.\"");
@@ -15082,12 +15066,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create context is ""RqLs"" as defined in section 2.2.13.2, and RequestedOplockLevel is set to SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:"", ""[MS-SMB2] 	If Connection.Dialect belongs to the ""3.x"" dialect family, and the DataLength field equals 0x34, the server MUST attempt to acquire a lease on the open from the underlying object store, as described in section 3.3.5.9.11."", ""[TestInfo] All the above conditions are met."", ""[MS-SMB2] 3.3.5.9.8: If the lease state requested is a superset of Lease.LeaseState and Lease.Breaking is FALSE, the server MUST request promotion of the lease state from the underlying object store to the new caching state.<271> If the object store succeeds this request, Lease.LeaseState MUST be set to the new caching state."", ""[TestInfo] Lease.Epoch is incremented by 1."", ""[MS-SMB2] 3.3.5.9.11: If SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set in the Flags field of the request, ParentLeaseKey MUST be set to the ParentLeaseKey in the request and SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit MUST be set in the Flags field of the response."", ""[TestInfo] SMB2_LEASE_FLAG_PARENT_LEASE_KEY_SET bit is set.""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported))), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(c.IsLeasingSupported == 0)");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Leasing.LeasingConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsDirectoryLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsDirectoryLeasingSupported)))), "Fail to check the assumption : v1.IsDirectoryLeasingSupported == c.IsDirectoryLea" +
                     "singSupported");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(System.Convert.ToInt32(this.v1.Value.IsLeasingSupported))), ((object)(System.Convert.ToInt32(this.c.Value.IsLeasingSupported)))), "Fail to check the assumption : v1.IsLeasingSupported == c.IsLeasingSupported");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the server supports leasing, the name of the create contex" +
                     "t is \"RqLs\" as defined in section 2.2.13.2, and RequestedOplockLevel is set to S" +
                     "MB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:\"");

@@ -24,7 +24,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fId">The SMB file identifier of the target directory.</param>
         /// <param name="previousVersion">The previous version list will be configured for this file.</param>
         /// <param name="isSuccess">It indicates whether the checking is successful or not.</param>
-        [Rule]
+        /// [Rule]
         public static void CheckPreviousVersion(int fId, List<int> previousVersion, out bool isSuccess)
         {
             Condition.IsTrue((smbState != SmbState.End) && (smbState != SmbState.Closed));
@@ -66,7 +66,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="reserved">
         /// It is ignored by System Under Test (the SUT), used to be tested in traditional test.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2QueryFileInfoRequest(
             int messageId,
             int sessionId,
@@ -117,7 +117,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2QueryFileInfoResponse(
             int messageId,
             int sessionId,
@@ -177,7 +177,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </param>
         /// <param name="isRs2073Implemented">It indicates whether RS2073 is implemented.</param>
         /// Disable warning CA1801 isRs2073Implemented is used in Adapter.
-        [Rule]
+        /// [Rule]
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters")]
         public static void ErrorTrans2QueryFileInfoResponse(
             int messageId,
@@ -264,7 +264,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </param>
         /// <param name="informationLevel">The information level used for this request.</param>
         /// <param name="gmtTokenIndex">The index of the GMT token configured by CheckPreviousVersion action.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2QueryPathInfoRequest(
             int messageId,
             int sessionId,
@@ -334,7 +334,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2QueryPathInfoResponse(
             int messageId,
             int sessionId,
@@ -391,7 +391,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
         /// <param name="isRs2076Implemented">It indicates whether RS2076 is implemented.</param>
-        [Rule]
+        /// [Rule]
         public static void ErrorTrans2QueryPathInfoResponse(
             int messageId,
             MessageStatus messageStatus,
@@ -489,7 +489,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fileName">The new This is used to represent the name of the resource.</param>
         /// <param name="isRootDirecotyNull">It indicates whether root directory is null.</param>
         /// <param name="reserved">It is ignored by the SUT, used to be tested in traditional test.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetFileInfoRequest(
             int messageId,
             int sessionId,
@@ -573,7 +573,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetFileInfoResponse(
             int messageId,
             int sessionId,
@@ -659,7 +659,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </param>
         /// Disable warning CA1502 because according to Test Case design, excessive class complexity is necessary.
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorTrans2SetFileInfoResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -784,7 +784,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </param>
         /// <param name="informationLevel">The information level used for this request.</param>
         /// <param name="gmtTokenIndex">The index of the GMT token configured by CheckPreviousVersion action.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetPathInfoRequest(
             int messageId,
             int sessionId,
@@ -853,7 +853,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetPathInfoResponse(
             int messageId,
             int sessionId,
@@ -904,7 +904,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorTrans2SetPathInfoResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -963,7 +963,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="informationLevel">The information level used for this request.</param>
         /// <param name="otherBits">The bits not listed in section.</param>
         /// <param name="reserved">It MUST be ignored upon receipt of the message.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2QueryFsInfoRequest(
             int messageId,
             int sessionId,
@@ -1012,7 +1012,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2QueryFsInfoResponse(
             int messageId,
             int sessionId,
@@ -1061,7 +1061,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorTrans2QueryFsInfoResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1116,7 +1116,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// It indicates that valid condition and each error condition are contained in the input conditions type.
         /// </param>
         /// <param name="requestPara">TRANS2_SET_FS_INFORMATION request parameter.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetFsInfoRequestAdditional(
             int messageId,
             int sessionId,
@@ -1157,7 +1157,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetFsInfoResponseAdditional(
             int messageId,
             int sessionId,
@@ -1202,7 +1202,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void ErrorTrans2SetFsInfoResponseAdditional(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1286,7 +1286,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="fId">The SMB file identifier of the target directory.</param>
         /// <param name="otherBits">The bits not listed in section.</param>
         /// <param name="reserved">It MUST be ignored upon receipt of the message.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetFsInfoRequest(
             int messageId,
             int sessionId,
@@ -1333,7 +1333,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2SetFsInfoResponse(
             int messageId,
             int sessionId,
@@ -1387,7 +1387,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorTrans2SetFsInfoResponse(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1447,7 +1447,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isFlagsKnowsLongNameSet">
         /// It indicates the adpater to set the SMB_FLAGS2_KNOWS_LONG_NAMES flag in SMB header or not.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2FindFirst2Request(
             int messageId,
             int sessionId,
@@ -1509,7 +1509,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// </param>
         /// <param name="isRs2398Implemented">It indicates whether RS2398 is implemented.</param>
         /// <param name="isRs4899Implemented">It indicates whether RS4899 is implemented.</param>
-        [Rule]
+        /// [Rule]
         /// Disable warning CA1502, because there are 30 error situations in this command according to the technical 
         /// document, the cyclomatic complexity cannot be reduced.
         [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -1686,7 +1686,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorFindFirst2Response(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -1768,7 +1768,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isFlagsKnowsLongNameSet">
         /// It indicates the adpater to set the SMB_FLAGS2_KNOWS_LONG_NAMES flag in SMB header or not.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2FindNext2Request(
             int messageId,
             int sessionId,
@@ -1828,7 +1828,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isFlagsKnowsLongNameSet">Indicate whether the SMB_FLAGS2_KNOWS_LONG_NAMES flag 
         /// in SMB header is set or not.</param>
         /// <param name="isGmtPatten"> Indicate whether the GMT Patten is used.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2FindFirst2RequestInvalidDirectoryToken(
             int messageId,
             int sessionId,
@@ -1871,7 +1871,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="isFlagsKnowsLongNameSet">Indicate whether the SMB_FLAGS2_KNOWS_LONG_NAMES flag 
         /// in SMB header is set or not.</param>
         /// <param name="isGmtPatten"> Indicate whether the GMT Patten is used.</param>
-        [Rule]
+        /// [Rule]
         public static void Trans2FindFirst2RequestInvalidFileToken(
             int messageId,
             int sessionId,
@@ -1911,7 +1911,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule]
+        /// [Rule]
         public static void Trans2FindNext2Response(
             int messageId,
             int sessionId,
@@ -1996,7 +1996,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="messageStatus">
         /// It indicates that the status code returned from the SUT is success or failure.
         /// </param>
-        [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
+        /// [Rule(Action = "ErrorResponse(messageId, messageStatus)")]
         public static void ErrorFindNext2Response(int messageId, MessageStatus messageStatus)
         {
             Condition.IsTrue(smbConnection.sentRequest.ContainsKey(messageId));
@@ -2043,7 +2043,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// the SMB header.</param>
         /// <param name="informationLevel"> The information level used for this request.</param>
         /// <param name="gmtTokenIndex"> The index of the GMT token configured by CheckPreviousVersion action.</param>
-        [Rule]
+        /// [Rule]
         public static void FSCCTrans2QueryPathInfoRequest(int messageId,
                                                           int sessionId,
                                                           int treeId,
@@ -2122,7 +2122,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="treeId"> The tree ID for the corrent share connection.</param>
         /// <param name="isSigned"> Indicates whether the message is signed or not for this response.</param>
         /// <param name="messageStatus"> Indicate the status code returned from server, success or fail.</param>
-        [Rule]
+        /// [Rule]
         public static void FSCCTrans2QueryPathInfoResponse(int messageId,
                                                            int sessionId,
                                                            int treeId,
@@ -2151,7 +2151,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="informationLevel"> The information level used for this request.</param>
         /// <param name="otherBits"> The bits not listed in section</param>
         /// <param name="reserved"> it MUST be ignored upon receipt of the message.</param>
-        [Rule]
+        /// [Rule]
         public static void FSCCTrans2QueryFSInfoRequest(int messageId,
                                                         int sessionId,
                                                         int treeId,
@@ -2190,7 +2190,7 @@ namespace Microsoft.Protocol.TestSuites.Smb
         /// <param name="treeId"> The tree ID for the corrent share connection.</param>
         /// <param name="isSigned"> Indicates whether the message is signed or not for this response.</param>
         /// <param name="messageStatus"> Indicate the status code returned from server, success or fail.</param>
-        [Rule]
+        /// [Rule]
         public static void FSCCTrans2QueryFSInfoResponse(int messageId,
                                                          int sessionId,
                                                          int treeId,

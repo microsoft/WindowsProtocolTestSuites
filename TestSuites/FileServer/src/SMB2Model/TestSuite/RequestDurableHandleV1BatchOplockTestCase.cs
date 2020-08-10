@@ -16,9 +16,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.Messages.Runtime;
-
+    
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class RequestDurableHandleV1BatchOplockTestCase : PtfTestClassBase {
         
@@ -82,8 +84,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         #region Test Initialization and Cleanup
         protected override void TestInitialize() {
             this.InitializeTestManager();
-            this.IHandleAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.IHandleAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.IHandleAdapter))));
-            this.IHandleAdapterInstance.OpenResponse += IHandleAdapterInstance_OpenResponse;
+            this.IHandleAdapterInstance = ((Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.IHandleAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.IHandleAdapter))));
+            this.Manager.Subscribe(OpenResponseInfo, this.IHandleAdapterInstance);
             this.c = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>("c");
             this.c1 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>("c1");
             this.durableHandleResponseContext = this.Manager.CreateVariable<int>("durableHandleResponseContext");
@@ -95,14 +97,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.v3 = this.Manager.CreateVariable<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>("v3");
             this.v4 = this.Manager.CreateVariable<int>("v4");
         }
-
-        private void IHandleAdapterInstance_OpenResponse(Adapter.ModelSmb2Status status, Adapter.Handle.DurableHandleResponseContext durableHandleResponseContext, Adapter.Handle.LeaseResponseContext leaseResponseContext, Adapter.Handle.HandleConfig c)
-        {
-            this.Manager.AddEvent(OpenResponseInfo, this.IHandleAdapterInstance, new object[] { status, durableHandleResponseContext, leaseResponseContext, c });
-        }
-
+        
         protected override void TestCleanup() {
-            this.IHandleAdapterInstance.OpenResponse -= IHandleAdapterInstance_OpenResponse;
             base.TestCleanup();
             this.CleanupTestManager();
         }
@@ -266,11 +262,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -287,11 +283,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -341,11 +337,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -396,11 +392,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -450,11 +446,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -505,13 +501,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
@@ -555,11 +551,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void PreConstraintChecker1() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -576,13 +572,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
@@ -629,11 +625,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -671,11 +667,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -719,11 +715,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -768,11 +764,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -808,11 +804,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void PreConstraintChecker2() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -829,11 +825,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -877,11 +873,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -924,11 +920,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -971,11 +967,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -1019,13 +1015,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
@@ -1062,7 +1058,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S1");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS29() {
@@ -1172,11 +1168,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S110");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker3() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -1193,11 +1189,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -1236,11 +1232,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -1280,11 +1276,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -1323,11 +1319,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -1367,13 +1363,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
@@ -1406,11 +1402,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S110");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void PreConstraintChecker4() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -1461,14 +1457,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S110");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS109ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S110");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS69() {
@@ -1515,7 +1511,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         }
         
         private void PreConstraintChecker5() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -1532,11 +1528,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -1583,11 +1579,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -1633,11 +1629,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -1683,11 +1679,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -1734,13 +1730,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
@@ -1818,14 +1814,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S125");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS124ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S125");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS42() {
@@ -1872,7 +1868,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         }
         
         private void PreConstraintChecker6() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -1889,11 +1885,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -1943,11 +1939,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -1997,11 +1993,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -2052,13 +2048,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
@@ -2111,11 +2107,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -2157,14 +2153,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S125");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS124ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S125");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS89() {
@@ -2211,7 +2207,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
         }
         
         private void PreConstraintChecker7() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -2228,11 +2224,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -2279,11 +2275,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -2329,11 +2325,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -2380,11 +2376,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECO" +
@@ -2430,13 +2426,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the create request also includes an SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context, the server MUST process the create context as specified in section 3.3.5.9.7 and skip this section."", ""[TestInfo] SMB2_CREATE_DURABLE_HANDLE_RECONNECT is included."", ""[TestTag] Compatibility"", ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Cont" +
                     "ext\"");
@@ -2535,11 +2531,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S127");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void PreConstraintChecker8() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -2573,21 +2569,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S127");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS126ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S127");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS126ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S127");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -2671,11 +2667,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S134");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void PreConstraintChecker9() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -2692,11 +2688,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -2735,11 +2731,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -2778,11 +2774,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -2822,13 +2818,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
@@ -2870,11 +2866,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -2905,21 +2901,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S134");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS133ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S134");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS133ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S134");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -3006,18 +3002,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S31");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS30ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S31");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void PreConstraintChecker10() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3055,11 +3051,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S31");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker11() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3107,7 +3103,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S31");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         #endregion
         
@@ -3194,25 +3190,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S52");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS51ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S52");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS51ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S52");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void PreConstraintChecker12() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3229,7 +3225,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section."", ""[TestInfo] The create response should not contain SMB2_CREATE_DURABLE_HANDLE_RESPONSE."", ""[TestTag] UnexpectedContext""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponseContext.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponseContext.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponseContext == 1)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
@@ -3260,11 +3256,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S52");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker13() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3281,7 +3277,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.6: Handling the SMB2_CREATE_DURABLE_HANDLE_REQUEST Create Context"", ""[MS-SMB2] If the RequestedOplockLevel field in the create request is not set to SMB2_OPLOCK_LEVEL_BATCH and the create request does not include an SMB2_CREATE_REQUEST_LEASE create context with a LeaseState field that includes the SMB2_LEASE_HANDLE_CACHING bit value, the server MUST ignore this create context and skip this section."", ""[TestInfo] The create response should not contain SMB2_CREATE_DURABLE_HANDLE_RESPONSE."", ""[TestTag] UnexpectedContext""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.durableHandleResponseContext.Value)), ((object)(1)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.durableHandleResponseContext.Value)), ((object)(1)))) 
                             == false), "Fail to check the assumption : !(durableHandleResponseContext == 1)");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
@@ -3371,25 +3367,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S63");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS62ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S63");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS62ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S63");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker14() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3433,7 +3429,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S63");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
         
@@ -3538,25 +3534,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S74");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS73ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S74");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS73ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S74");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void PreConstraintChecker15() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3573,11 +3569,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -3617,11 +3613,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -3660,11 +3656,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -3703,11 +3699,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -3747,13 +3743,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
@@ -3786,11 +3782,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S74");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker16() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3893,25 +3889,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S84");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS83ReadConfigChecker1(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S84");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS83ReadConfigChecker2(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S84");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         
         private void PreConstraintChecker17() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -3945,7 +3941,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S84");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         #endregion
         
@@ -4050,11 +4046,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S99");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(770))), "Fail to check the assumption : v.MaxSmbVersionSupported == 770");
         }
         
         private void PreConstraintChecker18() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -4071,11 +4067,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : c.Platform == 268435462");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435462))), "Fail to check the assumption : v3.Platform == 268435462");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -4114,11 +4110,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2012R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : c.Platform == 268435463");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435463))), "Fail to check the assumption : v3.Platform == 268435463");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -4158,11 +4154,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : c.Platform == 268435458");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435458))), "Fail to check the assumption : v3.Platform == 268435458");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -4201,11 +4197,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is WindowsServer2008R2."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : c.Platform == 268435460");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(268435460))), "Fail to check the assumption : v3.Platform == 268435460");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
             this.Manager.Checkpoint("\"[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doi" +
@@ -4245,13 +4241,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context"", ""[MS-SMB2] The server MUST look up an existing open in the GlobalOpenTable by doing a lookup with the FileId.Persistent portion of the create context. "", ""[MS-SMB2] If the lookup fails, the server SHOULD<268> fail the request with STATUS_OBJECT_NAME_NOT_FOUND and proceed as specified in ""Failed Open Handling"" in section 3.3.5.9."", ""[TestInfo] The open does not exist and the SUT platform is NonWindows."", ""[TestTag] InvalidIdentifier""");
                 throw;
             }
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(this.status.Value)), ((object)(0)))) 
                             == false), "Fail to check the assumption : !(status == 0)");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.c.Value.Platform)))), ((object)(0))), "Fail to check the assumption : c.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v1, this.durableHandleResponseContext, "v1 == durableHandleResponseContext");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v2, this.leaseResponseContext, "v2 == leaseResponseContext");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v3, this.c1, "v3 == c1");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v3.Value.Platform)))), ((object)(0))), "Fail to check the assumption : v3.Platform == 0");
             TestManagerHelpers.AssertBind<int>(this.Manager, this.v4, this.status, "v4 == status");
             this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9.7: Handling the SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Co" +
                     "ntext\"");
@@ -4284,11 +4280,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S99");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(768))), "Fail to check the assumption : v.MaxSmbVersionSupported == 768");
         }
         
         private void PreConstraintChecker19() {
-            this.Manager.Assert(((TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
+            this.Manager.Assert(((Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)((System.Convert.ToInt32(this.c.Value.IsLeasingSupported) | 1))), ((object)(0)))) 
                             == false), "Fail to check preconstraint : !((c.IsLeasingSupported | 1) == 0)");
         }
         
@@ -4332,14 +4328,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S99");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(514))), "Fail to check the assumption : v.MaxSmbVersionSupported == 514");
         }
         
         private void RequestDurableHandleV1BatchOplockTestCaseS98ReadConfigChecker3(Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig c) {
             this.Manager.Comment("checking step \'return ReadConfig/[out c]\'");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.c, c, "c of ReadConfig, state S99");
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle.HandleConfig>(this.Manager, this.v, this.c, "v == c");
-            this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
+            this.Manager.Assert(Microsoft.SpecExplorer.Runtime.Testing.TestManagerHelpers.Equality(((object)(((int)(this.v.Value.MaxSmbVersionSupported)))), ((object)(528))), "Fail to check the assumption : v.MaxSmbVersionSupported == 528");
         }
         #endregion
     }

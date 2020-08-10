@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Microsoft.SpecExplorer.Runtime;
 using System.Reflection;
+using Microsoft.SpecExplorer;
 using FRS2Model;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;

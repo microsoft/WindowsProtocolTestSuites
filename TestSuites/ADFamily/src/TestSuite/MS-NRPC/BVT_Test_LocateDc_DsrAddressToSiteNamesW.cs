@@ -7,6 +7,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using System.Collections.Generic;
     using System.Text;
     using System.Reflection;
+    using Microsoft.SpecExplorer.Runtime.Testing;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestSuites.ActiveDirectory.Common;
     using System.Net;
@@ -15,6 +16,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Spec Explorer", "3.5.3146.0")]
     [TestClassAttribute()]
     public partial class BVT_Test_LocateDc_DsrAddressToSiteNamesW : PtfTestClassBase
     {
@@ -47,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.INrpcServerAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.INrpcServerAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.INrpcServerAdapter))));
+            this.INrpcServerAdapterInstance = ((Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.INrpcServerAdapter)(this.Manager.GetAdapter(typeof(Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.INrpcServerAdapter))));
 
         }
 
