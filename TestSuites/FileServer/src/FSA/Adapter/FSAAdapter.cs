@@ -253,7 +253,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public override void Initialize(ITestSite testSite)
         {
             //Test Site Configuration
-            testSite = ReqConfigurableSite.GetReqConfigurableSite(testSite) as ITestSite;
+            testSite = ReqConfigurableSite.GetReqConfigurableSite(testSite);
             base.Initialize(testSite);
             this.site = base.Site;
             Site.DefaultProtocolDocShortName = "MS-FSA";
