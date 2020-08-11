@@ -775,7 +775,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S345\'");
             ConstrOnAddOpErrs temp23;
             this.Manager.Comment(@"executing step 'call AddOperation([""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", "distinguishedName: CN=Administrator,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp23);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp23);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R575");
             this.Manager.Checkpoint("MS-AD_LDAP_R156");
@@ -829,7 +829,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S346\'");
             ConstrOnAddOpErrs temp25;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: Administrator"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: Administrator"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: Administrator", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: Administrator", "distinguishedName: CN=Administrator,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp25);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: top;person;organizationalPerson;user", $"sAMAccountName: {Utilities.DomainAdmin}", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp25);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R575");
             this.Manager.Checkpoint("MS-AD_LDAP_R156");
@@ -1006,7 +1006,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S348\'");
             ConstrOnAddOpErrs temp31;
             this.Manager.Comment(@"executing step 'call AddOperation([""objectClass: top;person;organizationalPerson;user"",""distinguishedName: OU=Administrator,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,notAValidRight,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", "distinguishedName: OU=Administrator,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp31);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: OU={Utilities.DomainAdmin},CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(1)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp31);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R575");
             this.Manager.Checkpoint("MS-AD_LDAP_R156");
@@ -3747,7 +3747,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S320\'");
             ConstrOnAddOpErrs temp119;
             this.Manager.Comment(@"executing step 'call AddOperation([""objectClass: top;person;organizationalPerson;user"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", "distinguishedName: CN=Administrator,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp119);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp119);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R575");
             this.Manager.Checkpoint("MS-AD_LDAP_R156");
@@ -4691,7 +4691,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S334\'");
             ConstrOnAddOpErrs temp149;
             this.Manager.Comment(@"executing step 'call AddOperation([""objectClass: top;person;organizationalPerson;user"",""distinguishedName: OU=Administrator,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", "distinguishedName: OU=Administrator,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp149);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "objectClass: top;person;organizationalPerson;user", $"distinguishedName: OU={Utilities.DomainAdmin},CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp149);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R575");
             this.Manager.Checkpoint("MS-AD_LDAP_R156");
@@ -4745,7 +4745,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap
             this.Manager.Comment("reaching state \'S335\'");
             ConstrOnAddOpErrs temp151;
             this.Manager.Comment(@"executing step 'call AddOperation([""cn: Administrator"",""objectClass: top;person;organizationalPerson;user"",""sAMAccountName: Administrator"",""distinguishedName: CN=Administrator,CN=Users,DC=adts88"",""instanceType: 4"",""objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88""],RIGHT_DS_CREATE_CHILDwithSE_ENABLE_DELEGATION_PRIVILEGE,RIGHT_DS_ADD_GUID,Windows2K8R2,NoExtendedControl,AD_DS,False,out _)'");
-            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { "cn: Administrator", "objectClass: top;person;organizationalPerson;user", "sAMAccountName: Administrator", "distinguishedName: CN=Administrator,CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp151);
+            this.IAD_LDAPModelAdapterInstance.AddOperation(new List<string> { $"cn: {Utilities.DomainAdmin}", "objectClass: top;person;organizationalPerson;user", $"sAMAccountName: {Utilities.DomainAdmin}", $"distinguishedName: CN={Utilities.DomainAdmin},CN=Users,DC=adts88", "instanceType: 4", "objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=adts88" }, ((RightsOnParentObjects)(0)), ((NCRight)(0)), ServerVersion.Win2008R2, null, ((ADImplementations)(0)), false, out temp151);
             this.Manager.Checkpoint("MS-AD_LDAP_R576");
             this.Manager.Checkpoint("MS-AD_LDAP_R575");
             this.Manager.Checkpoint("MS-AD_LDAP_R156");

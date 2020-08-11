@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             "This test case is only supported in Windows 2008 R2 or higher.");
 
             // Change the registry key which contol the DC blocker, modify the configuration in environment.
-            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCIPAddress);
 
             Status responseStatus = apdsServerAdapter.NTLMLogon(
                 _NETLOGON_LOGON_INFO_CLASS.NetlogonInteractiveInformation,
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 _NETLOGON_VALIDATION_INFO_CLASS.NetlogonValidationSamInfo2);
 
             // Revert the registry key which contol the DC blocker as default value.
-            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCIPAddress);
 
             // test cases validation
             Site.CaptureRequirementIfAreEqual<Status>(
@@ -204,7 +204,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             "This test case is only supported in Windows 2008 R2 or higher.");
 
             // Change the registry key which contol the DC blocker, modify the configuration in environment.
-            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCIPAddress);
 
             Status responseStatus = apdsServerAdapter.NTLMLogon(
                 _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
@@ -213,7 +213,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 _NETLOGON_VALIDATION_INFO_CLASS.NetlogonValidationSamInfo2);
 
             // Revert the registry key which contol the DC blocker as default value.
-            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCIPAddress);
 
             // test cases validation
             Site.CaptureRequirementIfAreEqual<Status>(
@@ -260,7 +260,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             "This test case is only supported in Windows 2008 R2 or higher.");
 
             // Change the registry key which contol the DC blocker, modify the configuration in environment.
-            serverControlAdapter.SetDCBlockValue(blockDCkey, accountDCName);
+            serverControlAdapter.SetDCBlockValue(blockDCkey, accountDCIPAddress);
 
             Status responseStatus = apdsServerAdapter.NTLMLogon(
                 _NETLOGON_LOGON_INFO_CLASS.NetlogonInteractiveInformation,
@@ -270,7 +270,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 );
 
             // Revert the registry key which contol the DC blocker as default value.
-            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, accountDCName);
+            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, accountDCIPAddress);
 
             // test cases validation
             Site.CaptureRequirementIfAreEqual<Status>(
@@ -313,7 +313,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             "This test case is only supported in Windows 2008 R2 or higher.");
 
             // Change the registry key which contol the DC blocker, modify the configuration in environment.
-            serverControlAdapter.SetDCBlockValue(blockDCkey, accountDCName);
+            serverControlAdapter.SetDCBlockValue(blockDCkey, accountDCIPAddress);
 
             Status responseStatus = apdsServerAdapter.NTLMLogon(
                 _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
@@ -322,7 +322,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 _NETLOGON_VALIDATION_INFO_CLASS.NetlogonValidationSamInfo2);
 
             // Revert the registry key which contol the DC blocker as default value.
-            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, accountDCName);
+            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, accountDCIPAddress);
 
             // test cases validation
             Site.CaptureRequirementIfAreEqual<Status>(
@@ -367,8 +367,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             "This test case is only supported in Windows 2008 R2 or higher.");
 
             // Change the registry key which contol the DC blocker, modify the configuration in environment.
-            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCName);
-            serverControlAdapter.SetDCException(blockCDException, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCIPAddress);
+            serverControlAdapter.SetDCException(blockCDException, resourceDCIPAddress);
 
             Status responseStatus = apdsServerAdapter.NTLMLogon(
                 _NETLOGON_LOGON_INFO_CLASS.NetlogonInteractiveInformation,
@@ -377,8 +377,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 _NETLOGON_VALIDATION_INFO_CLASS.NetlogonValidationSamInfo2);
 
             // Revert the registry key which contol the DC blocker as default value.
-            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCName);
-            serverControlAdapter.SetDCException(defaultResourceDCException, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCIPAddress);
+            serverControlAdapter.SetDCException(defaultResourceDCException, resourceDCIPAddress);
 
             Site.Assert.AreEqual<Status>(Status.Success, responseStatus, "The return status must be STATUS_SUCCESS", null);
         }
@@ -399,8 +399,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
             "This test case is only supported in Windows 2008 R2 or higher.");
 
             // Change the registry key which contol the DC blocker, modify the configuration in environment.
-            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCName);
-            serverControlAdapter.SetDCException(blockCDException, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(blockDCkey, resourceDCIPAddress);
+            serverControlAdapter.SetDCException(blockCDException, resourceDCIPAddress);
 
             Status responseStatus = apdsServerAdapter.NTLMLogon(
                 _NETLOGON_LOGON_INFO_CLASS.NetlogonNetworkInformation,
@@ -409,8 +409,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Apds
                 _NETLOGON_VALIDATION_INFO_CLASS.NetlogonValidationSamInfo4);
 
             // Revert the registry key which contol the DC blocker as default value.
-            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCName);
-            serverControlAdapter.SetDCException(defaultResourceDCException, resourceDCName);
+            serverControlAdapter.SetDCBlockValue(defaultResourceDCKey, resourceDCIPAddress);
+            serverControlAdapter.SetDCException(defaultResourceDCException, resourceDCIPAddress);
 
             Site.Assert.AreEqual<Status>(Status.Success, responseStatus, "The return status must be STATUS_SUCCESS", null);
         }
