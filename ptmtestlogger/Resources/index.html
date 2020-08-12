@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+div#left_sidebar {width:29%;float:left;overflow:auto;overflow:scroll;overflow-x:hidden}
+div#back_to_summary {width:68%;float:left;overflow:auto;}
+div#right_sidebar_summary {width:68%;float:left;overflow:auto;margin-left:-2px}
+div#right_sidebar_case {width:68%;float:left;overflow:auto;margin-left:-2px}
+h1 {margin-bottom:0;}
+ul {margin:0;}
+li {list-style:none;}
+
+body{
+    font-family:Arial,Verdana,Sans-serif;
+    background-color: rgb(243,243,244);
+}
+h1.title{
+    color: #1382CE;
+    font-family:Arial,Verdana,Sans-serif;
+    font-weight: bolder;
+}
+
+h1.caselist {
+   color: #1382CE; 
+   font-weight: bolder;
+   font-family:Arial,Verdana,Sans-serif;
+}
+
+div.frame {
+    color:white;
+    border-style: groove;
+    font-weight: bold;
+    font-size: 110%;
+    filter: alpha(opacity=30);
+    border:none;
+    padding:5px 5px 5px 5px;
+    background-color:#1382CE;
+}
+
+div {
+    font-size: 90%;
+}
+
+div.sub {
+    margin-left:20px;
+}
+
+a.hyper {
+    font-size: 80%;
+    font-family:Arial,Verdana,Sans-serif;
+    font-weight:normal;
+    color: #1382CE;
+    background-color: #E2E2E2;
+    padding: 5px 0px 5px 10px;
+    display: block;
+    -webkit-margin-before: 0.67em;    
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+a {
+    font-size: 90%;
+    font-family:Arial,Verdana,Sans-serif;
+}
+
+th {
+    background-color:#E7E7E8;
+    font-family:Arial,Verdana,Sans-serif;
+    text-decoration: none;
+    font-weight: normal;
+    padding: 3px 6px 3px 6px;
+}
+
+td {
+    vertical-align: inherit;
+    border-color: inherit;
+    background-color:rgb(247,247,248);
+}
+
+table {
+    text-align: center;
+    font-weight:700;
+    font-size: 10pt;
+    border-spacing: 2px;
+    border-color: gray;
+    border-spacing: 0 0;
+    border-collapse: collapse;
+}
+img.small{
+    vertical-align:1px;
+    margin-right:6px;
+}
+
+img.result{
+    vertical-align:middle;
+}
+
+.normal{
+   color:black;
+   background-color:rgb(243,243,244);
+}
+
+.highLight{
+   color:white;
+   background-color:rgb(91,155,213)
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- left side, show case list -->
+<div id="left_sidebar" style="padding-right:10px;border-right:2px solid">
+    <br/>
+    <h1 align="center"class="caselist">Case List</h1>
+    <h5>&nbsp&nbsp&nbsp&nbsp Group By                 
+        <select onchange="ChangeSelect(this.value)" id="groupbyid" style="width:126px">
+            <option value="1"selected="selected" >None</option>
+            <option value="2">Test Result</option>
+            <option value="3">Category</option> 
+            <option value="4">Class</option>                 
+    </select>    
+    <br/>
+    <p style="line-height:3px"/>
+        &nbsp&nbsp&nbsp&nbsp Keyword                
+        <input id="keyword" type="text" size=8  onkeyup="KeyShow(event.keyCode,this.value)" style="margin-left:3px"/>
+        <input id="kwbtn" type="button" style="width:auto; height: 20px"  onclick="KeywordGo()" value="Go"/>
+    </h5>
+    <hr style="border:1px dashed rgb(128, 128, 128); height:1px"/>
+    <!--list side -->
+    <div id="list">
+    </div>
+
+    <script type="text/javascript" src="./js/functions.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        // listObj will be inserted above when cases are running.
+
+        CreateCaseList();
+    </script>
+</div>
+
+<!-- right side, show summary -->
+<div id="right_sidebar_summary" style="padding-left:10px;border-left:2px solid;">
+    <h1 align="center" class="title">Summary</h1>
+    <table id="tableid" width="600" height="60" border="1">
+        <tr>
+        <th  scope="col">Total</th>
+        <th  scope="col">Passed</th>
+        <th  scope="col">Failed</th>
+        <th  scope="col">Inconclusive</th>
+        <th  scope="col">Pass Rate </th>
+        </tr>
+    </table>
+    <br />
+    <script language="javascript" type="text/javascript">
+        ShowSummary();
+    </script>
+</div>
+
+<div id ="back_to_summary" style="padding-left:10px;display:none">
+    <a class="hyper"  onclick="ClickSummary(this)" id="summary" >
+        <u>Back to Summary</u>
+    </a>
+</div>
+    <!-- right side, show case detail -->
+<div id="right_sidebar_case" style="display:none;padding-left:10px;border-left:2px solid;">
+    <iframe id ="testcase" width="100%" onload="SetIFrameHeight(this)" frameborder="0"></iframe>
+</div>
+
+</body>
+
+</html>

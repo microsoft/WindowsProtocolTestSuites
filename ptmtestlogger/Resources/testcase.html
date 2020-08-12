@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title></title>
+    <style type="text/css">
+h1 {margin-bottom:0;}
+ul {margin:0;}
+
+body{
+    font-family:Arial,Verdana,Sans-serif;
+    background-color: rgb(243,243,244);
+}
+h1.title{
+    color: #1382CE;
+    font-family:Arial,Verdana,Sans-serif;
+    font-weight: bold;
+    font-size:1.25rem;
+}
+
+div.frame {
+    color:white;
+    border-style: groove;
+    font-weight: bold;
+    font-size: 110%;
+    filter: alpha(opacity=30);
+    border:none;
+    padding:0.3125rem 0.3125rem 0.3125rem 0.3125rem;
+    background-color:#1382CE;
+}
+
+
+div.filter {
+    background-color:White;
+    border:0.0625rem solid;
+    border-color:grey;
+    font-size:0.625rem;
+    position:absolute;left:1.25rem;
+    margin-left:4.0625rem;
+    padding-right:0.3125rem;
+    padding-bottom:0.3125rem;
+}
+
+div.filterframe {
+    font-size:0.75rem;
+    font-weight: bold;
+    margin-left:1.25rem;
+}
+
+div {
+    font-size: 90%;
+}
+
+div.sub {
+    margin-left:1.25rem;
+}
+
+img.small{
+    vertical-align:0.0625rem;
+    margin-right:0.375rem;
+}
+
+</style>
+
+</head>
+<body>
+
+    <h1 align="center" class="title" id="right_sidebar_case_title"></h1>
+    <p align="left" id="casetime" style="font-size:0.75rem"></p>
+    <div id="log">
+    </div>
+</body>
+    <script type="text/javascript" src="../js/functions.js"></script>
+
+    <script language="javascript" type="text/javascript">
+        // detailObj will be inserted above when cases are running
+
+        SetFrames();
+        ShowDetail('time', '0');
+        ShowDetail('StandardOut', '0');
+        ShowDetail('ErrorStackTrace', '0');
+        ShowDetail('ErrorMessage', '0');
+
+    </script>
+</html>
