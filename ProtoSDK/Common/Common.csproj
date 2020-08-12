@@ -6,6 +6,10 @@
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
