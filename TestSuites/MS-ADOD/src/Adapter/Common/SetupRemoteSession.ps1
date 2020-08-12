@@ -1,16 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           SetupRemoteSession.ps1
-## Purpose:        Use WinRM to Setup a PowerShell session from local machine to a remote computer.
-## Version:        1.1 (2 Mar, 2012)
-##
 ##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           SetupRemoteSession.ps1
+# Purpose:        Use WinRM to Setup a PowerShell session from local machine to a remote computer.
+# Version:        1.1 (2 Mar, 2012)
+#
+##############################################################################
+
 param(
 [string]$computerName,
 [string]$userName,

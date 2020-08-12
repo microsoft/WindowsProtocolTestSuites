@@ -1,5 +1,5 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.using Microsoft.Protocol.TestSuites.Smbd.Adapter;
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocol.TestSuites.Smbd.Adapter;
 using Microsoft.Protocols.TestSuites.Smbd.Adapter;

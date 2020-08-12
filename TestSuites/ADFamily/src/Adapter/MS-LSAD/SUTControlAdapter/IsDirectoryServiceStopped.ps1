@@ -1,16 +1,14 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           IsDirectoryServiceStopped.ps1
-## Purpose:        Get Active Directory Domain Control Service Status
-## Requirements:   Windows Powershell 2.0
-## Supported OS:   Windows Server 2008 R2
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           IsDirectoryServiceStopped.ps1
+# Purpose:        Get Active Directory Domain Control Service Status
+# Requirements:   Windows Powershell 2.0
+# Supported OS:   Windows Server 2008 R2
+#
 ##############################################################################
 
 $retVal = $false

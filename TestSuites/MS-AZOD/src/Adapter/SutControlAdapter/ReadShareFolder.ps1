@@ -1,15 +1,14 @@
-﻿########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-####################################################################################
-##
-## 	Microsoft Windows Powershell Scripting
-##  File:		ReadShareFolder.ps1
-##	Purpose:	To list the directory information of a shared folder with specified credential.
-##	Version: 	1.0 (18 Jun, 2014)
-####################################################################################
+##############################################################################
+#
+# 	Microsoft Windows Powershell Scripting
+#	File:		ReadShareFolder.ps1
+#	Purpose:	To list the directory information of a shared folder with specified credential.
+#	Version: 	1.0 (18 Jun, 2014)
+##############################################################################
+
 #param(
 #		[string]$uncPath,		
 #		[string]$userName,
@@ -18,6 +17,7 @@
 #		[string]$logFileName
 #		
 #	)
+
 #----------------------------------------------------------------------------
 #Replace the / with \, because //win8as/sharefolder will not be recognized by test-path
 #----------------------------------------------------------------------------
@@ -31,7 +31,6 @@ $workingDir =Split-Path $workingDir
 $runningScriptName=$MyInvocation.MyCommand.Name
 $logFile="$PtfProp_DriverLogPath\$logFileName"
 $signalFile="$workingDir\$runningScriptName.signal"
-
 
 #----------------------------------------------------------------------------
 # Create the log file

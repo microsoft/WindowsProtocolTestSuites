@@ -1,17 +1,16 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           Config-DriverComputer.ps1
-## Purpose:        Configure Driver Computer for MS-ADOD OD test suite.
-## Requirements:   Windows PowerShell 2.0
-## Supported OS:   Windows 7 or later versions
-##
 ##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           Config-DriverComputer.ps1
+# Purpose:        Configure Driver Computer for MS-ADOD OD test suite.
+# Requirements:   Windows PowerShell 2.0
+# Supported OS:   Windows 7 or later versions
+#
+##############################################################################
+
 Param(
   [String]$scriptsPath     = (Split-Path $MyInvocation.MyCommand.Definition -Parent)
 )

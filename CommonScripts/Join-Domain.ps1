@@ -1,15 +1,13 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 ##############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Join-Domain.ps1
-## Purpose:        Join the machine to the specified domain.
-## Version:        1.1 (26 June, 2008)
-##          
+#
+# Microsoft Windows Powershell Scripting
+# File:           Join-Domain.ps1
+# Purpose:        Join the machine to the specified domain.
+# Version:        1.1 (26 June, 2008)
+#          
 ##############################################################################
 
 Param(

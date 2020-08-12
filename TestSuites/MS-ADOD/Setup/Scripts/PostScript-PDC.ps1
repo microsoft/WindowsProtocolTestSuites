@@ -1,16 +1,14 @@
-#############################################################################
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Sripting
-## File:           PostScript-PDC.ps1
-## Purpose:        Configure PDC for MS-ADOD test suite
-## Requirements:   Windows PowerShell 2.0
-## Supported OS:   Windows Server 2012 or later versions
-##
+##############################################################################
+#
+# Microsoft Windows PowerShell Sripting
+# File:           PostScript-PDC.ps1
+# Purpose:        Configure PDC for MS-ADOD test suite
+# Requirements:   Windows PowerShell 2.0
+# Supported OS:   Windows Server 2012 or later versions
+#
 ##############################################################################
 
 Param

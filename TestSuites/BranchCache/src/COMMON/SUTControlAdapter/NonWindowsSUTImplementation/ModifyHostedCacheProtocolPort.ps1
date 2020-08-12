@@ -1,9 +1,7 @@
-######################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-######################################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#-------------------------------------------------------------------------------------
+##############################################################################
 # Script function description:
 # Fuction: Modify the hosted cache protocol port which is designated by the parameter
 #          $newPort's value.
@@ -14,7 +12,7 @@
 #          Or modify the hosted cache listen port on the hosted cache server which is
 #          designated by the parameter $hostedServerComputerName's value through updating
 #          the registry remotely from a 32 bit application.
-#-------------------------------------------------------------------------------------
+##############################################################################
 
 param(
 [string]$hostedClient = $hostedClientComputerName,

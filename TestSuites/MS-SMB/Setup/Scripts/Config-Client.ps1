@@ -1,14 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Config-Client.ps1
-## Purpose:        Configure driver computer for MS-SMB test suite.
-## Requirements:   Windows Powershell 2.0 CTP2
-## Supported OS:   Windows 7 and later versions
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 ##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Config-Client.ps1
+# Purpose:        Configure driver computer for MS-SMB test suite.
+# Requirements:   Windows Powershell 2.0 CTP2
+# Supported OS:   Windows 7 and later versions
+#
+##############################################################################
+
 $ScriptsSignalFile = "$env:HOMEDRIVE\config.finished.signal"
 $protocolName = "MS-SMB"
 

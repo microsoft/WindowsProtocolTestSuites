@@ -1,10 +1,10 @@
-﻿#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## Purpose: Get OS version number.
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# Purpose: Get OS version number.
+#
 ##############################################################################
 
 #----------------------------------------------------------------------------

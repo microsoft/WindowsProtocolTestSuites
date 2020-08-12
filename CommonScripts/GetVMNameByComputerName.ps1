@@ -1,17 +1,15 @@
-﻿#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-###########################################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           GetVMNameByComputerName.ps1
-## Purpose:        Get the hypervname of current vm from the test suite config file by the computer name.
-## Requirements:   Windows Powershell 2.0
-## Supported OS:   Windows Server 2012, Windows Server 2012 R2, Windows Server 2016, and later.
-##
-###########################################################################################
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           GetVMNameByComputerName.ps1
+# Purpose:        Get the hypervname of current vm from the test suite config file by the computer name.
+# Requirements:   Windows Powershell 2.0
+# Supported OS:   Windows Server 2012, Windows Server 2012 R2, Windows Server 2016, and later.
+#
+##############################################################################
 
 Param
 (
