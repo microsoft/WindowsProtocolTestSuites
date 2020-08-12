@@ -17,12 +17,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IClientControlAdapter\ClearTrustRealmEncType.ps1" />
-    <Content Include="IClientControlAdapter\SetTrustRealmEncTypeAsAes.ps1" />
-    <Content Include="IClientControlAdapter\SetSupportedEncryptionTypesAsRc4.ps1" />
-    <Content Include="IClientControlAdapter\RestoreSupportedEncryptionTypes.ps1" />
-    <Content Include="IClientControlAdapter\EnableCompoundIdentity.ps1" />    
-    <Content Include="IClientControlAdapter\Run-TaskOnRemoteComputer.ps1" />
+    <Content Include="IClientControlAdapter\ClearTrustRealmEncType.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IClientControlAdapter\SetTrustRealmEncTypeAsAes.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IClientControlAdapter\SetSupportedEncryptionTypesAsRc4.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IClientControlAdapter\RestoreSupportedEncryptionTypes.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IClientControlAdapter\EnableCompoundIdentity.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>    
+    <Content Include="IClientControlAdapter\Run-TaskOnRemoteComputer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj" />
@@ -36,6 +48,10 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

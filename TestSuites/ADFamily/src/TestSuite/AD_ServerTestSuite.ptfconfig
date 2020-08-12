@@ -20,12 +20,10 @@
     <!--MS_ADTS_Security-->
     <Adapter xsi:type="managed" name="IMS_ADTS_AuthenticationAuth" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security.MS_ADTS_AuthenticationAuth, AD_ServerAdapter" />
     <Adapter xsi:type="managed" name="IMS_ADTS_TDOAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security.MS_ADTS_TDOAdapter, AD_ServerAdapter" />
-    <Adapter xsi:type="rpc" name="ILSADRpcAdapter" />
     <!--MS_DRSR-->
-    <Adapter xsi:type="interactive" name="IRecoverAdapter" />
+
     <Adapter xsi:type="powershell" name="IDrsrSutControlAdapter" scriptdir="." />
     <Adapter xsi:type="managed" name="ILdapAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.LdapAdapter, AD_ServerAdapter" />
-    <Adapter xsi:type="rpc" name="IMS_DRSR_RpcAdapter" />
     <!--MS_LSAD-->
     <Adapter xsi:type="managed" name="ILsadManagedAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.LsadManagedAdapter, AD_ServerAdapter" />
     <Adapter xsi:type="powershell" name="ILsadSutControlAdapter" scriptdir=".\Adapter\MS-LSAD\SUTControlAdapter\" />
@@ -38,7 +36,6 @@
     <Adapter xsi:type="managed" name="IConfigStoreInitializerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.MS_FRS2.FRS2ConfigStoreInitializer" />
     <Adapter xsi:type="managed" name="IFRS2ManagedAdapter" adaptertype="Microsoft.Protocols.TestSuites.MS_FRS2.FRS2ManagedAdapter" />
     <Adapter xsi:type="managed" name="IFRS2ServerControllerAdapter" adaptertype="Microsoft.Protocols.TestSuites.MS_FRS2.FRS2ServerControllerAdapter" />
-    <Adapter xsi:type="rpc" name="IFRS2Adapter" />
     <!--MS_APDS-->
     <Adapter xsi:type="managed" name="IApdsServerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Apds.IApdsServerAdapter, AD_ServerAdapter" />
     <Adapter xsi:type="powershell" name="IApdsSutControlAdapter" scriptdir=".\Adapter\MS-APDS\SUTControlAdapter\" />

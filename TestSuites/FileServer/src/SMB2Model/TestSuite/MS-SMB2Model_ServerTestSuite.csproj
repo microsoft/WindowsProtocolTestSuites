@@ -32,6 +32,14 @@
   <ItemGroup>
     <Content Include="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig"></Content>
     <Content Include="MS-SMB2Model_ServerTestSuite.ptfconfig"></Content>
+    <Content Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
+      <Link>CommonTestSuite.ptfconfig</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig">
+      <Link>CommonTestSuite.deployment.ptfconfig</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
@@ -39,10 +47,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
   </ItemGroup>
 </Project>

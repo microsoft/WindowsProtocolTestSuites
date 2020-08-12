@@ -30,7 +30,7 @@
   </Properties>
 
   <Adapters>
-    <Adapter xsi:type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
+    <Adapter xsi:type="powershell" name="ISutControlAdapter" scriptdir=".\WindowsSutControlAdapter"/>
     <!--<Adapter xsi:type="interactive" name="ISutControlAdapter" /> -->
   </Adapters>
 

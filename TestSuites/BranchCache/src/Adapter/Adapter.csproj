@@ -8,24 +8,46 @@
     <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Content Include="WindowsSUTControlAdapter\ClearCache.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\ClearHTTPHash.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\ClearSMB2Hash.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\RestartBranchCacheService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\IsHTTPHashExisted.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\IsLocalCacheExisted.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\GenerateSMB2Hash.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WindowsSUTControlAdapter\CreatePSCredential.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WindowsSUTControlAdapter\ClearCache.ps1" />
-    <Content Include="WindowsSUTControlAdapter\ClearHTTPHash.ps1" />
-    <Content Include="WindowsSUTControlAdapter\ClearSMB2Hash.ps1" />
-    <Content Include="WindowsSUTControlAdapter\RestartBranchCacheService.ps1" />
-    <Content Include="WindowsSUTControlAdapter\IsHTTPHashExisted.ps1" />
-    <Content Include="WindowsSUTControlAdapter\IsLocalCacheExisted.ps1" />
-    <Content Include="WindowsSUTControlAdapter\GenerateSMB2Hash.ps1" />
-    <Content Include="WindowsSUTControlAdapter\CreatePSCredential.ps1" />
-  </ItemGroup>
-  <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />

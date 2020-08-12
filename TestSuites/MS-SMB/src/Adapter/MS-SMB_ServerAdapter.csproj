@@ -14,10 +14,18 @@
     </Compile>
   </ItemGroup> 
   <ItemGroup>
-    <Content Include="ServerSetup\ConfigSignState.ps1" />
-    <Content Include="ServerSetup\DeleteFiles.ps1" />
-    <Content Include="ServerSetup\NonWindowsSUTImplementation\EmptyConfigSignState.ps1" />
-    <Content Include="ServerSetup\NonWindowsSUTImplementation\EmptyDeleteFiles.ps1" />
+    <Content Include="ServerSetup\ConfigSignState.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ServerSetup\DeleteFiles.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ServerSetup\NonWindowsSUTImplementation\EmptyConfigSignState.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ServerSetup\NonWindowsSUTImplementation\EmptyDeleteFiles.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj" />
@@ -29,6 +37,10 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
   </ItemGroup>
 </Project>

@@ -20,9 +20,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MS-SMBD_ServerAdapter", "Adapter\MS-SMBD_ServerAdapter.csproj", "{98A76DE1-2D66-476B-9222-F15FFDFA8C81}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{87D04238-B23E-48AD-A915-D20E69EF891E}"
-	ProjectSection(SolutionItems) = preProject
-		ServerLocal.TestSettings = ServerLocal.TestSettings
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smbd", "..\..\..\ProtoSDK\MS-SMBD\Smbd.csproj", "{C07058FA-1891-46E6-B4AF-7F38DD6BD7AD}"
 EndProject
@@ -42,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiService", "..\..\..\Pro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rdma", "..\..\..\ProtoSDK\RDMA\Rdma.vcxproj", "{94267900-7F95-48DB-AAC4-ADFF00492BF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KerberosLib", "..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj", "{F1EDA208-50B6-4501-A9D8-D18D3434D587}"
 EndProject

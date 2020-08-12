@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
   </ItemGroup>
@@ -27,6 +31,66 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="RdpedispSUTControlAdapter\TriggerInitializeDisplaySettings.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpedispSUTControlAdapter\TriggerMaximizeRDPClientWindow.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpedispSUTControlAdapter\TriggerOrientationChangeOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpedispSUTControlAdapter\TriggerResolutionChangeOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpeiSUTControlAdapter\TriggerContinuousTouchEventOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpeiSUTControlAdapter\TriggerDismissHoveringContactPduOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpeiSUTControlAdapter\TriggerMultiTouchEventOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpeiSUTControlAdapter\TriggerOneTouchEventOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="RdpeiSUTControlAdapter\TriggerPositionSpecifiedTouchEventOnClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\Check-PSRemoting.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\RDPConnectWithDirectCredSSP.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\Run-TaskWithPSRemoting.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\TriggerClientAutoReconnect.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\TriggerClientDisconnect.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\TriggerClientDisconnectAll.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\TriggerInputEvents.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

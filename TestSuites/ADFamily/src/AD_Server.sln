@@ -10,9 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AD_ServerAdapter", "Adapter\AD_ServerAdapter.csproj", "{669014EF-A5C7-4178-9F1E-3CFB2EC8ED4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1A18060C-C77D-4916-B0D6-4EADD0561D5C}"
-	ProjectSection(SolutionItems) = preProject
-		ServerLocalTestRun.testrunconfig = ServerLocalTestRun.testrunconfig
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MS-FRS2", "MS-FRS2", "{EB68A61F-59B4-4507-9000-5CDA904B423B}"
 EndProject
@@ -76,17 +73,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADTSPublishDCScenario_Respo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IMS_FRS2_RpcAdapter_RpcStubs", "MS-FRS2\FRS2Stubs\MS-FRS2_ServerFRS2Stubs.vcxproj", "{E0AB3259-0FEC-4BE4-AD04-31AD1F570DAA}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "deploy", "Deploy\deploy.wixproj", "{1EE9E1E6-C406-448F-B3A4-844706123937}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xca", "..\..\..\ProtoSDK\MS-XCA\Xca.csproj", "{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiLib", "..\..\..\ProtoSDK\SspiLib\SspiLib.csproj", "{E64BF20F-11D2-49F6-A25B-F4378AB38180}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiService", "..\..\..\ProtoSDK\SspiService\SspiService.csproj", "{1FC8C336-EF82-4F7C-9532-AB8AB268916E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SspiService", "..\..\..\ProtoSDK\SspiService\SspiService.csproj", "{1FC8C336-EF82-4F7C-9532-AB8AB268916E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -344,10 +337,6 @@ Global
 		{E0AB3259-0FEC-4BE4-AD04-31AD1F570DAA}.Release|Any CPU.Build.0 = Release|x64
 		{E0AB3259-0FEC-4BE4-AD04-31AD1F570DAA}.Release|x64.ActiveCfg = Release|x64
 		{E0AB3259-0FEC-4BE4-AD04-31AD1F570DAA}.Release|x64.Build.0 = Release|x64
-		{1EE9E1E6-C406-448F-B3A4-844706123937}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{1EE9E1E6-C406-448F-B3A4-844706123937}.Debug|x64.ActiveCfg = Debug|x86
-		{1EE9E1E6-C406-448F-B3A4-844706123937}.Release|Any CPU.ActiveCfg = Release|x86
-		{1EE9E1E6-C406-448F-B3A4-844706123937}.Release|x64.ActiveCfg = Release|x86
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55F86FDF-E929-4AA6-901B-4E0BE8B9B633}.Debug|x64.ActiveCfg = Debug|Any CPU
