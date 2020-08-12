@@ -1,15 +1,13 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           JoinDomainCreateAcctSAMR.ps1
-## Purpose:        Use PowerShell Remote Session to trigger the client computer to join domain by creating an account using LDAP.
-## Version:        1.1 (2 Mar, 2012)
-##
+##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           JoinDomainCreateAcctSAMR.ps1
+# Purpose:        Use PowerShell Remote Session to trigger the client computer to join domain by creating an account using LDAP.
+# Version:        1.1 (2 Mar, 2012)
+#
 ##############################################################################
 
 [string]$clientComputerName  = $PtfProp_ClientIP

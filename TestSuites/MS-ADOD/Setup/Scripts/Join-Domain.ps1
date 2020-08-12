@@ -1,17 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           Join-Domain-Method1.ps1
-## Purpose:        Join a specified domain by creating an account or by a predefined account.
-## Version:        1.0 (8 Feb, 2012)
-## Requirements:   Windows PowerShell 2.0 CTP
-## Supported OS:   Windows 7, Windows 8
-##           
+##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           Join-Domain-Method1.ps1
+# Purpose:        Join a specified domain by creating an account or by a predefined account.
+# Version:        1.0 (8 Feb, 2012)
+# Requirements:   Windows PowerShell 2.0 CTP
+# Supported OS:   Windows 7, Windows 8
+#           
 ##############################################################################
 
 #-------------------------------------------------------------------------

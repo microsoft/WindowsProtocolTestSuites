@@ -1,15 +1,13 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Create-Account.ps1
-## Purpose:        Create a new user account (Domain user or Local user).
-## Version:        1.1 (26 June, 2008)
-##       
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Create-Account.ps1
+# Purpose:        Create a new user account (Domain user or Local user).
+# Version:        1.1 (26 June, 2008)
+#       
 ##############################################################################
 
 Param (

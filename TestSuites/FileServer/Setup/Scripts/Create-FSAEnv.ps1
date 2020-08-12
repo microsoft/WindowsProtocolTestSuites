@@ -1,14 +1,14 @@
-########################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-## Microsoft Windows Powershell Scripting
-## File:           Create-FSAEnv.ps1
-## Purpose:        Create ShareFolder and relevant files in SUT for MS-FSA test suite
-## Requirements:   Windows Powershell 2.0
-## Supported OS:   Windows Server 2012, Windows Server 2012 R2
-## 
-#########################################################################################
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Create-FSAEnv.ps1
+# Purpose:        Create ShareFolder and relevant files in SUT for MS-FSA test suite
+# Requirements:   Windows Powershell 2.0
+# Supported OS:   Windows Server 2012, Windows Server 2012 R2
+# 
+##############################################################################
 
 #----------------------------------------------------------------------------
 # Global variables

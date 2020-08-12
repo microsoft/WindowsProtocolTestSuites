@@ -1,14 +1,12 @@
-﻿########################################################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-########################################################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-################################################################################
-## 	Microsoft Windows Powershell Scripting
-##  File:		CleanupCachedTickets.ps1
-##	Purpose:	Cleanup cached kerberos tickets and dns
-##	Version: 	1.1 (12 Apr, 2013)
-#################################################################################
+##############################################################################
+# 	Microsoft Windows Powershell Scripting
+#	File:		CleanupCachedTickets.ps1
+#	Purpose:	Cleanup cached kerberos tickets and dns
+#	Version: 	1.1 (12 Apr, 2013)
+##############################################################################
 
 #-------------------------------------------------------------------------------------#
 # Create $logFile if not exist
@@ -34,7 +32,6 @@ echo "EXECUTING [CleanupCachedTickets.ps1]." |Out-File $logFile -Append
 echo "`$computerName  = $computerName" |Out-File $logFile -Append
 echo "`$userName = $userName" |Out-File $logFile -Append
 echo "`$userPassword      = $userPassword" |Out-File $logFile -Append
-
 
 #-------------------------------------------------------------------------------------#
 # When exceptions trapped, stop the script and return null

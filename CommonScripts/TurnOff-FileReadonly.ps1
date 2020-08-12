@@ -1,12 +1,11 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## Purpose: Turn off readonly attribute for a file.
-##
-##############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# Purpose: Turn off readonly attribute for a file.
+#
+##############################################################################
 
 param(
 [string]$filePath

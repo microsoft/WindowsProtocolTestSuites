@@ -1,15 +1,13 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           TurnOff-FileReadonly.ps1
-## Purpose:        Turn off readonly attribute for a file.
-## Version:        1.0 (25 May, 2008)
-##
+##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           TurnOff-FileReadonly.ps1
+# Purpose:        Turn off readonly attribute for a file.
+# Version:        1.0 (25 May, 2008)
+#
 ##############################################################################
 
 param(

@@ -1,11 +1,10 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#-------------------------------------------------------------------------------------
+##############################################################################
 # This function is used to import the cert with password into the appointed cert store
-#-------------------------------------------------------------------------------------
+##############################################################################
+
 param(
 [String]$certhash="5873ce11f1c4ed311a61d0510f998a90bf7331c9",
 [String]$appid="{d673f5ee-a714-454d-8de2-492e4c1bd8f8}",

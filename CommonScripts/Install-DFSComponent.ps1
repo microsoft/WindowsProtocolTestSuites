@@ -1,12 +1,12 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Install-DFSComponent.ps1
-## Purpose:        Install DFS component (just used in w2k8).
-## Version:        1.1 (26 Jun, 2008)
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Install-DFSComponent.ps1
+# Purpose:        Install DFS component (just used in w2k8).
+# Version:        1.1 (26 Jun, 2008)
+#
 ##############################################################################
 
 #----------------------------------------------------------------------------

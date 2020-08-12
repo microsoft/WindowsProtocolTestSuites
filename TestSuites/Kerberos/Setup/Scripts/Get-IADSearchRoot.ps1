@@ -1,17 +1,15 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Get-IADSearchRoot.ps1
-## Purpose:        Get the search root of an Active Directory in a specified DC (Server) according to the object DN provided.
-## Version:        1.0 (8 Feb, 2012)
-## Requirements:   Windows Powershell 2.0 CTP
-## Supported OS:   Windows 7, Windows 8
-##           
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Get-IADSearchRoot.ps1
+# Purpose:        Get the search root of an Active Directory in a specified DC (Server) according to the object DN provided.
+# Version:        1.0 (8 Feb, 2012)
+# Requirements:   Windows Powershell 2.0 CTP
+# Supported OS:   Windows 7, Windows 8
+#           
 ##############################################################################
 
 function Get-IADSearchRoot {

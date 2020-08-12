@@ -1,15 +1,13 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows PowerShell Scripting
-## File:           ChangeUserAcctPasswordLDAP.ps1
-## Purpose:        Setup remote session on to the client computer and change a user account's password.
-## Version:        1.1 (11 Jan, 2012)
-##
+##############################################################################
+#
+# Microsoft Windows PowerShell Scripting
+# File:           ChangeUserAcctPasswordLDAP.ps1
+# Purpose:        Setup remote session on to the client computer and change a user account's password.
+# Version:        1.1 (11 Jan, 2012)
+#
 ##############################################################################
 
 [string]$clientComputerName 	= $PtfProp_ClientIP

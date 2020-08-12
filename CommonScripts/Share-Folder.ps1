@@ -1,12 +1,12 @@
-#############################################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-##
-## Microsoft Windows Powershell Scripting
-## File:           Share-Folder.ps1
-## Purpose:        Share a folder for everyone.
-## Version:        1.1 (26 Jun, 2008)
-##
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+##############################################################################
+# Microsoft Windows Powershell Scripting
+# File:           Share-Folder.ps1
+# Purpose:        Share a folder for everyone.
+# Version:        1.1 (26 Jun, 2008)
+#
 ##############################################################################
 
 Param(

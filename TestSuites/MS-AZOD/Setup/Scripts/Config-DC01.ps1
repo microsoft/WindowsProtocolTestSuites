@@ -1,16 +1,14 @@
-#############################################################################
-## Copyright (c) Microsoft Corporation. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#############################################################################
-##
-## Microsoft Windows Powershell Scripting
-## File:           Config-DC01.ps1
-## Purpose:        Configure local realm DC for MS-AZOD test suite.
-## Requirements:   Windows Powershell 2.0
-## Supported OS:   Windows Server 2012 +
-##
+##############################################################################
+#
+# Microsoft Windows Powershell Scripting
+# File:           Config-DC01.ps1
+# Purpose:        Configure local realm DC for MS-AZOD test suite.
+# Requirements:   Windows Powershell 2.0
+# Supported OS:   Windows Server 2012 +
+#
 ##############################################################################
 
 Function SetupDCUsersAndGroups
@@ -133,7 +131,7 @@ Function SetupDCUsersAndGroups
             }
             catch
             {
-	             .\Write-Info.ps1 "Error occur during create user $name£¡Error happened: $_.Exception.Message" -ForegroundColor Red
+	             .\Write-Info.ps1 "Error occur during create user $nameÂ£Â¡Error happened: $_.Exception.Message" -ForegroundColor Red
             }               
 
         }
@@ -166,7 +164,7 @@ Function SetupDCUsersAndGroups
                 }
                 catch
                 {
-	               .\Write-Info.ps1 "Error occur during create claim type $displayName£¡Error happened: $_.Exception.Message" -ForegroundColor Red
+	               .\Write-Info.ps1 "Error occur during create claim type $displayNameÂ£Â¡Error happened: $_.Exception.Message" -ForegroundColor Red
                 } 
             }
         }
@@ -201,7 +199,7 @@ Function SetupDCUsersAndGroups
                 }
                 catch
                 {
-	                .\Write-Info.ps1 "Error occur during create Resource Property $displayName£¡Error happened: $_.Exception.Message" -ForegroundColor Red
+	                .\Write-Info.ps1 "Error occur during create Resource Property $displayNameÂ£Â¡Error happened: $_.Exception.Message" -ForegroundColor Red
                 }  
             }  
         }

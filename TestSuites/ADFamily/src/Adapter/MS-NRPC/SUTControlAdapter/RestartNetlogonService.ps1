@@ -1,7 +1,5 @@
-#############################################################
-## Copyright (c) Microsoft. All rights reserved.
-## Licensed under the MIT license. See LICENSE file in the project root for full license information.
-#############################################################
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 #[MethodHelp(@"This method is used to restart the Netlogon service on the Endpoint and TDC")]
 #        void RestartNetlogonService(string endpointName, string tdcName);
