@@ -79,6 +79,10 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
+      </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Swn.pdb" Guid="*" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Swn.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Swn.pdb" />
@@ -215,6 +219,10 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll" Guid="{8D9344FE-24C3-4D29-95E6-24EBBB8D628E}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll" 
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.SspiService.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" Guid="{EEDAC8AC-D93B-40E3-89C8-4157370EA783}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.Swn.dll" Guid="{0E6EA196-311E-4E90-BA38-3E0894ED785F}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.Swn.dll"
