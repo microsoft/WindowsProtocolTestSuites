@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System.Management;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using System.Globalization;
@@ -504,8 +505,7 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
 
         public void CPMConnectInRequest(ref DetectionInfo info)
         {
-            var parameter = new MessageBuilderParameter();
-            parameter = ServerHelper.BuildParameter();
+            var parameter = ServerHelper.BuildParameter();
 
             MessageBuilder builder = new MessageBuilder(parameter);
 
@@ -537,7 +537,9 @@ namespace Microsoft.Protocols.TestManager.WSPServerPlugin
                     connectInMessage.UserName, 
                     connectInMessage.PropertySet1, 
                     connectInMessage.PropertySet2,
-                    connectInMessage.aPropertySets);
+                    connectInMessage.aPropertySets,
+                    connectInMessage.cPropSets,
+                    connectInMessage.cExtPropSet);
                 
                 CPMConnectOut connectOutMessage;
 

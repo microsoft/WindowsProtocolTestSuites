@@ -48,7 +48,7 @@
     <Compile Include="TestSuiteScripts.wxs" />
     <Compile Include="TestSuiteDataFiles.wxs" />
   </ItemGroup>
-   <ItemGroup>
+  <ItemGroup>
     <WixExtension Include="WixVSExtension">
       <HintPath>$(WIX)\bin\WixVSExtension.dll</HintPath>
       <Name>WixVSExtension</Name>
@@ -71,7 +71,6 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    
     <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
       <Name>Common</Name>
       <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
@@ -95,7 +94,7 @@
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
-    </ProjectReference>   
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
       <Name>Messages</Name>
       <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
@@ -123,6 +122,14 @@
     <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
       <Name>Sspi</Name>
       <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SPNG\Spng.csproj">
+      <Name>Spng</Name>
+      <Project>{16B76101-C213-4C61-91E6-BF0FF92BE2C0}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
@@ -159,7 +166,7 @@
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
-    </ProjectReference>  
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj">
       <Name>WSP</Name>
       <Project>{724F1968-83F4-4F34-A3E2-7F5C9E795294}</Project>
@@ -167,7 +174,7 @@
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
-    </ProjectReference>    
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-XCA\XCA.csproj">
       <Name>XCA</Name>
       <Project>{0D99C631-C7E5-4EF7-9773-20906F31BEF2}</Project>
@@ -175,7 +182,7 @@
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
-    </ProjectReference>    
+    </ProjectReference>
     <ProjectReference Include="..\Adapter\MS-WSP_ServerAdapter.csproj">
       <Name>MS-WSP_ServerAdapter</Name>
       <Project>{88ACDF6A-978C-4B03-96DD-3F6BF1E4A9C9}</Project>
@@ -210,13 +217,8 @@
       <Name>WixUtilExtension</Name>
     </WixExtension>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\" />
-    <Folder Include="bin\Debug\" />
-    <Folder Include="bin\Debug\en-us\" />
-  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
-  
+
   <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
     <!--Test Suite WXS files-->
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
@@ -224,28 +226,22 @@
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
     <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data" -out TestSuiteDataFiles.wxs -template fragment -gg -cg TESTSUITE_DATA_FILES -dr TESTSUITE_DATA_DIR -var wix.TESTSUITE_DATA_DIR -sreg -sfrag -srd' />
     <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
-  </Target> 
+  </Target>
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\deploy\" />
-  </Target>  
+  </Target>
   <ItemGroup>
-	<WSPDataFiles Include="..\..\Setup\Data\*" />
-	<WSPDataTestFiles Include="..\..\Setup\Data\Test\*" />
-  <WSPDataCreateQuerySizeFiles Include="..\..\Setup\Data\CreateQuery_Size\*" />
-	<WSPScriptFiles Include="..\..\Setup\Scripts\*" />
-	<AdapterScriptFiles Include="..\Adapter\SUTControlAdapter\*.ps1" />
+    <WSPDataFiles Include="..\..\Setup\Data\**\*.*" />
+    <WSPScriptFiles Include="..\..\Setup\Scripts\*" />
+    <AdapterScriptFiles Include="..\Adapter\SUTControlAdapter\*.ps1" />
   </ItemGroup>
-  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile" >
-	<Copy SourceFiles="@(WSPDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data" />	
-	<Copy SourceFiles="@(WSPDataTestFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data\Test" />	
-  <Copy SourceFiles="@(WSPDataCreateQuerySizeFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data\CreateQuery_Size" />	
-	<Copy SourceFiles="@(WSPScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" />	
-	<Copy SourceFiles="@(AdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />	
-	<Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
-	<Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
-	<Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
-  <Copy SourceFiles="@(DataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\FileServer\Bin\Data\" />
-
-  </Target>    
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
+    <Copy SourceFiles="@(WSPDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data\%(RecursiveDir)" />
+    <Copy SourceFiles="@(WSPScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" />
+    <Copy SourceFiles="@(AdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+  </Target>
 
 </Project>

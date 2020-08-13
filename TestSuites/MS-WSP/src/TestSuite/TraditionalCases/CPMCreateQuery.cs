@@ -643,7 +643,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestCategory("BVT")]
         [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to verify the server response if an invalid search scope is specified in CPMCreateQueryIn.")]
-        public void CPMCreateQuery_InvalidSearchScope()
+        public void BVT_CPMCreateQuery_InvalidSearchScope()
         {
             argumentType = ArgumentType.InvalidSearchScope;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
@@ -847,7 +847,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     fileNameList = new string[] { "test121.txt" };
                     break;
                 case CRestriction_ulType_Values.RTOr:
-                    comparedSize = 2883584;
+                    comparedSize = 2868736;
                     fileQueryString = "test12?.txt";
                     relation = _relop_Values.PRGT;
                     log = $"whose size is larger than {comparedSize} bytes or whose file name matches {fileQueryString}";
@@ -855,14 +855,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     fileNameList = new string[] { "test15.docx", "test121.txt", "test122.txt", "test128.txt" };
                     break;
                 case CRestriction_ulType_Values.RTNot:
-                    comparedSize = 2883584;
+                    comparedSize = 2868736;
                     relation = _relop_Values.PRLT;
                     log = $"whose size is NOT less than {comparedSize}";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test13.doc", "test15.docx" };
                     break;
                 case CRestriction_ulType_Values.RTProperty:
-                    comparedSize = 2883584;
+                    comparedSize = 2868736;
                     relation = _relop_Values.PRGE;
                     log = $"whose size is larger than or equal to {comparedSize} bytes";
                     expectedRowsCount = 2;

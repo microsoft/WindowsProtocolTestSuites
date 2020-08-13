@@ -38,6 +38,8 @@
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.dll"/>
       <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Compression.Xpress.pdb"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll"/>
+      <ComponentRef Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb"/>
       <!-- Test Suite binaries and symbols. -->
       <ComponentRef Id="MS_WSP_ServerAdapter.dll" />
       <ComponentRef Id="MS_WSP_ServerAdapter.pdb" />
@@ -175,7 +177,13 @@
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb" Guid="{A7D08A15-B1E4-4B3B-A72B-83084C0DB300}">
         <File Id="filB1F637A87332EB226195B7A4905B3CCF" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.pdb" />
-      </Component>      
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" Guid="{76DBC825-7B92-4D83-94F1-9D20E781904F}">
+        <File Id="fil627929346BF483DEAA7AC129CE388306" Source="!(wix.PROTOSDK_DROP_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" Guid="{84CF1B64-A324-4128-A694-BDE25FBAB0BC}">
+        <File Id="filB1F637A87332EB226195B7A4907B3CCF" Source="$(var.PROTOSDK_SYMBOLS_DIR)\Microsoft.Protocols.TestTools.StackSdk.Security.Spng.pdb" />
+      </Component>         
 
    </DirectoryRef>
     <DirectoryRef Id="TESTSUITE_DATA_DIR">
