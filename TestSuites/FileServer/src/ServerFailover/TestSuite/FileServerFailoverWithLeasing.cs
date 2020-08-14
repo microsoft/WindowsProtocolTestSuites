@@ -3,6 +3,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -138,8 +139,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 "Retry Create until succeed within timeout span");
             #endregion
 
-            // Create a timer that signals the delegate to invoke AckLeaseBreakNotification
-            Timer timer = new Timer(AckLeaseBreakNotification, treeIdAfterFailover, 0, Timeout.Infinite);
+            // Create a task to invoke AckLeaseBreakNotification
+            var ackLeaseBreakNotificationTask = Task.Run(() => AckLeaseBreakNotification(treeIdAfterFailover));
             base.clientToAckLeaseBreak = clientAfterFailover;
 
             Smb2FunctionalClient clientTriggeringBreak = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -163,10 +164,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             Thread.Sleep(1000);
 
             status = clientAfterFailover.Close(treeIdAfterFailover, fileIdAfterFailover);
-
             status = clientAfterFailover.TreeDisconnect(treeIdAfterFailover);
-
             status = clientAfterFailover.LogOff();
+
+            ackLeaseBreakNotificationTask.Wait(TestConfig.FailoverTimeout);
         }
 
         /// <summary>

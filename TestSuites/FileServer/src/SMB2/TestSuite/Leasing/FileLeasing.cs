@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools;
 using System.Timers;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
@@ -149,7 +150,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             }
             #endregion
 
-            System.Threading.Timer timer = new System.Threading.Timer(CheckBreakNotification, client1TreeId, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            var checkBreakNotificationTask = Task.Run(() => CheckBreakNotification(client1TreeId));
 
             #region Lease Break RWH => RH
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
@@ -184,6 +186,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             client2.TreeDisconnect(client2TreeId);
             client2.LogOff();
             #endregion
+
+            checkBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
         }
         #endregion
     }

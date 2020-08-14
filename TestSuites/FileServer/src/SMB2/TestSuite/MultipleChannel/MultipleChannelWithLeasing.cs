@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -79,8 +80,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 clientIps[1],
                 treeId);
 
-            // Create a timer that signals the delegate to invoke CheckBreakNotification after 5 seconds
-            Timer timer = new Timer(CheckBreakNotification, treeId, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            var checkBreakNotificationTask = Task.Run(() => CheckBreakNotification(treeId));
 
             Smb2FunctionalClient clientTriggeringBreak = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
 
@@ -101,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             ClientTearDown(alternativeChannelClient, treeId, fileId);
 
             // Wait until CheckBreakNotification exits;
-            Thread.Sleep(TestConfig.WaitTimeoutInMilliseconds);
+            checkBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
         }
         #endregion
 
