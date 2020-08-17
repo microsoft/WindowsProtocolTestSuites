@@ -87,16 +87,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             if (checkBreakNotificationTask != null)
             {
-                try
-                {
-                    checkBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
-                }
-                catch (Exception ex)
-                {
-                    BaseTestSite.Log.Add(
-                        LogEntryKind.Debug,
-                        "Unexpected exception when waiting for task checkBreakNotification: {0}", ex.ToString());
-                }
+                checkBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
             }
 
             foreach (var client in testClients.Values)
