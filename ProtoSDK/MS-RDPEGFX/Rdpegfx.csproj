@@ -5,8 +5,15 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\MS-RDPEFS\Rdpefs.csproj" />
     <ProjectReference Include="..\MS-RDPRFX\Rdprfx.csproj" />
