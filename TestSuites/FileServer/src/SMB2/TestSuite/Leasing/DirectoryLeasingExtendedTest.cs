@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -44,6 +45,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         /// ClientGuid list for clients used in test, and is also used as LeaseKey when request a lease
         /// </summary>
         private List<Guid> clientGuids;
+
+        private Task checkBreakNotificationTask;
 
         /// <summary>
         /// Manual event signal collection indicate the arrival of LEASE_BREAK_Notification packet and indexed by the LeaseKey Guid
@@ -77,12 +80,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             expectedNewLeaseStates = new Dictionary<Guid, LeaseStateValues>();
 
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            checkBreakNotificationTask = null;
         }
 
         protected override void TestCleanup()
         {
-            // Wait until CheckBreakNotification exits;
-            Thread.Sleep(TestConfig.WaitTimeoutInMilliseconds);
+            if (checkBreakNotificationTask != null)
+            {
+                checkBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
+            }
 
             foreach (var client in testClients.Values)
             {
@@ -94,7 +100,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 {
                     BaseTestSite.Log.Add(
                         LogEntryKind.Debug,
-                        "Unexpected exception when disconnect client: {0}", ex.ToString());
+                        "Unexpected exception when disconnecting client: {0}", ex.ToString());
                 }
             }
 
@@ -183,8 +189,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Dictionary<Guid, uint> treeIds = new Dictionary<Guid, uint>();
             treeIds.Add(client1GuidRequestingLease, treeIdClient1RequestingLease);
             treeIds.Add(client2GuidRequestingLease, treeIdClient2RequestingLease);
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(CheckBreakNotification, treeIds, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => CheckBreakNotification(treeIds));
 
             #region Attemp to trigger lease break from a separate client
             uint treeIdClientTriggerBreak;
@@ -270,9 +276,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
-
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by deleting child item
@@ -343,8 +348,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
 
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by deleting child item
@@ -413,8 +418,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by modifying child item
@@ -486,8 +491,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by renaming child item
@@ -575,8 +580,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by renaming parent directory
@@ -678,8 +683,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by deleting parent directory
@@ -797,8 +802,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 status,
                 "Create an open to {0} should succeed, actual status is {1}", testDirectory, Smb2Status.GetStatusCode(status));
             #endregion
-            // Create a timer that signals the delegate to invoke CheckBreakNotification
-            Timer timer = new Timer(base.CheckBreakNotification, treeIdClientRequestingLease, 0, Timeout.Infinite);
+            // Create a task to invoke CheckBreakNotification
+            checkBreakNotificationTask = Task.Run(() => base.CheckBreakNotification(treeIdClientRequestingLease));
             base.clientToAckLeaseBreak = clientRequestingLease;
 
             #region Attempt to trigger lease break by a conflict open
