@@ -3610,7 +3610,6 @@ See [Scenario](#3.1.11.1.1)
 | R                            | ChildDeleted            |
 | R                            | ChildModified           |
 | RH                           | ConflictOpen            |
-| RH                           | ParentDeleted           |
 | RH                           | ParentRenamed           |
 
 ###### <a name="3.2.5.2.1"> Scenario
@@ -3784,41 +3783,6 @@ See [Scenario](#3.1.11.1.1)
 ||SESSION_SETUP|
 ||TREE_CONNECT|
 ||CREATE (File in the directory, with WRITE access mask)|
-||**From client1**|
-||Receive LEASE_BREAK|
-||Send LEASE_BREAK_ACK if server requires|
-||CLOSE|
-||TREE_DISCONNECT|
-||LOGOFF|
-||**From client2**|
-||TREE_DISCONNECT|
-||LOGOFF|
-|**Cleanup**||
-
-
-|||
-|---|---|
-|**Test ID**|DirectoryLeasing_BreakHandleCachingByParentDeleted|
-|**Description**|Test whether server can handle HANDLE lease break notification triggered by deleting parent directory.|
-|**Prerequisites**||
-|**Test Execution Steps**|**Test preparation**|
-||Create a parent directory on a share|
-||Create a test directory in the parent directory|
-||**From client1**|
-||NEGOTIATE|
-||SESSION_SETUP|
-||TREE_CONNECT|
-||CREATE (on test directory, with SMB2_CREATE_REQUEST_LEASE_V2 with LeaseState SMB2_LEASE_HANDLE_CACHING | SMB2_LEASE_READ_CACHING)|
-||**From client2 to trigger lease break by deleting the parent directory**|
-||NEGOTIATE|
-||SESSION_SETUP|
-||TREE_CONNECT|
-||CREATE (on the parent directory, with DELETE access mask and FILE_DELETE_ON_CLOSE create option)|
-||SetInfo (FileDispositionInformation with DeletePending = 1)|
-||CLOSE to commit the delete|
-||// Additional CREATE to open the parent directory to trigger the lease break|
-||// It's the same way for Windows attempt to delete the parent directory when //child is opened by others|
-||CREATE (on the parent directory, with DELETE access mask and FILE_DELETE_ON_CLOSE create option)|
 ||**From client1**|
 ||Receive LEASE_BREAK|
 ||Send LEASE_BREAK_ACK if server requires|
