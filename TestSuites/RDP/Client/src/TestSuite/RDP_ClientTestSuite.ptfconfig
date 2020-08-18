@@ -49,18 +49,18 @@
 
     <!-- SUT Control Adapters-->
     <!-- Basic RDP SUT Control Adapters -->    
-    <Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir ="." />
+    <Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir =".\SUTControlAdapter" />
     <!--<Adapter xsi:type="interactive" name="IRdpSutControlAdapter" />-->
     <!--<Adapter xsi:type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>-->
     
     <!-- RDPEI SUT Control Adapters -->
-    <Adapter xsi:type="powershell" name="IRdpeiSUTControlAdapter" scriptdir ="." />
+    <Adapter xsi:type="powershell" name="IRdpeiSUTControlAdapter" scriptdir =".\RdpeiSUTControlAdapter" />
     <!--<Adapter xsi:type="interactive" name="IRdpeiSUTControlAdapter"/>-->
     <!--<Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpei.RdpeiSUTControlAdapter"/>-->
     <!--<Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpeiSUTControlAdapter"/>-->  
     
     <!--RDPEDISP SUT Control Adapters-->
-    <Adapter xsi:type="powershell" name="IRdpedispSUTControlAdapter" scriptdir="." />
+    <Adapter xsi:type="powershell" name="IRdpedispSUTControlAdapter" scriptdir=".\RdpedispSUTControlAdapter" />
     <!--<Adapter xsi:type="interactive" name="IRdpedispSUTControlAdapter" />-->   
     <!--<Adapter xsi:type="managed" name="IRdpedispSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpedispSUTControlAdapter"/>-->
      
@@ -72,7 +72,6 @@
       <File id="XMLLog" directory="..\..\Log" file="RDP-Log.xml" format="xml"/>
       <File id="Debug" directory="..\..\DebugLog" file="DEBUG_log.txt" format="text"/>
       <Sink id="PipeSink" type="Microsoft.Protocols.TestTools.Logging.PipeSink"/>
-      <Sink id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" assembly="Microsoft.Protocols.TestTools"/>
     </Sinks>
     <Profiles>
       <Profile name="Verbose" extends="Error">
@@ -104,13 +103,6 @@
         <Rule kind="TestInconclusive" sink="XMLLog" delete="false"/>
         <Rule kind="TestPassed" sink="XMLLog" delete="false"/>
 
-
-        <!-- Show for beacon log -->
-        <Rule kind="Checkpoint" sink="BeaconLog" delete="false"/>
-        <Rule kind="CheckSucceeded" sink="BeaconLog" delete="false"/>
-        <Rule kind="Comment" sink="BeaconLog" delete="false"/>
-        <Rule kind="Debug" sink="BeaconLog" delete="false"/>
-
         <!-- Show for debugging -->
         <Rule kind="BeginGroup" sink ="Debug"/>
         <Rule kind="EndGroup" sink="Debug"/>
@@ -126,18 +118,6 @@
         <Rule kind="TestFailed" sink="Debug"/>
         <Rule kind="TestInconclusive" sink="Debug"/>
         <Rule kind="TestPassed" sink="Debug"/>
-        
-        <Rule kind="CheckFailed" sink="Etw" delete="false" />
-        <!--<Rule kind="Checkpoint" sink="Etw" delete="false"/>-->
-        <!--<Rule kind="TestInProgress" sink="Etw" delete="false"/>-->
-        <Rule kind="Comment" sink="Etw" delete="false"/>
-        <Rule kind="TestFailed" sink="Etw" delete="false"/>
-        <Rule kind="TestInconclusive" sink="Etw" delete="false"/>
-        <Rule kind="TestPassed" sink="Etw" delete="false"/>
-        <Rule kind="TestError" sink="Etw" delete="false"/>
-        <Rule kind="TestTimeout" sink="Etw" delete="false"/>
-        <Rule kind="TestAborted" sink="Etw" delete="false"/>
-        <Rule kind="TestStep" sink="Etw" delete="false"/>
         
         <!--Shown for Protocol Test Manager-->
         <Rule kind="Checkpoint" sink="PipeSink" delete="false" />

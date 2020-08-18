@@ -4,8 +4,15 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Claim</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\MS-XCA\Xca.csproj" />

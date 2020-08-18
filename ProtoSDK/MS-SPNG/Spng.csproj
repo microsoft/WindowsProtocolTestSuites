@@ -3,7 +3,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Asn1Base\Asn1Base.csproj">
       <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>

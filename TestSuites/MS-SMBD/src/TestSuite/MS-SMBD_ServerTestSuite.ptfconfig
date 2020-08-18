@@ -42,14 +42,13 @@
     <Property name ="RdmaLayerLoggingEnabled" value ="false" />
   </Properties>
   <Adapters>
-    <Adapter xsi:type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\" />
+    <Adapter xsi:type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\SutProtocolControlAdapter" />
   </Adapters>
 
   <TestLog defaultprofile="Verbose">
     <Sinks>
       <File id="Debug" directory=".\" file="MS-SMBD_Log.txt" format="text" />
       <File id="XMLLog" directory=".\" file="MS-SMBD_Log.xml" format="xml" />
-      <Sink id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" />
     </Sinks>
     <Profiles>
       <Profile name="Verbose" extends="Error">

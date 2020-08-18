@@ -4,8 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CryptoLib\CryptoLib.csproj" />
     <ProjectReference Include="..\SspiLib\SspiLib.csproj" />

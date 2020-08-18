@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{32BFDDB3-791F-4DD7-ADF3-6E56285F45C0}"
-	ProjectSection(SolutionItems) = preProject
-		LocalTestRun.testsettings = LocalTestRun.testsettings
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSuite", "TestSuite\TestSuite.csproj", "{61EADAB7-919C-42E0-BF66-5A1F5407ABB6}"
 EndProject
@@ -54,13 +51,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xca", "..\..\..\ProtoSDK\MS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiLib", "..\..\..\ProtoSDK\SspiLib\SspiLib.csproj", "{E64BF20F-11D2-49F6-A25B-F4378AB38180}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SspiService", "..\..\..\ProtoSDK\SspiService\SspiService.csproj", "{1FC8C336-EF82-4F7C-9532-AB8AB268916E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiService", "..\..\..\ProtoSDK\SspiService\SspiService.csproj", "{1FC8C336-EF82-4F7C-9532-AB8AB268916E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KerberosLib", "..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj", "{F1EDA208-50B6-4501-A9D8-D18D3434D587}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KerberosLib", "..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj", "{F1EDA208-50B6-4501-A9D8-D18D3434D587}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sspi", "..\..\..\ProtoSDK\Sspi\Sspi.csproj", "{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sspi", "..\..\..\ProtoSDK\Sspi\Sspi.csproj", "{D0CB354B-2CD3-49C1-8ECA-2F6EBADBCCEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -4,9 +4,14 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Messages</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Messages</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Asn1Base\Asn1Base.csproj" />
   </ItemGroup>

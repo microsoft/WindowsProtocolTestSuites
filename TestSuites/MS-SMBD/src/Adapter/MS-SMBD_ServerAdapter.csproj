@@ -44,9 +44,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SutProtocolControlAdapter\DeleteFile.ps1" />
+    <Content Include="SutProtocolControlAdapter\DeleteFile.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
     <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
     <PackageReference Include="System.Management" Version="4.7.0" />

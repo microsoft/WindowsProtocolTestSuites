@@ -4,8 +4,13 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FileAccessService\FileAccessService.csproj" />
     <ProjectReference Include="..\MS-XCA\Xca.csproj" />

@@ -24,6 +24,10 @@
     <ProjectReference Include="..\Adapter\MS-SMB_ServerAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
   </ItemGroup>
 </Project>

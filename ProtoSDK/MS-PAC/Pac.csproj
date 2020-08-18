@@ -4,8 +4,15 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Pac</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Pac</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Claim\Claim.csproj" />
     <ProjectReference Include="..\MS-RPCE\Rpce.csproj" />

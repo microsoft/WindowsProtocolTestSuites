@@ -1776,28 +1776,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             _ACL? sacl,
             _ACL? dacl)
         {
-            RawAcl sRawAcl = null;
-            RawAcl dRawAcl = null;
-            SecurityIdentifier rawOwnerSid = null;
-            SecurityIdentifier rawGroupSid = null;
+            _RawAcl sRawAcl = null;
+            _RawAcl dRawAcl = null;
+            _SecurityIdentifier rawOwnerSid = null;
+            _SecurityIdentifier rawGroupSid = null;
             if (ownerSid != null)
             {
-                rawOwnerSid = new SecurityIdentifier(TypeMarshal.ToBytes(ownerSid.Value), 0);
+                rawOwnerSid = new _SecurityIdentifier(TypeMarshal.ToBytes(ownerSid.Value), 0);
             }
             if (groupSid != null)
             {
-                rawGroupSid = new SecurityIdentifier(TypeMarshal.ToBytes(groupSid.Value), 0);
+                rawGroupSid = new _SecurityIdentifier(TypeMarshal.ToBytes(groupSid.Value), 0);
             }
             if (sacl != null)
             {
-                sRawAcl = new RawAcl(DtypUtility.EncodeAcl(sacl.Value), 0);
+                sRawAcl = new _RawAcl(DtypUtility.EncodeAcl(sacl.Value), 0);
             }
             if (dacl != null)
             {
-                dRawAcl = new RawAcl(DtypUtility.EncodeAcl(dacl.Value), 0);
+                dRawAcl = new _RawAcl(DtypUtility.EncodeAcl(dacl.Value), 0);
             }
-            RawSecurityDescriptor rawSecurityDescriptor = new RawSecurityDescriptor(
-                (ControlFlags)control,
+            _RawSecurityDescriptor rawSecurityDescriptor = new _RawSecurityDescriptor(
+                (SECURITY_DESCRIPTOR_Control)control,
                 rawOwnerSid,
                 rawGroupSid,
                 sRawAcl,
@@ -3795,6 +3795,99 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             }
             return acl;
         }
+
+        /// <summary>
+        /// read ushort from the buffer
+        /// </summary>
+        /// <param name="buffer">the buffer to be read</param>
+        /// <param name="offset">the offset in the buffer</param>
+        /// <returns></returns>
+        public static ushort ReadUInt16(byte[] buffer, int offset)
+        {
+            return (ushort)((((int)buffer[offset + 0]) << 0) | (((int)buffer[offset + 1]) << 8));
+        }
+
+        /// <summary>
+        /// read int from the buffer
+        /// </summary>
+        /// <param name="buffer">the buffer to be read</param>
+        /// <param name="offset">the offset in the buffer</param>
+        /// <returns></returns>
+        public static int ReadInt32(byte[] buffer, int offset)
+        {
+            return (((int)buffer[offset + 0]) << 0)
+                | (((int)buffer[offset + 1]) << 8)
+                | (((int)buffer[offset + 2]) << 16)
+                | (((int)buffer[offset + 3]) << 24);
+        }
+
+        /// <summary>
+        /// write int into the buffer
+        /// </summary>
+        /// <param name="val">the value to be written</param>
+        /// <param name="buffer">the buffer to be written in</param>
+        /// <param name="offset">the offset in the buffer</param>
+        public static void WriteInt32(int val, byte[] buffer, int offset)
+        {
+            buffer[offset] = (byte)val;
+            buffer[offset + 1] = (byte)(val >> 8);
+            buffer[offset + 2] = (byte)(val >> 16);
+            buffer[offset + 3] = (byte)(val >> 24);
+        }
+
+        /// <summary>
+        /// write ushort into the buffer
+        /// </summary>
+        /// <param name="val">the value to be written</param>
+        /// <param name="buffer">the buffer to be written in</param>
+        /// <param name="offset">the offset in the buffer</param>
+        public static void WriteUInt16(ushort val, byte[] buffer, int offset)
+        {
+            buffer[offset] = (byte)val;
+            buffer[offset + 1] = (byte)(val >> 8);
+        }
+
+        /// <summary>
+        /// write guid into the buffer
+        /// </summary>
+        /// <param name="val">the value to be written</param>
+        /// <param name="buffer">the buffer to be written in</param>
+        /// <param name="offset">the offset in the buffer</param>
+        public static void WriteGuid(Guid val, byte[] buffer, int offset)
+        {
+            byte[] guidData = val.ToByteArray();
+            Array.Copy(guidData, 0, buffer, offset, 16);
+        }
+
+        /// <summary>
+        /// read guid from the buffer
+        /// </summary>
+        /// <param name="buffer">the buffer to be read</param>
+        /// <param name="offset">the offset in the buffer</param>
+        /// <returns></returns>
+        public static Guid ReadGuid(byte[] buffer, int offset)
+        {
+            byte[] temp = new byte[16];
+            Array.Copy(buffer, offset, temp, 0, 16);
+            return new Guid(temp);
+        }
+
+        /// <summary>
+        /// return true if the aceobject type
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsAceObjectType(ACE_TYPE type)
+        {
+            return type == ACE_TYPE.ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.ACCESS_ALLOWED_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.ACCESS_DENIED_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.SYSTEM_ALARM_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE
+                || type == ACE_TYPE.SYSTEM_AUDIT_OBJECT_ACE_TYPE;
+        }
     }
 
     /// <summary>
@@ -4277,5 +4370,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// A combination of two of the bits shown above for the purposes of this specification.
         /// </summary>
         GROUP_TYPE_SECURITY_UNIVERSAL = 0x80000008
+    }
+
+    [Flags]
+    public enum _ObjectAceFlags
+    {
+        None = 0,
+        ObjectAceTypePresent = 1,
+        InheritedObjectAceTypePresent = 2,
     }
 }

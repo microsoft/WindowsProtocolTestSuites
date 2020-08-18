@@ -26,24 +26,52 @@
     <Content Include="MS-DRSR\NonWindowsSUTImplementation\OfflineDirectoryService.ps1" />
     <Content Include="MS-DRSR\NonWindowsSUTImplementation\OnlineDirectoryService.ps1" />
     <Content Include="MS-DRSR\NonWindowsSUTImplementation\UploadDomainRenameScript.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\ChangeReplTrafficStatus.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\CreateLingeringObject.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\CreateLingeringObjectRemote.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\DisableAuditingOnServer.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\EnableAuditingOnServer.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\EnableBasicAuth.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\EndDomainRename.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\RemoveLingeringObject.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\RemoveLingeringObjectRemote.ps1" />
-    <Content Include="MS-DRSR\SUTControlAdapter\UploadDomainRenameScript.ps1" />
+    <Content Include="MS-DRSR\SUTControlAdapter\ChangeReplTrafficStatus.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\CreateLingeringObject.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\CreateLingeringObjectRemote.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\DisableAuditingOnServer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\EnableAuditingOnServer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\EnableBasicAuth.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\EndDomainRename.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\RemoveLingeringObject.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\RemoveLingeringObjectRemote.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-DRSR\SUTControlAdapter\UploadDomainRenameScript.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="MS-LSAD\NonWindowsSUTImplementation\IsDirectoryServiceStopped.ps1" />
     <Content Include="MS-LSAD\NonWindowsSUTImplementation\ReadPtfConfig.ps1" />
     <Content Include="MS-LSAD\NonWindowsSUTImplementation\StartDirectoryService.ps1" />
     <Content Include="MS-LSAD\NonWindowsSUTImplementation\StopDirectoryService.ps1" />
-    <Content Include="MS-LSAD\SUTControlAdapter\IsDirectoryServiceStopped.ps1" />
-    <Content Include="MS-LSAD\SUTControlAdapter\ReadPtfConfig.ps1" />
-    <Content Include="MS-LSAD\SUTControlAdapter\StartDirectoryService.ps1" />
-    <Content Include="MS-LSAD\SUTControlAdapter\StopDirectoryService.ps1" />
+    <Content Include="MS-LSAD\SUTControlAdapter\IsDirectoryServiceStopped.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-LSAD\SUTControlAdapter\ReadPtfConfig.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-LSAD\SUTControlAdapter\StartDirectoryService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-LSAD\SUTControlAdapter\StopDirectoryService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="MS-NRPC\NonWindowsSUTImplementation\ChangeNonDCMachineAccountStatus.ps1" />
     <Content Include="MS-NRPC\NonWindowsSUTImplementation\ConfigServer.ps1" />
     <Content Include="MS-NRPC\NonWindowsSUTImplementation\ConfigServerRejectMD5Client.ps1" />
@@ -71,43 +99,117 @@
     <Content Include="MS-NRPC\NonWindowsSUTImplementation\SetDnsHostNameAttributeOfClient.ps1" />
     <Content Include="MS-NRPC\NonWindowsSUTImplementation\StartNetlogonService.ps1" />
     <Content Include="MS-NRPC\NonWindowsSUTImplementation\StopNetlonService.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\ChangeNonDCMachineAccountStatus.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\ConfigServer.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\ConfigServerRejectMD5Client.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetAdministratorObjPath.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetAttributeValueFromAD.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetBadPwdCountAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetClientObjPath.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetDnsHostNameAttributeOfClient.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetHomeDirectoryAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetHomeDriveAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetLastLogonAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetLogonCountAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetOperatingSystemAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetPdcObjPath.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetProfilePathAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetPwdLastSetAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetSamAccountNameAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetScriptPathAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\GetServicePrincipalNameAttribute.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\PauseNetlogonService.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\ReadPtfConfig.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\RestartNetlogonService.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\RestoreNetlogonService.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\ResumeNetlogonService.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\SetDnsHostNameAttributeOfClient.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\StartNetlogonService.ps1" />
-    <Content Include="MS-NRPC\SUTControlAdapter\StopNetlogonService.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\GetDCBlockValue.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\GetDCException.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\SetA2A2.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\SetA2AF.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\SetDCBlockValue.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\SetDCException.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\SetProtectedUser.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\ConfigNTLMRegistryKey.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\RestoreNTLMRegistryKey.ps1" />
-    <Content Include="MS-APDS\SUTControlAdapter\SetA2AFServiceAccount.ps1" />
+    <Content Include="MS-NRPC\SUTControlAdapter\ChangeNonDCMachineAccountStatus.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\ConfigServer.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\ConfigServerRejectMD5Client.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetAdministratorObjPath.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetAttributeValueFromAD.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetBadPwdCountAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetClientObjPath.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetDnsHostNameAttributeOfClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetHomeDirectoryAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetHomeDriveAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetLastLogonAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetLogonCountAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetOperatingSystemAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetPdcObjPath.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetProfilePathAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetPwdLastSetAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetSamAccountNameAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetScriptPathAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\GetServicePrincipalNameAttribute.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\PauseNetlogonService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\ReadPtfConfig.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\RestartNetlogonService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\RestoreNetlogonService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\ResumeNetlogonService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\SetDnsHostNameAttributeOfClient.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\StartNetlogonService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-NRPC\SUTControlAdapter\StopNetlogonService.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\GetDCBlockValue.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\GetDCException.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\SetA2A2.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\SetA2AF.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\SetDCBlockValue.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\SetDCException.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\SetProtectedUser.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\ConfigNTLMRegistryKey.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\RestoreNTLMRegistryKey.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MS-APDS\SUTControlAdapter\SetA2AFServiceAccount.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj" />
@@ -144,6 +246,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />

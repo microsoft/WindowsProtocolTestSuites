@@ -4,8 +4,15 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\MS-CIFS\Cifs.csproj" />
     <ProjectReference Include="..\SspiService\SspiService.csproj" />

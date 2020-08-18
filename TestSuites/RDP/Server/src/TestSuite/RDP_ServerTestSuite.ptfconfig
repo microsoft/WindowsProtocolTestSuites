@@ -20,7 +20,6 @@
       <!-- File location should be relative path -->
       <File id="XMLLog" directory="..\..\Log" file="RDP-Log.xml" format="xml"/>
       <File id="Debug" directory="..\..\DebugLog" file="DEBUG_log.txt" format="text"/>
-      <Sink id="BeaconLog" type="Microsoft.Protocols.TestTools.Logging.BeaconLogSink" assembly="Microsoft.Protocols.TestTools"/>
     </Sinks>
     <Profiles>
       <Profile name="Verbose" extends="Error">
@@ -52,13 +51,6 @@
         <Rule kind="TestInconclusive" sink="XMLLog" delete="false"/>
         <Rule kind="TestPassed" sink="XMLLog" delete="false"/>
 
-
-        <!-- Show for beacon log -->
-        <Rule kind="Checkpoint" sink="BeaconLog" delete="false"/>
-        <Rule kind="CheckSucceeded" sink="BeaconLog" delete="false"/>
-        <Rule kind="Comment" sink="BeaconLog" delete="false"/>
-        <Rule kind="Debug" sink="BeaconLog" delete="false"/>
-
         <!-- Show for debugging -->
         <Rule kind="BeginGroup" sink ="Debug"/>
         <Rule kind="EndGroup" sink="Debug"/>
@@ -74,19 +66,6 @@
         <Rule kind="TestFailed" sink="Debug"/>
         <Rule kind="TestInconclusive" sink="Debug"/>
         <Rule kind="TestPassed" sink="Debug"/>
-
-        <Rule kind="CheckFailed" sink="Etw" delete="false" />
-        <!--<Rule kind="Checkpoint" sink="Etw" delete="false"/>-->
-        <!--<Rule kind="TestInProgress" sink="Etw" delete="false"/>-->
-        <Rule kind="Comment" sink="Etw" delete="false"/>
-        <Rule kind="TestFailed" sink="Etw" delete="false"/>
-        <Rule kind="TestInconclusive" sink="Etw" delete="false"/>
-        <Rule kind="TestPassed" sink="Etw" delete="false"/>
-        <Rule kind="TestError" sink="Etw" delete="false"/>
-        <Rule kind="TestTimeout" sink="Etw" delete="false"/>
-        <Rule kind="TestAborted" sink="Etw" delete="false"/>
-        <Rule kind="TestStep" sink="Etw" delete="false"/>
-
       </Profile>
     </Profiles>
   </TestLog>
