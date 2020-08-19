@@ -21,6 +21,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     public static class DtypUtility
     {
         /// <summary>
+        /// The minimum length of security identifier
+        /// </summary>
+        public const int MinLengthOfSecurityIdentifier = 8;
+        /// <summary>
         /// The length of _ACL header, including _ACL.AclRevision, _ACL.Sbz1 ,_ACL.AclSize,
         /// _ACL.AceCount and _ACL.Sbz2, in bytes.
         /// </summary>
@@ -836,7 +840,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         public static string ToSddlString(_SECURITY_DESCRIPTOR securityDescriptor)
         {
             byte[] securityDescriptorBytes = DtypUtility.EncodeSecurityDescriptor(securityDescriptor);
-            RawSecurityDescriptor rawSecurityDescriptor = new RawSecurityDescriptor(securityDescriptorBytes, 0);
+            _RawSecurityDescriptor rawSecurityDescriptor = new _RawSecurityDescriptor(securityDescriptorBytes, 0);
 
             return rawSecurityDescriptor.GetSddlForm(AccessControlSections.All);
         }
@@ -1802,7 +1806,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 rawGroupSid,
                 sRawAcl,
                 dRawAcl);
-            byte[] rawSecurityDescriptorBytes = new byte[rawSecurityDescriptor.BinaryLength];
+            byte[] rawSecurityDescriptorBytes = new byte[rawSecurityDescriptor.Size];
             rawSecurityDescriptor.GetBinaryForm(rawSecurityDescriptorBytes, 0);
 
             return DtypUtility.DecodeSecurityDescriptor(rawSecurityDescriptorBytes);
@@ -3624,6 +3628,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
+        /// Return the SDDL string of ace type
+        /// </summary>
+        /// <param name="type">ace type</param>
+        /// <returns>the sddl string format</returns>
+        public static string ConvertAceTypeToSDDL(ACE_TYPE type)
+        {
+            switch (type)
+            {
+                case ACE_TYPE.ACCESS_ALLOWED_ACE_TYPE:
+                    return "A";
+                case ACE_TYPE.ACCESS_DENIED_ACE_TYPE:
+                    return "D";
+                case ACE_TYPE.ACCESS_ALLOWED_OBJECT_ACE_TYPE:
+                    return "OA";
+                case ACE_TYPE.ACCESS_DENIED_OBJECT_ACE_TYPE:
+                    return "OD";
+                case ACE_TYPE.SYSTEM_AUDIT_ACE_TYPE:
+                    return "AU";
+                case ACE_TYPE.SYSTEM_ALARM_ACE_TYPE:
+                    return "AL";
+                case ACE_TYPE.SYSTEM_AUDIT_OBJECT_ACE_TYPE:
+                    return "OU";
+                case ACE_TYPE.SYSTEM_ALARM_OBJECT_ACE_TYPE:
+                    return "OL";
+                case ACE_TYPE.ACCESS_ALLOWED_CALLBACK_ACE_TYPE:
+                    return "XA";
+                case ACE_TYPE.ACCESS_DENIED_CALLBACK_ACE_TYPE:
+                    return "XD";
+                default:
+                    throw new ArgumentException(nameof(type));
+            }
+        }
+
+        /// <summary>
         /// Create an ACCESS_DENIED_ACE by using specific SID, access mask and optional ace flags.
         /// </summary>
         /// <param name="sid">The SID of the trustee.</param>
@@ -3771,6 +3809,90 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
+        /// Return the SDDL string of ace flag
+        /// </summary>
+        /// <param name="flags">ace flag</param>
+        /// <returns>the sddl string format of ace flag</returns>
+        public static string ConvertAceFlagToSDDL(ACE_FLAGS flags)
+        {
+            StringBuilder result = new StringBuilder();
+            if (flags.HasFlag(ACE_FLAGS.OBJECT_INHERIT_ACE))
+                result.Append("OI");
+            if (flags.HasFlag(ACE_FLAGS.CONTAINER_INHERIT_ACE))
+                result.Append("CI");
+            if (flags.HasFlag(ACE_FLAGS.NO_PROPAGATE_INHERIT_ACE))
+                result.Append("NP");
+            if (flags.HasFlag(ACE_FLAGS.INHERIT_ONLY_ACE))
+                result.Append("IO");
+            if (flags.HasFlag(ACE_FLAGS.INHERITED_ACE))
+                result.Append("ID");
+            if (flags.HasFlag(ACE_FLAGS.SUCCESSFUL_ACCESS_ACE_FALG))
+                result.Append("SA");
+            if (flags.HasFlag(ACE_FLAGS.FAILED_ACCESS_ACE_FLAG))
+                result.Append("FA");
+
+            return result.ToString();
+        }
+
+
+        public static string ConvertAccessMaskToSDDL(int accessMask)
+        {
+            switch (accessMask)
+            {
+                case 0x00000001:
+                    return "CC";
+                case 0x00000002:
+                    return "DC";
+                case 0x00000004:
+                    return "LC";
+                case 0x00000008:
+                    return "SW";
+                case 0x00000010:
+                    return "RP";
+                case 0x00000020:
+                    return "WP";
+                case 0x00000040:
+                    return "DT";
+                case 0x00000080:
+                    return "LO";
+                case 0x00000100:
+                    return "CR";
+                case 0x00010000:
+                    return "SD";
+                case 0x00020000:
+                    return "RC";
+                case 0x00040000:
+                    return "WD";
+                case 0x00080000:
+                    return "WO";
+                case 0x10000000:
+                    return "GA";
+                case 0x20000000:
+                    return "GX";
+                case 0x40000000:
+                    return "GW";
+                case unchecked((int)0x80000000):
+                    return "GR";
+                case 0x001F01FF:
+                    return "FA";
+                case 0x00120089:
+                    return "FR";
+                case 0x00120116:
+                    return "FW";
+                case 0x001200A0:
+                    return "FX";
+                case 0x000F003F:
+                    return "KA";
+                case 0x00020019:
+                    return "KR";
+                case 0x00020006:
+                    return "KW";
+                default:
+                    return string.Format(CultureInfo.InvariantCulture, "0x{0:x}", accessMask);
+            }           
+        }
+
+        /// <summary>
         /// Create an ACL with provided ACE(s). 
         /// </summary>
         /// <param name="isDACL">Whether it is DACL or SACL</param>
@@ -3797,28 +3919,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
-        /// read ushort from the buffer
+        /// read guid from the buffer
         /// </summary>
         /// <param name="buffer">the buffer to be read</param>
         /// <param name="offset">the offset in the buffer</param>
         /// <returns></returns>
-        public static ushort ReadUInt16(byte[] buffer, int offset)
+        public static Guid ReadGuid(byte[] buffer, int offset)
         {
-            return (ushort)((((int)buffer[offset + 0]) << 0) | (((int)buffer[offset + 1]) << 8));
-        }
+            byte[] temp = new byte[16];
+            Array.Copy(buffer, offset, temp, 0, 16);
 
-        /// <summary>
-        /// read int from the buffer
-        /// </summary>
-        /// <param name="buffer">the buffer to be read</param>
-        /// <param name="offset">the offset in the buffer</param>
-        /// <returns></returns>
-        public static int ReadInt32(byte[] buffer, int offset)
-        {
-            return (((int)buffer[offset + 0]) << 0)
-                | (((int)buffer[offset + 1]) << 8)
-                | (((int)buffer[offset + 2]) << 16)
-                | (((int)buffer[offset + 3]) << 24);
+            Guid result = new Guid(temp);
+            return result;
         }
 
         /// <summary>
@@ -3827,12 +3939,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="val">the value to be written</param>
         /// <param name="buffer">the buffer to be written in</param>
         /// <param name="offset">the offset in the buffer</param>
-        public static void WriteInt32(int val, byte[] buffer, int offset)
+        public static void WriteInt32ToByteArray(int val, byte[] buffer, int offset)
         {
-            buffer[offset] = (byte)val;
-            buffer[offset + 1] = (byte)(val >> 8);
-            buffer[offset + 2] = (byte)(val >> 16);
-            buffer[offset + 3] = (byte)(val >> 24);
+            byte[] result = BitConverter.GetBytes(val);//should be 4 bytes here
+            result.CopyTo(buffer, offset);
         }
 
         /// <summary>
@@ -3841,10 +3951,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="val">the value to be written</param>
         /// <param name="buffer">the buffer to be written in</param>
         /// <param name="offset">the offset in the buffer</param>
-        public static void WriteUInt16(ushort val, byte[] buffer, int offset)
+        public static void WriteUInt16ToByteArray(ushort val, byte[] buffer, int offset)
         {
-            buffer[offset] = (byte)val;
-            buffer[offset + 1] = (byte)(val >> 8);
+            byte[] result = BitConverter.GetBytes(val);//should be 2 bytes here
+            result.CopyTo(buffer, offset);
         }
 
         /// <summary>
@@ -3857,27 +3967,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         {
             byte[] guidData = val.ToByteArray();
             Array.Copy(guidData, 0, buffer, offset, 16);
-        }
-
-        /// <summary>
-        /// read guid from the buffer
-        /// </summary>
-        /// <param name="buffer">the buffer to be read</param>
-        /// <param name="offset">the offset in the buffer</param>
-        /// <returns></returns>
-        public static Guid ReadGuid(byte[] buffer, int offset)
-        {
-            byte[] temp = new byte[16];
-            Array.Copy(buffer, offset, temp, 0, 16);
-            return new Guid(temp);
-        }
+        }       
 
         /// <summary>
         /// return true if the aceobject type
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool IsAceObjectType(ACE_TYPE type)
+        public static bool IsObjectAce(ACE_TYPE type)
         {
             return type == ACE_TYPE.ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE
                 || type == ACE_TYPE.ACCESS_ALLOWED_OBJECT_ACE_TYPE

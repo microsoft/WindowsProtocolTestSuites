@@ -7,7 +7,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Net.Mime;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
@@ -20,176 +23,175 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         private byte[] buffer;
 
         /// <summary>
-        /// The maximum length of the binary
+        /// Constructor
         /// </summary>
-        public static readonly int MaxLength = 68;
-
-        /// <summary>
-        /// The minimum length of the binary
-        /// </summary>
-        public static readonly int MinLength = 8;
-
-        /// <summary>
-        /// Cnnstructor
-        /// </summary>
-        /// <param name="binaryForm">The binary form to be encoded</param>
+        /// <param name="binary">The binary to be encoded</param>
         /// <param name="offset">The offset in the binary</param>
-        unsafe public _SecurityIdentifier(byte[] binaryForm, int offset)
+        unsafe public _SecurityIdentifier(byte[] binary, int offset)
         {
-            if (binaryForm == null)
+            if (binary == null)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
+                throw new ArgumentNullException(nameof(binary));
             }
 
-            if ((offset < 0) || (offset > binaryForm.Length - 2))
+            if ((offset < 0) || (offset > binary.Length - 2))
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            fixed (byte* binaryFormPtr = binaryForm)
-                CreateFromBinaryForm((IntPtr)(binaryFormPtr + offset), binaryForm.Length - offset);
+            fixed (byte* binaryPtr = binary)CreateFromBinaryForm((IntPtr)(binaryPtr + offset), binary.Length - offset);
         }
 
         /// <summary>
-        /// Create the buffer from thr binaryForm input
+        /// Create the buffer from the binary input
         /// </summary>
-        /// <param name="binaryForm">The input binary form</param>
+        /// <param name="binary">The input binary</param>
         /// <param name="length">The length of the binary</param>
-        void CreateFromBinaryForm(IntPtr binaryForm, int length)
+        void CreateFromBinaryForm(IntPtr binary, int length)
         {
-            int revision = Marshal.ReadByte(binaryForm, 0);
-            int numSubAuthorities = Marshal.ReadByte(binaryForm, 1);
-            if (revision != 1 || numSubAuthorities > 15)
+            int revision = Marshal.ReadByte(binary, 0);
+            int subAuthorities = Marshal.ReadByte(binary, 1);
+            if (revision != 1 || subAuthorities > 15)
             {
                 throw new ArgumentException(nameof(revision));
             }
-            if (length < (8 + (numSubAuthorities * 4)))
+            if (length < (8 + (subAuthorities * 4)))
             {
                 throw new ArgumentException(nameof(length));
             }
 
-            buffer = new byte[8 + (numSubAuthorities * 4)];
-            Marshal.Copy(binaryForm, buffer, 0, buffer.Length);
+            buffer = new byte[8 + (subAuthorities * 4)];
+            Marshal.Copy(binary, buffer, 0, buffer.Length);
         }
 
         /// <summary>
         /// The binary length of the buffer
         /// </summary>
-        public int BinaryLength
+        public int Size
         {
             get { return buffer.Length; }
         }
 
         /// <summary>
-        /// Create the binaryForm from the buffer
+        /// Create the binary from the buffer
         /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        public void GetBinaryForm(byte[] binaryForm, int offset)
+        /// <param name="binary">The binary></param>
+        /// <param name="offset">The offset in the binary</param>
+        public void GetBinaryForm(byte[] binary, int offset)
         {
-            if (binaryForm == null)
+            if (binary == null)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
+                throw new ArgumentNullException(nameof(binary));
             }
-            if ((offset < 0) || (offset > binaryForm.Length - buffer.Length))
+            if ((offset < 0) || (offset > binary.Length - buffer.Length))
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
-            Array.Copy(buffer, 0, binaryForm, offset, buffer.Length);
+            Array.Copy(buffer, 0, binary, offset, buffer.Length);
+        }
+
+        public string GetSddlForm()
+        {
+            StringBuilder result = new StringBuilder();
+            _SID sid = TypeMarshal.ToStruct<_SID>(buffer);
+            string sddl = DtypUtility.ToSddlString(sid);
+            result.AppendFormat(CultureInfo.InvariantCulture, "O:{0}", sddl);
+
+            return result.ToString();
         }
     }
 
     /// <summary>
-    /// The generic acr to be inherited
+    /// The ace header to be inherited
     /// </summary>
-    public abstract class _GenericAce
+    public abstract class _AceHeader
     {
         /// <summary>
-        /// The constructor
-        /// </summary>
-        /// <param name="binaryForm">The input binaryForm</param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        internal _GenericAce(byte[] binaryForm, int offset)
-        {
-            if (binaryForm == null)
-            {
-                throw new ArgumentNullException(nameof(binaryForm));
-            }
-
-            if (offset < 0 || offset > binaryForm.Length - 2)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
-
-            AceType = (ACE_TYPE)binaryForm[offset];
-            AceFlags = (ACE_FLAGS)binaryForm[offset + 1];
-        }
-
-        /// <summary>
-        /// The ace flags
+        /// An unsigned 8-bit integer that specifies a set of ACE type-specific control flags
         /// </summary>
         public ACE_FLAGS AceFlags { get; set; }
 
         /// <summary>
-        /// The ace type
+        /// An unsigned 8-bit integer that specifies the ACE types
         /// </summary>
         public ACE_TYPE AceType { get; }
 
         /// <summary>
-        /// The binary length
+        /// An unsigned 16-bit integer that specifies the size, in bytes, of the ACE
         /// </summary>
-        public abstract int BinaryLength { get; }
+        public abstract int Size { get; }
 
         /// <summary>
-        /// Create the buffer from thr binaryForm input
+        /// The constructor
         /// </summary>
-        /// <param name="binaryForm">The input binary form</param>
-        /// <param name="offset">The offset of the binary</param>
-        public static _GenericAce CreateFromBinaryForm(byte[] binaryForm, int offset)
+        /// <param name="binary">The input binary</param>
+        /// <param name="offset">The offset in the binary</param>
+        public _AceHeader(byte[] binary, int offset)
         {
-            if (binaryForm == null)
+            if (binary == null)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
+                throw new ArgumentNullException(nameof(binary));
             }
 
-            if (offset < 0 || offset > binaryForm.Length - 1)
+            if (offset < 0 || offset > binary.Length - 2)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            ACE_TYPE type = (ACE_TYPE)binaryForm[offset];
+            AceType = (ACE_TYPE)binary[offset];
+            AceFlags = (ACE_FLAGS)binary[offset + 1];
+        }
 
-            if (DtypUtility.IsAceObjectType(type))
+        /// <summary>
+        /// Create the ace from thr binary input
+        /// </summary>
+        /// <param name="binary">The input binary</param>
+        /// <param name="offset">The offset of the binary</param>
+        public static _AceHeader CreateAceFromBinary(byte[] binary, int offset)
+        {
+            if (binary == null)
             {
-                return new _ObjectAce(binaryForm, offset);
+                throw new ArgumentNullException(nameof(binary));
+            }
+
+            if (offset < 0 || offset > binary.Length - 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
+
+            ACE_TYPE type = (ACE_TYPE)binary[offset];
+
+            if (DtypUtility.IsObjectAce(type))
+            {
+                return new _ObjectAce(binary, offset);
             }
             else
             {
-                return new _CommonAce(binaryForm, offset);
+                return new _NonObjectAce(binary, offset);
             }
         }
 
         /// <summary>
-        /// Create the binaryForm from the buffer
+        /// Create the binary from the buffer
         /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        public abstract void GetBinaryForm(byte[] binaryForm, int offset);
+        /// <param name="binary">The binary</param>
+        /// <param name="offset">The offset in the binary</param>
+        public abstract void GetBinaryForm(byte[] binary, int offset);
+
+        public abstract string GetSddlForm();
     }
 
     /// <summary>
-    /// The abstract known ace inherited from generic ace
+    /// The non object ace inherited from the ace header
     /// </summary>
-    public abstract class _KnownAce : _GenericAce
+    public class _NonObjectAce : _AceHeader
     {
         private int access_mask;
         private _SecurityIdentifier identifier;
-
-        internal _KnownAce(byte[] binaryForm, int offset) : base(binaryForm, offset)
-        { }
+        private byte[] applicationData;
 
         /// <summary>
-        /// The access mask contained in the ace
+        /// An ACCESS_MASK is a 32-bit set of flags that are used to encode the user rights to an object
         /// </summary>
         public int _AccessMask
         {
@@ -198,275 +200,236 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
-        /// the security identifier contained in the ace
+        /// A security identifier (SID) uniquely identifies a security principal
         /// </summary>
         public _SecurityIdentifier _SecurityIdentifier
         {
             get { return identifier; }
             set { identifier = value; }
         }
-    }
-
-    /// <summary>
-    /// The qualified ace inherited from the known ace
-    /// </summary>
-    public abstract class _QualifiedAce : _KnownAce
-    {
-        private byte[] opaque;
 
         /// <summary>
         /// The constructor
         /// </summary>
-        /// <param name="binaryForm">THe input binaryForm</param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        internal _QualifiedAce(byte[] binaryForm, int offset) : base(binaryForm, offset)
-        { }
-
-        /// <summary>
-        /// Return the opaque
-        /// </summary>
-        /// <returns></returns>
-        public byte[] GetOpaque()
+        /// <param name="binary">The input binary</param>
+        /// <param name="offset">The offset in the binary</param>
+        public _NonObjectAce(byte[] binary, int offset) : base(binary, offset)
         {
-            return opaque == null ? null : (byte[])opaque.Clone();
-        }
+            int length = BitConverter.ToUInt16(binary, offset + 2);
 
-        /// <summary>
-        /// Set the value of opaque with the input value
-        /// </summary>
-        /// <param name="opaque">the input value</param>
-        public void SetOpaque(byte[] opaque)
-        {
-            this.opaque = (opaque == null ? null : (byte[])opaque.Clone());
-        }
-
-        /// <summary>
-        /// Get the length of the opaque
-        /// </summary>
-        /// <returns></returns>
-        public int GetOpaqueLength()
-        {
-            return opaque == null ? 0 : opaque.Length;
-        }
-    }
-
-    /// <summary>
-    /// The common ace inherited from qualified ace
-    /// </summary>
-    public class _CommonAce : _QualifiedAce
-    {
-        /// <summary>
-        /// The constructor
-        /// </summary>
-        /// <param name="binaryForm">The input binaryForm</param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        internal _CommonAce(byte[] binaryForm, int offset) : base(binaryForm, offset)
-        {
-            int len = DtypUtility.ReadUInt16(binaryForm, offset + 2);
-
-            if (offset > binaryForm.Length - len)
+            if (offset > binary.Length - length)
             {
                 throw new ArgumentException(nameof(offset));
             }
 
-            if (len < 8 + _SecurityIdentifier.MinLength)
+            if (length < 8 + DtypUtility.MinLengthOfSecurityIdentifier)
             {
-                throw new ArgumentException(nameof(len));
+                throw new ArgumentException(nameof(length));
             }
 
-            _AccessMask = DtypUtility.ReadInt32(binaryForm, offset + 4);
-            _SecurityIdentifier = new _SecurityIdentifier(binaryForm, offset + 8);
+            _AccessMask = BitConverter.ToInt32(binary, offset + 4);
+            _SecurityIdentifier = new _SecurityIdentifier(binary, offset + 8);
 
-            int opaqueLen = len - (8 + _SecurityIdentifier.BinaryLength);
-            if (opaqueLen > 0)
+            int dataLength = length - (8 + _SecurityIdentifier.Size);
+            if (dataLength > 0)// If there is still other application data exists
             {
-                byte[] opaque = new byte[opaqueLen];
-                Array.Copy(binaryForm, offset + 8 + _SecurityIdentifier.BinaryLength, opaque, 0, opaqueLen);
-                SetOpaque(opaque);
+                this.applicationData = new byte[dataLength];
+                Array.Copy(binary, offset + 8 + _SecurityIdentifier.Size, this.applicationData, 0, dataLength);
             }
         }
 
         /// <summary>
-        /// The binary length of the common ace
+        /// The binary length of the non object ace
         /// </summary>
-        public override int BinaryLength
+        public override int Size
         {
             get
             {
-                return 8 + _SecurityIdentifier.BinaryLength + GetOpaqueLength();
+                int dataLength = this.applicationData == null ? 0 : this.applicationData.Length;
+                return 8 + _SecurityIdentifier.Size + dataLength;
             }
         }
 
         /// <summary>
-        /// Create the binaryForm from the buffer
+        /// Create the binary from the buffer
         /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
+        /// <param name="binary">The binary</param>
         /// <param name="offset">The offset in the binaryForm</param>
-        public override void GetBinaryForm(byte[] binaryForm, int offset)
+        public override void GetBinaryForm(byte[] binary, int offset)
         {
-            int len = BinaryLength;
-            binaryForm[offset] = (byte)this.AceType;
-            binaryForm[offset + 1] = (byte)this.AceFlags;
-            DtypUtility.WriteUInt16((ushort)len, binaryForm, offset + 2);
-            DtypUtility.WriteInt32(_AccessMask, binaryForm, offset + 4);
+            int len = Size;
+            binary[offset] = (byte)this.AceType;
+            binary[offset + 1] = (byte)this.AceFlags;
+            DtypUtility.WriteUInt16ToByteArray((ushort)len, binary, offset + 2);
+            DtypUtility.WriteInt32ToByteArray(_AccessMask, binary, offset + 4);
 
-            _SecurityIdentifier.GetBinaryForm(binaryForm, offset + 8);
+            _SecurityIdentifier.GetBinaryForm(binary, offset + 8);
 
-            byte[] opaque = GetOpaque();
+            if (this.applicationData != null)
+            {
+                Array.Copy(this.applicationData, 0, binary, offset + 8 + _SecurityIdentifier.Size, this.applicationData.Length);
+            }
+        }
 
-            if (opaque != null)
-                Array.Copy(opaque, 0, binaryForm, offset + 8 + _SecurityIdentifier.BinaryLength, opaque.Length);
+        public override string GetSddlForm()
+        {
+            return string.Format(CultureInfo.InvariantCulture,
+                "({0};{1};{2};;;{3})",
+                DtypUtility.ConvertAceTypeToSDDL(AceType),
+                DtypUtility.ConvertAceFlagToSDDL(AceFlags),
+                DtypUtility.ConvertAccessMaskToSDDL(_AccessMask),
+                identifier.GetSddlForm());
         }
     }
 
     /// <summary>
-    /// The object ace inherited from the qualified ace
+    /// The object ace inherited from the ace header
     /// </summary>
-    public class _ObjectAce : _QualifiedAce
+    public class _ObjectAce : _AceHeader
     {
+        private int access_mask;
+        private _SecurityIdentifier identifier;
+        private byte[] applicationData;
+        private _ObjectAceFlags objectFlags;
+        private Guid objectType;
+        private Guid inheridObjectType;
+
+        #region Properties
+        /// <summary>
+        /// A 32-bit unsigned integer that specifies a set of bit flags that indicate whether the ObjectType and InheritedObjectType fields contain valid data. 
+        /// </summary>
+        public _ObjectAceFlags ObjectFlags
+        {
+            get { return this.objectFlags; }
+            set { this.objectFlags = value; }
+        }
+
+        /// <summary>
+        /// A GUID that identifies a property set, a property, an extended right, or a type of child object
+        /// </summary>
+        public Guid ObjectType
+        {
+            get { return this.objectType; }
+            set { this.objectType = value; }
+        }
+
+        /// <summary>
+        /// A GUID that identifies the type of child object that can inherit the ACE
+        /// </summary>
+        public Guid InheritedObjectType
+        {
+            get { return this.inheridObjectType; }
+            set { this.inheridObjectType = value; }
+        }
+
+        /// <summary>
+        /// An ACCESS_MASK that specifies the user rights allowed by this ACE
+        /// </summary>
+        public int _AccessMask
+        {
+            get { return access_mask; }
+            set { access_mask = value; }
+        }
+
+        /// <summary>
+        /// A security identifier (SID) uniquely identifies a security principal
+        /// </summary>
+        public _SecurityIdentifier _SecurityIdentifier
+        {
+            get { return identifier; }
+            set { identifier = value; }
+        }
+        #endregion
+
         /// <summary>
         /// The constructor
         /// </summary>
-        /// <param name="binaryForm">The input binaryForm</param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        internal _ObjectAce(byte[] binaryForm, int offset) : base(binaryForm, offset)
+        /// <param name="binary">The input binary</param>
+        /// <param name="offset">The offset in the binary</param>
+        public _ObjectAce(byte[] binary, int offset) : base(binary, offset)
         {
-            int length = DtypUtility.ReadUInt16(binaryForm, offset + 2);
-            int minLength = 12 + _SecurityIdentifier.MinLength;
+            int length = BitConverter.ToUInt16(binary, offset + 2);
 
-            if (offset > binaryForm.Length - length)
+            if (offset > binary.Length - length)
             {
                 throw new ArgumentException(nameof(offset));
             }
 
-            if (length < minLength)
+            _AccessMask = BitConverter.ToInt32(binary, offset + 4);
+            ObjectFlags = (_ObjectAceFlags)BitConverter.ToInt32(binary, offset + 8);
+
+            int pointer = 12;
+            if (ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent))
             {
-                throw new ArgumentException(nameof(length));
+                ObjectType = DtypUtility.ReadGuid(binary, offset + pointer);
+                pointer += 16;
+            }
+            if (ObjectFlags.HasFlag(_ObjectAceFlags.InheritedObjectAceTypePresent))
+            {
+                InheritedObjectType = DtypUtility.ReadGuid(binary, offset + pointer);
+                pointer += 16;
             }
 
-            _AccessMask = DtypUtility.ReadInt32(binaryForm, offset + 4);
+            _SecurityIdentifier = new _SecurityIdentifier(binary, offset + pointer);
+            pointer += _SecurityIdentifier.Size;
 
-            ObjectAceFlags = (_ObjectAceFlags)DtypUtility.ReadInt32(binaryForm, offset + 8);
-
-            if (ObjectAceTypePresent)
+            int appDataLength = length - pointer;
+            if (appDataLength > 0)
             {
-                minLength += 16;
-            }
-
-            if (InheritedObjectAceTypePresent)
-            {
-                minLength += 16;
-            }
-
-            if (length < minLength)
-            {
-                throw new ArgumentException(nameof(length));
-            }
-
-            int pos = 12;
-            if (ObjectAceTypePresent)
-            {
-                ObjectAceType = DtypUtility.ReadGuid(binaryForm, offset + pos);
-                pos += 16;
-            }
-            if (InheritedObjectAceTypePresent)
-            {
-                InheritedObjectAceType = DtypUtility.ReadGuid(binaryForm, offset + pos);
-                pos += 16;
-            }
-
-            _SecurityIdentifier = new _SecurityIdentifier(binaryForm, offset + pos);
-            pos += _SecurityIdentifier.BinaryLength;
-
-            int opaqueLength = length - pos;
-            if (opaqueLength > 0)
-            {
-                byte[] opaque = new byte[opaqueLength];
-                Array.Copy(binaryForm, offset + pos, opaque, 0, opaqueLength);
-                SetOpaque(opaque);
+                this.applicationData = new byte[appDataLength];
+                Array.Copy(binary, offset + pointer, this.applicationData, 0, appDataLength);
             }
         }
 
         /// <summary>
-        /// The ace flags of the object ace
+        /// Create the binary from the buffer
         /// </summary>
-        public _ObjectAceFlags ObjectAceFlags { get; set; }
-
-        /// <summary>
-        /// The ace type of the object ace
-        /// </summary>
-        public Guid ObjectAceType { get; set; }
-
-        /// <summary>
-        /// The ace type of the inheritied object ace
-        /// </summary>
-        public Guid InheritedObjectAceType { get; set; }
-
-        /// <summary>
-        /// return whether objectacetype present
-        /// </summary>
-        bool ObjectAceTypePresent
+        /// <param name="binary">The binary</param>
+        /// <param name="offset">The offset in the binary</param>
+        public override void GetBinaryForm(byte[] binary, int offset)
         {
-            get { return 0 != (ObjectAceFlags & _ObjectAceFlags.ObjectAceTypePresent); }
-        }
+            int len = Size;
+            binary[offset++] = (byte)this.AceType;
+            binary[offset++] = (byte)this.AceFlags;
+            DtypUtility.WriteUInt16ToByteArray((ushort)len, binary, offset); offset += 2;
+            DtypUtility.WriteInt32ToByteArray(_AccessMask, binary, offset); offset += 4;
+            DtypUtility.WriteInt32ToByteArray((int)ObjectFlags, binary, offset); offset += 4;
 
-        /// <summary>
-        /// return whether inheritiedobjectacetype present
-        /// </summary>
-        bool InheritedObjectAceTypePresent
-        {
-            get { return 0 != (ObjectAceFlags & _ObjectAceFlags.InheritedObjectAceTypePresent); }
-        }
-
-        /// <summary>
-        /// Create the binaryForm from the buffer
-        /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        public override void GetBinaryForm(byte[] binaryForm, int offset)
-        {
-            int len = BinaryLength;
-            binaryForm[offset++] = (byte)this.AceType;
-            binaryForm[offset++] = (byte)this.AceFlags;
-            DtypUtility.WriteUInt16((ushort)len, binaryForm, offset); offset += 2;
-            DtypUtility.WriteInt32(_AccessMask, binaryForm, offset); offset += 4;
-            DtypUtility.WriteInt32((int)ObjectAceFlags, binaryForm, offset); offset += 4;
-
-            if (0 != (ObjectAceFlags & _ObjectAceFlags.ObjectAceTypePresent))
+            if (ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent))
             {
-                DtypUtility.WriteGuid(ObjectAceType, binaryForm, offset); offset += 16;
+                DtypUtility.WriteGuid(ObjectType, binary, offset); offset += 16;
             }
-            if (0 != (ObjectAceFlags & _ObjectAceFlags.InheritedObjectAceTypePresent))
+            if (ObjectFlags.HasFlag( _ObjectAceFlags.InheritedObjectAceTypePresent))
             {
-                DtypUtility.WriteGuid(InheritedObjectAceType, binaryForm, offset); offset += 16;
+                DtypUtility.WriteGuid(InheritedObjectType, binary, offset); offset += 16;
             }
 
-            _SecurityIdentifier.GetBinaryForm(binaryForm, offset);
-            offset += _SecurityIdentifier.BinaryLength;
+            _SecurityIdentifier.GetBinaryForm(binary, offset);
+            offset += _SecurityIdentifier.Size;
 
-            byte[] opaque = GetOpaque();
-            if (opaque != null)
+            if (this.applicationData != null)
             {
-                Array.Copy(opaque, 0, binaryForm, offset, opaque.Length);
-                offset += opaque.Length;
+                Array.Copy(this.applicationData, 0, binary, offset, this.applicationData.Length);
+                offset += this.applicationData.Length;
             }
         }
 
         /// <summary>
         /// return the length of the binary
         /// </summary>
-        public override int BinaryLength
+        public override int Size
         {
             get
             {
-                int length = 12 + _SecurityIdentifier.BinaryLength + GetOpaqueLength();
+                int dataLength = this.applicationData == null ? 0 : this.applicationData.Length;
+                int length = 12 + _SecurityIdentifier.Size + dataLength;
 
-                if (ObjectAceTypePresent)
+                if (ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent))
                 {
                     length += 16;
                 }
 
-                if (InheritedObjectAceTypePresent)
+                if (ObjectFlags.HasFlag( _ObjectAceFlags.InheritedObjectAceTypePresent))
                 {
                     length += 16;
                 }
@@ -474,219 +437,69 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 return length;
             }
         }
-    }
 
-    public sealed class _AceEnumerator : IEnumerator
-    {
-        _GenericAcl owner;
-        int current = -1;
-        internal _AceEnumerator(_GenericAcl owner)
+        public override string GetSddlForm()
         {
-            this.owner = owner;
-        }
-        public _GenericAce Current
-        {
-            get { return current < 0 ? null : owner[current]; }
-        }
-        object IEnumerator.Current
-        {
-            get { return Current; }
-        }
-        public bool MoveNext()
-        {
-            if (current + 1 == owner.Count)
-                return false;
-            current++;
-            return true;
-        }
-        public void Reset()
-        {
-            current = -1;
-        }
-    }
-
-    /// <summary>
-    /// The generic acl to be inheritied
-    /// </summary>
-    public abstract class _GenericAcl : ICollection, IEnumerable
-    {
-        public static readonly byte AclRevision;
-        public static readonly byte AclRevisionDS;
-        public static readonly int MaxBinaryLength;
-
-        /// <summary>
-        /// constructor
-        /// </summary>
-        static _GenericAcl()
-        {
-            //AclRevision = 2;
-            //AclRevisionDS = 4;
-            //MaxBinaryLength = 0x10000;
-        }
-
-        /// <summary>
-        /// constructor
-        /// </summary>
-        protected _GenericAcl()
-        {
-        }
-
-        /// <summary>
-        /// Get the length of the binary
-        /// </summary>
-        public abstract int BinaryLength { get; }
-
-        /// <summary>
-        /// Get the count
-        /// </summary>
-        public abstract int Count { get; }
-
-        /// <summary>
-        /// Inheritied property 
-        /// </summary>
-        public bool IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Inherited peoperty
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public abstract _GenericAce this[int index]
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Revision
-        /// </summary>
-        public abstract byte Revision { get; }
-
-
-        public virtual object SyncRoot
-        {
-            get
-            { return this; }
-        }
-
-        /// <summary>
-        /// Inherited function
-        /// </summary>
-        /// <param name="array">the array to be copied to</param>
-        /// <param name="index">the index of the array</param>
-        public void CopyTo(_GenericAce[] array, int index)
-        {
-            if (array == null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
-
-            if (index < 0 || array.Length - index < Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            for (int i = 0; i < Count; i++)
-            {
-                array[i + index] = this[i];
-            }
-        }
-
-        /// <summary>
-        /// inherited function
-        /// </summary>
-        /// <param name="array">the array to be copied to</param>
-        /// <param name="index">the index of the array</param>
-        void ICollection.CopyTo(Array array, int index)
-        {
-            CopyTo((_GenericAce[])array, index);
-        }
-
-
-        /// <summary>
-        /// Create the binaryForm from the buffer
-        /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        public abstract void GetBinaryForm(byte[] binaryForm, int offset);
-
-        /// <summary>
-        /// inherited function
-        /// </summary>
-        /// <returns></returns>
-        public _AceEnumerator GetEnumerator()
-        {
-            return new _AceEnumerator(this);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            return string.Format(CultureInfo.InvariantCulture,
+                "({0};{1};{2};{3};{4};{5})",
+                DtypUtility.ConvertAceTypeToSDDL(AceType),
+                DtypUtility.ConvertAceFlagToSDDL(AceFlags),
+                DtypUtility.ConvertAccessMaskToSDDL(_AccessMask),
+                ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent) ? objectType.ToString("D") : string.Empty,
+                ObjectFlags.HasFlag(_ObjectAceFlags.InheritedObjectAceTypePresent) ? inheridObjectType.ToString("D") : string.Empty,
+                identifier.GetSddlForm());
         }
     }
 
     /// <summary>
     /// The raw acl
     /// </summary>
-    public class _RawAcl : _GenericAcl
+    public class _RawAcl
     {
         private byte revision;
-        private List<_GenericAce> list;
+        private List<_AceHeader> list;
 
         /// <summary>
         /// The constructor
         /// </summary>
-        /// <param name="binaryForm">the input binaryForm</param>
-        /// <param name="offset">the offset in the binaryForm</param>
-        public _RawAcl(byte[] binaryForm, int offset)
+        /// <param name="binary">the input binary</param>
+        /// <param name="offset">the offset in the binary</param>
+        public _RawAcl(byte[] binary, int offset)
         {
-            if (binaryForm == null)
+            if (binary == null)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
+                throw new ArgumentNullException(nameof(binary));
             }
 
-            if (offset < 0 || offset > binaryForm.Length - 8)
+            if (offset < 0 || offset > binary.Length - 8)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            revision = binaryForm[offset];
+            revision = binary[offset];
 
-            int binaryLength = DtypUtility.ReadUInt16(binaryForm, offset + 2);
-            if (offset > binaryForm.Length - binaryLength)
+            int pointer = offset + 8;
+            int aceCount = BitConverter.ToUInt16(binary, offset + 4);
+            list = new List<_AceHeader>(aceCount);
+            for (int i = 0; i < aceCount; ++i)
             {
-                throw new ArgumentException(nameof(offset));
-            }
-
-            int pos = offset + 8;
-            int numAces = DtypUtility.ReadUInt16(binaryForm, offset + 4);
-
-            list = new List<_GenericAce>(numAces);
-            for (int i = 0; i < numAces; ++i)
-            {
-                _GenericAce newAce = _GenericAce.CreateFromBinaryForm(binaryForm, pos);
-                list.Add(newAce);
-                pos += newAce.BinaryLength;
+                _AceHeader ace = _AceHeader.CreateAceFromBinary(binary, pointer);
+                list.Add(ace);
+                pointer += ace.Size;
             }
         }
 
         /// <summary>
         /// get the length of the binary
         /// </summary>
-        public override int BinaryLength
+        public int Size
         {
             get
             {
                 int length = 8;
                 foreach (var ace in list)
                 {
-                    length += ace.BinaryLength;
+                    length += ace.Size;
                 }
 
                 return length;
@@ -694,307 +507,177 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
-        /// get the count of the list
+        /// return the revision
         /// </summary>
-        public override int Count
-        {
-            get { return list.Count; }
-        }
-
-        /// <summary>
-        /// inherited property
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public override _GenericAce this[int index]
-        {
-            get { return list[index]; }
-
-            set { list[index] = value; }
-        }
-
-        /// <summary>
-        /// inherited property
-        /// </summary>
-        public override byte Revision
+        public byte Revision
         {
             get { return revision; }
         }
 
         /// <summary>
-        /// Create the binaryForm from the buffer
+        /// Create the binary from the buffer
         /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
+        /// <param name="binary">The binary</param>
         /// <param name="offset">The offset in the binaryForm</param>
-        public override void GetBinaryForm(byte[] binaryForm, int offset)
+        public void GetBinaryForm(byte[] binary, int offset)
         {
-            if (binaryForm == null)
+            if (binary == null)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
+                throw new ArgumentNullException(nameof(binary));
             }
 
-            if (offset < 0 || offset > binaryForm.Length - BinaryLength)
+            if (offset < 0 || offset > binary.Length - Size)
             {
                 throw new ArgumentException(nameof(offset));
             }
 
-            binaryForm[offset] = Revision;
-            binaryForm[offset + 1] = 0;
-            DtypUtility.WriteUInt16((ushort)BinaryLength, binaryForm, offset + 2);
-            DtypUtility.WriteUInt16((ushort)list.Count, binaryForm, offset + 4);
-            DtypUtility.WriteUInt16(0, binaryForm, offset + 6);
+            binary[offset] = Revision;
+            binary[offset + 1] = 0;
+            DtypUtility.WriteUInt16ToByteArray((ushort)Size, binary, offset + 2);
+            DtypUtility.WriteUInt16ToByteArray((ushort)list.Count, binary, offset + 4);
+            DtypUtility.WriteUInt16ToByteArray((ushort)0, binary, offset + 6);
 
-            int pos = offset + 8;
+            int pointer = offset + 8;
             foreach (var ace in list)
             {
-                ace.GetBinaryForm(binaryForm, pos);
-                pos += ace.BinaryLength;
-            }
-        }
-    }
-
-    /// <summary>
-    /// The generic security descriptor
-    /// </summary>
-    public abstract class _GenericSecurityDescriptor
-    {
-        /// <summary>
-        /// the constructor
-        /// </summary>
-        protected _GenericSecurityDescriptor()
-        { }
-
-
-        /// <summary>
-        /// return the length of the binary
-        /// </summary>
-        public int BinaryLength
-        {
-            get
-            {
-                int length = 0x14;
-                if (Owner != null)
-                {
-                    length += Owner.BinaryLength;
-                }
-                if (Group != null)
-                {
-                    length += Group.BinaryLength;
-                }
-                if (DaclPresent && !DaclIsUnmodifiedAefa)
-                {
-                    length += InternalDacl.BinaryLength;
-                }
-                if (SaclPresent)
-                {
-                    length += InternalSacl.BinaryLength;
-                }
-
-                return length;
+                ace.GetBinaryForm(binary, pointer);
+                pointer += ace.Size;
             }
         }
 
-        /// <summary>
-        /// the security descriptor control flag
-        /// </summary>
-        public abstract SECURITY_DESCRIPTOR_Control ControlFlags { get; }
-
-        /// <summary>
-        /// the group security identifier of this secrurity descriptor
-        /// </summary>
-        public abstract _SecurityIdentifier Group { get; set; }
-
-        /// <summary>
-        /// the owner security identifier of this security descriptor
-        /// </summary>
-        public abstract _SecurityIdentifier Owner { get; set; }
-
-        /// <summary>
-        /// the revision
-        /// </summary>
-        public static byte Revision
+        public string GetSddlForm(SECURITY_DESCRIPTOR_Control flags, bool isDacl)
         {
-            get { return 1; }
-        }
+            StringBuilder result = new StringBuilder();
 
-        /// <summary>
-        /// the discretionary access control list 
-        /// </summary>
-        internal virtual _GenericAcl InternalDacl
-        {
-            get { return null; }
-        }
-
-        /// <summary>
-        /// the system access control list
-        /// </summary>
-        internal virtual _GenericAcl InternalSacl
-        {
-            get { return null; }
-        }
-
-        /// <summary>
-        /// the reserved field
-        /// </summary>
-        internal virtual byte InternalReservedField
-        {
-            get { return 0; }
-        }
-
-        /// <summary>
-        /// Create the binaryForm from the buffer
-        /// </summary>
-        /// <param name="binaryForm">The binaryForm></param>
-        /// <param name="offset">The offset in the binaryForm</param>
-        public void GetBinaryForm(byte[] binaryForm, int offset)
-        {
-            if (null == binaryForm)
+            if (isDacl)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
-            }
-
-            int binaryLength = BinaryLength;
-            if (offset < 0 || offset > binaryForm.Length - binaryLength)
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
-
-            SECURITY_DESCRIPTOR_Control controlFlags = ControlFlags;
-            if (DaclIsUnmodifiedAefa)
-            {
-                controlFlags &= ~SECURITY_DESCRIPTOR_Control.DACLPresent;
-            }
-
-            binaryForm[offset + 0x00] = Revision;
-            binaryForm[offset + 0x01] = InternalReservedField;
-            DtypUtility.WriteUInt16((ushort)controlFlags, binaryForm, offset + 0x02);
-
-            int pos = 0x14;
-            if (Owner != null)
-            {
-                DtypUtility.WriteInt32(pos, binaryForm, offset + 0x04);
-                Owner.GetBinaryForm(binaryForm, offset + pos);
-                pos += Owner.BinaryLength;
+                if (flags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLProtected))
+                    result.Append("P");
+                if (flags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLInheritanceRequired))
+                    result.Append("AR");
+                if (flags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLAutoInherited))
+                    result.Append("AI");
             }
             else
             {
-                DtypUtility.WriteInt32(0, binaryForm, offset + 0x04);
+                if (flags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLProtected))
+                    result.Append("P");
+                if (flags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLInheritanceRequired))
+                    result.Append("AR");
+                if (flags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLAutoInherited))
+                    result.Append("AI");
             }
 
-            if (Group != null)
+            foreach (var ace in list)
             {
-                DtypUtility.WriteInt32(pos, binaryForm, offset + 0x08);
-                Group.GetBinaryForm(binaryForm, offset + pos);
-                pos += Group.BinaryLength;
-            }
-            else
-            {
-                DtypUtility.WriteInt32(0, binaryForm, offset + 0x08);
+                result.Append(ace.GetSddlForm());
             }
 
-            _GenericAcl sysAcl = InternalSacl;
-            if (SaclPresent)
-            {
-                DtypUtility.WriteInt32(pos, binaryForm, offset + 0x0C);
-                sysAcl.GetBinaryForm(binaryForm, offset + pos);
-                pos += InternalSacl.BinaryLength;
-            }
-            else
-            {
-                DtypUtility.WriteInt32(0, binaryForm, offset + 0x0C);
-            }
-
-            _GenericAcl discAcl = InternalDacl;
-            if (DaclPresent && !DaclIsUnmodifiedAefa)
-            {
-                DtypUtility.WriteInt32(pos, binaryForm, offset + 0x10);
-                discAcl.GetBinaryForm(binaryForm, offset + pos);
-                pos += InternalDacl.BinaryLength;
-            }
-            else
-            {
-                DtypUtility.WriteInt32(0, binaryForm, offset + 0x10);
-            }
-        }
-
-        internal virtual bool DaclIsUnmodifiedAefa
-        {
-            get { return false; }
-        }
-
-        /// <summary>
-        /// return true if dacl is present
-        /// </summary>
-        bool DaclPresent
-        {
-            get
-            {
-                return InternalDacl != null && (ControlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent));
-            }
-        }
-
-        /// <summary>
-        /// return true if sacl is present
-        /// </summary>
-        bool SaclPresent
-        {
-            get
-            {
-                return InternalSacl != null && (ControlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLPresent));
-
-            }
+            return result.ToString();
         }
     }
 
     /// <summary>
     /// The raw security descriptor
     /// </summary>
-    public class _RawSecurityDescriptor : _GenericSecurityDescriptor
+    public class _RawSecurityDescriptor
     {
         private SECURITY_DESCRIPTOR_Control controlFlags;
         private _SecurityIdentifier ownerSid;
         private _SecurityIdentifier groupSid;
+        private _RawAcl dacl;
+        private _RawAcl sacl;
+
+        /// <summary>
+        /// An unsigned 16-bit field that specifies control access bit flags
+        /// </summary>
+        public SECURITY_DESCRIPTOR_Control ControlFlags
+        {
+            get { return controlFlags; }
+            set { controlFlags = value; }
+        }
+
+        /// <summary>
+        /// The DACL of the object. The length of the SID MUST be a multiple of 4
+        /// </summary>
+        public _RawAcl DACL
+        {
+            get { return dacl; }
+            set { dacl = value; }
+        }
+
+        /// <summary>
+        /// The SACL of the object. The length of the SID MUST be a multiple of 4
+        /// </summary>
+        public _RawAcl SACL 
+        {
+            get { return sacl; }
+            set { sacl = value; }
+        }
+
+        /// <summary>
+        /// The SID of the group of the object
+        /// </summary>
+        public _SecurityIdentifier Group
+        {
+            get { return groupSid; }
+            set { groupSid = value; }
+        }
+
+        /// <summary>
+        /// The SID of the owner of the object
+        /// </summary>
+        public _SecurityIdentifier Owner
+        {
+            get { return ownerSid; }
+            set { ownerSid = value; }
+        }
 
         /// <summary>
         /// the constructor
         /// </summary>
-        /// <param name="binaryForm"></param>
-        /// <param name="offset"></param>
-        public _RawSecurityDescriptor(byte[] binaryForm, int offset)
+        /// <param name="binary">the input binary</param>
+        /// <param name="offset">the offset in the binary</param>
+        public _RawSecurityDescriptor(byte[] binary, int offset)
         {
-            if (binaryForm == null)
+            if (binary == null)
             {
-                throw new ArgumentNullException(nameof(binaryForm));
+                throw new ArgumentNullException(nameof(binary));
             }
 
-            if (offset < 0 || offset > binaryForm.Length - 0x14)
+            if (offset < 0 || offset > binary.Length - 0x14)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            ResourceManagerControl = binaryForm[offset + 0x01];
+            controlFlags = (SECURITY_DESCRIPTOR_Control)BitConverter.ToUInt16(binary, offset + 0x02);
 
-            controlFlags = (SECURITY_DESCRIPTOR_Control)DtypUtility.ReadUInt16(binaryForm, offset + 0x02);
-            int ownerPos = DtypUtility.ReadInt32(binaryForm, offset + 0x04);
-            int groupPos = DtypUtility.ReadInt32(binaryForm, offset + 0x08);
-            int saclPos = DtypUtility.ReadInt32(binaryForm, offset + 0x0C);
-            int daclPos = DtypUtility.ReadInt32(binaryForm, offset + 0x10);
+            //Get owner sid
+            int ownerStart = BitConverter.ToInt32(binary, offset + 0x04);
+            if (ownerStart != 0)
+            {
+                ownerSid = new _SecurityIdentifier(binary, ownerStart);
+            }
 
-            if (ownerPos != 0)
+            //Get group sid
+            int groupStart = BitConverter.ToInt32(binary, offset + 0x08);
+            if (groupStart != 0)
             {
-                ownerSid = new _SecurityIdentifier(binaryForm, ownerPos);
+                groupSid = new _SecurityIdentifier(binary, groupStart);
             }
-            if (groupPos != 0)
+
+            //Get sacl
+            int saclStart = BitConverter.ToInt32(binary, offset + 0x0C);
+            if (saclStart != 0)
             {
-                groupSid = new _SecurityIdentifier(binaryForm, groupPos);
+                sacl = new _RawAcl(binary, saclStart);
             }
-            if (saclPos != 0)
+
+            //Get dacl
+            int daclStart = BitConverter.ToInt32(binary, offset + 0x10);
+            if (daclStart != 0)
             {
-                SystemAcl = new _RawAcl(binaryForm, saclPos);
-            }
-            if (daclPos != 0)
-            {
-                DiscretionaryAcl = new _RawAcl(binaryForm, daclPos);
+                dacl = new _RawAcl(binary, daclStart);
             }
         }
 
@@ -1004,84 +687,148 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="flags">the security descriptor control flag</param>
         /// <param name="owner">the owner sid</param>
         /// <param name="group">the group sid</param>
-        /// <param name="sacl"></param>
-        /// <param name="dacl"></param>
+        /// <param name="sacl">the sacl</param>
+        /// <param name="dacl">the dacl</param>
         public _RawSecurityDescriptor(SECURITY_DESCRIPTOR_Control flags,
             _SecurityIdentifier owner,
-            _SecurityIdentifier @group,
+            _SecurityIdentifier group,
             _RawAcl sacl,
             _RawAcl dacl)
         {
             controlFlags = flags;
             ownerSid = owner;
-            groupSid = @group;
-            SystemAcl = sacl;
-            DiscretionaryAcl = dacl;
+            groupSid = group;
+            this.sacl = sacl;
+            this.dacl = dacl;
         }
 
         /// <summary>
-        /// the security control flags
+        /// return the length of the binary
         /// </summary>
-        public override SECURITY_DESCRIPTOR_Control ControlFlags
+        public int Size
         {
-            get { return controlFlags; }
+            get
+            {
+                int length = 0x14;
+                if (Owner != null)
+                {
+                    length += Owner.Size;
+                }
+                if (Group != null)
+                {
+                    length += Group.Size;
+                }
+                if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent))
+                {
+                    length += DACL.Size;
+                }
+                if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLPresent))
+                {
+                    length += SACL.Size;
+                }
+
+                return length;
+            }
         }
 
         /// <summary>
-        /// the dacl
+        /// Create the binary from the buffer
         /// </summary>
-        public _RawAcl DiscretionaryAcl { get; set; }
-
-        /// <summary>
-        /// the group sid
-        /// </summary>
-        public override _SecurityIdentifier Group
+        /// <param name="binary">The input binary</param>
+        /// <param name="offset">The offset in the binary</param>
+        public void GetBinaryForm(byte[] binary, int offset)
         {
-            get { return groupSid; }
-            set { groupSid = value; }
+            if (binary == null)
+            {
+                throw new ArgumentNullException(nameof(binary));
+            }
+
+            int binaryLength = Size;
+            if (offset < 0 || offset > binary.Length - binaryLength)
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
+
+            SECURITY_DESCRIPTOR_Control controlFlags = this.controlFlags;
+
+            binary[offset + 0x00] = 1; //revision
+            binary[offset + 0x01] = 0; //reserved
+            DtypUtility.WriteUInt16ToByteArray((ushort)controlFlags, binary, offset + 0x02);
+
+            int pointer = 0x14;
+            if (Owner != null)
+            {
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x04);
+                Owner.GetBinaryForm(binary, offset + pointer);
+                pointer += Owner.Size;
+            }
+            else
+            {
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x04);
+            }
+
+            if (Group != null)
+            {
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x08);
+                Group.GetBinaryForm(binary, offset + pointer);
+                pointer += Group.Size;
+            }
+            else
+            {
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x08);
+            }
+
+            _RawAcl sacl = this.SACL;
+            if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLPresent))
+            {
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x0C);
+                sacl.GetBinaryForm(binary, offset + pointer);
+                pointer += this.SACL.Size;
+            }
+            else
+            {
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x0C);
+            }
+
+            _RawAcl dacl = this.DACL;
+            if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent))
+            {
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x10);
+                dacl.GetBinaryForm(binary, offset + pointer);
+                pointer += this.DACL.Size;
+            }
+            else
+            {
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x10);
+            }
         }
 
-        /// <summary>
-        /// the owner sid
-        /// </summary>
-        public override _SecurityIdentifier Owner
+        public string GetSddlForm(AccessControlSections sections)
         {
-            get { return ownerSid; }
-            set { ownerSid = value; }
+            StringBuilder result = new StringBuilder();
+
+            if (Owner != null && sections.HasFlag(AccessControlSections.Owner))
+            {
+                result.AppendFormat(CultureInfo.InvariantCulture, "O:{0}", Owner.GetSddlForm());
+            }
+
+            if (Group != null && sections.HasFlag(AccessControlSections.Group))
+            {
+                result.AppendFormat(CultureInfo.InvariantCulture, "G:{0}", Group.GetSddlForm());
+            }
+
+            if (sections.HasFlag(AccessControlSections.Access) && this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent))
+            {
+                result.AppendFormat(CultureInfo.InvariantCulture, "D:{0}", dacl.GetSddlForm(controlFlags, true));
+            }
+
+            if (sections.HasFlag(AccessControlSections.Audit) && this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLPresent))
+            {
+                result.AppendFormat(CultureInfo.InvariantCulture, "S:{0}", sacl.GetSddlForm(controlFlags, false));
+            }
+
+            return result.ToString();
         }
-
-        /// <summary>
-        /// the resource manager control
-        /// </summary>
-        public byte ResourceManagerControl { get; set; }
-
-        /// <summary>
-        /// the sacl
-        /// </summary>
-        public _RawAcl SystemAcl { get; set; }
-
-        /// <summary>
-        /// set the security descriptor control flags
-        /// </summary>
-        /// <param name="flags">the input flag</param>
-        public void SetFlags(SECURITY_DESCRIPTOR_Control flags)
-        {
-            controlFlags = flags | SECURITY_DESCRIPTOR_Control.SelfRelative;
-        }
-
-        internal override _GenericAcl InternalDacl
-        {
-            get { return this.DiscretionaryAcl; }
-        }
-
-        internal override _GenericAcl InternalSacl
-        {
-            get { return this.SystemAcl; }
-        }
-
-        internal override byte InternalReservedField
-        {
-            get { return this.ResourceManagerControl; }
-        }
+       
     }
 }
