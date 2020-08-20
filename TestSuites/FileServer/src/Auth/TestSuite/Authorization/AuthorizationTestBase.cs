@@ -11,10 +11,12 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Srvs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices;
+using System.Linq;
 using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
@@ -358,63 +360,54 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             Dictionary<string, CentralAccessPolicy> policies = new Dictionary<string, CentralAccessPolicy>();
 
             string[] domainNameTokens = domainName.Split('.');
-            Debug.Assert(domainNameTokens.Length >= 2, "Domain name has at least 2 parts.");
-            StringBuilder bindString = new StringBuilder("LDAP://CN=Claims Configuration,CN=Services,CN=Configuration");
+            string admin = $"{domainNameTokens[0].ToUpper()}\\{userName}";
+            StringBuilder bindString = new StringBuilder("CN=Claims Configuration,CN=Services,CN=Configuration");
             foreach (string domainNameToken in domainNameTokens)
             {
                 bindString.Append(",DC=");
                 bindString.Append(domainNameToken);
             }
-
-            using (DirectoryEntry ldapConnection = new DirectoryEntry(bindString.ToString()))
+            string searchBase = bindString.ToString();
+            using (LdapConnection conn = new LdapConnection())
             {
-                ldapConnection.AuthenticationType = AuthenticationTypes.Secure;
-                ldapConnection.Username = userName;
-                ldapConnection.Password = password;
+                conn.Connect(domainName, 389);
+                conn.Bind(admin, password);
 
-                using (DirectorySearcher AccessRuleSearcher = new DirectorySearcher(ldapConnection, "(objectClass=msAuthz-CentralAccessRule)",
-                    new string[] { "cn", "distinguishedName", "msAuthz-EffectiveSecurityPolicy", "msAuthz-ResourceCondition" },
-                    SearchScope.Subtree))
-                using (SearchResultCollection searchResults = AccessRuleSearcher.FindAll())
+                var results = conn.Search(searchBase, LdapConnection.ScopeSub, "(objectClass=msAuthz-CentralAccessRule)", new string[] { "cn", "distinguishedName", "msAuthz-EffectiveSecurityPolicy", "msAuthz-ResourceCondition" }, false);
+                var entryList = results.GetAllLdapEntries();
+                foreach (KeyValuePair<string, IList<LdapAttribute>> kvp in entryList)
                 {
-                    foreach (SearchResult searchResult in searchResults)
-                    {
-                        string dn = (string)searchResult.Properties["distinguishedName"][0];
-                        string carName = (string)searchResult.Properties["cn"][0];
-                        string sddl = (string)searchResult.Properties["msAuthz-EffectiveSecurityPolicy"][0];
-                        string resourceCondition = null;
-                        if (searchResult.Properties["msAuthz-ResourceCondition"].Count > 0)
-                        {
-                            resourceCondition = (string)searchResult.Properties["msAuthz-ResourceCondition"][0];
-                        }
 
-                        CentralAccessRule rule = new CentralAccessRule { Name = carName, Sddl = sddl, ResourceCondition = resourceCondition };
-                        rules.Add(dn, rule);
-                    }
+                    string dn = kvp.Value.GetStringValueFromAttributes("distinguishedName");
+                    string carName = kvp.Value.GetStringValueFromAttributes("cn");
+                    string sddl = kvp.Value.GetStringValueFromAttributes("msAuthz-EffectiveSecurityPolicy");
+                    string resourceCondition = kvp.Value.GetStringValueFromAttributes("msAuthz-ResourceCondition");
+
+                    CentralAccessRule rule = new CentralAccessRule { Name = carName, Sddl = sddl, ResourceCondition = resourceCondition };
+                    rules.Add(dn, rule);
+
                 }
 
-                using (DirectorySearcher AccessPolicySearcher = new DirectorySearcher(ldapConnection, "(objectClass=msAuthz-CentralAccessPolicy)",
-                    new string[] { "cn", "msAuthz-CentralAccessPolicyID", "msAuthz-MemberRulesInCentralAccessPolicy" },
-                    SearchScope.Subtree))
-                using (SearchResultCollection searchResults = AccessPolicySearcher.FindAll())
+                results = conn.Search(searchBase, LdapConnection.ScopeSub, "(objectClass=msAuthz-CentralAccessPolicy)", new string[] { "cn", "msAuthz-CentralAccessPolicyID", "msAuthz-MemberRulesInCentralAccessPolicy" }, false);
+                var policyEntryList = results.GetAllLdapEntries();
+                foreach (KeyValuePair<string, IList<LdapAttribute>> kvp in policyEntryList)
                 {
-                    foreach (SearchResult searchResult in searchResults)
+                    CentralAccessPolicy policy = new CentralAccessPolicy();
+                    string capName = kvp.Value.GetStringValueFromAttributes("cn");
+                    policy.Name = capName;
+                    byte[] sidInBinary = (byte[])kvp.Value.GetBytesValueFromAttributes("msAuthz-CentralAccessPolicyID")[0];
+                    _SID capId = TypeMarshal.ToStruct<_SID>(sidInBinary);
+                    policy.Id = capId;
+                    IList<string> rulesPath = kvp.Value.GetStringListValueFromAttributes("msAuthz-MemberRulesInCentralAccessPolicy");
+                    foreach (string ruleDN in rulesPath)
                     {
-                        CentralAccessPolicy policy = new CentralAccessPolicy();
-                        string capName = (string)searchResult.Properties["cn"][0];
-                        policy.Name = capName;
-                        byte[] sidInBinary = (byte[])searchResult.Properties["msAuthz-CentralAccessPolicyID"][0];
-                        _SID capId = TypeMarshal.ToStruct<_SID>(sidInBinary);
-                        policy.Id = capId;
-                        ResultPropertyValueCollection rulesPath = searchResult.Properties["msAuthz-MemberRulesInCentralAccessPolicy"];
-                        foreach (string ruleDN in rulesPath)
-                        {
-                            policy.MemberRules.Add(rules[ruleDN]);
-                        }
-
-                        policies.Add(capName, policy);
+                        policy.MemberRules.Add(rules[ruleDN]);
                     }
+
+                    policies.Add(capName, policy);
                 }
+
+                conn.Disconnect();
             }
 
             return policies;
@@ -423,47 +416,43 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         protected Dictionary<string, User> QueryUserInfo(string domainName, string userName, string password)
         {
             Dictionary<string, User> users = new Dictionary<string, User>();
-
             string[] domainNameTokens = domainName.Split('.');
-            Debug.Assert(domainNameTokens.Length >= 2, "Domain name has at least 2 parts.");
-            StringBuilder bindString = new StringBuilder("LDAP://CN=Users");
+            string admin = $"{domainNameTokens[0].ToUpper()}\\{userName}";
+            StringBuilder bindString = new StringBuilder("CN=Users");
             foreach (string domainNameToken in domainNameTokens)
             {
                 bindString.Append(",DC=");
                 bindString.Append(domainNameToken);
             }
 
-            using (DirectoryEntry ldapConnection = new DirectoryEntry(bindString.ToString()))
+            string searchBase = bindString.ToString();
+            using (LdapConnection conn = new LdapConnection())
             {
-                ldapConnection.AuthenticationType = AuthenticationTypes.Secure;
-                ldapConnection.Username = userName;
-                ldapConnection.Password = password;
+                conn.Connect(domainName, 389);
+                conn.Bind(admin, password);
 
-                using (DirectorySearcher UserSearcher = new DirectorySearcher(ldapConnection, "(objectClass=user)",
-                    new string[] { "cn", "countryCode", "department", "objectSid" },
-                    SearchScope.Subtree))
-                using (SearchResultCollection searchResults = UserSearcher.FindAll())
+                var results = conn.Search(searchBase, LdapConnection.ScopeSub, "(objectClass=user)", new string[] { "cn", "countryCode", "department", "objectSid" }, false);
+                var entryList = results.GetAllLdapEntries();
+                foreach (KeyValuePair<string, IList<LdapAttribute>> kvp in entryList)
                 {
-                    foreach (SearchResult searchResult in searchResults)
+                    User user = new User();
+                    string name = kvp.Value.GetStringValueFromAttributes("cn");
+                    user.Name = name;
+                    string countryCodeStr = kvp.Value.GetStringValueFromAttributes("countryCode");
+                    if (string.IsNullOrEmpty(countryCodeStr))
                     {
-                        User user = new User();
-                        string name = (string)searchResult.Properties["cn"][0];
-                        user.Name = name;
-                        if (searchResult.Properties["countryCode"].Count > 0)
+                        int countryCode = 0;
+                        if (int.TryParse(countryCodeStr, out countryCode))
                         {
-                            int countryCode = (int)searchResult.Properties["countryCode"][0];
                             user.CountryCode = countryCode;
                         }
-                        if (searchResult.Properties["department"].Count > 0)
-                        {
-                            string department = (string)searchResult.Properties["department"][0];
-                            user.Department = department;
-                        }
-                        byte[] sidInBinary = (byte[])searchResult.Properties["objectSid"][0];
-                        _SID userSid = TypeMarshal.ToStruct<_SID>(sidInBinary);
-                        user.Sid = userSid;
-                        users.Add(name, user);
                     }
+                    user.Department = kvp.Value.GetStringValueFromAttributes("department");
+
+                    byte[] sidInBinary = (byte[])kvp.Value.GetBytesValueFromAttributes("objectSid")[0];
+                    _SID userSid = TypeMarshal.ToStruct<_SID>(sidInBinary);
+                    user.Sid = userSid;
+                    users.Add(name, user);
                 }
             }
 
