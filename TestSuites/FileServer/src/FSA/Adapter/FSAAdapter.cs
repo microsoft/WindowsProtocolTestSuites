@@ -19,6 +19,7 @@ using System.Text;
 using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -4807,7 +4808,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             List<byte> byteList = new List<byte>();
             FILE_POSITION_INFORMATION fileInfo = new FILE_POSITION_INFORMATION();
 
-            fileInfo.CurrentByteOffset = new _LARGE_INTEGER();
+            fileInfo.CurrentByteOffset = new Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc._LARGE_INTEGER();
 
             switch (currentByteOffset)
             {
@@ -5247,15 +5248,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             OwnerSid ownerSidEnum)
         {
             byte[] informationBuffer = null;
-            RawSecurityDescriptor ReceivedSD = new RawSecurityDescriptor(" ");
+            _RawSecurityDescriptor ReceivedSD = new _RawSecurityDescriptor(" ");
 
-            ReceivedSD.Owner = new SecurityIdentifier(testConfig.GetProperty("SDOwner"));
+            ReceivedSD.Owner = new _SecurityIdentifier(testConfig.GetProperty("SDOwner"));
             if (ownerSidEnum == OwnerSid.OpenFileSecDesOwnerIsNull)
             {
                 ReceivedSD.Owner = null;
             }
 
-            informationBuffer = new byte[ReceivedSD.BinaryLength];
+            informationBuffer = new byte[ReceivedSD.Size];
 
             //Read the data from index 0.
             ReceivedSD.GetBinaryForm(informationBuffer, 0);

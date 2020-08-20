@@ -42,6 +42,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             fixed (byte* binaryPtr = binary)CreateFromBinaryForm((IntPtr)(binaryPtr + offset), binary.Length - offset);
         }
 
+        public _SecurityIdentifier(string sddl)
+        {
+            _SID sid = DtypUtility.ToSid(sddl);
+            this.buffer = TypeMarshal.ToBytes<_SID>(sid);
+        }
+
         /// <summary>
         /// Create the buffer from the binary input
         /// </summary>
@@ -700,6 +706,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             groupSid = group;
             this.sacl = sacl;
             this.dacl = dacl;
+        }
+
+        public _RawSecurityDescriptor(string sddl)
+        {
+            this.controlFlags |= SECURITY_DESCRIPTOR_Control.SelfRelative;
         }
 
         /// <summary>
