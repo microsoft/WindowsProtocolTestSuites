@@ -5,8 +5,13 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>MS-SMB2_ServerTestSuite</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

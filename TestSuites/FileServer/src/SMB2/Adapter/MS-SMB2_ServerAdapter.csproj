@@ -4,8 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>MS-SMB2_ServerAdapter</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>  
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
   </ItemGroup>
