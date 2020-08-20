@@ -33,7 +33,7 @@
 
     <Group name="Common">
 
-      <Property name="Timeout" value="6">
+      <Property name="Timeout" value="8">
         <Description>
           Timeout in seconds for SMB2 connection over transport
         </Description>
