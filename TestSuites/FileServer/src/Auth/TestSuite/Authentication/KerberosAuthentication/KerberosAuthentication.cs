@@ -9,13 +9,12 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
-using Microsoft.Protocols.TestTools.StackSdk.Security.Sspi;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
@@ -65,22 +64,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         public static void ClassInitialize(TestContext testContext)
         {
             Initialize(testContext);
+
             BaseTestSite.Log.Add(LogEntryKind.Debug, "Check if current computer is in a domain.");
-            try
-            {
-                using (Domain domain = Domain.GetComputerDomain())
-                {
-                    DomainController dc = domain.FindDomainController(LocatorOptions.KdcRequired);
-                    KDCIP = dc.IPAddress;
-                    IsComputerInDomain = true;
-                }
-                KDCPort = DefaultKdcPort;
-                OidPkt = KerberosConstValue.OidPkt.KerberosToken;
-            }
-            catch
-            {
-                IsComputerInDomain = false;
-            }
         }
 
         [ClassCleanup]
@@ -93,10 +78,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         {
             base.TestInitialize();
 
-            if (!IsComputerInDomain)
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"))
             {
                 BaseTestSite.Assert.Inconclusive("Kerberos Authentication test cases are not applicable in non-domain environment");
             }
+
+            if (string.IsNullOrEmpty(KDCIP))
+            {
+                KDCIP = TestConfig.DomainName.ParseIPAddress().ToString();
+            }
+
+            KDCPort = DefaultKdcPort;
+            OidPkt = KerberosConstValue.OidPkt.KerberosToken;
 
             if (servicePrincipalName == null)
             {
