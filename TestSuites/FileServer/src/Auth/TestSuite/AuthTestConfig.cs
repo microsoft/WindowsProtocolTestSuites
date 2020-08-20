@@ -13,6 +13,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
     public class AuthTestConfig : TestConfigBase
     {
+        public class SpecialUserCredential
+        {
+            public string UserName { get; }
+
+            public string Password { get; }
+
+            public SpecialUserCredential(string userName, string password)
+            {
+                UserName = userName;
+                Password = password;
+            }
+        }
+
         private const string AuthenticationGroupName = "Auth.Authentication";
         private const string AuthorizationGroupName = "Auth.Authorization";
 
@@ -43,12 +56,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             }
         }
 
-        // The user names with special characters in them, separated by ";"
-        public string SpecialUserNames
+        // Special users with special characters in their user names.
+        public SpecialUserCredential[] SpecialUsers
         {
             get
             {
-                return GetProperty(AuthenticationGroupName, "SpecialUserNames");
+                // The user names with special characters and their passwords, separated by ";".
+                var specialUserNames = GetProperty(AuthenticationGroupName, "SpecialUserNames").Split(';');
+                var specialPasswords = GetProperty(AuthenticationGroupName, "SpecialUserPasswords").Split(';');
+
+                return specialUserNames.Zip(specialPasswords, (userName, password) => new SpecialUserCredential(userName, password)).ToArray();
             }
         }
 

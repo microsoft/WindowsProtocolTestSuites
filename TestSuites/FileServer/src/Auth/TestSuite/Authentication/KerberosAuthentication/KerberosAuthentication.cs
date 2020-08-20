@@ -509,15 +509,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         {
             LoadConfig();
 
-            string[] userNames = TestConfig.SpecialUserNames.Split(';');
+            var users = TestConfig.SpecialUsers;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test different user names with some special characters for the Kerberos Authentication.");
 
-            foreach (string username in userNames)
+            foreach (var user in users)
             {
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test user :" + username);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test user : " + user.UserName);
 
-                Smb2KerberosAuthentication(CaseVariant.NONE, TestConfig.DomainName, username);
+                Smb2KerberosAuthentication(CaseVariant.NONE, TestConfig.DomainName, user.UserName, user.Password);
             }
         }
         private void LoadConfig()

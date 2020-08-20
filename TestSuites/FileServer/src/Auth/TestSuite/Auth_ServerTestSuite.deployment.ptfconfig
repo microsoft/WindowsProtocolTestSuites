@@ -34,6 +34,12 @@
             Some user names with special characters. Used in Kerberos Authentication cases.
           </Description>
         </Property>
+
+        <Property name="SpecialUserPasswords" value="Password01^;Password01^;Password01^;Password01^;Password01^">
+          <Description>
+            Passwords of some user names with special characters in the same order of SpecialUserNames property.
+          </Description>
+        </Property>
       </Group>
 
       <Group name="Authorization">

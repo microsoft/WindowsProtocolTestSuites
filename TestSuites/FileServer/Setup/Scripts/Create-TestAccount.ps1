@@ -148,22 +148,23 @@ if((gwmi win32_computersystem).partofdomain -eq $true)
 
     foreach($g in $azgroups)
     {        
-        .\Write-Info.ps1 "Create group: $g.Group.GroupName"
+        .\Write-Info.ps1 "Create group: $($g.Group.GroupName)"
         $azGroupDN = $g.Group.GroupName 
         New-ADGroup -Name $azGroupDN -GroupScope Global -GroupCategory Security
     }
 
-     foreach($user in $users.User)
+    foreach($user in $users.User)
     {        
-        .\Write-Info.ps1 "Create user: $user.Username"
-        $pwd = ConvertTo-SecureString $user.Password -AsPlainText -Force
-        New-ADUser -Name $user.Username -AccountPassword $pwd -CannotChangePassword $true -DisplayName $user -Enabled $true  -PasswordNeverExpires $true 
+        .\Write-Info.ps1 "Create user: $($user.Username)"
+        $domainDN = "DC=" + $domainName.Replace(".", ",DC=")
+        $userDN = "CN=$($user.Username),CN=Users,$domainDN"
+        dsadd user "$userDN" -pwd $user.Password -canchpwd no -display "$($user.Username)" -disabled no -pwdneverexpires yes | .\Write-Info.ps1
 	      
         if($user.Group -ne $null)
         {
             $aduser = Get-ADUser -Identity $user.Username
             Add-ADGroupMember -Identity $user.Group -Members $aduser
-        }      
+        }
     }
 
     .\Write-Info.ps1 "Enable Guest account"
@@ -172,13 +173,13 @@ if((gwmi win32_computersystem).partofdomain -eq $true)
 
     .\Write-Info.ps1 "Setting password never expires"
     dsquery user -samid * | dsmod user -pwdneverexpires yes -mustchpwd no 2>&1 | .\Write-Info.ps1
-    dsquery user -samid *| dsget user -samid -pwdneverexpires 2>&1 | .\Write-Info.ps1
+    dsquery user -samid * | dsget user -samid -pwdneverexpires 2>&1 | .\Write-Info.ps1
 }
 else
 {
     foreach($user in $users.User)
     {        
-        .\Write-Info.ps1 "Create user account:$user.Username"
+        .\Write-Info.ps1 "Create user account: $($user.Username)"
         CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1   
     }
 
