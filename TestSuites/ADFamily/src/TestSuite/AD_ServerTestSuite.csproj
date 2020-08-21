@@ -72,7 +72,7 @@
     <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.7.0" />
     <PackageReference Include="System.DirectoryServices.Protocols" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0-beta" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
   </ItemGroup>
