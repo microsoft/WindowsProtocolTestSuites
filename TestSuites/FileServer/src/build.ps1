@@ -37,6 +37,11 @@ if(!(Test-Path -Path $OutDir/Scripts)) {
     }
 }
 
+if(!(Test-Path -Path $OutDir/Bin/Data)) {
+    New-Item -ItemType Directory $OutDir/Bin/Data -Force
+    Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Data/*" -Destination "$OutDir/Bin/Data" -Recurse -Force
+}
+
 Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 
 dotnet publish "$TestSuiteRoot/TestSuites/FileServer/ShareUtil/ShareUtil.sln" -c $Configuration -o $OutDir/Utils
