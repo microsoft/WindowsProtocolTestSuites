@@ -140,17 +140,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                     {
                         // "file" contains path of the orginal file, the pure file name needs to be extracted and then the file can be copied to the destination share.
-                        string[] paths = null;
-                        if (file.Contains('/')) // Linux
-                        {
-                            paths = file.Split('/');
-                        }
-                        else
-                        {
-                            paths = file.Split(new char[] { '\\' });
-                        }
-
-                        var pureFileName = paths[paths.Length - 1];
+                        var pureFileName = Path.GetFileName(file);
                         byte[] buf = new byte[fs.Length];
                         fs.Read(buf, 0, (int)fs.Length);
                         client.Create(treeId, pureFileName,
