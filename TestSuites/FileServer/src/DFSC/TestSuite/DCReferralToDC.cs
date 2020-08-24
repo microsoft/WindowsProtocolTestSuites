@@ -148,12 +148,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             string expectedSpecialName;
             if (fqdnOrNetbios)
             {
-                expectedDCName = string.Format(@"\{0}.{1}", TestConfig.DCServerName, TestConfig.DomainFQDNName);
+                expectedDCName = string.Format(@"\{0}.{1}", TestConfig.GetNetBiosName(TestConfig.DCServerName), TestConfig.DomainFQDNName);
                 expectedSpecialName = TestConfig.ValidFQDNPath;
             }
             else
             {
-                expectedDCName = @"\" + TestConfig.DCServerName;
+                expectedDCName = @"\" + TestConfig.GetNetBiosName(TestConfig.DCServerName);
                 expectedSpecialName = TestConfig.ValidNETBIOSPath;
             }
 

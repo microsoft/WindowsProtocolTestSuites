@@ -128,13 +128,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             if (sysvolOrNetlogon)
             {
                 reqPath = string.Format(@"\{0}\{1}", TestConfig.DomainFQDNName, DfscConsts.SysvolShare);
-                target = string.Format(@"\{0}.{1}\{2}", TestConfig.DCServerName, TestConfig.DomainFQDNName, DfscConsts.SysvolShare);
+                target = string.Format(@"\{0}.{1}\{2}", TestConfig.GetNetBiosName(TestConfig.DCServerName), TestConfig.DomainFQDNName, DfscConsts.SysvolShare);
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v{0} Sysvol referral request with SYSVOL directory to DC.", (ushort)entryType);
             }
             else
             {
                 reqPath = string.Format(@"\{0}\{1}", TestConfig.DomainFQDNName, DfscConsts.NetlogonShare);
-                target = string.Format(@"\{0}.{1}\{2}", TestConfig.DCServerName, TestConfig.DomainFQDNName, DfscConsts.NetlogonShare);
+                target = string.Format(@"\{0}.{1}\{2}", TestConfig.GetNetBiosName(TestConfig.DCServerName), TestConfig.DomainFQDNName, DfscConsts.NetlogonShare);
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v{0} Sysvol referral request with NETLOGON directory to DC.", (ushort)entryType);
 
             }
