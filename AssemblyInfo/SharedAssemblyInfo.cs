@@ -4,4 +4,5 @@
 using System.Reflection;
 
 [assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("Windows Protocol Test Suites")]
 [assembly: AssemblyVersion("3.20.1.0")]
