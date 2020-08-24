@@ -130,7 +130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     return;
                 }
 
-                // fileName contains a file path and a search pattern. e.g. "data\*.*"
+                // fileName contains a file path and a search pattern. e.g. "Data\*.*"
                 string[] filePath = fileName.Split(new char[] { '\\' });
                 // fileName contains wildcard, so get the files by search pattern.
                 string[] files = Directory.GetFiles(filePath[0], filePath[1]);
@@ -140,8 +140,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                     {
                         // "file" contains path of the orginal file, the pure file name needs to be extracted and then the file can be copied to the destination share.
-                        var paths = file.Split(new char[] { '\\' });
-                        var pureFileName = paths[paths.Length - 1];
+                        var pureFileName = Path.GetFileName(file);
                         byte[] buf = new byte[fs.Length];
                         fs.Read(buf, 0, (int)fs.Length);
                         client.Create(treeId, pureFileName,
