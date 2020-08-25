@@ -43,6 +43,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         // The test suite is configured
         public bool IsConfiged { get; set; }
 
+        /// <summary>
+        /// The test suite target, where true indicates dotnet core.
+        /// </summary>
+        public bool IsCore { get; set; }
+
         // The profile of last run.
         public string LastProfile { get; set; }
 
@@ -52,7 +57,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             get
             {
                 if (IsInstalled) return InstallStatus.Installed;
-                if(!string.IsNullOrEmpty(Installer)) return Kernel.InstallStatus.MSIAvailable;
+                if (!string.IsNullOrEmpty(Installer)) return Kernel.InstallStatus.MSIAvailable;
                 return Kernel.InstallStatus.None;
             }
         }

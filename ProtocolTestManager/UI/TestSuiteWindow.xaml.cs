@@ -32,6 +32,8 @@ namespace Microsoft.Protocols.TestManager.UI
 
             bool noTestSuiteInstalled = true;
 
+            TestSuitesFamilies.Children.Clear();
+
             foreach (TestSuiteFamily family in introduction)
             {
                 Grid grid = new Grid();
@@ -49,9 +51,40 @@ namespace Microsoft.Protocols.TestManager.UI
                     Label name = new Label() { Content = info.TestSuiteName, Margin = new Thickness(7, 2, 0, 2) };
                     grid.Children.Add(name);
                     Grid.SetRow(name, row);
-                    Label version = new Label() { Content = info.TestSuiteVersion, HorizontalAlignment = System.Windows.HorizontalAlignment.Right, Margin = new Thickness(0, 2, 200, 2) };
+                    Label version = new Label() { Content = info.TestSuiteVersion, HorizontalAlignment = System.Windows.HorizontalAlignment.Right, Margin = new Thickness(0, 2, 240, 2) };
                     grid.Children.Add(version);
                     Grid.SetRow(version, row);
+
+                    var runCustomize = new Run(StringResources.Select);
+                    var linkCustomize = new Hyperlink(runCustomize);
+                    linkCustomize.Click += (sender, arg) =>
+                    {
+                        var dialog = new CustomizeTestSuiteWindow();
+
+                        var targetFamily = introduction.NotCustomized.Where(familyNotCustomized => familyNotCustomized.Name == family.Name).First();
+
+                        var notCustomized = targetFamily.Where(notCustomizedInfo => notCustomizedInfo.TestSuiteName == info.TestSuiteName).First();
+
+                        var result = dialog.ShowDialog(info, notCustomized);
+
+                        if (result != null)
+                        {
+                            if (TestSuiteCustomized != null)
+                            {
+                                TestSuiteCustomized(result);
+                            }
+                        }
+                    };
+                    Label labelCustomize = new Label()
+                    {
+                        Content = linkCustomize,
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        Margin = new Thickness(0, 2, 190, 2),
+                        ToolTip = StringResources.SelectTooltip,
+                    };
+                    grid.Children.Add(labelCustomize);
+                    Grid.SetRow(labelCustomize, row);
+
                     if (info.IsInstalled)
                     {
                         noTestSuiteInstalled = false;
@@ -94,6 +127,8 @@ namespace Microsoft.Protocols.TestManager.UI
                 TestSuitesFamilies.Children.Add(gTestSuiteFamily);
             }
 
+            Hint.Inlines.Clear();
+
             // Add hint depending on whether any test suite is installed.
             string source;
 
@@ -132,5 +167,8 @@ namespace Microsoft.Protocols.TestManager.UI
         public testSuiteLaunched Launch_Click;
         public testSuiteLaunched Run_Click;
 
+        public delegate void CustomizeTestSuite(CustomizedTestSuiteConfigurationItem item);
+
+        public event CustomizeTestSuite TestSuiteCustomized;
     }
 }

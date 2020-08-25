@@ -33,13 +33,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private int targetFilterIndex = -1;
         private int mappingFilterIndex = -1;
         private DateTime sessionStartTime;
+        private bool useCustomized;
 
-        public Utility()
+        public Utility(bool customized = false)
         {
             ptmVersion = Assembly.GetEntryAssembly().GetName().Version;
             string exePath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             installDir = Path.GetFullPath(Path.Combine(exePath, ".."));
             sessionStartTime = DateTime.Now;
+
+            useCustomized = customized;
         }
 
         /// <summary>
@@ -64,12 +67,41 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 if (testSuiteFamilies == null)
                 {
                     string introfile = Path.Combine(installDir, @"etc\TestSuiteIntro.xml");
-                    if (File.Exists(introfile))
-                        testSuiteFamilies = TestSuiteFamilies.Load(introfile);
+                    if (!File.Exists(introfile))
+                    {
+                        introfile = "TestSuiteIntro.xml";
+                    }
+
+                    if (useCustomized)
+                    {
+                        string customizedFile = Path.Combine(installDir, @"etc\customized.json");
+
+                        testSuiteFamilies = TestSuiteFamilies.Load(introfile, customizedFile);
+                    }
                     else
-                        testSuiteFamilies = TestSuiteFamilies.Load("TestSuiteIntro.xml");
+                    {
+                        testSuiteFamilies = TestSuiteFamilies.Load(introfile);
+                    }
                 }
                 return testSuiteFamilies;
+            }
+        }
+
+        /// <summary>
+        /// Reload test suite introduction.
+        /// </summary>
+        /// <param name="item">The customized configuration item.</param>
+        public void Reload(CustomizedTestSuiteConfigurationItem item)
+        {
+            if (useCustomized)
+            {
+                string introfile = Path.Combine(installDir, @"etc\TestSuiteIntro.xml");
+                if (!File.Exists(introfile))
+                {
+                    introfile = "TestSuiteIntro.xml";
+                }
+
+                testSuiteFamilies = TestSuiteFamilies.Reload(introfile, Path.Combine(installDir, @"etc\customized.json"), item);
             }
         }
 
@@ -1529,6 +1561,49 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Get the version of test suite based on .NET Core.
+        /// </summary>
+        /// <param name="path">Path to the test suite.</param>
+        /// <returns>The version./</returns>
+        public static string GetCoreTestSuiteVersion(string path)
+        {
+            if (String.IsNullOrEmpty(path))
+            {
+                return null;
+            }
+
+            try
+            {
+                var binPath = Path.Combine(path, "Bin");
+
+                var files = Directory.GetFiles(binPath, "*.dll", SearchOption.TopDirectoryOnly);
+
+                if (files.Length == 0)
+                {
+                    return null;
+                }
+
+                var versions = files.Select(file => FileVersionInfo.GetVersionInfo(file)).Where(version => version.ProductName == "Windows Protocol Test Suites").Select(version => version.ProductVersion);
+
+                // Check if all the test suite dlls have the same version number.
+                string candidateVersion = versions.First();
+
+                var isVersionAllSame = versions.All(version => version == candidateVersion);
+
+                if (!isVersionAllSame)
+                {
+                    return null;
+                }
+
+                return candidateVersion;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

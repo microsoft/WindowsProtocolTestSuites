@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestManager.UI
         private const int adapterIndex = 7;
         private const int runIndex = 8;
 
-        Utility util = new Utility();
+        Utility util = new Utility(true);
         bool isAutoDetected = false;
 
         bool enableConfigureAdapter = false;
@@ -166,6 +166,13 @@ namespace Microsoft.Protocols.TestManager.UI
                     }
                     Process.Start(startInfo);
                 };
+
+            Pages.TestSuiteWindow.TestSuiteCustomized += (item) =>
+            {
+                util.Reload(item);
+
+                Pages.TestSuiteWindow.SetIntroduction(util.TestSuiteIntroduction);
+            };
         }
 
         private bool detectionFinished = false;

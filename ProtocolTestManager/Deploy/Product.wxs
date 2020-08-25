@@ -272,6 +272,12 @@
         <File Id="TestSuiteIntro.xml"
               Source="$(var.SRCDIR)\etc\TestSuiteIntro.xml" />
       </Component>
+
+      <Component Id="customized.json" Guid="{15E30123-5B1A-4455-AACC-1CFC5DE1925A}" Feature="PTM_Feature">
+        <File Id="customized.json"
+              Source="$(var.SRCDIR)\etc\customized.json" />
+      </Component>
+      
     </ComponentGroup>
   </Fragment>
 </Wix>

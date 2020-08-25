@@ -211,7 +211,7 @@ Do you want to abort the execution?</value>
     <value>Protocol Test Manager - {0} {1}</value>
   </data>
   <data name="ConfigureWizard" xml:space="preserve">
-    <value>Configure Wizard</value>
+    <value>Configuration Wizard</value>
   </data>
   <data name="Run" xml:space="preserve">
     <value>Run</value>
@@ -264,5 +264,14 @@ New profile is saved as {0}.</value>
   </data>
   <data name="NoTestResults" xml:space="preserve">
     <value>No test results met the selected criteria.</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="SelectTooltip" xml:space="preserve">
+    <value>Select the version of test suite.</value>
+  </data>
+  <data name="InvalidLocationSpecified" xml:space="preserve">
+    <value>The location you specified does not contain a valid version of test suite.</value>
   </data>
 </root>

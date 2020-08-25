@@ -102,6 +102,9 @@
     <Compile Include="ConfigMethodPage.xaml.cs">
       <DependentUpon>ConfigMethodPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomizeTestSuiteWindow.xaml.cs">
+      <DependentUpon>CustomizeTestSuiteWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages.cs" />
     <Compile Include="AutoDetectionPage.xaml.cs">
       <DependentUpon>AutoDetectionPage.xaml</DependentUpon>
@@ -142,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfigMethodPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomizeTestSuiteWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -213,6 +220,9 @@
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.manifest" />
+    <None Include="customized.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -267,5 +277,6 @@
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
     <Copy SourceFiles="$(TargetDir)\TestSuiteIntro.xml" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\etc\" />
+    <Copy SourceFiles="$(TargetDir)\customized.json" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\etc\" />
   </Target>
 </Project>

@@ -107,6 +107,7 @@
     <Compile Include="TestReport\PlainReport.cs" />
     <Compile Include="TestReport\TestReport.cs" />
     <Compile Include="TestReport\XUnitReport.cs" />
+    <Compile Include="TestSuiteIntro\CustomizedTestSuiteConfiguration.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteFamilies.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteFamily.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteInfo.cs" />

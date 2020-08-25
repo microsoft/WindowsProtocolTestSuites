@@ -1,13 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Xml;
-using Microsoft.Win32;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -21,6 +20,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string RegistryPath;
         public string RegistryPath64;
 
+        public TestSuiteFamilies NotCustomized;
+
         public TestSuiteFamilies()
         { }
 
@@ -28,10 +29,25 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Load test suites
         /// </summary>
         /// <param name="filename">The name of an XML file, which defines all the basic info of all available test suites</param>
+        /// <param name="customizedConfig">The path of customized test suite configuration file.</param>
         /// <returns></returns>
-        public static TestSuiteFamilies Load(string filename)
+        public static TestSuiteFamilies Load(string filename, string customizedConfig = null)
         {
             TestSuiteFamilies family = new TestSuiteFamilies();
+
+            IEnumerable<CustomizedTestSuiteConfigurationItem> config = null;
+
+            if (customizedConfig != null)
+            {
+                config = CustomizedTestSuiteConfiguration.Load(customizedConfig);
+
+                family.NotCustomized = Load(filename);
+            }
+            else
+            {
+                family.NotCustomized = null;
+            }
+
             // The XML file is automatically created by IDE under such a path
             // It can be revised both in IDE and notepad.
             family.TestSuiteSelectionConfigXml = filename;
@@ -139,37 +155,93 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 foreach (TestSuiteInfo testsuite in f)
                 {
-                    // Find the registry key of the test suite.
+                    CustomizedTestSuiteConfigurationItem configItem = null;
 
-                    testsuite.IsInstalled = FindTestSuiteInformationInRegistry(testSuitesRegPathList, testsuite);
-
-                    if (!testsuite.IsInstalled)
+                    if (config != null)
                     {
-                        continue;
+                        configItem = config.Where(item => item.Name == testsuite.TestSuiteName).FirstOrDefault();
                     }
 
-                    testsuite.TestSuiteFolder = (testsuite.TestSuiteFolderFormat != null) ?
-                            testsuite.TestSuiteFolderFormat
-                                .Replace("$(TestSuiteName)", testsuite.TestSuiteName)
-                                .Replace("$(TestSuiteVersion)", testsuite.TestSuiteVersion)
-                                .Replace("$(TestSuiteEndpoint)", testsuite.TestSuiteEndPoint)
-                            : string.Format(StringResource.TestSuiteFolder,
-                                testsuite.TestSuiteName,
-                                testsuite.TestSuiteEndPoint,
-                                testsuite.TestSuiteVersion);
+                    if (configItem != null && configItem.IsCore)
+                    {
+                        // Use configuration from customized.
+                        testsuite.IsInstalled = true;
+
+                        testsuite.TestSuiteFolder = configItem.Location;
+
+                        testsuite.TestSuiteVersion = configItem.Version;
+
+                        testsuite.IsCore = configItem.IsCore;
+                    }
+                    else
+                    {
+                        // Find the registry key of the test suite.
+
+                        testsuite.IsInstalled = FindTestSuiteInformationInRegistry(testSuitesRegPathList, testsuite);
+
+                        if (!testsuite.IsInstalled)
+                        {
+                            continue;
+                        }
+
+                        if (testsuite.IsInstalled)
+                        {
+                            testsuite.TestSuiteFolder = (testsuite.TestSuiteFolderFormat != null) ?
+                                    testsuite.TestSuiteFolderFormat
+                                        .Replace("$(TestSuiteName)", testsuite.TestSuiteName)
+                                        .Replace("$(TestSuiteVersion)", testsuite.TestSuiteVersion)
+                                        .Replace("$(TestSuiteEndpoint)", testsuite.TestSuiteEndPoint)
+                                    : string.Format(StringResource.TestSuiteFolder,
+                                        testsuite.TestSuiteName,
+                                        testsuite.TestSuiteEndPoint,
+                                        testsuite.TestSuiteVersion);
+
+                            testsuite.IsCore = false;
+                        }
+                    }
+
                     string lastProfileFile = Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                        "Protocol Test Manager",
-                        testsuite.TestSuiteName,
-                        testsuite.TestSuiteVersion,
-                        "lastprofile.ptm");
+                           Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                           "Protocol Test Manager",
+                           testsuite.TestSuiteName,
+                           testsuite.TestSuiteVersion,
+                           "lastprofile.ptm");
                     testsuite.LastProfile = lastProfileFile;
                     testsuite.IsConfiged = File.Exists(lastProfileFile);
-
-
                 }
             }
             return family;
+        }
+
+        /// <summary>
+        /// Reload test suite families.
+        /// </summary>
+        /// <param name="filename">The name of an XML file, which defines all the basic info of all available test suites</param>
+        /// <param name="customizedConfig">The path of customized test suite configuration file.</param>
+        /// <param name="item">The customized configuration item.</param>
+        /// <returns>The reloaded test suite families.</returns>
+        public static TestSuiteFamilies Reload(string filename, string customizedConfig, CustomizedTestSuiteConfigurationItem item)
+        {
+            var items = CustomizedTestSuiteConfiguration.Load(customizedConfig);
+
+            bool found = false;
+
+            var itemToUpdate = items.Where(configItem => configItem.Name == item.Name).FirstOrDefault();
+
+            if (itemToUpdate == null)
+            {
+                items = items.Append(item);
+            }
+            else
+            {
+                itemToUpdate.Location = item.Location;
+
+                itemToUpdate.IsCore = item.IsCore;
+            }
+
+            CustomizedTestSuiteConfiguration.Save(customizedConfig, items);
+
+            return Load(filename, customizedConfig);
         }
 
         /// <summary>
