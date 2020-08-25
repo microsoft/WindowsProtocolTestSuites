@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             get
             {
-                return string.Format(@"\{0}\{1}", this.StorageServerName, this.StorageServerShare);
+                return string.Format(@"\{0}\{1}", GetNetBiosName(this.StorageServerName), this.StorageServerShare);
             }
         }
 
@@ -73,11 +73,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                 if (RootTargetType == RootTargetType.FQDN
                     && !String.IsNullOrEmpty(DomainFQDNName))
                 {
-                    return string.Format(@"\{0}.{1}\{2}", this.DFSServerName, this.DomainFQDNName, this.DomainNamespace);
+                    return string.Format(@"\{0}.{1}\{2}", GetNetBiosName(this.DFSServerName), this.DomainFQDNName, this.DomainNamespace);
                 }
                 else
                 {
-                    return string.Format(@"\{0}\{1}", this.DFSServerName, this.DomainNamespace);
+                    return string.Format(@"\{0}\{1}", GetNetBiosName(this.DFSServerName), this.DomainNamespace);
                 }
             }
         }
@@ -89,11 +89,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                 if (RootTargetType == RootTargetType.FQDN
                     && !String.IsNullOrEmpty(DomainFQDNName))
                 {
-                    return string.Format(@"\{0}.{1}\{2}", this.DFSServerName, this.DomainFQDNName, this.StandaloneNamespace);
+                    return string.Format(@"\{0}.{1}\{2}", GetNetBiosName(this.DFSServerName), this.DomainFQDNName, this.StandaloneNamespace);
                 }
                 else
                 {
-                    return string.Format(@"\{0}\{1}", this.DFSServerName, this.StandaloneNamespace);
+                    return string.Format(@"\{0}\{1}", GetNetBiosName(this.DFSServerName), this.StandaloneNamespace);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             get
             {
-                return string.Format(@"\{0}\{1}", this.DFSServerName, this.SMBDfsLink);
+                return string.Format(@"\{0}\{1}", GetNetBiosName(this.DFSServerName), this.SMBDfsLink);
             }
         }
         #endregion
@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             get
             {
-                return string.Format(@"\{0}\{1}\{2}", this.DFSServerName, this.StandaloneNamespace, this.DFSLink);
+                return string.Format(@"\{0}\{1}\{2}", GetNetBiosName(this.DFSServerName), this.StandaloneNamespace, this.DFSLink);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             get
             {
-                return string.Format(@"\{0}\{1}\{2}", this.DFSServerName, this.StandaloneNamespace, this.Interlink);
+                return string.Format(@"\{0}\{1}\{2}", GetNetBiosName(this.DFSServerName), this.StandaloneNamespace, this.Interlink);
             }
         }
         #endregion
@@ -269,6 +269,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             //Client Information
             ClientComputerName = System.Environment.MachineName;
+        }
+
+        public string GetNetBiosName(string name)
+        {
+            if (!name.Contains(this.DomainFQDNName))
+            {
+                return name;
+            }
+
+            return name.Split('.')[0];
         }
     }
 }
