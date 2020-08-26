@@ -25,8 +25,9 @@ if(Test-Path -Path $OutDir) {
 
 if(!(Test-Path -Path $OutDir/Batch)) {
     New-Item -ItemType Directory $OutDir/Batch -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
-    Copy-Item "$TestSuiteRoot/common/*" -Destination "$OutDir/Batch/" -Recurse -Force
+    Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.sh" -Destination "$OutDir/Batch/" -Recurse -Force
+    Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.ps1" -Destination "$OutDir/Batch/" -Recurse -Force
+    Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
 }
 
 if(!(Test-Path -Path $OutDir/Scripts)) {
