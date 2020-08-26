@@ -41,7 +41,7 @@
         </Description>
       </Property>
 
-      <Property name="ClusteredFileServerName" value="GeneralFS">
+      <Property name="ClusteredFileServerName" value="GeneralFS.contoso.com">
         <Description>
           Computer name of traditional CA file server which hosts the CA share.
           This type of file server keeps online on one of servers (nodes) which construct the file server at a time.
@@ -51,7 +51,7 @@
         </Description>
       </Property>
 
-      <Property name="ClusteredScaleOutFileServerName" value="ScaleOutFS">
+      <Property name="ClusteredScaleOutFileServerName" value="ScaleOutFS.contoso.com">
         <Description>
           Computer name of scale-out CA file server which hosts the CA share.
           This type of file server keeps online on all servers (nodes) which construct the file server.
@@ -68,21 +68,21 @@
         </Description>
       </Property>
 
-      <Property name="OptimumNodeOfAsymmetricShare" value="ScaleOutFS">
+      <Property name="OptimumNodeOfAsymmetricShare" value="ScaleOutFS.contoso.com">
         <Description>
           Name of optimum computer for ScaleOut asymmetric share.
           If SUT does not have asymmetric share, leave it blank
         </Description>
       </Property>
 
-      <Property name="NonOptimumNodeOfAsymmetricShare" value="ScaleOutFS">
+      <Property name="NonOptimumNodeOfAsymmetricShare" value="ScaleOutFS.contoso.com">
         <Description>
           Name of non-optimum computer for ScaleOut asymmetric share.
           If SUT does not have asymmetric share, leave it blank
         </Description>
       </Property>
 
-      <Property name="WitnessClientName" value="client01">
+      <Property name="WitnessClientName" value="client01.contoso.com">
         <Description>
           Name of the witness client
         </Description>

@@ -58,7 +58,7 @@
         </Description>
       </Property>
 
-      <Property name="SutComputerName" value="node01">
+      <Property name="SutComputerName" value="node01.contoso.com">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
@@ -79,7 +79,7 @@
         </Description>
       </Property>
 
-      <Property name="DCServerComputerName" value="DC01">
+      <Property name="DCServerComputerName" value="DC01.contoso.com">
         <Description>
           Computer name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
@@ -241,7 +241,7 @@
         </Description>
       </Property>
 
-      <Property name="CAShareServerName" value="GeneralFS">
+      <Property name="CAShareServerName" value="GeneralFS.contoso.com">
         <Description>
           Computer name of server which hosts Continuous Availability (CA) share
           If the server does not have a computer name, set it with IP address

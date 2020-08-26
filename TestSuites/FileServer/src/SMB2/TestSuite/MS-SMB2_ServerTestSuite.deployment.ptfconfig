@@ -75,7 +75,7 @@
 
     </Group>
       <Group name="HVRS">
-          <Property name="SharePath" value="\\node01\SMBBasic">
+          <Property name="SharePath" value="\\node01.contoso.com\SMBBasic">
               <!--File_level_trim passed on smbbasic-->
               <!--Property name="SharePath" value="\\node01\SMBBasic"-->
               <!--Property name="SharePath" value="\\node01\SMBReFSShare"-->

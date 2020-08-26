@@ -9,7 +9,7 @@
 
   <Properties>
     <Group name="RSVD">
-      <Property name="ShareContainingSharedVHD" value="\\ScaleoutFS\SMBClustered">
+      <Property name="ShareContainingSharedVHD" value="\\ScaleoutFS.contoso.com\SMBClustered">
         <Description>
           The share path which contains the shared virtual disk files, should start with "\\"
           If no such share, leave it blank
