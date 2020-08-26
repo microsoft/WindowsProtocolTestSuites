@@ -78,7 +78,7 @@ if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
 
 $endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\FileServer\Server-Endpoint"
 $version = Get-ChildItem $endPointPath | where {$_.Attributes -match "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1
-$binDir = "$endPointPath\$version\bin"
+$binDir = "$endPointPath\$version\Utils"
 $ShareUtil = "$binDir\ShareUtil.exe"
 
 #----------------------------------------------------------------------------
