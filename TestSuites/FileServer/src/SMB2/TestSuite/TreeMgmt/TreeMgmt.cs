@@ -188,6 +188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
         }
         
         [TestMethod]
+        [Ignore]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Tree)]
         [TestCategory(TestCategories.Positive)]

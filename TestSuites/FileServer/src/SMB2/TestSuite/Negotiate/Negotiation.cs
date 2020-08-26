@@ -589,6 +589,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
         [TestMethod]
+        [Ignore]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
         [TestCategory(TestCategories.Compatibility)]

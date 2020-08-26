@@ -14,6 +14,7 @@ using System;
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
     [TestClass]
+    [Ignore]
     public class SharePermissionTest : AuthorizationTestBase
     {
         private bool dynamicallyConfigurableShareExist;
