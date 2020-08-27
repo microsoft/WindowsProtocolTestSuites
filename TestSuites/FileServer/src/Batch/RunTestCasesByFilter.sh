@@ -15,7 +15,7 @@ Binaries="Auth_ServerTestSuite.dll,\
     MS-RSVD_ServerTestSuite.dll,\
     MS-SMB2Model_ServerTestSuite.dll,\
     MS-SMB2_ServerTestSuite.dll,\
-    MS-SQOS_ServerTestSuite.dll
+    MS-SQOS_ServerTestSuite.dll"
 
 Filter=$1
 
