@@ -11,11 +11,6 @@
 
     <Group name="PTF">
       <Group name="NetworkCapture">
-        <Property name="CaptureFileFolder" value="C:\FileServerCaptureFileDirectory">
-          <Description>
-            The path to put the capture files. Old files will be overwritten.
-          </Description>
-        </Property>
         <Property name="StopRunningOnError" value="false">
           <Choice>true,false</Choice>
           <Description>
