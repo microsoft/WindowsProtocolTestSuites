@@ -69,6 +69,13 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
+    <ProjectReference Include="..\TestCaseDiscover\TestCaseDiscover.csproj">
+      <Name>TestCaseDiscover</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\UI\UI.csproj">
       <Name>ProtocolTestManager</Name>
       <Project>{FE998190-5B44-4816-9A65-295E8A1EBBA1}</Project>

@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private PrerequisitView prerequisits;
         private List<Microsoft.Protocols.TestManager.Detector.DetectingItem> detectSteps;
         private TestCaseFilter filter = null;
-        private TestSuite testSuite = null;
+        private ITestSuite testSuite = null;
         private TestEngine testEngine = null;
         private int targetFilterIndex = -1;
         private int mappingFilterIndex = -1;
@@ -129,7 +129,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     testSuiteInfo.TestSuiteName,
                     testSuiteInfo.TestSuiteVersion,
                     testSuiteDir,
-                    installDir);
+                    installDir,
+                    testSuiteInfo.IsCore
+                    );
             }
             catch (Exception e)
             {
@@ -191,7 +193,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             try
             {
-                appConfig.GetAdapterMethods();
+                if (!appConfig.IsCore)
+                {
+                    appConfig.GetAdapterMethods();
+                }
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -217,7 +222,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 throw new Exception(string.Format(StringResource.LoadAdapterError, e.Message));
             }
-            testSuite = new TestSuite();
+
+            if (appConfig.IsCore)
+            {
+                testSuite = new TestSuiteFromCore();
+            }
+            else
+            {
+                testSuite = new TestSuiteFromFramework();
+            }
+
             try
             {
                 AppDomain.CurrentDomain.AssemblyResolve += UnitTestFrameworkResolveHandler;
@@ -512,7 +526,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>Test case list</returns>
         public List<TestCase> GetSelectedCaseList()
         {
-            selectedCases = filter.FilterTestCaseList(testSuite.TestCaseList);
+            selectedCases = filter.FilterTestCaseList(testSuite.TestCaseList.ToList());
             return selectedCases;
         }
 
@@ -520,7 +534,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Gets current TestSuite object.
         /// </summary>
         /// <returns>A TestSuite object</returns>
-        public TestSuite GetTestSuite()
+        public ITestSuite GetTestSuite()
         {
             return testSuite;
         }
@@ -599,7 +613,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             Dictionary<string, List<Rule>> reverseMappingTable = new Dictionary<string, List<Rule>>();
 
-            List<TestCase> testCaseList = testSuite.TestCaseList;
+            List<TestCase> testCaseList = testSuite.TestCaseList.ToList();
             foreach (TestCase testCase in testCaseList)
             {
                 List<string> categories = testCase.Category;

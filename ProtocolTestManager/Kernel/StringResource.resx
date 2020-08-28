@@ -349,4 +349,10 @@ Please upgrade Protocol Test Manager to the same version with the test suite.</v
     <value>Version of Protocol Test Manager ({0}) is greater than version of the test suite ({1}).
 Please upgrade the test suite to the same version of Protocol Test Manager.</value>
   </data>
+  <data name="FailToRunTestCaseDiscover" xml:space="preserve">
+    <value>Failed to load test case infos by running TestCaseDiscover.</value>
+  </data>
+  <data name="TestCaseDiscover" xml:space="preserve">
+    <value>TestCaseDiscover.exe</value>
+  </data>
 </root>

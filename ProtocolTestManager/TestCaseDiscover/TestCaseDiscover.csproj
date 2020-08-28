@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Microsoft.Protocols.TestManager.TestCaseDiscover</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+  <Target Name="Copy" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetDir)$(TargetName).exe" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).dll" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).runtimeconfig.json" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />
+  </Target>
+  
+</Project>

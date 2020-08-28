@@ -235,6 +235,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{cadce22a-1b45-4e01-b8db-8b916b6e517c}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kernel\Kernel.csproj">
       <Project>{179ffb40-6987-4976-8c26-7d89a5adf50d}</Project>
       <Name>Kernel</Name>

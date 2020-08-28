@@ -77,6 +77,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppConfig.cs" />
+    <Compile Include="Common\TestCase.cs" />
     <Compile Include="Detector\DetectionOutcome.cs" />
     <Compile Include="Detector\Detector.cs" />
     <Compile Include="Detector\PrerequisitView.cs" />
@@ -111,11 +112,17 @@
     <Compile Include="TestSuiteIntro\TestSuiteFamilies.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteFamily.cs" />
     <Compile Include="TestSuiteIntro\TestSuiteInfo.cs" />
-    <Compile Include="Common\TestCase.cs" />
+    <Compile Include="TestSuite\ITestSuite.cs" />
     <Compile Include="TestSuite\TestSuite.cs" />
+    <Compile Include="TestSuite\TestSuiteFromCore.cs" />
+    <Compile Include="TestSuite\TestSuiteFromFramework.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{cadce22a-1b45-4e01-b8db-8b916b6e517c}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PropertyValueDetector\PropertyValueDetector.csproj">
       <Project>{6f3948b1-316e-4378-afca-3be6c9f51894}</Project>
       <Name>PropertyValueDetector</Name>
@@ -131,6 +138,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\ProtocolTestManager\Bin\" />

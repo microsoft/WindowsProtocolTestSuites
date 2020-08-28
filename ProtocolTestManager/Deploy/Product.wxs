@@ -61,7 +61,7 @@
         <FileSearch Name="vstest.console.exe" />
       </DirectorySearch>
     </Property>
-    
+
     <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
       <![CDATA[VSTEST]]>
     </SetProperty>
@@ -220,6 +220,14 @@
         <File Id="Microsoft.Protocols.TestManager.Detector.pdb"
              Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestManager.Common.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestManager.Common.pdb"
+             Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Common.pdb" />
+      </Component>
+      <Component Id="TestCaseDiscover.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="TestCaseDiscover.pdb"
+             Source="$(var.SRCDIR)\bin\TestCaseDiscover.pdb" />
+      </Component>
       <Component Id="Microsoft.Protocols.TestManager.Kernel.pdb" Guid="*" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Kernel.pdb"
              Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Kernel.pdb" />
@@ -244,6 +252,22 @@
       <Component Id="Microsoft.Protocols.TestManager.Detector.dll" Guid="{FF3C5836-7D7F-4DA2-B7AF-8B91DBFBEB1F}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Detector.dll"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestManager.Common.dll" Guid="{284C95C8-EA9B-4C28-93EC-42FBF89CAACD}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestManager.Common.dll"
+              Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Common.dll" />
+      </Component>
+      <Component Id="TestCaseDiscover.exe" Guid="{B35EA84C-E428-4754-B6B7-DEAC56362D5A}" Feature="PTM_Feature">
+        <File Id="TestCaseDiscover.exe"
+              Source="$(var.SRCDIR)\bin\TestCaseDiscover.exe" />
+      </Component>
+      <Component Id="TestCaseDiscover.dll" Guid="{6CF8E8A5-805B-4ACA-A467-EFCF72CCD3E3}" Feature="PTM_Feature">
+        <File Id="TestCaseDiscover.dll"
+              Source="$(var.SRCDIR)\bin\TestCaseDiscover.dll" />
+      </Component>
+      <Component Id="TestCaseDiscover.runtimeconfig.json" Guid="{AE4857B6-2A41-4973-9A58-63187467A887}" Feature="PTM_Feature">
+        <File Id="TestCaseDiscover.runtimeconfig.json"
+              Source="$(var.SRCDIR)\bin\TestCaseDiscover.runtimeconfig.json" />
       </Component>
       <Component Id="Microsoft.Protocols.TestManager.Kernel.dll" Guid="{3AFB35ED-20C3-491E-8BCD-7B42878E2521}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Kernel.dll"
@@ -277,7 +301,7 @@
         <File Id="customized.json"
               Source="$(var.SRCDIR)\etc\customized.json" />
       </Component>
-      
+
     </ComponentGroup>
   </Fragment>
 </Wix>

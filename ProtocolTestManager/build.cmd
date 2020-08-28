@@ -58,7 +58,19 @@ if exist "%TestSuiteRoot%drop\ProtocolTestManager" (
  rd /s /q "%TestSuiteRoot%drop\ProtocolTestManager"
 )
 
+%nuget% restore "%TestSuiteRoot%ProtocolTestManager\Common\Common.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
+if ErrorLevel 1 (
+	echo Error: Failed to restore NuGet dependencies
+	exit /b 1
+)
+
 %nuget% restore "%TestSuiteRoot%ProtocolTestManager\Kernel\Kernel.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
+if ErrorLevel 1 (
+	echo Error: Failed to restore NuGet dependencies
+	exit /b 1
+)
+
+%nuget% restore "%TestSuiteRoot%ProtocolTestManager\TestCaseDiscover\TestCaseDiscover.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
 if ErrorLevel 1 (
 	echo Error: Failed to restore NuGet dependencies
 	exit /b 1
