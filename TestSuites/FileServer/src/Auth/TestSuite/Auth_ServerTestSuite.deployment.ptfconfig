@@ -31,13 +31,13 @@
 
         <Property name="SpecialUserNames" value="9L7!MNZ%}wq4iZ;p9jwB3A@U)i2z~LzTd;XJ(x1SjZ{INM!RpPrQ^c;$I1Q73_VjdSJ!vGn7Q;@0o2^w@w^-t%abwos31">
           <Description>
-            Some user names with special characters. Used in Kerberos Authentication cases.
+            Some user names with special characters separated by semicolon. Used in Kerberos Authentication cases.
           </Description>
         </Property>
 
         <Property name="SpecialUserPasswords" value="Password01^;Password01^;Password01^;Password01^;Password01^">
           <Description>
-            Passwords of some user names with special characters in the same order of SpecialUserNames property.
+            Passwords of some user names with special characters in the same order of SpecialUserNames property, separated by semicolon.
           </Description>
         </Property>
       </Group>
