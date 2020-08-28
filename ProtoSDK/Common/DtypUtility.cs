@@ -28,17 +28,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// The length of _ACL header, including _ACL.AclRevision, _ACL.Sbz1 ,_ACL.AclSize,
         /// _ACL.AceCount and _ACL.Sbz2, in bytes.
         /// </summary>
-        private const ushort ACL_HEADER_LENGTH = 8;
+        public const ushort ACL_HEADER_LENGTH = 8;
 
         /// <summary>
         /// The length of _ACE_HEADER in bytes.
         /// </summary>
-        private const ushort ACE_HEADER_LENGTH = 4;
+        public const ushort ACE_HEADER_LENGTH = 4;
+
+        /// <summary>
+        /// The length of ace flags in bytes.
+        /// </summary>
+        public const ushort ACE_FLAGS_LENGTH = 4;
 
         //The short fixed ace length in bytes contains the following parts:
         //_ACE_HEADER Header; (4 bytes)
         //uint Mask; (4 bytes)
-        private const ushort SHORT_FIXED_ACE_LENGTH = 8;
+        public const ushort SHORT_FIXED_ACE_LENGTH = 8;
 
         //The long fixed ace length in bytes contains the following parts:
         //_ACE_HEADER Header; (4 bytes)
@@ -46,10 +51,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         //ACCESS_OBJECT_ACE_Flags Flags;(4 bytes)
         //Guid ObjectType;(16 bytes)
         //Guid InheritedObjectType;(16 bytes)
-        private const ushort LONG_FIXED_ACE_LENGTH = 44;
+        public const ushort LONG_FIXED_ACE_LENGTH = 44;
 
         // Length of SID authority byte array.
-        private const int SID_AUTHORITY_LENGTH = 6;
+        public const int SID_AUTHORITY_LENGTH = 6;
+
+        /// <summary>
+        /// The fixed length of security descriptor
+        /// including Revision(1 byte), Sbz1(1 byte), Control(2 bytes)
+        /// OffsetOwner(4 bytes), OffsetGroup(4 bytes), OffsetSacl(4 bytes), OffsetDacl(4 bytes)
+        /// </summary>
+        public const int SECURITY_DESCRIPTOR_FIXED_LENGTH = 20;
 
         /// <summary>
         /// Specifies access to delete an object.

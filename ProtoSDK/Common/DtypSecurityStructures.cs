@@ -20,6 +20,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// </summary>
     public class _SecurityIdentifier
     {
+        const byte DEFAULT_REVISION = 1;
         private byte[] buffer;
 
         /// <summary>
@@ -55,23 +56,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="length">The length of the binary</param>
         void CreateFromBinaryForm(IntPtr binary, int length)
         {
-            int revision = Marshal.ReadByte(binary, 0);
-            int subAuthorities = Marshal.ReadByte(binary, 1);
-            if (revision != 1 || subAuthorities > 15)
+            _SID sid = new _SID();
+
+            sid.Revision = Marshal.ReadByte(binary, 0);
+            sid.SubAuthorityCount = Marshal.ReadByte(binary, 1);
+            if (sid.Revision != DEFAULT_REVISION)
             {
-                throw new ArgumentException(nameof(revision));
+                throw new ArgumentException("The value of Revision MUST be set to 0x01.");
             }
-            if (length < (8 + (subAuthorities * 4)))
+            if (sid.SubAuthorityCount > 15)
             {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException("The maximum number of elements allowed is 15");
             }
 
-            buffer = new byte[8 + (subAuthorities * 4)];
-            Marshal.Copy(binary, buffer, 0, buffer.Length);
+            sid.IdentifierAuthority = new byte[6];
+            for (int i = 0; i < 6; i++)
+            {
+                sid.IdentifierAuthority[i] = Marshal.ReadByte(binary, i + 2);
+            }
+
+            sid.SubAuthority = new uint[sid.SubAuthorityCount];
+            for (int i = 0; i < sid.SubAuthorityCount; i++)
+            {
+                byte[] temp = new byte[4];
+
+                for (int j = 0; j < 4; j++)
+                {
+                    temp[j] = Marshal.ReadByte(binary, i * 4 + j + 8);
+                }
+
+                sid.SubAuthority[i] = BitConverter.ToUInt32(temp);
+            }
+
+            this.buffer = TypeMarshal.ToBytes<_SID>(sid);
         }
 
         /// <summary>
-        /// The binary length of the buffer
+        /// The binary length of the buffer in bytes
         /// </summary>
         public int Size
         {
@@ -93,6 +114,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
+
             Array.Copy(buffer, 0, binary, offset, buffer.Length);
         }
 
@@ -184,6 +206,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="offset">The offset in the binary</param>
         public abstract void GetBinaryForm(byte[] binary, int offset);
 
+        /// <summary>
+        /// Get the sddl string form of the ace
+        /// </summary>
+        /// <returns></returns>
         public abstract string GetSddlForm();
     }
 
@@ -193,9 +219,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     public class _NonObjectAce : _AceHeader
     {
         private int access_mask;
+        //An unsigned 16-bit integer that specifies the size, in bytes, of the ACE
+        private int aceSize;
         private _SecurityIdentifier identifier;
         private byte[] applicationData;
 
+        #region Properties
         /// <summary>
         /// An ACCESS_MASK is a 32-bit set of flags that are used to encode the user rights to an object
         /// </summary>
@@ -213,6 +242,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             get { return identifier; }
             set { identifier = value; }
         }
+        #endregion
 
         /// <summary>
         /// The constructor
@@ -221,26 +251,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="offset">The offset in the binary</param>
         public _NonObjectAce(byte[] binary, int offset) : base(binary, offset)
         {
-            int length = BitConverter.ToUInt16(binary, offset + 2);
+            //The AceSize field
+            aceSize = BitConverter.ToUInt16(binary, offset + 2);
 
-            if (offset > binary.Length - length)
+            if (offset > binary.Length - aceSize)
             {
                 throw new ArgumentException(nameof(offset));
             }
 
-            if (length < 8 + DtypUtility.MinLengthOfSecurityIdentifier)
+            if (aceSize < 8 + DtypUtility.MinLengthOfSecurityIdentifier)
             {
-                throw new ArgumentException(nameof(length));
+                throw new ArgumentException(nameof(aceSize));
             }
 
-            _AccessMask = BitConverter.ToInt32(binary, offset + 4);
-            _SecurityIdentifier = new _SecurityIdentifier(binary, offset + 8);
+            _AccessMask = BitConverter.ToInt32(binary, offset + DtypUtility.ACE_HEADER_LENGTH);
+            _SecurityIdentifier = new _SecurityIdentifier(binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH);
 
-            int dataLength = length - (8 + _SecurityIdentifier.Size);
+            int dataLength = aceSize - (DtypUtility.SHORT_FIXED_ACE_LENGTH + _SecurityIdentifier.Size);
             if (dataLength > 0)// If there is still other application data exists
             {
                 this.applicationData = new byte[dataLength];
-                Array.Copy(binary, offset + 8 + _SecurityIdentifier.Size, this.applicationData, 0, dataLength);
+                Array.Copy(binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH + _SecurityIdentifier.Size, this.applicationData, 0, dataLength);
             }
         }
 
@@ -252,7 +283,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             get
             {
                 int dataLength = this.applicationData == null ? 0 : this.applicationData.Length;
-                return 8 + _SecurityIdentifier.Size + dataLength;
+                return DtypUtility.SHORT_FIXED_ACE_LENGTH + _SecurityIdentifier.Size + dataLength;
             }
         }
 
@@ -267,13 +298,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             binary[offset] = (byte)this.AceType;
             binary[offset + 1] = (byte)this.AceFlags;
             DtypUtility.WriteUInt16ToByteArray((ushort)len, binary, offset + 2);
-            DtypUtility.WriteInt32ToByteArray(_AccessMask, binary, offset + 4);
+            DtypUtility.WriteInt32ToByteArray(_AccessMask, binary, offset + DtypUtility.ACE_HEADER_LENGTH);
 
-            _SecurityIdentifier.GetBinaryForm(binary, offset + 8);
+            _SecurityIdentifier.GetBinaryForm(binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH);
 
             if (this.applicationData != null)
             {
-                Array.Copy(this.applicationData, 0, binary, offset + 8 + _SecurityIdentifier.Size, this.applicationData.Length);
+                Array.Copy(this.applicationData, 0, binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH + _SecurityIdentifier.Size, this.applicationData.Length);
             }
         }
 
@@ -361,10 +392,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 throw new ArgumentException(nameof(offset));
             }
 
-            _AccessMask = BitConverter.ToInt32(binary, offset + 4);
-            ObjectFlags = (_ObjectAceFlags)BitConverter.ToInt32(binary, offset + 8);
+            _AccessMask = BitConverter.ToInt32(binary, offset + DtypUtility.ACE_HEADER_LENGTH);
+            ObjectFlags = (_ObjectAceFlags)BitConverter.ToInt32(binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH);
 
-            int pointer = 12;
+            int pointer = DtypUtility.ACE_HEADER_LENGTH + DtypUtility.SHORT_FIXED_ACE_LENGTH;
             if (ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent))
             {
                 ObjectType = DtypUtility.ReadGuid(binary, offset + pointer);
@@ -403,11 +434,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 
             if (ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent))
             {
-                DtypUtility.WriteGuid(ObjectType, binary, offset); offset += 16;
+                DtypUtility.WriteGuid(ObjectType, binary, offset); 
+                offset += 16;
             }
             if (ObjectFlags.HasFlag( _ObjectAceFlags.InheritedObjectAceTypePresent))
             {
-                DtypUtility.WriteGuid(InheritedObjectType, binary, offset); offset += 16;
+                DtypUtility.WriteGuid(InheritedObjectType, binary, offset); 
+                offset += 16;
             }
 
             _SecurityIdentifier.GetBinaryForm(binary, offset);
@@ -428,7 +461,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             get
             {
                 int dataLength = this.applicationData == null ? 0 : this.applicationData.Length;
-                int length = 12 + _SecurityIdentifier.Size + dataLength;
+                int length = DtypUtility.SHORT_FIXED_ACE_LENGTH + DtypUtility.ACE_FLAGS_LENGTH + _SecurityIdentifier.Size + dataLength;
 
                 if (ObjectFlags.HasFlag(_ObjectAceFlags.ObjectAceTypePresent))
                 {
@@ -477,14 +510,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 throw new ArgumentNullException(nameof(binary));
             }
 
-            if (offset < 0 || offset > binary.Length - 8)
+            if (offset < 0 || offset > binary.Length - DtypUtility.SHORT_FIXED_ACE_LENGTH)
             {
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
             revision = binary[offset];
 
-            int pointer = offset + 8;
+            int pointer = offset + DtypUtility.ACL_HEADER_LENGTH;
             int aceCount = BitConverter.ToUInt16(binary, offset + 4);
             list = new List<_AceHeader>(aceCount);
             for (int i = 0; i < aceCount; ++i)
@@ -502,7 +535,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         {
             get
             {
-                int length = 8;
+                int length = DtypUtility.ACL_HEADER_LENGTH;
                 foreach (var ace in list)
                 {
                     length += ace.Size;
@@ -543,7 +576,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             DtypUtility.WriteUInt16ToByteArray((ushort)list.Count, binary, offset + 4);
             DtypUtility.WriteUInt16ToByteArray((ushort)0, binary, offset + 6);
 
-            int pointer = offset + 8;
+            int pointer = offset + DtypUtility.ACL_HEADER_LENGTH;
             foreach (var ace in list)
             {
                 ace.GetBinaryForm(binary, pointer);
@@ -594,6 +627,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         private _RawAcl dacl;
         private _RawAcl sacl;
 
+        #region Properties
         /// <summary>
         /// An unsigned 16-bit field that specifies control access bit flags
         /// </summary>
@@ -638,6 +672,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             get { return ownerSid; }
             set { ownerSid = value; }
         }
+        #endregion
 
         /// <summary>
         /// the constructor
@@ -656,31 +691,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 throw new ArgumentOutOfRangeException(nameof(offset));
             }
 
-            controlFlags = (SECURITY_DESCRIPTOR_Control)BitConverter.ToUInt16(binary, offset + 0x02);
+            controlFlags = (SECURITY_DESCRIPTOR_Control)BitConverter.ToUInt16(binary, offset + 2);
 
             //Get owner sid
-            int ownerStart = BitConverter.ToInt32(binary, offset + 0x04);
+            int ownerStart = BitConverter.ToInt32(binary, offset + 4);
             if (ownerStart != 0)
             {
                 ownerSid = new _SecurityIdentifier(binary, ownerStart);
             }
 
             //Get group sid
-            int groupStart = BitConverter.ToInt32(binary, offset + 0x08);
+            int groupStart = BitConverter.ToInt32(binary, offset + 8);
             if (groupStart != 0)
             {
                 groupSid = new _SecurityIdentifier(binary, groupStart);
             }
 
             //Get sacl
-            int saclStart = BitConverter.ToInt32(binary, offset + 0x0C);
+            int saclStart = BitConverter.ToInt32(binary, offset + 12);
             if (saclStart != 0)
             {
                 sacl = new _RawAcl(binary, saclStart);
             }
 
             //Get dacl
-            int daclStart = BitConverter.ToInt32(binary, offset + 0x10);
+            int daclStart = BitConverter.ToInt32(binary, offset + 16);
             if (daclStart != 0)
             {
                 dacl = new _RawAcl(binary, daclStart);
@@ -720,7 +755,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         {
             get
             {
-                int length = 0x14;
+                int length = DtypUtility.SECURITY_DESCRIPTOR_FIXED_LENGTH;
                 if (Owner != null)
                 {
                     length += Owner.Size;
@@ -762,55 +797,55 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 
             SECURITY_DESCRIPTOR_Control controlFlags = this.controlFlags;
 
-            binary[offset + 0x00] = 1; //revision
-            binary[offset + 0x01] = 0; //reserved
-            DtypUtility.WriteUInt16ToByteArray((ushort)controlFlags, binary, offset + 0x02);
+            binary[offset] = 1; //revision
+            binary[offset + 1] = 0; //Sbz1
+            DtypUtility.WriteUInt16ToByteArray((ushort)controlFlags, binary, offset + 2);
 
-            int pointer = 0x14;
+            int pointer = DtypUtility.SECURITY_DESCRIPTOR_FIXED_LENGTH;
             if (Owner != null)
             {
-                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x04);
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 4);
                 Owner.GetBinaryForm(binary, offset + pointer);
                 pointer += Owner.Size;
             }
             else
             {
-                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x04);
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 4);
             }
 
             if (Group != null)
             {
-                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x08);
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 8);
                 Group.GetBinaryForm(binary, offset + pointer);
                 pointer += Group.Size;
             }
             else
             {
-                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x08);
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 8);
             }
 
             _RawAcl sacl = this.SACL;
             if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.SACLPresent))
             {
-                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x0C);
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 12);
                 sacl.GetBinaryForm(binary, offset + pointer);
                 pointer += this.SACL.Size;
             }
             else
             {
-                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x0C);
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 12);
             }
 
             _RawAcl dacl = this.DACL;
             if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent))
             {
-                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 0x10);
+                DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 16);
                 dacl.GetBinaryForm(binary, offset + pointer);
                 pointer += this.DACL.Size;
             }
             else
             {
-                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 0x10);
+                DtypUtility.WriteInt32ToByteArray(0, binary, offset + 16);
             }
         }
 
