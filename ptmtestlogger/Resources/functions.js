@@ -398,27 +398,6 @@ function GetText(elem)
         return elem.innerText;
 }
 
-// Get date string from json date
-function FormatDate(value) {
-    function pad(number) {
-        if (number < 10) {
-            return '0' + number;
-        }
-        return number;
-    }
-
-    var pattern = /Date\(([^)]+)\)/;
-    var results = pattern.exec(value);
-    var dt = new Date(parseFloat(results[1]));
-    return dt.getUTCFullYear() +
-        '-' + pad(dt.getUTCMonth() + 1) +
-        '-' + pad(dt.getUTCDate()) +
-        ' ' + pad(dt.getUTCHours()) +
-        ':' + pad(dt.getUTCMinutes()) +
-        ':' + pad(dt.getUTCSeconds()) +
-        '.' + (dt.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5);
-}
-
 // show detail in right_sidebar_case
 function ShowDetail(caseDetail, logTypes)
 {
@@ -433,8 +412,8 @@ function ShowDetail(caseDetail, logTypes)
             var pStartTime = document.createElement("p");
             var pEndTime = document.createElement("p");
             var pResult = document.createElement("p");
-            pStartTime.innerHTML = 'Start Time: ' + FormatDate(detailObj['StartTime']);
-            pEndTime.innerHTML = 'End Time: ' + FormatDate(detailObj['EndTime']);
+            pStartTime.innerHTML = 'Start Time: ' + detailObj['StartTime'];
+            pEndTime.innerHTML = 'End Time: ' + detailObj['EndTime'];
             pResult.innerHTML = 'Result: ' + detailObj['Result'];
             caseTime.appendChild(pStartTime);
             caseTime.appendChild(pEndTime);

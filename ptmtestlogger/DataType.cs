@@ -162,5 +162,93 @@ namespace Microsoft.Protocols.TestTools
                 this.CapturePath = null;
             }
         }
+
+        /// <summary>
+        /// Represents detailed test case information for JSON.
+        /// </summary>
+        public class TestCaseDetailForJson
+        {
+            /// <summary>
+            /// The name of the test case
+            /// </summary>
+            public string Name { get; set; }
+
+            /// <summary>
+            /// The start time of the test case
+            /// </summary>
+            public string StartTime { get; set; }
+
+            /// <summary>
+            /// The end time of the test case
+            /// </summary>
+            public string EndTime { get; set; }
+            /// <summary>
+            /// The result of the test case
+            /// </summary>
+            public string Result { get; set; }
+
+            /// <summary>
+            /// The source assembly of the test case
+            /// </summary>
+            public string Source { get; set; }
+            /// <summary>
+            /// The test class of the test case
+            /// </summary>
+            public string ClassType { get; set; }
+
+            /// <summary>
+            /// The Categories of the test case
+            /// </summary>
+            public List<string> Categories { get; set; }
+
+            /// <summary>
+            /// The ErrorStackTrace log of the test case
+            /// </summary>
+            public List<string> ErrorStackTrace { get; set; }
+            /// <summary>
+            /// The ErrorMessage log of the test case
+            /// </summary>
+            public List<string> ErrorMessage { get; set; }
+
+            /// <summary>
+            /// The StandardOut log of the test case
+            /// </summary>
+            public List<StandardOutDetail> StandardOut { get; set; }
+
+            /// <summary>
+            /// The Types in StandardOut log 
+            /// </summary>
+            public List<string> StandardOutTypes { get; set; }
+
+            /// <summary>
+            /// The path of the capture file if any
+            /// </summary>
+            public string CapturePath { get; set; }
+
+            /// <summary>
+            /// Update fields by provided test case detail.
+            /// </summary>
+            /// <param name="detail">Test case detail.</param>
+            public void Update(TestCaseDetail detail)
+            {
+                Name = detail.Name;
+                StartTime = ParseDateTimeOffset(detail.StartTime);
+                EndTime = ParseDateTimeOffset(detail.EndTime);
+                Result = detail.Result;
+                Source = detail.Source;
+                ClassType = detail.ClassType;
+                Categories = detail.Categories;
+                ErrorStackTrace = detail.ErrorStackTrace;
+                ErrorMessage = detail.ErrorMessage;
+                StandardOut = detail.StandardOut;
+                StandardOutTypes = detail.StandardOutTypes;
+                CapturePath = detail.CapturePath;
+            }
+
+            private string ParseDateTimeOffset(DateTimeOffset value)
+            {
+                return $"{value.UtcDateTime.ToString("yyyy-MM-dd HH:mm:ss")}.{value.Millisecond:d03}";
+            }
+        }
     }
 }

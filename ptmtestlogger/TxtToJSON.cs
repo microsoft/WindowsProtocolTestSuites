@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestTools
     {
         // Auxiliary variable to save information as JSON
         // Initialize the maximum length of JSON output to 32M
-       
+
 
         /// <summary>
         /// Translates List<DataType.TestCase> to DataType.TestCasesSummary string
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestTools
                 TestCasesClasses = GetTestCaseClassList(testCaseList)
             };
 
-            return specificDateTimeOffsetSerializer(rs);
+            return Serialize(rs);
         }
 
         /// <summary>
@@ -53,7 +53,12 @@ namespace Microsoft.Protocols.TestTools
         public string ConstructCaseDetail(DataType.TestCaseDetail caseDetail, string captureFolder)
         {
             caseDetail.CapturePath = CopyCaptureAndReturnPath(caseDetail.Name, captureFolder);
-            return specificDateTimeOffsetSerializer(caseDetail);
+
+            var caseDetailForJson = new DataType.TestCaseDetailForJson();
+
+            caseDetailForJson.Update(caseDetail);
+
+            return Serialize(caseDetailForJson);
         }
 
         /// <summary>
@@ -226,34 +231,9 @@ namespace Microsoft.Protocols.TestTools
             return null;
         }
 
-        private string specificDateTimeOffsetSerializer<T>(T obj)
+        private string Serialize<T>(T obj)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            options.Converters.Add(new DateTimeOffsetConverterUsingDateTimeOffsetParse());
-
-            return JsonSerializer.Serialize(obj, options);
-        }
-    }
-
-    /// <summary>
-    /// Translates the data from DateTimeOffset to json by a specific method.
-    /// </summary>
-    public class DateTimeOffsetConverterUsingDateTimeOffsetParse : JsonConverter<DateTimeOffset>
-    {
-        /// <summary>
-        /// Specific deserializer method
-        /// </summary>
-        /// <returns>Returns the DateTimeOffset value from reader</returns>
-        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Specific serializer method, set the specific datetimeoffset string to writer
-        /// </summary>
-        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
-        {
-            writer.WriteStringValue(string.Format("/Date({0})/);", value.ToUnixTimeMilliseconds().ToString()));
+            return JsonSerializer.Serialize(obj);
         }
     }
 }
