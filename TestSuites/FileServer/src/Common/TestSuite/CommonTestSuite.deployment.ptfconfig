@@ -11,17 +11,6 @@
 
     <Group name="PTF">
       <Group name="NetworkCapture">
-        <Property name="Enabled" value="false">
-          <Choice>true,false</Choice>
-          <Description>
-            If it is true, enable the auto-capture feature.
-          </Description>
-        </Property>
-        <Property name="CaptureFileFolder" value="C:\FileServerCaptureFileDirectory">
-          <Description>
-            The path to put the capture files. Old files will be overwritten.
-          </Description>
-        </Property>
         <Property name="StopRunningOnError" value="false">
           <Choice>true,false</Choice>
           <Description>
