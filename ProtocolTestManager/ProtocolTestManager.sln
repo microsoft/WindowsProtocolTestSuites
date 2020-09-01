@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCaseDiscover", "TestCaseDiscover\TestCaseDiscover.csproj", "{1233E897-07F5-4329-A6F6-13A3A839B971}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMTestLogger", "PTMTestLogger\PTMTestLogger.csproj", "{4F2CCCBF-7151-439A-BF65-2190086F8BB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,18 @@ Global
 		{1233E897-07F5-4329-A6F6-13A3A839B971}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1233E897-07F5-4329-A6F6-13A3A839B971}.Release|x64.ActiveCfg = Release|Any CPU
 		{1233E897-07F5-4329-A6F6-13A3A839B971}.Release|x64.Build.0 = Release|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Debug|x64.Build.0 = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Fxcop|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Fxcop|Any CPU.Build.0 = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Fxcop|x64.ActiveCfg = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Fxcop|x64.Build.0 = Debug|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Release|x64.ActiveCfg = Release|Any CPU
+		{4F2CCCBF-7151-439A-BF65-2190086F8BB0}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

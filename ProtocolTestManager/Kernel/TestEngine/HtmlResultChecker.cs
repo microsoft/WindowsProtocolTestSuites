@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -15,8 +16,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public class HtmlResultChecker
     {
-        private HtmlResultChecker()
+        private bool IsCore;
+
+        private HtmlResultChecker(bool isCore)
         {
+            IsCore = isCore;
         }
 
         private static HtmlResultChecker htmlResultChecker = null;
@@ -54,10 +58,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Gets a singleton instance of HtmlResultChecker.
         /// </summary>
+        /// <param name="isCore">The target of test suites, where true indicates .NET Core.</param>
         /// <returns>An instance of HtmlResultChecker.</returns>
-        public static HtmlResultChecker GetHtmlResultChecker()
+        public static HtmlResultChecker GetHtmlResultChecker(bool isCore)
         {
-            if (htmlResultChecker == null) htmlResultChecker = new HtmlResultChecker();
+            if (htmlResultChecker == null) htmlResultChecker = new HtmlResultChecker(isCore);
             return htmlResultChecker;
         }
 
@@ -149,7 +154,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             TestCaseStatus status;
             TestCaseDetail caseDetail;
-            if (!Utility.ParseFileGetStatus(e.FullPath, out status, out caseDetail))
+            if (!Utility.ParseFileGetStatus(e.FullPath, IsCore, out status, out caseDetail))
             {
                 // The file name format is not correct, ignore it.
                 return;
@@ -249,5 +254,92 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// The path of the capture file if any
         /// </summary>
         public string CapturePath;
+    }
+
+    /// <summary>
+    /// Represents detailed test case information for PTM test logger.
+    /// </summary>
+    public class TestCaseDetailForPTMTestLogger
+    {
+        /// <summary>
+        /// The name of the test case
+        /// </summary>
+        public string Name;
+
+        /// <summary>
+        /// The start time of the test case
+        /// </summary>
+        public string StartTime;
+
+        /// <summary>
+        /// The end time of the test case
+        /// </summary>
+        public string EndTime;
+
+        /// <summary>
+        /// The result of the test case
+        /// </summary>
+        public string Result;
+
+        /// <summary>
+        /// The source assembly of the test case
+        /// </summary>
+        public string Source;
+
+        /// <summary>
+        /// The ErrorStackTrace log of the test case
+        /// </summary>
+        public List<string> ErrorStackTrace;
+
+        /// <summary>
+        /// The ErrorMessage log of the test case
+        /// </summary>
+        public List<string> ErrorMessage;
+
+        /// <summary>
+        /// The StandardOut log of the test case
+        /// </summary>
+        public List<StandardOutDetail> StandardOut;
+
+        /// <summary>
+        /// The Types in StandardOut log 
+        /// </summary>
+        public List<string> StandardOutTypes;
+
+        /// <summary>
+        /// The path of the capture file if any
+        /// </summary>
+        public string CapturePath;
+
+        /// <summary>
+        /// Parse to test case detail.
+        /// </summary>
+        /// <returns>Parsed test case detail.</returns>
+        public TestCaseDetail Parse()
+        {
+            var result = new TestCaseDetail
+            {
+                Name = Name,
+                StartTime = ParseToDateTimeOffset(StartTime),
+                EndTime = ParseToDateTimeOffset(EndTime),
+                Result = Result,
+                Source = Source,
+                ErrorStackTrace = ErrorStackTrace,
+                ErrorMessage = ErrorMessage,
+                StandardOut = StandardOut,
+                StandardOutTypes = StandardOutTypes,
+                CapturePath = CapturePath,
+            };
+
+            return result;
+        }
+
+        private static DateTimeOffset ParseToDateTimeOffset(string value)
+        {
+            // 2020-08-28 07:30:05.224
+            var result = DateTimeOffset.ParseExact(value, "yyyy-MM-dd HH:mm:ss.fff", null);
+
+            return result;
+        }
     }
 }

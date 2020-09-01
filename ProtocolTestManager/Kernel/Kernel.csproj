@@ -104,6 +104,8 @@
     <Compile Include="TestEngine\Logger.cs" />
     <Compile Include="TestEngine\PipeSinkServer.cs" />
     <Compile Include="TestEngine\TestEngine.cs" />
+    <Compile Include="TestEngine\TestEngineCore.cs" />
+    <Compile Include="TestEngine\TestEngineFramework.cs" />
     <Compile Include="TestReport\JsonReport.cs" />
     <Compile Include="TestReport\PlainReport.cs" />
     <Compile Include="TestReport\TestReport.cs" />

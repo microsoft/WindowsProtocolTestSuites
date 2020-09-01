@@ -9,9 +9,9 @@ using System.Text;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
-    public class TestEngine
+    public abstract class TestEngine
     {
-        private string EnginePath;
+        protected string EnginePath;
         private Logger logger;
         public string PipeName { get; set; }
 
@@ -24,17 +24,27 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private List<TestCase> filteredTestcases;
 
-        public TestEngine(string enginePath)
+        private bool ShowConsole;
+
+        public TestEngine(string enginePath, bool showConsole)
         {
             EnginePath = enginePath;
+
+            ShowConsole = showConsole;
         }
 
         public void InitializeLogger(List<TestCase> testcases)
         {
-            logger = new Logger();
+            logger = CreateLogger();
             logger.Initialize(testcases);
             this.testcases = testcases;
         }
+
+        /// <summary>
+        /// Create a logger.
+        /// </summary>
+        /// <returns>The logger.</returns>
+        protected abstract Logger CreateLogger();
 
         /// <summary>
         /// Retrieves the Logger object.
@@ -93,40 +103,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
         Process vstestProcess = null;
 
         /// <summary>
-        /// Build vstest arguments. If caseStack is null, build common arguments only.
+        /// Build vstest arguments by test cases.
         /// </summary>
         /// <param name="caseStack">Test cases to run.</param>
-        /// <returns>A StringBuilder</returns>
-        private StringBuilder ConstructVstestArgs(Stack<TestCase> caseStack = null)
-        {
-            StringBuilder args = new StringBuilder();
-            Uri wd = new Uri(WorkingDirectory);
-            foreach (string file in TestAssemblies)
-            {
-                args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
-            }
-            args.AppendFormat("/Settings:\"{0}\" ", TestSetting);
-            args.AppendFormat("/ResultsDirectory:{0} ", "HtmlTestResults");
-            args.AppendFormat("/logger:html;OutputFolder={0} ", ResultOutputFolder);
-            if (caseStack != null)
-            {
-                args.Append("/TestCaseFilter:\"");
-                TestCase testcase = caseStack.Pop();
-                args.AppendFormat("Name={0}", testcase.Name);
-                while (caseStack.Count > 0)
-                {
-                    TestCase test = caseStack.Peek();
-                    if (args.Length + test.Name.Length + 9 + EnginePath.Length < 32000) //Max arg length for command line is 32699. For safety, use a shorter length, 32000.
-                    {
-                        test = caseStack.Pop();
-                        args.AppendFormat("|Name={0}", test.Name);
-                    }
-                    else break;
-                }
-                args.Append("\"");
-            }
-            return args;
-        }
+        /// <returns>The constructed args.</returns>
+        abstract protected string ConstructVstestArgs(Stack<TestCase> caseStack);
+
+        /// <summary>
+        /// Build vstest arguments by filter.
+        /// </summary>
+        /// <param name="filterExpr">Filter expression</param>
+        /// <returns>The constructed args.</returns>
+        abstract protected string ConstructVstestArgs(string filterExpr);
 
         HtmlResultChecker htmlResultChecker;
 
@@ -141,7 +129,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             runningCaseStack = caseStack;
 
-            htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
+            htmlResultChecker = GetHtmlResultChecker();
             htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
             htmlResultChecker.Start(this.WorkingDirectory);
 
@@ -150,8 +138,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 while (caseStack != null && caseStack.Count > 0)
                 {
-                    StringBuilder args = ConstructVstestArgs(caseStack);
-                    var innerException = Run(args.ToString());
+                    string args = ConstructVstestArgs(caseStack);
+                    var innerException = Run(args);
                     if (innerException != null)
                     {
                         exception.Add(innerException);
@@ -176,7 +164,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         WorkingDirectory = WorkingDirectory,
                         FileName = EnginePath,
                         UseShellExecute = false,
-                        CreateNoWindow = true,
+                        CreateNoWindow = !ShowConsole,
                         Arguments = runArgs
                     }
                 };
@@ -236,13 +224,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
             var exception = new List<Exception>();
             try
             {
-                htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
+                htmlResultChecker = GetHtmlResultChecker();
                 htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
                 htmlResultChecker.Start(this.WorkingDirectory);
 
-                StringBuilder args = ConstructVstestArgs();
-                args.AppendFormat("/TestCaseFilter:\"{0}\" ", filterExpr);
-                var innerException = Run(args.ToString());
+                string args = ConstructVstestArgs(filterExpr);
+
+                var innerException = Run(args);
                 if (innerException != null)
                 {
                     exception.Add(innerException);
@@ -254,6 +242,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             ExecutionFinished(exception);
         }
+
+        /// <summary>
+        /// Get HTML result checker.
+        /// </summary>
+        /// <returns>HTML result checker.</returns>
+        protected abstract HtmlResultChecker GetHtmlResultChecker();
 
         private void ExecutionFinished(List<Exception> e)
         {

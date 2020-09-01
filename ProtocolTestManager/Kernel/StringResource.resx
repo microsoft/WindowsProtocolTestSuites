@@ -355,4 +355,7 @@ Please upgrade the test suite to the same version of Protocol Test Manager.</val
   <data name="TestCaseDiscover" xml:space="preserve">
     <value>TestCaseDiscover.exe</value>
   </data>
+  <data name="DotNetNotInstalled" xml:space="preserve">
+    <value>Cannot find the test engine dotnet.exe.</value>
+  </data>
 </root>

@@ -271,6 +271,15 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find the test engine dotnet.exe..
+        /// </summary>
+        internal static string DotNetNotInstalled {
+            get {
+                return ResourceManager.GetString("DotNetNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicated node with type = &quot;{0}&quot;, name = &quot;{1}&quot; found..
         /// </summary>
         internal static string DuplicatePTFConfigNode {

@@ -156,6 +156,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string VSTestPath;
 
         /// <summary>
+        /// The path of dotnet.
+        /// </summary>
+        public string DotNetPath;
+
+        /// <summary>
         /// The arguments of VSTest.
         /// </summary>
         public string VSTestArguments;
@@ -272,6 +277,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             //Config Test Engine
             config.VSTestPath = LocateVSTestEngine();
+
+            config.DotNetPath = LocateDotNetEngine();
 
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
@@ -408,6 +415,59 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 throw new Exception(StringResource.HtmlTestLoggerNotInstalled);
             }
+        }
+
+        private static string LocateDotNetEngine()
+        {
+            string dotNet = "dotnet";
+
+            // Search dotnet.exe in Path environment variables.
+            var pathTypes = new EnvironmentVariableTarget[]
+            {
+                EnvironmentVariableTarget.Machine,
+                EnvironmentVariableTarget.User,
+                EnvironmentVariableTarget.Process,
+            };
+
+            var pathList = pathTypes.Aggregate(new string[0].AsEnumerable(), (acc, val) =>
+            {
+                try
+                {
+                    string path = Environment.GetEnvironmentVariable("Path", val);
+
+                    var pathArr = path.Split(';');
+
+                    return acc.Concat(pathArr);
+                }
+                catch
+                {
+                    return acc;
+                }
+            });
+
+            bool isDotNetFound = pathList.Any(pathItem =>
+            {
+                try
+                {
+                    var fullPath = Path.Combine(pathItem, $"{dotNet}.exe");
+
+                    bool isFound = File.Exists(fullPath);
+
+                    return isFound;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+
+            if (!isDotNetFound)
+            {
+                throw new Exception(StringResource.DotNetNotInstalled);
+            }
+
+            // dotnet exists in path.
+            return dotNet;
         }
 
         private void InitFolders(string testSuiteDir, string installDir)

@@ -14,11 +14,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public class Logger : INotifyPropertyChanged
     {
+        private bool IsCore;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public Logger()
+        /// <param name="isCore">The target of test suites, where true indicates .NET Core.</param>
+        public Logger(bool isCore)
         {
+            IsCore = isCore;
+
             GroupByOutcome = new GroupByOutcome();
             GroupByCategory = new GroupByCategory();
         }
@@ -138,7 +143,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             // Clear RunningTestCase
             if (RunningTestCase != null)
             {
-                if(RunningTestCase.Status == TestCaseStatus.Running)
+                if (RunningTestCase.Status == TestCaseStatus.Running)
                 {
                     GroupByOutcome.ChangeStatus(RunningTestCase.Name, TestCaseStatus.NotRun);
                 }
@@ -153,12 +158,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     TestCaseDetail caseDetail;
                     if (testcase.LogUri != null && System.IO.File.Exists(testcase.LogUri.AbsolutePath))
                     {
-                        Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, out status, out caseDetail); 
+                        Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, IsCore, out status, out caseDetail);
                     }
                     testcase.Status = status;
                 }
                 // Clear Running cases. Should not be here
-                if(testcase.Status == TestCaseStatus.Running && CurrentPageCaseList.Contains(testcase.Name))
+                if (testcase.Status == TestCaseStatus.Running && CurrentPageCaseList.Contains(testcase.Name))
                 {
                     testcase.Status = TestCaseStatus.NotRun;
                     RunningTestCase = null;

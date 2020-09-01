@@ -1249,14 +1249,29 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void InitializeTestEngine()
         {
-            testEngine = new TestEngine(appConfig.VSTestPath)
+            if (appConfig.IsCore)
             {
-                WorkingDirectory = testSuiteDir,
-                TestAssemblies = appConfig.TestSuiteAssembly,
-                TestSetting = appConfig.TestSetting,
-                PipeName = appConfig.PipeName,
-                ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
-            };
+                testEngine = new TestEngineCore(appConfig.DotNetPath)
+                {
+                    WorkingDirectory = testSuiteDir,
+                    TestAssemblies = appConfig.TestSuiteAssembly,
+                    TestSetting = appConfig.TestSetting,
+                    PipeName = appConfig.PipeName,
+                    ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
+                };
+            }
+            else
+            {
+                testEngine = new TestEngineFramework(appConfig.VSTestPath)
+                {
+                    WorkingDirectory = testSuiteDir,
+                    TestAssemblies = appConfig.TestSuiteAssembly,
+                    TestSetting = appConfig.TestSetting,
+                    PipeName = appConfig.PipeName,
+                    ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
+                };
+            }
+
             testEngine.InitializeLogger(selectedCases);
         }
 
@@ -1531,7 +1546,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Parse the file content to get the case status and detail
         /// </summary>
-        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status, out TestCaseDetail detail)
+        public static bool ParseFileGetStatus(string filePath, bool isCore, out TestCaseStatus status, out TestCaseDetail detail)
         {
             status = TestCaseStatus.NotRun;
             detail = null;
@@ -1556,7 +1571,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
             string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
 
             JavaScriptSerializer serializer = new JavaScriptSerializer() { MaxJsonLength = 32 * 1024 * 1024 };
-            detail = serializer.Deserialize<TestCaseDetail>(detailJson);
+
+            if (isCore)
+            {
+                var detailForPTMTestLogger = serializer.Deserialize<TestCaseDetailForPTMTestLogger>(detailJson);
+
+                detail = detailForPTMTestLogger.Parse();
+            }
+            else
+            {
+                detail = serializer.Deserialize<TestCaseDetail>(detailJson);
+            }
 
             switch (detail.Result)
             {
@@ -1618,6 +1643,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Get PTM path.
+        /// </summary>
+        /// <returns>The path to PTM.</returns>
+        public static string GetPTMPath()
+        {
+            var ptmVersion = Directory.GetParent(Assembly.GetEntryAssembly().Location).FullName;
+
+            return ptmVersion.ToString();
         }
     }
 }

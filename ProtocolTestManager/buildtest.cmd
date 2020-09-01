@@ -39,6 +39,12 @@ if ErrorLevel 1 (
 	exit /b 1
 )
 
+%nuget% restore "%TestSuiteRoot%ProtocolTestManager\PTMTestLogger\PTMTestLogger.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
+if ErrorLevel 1 (
+	echo Error: Failed to restore NuGet dependencies
+	exit /b 1
+)
+
 %nuget% restore "%TestSuiteRoot%ProtocolTestManager\PtmCli\PtmCli.csproj" -SolutionDirectory "%TestSuiteRoot%ProtocolTestManager"
 if ErrorLevel 1 (
 	echo Error: Failed to restore NuGet dependencies

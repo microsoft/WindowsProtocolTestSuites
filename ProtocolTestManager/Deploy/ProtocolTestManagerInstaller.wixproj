@@ -61,6 +61,13 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PTMTestLogger\PTMTestLogger.csproj">
+      <Name>PTMTestLogger</Name>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Kernel\Kernel.csproj">
       <Name>Microsoft.Protocols.TestManager.Kernel</Name>
       <Project>{179FFB40-6987-4976-8C26-7D89A5ADF50D}</Project>
