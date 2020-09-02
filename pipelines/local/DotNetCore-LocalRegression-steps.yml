@@ -27,7 +27,7 @@ jobs:
       displayName: "Trigger Test Suite Build"
       inputs:
         targetType: filePath
-        filePath: "$(Build.Repository.LocalPath)/AzureScripts/Get-ExpandedDotNetCoreArchive.ps1"
+        filePath: "WindowsProtocolTestSuitesHelper/AzureScripts/Get-ExpandedDotNetCoreArchive.ps1"
         arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -BuildPipelineParameters "${{parameters[''build.buildPipelineParameters'']}}" -BuildPipelineName "${{parameters[''build.buildPipelineName'']}}" -TargetRepoBranch "${{parameters[''build.targetRepoBranch'']}}" -ArchiveName "${{parameters[''build.archiveName'']}}" -ArtifactsLocalPath "$(Build.ArtifactStagingDirectory)/staging"'
       condition: succeeded()
 
