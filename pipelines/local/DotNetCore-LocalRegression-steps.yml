@@ -18,7 +18,10 @@ jobs:
   timeoutInMinutes: 0
 
   steps:
-  - checkout: self
+    - checkout: self
+      path: 's'
+
+    - checkout: git://${{parameters.extRepoUrl}}@${{parameters.HelperBranch}}
 
   - task: PowerShell@2
     displayName: "Trigger Test Suite Build"
