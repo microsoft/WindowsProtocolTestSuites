@@ -5,7 +5,6 @@
 * [1 Introduction](#1)
   * [1.1 Testing Environments](#1.1)
 * [2 Test Suite Setup Overview](#2)
-  * [2.1 Installed Files and Folders](#2.1)
 * [3 Requirements](#3)
   * [3.1 Network Infrastructure](#3.1)
   * [3.2 Environment Configuration](#3.2)
@@ -65,7 +64,7 @@
   * [7.1 Configure and Run Test Cases Using Protocol Test Manager](#7.1)
   * [7.2 Configure Test Suite Manually](#7.2)
   * [7.3 Run Test Cases with Batch Script](#7.3)
-    * [7.3.1 Run the BVT Test](#7.3.1)
+    * [7.3.1 Run Tests by filters](#7.3.1)
     * [7.3.2 Run All Test Cases](#7.3.2)
   * [7.4 Reviewing Test Results](#7.4)
 * [8 Creating a Custom Test Environment](#8)
@@ -90,6 +89,7 @@ The **File Server Protocol Family Test Suite**, hereinafter referred to as the *
 * [**[MS-SQOS]**](https://msdn.microsoft.com/en-us/library/mt226249.aspx) (Storage Quality of Service Protocol)
 * [**[MS-RSVD]**](https://msdn.microsoft.com/en-us/library/dn393384.aspx) (Remote Shared Virtual Disk Protocol
 * [**[MS-FSA]**](https://msdn.microsoft.com/en-us/library/ff469524.aspx) (File System Algorithms)
+* [**[MS-HVRS]**](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-hvrs/71761708-a421-4e32-8e0d-97e6539dc9eb) (Hyper-V Remote Storage Profile)
 
 This guide specifies the details for using the **Test Suite**  with both Microsoft® Windows® operating system and non-Windows based operating system environments. However, the details about non-Windows systems are limited to generalities, as the focus of setup and configuration is on Windows systems in this User Guide.
 
@@ -126,9 +126,9 @@ The following table summarizes the tasks that are required to get the **File Ser
 
 | Check | Task Overview                                                                                                       | Related Topic                                                                                                                                                                          |
 |-------|---------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| □     | Download the Test Suite installer file **FileServer-TestSuite-ServerEP.msi** here.                                  | For a complete list of files contained in the Test Suite installer, please see section [6 Installed Files and Folders](#6).                                                            |
+| □     | Download the Test Suite package **FileServer-TestSuite-ServerEP.zip** or **FileServer-TestSuite-ServerEP.tar.gz** from GitHub.                                  | For a complete list of files contained in the Test Suite, please see section [6 Installed Files and Folders](#6).                                                            |
 | □     | Plan your test environment and computer configurations with respect to the **File Server Test Suite** requirements. | To review the network, environment, and hardware requirements for the **Test Suite**, see section [3 Requirements](#3).                                                                |
-| □     | Install the **File Server Test Suite** and supporting software on what will be your Driver computer.                | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
+| □     | Extract the **File Server Test Suite** and install supporting software on what will be your Driver computer.                | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
 | □     | Set up the network.                                                                                                 | To review details, see section [4 Network Setup](#4).                                                                                                                                  |
 | □     | Verify connectivity between the Driver computer, SUT, and other network computers, as necessary.                    | To review details, see section [4.3 Verifying Network Computer Connectivity](#4.3).                                                                                                    |
 | □     | Set up a Workgroup environment.                                                                                     | To review details, see section [5.1 Workgroup Environment](#5.1).                                                                                                                      |
@@ -171,7 +171,7 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
   
   Although you can install and run the **Test Suite** components on virtual machines, this User Guide describes the setup of physical machines only.
 
-  * **Driver computer** (Client01) − this machine must be running the Microsoft® Windows 8.1 Enterprise operating system or later.
+  * **Driver computer** (Client01) − this machine must be running the [Operating System](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 3.1. 
 
     See section [3.3.1 Driver Computer Minimum Requirements](#3.3.1) for hardware requirements and section [5.1.1 Set up the Driver Computer in the Workgroup Environment](#5.1.1) for setup instructions.
 
@@ -225,7 +225,7 @@ The minimum requirements for the Driver computer are specified in Table 2 that f
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
-The requirements that follow apply only to a Windows-based Driver computer in the **WORKGROUP** or **DOMAIN** environments.
+The requirements that follow apply only to a Driver computer that has .NET Core 3.1 installed in the **WORKGROUP** or **DOMAIN** environments.
 
 <a name="table.2"></a>
 
@@ -234,7 +234,7 @@ The requirements that follow apply only to a Windows-based Driver computer in th
 | Requirement       | Description                                                  |
 |-------------------|--------------------------------------------------------------|
 | Computer name     | Client01                                                     |
-| Operating system  | Microsoft® Windows 8.1, Enterprise Edition or later versions |
+| Operating system  | The [operating system](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 3.1
 | Memory            | 2 GB RAM                                                     |
 | Disk space        | 60 GB                                                        |
 | Network interface | Requires dual network interface cards (NICs)                 |
@@ -324,7 +324,9 @@ All of the following software must be installed on the driver computer. They hav
 
 **Required Software**
 
-All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites.
+* All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites.
+
+* Download FileServer-TestSuite-ServerEP.zip or FileServer-TestSuite-ServerEP.tar.gz and extract it to the driver computer. Name the root path of the extracted files **FileServer-TestSuite-ServerEP**. The name is used throughout the document.
 
 **Optional Software**
 
@@ -334,7 +336,7 @@ All common softwares listed in [prerequisites](https://github.com/microsoft/Wind
 
 * **Microsoft Message Analyzer**
 
-    **Microsoft® Message Analyzer** (MMA) is listed here as an optional tool because the test cases of themselves neither perform live captures or capture verifications during execution. However, MMA can be helpful with debugging test case results, by analyzing ETL files that are generated by the Test Cases, that is, if you enable the the Automatic Network Capturing feature in the Protocol Test Manager (PTM) during test case configuration. The Automatic Network Capturing feature is further described in the [PTF User Guide](https://github.com/Microsoft/ProtocolTestFramework/blob/main/docs/PTFUserGuide.md#-automatic-network-capturing).
+    **Microsoft® Message Analyzer** (MMA) is listed here as an optional tool because the test cases of themselves neither perform live captures or capture verifications during execution. 
 
     ![](./image/FileServerUserGuide/image1.png)Note
 
@@ -524,7 +526,7 @@ Perform the steps that follow to set up the Driver computer:
 
 For more information about turning off the firewall on Windows platforms, see section [5.3.13 Turn off Firewalls](#5.3.13).
 
-3. Install the required software, as described in section [3.4 Software Requirements](#3.4), which includes installing the **FileServer-TestSuite-ServerEP.msi** package onto the Driver computer.
+3. Install the required software, as described in section [3.4 Software Requirements](#3.4), which includes downloading and extracting the **FileServer-TestSuite-ServerEP.zip (tar.gz) ** package onto the Driver computer.
 
 4. For x64-based machines, start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**; then type following command:  
 
@@ -534,7 +536,6 @@ For more information about turning off the firewall on Windows platforms, see se
 
 5. For x86-based machines, start Windows PowerShell (x86) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**; then execute the same command as immediately above.
 
-6. Create a new folder with path **%SystemDrive%\\FileServerCaptureFileDirectory**. This folder can be used to save the event trace log (ETL) files automatically generated by the Test Cases, which files you can analyze with Microsoft® Message Analyzer. Note that generation of ETL files will occur only if you enable **NetworkCapture** on the **Configure Test Cases** tab of the PTM and that you run the PTM as Administrator.
 
 #### <a name="5.1.2"/> 5.1.2 Setup the SUT Computer in the Workgroup Environment
 
@@ -1303,7 +1304,7 @@ To enable an OpLock on a share, perform the steps that follow.
 
     For further details, see section [5.3.1 Create a share](#5.3.1).
 
-2. Logon to the Driver computer and locate the **ShareUtil.exe file** in the following folder: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\Bin\\**
+2. Logon to the Driver computer and locate the **ShareUtil.exe file** in the following folder: FileServer-TestSuite-ServerEP\\Utils\\
 
     Copy the file to the SUT computer.
 
@@ -3259,11 +3260,11 @@ To create a volume mount point, perform the steps that follow.
 
 ## <a name="6"/> 6 Installed Files and Folders
 
-The installation process adds the folders and files to the Driver computer in this location: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\**
+Extract FileServer-TestSuite-ServerEP.zip or FileServer-TestSuite-ServerEP.tar.gz to your computer. 
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
-This path may vary based on your setup. Also, the &lt;version#&gt; placeholder indicates the installed build version number of the **Test Suite**. The installed folders and files are described in the Table that follows.
+The extracted folders and files are described in the Table that follows.
 
 <a name="table.11"></a>
 
@@ -3271,12 +3272,13 @@ This path may vary based on your setup. Also, the &lt;version#&gt; placeholder i
 
 | File or Folder | Description                                                                |
 |----------------|----------------------------------------------------------------------------|
-| Batch          | Command files that you use to run individual test cases or all test cases. |
+| Batch          | Command files that you use to run a group of test cases or all test cases. |
 | Bin            | Test Suite binaries and configuration files. This folder contains the following sub-folders:<br>&emsp;&emsp;- ServerFailover — contains .ps1 scripts that are called by specific test cases. |
 | Scripts        | The folder contains .ps1 scripts that are used to set up the test environment. |
+| Utils          | The folder contains ShareUtil that is used to config share properties. |
 | License.rtf    | The End User License Agreement.                                            |
 
-\*PowerShell scripts are located in the **WindowsSutControlAdapter** folder under the **ServerFailover** directory.
+\*PowerShell scripts are located in the **WindowsSutControlAdapter** folder.
 
 ## <a name="7"/> 7 Configure and Run Test Cases
 
@@ -3302,7 +3304,7 @@ This section explains how to configure the **Test Suite** and how to run test ca
 
 To configure the **Test Suite**, perform that steps that follow.
 
-1. If you have not already done so, install the Protocol Test Manager on the Driver (Client01) computer by double-clicking the ProtocolTestManager.msi and following the steps of the **Protocol Test Manager Setup Wizard**. For more information, see section [3.4 Software Requirements](#3.4).
+1. If you have not already done so, download and extract the Protocol Test Manager to the Driver (Client01) computer. For more information, see section [3.4 Software Requirements](#3.4).
 
 2. When complete, launch the Protocol Test Manager application from the desktop shortcut that was created during Protocol Test Manager installation on the Driver (Client01) computer. On the **Select Test Suite** tab of **Protocol Test Manager**, select the **File Server** test suite to begin configuration, and then click **Configure Wizard**.
 
@@ -3444,10 +3446,6 @@ To configure the **Test Suite**, perform that steps that follow.
 
     You can also mouse-hover over any item in the **Properties** column on the **Configure test case properties** tab of **Protocol Test Manager** to display a tool tip that contains the meaning of the item over which your mouse is hovering, also indicated in the figure that follows.
 
-    ![](./image/FileServerUserGuide/image2.png)**Important**
-
-    If you want to enable capture of event trace logs (ETL) with Message Analyzer during test case execution, you must set the **Enabled** field of the **NetworkCapture** property to True in the **PTF Group** on the **Configure Test Cases** tab of **PTM**.
-
     <a name="fig.190"></a>
 
     ![](./image/FileServerUserGuide/image160.png)
@@ -3535,23 +3533,27 @@ You can also change configuration settings by editing the **\\*.deployment.ptfco
 
 * ServerFailoverTestSuite.deployment.ptfconfig − settings in **ServerFailoverTestSuite.deployment.ptfconfig** file are for the File Server failover test suite.
 
-* MS-DFSC_ServerTestSuite.deployment.ptfconfig − settings in the **MSDFSC_ServerTestSuite.deployment.ptfconfig** file are for the Distributed File System (DFSC) server test suite.
+* MS-DFSC_ServerTestSuite.deployment.ptfconfig − settings in the **MS-DFSC_ServerTestSuite.deployment.ptfconfig** file are for the Distributed File System (DFSC) server test suite.
 
-* MS-FSRVP_ServerTestSuite.deployment.ptfconfig − settings in the **MSFSRVP_ServerTestSuite.deployment.ptfconfig** file are for the File Server Remote VSS Protocol (FSRVP) server test suite.
+* MS-FSRVP_ServerTestSuite.deployment.ptfconfig − settings in the **MS-FSRVP_ServerTestSuite.deployment.ptfconfig** file are for the File Server Remote VSS Protocol (FSRVP) server test suite.
 
-* MS-SMB2_ServerTestSuite.deployment.ptfconfig − settings in the **MSSMB2_ServerTestSuite.deployment.ptfconfig** file are for the Server Message Block (SMB2) test suite.
+* MS-SMB2_ServerTestSuite.deployment.ptfconfig − settings in the **MS-SMB2_ServerTestSuite.deployment.ptfconfig** file are for the Server Message Block (SMB2) test suite.
 
-* MS-SMB2Model_ServerTestSuite.deployment.ptfconfig − settings in the **MSSMB2Model_ServerTestSuite.deployment.ptfconfig** file are for the Server Message Block (SMB2) model test suite.
+* MS-SMB2Model_ServerTestSuite.deployment.ptfconfig − settings in the **MS-SMB2Model_ServerTestSuite.deployment.ptfconfig** file are for the Server Message Block (SMB2) model test suite.
 
-* MS-RSVD_ServerTestSuite.deployment.ptfconfig − settings in the **MSRSVD_ServerTestSuite.deployment.ptfconfig** file are for the Remote Shared Virtual Disk (RSVD) server test suite.
+* MS-RSVD_ServerTestSuite.deployment.ptfconfig − settings in the **MS-RSVD_ServerTestSuite.deployment.ptfconfig** file are for the Remote Shared Virtual Disk (RSVD) server test suite.
 
-* MS-SQOS_ServerTestSuite.deployment.ptfconfig − settings in the **MSSQOS_ServerTestSuite.deployment.ptfconfig** file are for the Storage Quality of Service (SQOS) server test suite.
+* MS-SQOS_ServerTestSuite.deployment.ptfconfig − settings in the **MS-SQOS_ServerTestSuite.deployment.ptfconfig** file are for the Storage Quality of Service (SQOS) server test suite.
 
 * Auth_ServerTestSuite.deployment.ptfconfig − settings in the **Auth_ServerTestSuite.deployment.ptfconfig** file are for the Auth test suite.
 
+* MS-FSA_ServerTestSuite.deployment.ptfconfig - settings in the **MS-FSA_ServerTestSuite.deployment.ptfconfig** file are for the FSA test suite.
+
+* MS-FSAModel_ServerTestSuite.deployment.ptfconfig - settings in the **MS-FSAModel_ServerTestSuite.deployment.ptfconfig** file are for the FSA model test suite.
+
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
-You can locate the .ptfconfig files in the following directory location after the **File Server Protocol Family Test Suite** is installed:  **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\Bin\\** The data in these XML files is invoked whenever you run test cases with the use of either **batch scripts** or the **Protocol Test Manager**.
+You can locate the .ptfconfig files in the following directory location after the **File Server Protocol Family Test Suite** is unpacked:  **FileServer-TestSuite-ServerEP\\Bin\\** The data in these XML files is invoked whenever you run test cases with the use of either **batch scripts** or the **Protocol Test Manager**.
 
 ![](./image/FileServerUserGuide/image2.png)**Important**
 
@@ -3561,63 +3563,42 @@ For specific configuration details, refer to a corresponding \*.deployment.ptfco
 
 The **File Server Protocol Family Test Suite** includes command (**.cmd**) batch files that you can use to run some basic test cases. Each test case verifies a protocol implementation based on a predefined scenario. You can run the .cmd test case files directly from the following directory:
 
-**%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\Batch\\**
+**FileServer-TestSuite-ServerEP\\Batch\\**
 
 To run these batch files, either double-click one or more of them directly from the specified directory location or run them from a command prompt.
 
-#### <a name="7.3.1"/> 7.3.1 Run the BVT Tests
+#### <a name="7.3.1"/> 7.3.1 Run Tests by filters
 
-This **Test Suite** includes a set of basic tests known as BVT tests. Together these test cases perform basic functionality tests that evaluate an implementation residing on an SUT computer. The BVT test cases are basic tests of specific features that should pass, which therefore makes them high priority tests.  You are advised to run the BVT test cases first and then run other test cases.
+To run a specific group of test cases that are categorized by feature names, perform the appropriate steps that follow:
 
-To run the BVT test cases in a **WORKGROUP** or **DOMAIN** environment, perform the appropriate steps that follow:
+* Start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**.
 
-1. To run the **BVT** test cases in a **WORKGROUP** environment:
+* Enter the **FileServer-TestSuite-ServerEP\\Batch\\** directory, define your filter (For example, "TestCategory=BVT&TestCategory=SMB311") and type the command below:
 
-    * From the desktop of the Driver computer, double-click the **Run FileServer ServerWorkgroup_BVTTestCases** shortcut that was created during the installation process.
+  ```
+      .\RunTestCasesByFilter.ps1 -Filter $Filter
+  ```    
 
-    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\Batch\\** directory and double-click the **Workgroup_RunBVTTestCases.cmd** file.
-
-2. To run the **BVT** test cases in a **DOMAIN** environment:
-
-    * From the desktop of the Driver computer, double-click the **Run FileServer ServerDomain_BVTTestCases** shortcut that was created during the installation process.
-
-    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\Batch\\** directory and double-click the **Domain_RunBVTTestCases.cmd** file.
 
 #### <a name="7.3.2"/> 7.3.2 Run All Test Cases
 
-Perform the steps that follow to run all test cases in either the WORKGROUP or DOMAIN environment, as required:
+Perform the steps that follow to run all test cases:
 
-1. To run all test cases in a **WORKGROUP** environment:
+* Start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**.
 
-    * From the desktop of the Driver computer, double-click the **Run FileServer ServerWorkgroup_AllTestCases** shortcut that was created during the installation process.
+* Enter the **FileServer-TestSuite-ServerEP\\Batch\\** directory and type the command below:
 
-    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\\Batch\\** directory and double-click the **Workgroup_RunAllTestCases.cmd** file.
-
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If you run all core/preconfigured test cases and your environment does not support certain features, you will see errors in the command console and in the PTM with respect to methods that failed when attempting to test those features.
-
-2. To run test cases with the RunTestCasesByCategory.cmd script, do the following:
-
-    * From the desktop of the Driver computer, double-click the **RunTestCasesByCategory** shortcut.
-
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    To run a specific group of test cases that are categorized by feature names, input the name of the appropriate test categories that are listed in the command console that appears when you run the **RunTestCasesByCategory.cmd** script.
-
-3. To run all test cases in a **DOMAIN** environment:
-
-    * From the desktop of the Driver computer, double-click the **Run FileServer ServerDomain_AllTestCases** shortcut that was created during the installation process.
-
-    * Alternatively, open the **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\\Batch\\** directory and double-click the **Domain_RunAllTestCases.cmd** file.
+  ```
+      .\RunAllTestCases.ps1
+  ```    
 
 ### <a name="7.4"/> 7.4 Reviewing Test Results
 
 The **File Server Protocol Family Test Suite** generates test result files in different file paths, depending on the manner in which test cases were executed. For example, when running test cases from the following sources, results are saved in the specified locations:
 
-* **Batch scripts (.cmd)** − results are saved in this location: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\ServerEndpoint\\&lt;version#&gt;\\Batch\\TestResults\\**
+* **Batch scripts (.ps1 or .sh)** − results are saved in this location: **FileServer-TestSuite-ServerEP\\TestResults\\**
 
-* **Protocol Test Manager** − results are saved in this location: **%SystemDrive%\\MicrosoftProtocolTests\\FileServer\\Server-Endpoint\\&lt;version#&gt;\\TestResults\\**
+* **Protocol Test Manager** − results are saved in this location: **FileServer-TestSuite-ServerEP\\HtmlTestResults\\**
 
 When your tests are complete, you can review the results in the respective locations as cited above.
 
@@ -3641,27 +3622,17 @@ The StandardOutput data can also be displayed separately in HTML format.
 
 If you want to create a Test Suite to customize a testing environment and test cases to your own specifications, review the following documentation:
 
-[Getting Started Guide for the Protocol Test Framework](https://github.com/Microsoft/ProtocolTestFramework/blob/master/docs/PTFUserGuide.md)
+[Getting Started Guide for the Protocol Test Framework](https://github.com/Microsoft/ProtocolTestFramework/blob/main/docs/PTFUserGuide.md)
 
-[Spec Explorer](https://docs.microsoft.com/en-us/previous-versions/visualstudio/spec-explorer/ee620411(v=specexplorer.10))
 
 ## <a name="9"/> 9 Debugging Test Cases
 
-You can use the Visual Studio solution (.sln) file included with the  **File Server Protocol Family Test Suite** to debug the test cases that you run against your own protocol implementations. The **FileServer.sln** file is located [here](../../src/).
+You can use the Visual Studio solution (.sln) file included with the  **File Server Protocol Family Test Suite** to debug the test cases that you run against your own protocol implementations. The **FileServer.sln** file is located [here](https://github.com/microsoft/WindowsProtocolTestSuites/tree/main/TestSuites/FileServer/src).
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-While using Microsoft® Visual Studio® 2017 or later to run test cases, the **Test Suite** may throw an exception with the message: **Cannot get test site**. To resolve this issue, navigate to **Test** -&gt; **Test Settings** -&gt; **Select Test Settings File**, and then select the test settings file ServerLocalTestRun.testrunconfig (under this folder <https://github.com/Microsoft/WindowsProtocolTestSuites/tree/main/TestSuites/FileServer/src>)
-
-<a name="fig.196"></a>
-
-![](./image/FileServerUserGuide/image166.png)
-
-Figure 196. Microsoft Visual Studio: Correcting the exception **Cannot get test site**
 
 To debug a test case, perform the steps that follow.
 
-1. On the Driver computer, use Microsoft® Visual Studio® to open the following solution file: [FileServer.sln](../../src/).
+1. On the Driver computer, use Microsoft® Visual Studio® to open the following solution file: [FileServer.sln](https://github.com/microsoft/WindowsProtocolTestSuites/tree/main/TestSuites/FileServer/src).
 
 2. In Visual Studio, in the Solution Explorer window, right-click the **Solution** **FileServer**, and then select **Build Solution**.
 
