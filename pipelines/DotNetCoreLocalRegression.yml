@@ -26,4 +26,4 @@ jobs:
       EnvironmentName: $(test.environmentName)
       HelperBranch: $(test.helperBranch)
       FilterSuffix: $(test.FilterSuffix)
-      BuildPipelineName: ${test.BuildPipelineName}
+      BuildPipelineName: $(test.BuildPipelineName)
