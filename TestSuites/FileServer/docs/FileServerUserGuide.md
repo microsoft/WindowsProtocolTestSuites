@@ -5,7 +5,6 @@
 * [1 Introduction](#1)
   * [1.1 Testing Environments](#1.1)
 * [2 Test Suite Setup Overview](#2)
-  * [2.1 Installed Files and Folders](#2.1)
 * [3 Requirements](#3)
   * [3.1 Network Infrastructure](#3.1)
   * [3.2 Environment Configuration](#3.2)
@@ -90,6 +89,7 @@ The **File Server Protocol Family Test Suite**, hereinafter referred to as the *
 * [**[MS-SQOS]**](https://msdn.microsoft.com/en-us/library/mt226249.aspx) (Storage Quality of Service Protocol)
 * [**[MS-RSVD]**](https://msdn.microsoft.com/en-us/library/dn393384.aspx) (Remote Shared Virtual Disk Protocol
 * [**[MS-FSA]**](https://msdn.microsoft.com/en-us/library/ff469524.aspx) (File System Algorithms)
+* [**[MS-HVRS]**](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-hvrs/71761708-a421-4e32-8e0d-97e6539dc9eb) (Hyper-V Remote Storage Profile)
 
 This guide specifies the details for using the **Test Suite**  with both Microsoft® Windows® operating system and non-Windows based operating system environments. However, the details about non-Windows systems are limited to generalities, as the focus of setup and configuration is on Windows systems in this User Guide.
 
@@ -126,9 +126,9 @@ The following table summarizes the tasks that are required to get the **File Ser
 
 | Check | Task Overview                                                                                                       | Related Topic                                                                                                                                                                          |
 |-------|---------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| □     | Download the Test Suite installer file **FileServer-TestSuite-ServerEP.msi** here.                                  | For a complete list of files contained in the Test Suite installer, please see section [6 Installed Files and Folders](#6).                                                            |
+| □     | Download the Test Suite package **FileServer-TestSuite-ServerEP.zip** or **FileServer-TestSuite-ServerEP.tar.gz** from GitHub.                                  | For a complete list of files contained in the Test Suite, please see section [6 Installed Files and Folders](#6).                                                            |
 | □     | Plan your test environment and computer configurations with respect to the **File Server Test Suite** requirements. | To review the network, environment, and hardware requirements for the **Test Suite**, see section [3 Requirements](#3).                                                                |
-| □     | Install the **File Server Test Suite** and supporting software on what will be your Driver computer.                | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
+| □     | Extract the **File Server Test Suite** and install supporting software on what will be your Driver computer.                | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
 | □     | Set up the network.                                                                                                 | To review details, see section [4 Network Setup](#4).                                                                                                                                  |
 | □     | Verify connectivity between the Driver computer, SUT, and other network computers, as necessary.                    | To review details, see section [4.3 Verifying Network Computer Connectivity](#4.3).                                                                                                    |
 | □     | Set up a Workgroup environment.                                                                                     | To review details, see section [5.1 Workgroup Environment](#5.1).                                                                                                                      |
@@ -171,7 +171,7 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
   
   Although you can install and run the **Test Suite** components on virtual machines, this User Guide describes the setup of physical machines only.
 
-  * **Driver computer** (Client01) − this machine must be running the Microsoft® Windows 8.1 Enterprise operating system or later.
+  * **Driver computer** (Client01) − this machine must be running the [Operating System](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 3.1. 
 
     See section [3.3.1 Driver Computer Minimum Requirements](#3.3.1) for hardware requirements and section [5.1.1 Set up the Driver Computer in the Workgroup Environment](#5.1.1) for setup instructions.
 
@@ -225,7 +225,7 @@ The minimum requirements for the Driver computer are specified in Table 2 that f
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
-The requirements that follow apply only to a Windows-based Driver computer in the **WORKGROUP** or **DOMAIN** environments.
+The requirements that follow apply only to a Driver computer that has .NET Core 3.1 installed in the **WORKGROUP** or **DOMAIN** environments.
 
 <a name="table.2"></a>
 
@@ -234,7 +234,7 @@ The requirements that follow apply only to a Windows-based Driver computer in th
 | Requirement       | Description                                                  |
 |-------------------|--------------------------------------------------------------|
 | Computer name     | Client01                                                     |
-| Operating system  | Microsoft® Windows 8.1, Enterprise Edition or later versions |
+| Operating system  | The [operating system](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 3.1
 | Memory            | 2 GB RAM                                                     |
 | Disk space        | 60 GB                                                        |
 | Network interface | Requires dual network interface cards (NICs)                 |
@@ -324,7 +324,9 @@ All of the following software must be installed on the driver computer. They hav
 
 **Required Software**
 
-All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites.
+* All common softwares listed in [prerequisites](https://github.com/microsoft/WindowsProtocolTestSuites#prerequisites) for running Windows Protocol Test Suites.
+
+* Download FileServer-TestSuite-ServerEP.zip or FileServer-TestSuite-ServerEP.tar.gz and extract it to the driver computer. Name the root path of the extracted files **FileServer-TestSuite-ServerEP**. The name is used throughout the document.
 
 **Optional Software**
 
@@ -524,7 +526,7 @@ Perform the steps that follow to set up the Driver computer:
 
 For more information about turning off the firewall on Windows platforms, see section [5.3.13 Turn off Firewalls](#5.3.13).
 
-3. Install the required software, as described in section [3.4 Software Requirements](#3.4), which includes installing the **FileServer-TestSuite-ServerEP.msi** package onto the Driver computer.
+3. Install the required software, as described in section [3.4 Software Requirements](#3.4), which includes downloading and extracting the **FileServer-TestSuite-ServerEP.zip (tar.gz) ** package onto the Driver computer.
 
 4. For x64-based machines, start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**; then type following command:  
 
@@ -534,7 +536,6 @@ For more information about turning off the firewall on Windows platforms, see se
 
 5. For x86-based machines, start Windows PowerShell (x86) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**; then execute the same command as immediately above.
 
-6. Create a new folder with path **%SystemDrive%\\FileServerCaptureFileDirectory**. This folder can be used to save the event trace log (ETL) files automatically generated by the Test Cases, which files you can analyze with Microsoft® Message Analyzer. Note that generation of ETL files will occur only if you enable **NetworkCapture** on the **Configure Test Cases** tab of the PTM and that you run the PTM as Administrator.
 
 #### <a name="5.1.2"/> 5.1.2 Setup the SUT Computer in the Workgroup Environment
 
@@ -3259,7 +3260,7 @@ To create a volume mount point, perform the steps that follow.
 
 ## <a name="6"/> 6 Installed Files and Folders
 
-Extract FileServer-TestSuite-ServerEP.zip to your computer.
+Extract FileServer-TestSuite-ServerEP.zip or FileServer-TestSuite-ServerEP.tar.gz to your computer. 
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
