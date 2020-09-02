@@ -276,9 +276,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            config.VSTestPath = LocateVSTestEngine();
-
-            config.DotNetPath = LocateDotNetEngine();
+            if (isCore)
+            {
+                config.DotNetPath = LocateDotNetEngine();
+            }
+            else
+            {
+                config.VSTestPath = LocateVSTestEngine();
+            }
 
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)

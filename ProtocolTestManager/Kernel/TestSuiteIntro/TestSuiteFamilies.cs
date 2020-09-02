@@ -184,20 +184,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
                             continue;
                         }
 
-                        if (testsuite.IsInstalled)
-                        {
-                            testsuite.TestSuiteFolder = (testsuite.TestSuiteFolderFormat != null) ?
-                                    testsuite.TestSuiteFolderFormat
-                                        .Replace("$(TestSuiteName)", testsuite.TestSuiteName)
-                                        .Replace("$(TestSuiteVersion)", testsuite.TestSuiteVersion)
-                                        .Replace("$(TestSuiteEndpoint)", testsuite.TestSuiteEndPoint)
-                                    : string.Format(StringResource.TestSuiteFolder,
-                                        testsuite.TestSuiteName,
-                                        testsuite.TestSuiteEndPoint,
-                                        testsuite.TestSuiteVersion);
+                        testsuite.TestSuiteFolder = (testsuite.TestSuiteFolderFormat != null) ?
+                                testsuite.TestSuiteFolderFormat
+                                    .Replace("$(TestSuiteName)", testsuite.TestSuiteName)
+                                    .Replace("$(TestSuiteVersion)", testsuite.TestSuiteVersion)
+                                    .Replace("$(TestSuiteEndpoint)", testsuite.TestSuiteEndPoint)
+                                : string.Format(StringResource.TestSuiteFolder,
+                                    testsuite.TestSuiteName,
+                                    testsuite.TestSuiteEndPoint,
+                                    testsuite.TestSuiteVersion);
 
-                            testsuite.IsCore = false;
-                        }
+                        testsuite.IsCore = false;
                     }
 
                     string lastProfileFile = Path.Combine(
@@ -224,8 +221,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             var items = CustomizedTestSuiteConfiguration.Load(customizedConfig);
 
-            bool found = false;
-
             var itemToUpdate = items.Where(configItem => configItem.Name == item.Name).FirstOrDefault();
 
             if (itemToUpdate == null)
@@ -235,6 +230,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             else
             {
                 itemToUpdate.Location = item.Location;
+
+                itemToUpdate.Version = item.Version;
 
                 itemToUpdate.IsCore = item.IsCore;
             }

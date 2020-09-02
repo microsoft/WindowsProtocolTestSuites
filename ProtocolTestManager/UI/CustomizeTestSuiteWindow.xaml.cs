@@ -2,11 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestManager.Kernel;
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+
+using Timer = System.Windows.Forms.Timer;
 
 namespace Microsoft.Protocols.TestManager.UI
 {
@@ -17,9 +18,19 @@ namespace Microsoft.Protocols.TestManager.UI
     {
         private const string NA = "N/A";
 
+        private const string DETECTING = "Detecting...";
+
         private TestSuiteInfo notCustomizedInfo;
 
         private CustomizedTestSuiteConfigurationItem result;
+
+        private Timer timer;
+
+        private bool isDetecting;
+
+        private bool needUpdate;
+
+        private bool changedDuringDetecting;
 
         public CustomizeTestSuiteWindow()
         {
@@ -28,42 +39,37 @@ namespace Microsoft.Protocols.TestManager.UI
 
         public CustomizedTestSuiteConfigurationItem ShowDialog(TestSuiteInfo info, TestSuiteInfo notCustomized)
         {
-            CheckCore.IsChecked = false;
-
-            CheckFx.IsChecked = false;
-
             notCustomizedInfo = notCustomized;
 
-            if (info.IsCore)
-            {
-                CheckCore.IsChecked = true;
+            bool checkCore = info.IsCore ? true : !notCustomized.IsInstalled;
 
-                CoreVersion.Text = info.TestSuiteVersion;
+            CoreVersion.Text = info.IsCore ? info.TestSuiteVersion : NA;
 
-                Location.Text = info.TestSuiteFolder;
-            }
-            else
-            {
-                CheckFx.IsChecked = notCustomized.IsInstalled;
+            Location.Text = info.IsCore ? info.TestSuiteFolder : null;
 
-                CoreVersion.Text = NA;
+            CheckCore.IsChecked = checkCore;
 
-                Location.Text = null;
-            }
+            CheckFx.IsChecked = !checkCore;
 
-            if (notCustomized.IsInstalled)
-            {
-                CheckFx.IsChecked = !info.IsCore;
+            InstalledVersion.Text = notCustomized.IsInstalled ? notCustomized.TestSuiteVersion : NA;
 
-                InstalledVersion.Text = notCustomized.TestSuiteVersion;
-            }
-            else
-            {
-                // Disable the radio button if no corresponding MSI installed.
-                CheckFx.IsEnabled = false;
+            // Disable the radio button if no corresponding MSI installed.
+            CheckFx.IsEnabled = notCustomized.IsInstalled;
 
-                InstalledVersion.Text = NA;
-            }
+            // Initialize timer for detecting the path user specified.
+            isDetecting = false;
+
+            needUpdate = false;
+
+            changedDuringDetecting = false;
+
+            timer = new Timer();
+
+            timer.Interval = 100;
+
+            timer.Tick += Timer_Tick;
+
+            timer.Start();
 
             var ret = ShowDialog();
 
@@ -83,7 +89,9 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             if (IsCoreCheck())
             {
-                if (CoreVersion.Text == NA)
+                string version = Utility.GetCoreTestSuiteVersion(Location.Text);
+
+                if (version == null)
                 {
                     DialogResult = false;
 
@@ -98,7 +106,7 @@ namespace Microsoft.Protocols.TestManager.UI
                     result = new CustomizedTestSuiteConfigurationItem
                     {
                         Location = Location.Text,
-                        Version = CoreVersion.Text,
+                        Version = version,
                         IsCore = true,
                     };
                 }
@@ -164,11 +172,55 @@ namespace Microsoft.Protocols.TestManager.UI
             Location.Text = dialog.SelectedPath;
         }
 
-        private void LocationChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void OnLocationChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            string version = Utility.GetCoreTestSuiteVersion(Location.Text);
+            needUpdate = true;
+        }
 
-            CoreVersion.Text = version == null ? NA : version;
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (isDetecting)
+            {
+                if (needUpdate)
+                {
+                    needUpdate = false;
+
+                    changedDuringDetecting = true;
+                }
+
+                return;
+            }
+            else if (needUpdate || changedDuringDetecting)
+            {
+                needUpdate = false;
+
+                changedDuringDetecting = false;
+            }
+            else
+            {
+                return;
+            }
+
+            isDetecting = true;
+
+            CoreVersion.Text = DETECTING;
+
+            string text = Location.Text;
+
+            Task.Run(() =>
+            {
+                string version = Utility.GetCoreTestSuiteVersion(text);
+
+                // Add sleep to avoid triggering detection too frequently.
+                Thread.Sleep(50);
+
+                Dispatcher.Invoke(() =>
+                {
+                    CoreVersion.Text = version == null ? NA : version;
+
+                    isDetecting = false;
+                });
+            });
         }
     }
 }

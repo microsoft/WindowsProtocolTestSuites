@@ -22,8 +22,8 @@
                     <Label Content="Path to the root of extracted archive. (E.g., D:\Test\FileServer-TestSuite-ServerEP) " Target="{Binding ElementName=Location}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" HorizontalAlignment="Left" />
                 </Grid>
                 <Grid Height="25">
-                    <TextBox Name="Location"  Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Margin="20,0,0,0" Width="460" Height="18" HorizontalAlignment="Left" TextChanged="LocationChanged" />
-                    <Button Content="..." Grid.Column="2" Grid.Row="1" Click="OnBrowseClicked" VerticalAlignment="Center" HorizontalAlignment="Left" Width="30" Margin="500,0,0,0" />
+                    <TextBox Name="Location"  Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Center" Margin="20,0,0,0" Width="460" Height="18" HorizontalAlignment="Left" TextChanged="OnLocationChanged" />
+                    <Button Name="Browse" Content="..." Grid.Column="2" Grid.Row="1" Click="OnBrowseClicked" VerticalAlignment="Center" HorizontalAlignment="Left" Width="30" Margin="500,0,0,0" />
                 </Grid>
                 <Grid Height="25">
                     <Label Content="Detected version" Target="{Binding ElementName=CoreVersion}" Margin="10,0,0,0" />
