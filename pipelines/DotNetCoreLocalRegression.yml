@@ -13,10 +13,10 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines
+      ref: v-hazh/DotNetCoreLocalRegression
 
 jobs:
-  - template: pipelines/local/LocalRegression-steps.yml@template
+  - template: pipelines/local/DotNetCore-LocalRegression-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
