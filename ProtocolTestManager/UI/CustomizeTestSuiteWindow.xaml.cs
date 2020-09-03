@@ -85,11 +85,15 @@ namespace Microsoft.Protocols.TestManager.UI
             }
         }
 
-        private void OnOKClicked(object sender, RoutedEventArgs e)
+        private async void OnOKClicked(object sender, RoutedEventArgs e)
         {
+            IsEnabled = false;
+
             if (IsCoreCheck())
             {
-                string version = Utility.GetCoreTestSuiteVersion(Location.Text);
+                string path = Location.Text;
+
+                string version = await Task.Run(() => Utility.GetCoreTestSuiteVersion(path));
 
                 if (version == null)
                 {

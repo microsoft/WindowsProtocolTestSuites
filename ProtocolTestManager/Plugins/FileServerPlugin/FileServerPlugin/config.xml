@@ -42,7 +42,6 @@
     <PtfFileName>MS-SMB2Model_ServerTestSuite.deployment.ptfconfig</PtfFileName>
   </PtfFileNames>
   <DllFileNames>
-    <DllFileName>Bin\CommonTestSuite.dll</DllFileName>
     <DllFileName>Bin\ServerFailoverTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-DFSC_ServerTestSuite.dll</DllFileName>
     <DllFileName>Bin\MS-FSA_ServerTestSuite.dll</DllFileName>
