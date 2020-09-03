@@ -38,6 +38,6 @@ jobs:
       inputs:
         targetType: filePath
         filePath: "WindowsProtocolTestSuitesHelper/AzureScripts/Queue-DotNetCoreCodeLocalRegression.ps1"
-        arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -LastBuildId "$(build.testSuiteBuildId)" -RegressionPipelineNames ${{parameters.RegressionPipelineNames}}'
+        arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -LastBuildId "$(build.testSuiteBuildId)" -LastPipelineId "$(build.testSuitePipelineId)" -RegressionPipelineNames ${{parameters.RegressionPipelineNames}}'
       condition: succeeded()
 
