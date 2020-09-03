@@ -27,3 +27,4 @@ jobs:
       HelperBranch: $(test.helperBranch)
       FilterSuffix: $(test.FilterSuffix)
       BuildPipelineName: $(test.BuildPipelineName)
+      RegressionPipelineNames: $(test.RegressionPipelineNames)
