@@ -39,7 +39,7 @@ cd $batchPath
 $maxRetryTimes = 20
 $tryTime = 0
 while($tryTime -lt $maxRetryTimes){
-    ./RunTestCasesByFilter.ps1 BVT_ConnectionTest_ConnectionInitiation_PositiveTest
+    ./RunTestCasesByFilter.ps1 S1_ConnectionTest_BasicSettingExchange_PositiveTest_EncryptionMethodandLevel
     sleep 15
     $filenames = Get-ChildItem .\..\TestResults
     foreach($filename in $filenames){
