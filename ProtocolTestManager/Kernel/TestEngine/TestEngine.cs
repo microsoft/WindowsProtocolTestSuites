@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Management;
 using System.Text;
 
 namespace Microsoft.Protocols.TestManager.Kernel
@@ -105,12 +104,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
-            args.AppendFormat("/Settings:\"{0}\" ", TestSetting);
-            args.AppendFormat("/ResultsDirectory:{0} ", "HtmlTestResults");
-            args.AppendFormat("/logger:html;OutputFolder={0} ", ResultOutputFolder);
+            //args.AppendFormat("/Settings:\"{0}\" ", TestSetting);
+            //args.AppendFormat("/ResultsDirectory:{0} ", "HtmlTestResults");
+            //args.AppendFormat("/logger:html;OutputFolder={0} ", ResultOutputFolder);
+            args.AppendFormat("--results-directory {0} ", ResultOutputFolder);
+            args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
+            //args.AppendFormat("--settings  {0} ", TestSetting);
+            args.AppendFormat("--logger ptm ");
+
             if (caseStack != null)
             {
-                args.Append("/TestCaseFilter:\"");
+                //args.Append("/TestCaseFilter:\"");
+                args.Append("--filter \"");
                 TestCase testcase = caseStack.Pop();
                 args.AppendFormat("Name={0}", testcase.Name);
                 while (caseStack.Count > 0)
@@ -143,7 +148,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
             htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
-            htmlResultChecker.Start(this.WorkingDirectory);
+            htmlResultChecker.Start(this.WorkingDirectory, ResultOutputFolder);
 
             var exception = new List<Exception>();
             try
@@ -175,21 +180,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         WorkingDirectory = WorkingDirectory,
                         FileName = EnginePath,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                        Arguments = runArgs
+                        UseShellExecute = true,
+                        CreateNoWindow = false,
+                        Arguments = "test "+ runArgs,
+                        
                     }
                 };
 
-                PipeSinkServer.ParseLogMessage = ParseLogMessage;
-                PipeSinkServer.Start(PipeName);
 
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
+                int err = vstestProcess.ExitCode;
+                if (err != 0) {
+                    Console.Error.WriteLine("\nCommand got error");
+                };
             }
             catch (Exception exception)
             {
-                PipeSinkServer.Stop();
+                Console.WriteLine(exception.Message);
                 return exception;
             }
             return null;
@@ -238,7 +246,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
                 htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
-                htmlResultChecker.Start(this.WorkingDirectory);
+                htmlResultChecker.Start(this.WorkingDirectory, ResultOutputFolder);
 
                 StringBuilder args = ConstructVstestArgs();
                 args.AppendFormat("/TestCaseFilter:\"{0}\" ", filterExpr);
@@ -270,7 +278,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             htmlResultChecker.Stop();
             logger.IndexHtmlFilePath = htmlResultChecker.IndexHtmlFilePath;
             logger.FinishTest();
-            PipeSinkServer.Stop();
         }
 
         /// <summary>
@@ -297,15 +304,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 process.CloseMainWindow();
 
                 process.Kill();
-
-                // Enumerate all child processes and terminate them.
-                var searcher = new ManagementObjectSearcher($"select * from Win32_Process where ParentProcessId={pid}");
-                var result = searcher.Get();
-                foreach (var item in result)
-                {
-                    int childPid = Convert.ToInt32(item["ProcessId"]);
-                    TerminateProcessTree(childPid);
-                }
 
                 process.WaitForExit();
             }

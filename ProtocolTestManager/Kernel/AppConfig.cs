@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.VisualStudio.Setup.Configuration;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -203,7 +203,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSuiteName = testSuiteName;
             config.TestSuiteVersion = testSuiteVersion;
             config.InitFolders(testSuiteDir, installDir);
-            config.PipeName = StringResource.PipeName;
+           
 
             XmlDocument doc = new XmlDocument();
             doc.XmlResolver = null;
@@ -262,7 +262,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            config.VSTestPath = LocateVSTestEngine();
+            config.VSTestPath = LoadTestEngine();
 
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
@@ -299,7 +299,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             for (int i = 0; i < PtfConfigFileNames.Count; i++)
             {
-                config.PtfConfigFiles.Add(System.IO.Path.Combine(testSuiteDir, "Bin", PtfConfigFileNames[i]));
+                config.PtfConfigFiles.Add(System.IO.Path.Combine(testSuiteDir, PtfConfigFileNames[i]));
             }
 
             config.RuleDefinitions = doc.DocumentElement.SelectSingleNode("ConfigCaseRule");
@@ -354,51 +354,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return config;
         }
 
-        private static string LocateVSTestEngine()
+        private static string LoadTestEngine()
         {
-            bool foundVSTest = false;
-
-            var query = new SetupConfiguration();
-
-            var enumInstances = query.EnumAllInstances();
-
-            while (true)
-            {
-                int count;
-                var instances = new ISetupInstance[1];
-                enumInstances.Next(1, instances, out count);
-                if (count == 0)
-                {
-                    break;
-                }
-                string vspath = instances[0].GetInstallationPath();
-                if (!String.IsNullOrEmpty(vspath))
-                {
-                    string vstest = Path.Combine(vspath, StringResource.VSTestLocation);
-                    if (File.Exists(vstest))
-                    {
-                        // Found test engine.
-                        foundVSTest = true;
-
-                        string htmltestlogger = Path.Combine(vspath, StringResource.HtmlTestLoggerLocation);
-                        if (File.Exists(htmltestlogger))
-                        {
-                            // Found html test logger.
-                            return vstest;
-                        }
-                    }
-                }
-            }
-
-            if (foundVSTest == false)
-            {
-                // vstest Not found.
-                throw new Exception(StringResource.VSTestNotInstalled);
-            }
-            else
-            {
-                throw new Exception(StringResource.HtmlTestLoggerNotInstalled);
-            }
+            return "dotnet";
         }
 
         private void InitFolders(string testSuiteDir, string installDir)
