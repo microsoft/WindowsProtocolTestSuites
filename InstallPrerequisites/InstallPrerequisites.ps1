@@ -128,7 +128,7 @@ Function CheckIfVSExtensionInstalled
 
 	foreach ($path in $VSInstallationPaths)
 	{
-		if (($AppName -match "2017" -and $path -match "2017") -or ($AppName -match "2019" -and $path -match "2019"))
+		if ($AppName -match "2019" -and $path -match "2019")
 		{
 			$DllPath = Get-ChildItem -Path $path\Common7\IDE\Extensions -Filter $DllName -Recurse
 			if(-not $DllPath)
@@ -364,18 +364,14 @@ Function DownloadAndInstallVsExtension
 
 	$FLAGS  = $AppItem.Arguments
 
-	if ($AppItem -match "2017")
-	{
-		$path = FindSpecificVersionOfVisualStudio -Version 2017 -VSInstallationPaths $VSInstallationPaths
-	}
-	elseif ($AppItem -match "2019") 
+	if ($AppItem -match "2019") 
 	{
 		$path = FindSpecificVersionOfVisualStudio -Version 2019 -VSInstallationPaths $VSInstallationPaths	
 	}
 	else
 	{
 		$failedList += $AppItem.Name
-		$content = "Install " + $AppItem.Name +" failed, we only support install Visual Studio 2017 or 2019 extensions now."
+		$content = "Install " + $AppItem.Name +" failed, we only support install Visual Studio 2019 extensions now."
 		Write-Host "ERROR $content"; 
 	}
 
@@ -616,8 +612,9 @@ foreach($item in $downloadList)
 
 	
 }
-
-$downloadList.Clear();
+if($downloadList -is [array]) {
+	$downloadList.Clear();
+}
 
 if($failedList.Length -eq 0) #No failure occurs
 {
