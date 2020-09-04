@@ -107,21 +107,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.Name == testCaseName);
                 // If changed to Running/Waiting status, no need to change group.
 
-                if (status == TestCaseStatus.Running)
+                if (RunningTestCase != null)
                 {
-                    if (RunningTestCase != null)
-                    {
-                        if (RunningTestCase.Status == TestCaseStatus.Running)
-                            RunningTestCase.Status = TestCaseStatus.Waiting;
-                    }
-                    RunningTestCase = testcase;
-                    RunningTestCase.Status = status;
-                    if (UpdateTestCaseList != null)
-                    {
-                        UpdateTestCaseList(from, RunningTestCase);
-                    }
-                    return;
+                    if (RunningTestCase.Status == TestCaseStatus.Running)
+                        RunningTestCase.Status = TestCaseStatus.Waiting;
                 }
+                RunningTestCase = testcase;
+                RunningTestCase.Status = status;
+                if (UpdateTestCaseList != null)
+                {
+                    UpdateTestCaseList(from, RunningTestCase);
+                }
+                return;
                 if (status == TestCaseStatus.Waiting)
                 {
                     if (testcase.Status == TestCaseStatus.Running)

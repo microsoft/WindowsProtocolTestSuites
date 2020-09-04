@@ -30,21 +30,11 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         static void Run(Options options)
         {
-            bool isNewInstance = false;
-            Mutex mutex = new Mutex(true, "{FE998190-5B44-4816-9A65-295E8A1EBBA1}", out isNewInstance);
-
-            if (!isNewInstance)
-            {
-                Console.WriteLine("Protocol Test Manager or PtmCli is already running.");
-                mutex = null;
-                return;
-            }
-
             try
             {
                 Program p = new Program();
                 p.Init();
-                p.LoadTestSuite(options.Profile);
+                p.LoadTestSuite(options.Profile, options.TestSuite);
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
 
@@ -64,15 +54,11 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
                 }
-                mutex.ReleaseMutex();
-                mutex = null;
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine("ERROR:");
                 Console.Error.WriteLine(e.Message);
-                mutex.ReleaseMutex();
-                mutex = null;
                 Environment.Exit(-1);
             }
         }
@@ -98,7 +84,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Load test suite.
         /// </summary>
         /// <param name="filename">Filename of the profile</param>
-        public void LoadTestSuite(string filename)
+        public void LoadTestSuite(string filename, string testSuiteFolder)
         {
             TestSuiteInfo tsinfo;
             using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
@@ -108,6 +94,9 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     throw new ArgumentException(String.Format(StringResources.UnknownTestSuiteMessage, profile.Info.TestSuiteName));
                 }
+                string testSuiteFolderBin = Path.Combine(testSuiteFolder, "Bin");
+                tsinfo.TestSuiteFolder = testSuiteFolder;
+                tsinfo.TestSuiteVersion = LoadTestsuiteVersion(testSuiteFolderBin);
             }
 
             util.LoadTestSuiteConfig(tsinfo);
@@ -158,6 +147,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <param name="testCases">The list of test cases to run</param>
         public void RunTestSuite(List<TestCase> testCases)
         {
+
             using (ProgressBar progress = new ProgressBar())
             {
                 util.InitializeTestEngine();
@@ -218,6 +208,35 @@ namespace Microsoft.Protocols.TestManager.CLI
             }
 
             report.ExportReport(filename);
+        }
+
+        /// <summary>
+        /// load test suite version info
+        /// </summary>
+        /// <param name="testsuitepath">The path of test case</param>
+        public string LoadTestsuiteVersion(string testsuitepath)
+        {
+            List<string> paths = new List<string>();
+            Utility.getFilesFromDirByFilter(testsuitepath, paths, ".dll");
+            var allVersions = new HashSet<string>();
+            foreach (var path in paths)
+            {
+                var info = Utility.GetInfoFromDll(path);
+                if (info.ProductName == "Windows Protocol Test Suites")
+                {
+                    allVersions.Add(info.ProductVersion);
+                }
+                
+            }
+            if (allVersions.Count == 1)
+            {
+                return allVersions.First();
+            }
+            else
+            {
+                throw new Exception(string.Format("dll has different versions, or have no dll"));
+            }
+
         }
     }
 }
