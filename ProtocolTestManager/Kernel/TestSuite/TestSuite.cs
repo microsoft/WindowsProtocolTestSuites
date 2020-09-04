@@ -71,7 +71,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                 {
                                     PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
                                     object category = property.GetValue(attribute, null);
-                                    foreach (string str in (System.Collections.ObjectModel.ReadOnlyCollection<string>)category)
+                                    foreach (string str in ((List<string>)category).AsReadOnly())
                                     {
                                         if (str == "Disabled")
                                         {
@@ -94,7 +94,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                     {
                                         PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
                                         object category = property.GetValue(attribute, null);
-                                        foreach (string str in (System.Collections.ObjectModel.ReadOnlyCollection<string>)category)
+                                        foreach (string str in ((List<string>)category).AsReadOnly())
                                         {
                                             categories.Add(str);
                                         }
