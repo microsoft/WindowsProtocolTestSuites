@@ -122,33 +122,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
 
-            // Find Test suite Information from Registry
-            RegistryKey HKLM = Registry.LocalMachine;
-            RegistryKey[] testSuitesRegPathList;
-            if (Environment.Is64BitProcess)
-            {
-                // 32-bit and 64-bit
-                testSuitesRegPathList = new RegistryKey[]
-                {
-                    HKLM.OpenSubKey(family.RegistryPath),
-                    HKLM.OpenSubKey(family.RegistryPath64)
-                };
-            }
-            else
-            {
-                // 32-bit only
-                testSuitesRegPathList = new RegistryKey[]
-                {
-                    HKLM.OpenSubKey(family.RegistryPath)
-                };
-            }
-
-            // Check if all registry paths do not exist
-            testSuitesRegPathList = testSuitesRegPathList.Where(Entry => Entry != null).ToArray();
-            if (testSuitesRegPathList.Length == 0)
-            {
-                return family;
-            }
 
             //Check if the test suite is installed.
             foreach (TestSuiteFamily f in family)
@@ -177,7 +150,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         // Find the registry key of the test suite.
 
-                        testsuite.IsInstalled = FindTestSuiteInformationInRegistry(testSuitesRegPathList, testsuite);
+                        testsuite.IsInstalled = FindTestSuiteInformationInRegistry(family, testsuite);
 
                         if (!testsuite.IsInstalled)
                         {
@@ -244,16 +217,44 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Find test suite related information in registry.
         /// </summary>
-        /// <param name="registryList">registry root path for test suite.</param>
+        /// <param name="family">Test suite families.</param>
         /// <param name="testSuite">Test suite name.</param>
         /// <returns>True if found, otherwise false.</returns>
-        private static bool FindTestSuiteInformationInRegistry(RegistryKey[] registryList, TestSuiteInfo testSuite)
+        private static bool FindTestSuiteInformationInRegistry(TestSuiteFamilies family, TestSuiteInfo testSuite)
         {
+            // Find Test suite Information from Registry
+            RegistryKey HKLM = Registry.LocalMachine;
+            RegistryKey[] testSuitesRegPathList;
+            if (Environment.Is64BitProcess)
+            {
+                // 32-bit and 64-bit
+                testSuitesRegPathList = new RegistryKey[]
+                {
+                    HKLM.OpenSubKey(family.RegistryPath),
+                    HKLM.OpenSubKey(family.RegistryPath64)
+                };
+            }
+            else
+            {
+                // 32-bit only
+                testSuitesRegPathList = new RegistryKey[]
+                {
+                    HKLM.OpenSubKey(family.RegistryPath)
+                };
+            }
+
+            // Check if all registry paths do not exist
+            testSuitesRegPathList = testSuitesRegPathList.Where(Entry => Entry != null).ToArray();
+            if (testSuitesRegPathList.Length == 0)
+            {
+                return false;
+            }
+
             string latestTestSuiteVersionString = null;
             Version latestTestSuiteVersion = null;
             string latestTestSuiteEndPoint = null;
 
-            foreach (var registryPath in registryList)
+            foreach (var registryPath in testSuitesRegPathList)
             {
                 var registryKeyNames = registryPath.GetSubKeyNames()
                                                      .Where(s => s.Contains(testSuite.TestSuiteName));
