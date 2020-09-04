@@ -28,3 +28,4 @@ jobs:
       FilterSuffix: $(test.FilterSuffix)
       BuildPipelineName: $(test.BuildPipelineName)
       RegressionPipelineNames: $(test.RegressionPipelineNames)
+      TargetRepoCsvFile: $(targetRepo.csvFile)

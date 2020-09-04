@@ -9,6 +9,7 @@ parameters:
   FilterSuffix : ''
   BuildPipelineName : ''
   RegressionPipelineNames : ''
+  TargetRepoCsvFile : ''
   
 jobs:
 - job:
@@ -38,6 +39,6 @@ jobs:
       inputs:
         targetType: filePath
         filePath: "WindowsProtocolTestSuitesHelper/AzureScripts/Queue-DotNetCoreCodeLocalRegression.ps1"
-        arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -LastBuildId "$(build.testSuiteBuildId)" -LastPipelineId "$(build.testSuitePipelineId)" -RegressionPipelineNames ${{parameters.RegressionPipelineNames}} -TargetHelperBranch ${{parameters.HelperBranch}}'
+        arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -LastBuildId "$(build.testSuiteBuildId)" -LastPipelineId "$(build.testSuitePipelineId)" -RegressionPipelineNames ${{parameters.RegressionPipelineNames}} -TargetHelperBranch ${{parameters.HelperBranch}} -TargetRepoCsvFile ${{parameters.TargetRepoCsvFile}}'
       condition: succeeded()
 
