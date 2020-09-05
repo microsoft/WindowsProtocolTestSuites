@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -255,6 +256,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             foreach (XmlNode xn in DllFileNamesNode.SelectNodes("DllFileName"))
             {
                 string name = xn.InnerText.Trim();
+                name = name.Replace('\\', Path.DirectorySeparatorChar);
                 config.TestSuiteAssembly.Add(System.IO.Path.Combine(testSuiteDir, name));
             }
 
@@ -356,7 +358,27 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private static string LoadTestEngine()
         {
-            return "dotnet";
+            //return "dotnet";
+
+            string dotNet = "dotnet";
+            var psi = new ProcessStartInfo(dotNet, "--info") { RedirectStandardOutput = true };
+            //启动
+            try
+            {
+                var proc = Process.Start(psi);
+
+                proc.WaitForExit();
+                if (proc.ExitCode != 0)
+                {
+                    throw new Exception("Cannot find the dotnet");
+                }
+            }
+            catch
+            {
+                throw new Exception("Cannot find the dotnet");
+            }
+            return dotNet;
+            
         }
 
         private void InitFolders(string testSuiteDir, string installDir)

@@ -60,7 +60,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 if (testSuiteFamilies == null)
                 {
-                    string introfile = Path.Combine(installDir, @"etc\TestSuiteIntro.xml");
+                    string introfile = Path.Combine(installDir, "etc", "TestSuiteIntro.xml");
                     if (File.Exists(introfile))
                         testSuiteFamilies = TestSuiteFamilies.Load(introfile);
                     else
