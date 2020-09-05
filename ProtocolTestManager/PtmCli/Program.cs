@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
                 {
                     executed++;
-                    progress.Update((double)executed / total, $"Executing {runningcase.Name}");
+                    progress.Update((double)executed / total, $"({executed}/{total}) Executing {runningcase.Name}");
                 };
 
                 progress.Update(0, "Loading test suite");
