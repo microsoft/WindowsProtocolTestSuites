@@ -7,13 +7,12 @@
 
 :: Install vs_community with the following 
 %1 %2 --installPath %3 ^
---add Microsoft.VisualStudio.Workload.NativeDesktop ^
---add Microsoft.VisualStudio.Workload.ManagedDesktop ^
---add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 ^
---add Microsoft.Net.Component.4.7.1.TargetingPack ^
---add Microsoft.Net.ComponentGroup.4.7.1.DeveloperTools ^
---add Microsoft.VisualStudio.Component.Windows10SDK.16299.Desktop ^
---add Microsoft.VisualStudio.Component.TestTools.Core ^
---add Microsoft.Component.MSBuild ^
+--add Microsoft.NetCore.Component.SDK ^
+--add Microsoft.VisualStudio.Component.Roslyn.Compiler ^
+--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64	 ^
+--add Microsoft.VisualStudio.Component.VC.CLI.Support ^
+--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest ^
+--add Microsoft.VisualStudio.Component.VC.CoreIde ^
+--add Microsoft.VisualStudio.Component.Windows10SDK.19041 ^
 --passive --norestart
 
