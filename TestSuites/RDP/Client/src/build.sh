@@ -28,7 +28,7 @@ then
     OutDir="$TestSuiteRoot/drop/TestSuites/RDP/Client"
 fi
 
-declare -a CommonScripts=("Disable_Firewall.ps1" "Get-Parameter.ps1" "Modify-ConfigFileNode.ps1" "Set-Parameter.ps1",
+declare -a CommonScripts=("Disable_Firewall.ps1" "Get-Parameter.ps1" "Modify-ConfigFileNode.ps1" "Set-Parameter.ps1" 
 "TurnOff-FileReadonly.ps1" "Enable-WinRM.ps1")
 
 if [ -d $OutDir -a "$OutDir" != "/" ]
