@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 Param(
     [string]$Configuration="Release",
     [string]$OutDir
@@ -9,7 +12,7 @@ Write-Host ======================================
 
 $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $OutDir
-dotnet publish "$InvocationPath/PtmCli.sln" -c $Configuration -o $OutDir/Bin
+dotnet publish "$InvocationPath/PtmCli.sln" -c $Configuration -o $OutDir
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build FileServer test suite"
     exit 1
