@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             Stop();
             isFirstTimeAccess = new ConcurrentDictionary<string, bool>();
             workingDir = Path.Combine(workingDirectory, ResultOutputFolder);
-            if (!File.Exists(workingDir))
+            if (!Directory.Exists(workingDir))
             {
                 Directory.CreateDirectory(workingDir);
             }
@@ -120,8 +120,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             // The html files are under the below folder, so any file that is not in that folder is not interesting.
             // E.g. C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\1.0.5812.0\HtmlTestResults\2014-11-09-21-59-16\Html\
-
-
             if (e.FullPath.Contains(AppConfig.IndexHtmlFileName))
             {
                 this.indexHtmlFilePath = e.FullPath;

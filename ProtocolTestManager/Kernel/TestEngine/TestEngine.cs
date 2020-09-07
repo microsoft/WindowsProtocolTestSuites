@@ -104,17 +104,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
-            //args.AppendFormat("/Settings:\"{0}\" ", TestSetting);
-            //args.AppendFormat("/ResultsDirectory:{0} ", "HtmlTestResults");
-            //args.AppendFormat("/logger:html;OutputFolder={0} ", ResultOutputFolder);
+
             args.AppendFormat("--results-directory {0} ", ResultOutputFolder);
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
-            //args.AppendFormat("--settings  {0} ", TestSetting);
             args.AppendFormat("--logger ptm ");
 
             if (caseStack != null)
             {
-                //args.Append("/TestCaseFilter:\"");
                 args.Append("--filter \"");
                 TestCase testcase = caseStack.Pop();
                 args.AppendFormat("Name={0}", testcase.Name);

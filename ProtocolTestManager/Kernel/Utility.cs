@@ -1182,33 +1182,5 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 return null;
             }
         }
-
-        /// <summary>
-        /// walk all files in the dir by filters
-        /// </summary>
-        public static void getFilesFromDirByFilter(string dir, List<string> list, string filter = "")
-        {
-            if (!Directory.Exists(dir))
-            {
-                return;
-            }
-            DirectoryInfo d = new DirectoryInfo(dir);
-            FileInfo[] files = d.GetFiles();
-            DirectoryInfo[] directs = d.GetDirectories();
-            foreach (FileInfo f in files)
-            {
-                if (filter != "" && f.Extension != filter)
-                {
-                    continue;
-                }
-                list.Add(f.FullName);
-            }
-
-            foreach (DirectoryInfo dd in directs)
-            {
-                getFilesFromDirByFilter(dd.FullName, list, filter);
-            }
-        }
-
     }
 }

@@ -147,7 +147,6 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <param name="testCases">The list of test cases to run</param>
         public void RunTestSuite(List<TestCase> testCases)
         {
-
             using (ProgressBar progress = new ProgressBar())
             {
                 util.InitializeTestEngine();
@@ -156,8 +155,13 @@ namespace Microsoft.Protocols.TestManager.CLI
                 int executed = 0;
 
                 Logger logger = util.GetLogger();
+                var caseSet = new HashSet<string>();
                 logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
                 {
+                    if (caseSet.Contains(runningcase.Name)){
+                        return;
+                    }
+                    caseSet.Add(runningcase.Name);
                     executed++;
                     progress.Update((double)executed / total, $"({executed}/{total}) Executing {runningcase.Name}");
                 };
@@ -217,16 +221,14 @@ namespace Microsoft.Protocols.TestManager.CLI
         public string LoadTestsuiteVersion(string testsuitepath)
         {
             List<string> paths = new List<string>();
-            Utility.getFilesFromDirByFilter(testsuitepath, paths, ".dll");
             var allVersions = new HashSet<string>();
-            foreach (var path in paths)
+            foreach (var dllpath in Directory.EnumerateFiles(testsuitepath, "*.dll", SearchOption.AllDirectories))
             {
-                var info = Utility.GetInfoFromDll(path);
+                var info = Utility.GetInfoFromDll(dllpath);
                 if (info.ProductName == "Windows Protocol Test Suites")
                 {
                     allVersions.Add(info.ProductVersion);
                 }
-                
             }
             if (allVersions.Count == 1)
             {

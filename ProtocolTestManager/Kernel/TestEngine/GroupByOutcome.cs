@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -12,7 +13,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public class GroupByOutcome
     {
-        private object locker = new object();
+        private ReaderWriterLockSlim locker = new ReaderWriterLockSlim();
         Dictionary<string, TestCaseGroup> testcasemap;
 
         /// <summary>
