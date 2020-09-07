@@ -17,7 +17,7 @@ if ([string]::IsNullOrEmpty($OutDir)) {
     $OutDir = "$TestSuiteRoot/drop/TestSuites/RDP/Server"
 }
 
-$CommonScripts ="Disable_Firewall.ps1","Enable-WinRM.ps1","Set-AutoLogon.ps1","RestartAndRunFinish.ps1","RestartAndRun.ps1"
+$CommonScripts ="Disable_Firewall.ps1","Enable-WinRM.ps1","Set-AutoLogon.ps1","RestartAndRunFinish.ps1","RestartAndRun.ps1","TurnOff-FileReadonly.ps1"
 
 
 if(Test-Path -Path $OutDir) {
