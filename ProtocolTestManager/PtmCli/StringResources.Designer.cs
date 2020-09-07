@@ -10,8 +10,9 @@
 
 namespace Microsoft.Protocols.TestManager.CLI {
     using System;
-    
-    
+    using System.Runtime.Serialization;
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -68,7 +69,18 @@ namespace Microsoft.Protocols.TestManager.CLI {
                 return ResourceManager.GetString("PtmProfileUpgraded", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///  Looks up a dll version error.
+        /// </summary>
+        internal static string DllhasInvaildVersion
+        {
+            get
+            {
+                return ResourceManager.GetString("DllhasInvaildVersion", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Unknown format: {0}..
         /// </summary>

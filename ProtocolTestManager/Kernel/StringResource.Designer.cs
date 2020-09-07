@@ -1070,5 +1070,27 @@ namespace Microsoft.Protocols.TestManager.Kernel {
                 return ResourceManager.GetString("XsiNamespace", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a dotnet error
+        /// </summary>
+        internal static string CannotFindDotnet
+        {
+            get
+            {
+                return ResourceManager.GetString("CannotFindDotnet", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a config error
+        /// </summary>
+        internal static string ConfigNotRight
+        {
+            get
+            {
+                return ResourceManager.GetString("ConfigNotRight", resourceCulture);
+            }
+        }
     }
 }

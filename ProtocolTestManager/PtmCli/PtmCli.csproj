@@ -17,4 +17,10 @@
 	  <ProjectReference Include="..\ptmtestlogger\PTMTestLogger.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="StringResources.resx">
+      <Generator></Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

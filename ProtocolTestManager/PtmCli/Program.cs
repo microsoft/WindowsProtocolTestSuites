@@ -236,7 +236,7 @@ namespace Microsoft.Protocols.TestManager.CLI
             }
             else
             {
-                throw new Exception(string.Format("dll has different versions, or have no dll"));
+                throw new Exception(StringResources.DllhasInvaildVersion);
             }
 
         }

@@ -396,6 +396,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             // Parse Config section
             var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
             Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
+            if(!configTable.ContainsKey("targetFilterIndex") || !configTable.ContainsKey("mappingFilterIndex"))
+            {
+                throw new Exception(StringResource.ConfigNotRight);
+            }
             int _targetFilterIndex = configTable["targetFilterIndex"];
             int _mappingFilterIndex = configTable["mappingFilterIndex"];
             if ((_targetFilterIndex == _mappingFilterIndex) ||

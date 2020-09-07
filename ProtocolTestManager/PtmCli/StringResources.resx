@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,127 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConfigFileNameNotSpecified" xml:space="preserve">
-    <value>The configFileNames must not be null.</value>
+  <data name="DllhasInvaildVersion" xml:space="preserve">
+    <value>The version of the test suite is invalid</value>
   </data>
-  <data name="DefaultDescription" xml:space="preserve">
-    <value>This is a {0} test suite.</value>
+  <data name="PtmProfileUpgraded" xml:space="preserve">
+    <value>The PTM profile has been upgraded. New profile is saved as {0}.</value>
   </data>
-  <data name="DefaultGroupName" xml:space="preserve">
-    <value>Default Group</value>
+  <data name="UnknownReportFormat" xml:space="preserve">
+    <value>Unknown format: {0}.</value>
   </data>
-  <data name="DuplicatePTFConfigNode" xml:space="preserve">
-    <value>Duplicated node with type = "{0}", name = "{1}" found.</value>
-  </data>
-  <data name="LoadingAutoDetectorFailed" xml:space="preserve">
-    <value>Loading auto-detector assembly failed.</value>
-  </data>
-  <data name="LoadProfileError" xml:space="preserve">
-    <value>Error in loading profile: {0}</value>
-  </data>
-  <data name="RegistryPathNotSpecified" xml:space="preserve">
-    <value>DefaultRegistryPath is not specified.</value>
-  </data>
-  <data name="TestSuiteFolder" xml:space="preserve">
-    <value>C:\MicrosoftProtocolTests\{0}\{1}-Endpoint\{2}</value>
-  </data>
-  <data name="DefaultNamespace" xml:space="preserve">
-    <value>http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig</value>
-  </data>
-  <data name="XsiNamespace" xml:space="preserve">
-    <value>http://www.w3.org/2001/XMLSchema-instance</value>
-  </data>
-  <data name="ConfigFilename" xml:space="preserve">
-    <value>config.xml</value>
-  </data>
-  <data name="ConfigLoadError" xml:space="preserve">
-    <value>Failed to load the test suite:
-{0}</value>
-  </data>
-  <data name="LoadAdapterError" xml:space="preserve">
-    <value>Failed to load adapters from the test suite assembly:
-{0}</value>
-  </data>
-  <data name="LoadAssemblyError" xml:space="preserve">
-    <value>Failed to load the test suite assembly:
-{0}</value>
-  </data>
-  <data name="LoadFilterError" xml:space="preserve">
-    <value>Failed to load the filter definitions from the config.xml:
-{0}</value>
-  </data>
-  <data name="LoadPtfconfigError" xml:space="preserve">
-    <value>Failed to load the PTFConfig files:
-{0}</value>
-  </data>
-  <data name="LoadFeatureMappingError" xml:space="preserve">
-    <value>Failed to load the feature mapping from the config.xml:
-{0}</value>
-  </data>
-  <data name="EndpointRegex" xml:space="preserve">
-    <value>(Server)|(Client)</value>
-  </data>
-  <data name="VersionRegex" xml:space="preserve">
-    <value>\d+\.\d+\.\d+\.\d+</value>
-  </data>
-  <data name="DirectoryNotFound" xml:space="preserve">
-    <value>Directory {0} is not found.</value>
-  </data>
-  <data name="VSTestLocation" xml:space="preserve">
-    <value>Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</value>
-    <comment>Relative path to the VS installation folder</comment>
-  </data>
-  <data name="VSTestNotInstalled" xml:space="preserve">
-    <value>Cannot find the test engine vstest.console.exe.</value>
-  </data>
-  <data name="AppendCategoryError" xml:space="preserve">
-    <value>Failed to append test category.</value>
-  </data>
-  <data name="ProfileNotMatchError" xml:space="preserve">
-    <value>The profile does not match the installed test suite.
-The profile is for {0} {1}.
-The test suite is {2} {3}.</value>
-  </data>
-  <data name="InvalidProfile" xml:space="preserve">
-    <value>It is not a valid PTM test profile.</value>
-  </data>
-  <data name="InprogressTag" xml:space="preserve">
-    <value>[TestInProgress]</value>
-  </data>
-  <data name="PipeName" xml:space="preserve">
-    <value>PTFToolPipe</value>
-  </data>
-  <data name="FailedTag" xml:space="preserve">
-    <value>[TestFailed]</value>
-  </data>
-  <data name="InconclusiveTag" xml:space="preserve">
-    <value>[TestInconclusive]</value>
-  </data>
-  <data name="PassedTag" xml:space="preserve">
-    <value>[TestPassed]</value>
-  </data>
-  <data name="HtmlTestLoggerLocation" xml:space="preserve">
-    <value>Common7\IDE\Extensions\TestPlatform\Extensions\Microsoft.Protocols.TestTools.Html.TestLogger.dll</value>
-    <comment>Relative path to the VS installation folder</comment>
-  </data>
-  <data name="HtmlTestLoggerNotInstalled" xml:space="preserve">
-    <value>Cannot find html test logger, try to reinstall Protocol Test Framework.</value>
-  </data>
-  <data name="ProfileNewerError" xml:space="preserve">
-    <value>The profile version is newer than test suite.</value>
-  </data>
-  <data name="PTMNeedUpgrade" xml:space="preserve">
-    <value>Version of Protocol Test Manager ({0}) is lesser than version of the test suite ({1}).
-Please upgrade Protocol Test Manager to the same version with the test suite.</value>
-  </data>
-  <data name="TestSuiteNeedUpgrade" xml:space="preserve">
-    <value>Version of Protocol Test Manager ({0}) is greater than version of the test suite ({1}).
-Please upgrade the test suite to the same version of Protocol Test Manager.</value>
-  </data>
-  <data name="CannotFindDotnet" xml:space="preserve">
-    <value>Cannot find the dotnet</value>
-  </data>
-  <data name="ConfigNotRight" xml:space="preserve">
-    <value>Config file is not right</value>
+  <data name="UnknownTestSuiteMessage" xml:space="preserve">
+    <value>Unknown test suite: {0}.</value>
   </data>
 </root>

@@ -370,12 +370,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 proc.WaitForExit();
                 if (proc.ExitCode != 0)
                 {
-                    throw new Exception("Cannot find the dotnet");
+                    throw new Exception(StringResource.CannotFindDotnet);
                 }
             }
             catch
             {
-                throw new Exception("Cannot find the dotnet");
+                throw new Exception(StringResource.CannotFindDotnet);
             }
             return dotNet;
             
