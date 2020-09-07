@@ -358,15 +358,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private static string LoadTestEngine()
         {
-            //return "dotnet";
-
             string dotNet = "dotnet";
             var psi = new ProcessStartInfo(dotNet, "--info") { RedirectStandardOutput = true };
-            //启动
             try
             {
                 var proc = Process.Start(psi);
-
                 proc.WaitForExit();
                 if (proc.ExitCode != 0)
                 {
@@ -378,7 +374,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 throw new Exception(StringResource.CannotFindDotnet);
             }
             return dotNet;
-            
         }
 
         private void InitFolders(string testSuiteDir, string installDir)
