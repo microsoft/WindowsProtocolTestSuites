@@ -41,7 +41,7 @@ cp $TestSuiteRoot/TestSuites/RDP/Client/src/Batch/* $OutDir/Batch/ -f
 cp $TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.* $OutDir/Batch/ -f
 
 mkdir -p $OutDir/Data
-cp $TestSuiteRoot/TestSuites/RDP/Client/Setup/Data/* $OutDir/Data/ -f
+cp $TestSuiteRoot/TestSuites/RDP/Client/Setup/Data/* $OutDir/Data/ -fr
 
 mkdir -p $OutDir/Scripts
 cp -R $TestSuiteRoot/TestSuites/RDP/Client/Setup/Scripts/* $OutDir/Scripts/ -f
