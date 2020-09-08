@@ -11,6 +11,10 @@ namespace Microsoft.Protocols.TestManager.CLI
             Required = true,
             HelpText = "Specifies the path of the test profile to run.")]
         public string Profile { get; set; }
+        [Option('t', "testsuite",
+            Required = true,
+            HelpText = "Specifies the path of the testsuite to run.")]
+        public string TestSuite { get; set; }
 
         [Option('s', "selected",
             Default = false,
