@@ -12,7 +12,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         private string EnginePath;
         private Logger logger;
-        public string PipeName { get; set; }
 
         public List<string> TestAssemblies { get; set; }
         public string TestSetting { get; set; }

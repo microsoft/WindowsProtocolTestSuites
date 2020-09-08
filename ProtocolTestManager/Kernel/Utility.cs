@@ -848,8 +848,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
-                PipeName = appConfig.PipeName+"1",
-                //PipeName = appConfig.PipeName,
                 ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
             };
             testEngine.InitializeLogger(selectedCases);

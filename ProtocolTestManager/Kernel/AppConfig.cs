@@ -142,11 +142,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string TestListName;
 
         /// <summary>
-        /// NamedPipe from PTF
-        /// </summary>
-        public string PipeName;
-
-        /// <summary>
         /// The path of VSTest.
         /// </summary>
         public string VSTestPath;
