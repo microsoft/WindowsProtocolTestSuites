@@ -303,7 +303,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             for (int i = 0; i < PtfConfigFileNames.Count; i++)
             {
-                config.PtfConfigFiles.Add(System.IO.Path.Combine(testSuiteDir, PtfConfigFileNames[i]));
+                config.PtfConfigFiles.Add(System.IO.Path.Combine(testSuiteDir, "Bin", PtfConfigFileNames[i]));
             }
 
             config.RuleDefinitions = doc.DocumentElement.SelectSingleNode("ConfigCaseRule");
