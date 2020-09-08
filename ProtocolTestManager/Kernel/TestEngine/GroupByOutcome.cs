@@ -39,39 +39,35 @@ namespace Microsoft.Protocols.TestManager.Kernel
             testcasemap = new Dictionary<string, TestCaseGroup>();
             foreach (TestCase testcase in testcases)
             {
-                switch (testcase.Status)
+                locker.EnterReadLock();
+                try
                 {
-                    case TestCaseStatus.NotRun:
-                        NotRunTestCases.AddTestCase(testcase);
-                        lock (locker)
-                        {
+                    switch (testcase.Status)
+                    {
+                        case TestCaseStatus.NotRun:
+                            NotRunTestCases.AddTestCase(testcase);
                             testcasemap.Add(testcase.Name, NotRunTestCases);
-                        }
-                        break;
-                    case TestCaseStatus.Passed:
-                        PassedTestCases.AddTestCase(testcase);
-                        lock (locker)
-                        {
+                            break;
+                        case TestCaseStatus.Passed:
+                            PassedTestCases.AddTestCase(testcase);
                             testcasemap.Add(testcase.Name, PassedTestCases);
-                        }
-                        break;
-                    case TestCaseStatus.Failed:
-                        FailedTestCases.AddTestCase(testcase);
-                        lock (locker)
-                        {
+                            break;
+                        case TestCaseStatus.Failed:
+                            FailedTestCases.AddTestCase(testcase);
                             testcasemap.Add(testcase.Name, FailedTestCases);
-                        }
-                        break;
-                    case TestCaseStatus.Other:
-                        OtherTestCases.AddTestCase(testcase);
-                        lock (locker)
-                        {
+                            break;
+                        case TestCaseStatus.Other:
+                            OtherTestCases.AddTestCase(testcase);
                             testcasemap.Add(testcase.Name, OtherTestCases);
-                        }
-                        break;
-                    case TestCaseStatus.Running:
-                        RunningTestCase = testcase;
-                        break;
+                            break;
+                        case TestCaseStatus.Running:
+                            RunningTestCase = testcase;
+                            break;
+                    }
+                }
+                finally
+                {
+                    locker.ExitReadLock();
                 }
             }
             groupList = null;
@@ -100,7 +96,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public void ChangeStatus(string testCaseName, TestCaseStatus status)
         {
-            lock (locker)
+            locker.EnterReadLock();
+            try
             {
                 TestCaseGroup from = testcasemap[testCaseName];
                 TestCaseGroup to = OtherTestCases;
@@ -120,42 +117,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     UpdateTestCaseList(from, RunningTestCase);
                 }
                 return;
-                if (status == TestCaseStatus.Waiting)
-                {
-                    if (testcase.Status == TestCaseStatus.Running)
-                    {
-                        testcase.Status = status;
-                        return;
-                    }
-                }
-
-                switch (status)
-                {
-                    case TestCaseStatus.Passed:
-                        to = PassedTestCases;
-                        break;
-                    case TestCaseStatus.Failed:
-                        to = FailedTestCases;
-                        break;
-                    case TestCaseStatus.Other:
-                        to = OtherTestCases;
-                        break;
-                    case TestCaseStatus.NotRun:
-                        to = NotRunTestCases;
-                        break;
-                }
-                testcase.Status = status;
-                if (UpdateTestCaseStatus != null)
-                {
-
-                    UpdateTestCaseStatus(from, to, testcase);
-                }
-                else
-                {
-                    from.RemoveTestCase(testcase);
-                    to.AddTestCase(testcase);
-                }
-                testcasemap[testCaseName] = to;
+            }
+            finally
+            {
+                locker.ExitReadLock();
             }
         }
 
