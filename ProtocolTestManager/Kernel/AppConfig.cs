@@ -228,8 +228,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 foreach (XmlNode xn in ConfigFilePathNode.SelectNodes("PtfFileName"))
                 {
+                    string name = xn.InnerText.Trim();
+                    name = name.Replace('\\', Path.DirectorySeparatorChar);
                     config.PtfConfigFilesInSource.Add(
-                        Path.Combine(testSuiteDir, xn.InnerText.Trim()));
+                        Path.Combine(testSuiteDir, name));
                 }
             }
             // Group Order
