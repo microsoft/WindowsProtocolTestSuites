@@ -76,9 +76,9 @@ if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
     exit 0
 }
 
-$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\FileServer\Server-Endpoint"
-$version = Get-ChildItem $endPointPath | where {$_.Attributes -match "Directory" -and $_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1
-$binDir = "$endPointPath\$version\Utils"
+$driver = $config.lab.servers.vm | Where {$_.role -match "DriverComputer"}
+$endPointPath = $driver.tools.TestsuiteZip.targetFolder
+$binDir = "$endPointPath\Utils"
 $ShareUtil = "$binDir\ShareUtil.exe"
 
 #----------------------------------------------------------------------------
