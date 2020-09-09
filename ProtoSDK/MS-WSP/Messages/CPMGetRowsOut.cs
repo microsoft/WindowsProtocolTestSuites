@@ -295,10 +295,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 case vType_Values.VT_CY: // An 8-byte two's complement integer (vValue divided by 10,000).
                     throw new NotImplementedException();
                 case vType_Values.VT_DATE:
-                    value = DateTime.FromOADate(buffer.Peek<double>(valueOffset));
+                    value = DateTime.FromOADate(buffer.Peek<double>(valueOffset)).ToUniversalTime();
                     break;
                 case vType_Values.VT_FILETIME:
-                    value = DateTime.FromFileTime(buffer.Peek<Int64>(valueOffset));
+                    value = DateTime.FromFileTime(buffer.Peek<Int64>(valueOffset)).ToUniversalTime();
                     break;
                 case vType_Values.VT_DECIMAL:
                     value = buffer.Peek<DECIMAL>(valueOffset);

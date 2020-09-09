@@ -213,11 +213,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     break;
 
                 case vType_Values.VT_DATE:
-                    value = DateTime.FromOADate(buffer.ToStruct<double>());
+                    value = DateTime.FromOADate(buffer.ToStruct<double>()).ToUniversalTime();
                     break;
 
                 case vType_Values.VT_FILETIME:
-                    value = DateTime.FromFileTime(buffer.ToStruct<long>());
+                    value = DateTime.FromFileTime(buffer.ToStruct<long>()).ToUniversalTime();
                     break;
 
                 case vType_Values.VT_DECIMAL:

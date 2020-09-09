@@ -950,9 +950,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             var expectedResults = new DateTime[]
             {
-                DateTime.Parse("6/23/2020 12:03:23"),
-                DateTime.Parse("7/23/2020 12:03:23"),
-                DateTime.Parse("5/23/2020 12:03:23"),
+                DateTime.Parse("2020-06-23T04:03:23Z").ToUniversalTime(),
+                DateTime.Parse("2020-07-23T04:03:23Z").ToUniversalTime(),
+                DateTime.Parse("2020-05-23T04:03:23Z").ToUniversalTime(),
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Media_DateEncoded), expectedResults, queryResult);
