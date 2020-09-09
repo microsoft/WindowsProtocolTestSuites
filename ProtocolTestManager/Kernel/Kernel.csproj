@@ -4,7 +4,8 @@
 		<targetframework>netstandard2.1</targetframework>
 		<RootNamespace>Microsoft.Protocols.TestManager.Kernel</RootNamespace>
 		<AssemblyName>Microsoft.Protocols.TestManager.Kernel</AssemblyName>
-	</PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
       <PrivateAssets>all</PrivateAssets>
@@ -13,9 +14,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
     <PackageReference Include="System.Text.Json" Version="5.0.0-preview.7.20364.11" />
-
-    
+  </ItemGroup>    
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="etc\**\*" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
