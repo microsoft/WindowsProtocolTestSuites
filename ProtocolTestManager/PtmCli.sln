@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMTestLogger", "ptmtestlogger\PTMTestLogger.csproj", "{8A8B1F48-E575-4C05-802B-11D3E55DD171}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMCli", "PtmCli\PTMCli.csproj", "{E6057442-9E61-4AEC-ADBB-D34388070581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMCli", "PtmCli\PtmCli.csproj", "{E6057442-9E61-4AEC-ADBB-D34388070581}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "Kernel\Kernel.csproj", "{51A6D366-99D5-46AD-BEC5-5C17804E1E6C}"
 EndProject
