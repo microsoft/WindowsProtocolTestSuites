@@ -1092,5 +1092,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
                 return ResourceManager.GetString("ConfigNotRight", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a profile version error
+        /// </summary>
+        internal static string TestsuiteeNewerError
+        {
+            get
+            {
+                return ResourceManager.GetString("TestsuiteeNewerError", resourceCulture);
+            }
+        }
     }
 }
