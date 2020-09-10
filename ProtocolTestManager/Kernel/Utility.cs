@@ -520,7 +520,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
                 else if (profileVersion < testSuiteVersion)
                 {
-                    throw new ArgumentException(StringResource.TestsuiteeNewerError);
+                    throw new ArgumentException(StringResource.TestSuiteNewerThanProfile);
                 }
                 else
                 {

@@ -240,7 +240,7 @@ Please upgrade the test suite to the same version of Protocol Test Manager.</val
   <data name="ConfigNotRight" xml:space="preserve">
     <value>Config file is not right</value>
   </data>
-  <data name="TestsuiteeNewerError" xml:space="preserve">
+  <data name="TestSuiteNewerThanProfile" xml:space="preserve">
     <value>The test suite version is newer than profile.</value>
   </data>
 </root>

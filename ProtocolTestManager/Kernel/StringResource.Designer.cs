@@ -1096,11 +1096,11 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         /// <summary>
         ///   Looks up a profile version error
         /// </summary>
-        internal static string TestsuiteeNewerError
+        internal static string TestSuiteNewerThanProfile
         {
             get
             {
-                return ResourceManager.GetString("TestsuiteeNewerError", resourceCulture);
+                return ResourceManager.GetString("TestSuiteNewerThanProfile", resourceCulture);
             }
         }
     }
