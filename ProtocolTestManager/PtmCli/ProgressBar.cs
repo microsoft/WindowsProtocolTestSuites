@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.CLI
 {
-    class ProgressBar: IDisposable
+    class ProgressBar : IDisposable
     {
         private readonly TimeSpan animationInterval = TimeSpan.FromSeconds(1.0 / 8);
         private const string animation = @"|/-\";
@@ -14,7 +14,6 @@ namespace Microsoft.Protocols.TestManager.CLI
         private readonly Timer timer;
 
         private string nextText = "";
-        private string currentText = "";
         private int animationIndex = 0;
         private bool disposed = false;
 
@@ -49,21 +48,24 @@ namespace Microsoft.Protocols.TestManager.CLI
                 }
 
                 animationIndex = (animationIndex + 1) % animation.Length;
-                string text = string.Format(nextText,animation[animationIndex]);
+                string text = string.Format(nextText, animation[animationIndex]);
                 UpdateText(text);
             }
         }
 
         private void UpdateText(string text)
         {
-            StringBuilder outputBuilder = new StringBuilder();
-            outputBuilder.Append('\b', currentText.Length);
-          
-            outputBuilder.Append(text);
+            Console.CursorVisible = false;
 
+            Console.SetCursorPosition(0, 0);
 
-            Console.Write(outputBuilder);
-            currentText = text;
+            var output = new StringBuilder();
+
+            output.Append(text);
+
+            output.Append(' ', Console.WindowWidth * Console.WindowHeight - text.Length);
+
+            Console.Write(output.ToString());
         }
 
         private void EnableTimer()

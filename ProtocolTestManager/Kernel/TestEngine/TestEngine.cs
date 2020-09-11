@@ -218,17 +218,19 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         WorkingDirectory = WorkingDirectory,
                         FileName = EnginePath,
-                        UseShellExecute = true,
-                        CreateNoWindow = false,
-                        Arguments = "test "+ runArgs,
-                        
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Arguments = "test " + runArgs,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
                     }
                 };
 
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
                 int err = vstestProcess.ExitCode;
-                if (err != 0) {
+                if (err != 0)
+                {
                     Console.Error.WriteLine();
                     Console.Error.WriteLine(StringResource.RunCaseError);
                 };
