@@ -25,31 +25,28 @@ if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
-if(!(Test-Path -Path $OutDir/Batch)) {
-    New-Item -ItemType Directory $OutDir/Batch -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
-    Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
+
+New-Item -ItemType Directory $OutDir/Batch -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
+Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
+
+
+New-Item -ItemType Directory $OutDir/Data -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/Setup/Data/*" -Destination "$OutDir/Data/" -Recurse -Force    
+
+
+New-Item -ItemType Directory $OutDir/Scripts -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
+foreach ($curr in $CommonScripts) { 
+    Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
 }
-if(!(Test-Path -Path $OutDir/Data)) {
-    New-Item -ItemType Directory $OutDir/Data -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/Setup/Data/*" -Destination "$OutDir/Data/" -Recurse -Force    
-}
-if(!(Test-Path -Path $OutDir/Scripts)) {
-    New-Item -ItemType Directory $OutDir/Scripts -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
-    foreach ($curr in $CommonScripts) { 
-        Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
-    }
-}
-if(!(Test-Path -Path $OutDir/Bin)) {
-    New-Item -ItemType Directory $OutDir/Bin -Force
-	Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.bmp" -Destination "$OutDir/Bin/" -Force
-	Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.xml" -Destination "$OutDir/Bin/" -Force
-	Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png" -Destination "$OutDir/Bin/" -Recurse -Force
-	Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.*" -Destination "$OutDir/Bin/" -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/*" -Destination "$OutDir/Bin/" -Recurse -Force    
-	
-}
+
+New-Item -ItemType Directory $OutDir/TestData -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.bmp" -Destination "$OutDir/TestData/" -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.xml" -Destination "$OutDir/TestData/" -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png" -Destination "$OutDir/TestData/" -Recurse -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.*" -Destination "$OutDir/TestData/" -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/*" -Destination "$OutDir/TestData/" -Recurse -Force    
 
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 

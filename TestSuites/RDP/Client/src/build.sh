@@ -50,12 +50,12 @@ do
     cp $TestSuiteRoot/CommonScripts/$curr $OutDir/Scripts/ -f
 done
 
-mkdir -p $OutDir/Bin
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.bmp $OutDir/Bin -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.xml $OutDir/Bin -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png $OutDir/Bin -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.* $OutDir/Bin -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/* $OutDir/Bin -f
+mkdir -p $OutDir/TestData
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.bmp $OutDir/TestData -f
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.xml $OutDir/TestData -f
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png $OutDir/TestData -f
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.* $OutDir/TestData -f
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/* $OutDir/TestData -f
 
 cp $TestSuiteRoot/TestSuites/RDP/Client/src/Deploy/LICENSE.rtf $OutDir/LICENSE.rtf -f
 

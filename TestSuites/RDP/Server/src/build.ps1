@@ -24,18 +24,14 @@ if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
-if(!(Test-Path -Path $OutDir/Batch)) {
-    New-Item -ItemType Directory $OutDir/Batch -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Server/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
-    Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
-}
+New-Item -ItemType Directory $OutDir/Batch -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Server/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
+Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
 
-if(!(Test-Path -Path $OutDir/Scripts)) {
-    New-Item -ItemType Directory $OutDir/Scripts -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Server/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
-    foreach ($curr in $CommonScripts) { 
-        Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
-    }
+New-Item -ItemType Directory $OutDir/Scripts -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Server/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
+foreach ($curr in $CommonScripts) { 
+    Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
 }
 
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Server/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force

@@ -31,11 +31,9 @@ if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
-if(!(Test-Path -Path $OutDir/Batch)) {
-    New-Item -ItemType Directory $OutDir/Batch -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/MS-SMBD/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
-    Copy-Item  "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.ps1" -Destination "$OutDir/Batch/" -Recurse -Force
-}
+New-Item -ItemType Directory $OutDir/Batch -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/MS-SMBD/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
+Copy-Item  "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.ps1" -Destination "$OutDir/Batch/" -Recurse -Force
 
 Copy-Item  "$TestSuiteRoot/TestSuites/MS-SMBD/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 

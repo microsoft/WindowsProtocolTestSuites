@@ -23,25 +23,19 @@ if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
-if(!(Test-Path -Path $OutDir/Batch)) {
-    New-Item -ItemType Directory $OutDir/Batch -Force
-    Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.sh" -Destination "$OutDir/Batch/" -Recurse -Force
-    Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.ps1" -Destination "$OutDir/Batch/" -Recurse -Force
-    Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
+New-Item -ItemType Directory $OutDir/Batch -Force
+Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.sh" -Destination "$OutDir/Batch/" -Recurse -Force
+Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.ps1" -Destination "$OutDir/Batch/" -Recurse -Force
+Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
+
+New-Item -ItemType Directory $OutDir/Scripts -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
+foreach ($curr in $CommonScripts) { 
+    Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
 }
 
-if(!(Test-Path -Path $OutDir/Scripts)) {
-    New-Item -ItemType Directory $OutDir/Scripts -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
-    foreach ($curr in $CommonScripts) { 
-        Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
-    }
-}
-
-if(!(Test-Path -Path $OutDir/Bin/Data)) {
-    New-Item -ItemType Directory $OutDir/Bin/Data -Force
-    Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Data/*" -Destination "$OutDir/Bin/Data" -Recurse -Force
-}
+New-Item -ItemType Directory $OutDir/Bin/Data -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Data/*" -Destination "$OutDir/Bin/Data" -Recurse -Force
 
 Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 
