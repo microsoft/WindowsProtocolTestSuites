@@ -8,7 +8,7 @@
     <!-- Password of user Under test-->
     <Property name="Password" value="Password01!" />
     <!-- Name of the Domain Under test-->
-    <Property name="DomainName" value="contoso.com" />
+    <Property name="DomainName" value="" />
     <!--Win2003,Win2008,Other-->
     <Property name="ServerOSVersion" value="Win7"/>
     <!-- Path of shared folder on server machine-->
