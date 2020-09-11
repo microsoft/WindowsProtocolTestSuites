@@ -122,8 +122,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             GroupByOutcome.ChangeStatus(testCaseName, status);
             RunningTestCase.LogUri = new Uri(testCaseLogPath);
             RunningTestCase.Assembly = detail.Source;
-            RunningTestCase.StartTime = detail.StartTime;
-            RunningTestCase.EndTime = detail.EndTime;
+            RunningTestCase.StartTime = DateTimeOffset.Parse(detail.StartTime);
+            RunningTestCase.EndTime = DateTimeOffset.Parse(detail.EndTime);
             RunningTestCase.StdOut = String.Join("\n", detail.StandardOut.Select(output => output.Content));
             RunningTestCase.ErrorMessage = String.Join("\n", detail.ErrorMessage);
             RunningTestCase.ErrorStackTrace = String.Join("\n", detail.ErrorStackTrace);

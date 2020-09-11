@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-# Check or install Visual Studio 2017 Community
+# Check or install Visual Studio 2019 Community
 
 param (
 	[ValidateSet("Check", "Install")]
@@ -9,9 +9,9 @@ param (
 	[string]$DownloadedArtifact	# Path to the downloaded Visual Studio 2017 Community installer
 )
 
-Function CheckAndModify-VS2017OrLater {
+Function CheckAndModify-VS2019OrLater {
 
-	Write-Host "Checking whether Visual Studio 2017 or later is installed or not..."
+	Write-Host "Checking whether Visual Studio 2019 or later is installed or not..."
 	
 	if ([IntPtr]::Size -eq 4)  # 32-bit
 	{
@@ -28,7 +28,7 @@ Function CheckAndModify-VS2017OrLater {
 
 	if ($VSWherePathExisted -eq $false)
 	{
-		Write-Host "Visual Studio 2017 or later is not installed in your computer."	-ForegroundColor Yellow
+		Write-Host "Visual Studio 2019 or later is not installed in your computer."	-ForegroundColor Yellow
 		return $false
 	}
 
@@ -37,7 +37,13 @@ Function CheckAndModify-VS2017OrLater {
 
 	if ($VSInstallationPaths -eq $null)
 	{
-		Write-Host "Visual Studio 2017 or later is not installed in your computer." -ForegroundColor Yellow
+		Write-Host "Visual Studio 2019 or later is not installed in your computer." -ForegroundColor Yellow
+		return $false			
+	}
+
+	if (($VSDisplayNames -Match '2019').Count -eq 0)
+	{
+		Write-Host "Visual Studio 2019 or later is not installed in your computer." -ForegroundColor Yellow
 		return $false			
 	}
 
@@ -62,7 +68,7 @@ Function CheckAndModify-VS2017OrLater {
 $currentPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 # The path where the Visual Studio will be installed
-$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
+$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community"
 
 Function Install-VisualStudio {
 	try {
@@ -75,14 +81,14 @@ Function Install-VisualStudio {
 		}
 	}
 	catch {
-		Write-Host "Install Visual Studio 2017 Community failed: $_" -ForegroundColor Red
+		Write-Host "Install Visual Studio 2019 Community failed: $_" -ForegroundColor Red
 		return $false
 	}
 }
 
 switch($Action) {
 	"Check" {
-		$isInstalled = CheckAndModify-VS2017OrLater
+		$isInstalled = CheckAndModify-VS2019OrLater
 		return $isInstalled
 	}
 

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSuiteSelectionConfig>
+  <DefaultRegistryPath>SOFTWARE\Microsoft\ProtocolTestSuites</DefaultRegistryPath>
+  <DefaultRegistryPath64>SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites</DefaultRegistryPath64>
+  <Group name="File Sharing">
+    <TestSuite name="FileServer">
+      <Description></Description>
+      <TestSuiteDetail>FileServer test suite is designed to test implementations of file sharing protocol family.</TestSuiteDetail>
+    </TestSuite>
+    <TestSuite name="MS-SMBD">
+      <Description></Description>
+      <TestSuiteDetail>MS-SMBD test suite is designed to test server implementations of MS-SMBD protocol.</TestSuiteDetail>
+    </TestSuite>
+  </Group>
+  <Group name="Security">
+    <TestSuite name="Kerberos">
+      <Description></Description>
+      <TestSuiteDetail></TestSuiteDetail>
+    </TestSuite>
+	<TestSuite name="MS-AZOD" folder="C:\MicrosoftProtocolTests\MS-AZOD\OD-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+    </TestSuite>
+  </Group>
+  <Group name="Active Directory">
+    <TestSuite name="ADFamily" folder="C:\MicrosoftProtocolTests\ADFamily\Server-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>Active Directory Protocols</TestSuiteDetail>
+    </TestSuite>
+    <TestSuite name="MS-ADOD" folder="C:\MicrosoftProtocolTests\MS-ADOD\OD-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>* Active Directory Protocols Overview [MS-ADOD]</TestSuiteDetail>
+    </TestSuite>
+  </Group>
+
+  <Group name="Remote Desktop">
+    <TestSuite name="RDP-Client" folder="C:\MicrosoftProtocolTests\RDP\Client-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>RDP Client test suite is designed to test client implementation of Remote Desktop Protocol family.</TestSuiteDetail>
+    </TestSuite>
+    <TestSuite name="RDP-Server" folder="C:\MicrosoftProtocolTests\RDP\Server-Endpoint\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>RDP Server test suite is designed to test server implementation of Remote Desktop Protocol family.</TestSuiteDetail>
+    </TestSuite>
+  </Group>
+  <Group name="MS-ADFSPIP">
+    <TestSuite name="MS-ADFSPIP">
+      <Description></Description>
+      <TestSuiteDetail>MS-ADFSPIP test suite is designed to test the implementations of Device Registration Discovery Protocol, as specified in Microsoft document [MS-DVRD], and Device Registration Enrollment Protocol, as specified in Microsoft document [MS-DVRE].</TestSuiteDetail>
+    </TestSuite>
+  </Group>
+  <Group name="BranchCache">
+    <TestSuite name="BranchCache" folder="C:\MicrosoftProtocolTests\BranchCache\$(TestSuiteVersion)">
+      <Description></Description>
+      <TestSuiteDetail>BranchCache test suite is designed to test the implementations of MS-PCCRTP, MS-PCCRR, MS-PCHC and MS-PCCRC protocols.</TestSuiteDetail>
+    </TestSuite>
+  </Group>
+</TestSuiteSelectionConfig>

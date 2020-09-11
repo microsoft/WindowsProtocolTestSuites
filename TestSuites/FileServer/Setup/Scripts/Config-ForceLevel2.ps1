@@ -76,7 +76,7 @@ if( $null -ne $sut.os  -and $sut.os -eq "Linux"){
     exit 0
 }
 
-$driver = $config.lab.servers.vm | Where-Object {$_.role -match "DriverComputer"}
+$driver = $config.lab.servers.vm | Where {$_.role -match "DriverComputer"}
 $endPointPath = $driver.tools.TestsuiteZip.targetFolder
 $binDir = "$endPointPath\Utils"
 $ShareUtil = "$binDir\ShareUtil.exe"
