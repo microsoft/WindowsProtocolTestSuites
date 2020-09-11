@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         {
             value = Math.Max(0, Math.Min(1, value)); // Make sure value is in [0..1] range
             int percent = (int)(value * 100);
-            string next = string.Format("{0,3}% {{0}} {1}", percent, step);
+            string next = string.Format("{0}% {{0}} {1}", percent, step);
             Interlocked.Exchange(ref nextText, next);
         }
 
@@ -56,28 +56,11 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         private void UpdateText(string text)
         {
-            // Get length of common portion
-            int commonPrefixLength = 0;
-            int commonLength = Math.Min(currentText.Length, text.Length);
-            while (commonPrefixLength < commonLength && text[commonPrefixLength] == currentText[commonPrefixLength])
-            {
-                commonPrefixLength++;
-            }
-
-            // Backtrack to the first differing character
             StringBuilder outputBuilder = new StringBuilder();
-            outputBuilder.Append('\b', currentText.Length - commonPrefixLength);
+            outputBuilder.Append('\b', currentText.Length);
+          
+            outputBuilder.Append(text);
 
-            // Output new suffix
-            outputBuilder.Append(text.Substring(commonPrefixLength));
-
-            // If the new text is shorter than the old one: delete overlapping characters
-            int overlapCount = currentText.Length - text.Length;
-            if (overlapCount > 0)
-            {
-                outputBuilder.Append(' ', overlapCount);
-                outputBuilder.Append('\b', overlapCount);
-            }
 
             Console.Write(outputBuilder);
             currentText = text;

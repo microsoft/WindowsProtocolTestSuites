@@ -70,13 +70,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Registers the callback function. Wait to be notified when there're file changes.
         /// </summary>
-        public void Start(string workingDirectory)
+        public void Start(string workingDirectory, string ResultOutputFolder)
         {
             if (workingDir == workingDirectory && watcher != null) return;
 
             Stop();
             isFirstTimeAccess = new ConcurrentDictionary<string, bool>();
-            workingDir = workingDirectory;
+            workingDir = Path.Combine(workingDirectory, ResultOutputFolder);
+            if (!Directory.Exists(workingDir))
+            {
+                Directory.CreateDirectory(workingDir);
+            }
             watcher = new FileSystemWatcher(workingDir);
             watcher.IncludeSubdirectories = true;
             watcher.Filter = "*.html"; // Only cares about html files
@@ -92,10 +96,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             // The html files are under the below folder, so any file that is not in that folder is not interesting.
             // E.g. C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\1.0.5812.0\HtmlTestResults\2014-11-09-21-59-16\Html\
-            if (!e.FullPath.StartsWith(Path.Combine(workingDir, AppConfig.HtmlResultFolderName)))
-            {
-                return;
-            }
 
             if (e.FullPath.Contains(AppConfig.IndexHtmlFileName))
             {
@@ -120,11 +120,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             // The html files are under the below folder, so any file that is not in that folder is not interesting.
             // E.g. C:\MicrosoftProtocolTests\FileSharing\Server-Endpoint\1.0.5812.0\HtmlTestResults\2014-11-09-21-59-16\Html\
-            if (!e.FullPath.StartsWith(Path.Combine(workingDir, AppConfig.HtmlResultFolderName)))
-            {
-                return;
-            }
-
             if (e.FullPath.Contains(AppConfig.IndexHtmlFileName))
             {
                 this.indexHtmlFilePath = e.FullPath;
@@ -203,51 +198,58 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// The name of the test case
         /// </summary>
-        public string Name;
+        public string Name { get; set; }
 
         /// <summary>
         /// The start time of the test case
         /// </summary>
-        public DateTimeOffset StartTime;
+        public string StartTime { get; set; }
 
         /// <summary>
         /// The end time of the test case
         /// </summary>
-        public DateTimeOffset EndTime;
-
+        public string EndTime { get; set; }
         /// <summary>
         /// The result of the test case
         /// </summary>
-        public string Result;
+        public string Result { get; set; }
 
         /// <summary>
         /// The source assembly of the test case
         /// </summary>
-        public string Source;
+        public string Source { get; set; }
+        /// <summary>
+        /// The test class of the test case
+        /// </summary>
+        public string ClassType { get; set; }
+
+        /// <summary>
+        /// The Categories of the test case
+        /// </summary>
+        public List<string> Categories { get; set; }
 
         /// <summary>
         /// The ErrorStackTrace log of the test case
         /// </summary>
-        public List<string> ErrorStackTrace;
-
+        public List<string> ErrorStackTrace { get; set; }
         /// <summary>
         /// The ErrorMessage log of the test case
         /// </summary>
-        public List<string> ErrorMessage;
+        public List<string> ErrorMessage { get; set; }
 
         /// <summary>
         /// The StandardOut log of the test case
         /// </summary>
-        public List<StandardOutDetail> StandardOut;
+        public List<StandardOutDetail> StandardOut { get; set; }
 
         /// <summary>
         /// The Types in StandardOut log 
         /// </summary>
-        public List<string> StandardOutTypes;
+        public List<string> StandardOutTypes { get; set; }
 
         /// <summary>
         /// The path of the capture file if any
         /// </summary>
-        public string CapturePath;
+        public string CapturePath { get; set; }
     }
 }
