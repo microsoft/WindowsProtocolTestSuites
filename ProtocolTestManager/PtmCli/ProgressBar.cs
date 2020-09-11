@@ -26,6 +26,8 @@ namespace Microsoft.Protocols.TestManager.CLI
             // Otherwise, we'll end up with a lot of garbage in the target file.
             if (!Console.IsOutputRedirected)
             {
+                Console.Clear();
+
                 EnableTimer();
             }
         }
@@ -63,7 +65,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
             output.Append(text);
 
-            output.Append(' ', Console.WindowWidth * Console.WindowHeight - text.Length);
+            output.Append(' ', Console.WindowWidth * Console.WindowHeight - text.Length - 1);
 
             Console.Write(output.ToString());
         }
