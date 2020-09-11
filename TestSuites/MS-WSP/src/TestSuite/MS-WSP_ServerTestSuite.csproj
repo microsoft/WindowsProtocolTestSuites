@@ -82,7 +82,6 @@
     <Compile Include="TestCaseSetbindingsFor_E_Error.cs" />
     <Compile Include="TestCaseSetScopePrioritization.cs" />
     <Compile Include="TestCaseSetScopePrioritization_StatusInvalidParameter.cs" />
-    <Compile Include="TestCaseUpdateDocumentsIn_StatusInvalid.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
     <Compile Include="TraditionalCases\CPMFetchValue.cs" />
     <Compile Include="TraditionalCases\CPMCreateQuery_Categorization_Aggregate.cs" />

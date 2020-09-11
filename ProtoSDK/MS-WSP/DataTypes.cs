@@ -476,10 +476,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         CPMFetchValueOut = 0x000000E4,
         /// <summary>
-        ///  MessageId of CPMUpdateDocumentsIn
-        /// </summary>
-        CPMUpdateDocumentsIn = 0x000000E6,
-        /// <summary>
         ///  MessageId of CPMGetQueryStatusExIn
         /// </summary>
         CPMGetQueryStatusExIn = 0x000000E7,
@@ -491,11 +487,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         ///  MessageId of CPMRestartPositionIn
         /// </summary>
         CPMRestartPositionIn = 0x000000E8,
-        //Update by v-aliche for delta testing
-        ///// <summary>
-        /////  MessageId of CPMStopAsynchIn
-        ///// </summary>
-        //CPMStopAsynchIn = 0x000000E9
 
         /// <summary>
         /// MessageID of CPMFindIndicesIn
@@ -1117,10 +1108,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 | 0x000000D9
                 | 0x000000E1
                 | 0x000000E4
-                | 0x000000E6
                 | 0x000000E7
                 | 0x000000E8
-                | 0x000000E9
                 | 0x000000EC
                 | 0x000000F1
                 | 0x000000F2

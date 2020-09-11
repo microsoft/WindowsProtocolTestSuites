@@ -1790,61 +1790,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             CPMSetScopePrioritizationOutResponse;
         #endregion
 
-        #region CPMUpdateDocumentsIn and CPMUpdateDocumentsOut
-
-        /// <summary>
-        /// CPMUpdateDocumentsIn() request directs the server to index the specified path
-        /// </summary>
-        /// <param name="_flag"></param>
-        /// <param name="_fRootPath"></param>
-        public void CPMUpdateDocumentsIn(uint _flag, uint _fRootPath)
-        {
-            byte[] updateDocumentsOutMessage = null;
-            RequestSender sender = GetRequestSender(isClientConnected);
-
-            string rootPath;
-            //If set to 0x00000001, a path on which to perform the update is included in RootPath;
-            //If set to 0x00000000, the update is to be performed on all indexed paths.
-            if (_fRootPath == 0x00000001)
-            {
-                rootPath = Site.Properties["SharedPath"];
-            }
-            else
-            {
-                rootPath = "";
-            }
-
-            byte[] updateDocumentsInMessage = builder.GetCPMUpdateDocumentsIn(_flag, _fRootPath, rootPath);
-
-            int bytesRead = sender.SendMessage(updateDocumentsInMessage,
-                out updateDocumentsOutMessage);
-            byte[] value = null;
-            value = new byte[bytesRead];
-            Array.Copy(updateDocumentsOutMessage, 0, value, 0, bytesRead);
-
-            uint checkSum = GetCheckSumField(updateDocumentsInMessage);
-            // Read the message Response           
-
-            int startingIndex = 0;
-            uint msgId = Helper.GetUInt(updateDocumentsOutMessage, ref startingIndex);
-            uint errorCode = Helper.GetUInt(updateDocumentsOutMessage, ref startingIndex);
-
-            if (errorCode == 0)
-            {
-                validator.ValidateUpdateDocumentsOut(value, checkSum);
-            }
-            CPMUpdateDocumentsOutResponse(errorCode);
-
-        }
-
-        /// <summary>
-        /// This event is used to get the response from 
-        /// CPMUpdateDocumentsIn request.
-        /// </summary>
-        public event CPMUpdateDocumentsOutResponseHandler
-            CPMUpdateDocumentsOutResponse;
-        #endregion
-
         #region CPMRestartPositionIn request and response
 
         /// <summary>

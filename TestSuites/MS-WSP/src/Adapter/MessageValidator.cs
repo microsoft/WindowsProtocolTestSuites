@@ -1789,19 +1789,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Method for verify the UpdateDocumentsOut message,
-        /// this message directs the server to index the specified path.
-        /// </summary>
-        /// <param name="bytes">byte array</param>
-        /// <param name="checkSum">Checksum of the message</param>
-        public void ValidateUpdateDocumentsOut(Byte[] bytes, uint checkSum)
-        {
-            int startingIndex = 0;
-            ValidateHeader(bytes, MessageType.CPMUpdateDocumentsIn, checkSum, ref startingIndex);
-
-        }
-
-        /// <summary>
         /// Method for verify the GetScopeStatisticsOut massage,
         /// this message request statistics regarding the number of indexed items, the number of items needing to be indexed 
         /// and the number of items needing to be re-indexed that are relevant to the originating query.
@@ -2837,13 +2824,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "server MUST  prepare a CPMFetchValueOut message.");
                     break;
 
-                case MessageType.CPMUpdateDocumentsIn:
-                    //Blocked due to Active TDI 
-                    //site.CaptureRequirementIfAreEqual<uint>(0x000000E6, 
-                    //messageType, 931,
-                    //    "The value of 4 bytes 'msg' field for the response
-                    //of CPMUpdateDocumentsIn message is 0x000000E6.");
-                    break;
                 case MessageType.CPMGetQueryStatusExIn:
                     site.CaptureRequirementIfAreEqual<uint>(0x000000E7,
                         messageType, 933,
@@ -2866,14 +2846,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     //response of CPMReStartPositionIn message 
                     //is 0x000000E8.");
                     break;
-                //Update by v-aliche for delta testing
-                //case MessageType.CPMStopAsynchIn:
-                //    //Blocked due to Active TDI 18402
-                //    //site.CaptureRequirementIfAreEqual<uint>(0x000000E9, 
-                //    //messageType, 937,
-                //    //    "The value of 4 bytes 'msg' field for the 
-                //    //response of CPMStopAsyncIn message is 0x000000E9.");
-                //    break;
+
                 default:
                     break;
             }

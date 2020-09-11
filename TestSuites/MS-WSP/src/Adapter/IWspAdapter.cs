@@ -124,13 +124,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         void CPMGetScopeStatisticsIn();
 
         /// <summary>
-        /// CPMUpdateDocumentsIn() request directs the server to index the specified path
-        /// </summary>
-        /// <param name="_flag"></param>
-        /// <param name="_fRootPath"></param>
-        void CPMUpdateDocumentsIn(uint _flag, uint _fRootPath);
-
-        /// <summary>
         /// CPMRestartPositionIn() request directs the server to moves the fetch position for a cursor to the beginning of the chapter. 
         /// </summary>
         /// <param name="_hCursor">The query handle.</param>
@@ -225,11 +218,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from CPMSetScopePrioritizationIn request.
         /// </summary>
         event CPMSetScopePrioritizationOutResponseHandler CPMSetScopePrioritizationOutResponse;
-
-        /// <summary>
-        /// This event is used to get the response from CPMUpdateDocumentsIn request.
-        /// </summary>
-        event CPMUpdateDocumentsOutResponseHandler CPMUpdateDocumentsOutResponse;
 
         /// <summary>
         /// This event is used to get the response from CPMRestartPositionIn request.
@@ -348,13 +336,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     /// </summary>
     /// <param name="errorCode">Error code from the server response.</param>
     public delegate void CPMGetScopeStatisticsOutResponseHandler(uint errorCode);
-
-    /// <summary>
-    /// CPMUpdateDocumentsOutResponseHandler is a delegate 
-    /// for CPMUpdateDocumentsOutResponse event.
-    /// </summary>
-    /// <param name="errorCode"></param>
-    public delegate void CPMUpdateDocumentsOutResponseHandler(uint errorCode);
 
     /// <summary>
     /// CCPMRestartPositionInResponseHadler is a delegate 

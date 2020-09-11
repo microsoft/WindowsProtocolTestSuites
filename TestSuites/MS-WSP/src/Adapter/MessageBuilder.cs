@@ -278,34 +278,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Gets the CPMUpdateDocumentsIn message BOLB.
-        /// </summary>
-        /// <param name="flag">type of update</param>
-        /// <param name="flagRootPath">Boolean value indicating
-        /// if the RootPath field specifies a path on which 
-        /// to perform the update.</param>
-        /// <param name="rootPath">Name of the path to be updated</param>
-        /// <returns>CPMUpdateDocumentsIn BLOB</returns>
-        public byte[] GetCPMUpdateDocumentsIn(uint flag,
-            uint flagRootPath, string rootPath)
-        {
-            int documentsInMessageLength = 2 * Constant.SIZE_OF_UINT
-                + 2 * rootPath.Length/* unicode character */;
-            byte[] mainBlob = new byte[documentsInMessageLength];
-            //================ Converting values into Bytes ============
-            int index = 0;
-
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(flag));
-            Helper.CopyBytes(mainBlob, ref index,
-                BitConverter.GetBytes(flagRootPath));
-            Helper.CopyBytes(mainBlob, ref index,
-                Encoding.Unicode.GetBytes(rootPath));
-            return AddMessageHeader(MessageType.CPMUpdateDocumentsIn,
-                mainBlob);
-        }
-
-        /// <summary>
         /// Gets RatioFinishedIn Message BLOB
         /// </summary>
         /// <param name="cursor">Handle identifying the query for
