@@ -29,3 +29,4 @@ jobs:
       BuildPipelineName: $(test.BuildPipelineName)
       RegressionPipelineNames: $(test.RegressionPipelineNames)
       TargetRepoCsvFile: $(targetRepo.csvFile)
+      targetRepoBranch: $(Build.SourceBranch)

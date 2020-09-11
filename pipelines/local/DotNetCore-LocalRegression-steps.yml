@@ -31,7 +31,7 @@ jobs:
       inputs:
         targetType: filePath
         filePath: "WindowsProtocolTestSuitesHelper/AzureScripts/Get-ExpandedDotNetCoreArchive.ps1"
-        arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -BuildPipelineParameters "${{parameters[''build.buildPipelineParameters'']}}" -BuildPipelineName ${{parameters.BuildPipelineName}} -TargetRepoBranch "${{parameters[''build.targetRepoBranch'']}}" -ArchiveName "${{parameters[''build.archiveName'']}}" -ArtifactsLocalPath "$(Build.ArtifactStagingDirectory)/staging"'
+        arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -BuildPipelineName ${{parameters.BuildPipelineName}} -TargetRepoBranch "${{parameters[''build.targetRepoBranch'']}}"'
       condition: succeeded()
 
     - task: PowerShell@2
