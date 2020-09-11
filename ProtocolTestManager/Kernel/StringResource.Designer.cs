@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class StringResource {
@@ -61,13 +61,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;Common&quot;&gt;
-        ///      &lt;!-- START - OVERALL ENVIRONMENT CONFIG --&gt;
-        ///      &lt;Property name=&quot;AllowBreakEnvironment&quot; value=&quot;false&quot;&gt;
-        ///         [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\ADFamily\src\TestSuite\AD_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string AD_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -76,12 +70,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;TestName&quot; value=&quot;AD_Family_Test_Suite&quot; /&gt;
-        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;AD_Family&quot; /&gt;
-        ///    &lt;Property name=&quot;Version&quot;  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\ADFamily\src\TestSuite\AD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string AD_ServerTestSuite_ptfconfig {
             get {
@@ -99,17 +88,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;Auth&quot;&gt;
-        ///      &lt;Group  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\Auth\TestSuite\Auth_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string Auth_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -118,17 +97,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///&lt;/TestSite&gt;
-        ///.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\Auth\TestSuite\Auth_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string Auth_ServerTestSuite_ptfconfig {
             get {
@@ -137,19 +106,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///
-        ///    &lt;!--
-        ///        Please edit the following settings according to your test environment
-        ///    --&gt;
-        ///
-        ///    &lt;!--
-        ///        SU [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\BranchCache\src\TestSuite\BranchCache_TestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string BranchCache_TestSuite_deployment_ptfconfig {
             get {
@@ -158,15 +115,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;TestName&quot; value=&quot;BranchCache Test&quot; /&gt;
-        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;BranchCache&quot; /&gt;
-        ///   [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\BranchCache\src\TestSuite\BranchCache_TestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string BranchCache_TestSuite_ptfconfig {
             get {
@@ -175,15 +124,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///
-        ///    &lt;!--
-        ///        Tag named Choice is used for the ComboBox in UI design
-        ///        Tag named Description is used for the com [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to .NET Core is not installed. Please download and install .NET Core 3.1 from the link: https://dotnet.microsoft.com/download/dotnet-core/3.1.
+        /// </summary>
+        internal static string CannotFindDotnet {
+            get {
+                return ResourceManager.GetString("CannotFindDotnet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\Common\TestSuite\CommonTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string CommonTestSuite_deployment_ptfconfig {
             get {
@@ -192,16 +142,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///
-        ///    &lt;Group name=&quot;Common&quot;&gt;
-        ///      &lt;Property name=&quot;TestName&quot; value=&quot;FileServer Family Test&quot; /&gt;
-        ///      &lt;Property name=&quot;Feat [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\Common\TestSuite\CommonTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string CommonTestSuite_ptfconfig {
             get {
@@ -234,6 +175,15 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string ConfigLoadError {
             get {
                 return ResourceManager.GetString("ConfigLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Config file is not right.
+        /// </summary>
+        internal static string ConfigNotRight {
+            get {
+                return ResourceManager.GetString("ConfigNotRight", resourceCulture);
             }
         }
         
@@ -346,14 +296,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!--Common properties--&gt;
-        ///    &lt;Property name=&quot;TransportType&quot; value=&quot;tcp&quot;&gt;
-        ///      &lt;Description&gt;
-        ///        The default transport type
-        ///      &lt;/Des [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\Kerberos\src\TestSuite\Kerberos_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string Kerberos_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -362,13 +305,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;ConsoleBufferHeight&quot; value=&quot;600&quot;/&gt;
-        ///    &lt;!--The directory of the keytab files. Leave empty to make keys  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\Kerberos\src\TestSuite\Kerberos_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string Kerberos_ServerTestSuite_ptfconfig {
             get {
@@ -445,15 +382,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;    
-        ///    &lt;Group name=&quot;Domain&quot;&gt;
-        ///      &lt;Property name=&quot;DomainName&quot;        value=&quot;contoso.com&quot;/&gt;
-        ///      &lt;Property name=&quot;Usern [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-ADFSPIP\src\TestSuite\PTFConfig\MS-ADFSPIP_ClientTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_ADFSPIP_ClientTestSuite_deployment_ptfconfig {
             get {
@@ -462,13 +391,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!-- Test suite properties which value not changed when running in different test environments --&gt;
-        ///    &lt;!--&lt;Property na [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-ADFSPIP\src\TestSuite\PTFConfig\MS-ADFSPIP_ClientTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_ADFSPIP_ClientTestSuite_ptfconfig {
             get {
@@ -477,15 +400,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!--Basic Configuration.--&gt;
-        ///
-        ///    &lt;!--Category: Domain Information.--&gt;
-        ///    &lt;!--Scope: All scope (Windows, NonWindows).- [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-ADOD\src\TestSuite\MS-ADOD_ODTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_ADOD_ODTestSuite_deployment_ptfconfig {
             get {
@@ -494,15 +409,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;TestName&quot; value=&quot;MS-ADOD Test&quot; /&gt;
-        ///    &lt;Property name=&quot;ExpectedExecutionTime&quot; value=&quot;1200&quot; /&gt;
-        ///  &lt; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-ADOD\src\TestSuite\MS-ADOD_ODTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_ADOD_ODTestSuite_ptfconfig {
             get {
@@ -511,16 +418,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;!-- Windows configuration --&gt;
-        ///      &lt;!--Basic configuration--&gt;       
-        ///        &lt;!--Scope: KDC domain--&gt;
-        ///        &lt;!- [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-AZOD\src\TestSuite\MS-AZOD_ODTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_AZOD_ODTestSuite_deployment_ptfconfig {
             get {
@@ -529,17 +427,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;TestName&quot; value=&quot;MS-AZOD Test&quot; /&gt;
-        ///  &lt;/Properties&gt;
-        ///
-        ///  &lt;Adapters&gt;
-        ///    &lt;!--&lt;Adapter xsi:type=&quot;int [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-AZOD\src\TestSuite\MS-AZOD_ODTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_AZOD_ODTestSuite_ptfconfig {
             get {
@@ -548,18 +436,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;DFSC&quot;&gt;
-        ///      &lt;!--T [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\DFSC\TestSuite\MS-DFSC_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_DFSC_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -568,17 +445,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///&lt;/TestSite&gt;
-        ///.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\DFSC\TestSuite\MS-DFSC_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_DFSC_ServerTestSuite_ptfconfig {
             get {
@@ -587,18 +454,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;FSA&quot;&gt;
-        ///      &lt;Proper [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_FSA_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -607,19 +463,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; 
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties /&gt;
-        ///  
-        ///  &lt;Adapters&gt;
-        ///    &lt;Adapter xsi:type=&quot;man [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_FSA_ServerTestSuite_ptfconfig {
             get {
@@ -628,16 +472,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!--
-        ///        Please edit the follow [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_FSRVP_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -646,17 +481,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///&lt;/TestSite&gt;
-        ///.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\FSRVP\TestSuite\MS-FSRVP_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_FSRVP_ServerTestSuite_ptfconfig {
             get {
@@ -665,18 +490,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;RSVD&quot;&gt;
-        ///      &lt;Prop [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\RSVD\TestSuite\MS-RSVD_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_RSVD_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -685,17 +499,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///&lt;/TestSite&gt;
-        ///.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\RSVD\TestSuite\MS-RSVD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_RSVD_ServerTestSuite_ptfconfig {
             get {
@@ -704,17 +508,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;SMB2&quot;&gt;
-        ///      &lt;!--Tag [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\SMB2\TestSuite\MS-SMB2_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SMB2_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -723,17 +517,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///&lt;/TestSite&gt;
-        ///.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\SMB2\TestSuite\MS-SMB2_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SMB2_ServerTestSuite_ptfconfig {
             get {
@@ -742,17 +526,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;SMB2&quot;&gt;
-        ///      &lt;!--Tag [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SMB2Model_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -761,18 +535,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///  
-        ///  &lt;Adapters&gt;
-        ///    &lt;Adapter xsi:type=&quot;managed [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\SMB2Model\TestSuite\MS-SMB2Model_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SMB2Model_ServerTestSuite_ptfconfig {
             get {
@@ -781,15 +544,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot; 
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;!--Computer name of system under test (SUT)--&gt;
-        ///    &lt;Property name=&quot;SutComputerName&quot; value=&quot;SMBD-SUT01&quot; /&gt;
-        ///    &lt;!--I [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-SMBD\src\TestSuite\MS-SMBD_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SMBD_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -798,15 +553,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;Property name=&quot;TestName&quot; value=&quot;SMBD&quot; /&gt;
-        ///    &lt;Property name=&quot;FeatureName&quot; value=&quot;MS-SMBD&quot; /&gt;
-        ///
-        ///    &lt;!--Security packag [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\MS-SMBD\src\TestSuite\MS-SMBD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SMBD_ServerTestSuite_ptfconfig {
             get {
@@ -815,18 +562,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;SQOS&quot;&gt;
-        ///      &lt;Prop [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\SQOS\TestSuite\MS-SQOS_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SQOS_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -835,17 +571,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties/&gt;
-        ///&lt;/TestSite&gt;
-        ///.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\SQOS\TestSuite\MS-SQOS_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string MS_SQOS_ServerTestSuite_ptfconfig {
             get {
@@ -902,16 +628,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///
-        ///    &lt;!--Block Begin: Properties that required to be set ***--&gt;
-        ///    &lt;!--The RDP listening port number.--&gt;
-        ///    &lt;Property [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\RDP\Client\src\TestSuite\RDP_ClientTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string RDP_ClientTestSuite_deployment_ptfconfig {
             get {
@@ -920,13 +637,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!-- Test suite properties which value not changed when running in different test environments --&gt;
-        ///    &lt;!--&lt;Property na [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\RDP\Client\src\TestSuite\RDP_ClientTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string RDP_ClientTestSuite_ptfconfig {
             get {
@@ -935,16 +646,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///
-        ///    &lt;!--Block Begin: Properties that required to be set ***--&gt;
-        ///    &lt;!--Whether a negotiation protocol is used.--&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\RDP\Server\src\TestSuite\RDP_ServerTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string RDP_ServerTestSuite_deployment_ptfconfig {
             get {
@@ -953,13 +655,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Properties&gt;
-        ///    &lt;!-- Test suite properties which value not changed when running in different test environments --&gt;
-        ///    &lt;!--&lt;Property na [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\RDP\Server\src\TestSuite\RDP_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string RDP_ServerTestSuite_ptfconfig {
             get {
@@ -977,18 +673,16 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.deployment.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///
-        ///    &lt;Group name=&quot;Cluster&quot;&gt;
-        ///      &lt;! [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to dotnet test exits with error..
+        /// </summary>
+        internal static string RunCaseError {
+            get {
+                return ResourceManager.GetString("RunCaseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\ServerFailover\TestSuite\ServerFailoverTestSuite.deployment.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string ServerFailoverTestSuite_deployment_ptfconfig {
             get {
@@ -997,18 +691,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;TestSite xmlns=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig&quot;
-        ///          xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///          xsi:schemaLocation=&quot;http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd&quot;&gt;
-        ///
-        ///  &lt;Include&gt;
-        ///    &lt;File name=&quot;CommonTestSuite.ptfconfig&quot;/&gt;
-        ///  &lt;/Include&gt;
-        ///
-        ///  &lt;Properties&gt;
-        ///    &lt;Group name=&quot;Cluster&quot;&gt;
-        ///      &lt;Property nam [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to ..\..\TestSuites\FileServer\src\ServerFailover\TestSuite\ServerFailoverTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252.
         /// </summary>
         internal static string ServerFailoverTestSuite_ptfconfig {
             get {
@@ -1032,6 +715,15 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string TestSuiteNeedUpgrade {
             get {
                 return ResourceManager.GetString("TestSuiteNeedUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The test suite version is newer than profile..
+        /// </summary>
+        internal static string TestSuiteNewerThanProfile {
+            get {
+                return ResourceManager.GetString("TestSuiteNewerThanProfile", resourceCulture);
             }
         }
         
@@ -1068,39 +760,6 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string XsiNamespace {
             get {
                 return ResourceManager.GetString("XsiNamespace", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a dotnet error
-        /// </summary>
-        internal static string CannotFindDotnet
-        {
-            get
-            {
-                return ResourceManager.GetString("CannotFindDotnet", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a config error
-        /// </summary>
-        internal static string ConfigNotRight
-        {
-            get
-            {
-                return ResourceManager.GetString("ConfigNotRight", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a profile version error
-        /// </summary>
-        internal static string TestSuiteNewerThanProfile
-        {
-            get
-            {
-                return ResourceManager.GetString("TestSuiteNewerThanProfile", resourceCulture);
             }
         }
     }

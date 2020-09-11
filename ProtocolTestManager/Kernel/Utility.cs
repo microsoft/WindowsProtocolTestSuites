@@ -30,6 +30,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private int targetFilterIndex = -1;
         private int mappingFilterIndex = -1;
         private DateTime sessionStartTime;
+        private string ptfconfigDirectory = null;
 
         public Utility()
         {
@@ -796,7 +797,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         throw new InvalidDataException(StringResource.InvalidProfile);
                     }
                 }
-                string desCfgDir = appConfig.TestSuiteDirectory;
+
+                ptfconfigDirectory = Path.Combine("PtfConfigDirectory", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}");
+                string desCfgDir = ptfconfigDirectory;
                 profile.SavePtfCfgTo(desCfgDir);
                 filter.LoadProfile(profile.ProfileStream);
                 ImportPlaylist(profile.PlaylistStream);
@@ -848,7 +851,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
-                ResultOutputFolder = Path.Combine("HtmlTestResults", String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss"))),
+                ResultOutputFolder = Path.Combine("HtmlTestResults", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}"),
+                PtfConfigDirectory = ptfconfigDirectory,
+                RunSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}.runsettings")
             };
             testEngine.InitializeLogger(selectedCases);
         }

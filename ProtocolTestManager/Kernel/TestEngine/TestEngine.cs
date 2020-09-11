@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -17,6 +18,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string TestSetting { get; set; }
         public string WorkingDirectory { get; set; }
         public string ResultOutputFolder { get; set; }
+
+        public string PtfConfigDirectory { get; set; }
+
+        public string RunSettingsPath { get; set; }
 
         private List<TestCase> testcases;
 
@@ -108,6 +113,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
             args.AppendFormat("--logger ptm ");
 
+            ConstructRunSettings(RunSettingsPath);
+            args.AppendFormat("--settings {0} ", RunSettingsPath);
+
             if (caseStack != null)
             {
                 args.Append("--filter \"");
@@ -125,7 +133,42 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
                 args.Append("\"");
             }
+
             return args;
+        }
+
+
+        /// <summary>
+        /// Construct .runsettings file to specify the location of ptfconfig files.
+        /// </summary>
+        private void ConstructRunSettings(string runsettingsPath)
+        {
+            //<RunSettings>
+            //  <TestRunParameters>
+            //    <Parameter name = "PtfconfigDirectory" value="/Ptfconfig/" />
+            //  </TestRunParameters>
+            //</RunSettings>
+
+            XmlDocument doc = new XmlDocument();
+
+
+            XmlNode parameterNode = doc.CreateElement("Parameter");
+            XmlAttribute nameAttr = doc.CreateAttribute("name");
+            nameAttr.Value = "PtfconfigDirectory";
+            parameterNode.Attributes.Append(nameAttr);
+            XmlAttribute valueAttr = doc.CreateAttribute("value");
+            valueAttr.Value = Path.Combine(Directory.GetCurrentDirectory(), this.PtfConfigDirectory);
+            parameterNode.Attributes.Append(valueAttr);
+
+            XmlNode testRunParametersNode = doc.CreateElement("TestRunParameters");
+            testRunParametersNode.AppendChild(parameterNode);
+
+            XmlNode runSettingsNode = doc.CreateElement("RunSettings");
+            runSettingsNode.AppendChild(testRunParametersNode);
+
+            doc.AppendChild(runSettingsNode);
+
+            doc.Save(runsettingsPath);
         }
 
         HtmlResultChecker htmlResultChecker;
@@ -182,12 +225,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     }
                 };
 
-
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
                 int err = vstestProcess.ExitCode;
                 if (err != 0) {
-                    Console.Error.WriteLine("\nCommand got error");
+                    Console.Error.WriteLine();
+                    Console.Error.WriteLine(StringResource.RunCaseError);
                 };
             }
             catch (Exception exception)
