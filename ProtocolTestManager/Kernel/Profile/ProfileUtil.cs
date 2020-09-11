@@ -152,6 +152,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void SavePtfCfgTo(string path)
         {
             if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
             Uri ptfcfgBase = PackUriHelper.CreatePartUri(new Uri("ptfconfig", UriKind.Relative));
             foreach (var part in profilePackage.GetParts())
             {
