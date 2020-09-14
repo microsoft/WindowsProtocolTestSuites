@@ -66,27 +66,12 @@
     else put any value
     It is not applicable for Windows 2003
     -->
-    <Property name="TDI42066Fixed" value="false" />
-    <Property name="TDI42067Fixed" value="false" />
-    <Property name="TDI42332Fixed" value="false" />
-    <Property name="TDI42128Fixed" value="false" />
-    <Property name="TDI42428Fixed" value="false" />
-    <Property name="TDQ41693Fixed" value="false" />
-    <Property name="TDQ42166Fixed" value="false" />
-    <Property name="TDI42414Fixed" value="false" />
     <Property name="NewFile1" value="File1.txt" />
     <Property name="NewFile2" value="File2.txt" />
     <Property name="ExistFile1" value="ExistFile1.txt" />
     <Property name="ExistFile2" value="ExistFile2.txt" />
     <Property name="ExistFile3" value="ExistFile3.txt" />
     <Property name="ExistFile4" value="ExistFile4.txt" />
-
-    <Property name="R1122Implementated" value="true" />
-    <Property name="R1127Implementated" value="true" />
-    <Property name="R1134Implementated" value="true" />
-    <Property name="R1137Implementated" value="true" />
-    <Property name="R1157Implementated" value="true" />
-    <Property name="R549Implementated" value="true" />
 
     <!-- It specifies the Search Scope. (Path of the Network folder to be searched)-->
     <Property name="QueryPath" value="file://sut/test/" />

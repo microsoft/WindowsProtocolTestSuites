@@ -10,7 +10,7 @@
 #define _BLDVER_H_
 #define COMPANY_NAME	"Microsoft"
 
-#define BUILD_VERSION	"3.20.1.0"
-#define INET_VER         3,20,1,0
+#define BUILD_VERSION	"3.20.9.0"
+#define INET_VER         3,20,9,0
 
 #endif

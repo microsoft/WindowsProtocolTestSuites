@@ -265,82 +265,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                     // Verify WINDOWS_MAJOR_VERSION
                     uint dwWinVerMajor = connectOutResponse.dwWinVerMajor.Value;
-                    /* XXX: skip windows version check
-                    site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.WINDOWS_MAJOR_VERSION_6, dwWinVerMajor, 1060,
-                        "[On Windows-based servers," +
-                        " when server OS Windows Server 2008 R2,versions fields are set as]" +
-                        "dwWinVerMajor :WINDOWS_MAJOR_VERSION_6.");
-                    site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.WINDOWS_MAJOR_VERSION_6, dwWinVerMajor, 1008,
-                        "[CPMConnectOut]If present " +
-                        "this field [dwWinVerMajor] may contain one of the following " +
-                        "values:WINDOWS_MAJOR_VERSION_6(0x00000006).");
-                    */
 
                     // Verify WINDOWS_MINOR_VERSION
                     uint dwWinVerMinor = connectOutResponse.dwWinVerMinor.Value;
 
-                    /*
-                    site.CaptureRequirementIfIsTrue(dwWinVerMinor
-                        == (uint)dwWinNLSVersion.WINDOWS_MINOR_VERSION_1, 1062, 
-                        "<30>[On Windows-based servers, when server OS is Windows 7 and Windows Server 2008 R2," + 
-                        "versions fields are set as]dwWinVerMinor :WINDOWS_MINOR_VERSION_1");
-
-                    site.CaptureRequirementIfIsTrue((dwWinVerMinor == (uint)dwWinNLSVersion.WINDOWS_MINOR_VERSION_1) || (dwWinVerMinor == (uint)dwWinNLSVersion.WINDOWS_MINOR_VERSION_0),
-                        1010, "[CPMConnectOut]If present " +
-                        "this field may contain one of the following values:WINDOWS_MINOR_VERSION_0(0x00000000)," +
-                        "WINDOWS_MINOR_VERSION_1(0x00000001).");
-                    */
-
                     // Verify NLS_VERSION
                     uint dwNLSVerMajor = connectOutResponse.dwNLSVerMajor.Value;
                     uint dwNLSVerMinor = connectOutResponse.dwNLSVerMinor.Value;
-
-                    bool isTDI42332Fixed = Boolean.Parse(site.Properties.Get("TDI42332Fixed"));
-                    if (isTDI42332Fixed)
-                    {
-                        //Verify the dwNLSVerMajor is contained in NLS_ VERSION_40500 or NLS_VERSION_60000 or NLS_VERSION_60101
-                        bool dwNLSVerMajorContained = (dwNLSVerMajor == (uint)dwWinNLSVersion.NLS_VERSION_40500)
-                                    || (dwNLSVerMajor == (uint)dwWinNLSVersion.NLS_VERSION_60000)
-                                    || (dwNLSVerMajor == (uint)dwWinNLSVersion.NLS_VERSION_60101);
-
-                        //Verify the dwNLSVerMinor is contained in NLS_ VERSION_40500 or NLS_VERSION_60000 or NLS_VERSION_60101
-                        bool dwNLSVerMinorContained = (dwNLSVerMinor == (uint)dwWinNLSVersion.NLS_VERSION_40500)
-                                    || (dwNLSVerMinor == (uint)dwWinNLSVersion.NLS_VERSION_60000)
-                                    || (dwNLSVerMinor == (uint)dwWinNLSVersion.NLS_VERSION_60101);
-                        site.CaptureRequirementIfIsTrue(dwNLSVerMajorContained && dwNLSVerMinorContained, 1013,
-                            "[CPMConnectOut]If present, dwNLSVerMajor and dwNLSVerMinor field may contain one of the following values:" +
-                            "NLS_ VERSION_40500(0x00040500),NLS_VERSION_60000(0x00060000),NLS_VERSION_60101(0x00060101).");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement{0} should be covered after TDQ 42332 is fixed.", 1013));
-                    }
-
-                    /*
-                    site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.NLS_VERSION_60101, dwNLSVerMajor,
-                           1064, 
-                           "[On Windows-based servers, when server OS is Windows 7 and Windows Server 2008 R2," + 
-                           "versions fields are set as]dwNLSVerMajor: NLS_VERSION_60101");
-                    
-                    site.CaptureRequirementIfAreEqual<uint>((uint)dwWinNLSVersion.NLS_VERSION_60101, dwNLSVerMinor,
-                        1066, 
-                        "<30>[On Windows-based servers, when server OS is Windows 7 and Windows Server 2008 R2," + 
-                        "versions fields are set as]dwNLSVerMinor :NLS_VERSION_60101");
-                    */
-
-                    /*
-                    //Verify server fills dwNLSVerMinor,dwNLSVerMajor, dwWinVerMajor and dwWinVerMinor fields accordingly
-                    bool verifyNLSVersion = (dwNLSVerMinor == (uint)dwWinNLSVersion.NLS_VERSION_60101)
-                                && (dwNLSVerMajor == (uint)dwWinNLSVersion.NLS_VERSION_60101)
-                                && (dwWinVerMinor == (uint)dwWinNLSVersion.WINDOWS_MINOR_VERSION_1)
-                                && (dwWinVerMajor == (uint)dwWinNLSVersion.WINDOWS_MAJOR_VERSION_6);
-                    site.CaptureRequirementIfIsTrue(verifyNLSVersion, 1054,
-                        "[When the server receives a CPMConnectIn request from a client]" +
-                        "If the server supports reporting versioning information," +
-                        "fill dwWinVerMajor, dwWinVerMinor, dwNLSVerMajor, " +
-                        "and dwNLSVerMinor fields accordingly.");
-                    */
-
                 }
             }
             #endregion 
@@ -751,8 +682,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "of '_padding2' field of the  CTableColumn" +
                 " structure, server response is success.");
 
-
-
             // The Response message contains only the message
             //Header with Success Status
             //(Status is validated in ValidateHeader method)
@@ -864,7 +793,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //Updated by:v-zhil
             //Delta testing            
-            string isR549Implementated = site.Properties.Get("R549Implementated");
             //Windows XP,Windows Vista is client SKU, not in our test scope
             if (site.Properties.Get("ServerOSVersion").ToUpper() == "WIN7" || site.Properties.Get("ServerOSVersion").ToUpper() == "W2K8"
                 || site.Properties.Get("ServerOSVersion").ToUpper() == "W2K3")
@@ -876,22 +804,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "<17>Windows XP, Windows Server 2003, Windows Vista, Windows Server 2008, Windows 7, " +
                     "and Windows Server 2008 R2 can return zero for this field [_ulDenominator] depending, in part, " +
                     "on when the CPMRatioFinishedIn and CPMRatioFinishedOut messages are exchanged.");
-
-                if (null == isR549Implementated)
-                {
-                    site.Properties.Add("R549Implementated", Boolean.TrueString);
-                    isR549Implementated = Boolean.TrueString;
-                }
             }
-            if (null != isR549Implementated)
-            {
-                bool expectedValue = Boolean.Parse(isR549Implementated);
-                bool actualValue = ulDenominator > 0;
-                //MS-WSP_R549
-                site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 549,
-                    string.Format(@"The 4 bytes '_ulDenominator' field of the CPMRatioFinishedOut message SHOULD be greater than zero.<17>", "this requirement is {0} implemented", Boolean.Parse(isR549Implementated) ? "" : "not"));
 
-            }
+            bool actualValue = ulDenominator > 0;
+            //MS-WSP_R549
+            site.CaptureRequirementIfIsTrue(actualValue, 549,
+                string.Format(@"The 4 bytes '_ulDenominator' field of the CPMRatioFinishedOut message SHOULD be greater than zero.<17>", "this requirement is implemented"));
+                        
             //-----------------------       _cRows     ----
             uint cRows
                 = Helper.GetUInt(ratioFinishedResponse, ref startingIndex);
@@ -952,17 +871,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             ValidateHeader(restartPositionResponse,
                 MessageType.CPMRestartPositionIn,
                 restartPositionCheckSum, ref startingIndex);
-
-            //site.CaptureRequirementIfIsTrue
-            //((Constant.SIZE_OF_HEADER==bytesRead),584,
-            //    "The 4 bytes '_hCursor' field 
-            //of the CPMRestartPositionIn message MUST be absent" +
-            //    "when the message is sent by the server.");
-            //site.CaptureRequirementIfIsTrue
-            //((Constant.SIZE_OF_HEADER==bytesRead),587,
-            //    "The 4 bytes '_chapt' field of the 
-            //CPMRestartPositionIn message MUST be absent when" + 
-            //    "the message is sent by the server.");
         }
 
         /// <summary>
@@ -1022,14 +930,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
            sendNotifyOutCheckSum, ref startingIndex);
             //----------------------    _watchNotify --
             uint watchNotify = Helper.GetUInt(bytes, ref startingIndex);
-            //site.CaptureRequirementIfIsTrue(((watchNotify == 0x00000001)
-            //|| (watchNotify == 0x00000001) ||
-            //(watchNotify == 0x00000001)), 570,
-            //    "The 4 bytes '_watchNotify' field of the
-            //CPMSendNotifyOut message MUST be one of the following value:" +
-            //    "DBWATCHNOTIFY_ROWSCHANGED(0x00000001), 
-            //DBWATCHNOTIFY_QUERYDONE(0x00000002), 
-            //DBWATCHNOTIFY_QUERYREEXECUTED(0x00000003).");
 
             // If the Server Sends WatchNotify field.Requirement 753 
             // is validated
@@ -1068,7 +968,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 "DBCOMPARE_LT(0x00000000), DBCOMPARE_EQ(0x00000001), " +
                 "DBCOMPARE_GT(0x00000002), DBCOMPARE_NE(0x00000003), " +
                 "DBCOMPARE_NOTCOMPARABLE(0x00000004).");
-
         }
 
         /// <summary>
@@ -1208,55 +1107,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "[CPMGetRowsetNotifyOut]This response [PROPAGATE_NONE 0] indicates that there were no available rowset events waiting on the server.");
                 }
             }
-            bool isTDI42066Fixed = Boolean.Parse(site.Properties.Get("TDI42066Fixed"));
-            bool isTDQ41693Fixed = Boolean.Parse(site.Properties.Get("TDQ41693Fixed"));
-
-            if (eventType != (int)EventType.PROPAGATE_NONE && additionalRowsetEvent && Constant.DBPROP_ENABLEROWSETEVENTS == true)
-            {
-                if (isTDQ41693Fixed)
-                {
-                    //MS-WSP_R1028
-                    site.CaptureRequirementIfAreEqual<int>(1, Convert.ToInt32(moreEvents), 1028,
-                    "[CPMGetRowsetNotifyOut]A single bit [moreEvents] that is set to 1 only " +
-                    "if there are additional rowset events remaining on the server.");
-                }
-                else
-                {
-                    site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDQ 41693 is fixed.", 1028));
-                }
-            }
-
-
-            bool eventTypeVerification = true;
-            switch (eventType)
-            {
-                case (int)EventType.PROPAGATE_NONE:
-                case (int)EventType.PROPAGATE_ADD:
-                case (int)EventType.PROPAGATE_DELETE:
-                case (int)EventType.PROPAGATE_MODIFY:
-                case (int)EventType.PROPAGATE_ROWSET:
-                    break;
-                default:
-                    eventTypeVerification = false;
-                    break;
-            }
-            if (isTDI42066Fixed)
-            {
-                //MS-WSP_R1029
-                site.CaptureRequirementIfIsTrue(eventTypeVerification, 1029,
-                        "[CPMGetRowsetNotifyOut]A 7 bit unsigned integer that MUST be one of the following values:" +
-                        "PROPAGATE_NONE(0),PROPAGATE_ADD(1),PROPAGATE_DELETE(2),PROPAGATE_MODIFY(3),PROPAGATE_ROWSET(4).");
-
-                //MS-WSP_R1115
-                site.CaptureRequirementIfIsTrue(eventTypeVerification, 1115,
-                        "[When the server receives a CPMGetRowsetNotifyIn message request from a client]" +
-                        "The CPMGetRowsetNotifyOut message MUST indicate the type of event response enclosed " +
-                        "in CPMGetRowsetNotifyOut by setting eventType.");
-            }
-            else
-            {
-                site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} {1} should be covered after TDI 42066 is fixed.", 1115, 1029));
-            }
 
             byte[] rowsetItemState = Helper.GetData(bytes, ref startingIndex, 1);
             bool verifyRowsetItemState = false;
@@ -1316,51 +1166,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "[CPMGetRowsetNotifyOut][rowsetItemState]An 8 bit unsigned integer that MUST be one of the following values [ROWSETEVENT_ITEMSTATE_NOTINROWSET(0)," +
                         "ROWSETEVENT_ITEMSTATE_INROWSET(1),ROWSETEVENT_ITEMSTATE_UNKNOWN(2)] if eventType is  PROPAGATE_MODIFY.");
                 }
-                if (isTDQ41693Fixed)
-                {
-                    if (Convert.ToInt32(rowsetItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_INROWSET)
-                    {
-                        //when rowsetItemState is ROWSETEVENT_ITEMSTATE_INROWSET, it should contain within the originating rowset
-                        site.CaptureRequirement(1037,
-                            "[CPMGetRowsetNotifyOut]The document identifier [ROWSETEVENT_ITEMSTATE_INROWSET] speicified by wid " +
-                            "MUST be contained within the originating rowset.");
-                    }
-                }
-
-                if (!Constant.DBPROP_ENABLEROWSETEVENTS)
-                {
-                    if (isTDI42066Fixed)
-                    {
-                        //MS-WSP_R1148
-                        site.CaptureRequirementIfAreEqual<int>(0, Convert.ToInt32(eventTypes), 1148,
-                            "[CPMGetRowsetNotifyIn]If a client requests an event without this property, " +
-                            "the server MUST return a PROPOGATE_NONE event response");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1148));
-                    }
-                }
             }
 
             if (eventType == (int)EventType.PROPAGATE_ADD)
             {
                 if (Constant.DBPROP_ENABLEROWSETEVENTS)
                 {
-                    if (isTDI42066Fixed)
-                    {
-                        //MS-WSP_R1119
-                        site.CaptureRequirementIfAreEqual<int>(1, eventTypes, 1119,
-                            "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
-                            "the following fields MUST be set based upon the following event types]" +
-                            "PROPAGATE_ADDeventType MUST be set to this value to indicate " +
-                            "that a new item was added to the index that may be relevant to the associated query.");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1119));
-                    }
-
                     //if eventType is PROPAGATE_ADD, the document identifier specified by wid, should be the new rowset,
                     //while not in the original rowset, so RowsetItemState should be set to ROWSETEVENT_ITEMSTATE_NOTINROWSET.
                     site.CaptureRequirementIfAreEqual<int>((int)RowsetItemState.ROWSETEVENT_ITEMSTATE_NOTINROWSET, Convert.ToInt32(rowsetItemState[0]), 1036,
@@ -1409,16 +1220,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 site.CaptureRequirement(1040,
                     "[CPMGetRowsetNotifyOut]The document identifier [ROWSETEVENT_ITEMSTATE_NOTINROWSET] specified by wid would NOT be contained within a subsequent query.");
             }
-            if (isTDQ41693Fixed)
-            {
-                if (Convert.ToInt32(changedItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_INROWSET)
-                {
-                    //when changedItemState is ROWSETEVENT_ITEMSTATE_INROWSET, 
-                    //it should contain within the originating rowset
-                    site.CaptureRequirement(1041,
-                        "[CPMGetRowsetNotifyOut]The document identifier [ROWSETEVENT_ITEMSTATE_INROWSET] speicified by wid would be contained within a subsequent query.");
-                }
-            }
 
             byte[] rowsetEvent = Helper.GetData(bytes, ref startingIndex, 1);
             byte[] rowsetEventData1 = Helper.GetData(bytes, ref startingIndex, 8);
@@ -1455,33 +1256,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "[CPMSetScopePrioritizationIn]When eventFrequency is set to zero the server MUST NOT issue the ROWSETEVENT_TYPE_SCOPESTATISTICS events.");
             }
 
-            if ((Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED) || (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS))
-            {
-                bool isTDI42067Fixed = Boolean.Parse(site.Properties.Get("TDI42067Fixed"));
-                if (isTDI42067Fixed)
-                {
-                    //MS-WSP_R1045
-                    site.CaptureRequirementIfIsTrue((BitConverter.ToInt32(rowsetEventData1, 0) == 0) && (BitConverter.ToInt32(rowsetEventData2, 0) == 0), 1045,
-                        "[CPMGetRowsetNotifyOut][ROWSETEVENT_TYPE_FOREGROUNDLOST]RowsetEventData1 and RowsetEventData2 MUST be set to zero.");
-                }
-                else
-                {
-                    site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42067 is fixed.", 1045));
-                }
-            }
-            else
-            {
-                int index = 0;
-                byte[] highRowsetEventData2 = Helper.GetData(rowsetEventData2, ref index, 4);
-                index = 0;
-                if (isTDQ41693Fixed)
-                {
-                    site.CaptureRequirementIfAreEqual<int>(0, BitConverter.ToInt32(highRowsetEventData2, index),
-                        1046,
-                        "[CPMGetRowsetNotifyOut][ROWSETEVENT_TYPE_SCOPESTATISTICS]RowsetEventData2's high 32 bits MUST be set to zero.");
-                }
-            }
-
             if (wid == 0)
             {
                 site.CaptureRequirementIfIsTrue((Convert.ToInt32(moreEvents) == 0) && (Convert.ToInt32(eventTypes) == (int)EventType.PROPAGATE_NONE)
@@ -1497,7 +1271,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             }
 
-            string isR1122Implementated = site.Properties.Get("R1122Implementated");
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
                 if (eventType != (int)EventType.PROPAGATE_NONE && eventType != (int)EventType.PROPAGATE_ROWSET && additionalRowsetEvent && Constant.DBPROP_ENABLEROWSETEVENTS == true)
@@ -1514,25 +1287,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         "[When the server receives a CPMGetRowsetNotifyIn message request from a client, the eventType is set to ROPAGATE_ADD]moreEvents is set to 1 to indicate " +
                         "that there is another event of any non-PROPAGATE_NONE type immediatly available in windows.");
                 }
-                if (null == isR1122Implementated)
-                {
-                    site.Properties.Add("isR1122Implementated", Boolean.TrueString);
-                    isR1122Implementated = Boolean.TrueString;
-                }
             }
-            if (null != isR1122Implementated)
-            {
-                bool expectedValue = Boolean.Parse(isR1122Implementated);
-                bool actualValue = Convert.ToInt32(moreEvents) == 1 || Convert.ToInt32(moreEvents) == 0;
 
-                //MS-WSP_R1122
-                site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 1122,
-                       string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
-                       "the eventType is set to ROPAGATE_ADD]moreEvents SHOULD be set to indicate " +
-                       "if there is another event of any non-PROPAGATE_NONE type immediatly available.", "this requirement is {0} implemented", Boolean.Parse(isR1122Implementated) ? "" : "not"));
+            bool actualValue = Convert.ToInt32(moreEvents) == 1 || Convert.ToInt32(moreEvents) == 0;
 
+            //MS-WSP_R1122
+            site.CaptureRequirementIfIsTrue(actualValue, 1122,
+                    string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
+                    "the eventType is set to ROPAGATE_ADD]moreEvents SHOULD be set to indicate " +
+                    "if there is another event of any non-PROPAGATE_NONE type immediatly available.", "this requirement is implemented"));
 
-            }
             bool rowsetItemStateChecked = Convert.ToInt32(rowsetItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_NOTINROWSET || Convert.ToInt32(rowsetItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_INROWSET
                     || Convert.ToInt32(rowsetItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_UNKNOWN;
 
@@ -1540,19 +1304,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 if (Constant.DBPROP_ENABLEROWSETEVENTS == true)
                 {
-                    if (isTDI42066Fixed)
-                    {
-                        //MS-WSP_R1123                     
-                        site.CaptureRequirementIfAreEqual<int>((int)EventType.PROPAGATE_DELETE, Convert.ToInt32(eventTypes), 1123,
-                            "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
-                            "the eventType is set to PROPAGATE_DELETE]PROPAGATE_DELETEeventType MUST be set to this value to indicate " +
-                            "that an existing item was deleted from the index that may be relevant to the associated query.");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1123));
-                    }
-                    string isR1127Implementated = site.Properties.Get("R1127Implementated");
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
                     {
                         if (additionalRowsetEvent)
@@ -1570,26 +1321,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                 "the eventType is set to PROPAGATE_DELETE]moreEvents is set to 0 to indicate " +
                                 "that there is not any event of any non_PROPAGATE_NONE type immediately available in windows.");
                         }
-
-                        if (null == isR1127Implementated)
-                        {
-                            site.Properties.Add("R1127Implementated", Boolean.TrueString);
-                            isR1127Implementated = Boolean.TrueString;
-                        }
-                    }
-                    if (null != isR1127Implementated)
-                    {
-                        bool expectedValue = Boolean.Parse(isR1127Implementated);
-                        bool actualValue = Convert.ToInt32(moreEvents) == 1 || Convert.ToInt32(moreEvents) == 0;
-
-                        //MS-WSP_R1127
-                        site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 1127,
-                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
-                            "the eventType is set to PROPAGATE_DELETE]moreEvents SHOULD be set to indicate " +
-                            "if there is another event of any non_PROPAGATE_NONE type immediately available.", "this requirement is {0} implemented", Boolean.Parse(isR1127Implementated) ? "" : "not"));
-
                     }
 
+                    actualValue = Convert.ToInt32(moreEvents) == 1 || Convert.ToInt32(moreEvents) == 0;
+
+                    //MS-WSP_R1127
+                    site.CaptureRequirementIfIsTrue(actualValue, 1127,
+                        string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
+                        "the eventType is set to PROPAGATE_DELETE]moreEvents SHOULD be set to indicate " +
+                        "if there is another event of any non_PROPAGATE_NONE type immediately available.", "this requirement is implemented"));
 
                 }
 
@@ -1611,20 +1351,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     site.CaptureRequirementIfAreEqual<uint>((uint)EventTypeValue.PROPAGATE_MODIFY, eventTypes, 1033,
                         "[CPMGetRowsetNotifyOut]This response [PROPAGATE_MODIFY 3] indicates that an item was re-indexed that may be of interest to the query originating the rowset.");
 
-                    if (isTDI42066Fixed)
-                    {
-                        //MS-WSP_R1128
-                        site.CaptureRequirementIfAreEqual<int>((int)EventType.PROPAGATE_MODIFY, Convert.ToInt32(eventTypes), 1128,
-                            "[When the server receives a CPMGetRowsetNotifyIn message request from a client]" +
-                            "PROPAGATE_MODIFYeventType MUST be set to this value to indicate that an existing item" +
-                            "[item may have been previously relevant to the associated query or " +
-                            "may have become relevant to the associated query as a result of being re-indexed.] was re-indexed.");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1128));
-                    }
-                    string isR1134Implementated = site.Properties.Get("R1134Implementated");
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
                     {
                         if (additionalRowsetEvent)
@@ -1641,24 +1367,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                 "the eventType is set to PROPAGATE_MODIFY]moreEvents is set to 0 to indicate " +
                                 "that there is not any event of any non PROPAGATE_NONE type immediately available in windows.");
                         }
-                        if (null == isR1134Implementated)
-                        {
-                            site.Properties.Add("R1134Implementated", Boolean.TrueString);
-                            isR1134Implementated = Boolean.TrueString;
-                        }
-                    }
-                    if (null != isR1134Implementated)
-                    {
-                        bool expectedValue = Boolean.Parse(isR1134Implementated);
-                        bool actualValue = Convert.ToInt32(moreEvents) == 1 || Convert.ToInt32(moreEvents) == 0;
-
-                        //MS-WSP_R1134
-                        site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 1134,
-                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
-                            "the eventType is set to PROPAGATE_MODIFY]moreEvents SHOULD be set to indicate " +
-                            "if there is another event of any non PROPAGATE_NONE type immediately available.", "this requirement is {0} implemented", Boolean.Parse(isR1134Implementated) ? "" : "not"));
                     }
 
+                    actualValue = Convert.ToInt32(moreEvents) == 1 || Convert.ToInt32(moreEvents) == 0;
+
+                    //MS-WSP_R1134
+                    site.CaptureRequirementIfIsTrue(actualValue, 1134,
+                        string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
+                        "the eventType is set to PROPAGATE_MODIFY]moreEvents SHOULD be set to indicate " +
+                        "if there is another event of any non PROPAGATE_NONE type immediately available.", "this requirement is implemented"));
 
                     //MS-WSP_R1129
                     site.CaptureRequirementIfIsTrue(wid > 0, 1129,
@@ -1695,32 +1412,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 if (Constant.DBPROP_ENABLEROWSETEVENTS == true)
                 {
-                    if (isTDI42066Fixed)
-                    {
-                        //MS-WSP_R1135
-                        site.CaptureRequirementIfAreEqual<int>((int)EventType.PROPAGATE_ROWSET, eventTypes,
-                            1135,
-                            "[When the server receives a CPMGetRowsetNotifyIn message request from a client]" +
-                            "PROPAGATE_ROWSET—eventType MUST be set to this value when when the event is a non-item based event.");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42066 is fixed.", 1135));
-                    }
-                    bool isTDI42128Fixed = bool.Parse(site.Properties.Get("TDI42128Fixed"));
-                    if (isTDI42128Fixed)
-                    {
-                        //MS-WSP_R1136
-                        site.CaptureRequirementIfAreEqual<uint>(0, wid, 1136,
-                            "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
-                            "the eventType is set to PROPAGATE_ROWSET]wid SHOULD be zero.");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDI 42128 is fixed.", 1136));
-                    }
-
-                    string isR1137Implementated = site.Properties.Get("R1137Implementated");
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
                     {
                         if (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED)
@@ -1745,26 +1436,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                 "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
                                 "the eventType is set to PROPAGATE_ROWSET]rowsetEvent is set to 2  value indicating the type [ROWSETEVENT_TYPE_SCOPESTATISTICS] of rowset event in windows.");
                         }
-                        if (null == isR1137Implementated)
-                        {
-                            site.Properties.Add("R1137Implementated", Boolean.TrueString);
-                            isR1137Implementated = Boolean.TrueString;
-                        }
                     }
-                    if (null != isR1137Implementated)
-                    {
-                        bool expectedValue = Boolean.Parse(isR1137Implementated);
-                        bool actualValue = Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED
-                            || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST
-                            || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS;
 
-                        //MS-WSP_R1137
-                        site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue,
-                            1137,
-                            string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, the eventType is set to PROPAGATE_ROWSET]" +
-                            "rowsetEvent SHOULD be set to a value indicating the type of rowset event.", "this requirement is {0} implemented", Boolean.Parse(isR1137Implementated) ? "" : "not"));
+                    actualValue = Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED
+                        || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST
+                        || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS;
 
-                    }
+                    //MS-WSP_R1137
+                    site.CaptureRequirementIfIsTrue(actualValue,
+                        1137,
+                        string.Format(@"[When the server receives a CPMGetRowsetNotifyIn message request from a client, the eventType is set to PROPAGATE_ROWSET]" +
+                        "rowsetEvent SHOULD be set to a value indicating the type of rowset event.", "this requirement is implemented"));
                 }
             }
         }
@@ -1799,7 +1481,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void ValidateGetScopeStatisticsOut(byte[] GetScopeStatisticsOut,
             uint checkSum, uint msgStatus)
         {
-            string isR1157Implementated = site.Properties.Get("R1157Implementated");
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
                 if (Constant.DBPROP_ENABLEROWSETEVENTS && msgStatus == 0x00000000)
@@ -1811,42 +1492,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                             "Note that the server returns zero for all statistics if the client does not have explicitly requested " +
                             "their availability by setting the DBPROP_ENABLEROWSETEVENTS property to TRUE in windows.");
                 }
-                else
-                {
-                    bool isTDI42428Fixed = Boolean.Parse(site.Properties.Get("TDI42428Fixed"));
-                    if (isTDI42428Fixed)
-                    {
-                        //MS-WSP_R201157
-                        site.CaptureRequirementIfAreNotEqual<uint>(0x00000000, msgStatus,
-                                201157,
-                                "[When the server receives a CPMGetScopeStatisticsIn message request from a client, " +
-                                "the server MUST]Note that the server returns non-zero for all statistics " +
-                                "if the client has explicitly requested their availability by setting the DBPROP_ENABLEROWSETEVENTS property to TRUE in windows.");
-                    }
-                    else
-                    {
-                        site.Log.Add(LogEntryKind.Comment, string.Format("this requirement {0} should be covered after TDQ 42428 is fixed.", 201157));
-                    }
-                }
-
-                if (null == isR1157Implementated)
-                {
-                    site.Properties.Add("R1157Implementated", Boolean.TrueString);
-                    isR1157Implementated = Boolean.TrueString;
-                }
-            }
-            if (null != isR1157Implementated)
-            {
-                bool expectedValue = Boolean.Parse(isR1157Implementated);
-                bool actualValue = msgStatus == 0x00000000 || msgStatus != 0x00000000;
-                //MS-WSP_R1157
-                site.CaptureRequirementIfAreEqual<Boolean>(expectedValue, actualValue, 1157,
-                    string.Format(@"[When the server receives a CPMGetScopeStatisticsIn message request from a client, the server MUST]" +
-                    "Note that the server SHOULD return zero for all statistics unless the client has explicitly requested " +
-                    "their availability by setting the DBPROP_ENABLEROWSETEVENTS property to TRUE.", "this requirement is {0} implemented", Boolean.Parse(isR1157Implementated) ? "" : "not"));
             }
 
-
+            bool actualValue = msgStatus == 0x00000000 || msgStatus != 0x00000000;
+            //MS-WSP_R1157
+            site.CaptureRequirementIfIsTrue(actualValue, 1157,
+                string.Format(@"[When the server receives a CPMGetScopeStatisticsIn message request from a client, the server MUST]" +
+                "Note that the server SHOULD return zero for all statistics unless the client has explicitly requested " +
+                "their availability by setting the DBPROP_ENABLEROWSETEVENTS property to TRUE.", "this requirement is implemented"));
+            
             byte[] tempByteArray;
             int startingIndex = 0;
             //Verify the massage header.
@@ -2051,11 +1705,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     case vType_Values.VT_COMPRESSED_LPWSTR:
                         // First 4 byte should specify the length
                         length = BitConverter.ToInt32(bytes, (int)offset);
-                        //site.CaptureRequirementIfIsTrue(length > 0, 31,
-                        //    "If vType is set to VT_BLOB, VT_BSTR, or "+
-                        //    "VT_LPSTR, the structure of vValue contains 4 "+
-                        //    "bytes 'cbSize' and variable sized  "+
-                        //    "'blobData' field.");
+
                         // If length is greater than zero for the above mentioned type
                         // this requirement is validated because the Client may obtain
                         // total length data in more than one Fetch Operation
@@ -2223,37 +1873,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             site.CaptureRequirementIfIsTrue(IsValidNTStatus(status), 593,
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
-
-            // status should be 0x000000000;
-            //==========    TDI RAISED 19612      ============================
-            //site.CaptureRequirementIfAreEqual<uint>(0x00000000, status, 364,
-            //"The 4 byte '_status' field of the message header is an HRESULT"+
-            //", indicating the status of the requested operation.");
-
-
-
-
-
-
-
-            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client).
-            uint checkSum = header._ulChecksum;
-
-
-            uint reserved = header._ulReserved2;
-            /* XXX: TDI?
-            //Updated by:v-zhil
-            //Delta testing
-            //For all the messages except CPMConnectIn.
-            bool checkgetrowin =(messageType == 0x000000CC);
-            if (!checkgetrowin)
-            {
-                //MS-WSP_R370
-                site.CaptureRequirementIfAreEqual<uint>(0, reserved, 370,
-                    "[Message Headers]This field MUST be set to 0x00000000 " +
-                    "except for the CPMGetRowsIn message.");
-            }
-            */
         }
 
         /// <summary>
@@ -2304,31 +1923,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             site.CaptureRequirementIfIsTrue(IsValidNTStatus(status), 593,
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
-
-            // status should be 0x000000000;
-            //==========    TDI RAISED 19612      ============================
-            //site.CaptureRequirementIfAreEqual<uint>(0x00000000, status, 364,
-            //"The 4 byte '_status' field of the message header is an HRESULT"+
-            //", indicating the status of the requested operation.");
-
-            // Keep reading the checkSum and reserved here even we don't verify them (since TD says that server will verify the checkSum instead of client).
-            uint checkSum = header._ulChecksum;
-
-
-            uint reserved = header._ulReserved2;
-            /* XXX: TDI?
-            //Updated by:v-zhil
-            //Delta testing
-            //For all the messages except CPMConnectIn.
-            bool checkgetrowin =(messageType == 0x000000CC);
-            if (!checkgetrowin)
-            {
-                //MS-WSP_R370
-                site.CaptureRequirementIfAreEqual<uint>(0, reserved, 370,
-                    "[Message Headers]This field MUST be set to 0x00000000 " +
-                    "except for the CPMGetRowsIn message.");
-            }
-            */
         }
 
         /// <summary>
@@ -2763,19 +2357,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     break;
 
                 case MessageType.CPMCompareBmkIn:
-                    //Blocked due to active TDI 18901
-                    //site.CaptureRequirementIfAreEqual<uint>(0x000000CE, 
-                    //messageType, 915,
-                    //    "The value of 4 bytes 'msg' field for 
-                    //CPMCompareBmkOut message is 0x000000CE.");
                     break;
 
                 case MessageType.CPMGetApproximatePositionIn:
-                    //Blocked due to Active TDI 18901
-                    //site.CaptureRequirementIfAreEqual<uint>(0x000000CF, 
-                    //messageType, 917,
-                    //    "The value of 4 bytes 'msg' field for 
-                    //CPMGetApproximatePositionOut message is 0x000000CF.");
                     break;
 
                 case MessageType.CPMSetBindingsIn:
@@ -2839,12 +2423,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     break;
 
                 case MessageType.CPMRestartPositionIn:
-                    //Blocked due to Active TDI 18901
-                    //site.CaptureRequirementIfAreEqual<uint>(0x000000E8, 
-                    //messageType, 935,
-                    //    "The value of 4 bytes 'msg' field for the 
-                    //response of CPMReStartPositionIn message 
-                    //is 0x000000E8.");
                     break;
 
                 default:
