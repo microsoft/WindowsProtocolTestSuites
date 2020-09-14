@@ -221,8 +221,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         Arguments = "test " + runArgs,
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
                     }
                 };
 
