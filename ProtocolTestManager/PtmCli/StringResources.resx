@@ -127,7 +127,7 @@
     <value>The PTM profile has been upgraded. New profile is saved as {0}.</value>
   </data>
   <data name="TestSuitesPath" xml:space="preserve">
-    <value>The result log path is in {0}</value>
+    <value>You can find the test results under {0}</value>
   </data>
   <data name="UnknownReportFormat" xml:space="preserve">
     <value>Unknown format: {0}.</value>
