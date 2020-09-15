@@ -35,6 +35,16 @@ namespace Microsoft.Protocols.TestManager.CLI
             {
                 Program p = new Program();
                 p.Init();
+
+                if (!Path.IsPathRooted(options.Profile))
+                {
+                    options.Profile = Utility.RelativePath2AbsolutePath(options.Profile);
+                }
+
+                if (!Path.IsPathRooted(options.TestSuite))
+                {
+                    options.TestSuite = Utility.RelativePath2AbsolutePath(options.TestSuite);
+                }
                 p.LoadTestSuite(options.Profile, options.TestSuite);
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);

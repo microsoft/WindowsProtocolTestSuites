@@ -1197,5 +1197,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 return null;
             }
         }
+
+        public static string RelativePath2AbsolutePath(string path)
+        {
+            string absolutePath = Path.Combine(Directory.GetCurrentDirectory(), path);
+            return absolutePath;
+        }
     }
 }
