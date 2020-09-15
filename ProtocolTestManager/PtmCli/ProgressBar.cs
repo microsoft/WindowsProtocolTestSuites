@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestManager.CLI
         private int animationIndex = 0;
         private bool disposed = false;
 
+        private bool originalConsoleCursorVisibleState;
+
         public ProgressBar()
         {
             timer = new Timer(TimerHandler);
@@ -30,6 +32,8 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 EnableTimer();
             }
+
+            originalConsoleCursorVisibleState = Console.CursorVisible;
         }
 
         public void Update(double value, string step)
@@ -82,6 +86,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 disposed = true;
                 timer.Dispose();
                 UpdateText(string.Empty);
+
+                Console.CursorVisible = originalConsoleCursorVisibleState;
             }
         }
 
