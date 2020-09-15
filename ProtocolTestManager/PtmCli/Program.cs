@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.AbortExecution();
                 };
 
-                p.RunTestSuite(testCases);
+                p.RunTestSuite(testCases, options.TestSuite);
 
                 if (options.ReportFile == null)
                 {
@@ -146,7 +146,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Run test suite
         /// </summary>
         /// <param name="testCases">The list of test cases to run</param>
-        public void RunTestSuite(List<TestCase> testCases)
+        public void RunTestSuite(List<TestCase> testCases, string testCasePath)
         {
             using (ProgressBar progress = new ProgressBar())
             {
@@ -174,7 +174,8 @@ namespace Microsoft.Protocols.TestManager.CLI
 
             Console.Clear();
 
-            Console.WriteLine("Finish running test cases.");
+            Console.WriteLine(StringResources.FinishRunningTips);
+            Console.WriteLine(String.Format(StringResources.TestSuitesPath, Path.Combine(testCasePath, util.GetTestEngineResultPath())));
         }
 
         /// <summary>
