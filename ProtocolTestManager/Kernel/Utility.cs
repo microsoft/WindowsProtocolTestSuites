@@ -859,6 +859,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
+        /// Get the test engine result path
+        /// </summary>
+        public string GetTestEngineResultPath()
+        {
+            return testEngine.ResultOutputFolder;
+        }
+
+        /// <summary>
         /// Occurs when the test run finished.
         /// </summary>
         public event TestFinishedEvent TestFinished
@@ -1188,6 +1196,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 return null;
             }
+        }
+
+        public static string RelativePath2AbsolutePath(string path)
+        {
+            string absolutePath = Path.Combine(Directory.GetCurrentDirectory(), path);
+            return absolutePath;
         }
     }
 }

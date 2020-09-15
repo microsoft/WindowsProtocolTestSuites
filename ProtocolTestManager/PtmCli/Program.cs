@@ -35,6 +35,16 @@ namespace Microsoft.Protocols.TestManager.CLI
             {
                 Program p = new Program();
                 p.Init();
+
+                if (!Path.IsPathRooted(options.Profile))
+                {
+                    options.Profile = Utility.RelativePath2AbsolutePath(options.Profile);
+                }
+
+                if (!Path.IsPathRooted(options.TestSuite))
+                {
+                    options.TestSuite = Utility.RelativePath2AbsolutePath(options.TestSuite);
+                }
                 p.LoadTestSuite(options.Profile, options.TestSuite);
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
@@ -45,7 +55,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.AbortExecution();
                 };
 
-                p.RunTestSuite(testCases);
+                p.RunTestSuite(testCases, options.TestSuite);
 
                 if (options.ReportFile == null)
                 {
@@ -146,7 +156,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Run test suite
         /// </summary>
         /// <param name="testCases">The list of test cases to run</param>
-        public void RunTestSuite(List<TestCase> testCases)
+        public void RunTestSuite(List<TestCase> testCases, string testCasePath)
         {
             using (ProgressBar progress = new ProgressBar())
             {
@@ -174,7 +184,8 @@ namespace Microsoft.Protocols.TestManager.CLI
 
             Console.Clear();
 
-            Console.WriteLine("Finish running test cases.");
+            Console.WriteLine(StringResources.FinishRunningTips);
+            Console.WriteLine(String.Format(StringResources.TestSuitesPath, Path.Combine(testCasePath, util.GetTestEngineResultPath())));
         }
 
         /// <summary>
