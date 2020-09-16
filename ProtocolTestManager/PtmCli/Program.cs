@@ -65,6 +65,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
                 }
+
+                Console.WriteLine(String.Format(StringResources.TestSuitesPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
             }
             catch (Exception e)
             {
@@ -182,10 +184,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 util.SyncRunByCases(testCases);
             }
 
-            Console.Clear();
-
+            Console.WriteLine();
             Console.WriteLine(StringResources.FinishRunningTips);
-            Console.WriteLine(String.Format(StringResources.TestSuitesPath, Path.Combine(testCasePath, util.GetTestEngineResultPath())));
         }
 
         /// <summary>
