@@ -17,8 +17,6 @@ namespace Microsoft.Protocols.TestManager.CLI
         private int animationIndex = 0;
         private bool disposed = false;
 
-        private bool originalConsoleCursorVisibleState;
-
         public ProgressBar()
         {
             timer = new Timer(TimerHandler);
@@ -28,12 +26,8 @@ namespace Microsoft.Protocols.TestManager.CLI
             // Otherwise, we'll end up with a lot of garbage in the target file.
             if (!Console.IsOutputRedirected)
             {
-                Console.Clear();
-
                 EnableTimer();
             }
-
-            originalConsoleCursorVisibleState = Console.CursorVisible;
         }
 
         public void Update(double value, string step)
@@ -61,17 +55,11 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         private void UpdateText(string text)
         {
-            Console.CursorVisible = false;
-
-            Console.SetCursorPosition(0, 0);
-
-            var output = new StringBuilder();
-
-            output.Append(text);
-
-            output.Append(' ', Console.WindowWidth * Console.WindowHeight - text.Length - 1);
-
-            Console.Write(output.ToString());
+            StringBuilder outputBuilder = new StringBuilder();
+            Console.CursorLeft = Console.WindowLeft;
+            outputBuilder.Append(text);
+            outputBuilder.Append(' ', Console.WindowWidth - text.Length - 1);
+            Console.Write(outputBuilder);
         }
 
         private void EnableTimer()
@@ -86,10 +74,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 disposed = true;
                 timer.Dispose();
                 UpdateText(string.Empty);
-
-                Console.CursorVisible = originalConsoleCursorVisibleState;
             }
         }
-
     }
 }
