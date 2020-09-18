@@ -19,7 +19,8 @@ namespace Microsoft.Protocols.TestManager.CLI
     {
         static void Main(string[] args)
         {
-            var parser = new Parser(cfg => {
+            var parser = new Parser(cfg =>
+            {
                 cfg.CaseInsensitiveEnumValues = true;
                 cfg.HelpWriter = Console.Error;
             });
@@ -34,6 +35,16 @@ namespace Microsoft.Protocols.TestManager.CLI
             {
                 Program p = new Program();
                 p.Init();
+
+                if (!Path.IsPathRooted(options.Profile))
+                {
+                    options.Profile = Utility.RelativePath2AbsolutePath(options.Profile);
+                }
+
+                if (!Path.IsPathRooted(options.TestSuite))
+                {
+                    options.TestSuite = Utility.RelativePath2AbsolutePath(options.TestSuite);
+                }
                 p.LoadTestSuite(options.Profile, options.TestSuite);
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
@@ -44,7 +55,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.AbortExecution();
                 };
 
-                p.RunTestSuite(testCases);
+                p.RunTestSuite(testCases, options.TestSuite);
 
                 if (options.ReportFile == null)
                 {
@@ -54,6 +65,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
                 }
+
+                Console.WriteLine(String.Format(StringResources.TestSuitesPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
             }
             catch (Exception e)
             {
@@ -145,7 +158,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Run test suite
         /// </summary>
         /// <param name="testCases">The list of test cases to run</param>
-        public void RunTestSuite(List<TestCase> testCases)
+        public void RunTestSuite(List<TestCase> testCases, string testCasePath)
         {
             using (ProgressBar progress = new ProgressBar())
             {
@@ -158,7 +171,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 var caseSet = new HashSet<string>();
                 logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
                 {
-                    if (caseSet.Contains(runningcase.Name)){
+                    if (caseSet.Contains(runningcase.Name))
+                    {
                         return;
                     }
                     caseSet.Add(runningcase.Name);
@@ -169,7 +183,9 @@ namespace Microsoft.Protocols.TestManager.CLI
                 progress.Update(0, "Loading test suite");
                 util.SyncRunByCases(testCases);
             }
-            Console.WriteLine("Finish running test cases.");
+
+            Console.WriteLine();
+            Console.WriteLine(StringResources.FinishRunningTips);
         }
 
         /// <summary>

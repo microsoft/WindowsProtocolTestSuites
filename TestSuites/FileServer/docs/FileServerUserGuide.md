@@ -3296,230 +3296,15 @@ This section explains how to configure the **Test Suite** and how to run test ca
 
   * **Batch Script** and **Visual Studio**
 
-  * **Test Agent**
-
 ### <a name="7.1"/> 7.1 Configure and Run Test Cases Using Protocol Test Manager
 
 **Protocol Test Manager** (**PTM**) is a user interface (UI)-based tool that helps you configure and run test cases.
 
-To configure the **Test Suite**, perform that steps that follow.
+On how to use PTM to configure and run test suite, please refer to this [tutorial](../../../Doc/File%20Server%20SMB2%20Test%20Suite%20Lab%20Tutorial_v2.pdf).
 
-1. If you have not already done so, download and extract the Protocol Test Manager to the Driver (Client01) computer. For more information, see section [3.4 Software Requirements](#3.4).
+**Protocol Test Manager** also has a command line interface (**PTMCli**) that you can use to automate the running of test cases with a selected Profile.
 
-2. When complete, launch the Protocol Test Manager application from the desktop shortcut that was created during Protocol Test Manager installation on the Driver (Client01) computer. On the **Select Test Suite** tab of **Protocol Test Manager**, select the **File Server** test suite to begin configuration, and then click **Configure Wizard**.
-
-    <a name="fig.180"></a>
-
-    ![](./image/FileServerUserGuide/image150.png)
-
-    Figure 180. Protocol Test Manager: Launching the File Server test suite
-
-3. On the **Test Suite Introduction** tab of **Protocol Test Manager**, review the general information about the **File Server Protocol Family Server Test Suite** and then click **Deployment Guide** or **Next**.
-
-    <a name="fig.181"></a>
-
-    ![](./image/FileServerUserGuide/image151.png)
-
-    Figure 181. Protocol Test Manager: Launching the Deployment Guide
-
-4. On the **Test Suite Introduction** tab of **Protocol Test Manager** review the diagrammatic information about the **Test Environment**, and then click **Next**.
-
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If you have already setup your test environment according to the instructions provided earlier in this document, you can skip the details that appear when clicking **Domain Environment** or **Workgroup Environment**.
-
-    <a name="fig.182"></a>
-
-    ![](./image/FileServerUserGuide/image152.png)
-
-    Figure 182. Protocol Test Manager: Reviewing the Test Environment
-
-5. On the **Configure Method** tab of **Protocol Test Manager**, you will need to select a configuration method option such as one of the following:
-
-    * **Run Auto-Detection**
-    * **Do Manual Configuration**
-    * **Load Profile**
-
-     The bullet points that follow provide additional instructions for each method.
-
-    <a name="fig.183"></a>
-
-    ![](./image/FileServerUserGuide/image153.png)
-
-    Figure 183. Protocol Test Manager: Selecting a configuration method
-
-    * Configure the **Test Suite** by using the **Auto-Detection** option:
-
-      * Click **Run Auto-Detection** and navigate to the **Auto-Detection** tab.
-
-      * On the **Auto-Detection** tab of **Protocol Test Manager**, ensure that the prerequisite information from auto-detection is correct based on the default values loaded from the .ptfconfig files, and make any necessary corrections.
-
-      * On the **Auto-Detection** tab click the **Detect** button.
-
-        ![](./image/FileServerUserGuide/image1.png)**Note**
-
-        If your SUT is in a **WORKGROUP** environment, leave the **Domain Name** field blank when providing prerequisite information.
-
-        <a name="fig.184"></a>
-
-        ![](./image/FileServerUserGuide/image154.png)
-
-        Figure 184. Protocol Test Manager: Providing information for auto-detection
-
-      * After detection has successfully completed, as indicated by the **Finished** flag next to each item in the Auto Detection list, click **Next** to check the **Detection Result**.
-
-      * On the **Detection Result** tab of **Protocol Test Manager**, a summary is provided within  information nodes that may include **Capabilities**, **IoCtl Codes**, **Remote Shared Virtual Disk**, and so on, to indicate what is supported by your SUT configuration. Review this information to ensure it's accuracy.
-
-        To expose or hide result details, perform clicks on any node to toggle the results.
-
-      * When your review is complete, click **Next**.
-
-        <a name="fig.185"></a>
-
-        ![](./image/FileServerUserGuide/image155.png)
-
-        Figure 185. Protocol Test Manager: Reviewing detection results
-
-      * In the **Selected Test Cases** pane on the **Filter Test Cases** tab of **Protocol Test Manager**, you will see the test cases automatically displayed from the detection results obtained in the previous step. If the detection results show that your SUT is not supporting a particular feature, that feature name will be rendered in italics under the **Feature** node. Note that you can manually select or unselect tests in the selection list as needed.
-
-        <a name="fig.186"></a>
-
-        ![](./image/FileServerUserGuide/image156.png)
-
-        Figure 186. Protocol Test Manager: Reviewing test cases
-
-    * Configure the **Test Suite** by using the **Do Manual Configuration** option:
-
-      ![](./image/FileServerUserGuide/image2.png)**Important**
-
-      If you choose the **Do Manual Configuration** option, you will need to manually provide information that is normally obtained during **Auto Detect**, such as target share, domain name, user name, password, and so forth. You will need to provide this information in the **Common** and **SMB** groups on the **Configure Test Cases** tab of **PTM**.
-
-      To use the **Do Manual Configuration** option, proceed as follows:
-
-      * On the **Configuration Method** tab of the **Protocol Test Manager**, click **Do Manual Configuration** and navigate directly to the **Filter Test Cases** tab.
-
-      * On the **Filter Test Cases** tab of **Protocol Test Manager**, select the test cases that you want to run by setting check boxes in the **Filter** and **Feature** tree lists.
-
-        <a name="fig.187"></a>
-
-        ![](./image/FileServerUserGuide/image157.png)
-
-        Figure 187. Protocol Test Manager: Manually selecting test cases
-
-    * Configure the **Test Suite** by using the **Load Profile** option:
-
-      In order to use this option, you will need to have run the **Test Suite** at least once and saved a Profile that contains selected test cases and related configuration information, following test execution. You can save a Profile in step 9 of this procedure and then use it in subsequent reruns of the profiled test environment where you specify use of the **Load Profile** option in the **Protocol Test Manager**.
-
-      When this is the case, proceed to the bullet points that follow to load and use a Profile with the **Load Profile** option.
-
-      * On the **Configuration Method** tab of the **Protocol Test Manager**, click **Load Profile**, select an existing profile, and then click the **Open** button.
-
-        Thereafter, navigate directly to the **Filter Test Cases** tab of **Protocol Test Manager**.
-
-        <a name="fig.188"></a>
-
-        ![](./image/FileServerUserGuide/image158.png)
-
-        Figure 188. Protocol Test Manager: Locating an existing Profile
-
-      * On the **Filter Test Cases** tab of **Protocol Test Manager**, verify that the checked test cases appear as expected from the **Profile** data that you imported. Note that you can still modify your selections as necessary by selecting or unselecting them.
-
-        <a name="fig.189"></a>
-
-        ![](./image/FileServerUserGuide/image159.png)
-
-        Figure 189. Protocol Test Manager: Verifying the presence of Profile test cases
-
-6. On the **Configure test case properties** tab of **Protocol Test Manager**, verify the correctness of the default property values that were set for the specified **Groups**, with respect to your detection results. Note that you can edit the values  if necessary.
-
-    For example, you can verify the properties values for the **Common** group to ensure that they match your environment. To verify the default values for **Common** group items, mouse-hover over any particular property to show a tool tip that contains the default property values, as shown in the figure that follows.
-
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If there appears to be a persistent disparity in property values that deviate from what you expect, you might consider running **Auto-Detect** again. If the issue persists, you may need to use the **Do Manual Configuration** option.
-
-    Note that if you are already using the **Do Manual Configuration** or **Load Profile** option, the properties are always set at the default values, which you can modify manually as needed
-
-    When complete, click **Next**.
-
-    ![](./image/FileServerUserGuide/image1.png)**Tip**
-
-    You can also mouse-hover over any item in the **Properties** column on the **Configure test case properties** tab of **Protocol Test Manager** to display a tool tip that contains the meaning of the item over which your mouse is hovering, also indicated in the figure that follows.
-
-    <a name="fig.190"></a>
-
-    ![](./image/FileServerUserGuide/image160.png)
-
-    Figure 190. Protocol Test Manager: Verifying the Common property values
-
-7. On the **Configure Adapter** tab of **Protocol Test Manager**, choose an **SUT control adapter** from the **Type** drop-down or use the typical default setting of **PowerShell**, and then click **Next**.
-
-    <a name="fig.191"></a>
-
-    ![](./image/FileServerUserGuide/image161.png)
-
-    Figure 191. Protocol Test Manager: Configuring the SUT control adapter
-
-    * On the **Run Selected Test Cases** tab of **Protocol Test Manager**, run test cases in either of the following ways:
-
-      * **Run All** – click this link to run all test cases.
-
-      * **Run Selected Test** – click this link to run the selected test cases.
-
-      After the test cases complete execution, you can view test case logs to the right of the test case listview, by selecting any test case in the listview.
-
-      ![](./image/FileServerUserGuide/image1.png)**Note**
-
-      You can drag the separator between the test case treeview and the log pane to adjust the width of the window for better viewing.
-
-      ![](./image/FileServerUserGuide/image2.png)**Important**
-
-      If you run all the core/preconfigured test cases and your environment does not support certain features, you will see errors in the command console, in the test cases listview, and in the right-hand side log pane of PTM, with respect to methods that failed when attempting to test those features. To avoid this, you can simply run only the test cases that apply to your environment.
-
-      <a name="fig.192"></a>
-
-      ![](./image/FileServerUserGuide/image162.png)
-
-      Figure 192. Protocol Test Manager: Running the test cases
-
-      ![](./image/FileServerUserGuide/image1.png)**Note**
-
-      As shown in the figure that follows, you can also run test cases from the context menu that appears when you right-click the test case listview, for example, with commands such as **Run Selected Tests** and **Run All Tests**. In addition, you can select the **Uncheck All** command to uncheck all selected test cases.
-
-      <a name="fig.193"></a>
-
-      ![](./image/FileServerUserGuide/image165.png)
-
-      Figure 193. Protocol Test Manager: Uncheck All context menu item
-
-8. After test execution is complete, click the results hyperlink in the upper-right corner of **Protocol Test Manager** to open the **Result** folder for the **Test Suite** run.
-
-    <a name="fig.194"></a>
-
-    ![](./image/FileServerUserGuide/image163.png)
-
-    Figure 194. Protocol Test Manager: Displaying the test case results
-
-9. To save a Profile that encapsulates the current test case configuration, click the **Export/Import** drop-down and select **Save Profile** to save the selected test cases of this run and all the related configurations.
-
-    You can then use the saved Profile with subsequent re-runs of the current Test Suite configuration where you employ the **Load Profile** option from the **Configuration Method** tab of **Protocol Test Manager**.
-
-    <a name="fig.195"></a>
-
-    ![](./image/FileServerUserGuide/image164.png)
-
-    Figure 195. Protocol Test Manager: Saving a test cases Profile
-
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    **Protocol Test Manager** also has a command line interface (**ptmcli.exe**) that you can use to automate the running of test cases with a selected Profile.
-    * You can locate the **ptmcli.exe** tool in the **..\\bin** folder under the **Protocol Test Manager** installation path in the **Program Files** directory. To use this tool, you will need to specify the path to a saved Profile name with the `-p` switch:
-
-      `ptmcli.exe -p <profileName>`
-
-    * To display help for the **ptmcli.exe** tool, specify the `-h` switch at the command line:
-
-      `ptmcli.exe -h`
+On how to use PTMCli to run test cases, please refer to this [guide](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/PtmCli).
 
 ### <a name="7.2"/> 7.2 Configure the Test Suite Manually
 
@@ -3561,36 +3346,11 @@ For specific configuration details, refer to a corresponding \*.deployment.ptfco
 
 ### <a name="7.3"/> 7.3 Run Test Cases with Batch Scripts
 
-The **File Server Protocol Family Test Suite** includes command (**.cmd**) batch files that you can use to run some basic test cases. Each test case verifies a protocol implementation based on a predefined scenario. You can run the .cmd test case files directly from the following directory:
+The **File Server Protocol Family Test Suite** includes batch files that you can use to run test cases. Each test case verifies a protocol implementation based on a predefined scenario. You can run the batch files directly from the following directory:
 
 **FileServer-TestSuite-ServerEP\\Batch\\**
 
-To run these batch files, either double-click one or more of them directly from the specified directory location or run them from a command prompt.
-
-#### <a name="7.3.1"/> 7.3.1 Run Tests by filters
-
-To run a specific group of test cases that are categorized by feature names, perform the appropriate steps that follow:
-
-* Start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**.
-
-* Enter the **FileServer-TestSuite-ServerEP\\Batch\\** directory, define your filter (For example, "TestCategory=BVT&TestCategory=SMB311") and type the command below:
-
-  ```
-      .\RunTestCasesByFilter.ps1 -Filter $Filter
-  ```    
-
-
-#### <a name="7.3.2"/> 7.3.2 Run All Test Cases
-
-Perform the steps that follow to run all test cases:
-
-* Start Windows PowerShell (x64) with Administrator privileges by right-clicking the Windows **Start** menu and selecting **Windows Power Shell (Admin)**.
-
-* Enter the **FileServer-TestSuite-ServerEP\\Batch\\** directory and type the command below:
-
-  ```
-      .\RunAllTestCases.ps1
-  ```    
+On how to run these batch files, please refer to this [guide](https://github.com/microsoft/WindowsProtocolTestSuites#run-test-suite-by-batch).
 
 ### <a name="7.4"/> 7.4 Reviewing Test Results
 

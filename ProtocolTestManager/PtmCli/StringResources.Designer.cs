@@ -71,6 +71,28 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
 
         /// <summary>
+        ///   Looks up a finish running tips. The path is as {0}..
+        /// </summary>
+        internal static string FinishRunningTips
+        {
+            get
+            {
+                return ResourceManager.GetString("FinishRunningTips", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up test suites path..
+        /// </summary>
+        internal static string TestSuitesPath
+        {
+            get
+            {
+                return ResourceManager.GetString("TestSuitesPath", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///  Looks up a dll version error.
         /// </summary>
         internal static string DllhasInvaildVersion

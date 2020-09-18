@@ -120,8 +120,14 @@
   <data name="DllhasInvaildVersion" xml:space="preserve">
     <value>The version of the test suite is invalid</value>
   </data>
+  <data name="FinishRunningTips" xml:space="preserve">
+    <value>Finish running test cases.</value>
+  </data>
   <data name="PtmProfileUpgraded" xml:space="preserve">
     <value>The PTM profile has been upgraded. New profile is saved as {0}.</value>
+  </data>
+  <data name="TestSuitesPath" xml:space="preserve">
+    <value>You can find the test results under {0}</value>
   </data>
   <data name="UnknownReportFormat" xml:space="preserve">
     <value>Unknown format: {0}.</value>
