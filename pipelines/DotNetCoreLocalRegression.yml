@@ -13,7 +13,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-hazh/DotNetCoreLocalRegression
+      ref: v-hazh/DotNetCoreLocalRegression-v2
 
 jobs:
   - template: pipelines/local/DotNetCore-LocalRegression-steps.yml@template
