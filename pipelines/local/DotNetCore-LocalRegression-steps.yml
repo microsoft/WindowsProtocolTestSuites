@@ -30,7 +30,7 @@ jobs:
       displayName: "Trigger Test Suite Build"
       inputs:
         targetType: filePath
-        filePath: "WindowsProtocolTestSuitesHelper/AzureScripts/Get-ExpandedDotNetCoreArchive.ps1"
+        filePath: "WindowsProtocolTestSuitesHelper/CommonScript/Get-ExpandedDotNetCoreArchive.ps1"
         arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -BuildPipelineName ${{parameters.BuildPipelineName}} -TargetRepoBranch "${{parameters[''build.targetRepoBranch'']}}"'
       condition: succeeded()
 
@@ -38,7 +38,7 @@ jobs:
       displayName: "Trigger Test Suite Local Regression"
       inputs:
         targetType: filePath
-        filePath: "WindowsProtocolTestSuitesHelper/AzureScripts/Queue-DotNetCoreCodeLocalRegression.ps1"
+        filePath: "WindowsProtocolTestSuitesHelper/CommonScript/Queue-DotNetCoreCodeLocalRegression.ps1"
         arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -LastBuildId "$(build.testSuiteBuildId)" -LastPipelineId "$(build.testSuitePipelineId)" -RegressionPipelineNames ${{parameters.RegressionPipelineNames}} -TargetHelperBranch ${{parameters.HelperBranch}} -TargetRepoCsvFile ${{parameters.TargetRepoCsvFile}} -TestFilter ${{parameters.FilterSuffix}}'
       condition: succeeded()
 
