@@ -63,7 +63,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -131,7 +131,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -172,7 +172,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -232,7 +232,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 Site.Assert.AreEqual(3U, response._dwRatioFinishedDenominator, "The _dwRatioFinishedDenominator should be 3.");
 
                 if (isAfterGetRowsIn)
-                {   
+                {
                     Site.Assert.AreEqual(3U, response._dwRatioFinishedNumerator, "The _dwRatioFinishedNumerator should be 3.");
                     Site.Assert.AreEqual(1U, response._iRowBmk, "The _iRowBmk should be 1.");
                 }

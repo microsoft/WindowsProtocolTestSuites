@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {

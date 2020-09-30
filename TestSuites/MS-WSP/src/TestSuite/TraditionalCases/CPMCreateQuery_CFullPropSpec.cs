@@ -73,9 +73,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             var expectedResults = new ulong[]
             {
-                23552,
-                43520,
-                32256
+                document1Size,
+                document2Size,
+                document3Size
             };
 
             ValidateQueryResult(nameof(WspConsts.System_Size), expectedResults, queryResult);

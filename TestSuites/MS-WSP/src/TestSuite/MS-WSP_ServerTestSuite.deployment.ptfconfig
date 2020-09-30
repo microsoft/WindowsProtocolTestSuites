@@ -61,11 +61,7 @@
      
     -->
     <Property name="ClientVersion" value="67328" />
-    <!-- See if TDI-19919 is still open
-    If the Server Under Test is Windows 2008, put it as 'Open'
-    else put any value
-    It is not applicable for Windows 2003
-    -->
+
     <Property name="NewFile1" value="File1.txt" />
     <Property name="NewFile2" value="File2.txt" />
     <Property name="ExistFile1" value="ExistFile1.txt" />
@@ -77,6 +73,26 @@
     <Property name="QueryPath" value="file://sut/test/" />
     <!-- It specifies the Search Query.Text to be present in name of Searched File -->
     <Property name="QueryText" value="test" />
+
+    <!--File size values of the files in Data\CraeteQuery_Size.-->
+    <!--The file size of test1.bin which is the file with a size in the middle of the following 3 files.-->
+    <Property name="Test1Size" value="1124" />
+    <!--The file size of test27.bin which is the smallest file of the 3 files.-->
+    <Property name="Test27Size" value="30" />
+    <!--The file size of test132.bin which is the largest file of the 3 files.-->
+    <Property name="Test132Size" value="3868" />
+
+    <!--File size values of the files in Data\CreateQuery_CFullPropSpec.-->
+    <!--The file size of document1.doc.-->
+    <Property name="Document1Size" value="23552" />
+    <!--The file size of document2.ppt.-->
+    <Property name="Document2Size" value="43520" />
+    <!--The file size of document3.xls.-->
+    <Property name="Document3Size" value="32256" />
+
+    <!--File size values of the files in Data\FetchValue.-->
+    <!--The file size of document.doc.-->
+    <Property name="DocumentSize" value="45568" />
 
     <!--  Fetch Value In-->
     <!--  If the CbChunk value is large enough, it retrieves all the value is one go

@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private ArgumentType argumentType;
 
+        private ulong documentSize;
+
         public enum ArgumentType
         {
             AllValid,
@@ -50,6 +52,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
 
             wspAdapter.CPMFetchValueOutResponse += CPMFetchValueOut;
+
+            documentSize = ulong.Parse(Site.Properties.Get("DocumentSize"));
         }
 
         protected override void TestCleanup()
@@ -105,7 +109,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_UI8 property is fetched by a single CPMFetchValueIn message.")]
         public void CPMFetchValue_SingleChunk_VT_UI8()
         {
-            CPMFetchValue_Positive(WspConsts.System_Size, vType_Values.VT_UI8, 45568UL);
+            CPMFetchValue_Positive(WspConsts.System_Size, vType_Values.VT_UI8, documentSize);
         }
 
         [TestMethod]
@@ -166,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_UI8 property is fetched by consequent CPMFetchValueIn messages.")]
         public void CPMFetchValue_MultipleChunks_VT_UI8()
         {
-            CPMFetchValue_Positive(WspConsts.System_Size, vType_Values.VT_UI8, 45568UL, false);
+            CPMFetchValue_Positive(WspConsts.System_Size, vType_Values.VT_UI8, documentSize, false);
         }
 
         [TestMethod]

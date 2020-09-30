@@ -20,6 +20,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private IWSPSUTAdapter wspSutAdapter;
 
+        // Size values of files under test whose size is queried.
+        private int test1Size;
+        private int test27Size;
+        private int test132Size;
+
+        private ulong document1Size;
+        private ulong document2Size;
+        private ulong document3Size;
+
         public enum ArgumentType
         {
             AllValid,
@@ -75,6 +84,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
 
             wspSutAdapter = Site.GetAdapter<IWSPSUTAdapter>();
+
+            test1Size = int.Parse(Site.Properties.Get("Test1Size"));
+            test27Size = int.Parse(Site.Properties.Get("Test27Size"));
+            test132Size = int.Parse(Site.Properties.Get("Test132Size"));
+
+            document1Size = ulong.Parse(Site.Properties.Get("Document1Size"));
+            document2Size = ulong.Parse(Site.Properties.Get("Document2Size"));
+            document3Size = ulong.Parse(Site.Properties.Get("Document3Size"));
         }
 
         protected override void TestCleanup()
@@ -226,7 +243,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test CPMCreateQuery by querying file size with a greater-than comparison.")]
         public void CPMCreateQuery_Size_GreaterThan()
         {
-            CPMCreateQuery_Size(_relop_Values.PRGT, 2000);
+            CPMCreateQuery_Size(_relop_Values.PRGT, test1Size + 1);
         }
 
         [TestMethod]
@@ -234,7 +251,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test CPMCreateQuery by querying file size with a greater-than or equal-to comparison.")]
         public void CPMCreateQuery_Size_GreaterThanOrEqualTo()
         {
-            CPMCreateQuery_Size(_relop_Values.PRGE, 1124);
+            CPMCreateQuery_Size(_relop_Values.PRGE, test1Size);
         }
 
         [TestMethod]
@@ -242,7 +259,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test CPMCreateQuery by querying file size with a less-than comparison.")]
         public void CPMCreateQuery_Size_LessThan()
         {
-            CPMCreateQuery_Size(_relop_Values.PRLT, 2000);
+            CPMCreateQuery_Size(_relop_Values.PRLT, test1Size + 1);
         }
 
         [TestMethod]
@@ -250,7 +267,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test CPMCreateQuery by querying file size with a less-than or equal-to comparison.")]
         public void CPMCreateQuery_Size_LessThanOrEqualTo()
         {
-            CPMCreateQuery_Size(_relop_Values.PRLE, 1124);
+            CPMCreateQuery_Size(_relop_Values.PRLE, test1Size);
         }
 
         [TestMethod]
@@ -687,7 +704,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             for (int i = 0; i < pidColumns.Length; i++)
             {
                 inGroupSortAggregSets.SortSets[0].sortArray[i].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
-                inGroupSortAggregSets.SortSets[0].sortArray[i].pidColumn = pidColumns[i]; 
+                inGroupSortAggregSets.SortSets[0].sortArray[i].pidColumn = pidColumns[i];
                 inGroupSortAggregSets.SortSets[0].sortArray[i].locale = wspAdapter.builder.parameter.LCID_VALUE;
                 inGroupSortAggregSets.SortSets[0].sortArray[i].dwIndividual = dwIndividual_Values.QUERY_SORTALL;
             }
@@ -782,22 +799,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case _relop_Values.PRLT:
                     log = $"less than {comparedSize}";
                     expectedRowsCount = 2;
-                    fileNameList = new string[] { "test1.txt", "test27.txt" };
+                    fileNameList = new string[] { "test1.bin", "test27.bin" };
                     break;
                 case _relop_Values.PRLE:
                     log = $"less than or equal to {comparedSize}";
                     expectedRowsCount = 2;
-                    fileNameList = new string[] { "test1.txt", "test27.txt" };
+                    fileNameList = new string[] { "test1.bin", "test27.bin" };
                     break;
                 case _relop_Values.PRGT:
                     log = $"greater than {comparedSize}";
                     expectedRowsCount = 1;
-                    fileNameList = new string[] { "test132.txt" };
+                    fileNameList = new string[] { "test132.bin" };
                     break;
                 case _relop_Values.PRGE:
                     log = $"greater than or equal to {comparedSize}";
                     expectedRowsCount = 2;
-                    fileNameList = new string[] { "test1.txt", "test132.txt" };
+                    fileNameList = new string[] { "test1.bin", "test132.bin" };
                     break;
                 default:
                     throw new Exception($"The relation should not be {relation}!");
@@ -826,6 +843,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             int comparedSize = 0;
+            string fileQueryPath = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size";
             string fileQueryString = null;
             string[] fileNameList = null;
             string log = null;
@@ -839,42 +857,44 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     expectedRowsCount = 0;
                     break;
                 case CRestriction_ulType_Values.RTAnd:
-                    comparedSize = 516;
-                    fileQueryString = "test12?.txt";
+                    comparedSize = test132Size;
+                    fileQueryString = "test?.bin";
                     relation = _relop_Values.PRLT;
                     log = $"whose size is less than {comparedSize} bytes and whose file name matches {fileQueryString}";
                     expectedRowsCount = 1;
-                    fileNameList = new string[] { "test121.txt" };
+                    fileNameList = new string[] { "test1.bin" };
                     break;
                 case CRestriction_ulType_Values.RTOr:
-                    comparedSize = 2868736;
-                    fileQueryString = "test12?.txt";
+                    comparedSize = test1Size;
+                    fileQueryString = "test?.bin";
                     relation = _relop_Values.PRGT;
                     log = $"whose size is larger than {comparedSize} bytes or whose file name matches {fileQueryString}";
-                    expectedRowsCount = 4;
-                    fileNameList = new string[] { "test15.docx", "test121.txt", "test122.txt", "test128.txt" };
+                    expectedRowsCount = 2;
+                    fileNameList = new string[] { "test1.bin", "test132.bin" };
                     break;
                 case CRestriction_ulType_Values.RTNot:
-                    comparedSize = 2868736;
+                    comparedSize = test1Size;
                     relation = _relop_Values.PRLT;
                     log = $"whose size is NOT less than {comparedSize}";
                     expectedRowsCount = 2;
-                    fileNameList = new string[] { "test13.doc", "test15.docx" };
+                    fileNameList = new string[] { "test1.bin", "test132.bin" };
                     break;
                 case CRestriction_ulType_Values.RTProperty:
-                    comparedSize = 2868736;
+                    comparedSize = test132Size;
                     relation = _relop_Values.PRGE;
                     log = $"whose size is larger than or equal to {comparedSize} bytes";
-                    expectedRowsCount = 2;
-                    fileNameList = new string[] { "test13.doc", "test15.docx" };
+                    expectedRowsCount = 1;
+                    fileNameList = new string[] { "test132.bin" };
                     break;
                 case CRestriction_ulType_Values.RTContent:
                     log = $"whose content contains {fileQueryString}";
+                    fileQueryPath = Site.Properties.Get("QueryPath") + "Data/Test";
                     fileQueryString = "Adapter";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test13.doc", "test17.docx" };
                     break;
                 case CRestriction_ulType_Values.RTReuseWhere:
+                    fileQueryPath = Site.Properties.Get("QueryPath") + "Data/Test";
                     expectedRowsCount = 2;
                     fileNameList = new string[] { "test13.doc", "test17.docx" };
                     break;
@@ -922,7 +942,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 default:
                     throw new NotImplementedException($"The test case of ulType {ulType} is not implemented.");
             }
-            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(Site.Properties.Get("QueryPath") + "Data/Test"));
+
+            CBaseStorageVariant searchSope = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(fileQueryPath));
             var scopeRestriction = wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, searchSope);
             var restrictionArray = wspAdapter.builder.GetRestrictionArray(scopeRestriction, fileRestriction);
 
@@ -960,7 +981,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectInRequest();
 
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -1001,13 +1022,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             int[] sizeList = null;
             if (ascend)
             {
-                fileNameList = new string[] { "test27.txt", "test1.txt", "test132.txt" };
-                sizeList = new int[] { 30, 1124, 3868 };
+                fileNameList = new string[] { "test27.bin", "test1.bin", "test132.bin" };
+                sizeList = new int[] { test27Size, test1Size, test132Size };
             }
             else
             {
-                fileNameList = new string[] { "test132.txt", "test1.txt", "test27.txt" };
-                sizeList = new int[] { 3868, 1124, 30 };
+                fileNameList = new string[] { "test132.bin", "test1.bin", "test27.bin" };
+                sizeList = new int[] { test132Size, test1Size, test27Size };
             }
 
             for (int i = 0; i < 3; i++)

@@ -17,8 +17,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server behavior if aggregate type MAX is sent in CMPCreateQueryIn.")]
         public void CPMCreateQuery_Categorization_Aggregate_MAX()
         {
-            // 114688 is the maximum size of the files in query.
-            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_MAX, WspConsts.System_Size, 114688);
+            // Test132Size is the maximum size of the files in query.
+            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_MAX, WspConsts.System_Size, test132Size);
         }
 
         [TestMethod]
@@ -26,8 +26,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server behavior if aggregate type MIN is sent in CMPCreateQueryIn.")]
         public void CPMCreateQuery_Categorization_Aggregate_MIN()
         {
-            // 30 is the minimum size of the files in query.
-            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_MIN, WspConsts.System_Size, 30);
+            // Test27Size is the minimum size of the files in query.
+            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_MIN, WspConsts.System_Size, test27Size);
         }
 
         [TestMethod]
@@ -35,9 +35,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server behavior if aggregate type AVG is sent in CMPCreateQueryIn.")]
         public void CPMCreateQuery_Categorization_Aggregate_AVG()
         {
-            // 13872 is the average size of the files in query.
             // It is converted from double to int.
-            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_AVG, WspConsts.System_Size, 13872);
+            var averageSize = Convert.ToInt32((test1Size + test27Size + test132Size) / 3.0);
+            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_AVG, WspConsts.System_Size, averageSize);
         }
 
         [TestMethod]
@@ -45,8 +45,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server behavior if aggregate type SUM is sent in CMPCreateQueryIn.")]
         public void CPMCreateQuery_Categorization_Aggregate_SUM()
         {
-            // 402279 is the total size of the files in query.
-            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_SUM, WspConsts.System_Size, 402279);
+            var totalSize = test1Size + test27Size + test132Size;
+            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_SUM, WspConsts.System_Size, totalSize);
         }
 
         [TestMethod]
@@ -55,7 +55,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMCreateQuery_Categorization_Aggregate_DATERANGE()
         {
             // Returns the lower and upper bounds of the queried files' created date.
-            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_DATERANGE, WspConsts.System_DateCreated, 0);
+            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_DATERANGE, WspConsts.System_DateCreated);
         }
 
         [TestMethod]
@@ -63,8 +63,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to verify the server behavior if aggregate type COUNT is sent in CMPCreateQueryIn.")]
         public void CPMCreateQuery_Categorization_Aggregate_COUNT()
         {
-            // 29 is the total count of the files in query.
-            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_COUNT, WspConsts.System_Size, 29);
+            // 3 is the total count of the files in query.
+            CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values.DBAGGTTYPE_COUNT, WspConsts.System_Size, 3);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             CPMCreateQuery_Categorization_Aggregate_ChildCount(WspConsts.System_Size, 1);
         }
 
-        private void CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values aggregateType, CFullPropSpec propSpec, int comparedValue)
+        private void CPMCreateQuery_Categorization_Aggregate(CAggregSpec_type_Values aggregateType, CFullPropSpec propSpec, int? comparedValue = null)
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
@@ -91,7 +91,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn with aggregate type {aggregateType} and expects success.");
             wspAdapter.CPMCreateQueryIn(
                 GetColumnSet(),
-                wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/Test", WspConsts.System_FileName),
+                wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName),
                 CreateSortSets(),
                 categorizationSet,
                 GetRowsetProperties(),
@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with aggregate type DBAGGTTYPE_CHILDCOUNT and expects success.");
             wspAdapter.CPMCreateQueryIn(
                 GetColumnSet(),
-                wspAdapter.builder.GetRestrictionArray("*.txt", Site.Properties.Get("QueryPath") + "Data/Test", WspConsts.System_FileName), 
+                wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName), 
                 CreateSortSets(0, 1), 
                 categorizationSet,
                 GetRowsetProperties(),
