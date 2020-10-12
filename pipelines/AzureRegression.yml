@@ -13,7 +13,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines
+      ref: AzurePipelines-dotnet-fx
 
 jobs:
   - template: pipelines/Azure/AzureRegression-steps.yml@template

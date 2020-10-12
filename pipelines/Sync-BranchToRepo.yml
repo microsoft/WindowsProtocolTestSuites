@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines
+      ref: AzurePipelines-dotnet-fx
 
 jobs:
   - template: pipelines/Sync/Sync-Branch-Between-Repo-steps.yml@template

@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines
+      ref: AzurePipelines-dotnet-fx
 
 jobs:
 - job:
