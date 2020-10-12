@@ -95,7 +95,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// The sender should not use this ACK for estimating the network RTT.
         /// </summary>
         RDPUDP_FLAG_ACKDELAYED = 0x0400,
-        
+
         /// <summary>
         /// Specifies that the RDPUDP_CORRELATION_ID_PAYLOAD Structure (section 2.2.2.8) is present.
         /// </summary>
@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// 16 8-bit values, all set to 0x00
         /// </summary>
-        public byte[] uReserved; 
+        public byte[] uReserved;
     }
 
     public struct RDPUDP_SYNDATAEX_PAYLOAD
@@ -395,7 +395,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             payload = null;
             padding = null;
         }
-           
+
         #endregion constructor
 
 
@@ -422,7 +422,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     length += 16;
                 }
 
-                if(SynDataEx.HasValue)
+                if (SynDataEx.HasValue)
                 {
                     marshaler.WriteUInt16((ushort)SynDataEx.Value.uSynExFlags);
                     marshaler.WriteUInt16((ushort)SynDataEx.Value.uUdpVer);
@@ -447,7 +447,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                         vecByte |= vec.Length;
                         byte state = (byte)vec.State;
                         vecByte |= (byte)(state << 6);
-                        ackVecElementList.Add(vecByte);                        
+                        ackVecElementList.Add(vecByte);
                     }
                     ackVecElementList.Reverse();
                     marshaler.WriteBytes(ackVecElementList.ToArray());
@@ -532,7 +532,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     return true;
                 }
 
-                
+
                 if (fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK))
                 {
                     // ACK.
@@ -549,7 +549,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                         ackVector.AckVectorElement[i].Length = (byte)(0x3F & vecByte);
                         ackVector.AckVectorElement[i].State = (VECTOR_ELEMENT_STATE)(vecByte >> 6);
                     }
-                    
+
                     this.ackVectorHeader = ackVector;
 
                     // Padding (variable): A variable-sized array, of length zero or more, 
@@ -584,7 +584,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     {
                         // FEC Data.
                         RDPUDP_FEC_PAYLOAD_HEADER fecDataHeader = new RDPUDP_FEC_PAYLOAD_HEADER();
-                        fecDataHeader.snCoded =  marshaler.ReadUInt32();
+                        fecDataHeader.snCoded = marshaler.ReadUInt32();
                         fecDataHeader.snSourceStart = marshaler.ReadUInt32();
                         fecDataHeader.uRange = marshaler.ReadByte();
                         fecDataHeader.uFecIndex = marshaler.ReadByte();
@@ -601,7 +601,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             {
                 return false;
             }
-        } 
+        }
 
         #endregion
 
@@ -718,4 +718,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             return packets;
         }
     }
+
+    /// <summary>
+    /// Delegate for unhandled exception received.
+    /// </summary>
+    /// <param name="ex">The unhandled exception received.</param>
+    public delegate void UnhandledExceptionReceivedDelegate(Exception ex);
 }

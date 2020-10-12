@@ -50,6 +50,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         #endregion Properties
 
+        #region Event
+        /// <summary>
+        /// Event for unhandled exception received.
+        /// </summary>
+        public event UnhandledExceptionReceivedDelegate UnhandledExceptionReceived;
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -65,10 +72,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 this.transportProtocol = Multitransport_Protocol_value.INITITATE_REQUEST_PROTOCOL_UDPFECL;
             }
-
-
-            EstablishTransportConnection();
-
 
             decoder = new ClientDecodingPduBuilder();
             pduBuilder = new PduBuilder();
@@ -148,6 +151,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             IPEndPoint localEndpoint = new IPEndPoint(((IPEndPoint)clientSessionContext.LocalIdentity).Address, port);
             rdpeudpClient = new RdpeudpClient(localEndpoint, (IPEndPoint)clientSessionContext.RemoteIdentity, udpTransportMode);
+
+            rdpeudpClient.UnhandledExceptionReceived += (ex) =>
+            {
+                UnhandledExceptionReceived?.Invoke(ex);
+            };
+
             if (!rdpeudpClient.Running)
             {
                 rdpeudpClient.Start();

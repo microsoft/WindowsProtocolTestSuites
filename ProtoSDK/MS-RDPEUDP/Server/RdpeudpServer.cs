@@ -41,12 +41,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     }
 
     /// <summary>
-    /// Delegate for unhandled exception received.
-    /// </summary>
-    /// <param name="ex">The unhandled exception received.</param>
-    public delegate void UnhandledExceptionReceivedDelegate(Exception ex);
-
-    /// <summary>
     /// RDPEUDP Server
     /// </summary>
     public class RdpeudpServer : IDisposable

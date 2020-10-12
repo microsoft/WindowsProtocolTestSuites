@@ -1445,6 +1445,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             this.TunnelsToSwitch = tunnelsToSwitchList.ToArray();
         }
     }
-    #endregion 
+    #endregion
+    #endregion
+
+    #region Delegate Types
+    /// <summary>
+    /// Delegate for unhandled exception received.
+    /// </summary>
+    /// <param name="ex">The unhandled exception received.</param>
+    public delegate void UnhandledExceptionReceivedDelegate(Exception ex);
     #endregion
 }

@@ -88,6 +88,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
                 var rdpeudpClient = new RdpeudpClient(new IPEndPoint(testConfig.localAddress.ParseIPAddress(), 0), new IPEndPoint(testConfig.serverName.ParseIPAddress(), testConfig.serverPort), mode, true);
 
+                rdpeudpClient.UnhandledExceptionReceived += (ex) =>
+                {
+                    Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpClient: {ex}");
+                };
+
                 rdpeudpClients[request.requestedProtocol] = rdpeudpClient;
 
                 rdpeudpClient.Start();

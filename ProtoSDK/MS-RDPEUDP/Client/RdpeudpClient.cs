@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         // Remote Endpoint
         private IPEndPoint remoteEndpoint;
-        
+
         // UDP Transport stack
         private TransportStack udpTransport;
 
@@ -57,7 +57,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// Whether socket in RDPEUDP client is auto handled
         /// </summary>
-        public bool AutoHandle{get; set;}
+        public bool AutoHandle { get; set; }
 
         /// <summary>
         /// Whether the RdpeudpClient is running
@@ -72,6 +72,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         #endregion Properties
 
+        #region Event
+        /// <summary>
+        /// Event for unhandled exception received.
+        /// </summary>
+        public event UnhandledExceptionReceivedDelegate UnhandledExceptionReceived;
+        #endregion
 
         #region Constructor
         /// <summary>
@@ -101,8 +107,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             running = true;
             receiveThread = new Thread(ReceiveLoop);
             receiveThread.Start();
-        }        
-      
+        }
+
         /// <summary>
         /// Stop RDPEUDP Client
         /// </summary>
@@ -117,13 +123,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             socket.Close();
             udpTransport.Stop();
         }
-        
+
         /// <summary>
         /// Connect to the Server on Remote EndPoint 
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public bool Connect(TimeSpan timeout)    
+        public bool Connect(TimeSpan timeout)
         {
             return socket.Connect(timeout);
         }
@@ -146,20 +152,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         private void ReceiveLoop()
         {
-            TimeSpan timeout;
-            object remoteEndpoint;
-            StackPacket receivedPacket;
-            timeout = new TimeSpan(0, 0, 0, 0, 100); // 100 milliseconds.
-            while (running)
-            {                   // An infinite loop to receive packet from transport stack.
-                try
-                {
-                    receivedPacket = udpTransport.ExpectPacket(timeout, out remoteEndpoint);
-                    socket.ReceivePacket(receivedPacket);
+            try
+            {
+                TimeSpan timeout;
+                object remoteEndpoint;
+                StackPacket receivedPacket;
+                timeout = new TimeSpan(0, 0, 0, 0, 100); // 100 milliseconds.
+                while (running)
+                {                   // An infinite loop to receive packet from transport stack.
+                    try
+                    {
+                        receivedPacket = udpTransport.ExpectPacket(timeout, out remoteEndpoint);
+                        socket.ReceivePacket(receivedPacket);
+                    }
+                    catch (TimeoutException)
+                    { }
+                    Thread.Sleep(RdpeudpSocketConfig.ReceivingInterval);
                 }
-                catch (TimeoutException)
-                { }
-                Thread.Sleep(RdpeudpSocketConfig.ReceivingInterval);
+            }
+            catch (Exception ex)
+            {
+                UnhandledExceptionReceived?.Invoke(ex);
             }
         }
 

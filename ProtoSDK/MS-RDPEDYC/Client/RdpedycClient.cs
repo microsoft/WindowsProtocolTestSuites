@@ -25,9 +25,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
         private PduBuilder pduBuilder;
 
-        private bool autoCreateChannel;       
+        private bool autoCreateChannel;
 
         #endregion Variables
+
+        #region Event
+        /// <summary>
+        /// Event for unhandled exception received.
+        /// </summary>
+        public event UnhandledExceptionReceivedDelegate UnhandledExceptionReceived;
+        #endregion
 
         #region Constructor
 
@@ -52,7 +59,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             transport.Received += ProcessPacketFromTCP;
             transportDic.Add(DynamicVC_TransportType.RDP_TCP, transport);
-            
+
         }
 
         #endregion Constructor
@@ -72,6 +79,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             Rdpemt_DVCClientTransport transport = new Rdpemt_DVCClientTransport(clientSessionContext, transportType);
 
+            transport.UnhandledExceptionReceived += (ex) =>
+            {
+                UnhandledExceptionReceived?.Invoke(ex);
+            };
+
             if (transportType == DynamicVC_TransportType.RDP_UDP_Reliable)
             {
                 transport.Received += ProcessPacketFromUDPR;
@@ -80,6 +92,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 transport.Received += ProcessPacketFromUDPL;
             }
+
+            transport.EstablishTransportConnection();
+
             transportDic.Add(transportType, transport);
         }
 
@@ -106,11 +121,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             DYNVC_CAPS_Version version = DYNVC_CAPS_Version.VERSION3;
 
-            if(pdu is CapsVer1ReqDvcPdu)
+            if (pdu is CapsVer1ReqDvcPdu)
             {
                 version = DYNVC_CAPS_Version.VERSION1;
             }
-            else if(pdu is CapsVer2ReqDvcPdu)
+            else if (pdu is CapsVer2ReqDvcPdu)
             {
                 version = DYNVC_CAPS_Version.VERSION2;
             }
@@ -118,9 +133,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             this.SendDVCCapResponsePDU(version);
 
             return version;
-            
+
         }
-        
+
         /// <summary>
         /// Expect server send a create SVC request
         /// </summary>
@@ -139,7 +154,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             {
                 throw new InvalidOperationException("DVC transport:" + transportType + " does not exist.");
             }
-            
+
 
             CreateReqDvcPdu createReq = this.ExpectDVCCreateRequestPDU(timeout, channelName, transportType);
             if (createReq == null)
@@ -148,7 +163,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             DynamicVirtualChannel channel = new DynamicVirtualChannel(createReq.ChannelId, channelName, (ushort)createReq.HeaderBits.Sp, transportDic[transportType]);
-                       
+
             channelDicbyId.Add(createReq.ChannelId, channel);
 
             this.SendDVCCreateResponsePDU(createReq.ChannelId, 0, transportType);
@@ -156,7 +171,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return channel;
 
         }
-        
+
         /// <summary>
         /// Expect server send a close DVC request
         /// </summary>
@@ -175,7 +190,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             // Remove the channel from dictionary
             channelDicbyId.Remove(channelId);
         }
-            
+
         /// <summary>
         /// Send the DYNVC_DATA_ PDU
         /// </summary>
@@ -184,13 +199,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
         public void SendUncompressedPdu(uint channelId, DynamicVC_TransportType transportType)
         {
             // Generate the data based on TD
-            byte[] data = new byte[ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH] ;
+            byte[] data = new byte[ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH];
             for (int i = 0; i < ConstLength.MAX_UNCOMPRESSED_DATA_LENGTH; i++)
             {
                 data[i] = 0x71;
             }
 
-           channelDicbyId[channelId].Send(data, false);            
+            channelDicbyId[channelId].Send(data, false);
         }
 
         /// <summary>
@@ -245,8 +260,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             return null;
 
         }
-      
-               
+
+
         /// <summary>
         /// Expect a DYNVC_SOFT_SYNC_RESPONSE PDU.
         /// </summary>
@@ -340,7 +355,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
             return null;
         }
-        
+
         /// <summary>
         /// Send a DVC Capabilities Response PDU
         /// </summary>
@@ -451,7 +466,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             DynamicVirtualChannel channel = new DynamicVirtualChannel(createReq.ChannelId, createReq.ChannelName, (ushort)createReq.HeaderBits.Sp, transportDic[transportType]);
-           
+
             channelDicbyId.Add(createReq.ChannelId, channel);
 
             this.SendDVCCreateResponsePDU(createReq.ChannelId, 0, transportType);
@@ -593,7 +608,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 }
             }
         }
-       
+
         /// <summary>
         /// Process DVC packet, but don't process data packet
         /// Data packet will be processed by corresponding Dynamic virtual channel

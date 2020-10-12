@@ -14,15 +14,15 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedyc
-{    
+{
     public partial class RdpedycAdapter : ManagedAdapterBase
     {
         public const string SVCNameForEGT = "Microsoft::Windows::RDS::Geometry::v08.01";
 
         public RdpbcgrAdapter bcgrAdapter;
 
-        public RdpedycClient rdpedycClientStack;          
-       
+        public RdpedycClient rdpedycClientStack;
+
         public override void Reset()
         {
             if (rdpedycClientStack != null)
@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             this.bcgrAdapter = new RdpbcgrAdapter(testConfig);
         }
 
-        public override void Initialize(ITestSite testSite )
+        public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
             bcgrAdapter.Initialize(testSite);
@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             bool supportSVCCompression = false,
             bool supportRemoteFXCodec = false
            )
-       {
+        {
             this.bcgrAdapter.ConnectToServer(encryptProtocol);
             this.bcgrAdapter.EstablishRDPConnection(requestedProtocols,
                 SVCNames,
@@ -105,7 +105,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
                 );
 
             rdpedycClientStack = new RdpedycClient(bcgrAdapter.rdpbcgrClientStack.Context, false);
-            
+
+            rdpedycClientStack.UnhandledExceptionReceived += (ex) =>
+            {
+                Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpedycClient: {ex}");
+            };
         }
 
         /// <summary>
@@ -114,14 +118,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// <param name="timeout">Time span for waiting</param>
         public DYNVC_CAPS_Version ExchangeCapabilities(TimeSpan timeout)
         {
-            if(rdpedycClientStack == null)
+            if (rdpedycClientStack == null)
             {
                 throw new Exception("RDPEDYC Client is required to be created before exchange capabilities.");
             }
 
             DYNVC_CAPS_Version version = rdpedycClientStack.ExchangeCapabilities(timeout);
 
-            return version;            
+            return version;
         }
 
         /// <summary>
@@ -132,7 +136,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// <param name="transportType">Transport type, Tcp by default</param>
         /// <returns></returns>
         public DynamicVirtualChannel ExpectChannel(TimeSpan timeout, DynamicVC_TransportType transportType = DynamicVC_TransportType.RDP_TCP)
-        {           
+        {
             if (rdpedycClientStack == null)
             {
                 throw new InvalidOperationException("RDPEDYC Client is required to be created before create channel!");
@@ -149,11 +153,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
         /// <param name="channelId"> channel id to specify the channel to be closed</param>
         public void CloseChannel(TimeSpan timeout, ushort channelId)
         {
-                       
+
             if (rdpedycClientStack == null)
             {
                 throw new InvalidOperationException("RDPEDYC Client is required to be created before close channel!");
-            }          
+            }
 
             rdpedycClientStack.CloseChannel(channelId);
         }
@@ -173,7 +177,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             this.rdpedycClientStack.SendUncompressedPdu(channelId, transportType);
 
             return;
-        }        
+        }
 
         /// <summary>
         /// Send compressed data sequence PDU to SUT, including the DYNVC_DATA_FIST_COMPRESSED and DYNVC_DATA_COMPRESSED
@@ -190,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedyc
             this.rdpedycClientStack.SendCompressedData(channelId, transportType);
 
             return;
-        }              
+        }
 
         /// <summary>
         /// Expect the Soft-sync request from SUT
