@@ -772,13 +772,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool supportRemoteFXCodec)
         {
             // Create capability sets
-            RdpbcgrCapSet capSet = new RdpbcgrCapSet();
-            Collection<ITsCapsSet> caps = capSet.CreateCapabilitySets(supportAutoReconnect,
-                supportFastPathInput,
-                supportFastPathOutput,
-                supportSurfaceCommands,
-                supportSVCCompression,
-                supportRemoteFXCodec);
+            var caps = rdpbcgrClientStack.CreateCapabilitySets(supportAutoReconnect, supportFastPathInput, supportFastPathOutput, supportSVCCompression);
+
+            var surfaceCommandsCapabilitySet = RdpbcgrCapSet.CreateSurfaceCommandsCapabilitySet(supportSurfaceCommands);
+
+            caps.Add(surfaceCommandsCapabilitySet);
+
+            var bitmapCodecsCapabilitySet = RdpbcgrCapSet.CreateBitmapCodecsCapabilitySet(supportRemoteFXCodec);
+
+            caps.Add(bitmapCodecsCapabilitySet);
 
             Client_Confirm_Active_Pdu pdu = rdpbcgrClientStack.CreateConfirmActivePdu(caps);
 
