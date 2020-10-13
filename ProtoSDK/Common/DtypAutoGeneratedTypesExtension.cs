@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System;
 using System.Diagnostics.CodeAnalysis;
-
-using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
+using System.Globalization;
+using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 {
@@ -355,6 +356,124 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             _ACE_HEADER header = (_ACE_HEADER)context.Variables["Header"];
             _SID sid = (_SID)context.Variables["Sid"];
             return DtypUtility.CalculateApplicationDataLength(header, sid);
+        }
+    }
+
+    /// <summary>
+    /// The SID structure defines a security identifier (SID), which is a 
+    /// variable-length byte array that uniquely identifies a security principal. 
+    /// Each security principal has a unique SID that is issued by a security agent. 
+    /// The agent can be a Windows local system or domain. The agent generates 
+    /// the SID when the security principal is created.
+    /// </summary>
+    public partial struct _SID
+    {
+        /// <summary>
+        /// Create the _SID from the binary input.
+        /// </summary>
+        /// <param name="binary">The binary to be encoded.</param>
+        /// <param name="offset">The offset in the binary.</param>
+        unsafe public _SID(byte[] binary, int offset)
+        {
+            if (binary == null)
+            {
+                throw new ArgumentNullException(nameof(binary));
+            }
+
+            if ((offset < 0) || (offset > binary.Length - 2))
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
+
+            fixed (byte* binaryPtr = binary)
+            {
+                byte* inputBinary = (binaryPtr + offset);
+                byte defaultRevision = 1;
+
+                this.Revision = *inputBinary;
+                if (this.Revision != defaultRevision)
+                {
+                    throw new ArgumentException("The value of Revision MUST be set to 0x01.");
+                }
+
+                this.SubAuthorityCount = *(inputBinary + 1);
+                if (this.SubAuthorityCount > 15)
+                {
+                    throw new ArgumentException("The maximum number of elements allowed is 15");
+                }
+
+                this.IdentifierAuthority = new byte[6];
+                for (int i = 0; i < 6; i++)
+                {
+                    this.IdentifierAuthority[i] = *(inputBinary + i + 2);
+                }
+
+                this.SubAuthority = new uint[this.SubAuthorityCount];
+                for (int i = 0; i < this.SubAuthorityCount; i++)
+                {
+                    int currPos = i * 4 + 8;
+                    uint val = 0;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        val |= (uint)(*(inputBinary + currPos + j) << (j * 8));
+                    }
+                    this.SubAuthority[i] = val;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Construct _SID from SDDL string.
+        /// </summary>
+        /// <param name="sddl">SDDL string to convert.</param>
+        public _SID(string sddl)
+        {
+            this = DtypUtility.ToSid(sddl);
+        }
+
+        /// <summary>
+        /// The binary length of the buffer in bytes.
+        /// </summary>
+        public int Size
+        {
+            get
+            {
+                return DtypUtility.SidLength(this);
+            }
+        }
+
+        /// <summary>
+        /// Create the binary from the buffer.
+        /// </summary>
+        /// <param name="binary">The binary.</param>
+        /// <param name="offset">The offset in the binary.</param>
+        public void GetBinaryForm(byte[] binary, int offset)
+        {
+            if (binary == null)
+            {
+                throw new ArgumentNullException(nameof(binary));
+            }
+
+            byte[] buffer = TypeMarshal.ToBytes<_SID>(this);
+            if ((offset < 0) || (offset > binary.Length - buffer.Length))
+            {
+                throw new ArgumentOutOfRangeException(nameof(offset));
+            }
+
+            Array.Copy(buffer, 0, binary, offset, buffer.Length);
+        }
+
+        /// <summary>
+        /// Get SDDL form from the _SID.
+        /// </summary>
+        /// <returns>The SDDL string built from the _SID.</returns>
+        public string GetSddlForm()
+        {
+            StringBuilder result = new StringBuilder();
+            string sddl = DtypUtility.ToSddlString(this);
+            result.AppendFormat(CultureInfo.InvariantCulture, "O:{0}", sddl);
+
+            return result.ToString();
         }
     }
 }

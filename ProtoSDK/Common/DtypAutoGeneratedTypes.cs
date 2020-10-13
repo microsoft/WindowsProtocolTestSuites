@@ -242,7 +242,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     /// The agent can be a Windows local system or domain. The agent generates 
     /// the SID when the security principal is created.
     /// </summary>
-    public struct _SID
+    public partial struct _SID
     {
         /// <summary>
         /// An 8-bit unsigned integer that specifies the revision level of 

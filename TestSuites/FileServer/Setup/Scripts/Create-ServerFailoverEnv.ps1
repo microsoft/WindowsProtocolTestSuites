@@ -153,18 +153,23 @@ if($diskCount -lt 3)
     exit ExitCode
 } 
 
-.\Write-Info.ps1 "Format 3 disks for cluster"
-for($i=0; $i -lt 3;$i++)
+.\Write-Info.ps1 "Format all disks for cluster"
+$diskLabelsDict = @{}
+$isQuorumDisk = $true
+foreach ($disk in $disks)
 {
-    if($i -eq 0)
+    $diskNumber = $disk.Number
+    if($isQuorumDisk)
     {
-        $volumeLabel = "Q"
+        $volumeLabel = "Q$diskNumber"
+        $isQuorumDisk = $false
     }
     else
     {
-        $volumeLabel = "CLUSTER_DATA"
+        $volumeLabel = "CLUSTER_DATA$diskNumber"
     }
-    $diskNumber = $disks[$i].Number
+    $diskLabelsDict.Add($diskNumber, $volumeLabel)
+    
     $partition = Get-Partition | Where-Object {$_.DiskNumber -eq $diskNumber}
     if($partition -eq $null)
     {
@@ -190,7 +195,7 @@ try {
      .\Write-Info.ps1 "Clean cluster env in single-domain environment."
     $domainAdminPwd = ConvertTo-SecureString $config.lab.core.password -AsPlainText -force
     $creds = New-Object System.Management.Automation.PSCredential($domainAdmin,$domainAdminPwd)
-    $filterStr = 'Name -like "'+$clusterName+'" -or Name -like "+$config.lab.ha.generalfs.name+" -or Name -like "+$config.lab.ha.scaleoutfs.name+"'
+    $filterStr = "Name -like `"$clusterName`" -or Name -like `"$($config.lab.ha.generalfs.name)`" -or Name -like `"$($config.lab.ha.scaleoutfs.name)`""
     Get-ADComputer -Filter $filterStr -Credential $creds | Remove-ADComputer -Credential $creds -Confirm:$false
 }
 catch {
@@ -219,7 +224,7 @@ if($cluster -eq $null)
 	
     # Create cluster
     .\Write-Info.ps1 "Create cluster"
-    New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps
+    New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps -NoStorage
     Start-Sleep 20
 
     .\Write-Info.ps1 "Check if cluster create succeed"
@@ -229,7 +234,43 @@ if($cluster -eq $null)
         .\Write-Info.ps1 "Create Cluster failed."
         Write-ConfigFailureSignal
         exit ExitCode
-    }    
+    }
+
+    .\Write-Info.ps1 "Set cluster quorum"
+    $disks = Get-Disk | Where-Object { $_.FriendlyName -match "MSFT Virtual HD" }
+    $Script:diskResourcesDict = @{}
+    foreach ($disk in $disks) {
+        if ($diskLabelsDict[$disk.Number] -match "Q\d") {
+            $diskResource = Add-ClusterDisk $disk
+            while ($diskResource.State -ne "Online") {
+                $diskResource = Start-ClusterResource -Name $diskResource.Name
+            }
+            
+            $Script:diskResourcesDict.Add($disk.Number, $diskResource.Name)
+            break
+        }
+    }
+
+    foreach ($disk in $disks) {
+        if ($diskLabelsDict[$disk.Number] -match "Q\d") {
+            $quorumDiskResourceName = $Script:diskResourcesDict[$disk.Number]
+            .\Write-Info.ps1 "Set $quorumDiskResourceName as the cluster quorum disk"
+            Set-ClusterQuorum -DiskWitness $quorumDiskResourceName
+            break
+        }
+    }
+
+    .\Write-Info.ps1 "Add other disks to cluster"
+    foreach ($disk in $disks) {
+        if ($diskLabelsDict[$disk.Number] -notmatch "Q\d") {
+            $diskResource = Add-ClusterDisk $disk
+            while ($diskResource.State -ne "Online") {
+                $diskResource = Start-ClusterResource -Name $diskResource.Name
+            }
+
+            $Script:diskResourcesDict.Add($disk.Number, $diskResource.Name)
+        }
+    }
 }
 
 #----------------------------------------------------------------------------
@@ -253,6 +294,14 @@ if($SMBGeneralDisk -eq $null)
     .\Write-Info.ps1 "Pick one disk from available storage for general disk"
     $clusterResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk"}
     $SMBGeneralDisk = $clusterResources | Select-Object -First 1
+    
+    foreach ($diskNumber in $Script:diskResourcesDict.Keys) {
+        if ($Script:diskResourcesDict[$diskNumber] -eq $SMBGeneralDisk.Name) {
+            $Script:SMBGeneralDiskLabel = $diskLabelsDict[$diskNumber]
+            break
+        }
+    }
+
     $SMBGeneralDisk.Name = "SMBGeneralDisk"    
 }
 
@@ -294,14 +343,14 @@ if($fileServerShare -eq $null)
 {
     .\Write-Info.ps1 "Get general disk volume"
     # Note: 
-    # There are 2 disks with label "CLUSTER_DATA" for general disk and cluster shared volume.
+    # There are 3 disks with label prefix "CLUSTER_DATA" for general disk and cluster shared volumes.
     # The general disk's FileSystem is NTFS
-    # The cluster shared volume's FileSystem is CSVFS
+    # The cluster shared volumes' FileSystem is CSVFS
     # Retry 5 minutes (30 * 10 s) in case the disk is not ready due to change cluster owner node.
     $retryTime = 30 
     do
     {
-        $drive = gwmi -Class Win32_volume | where {$_.FileSystem -eq "NTFS" -and $_.Label -eq "CLUSTER_DATA"}
+        $drive = gwmi -Class Win32_volume | where {$_.FileSystem -eq "NTFS" -and $_.Label -eq $Script:SMBGeneralDiskLabel}
         if($drive -eq $null)
         {
             Sleep 10
@@ -317,7 +366,7 @@ if($fileServerShare -eq $null)
         exit ExitCode
     }
 
-    .\Write-Info.ps1 "Ger available drive letter"
+    .\Write-Info.ps1 "Get available drive letter"
 	$driveLetter = ""
 	foreach ($letter in [char[]]([char]'F'..[char]'Z')) 
     { 

@@ -1,134 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Net.Mime;
-using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 {
-    /// <summary>
-    /// A security identifier (SID) uniquely identifies a security principal.
-    /// </summary>
-    public class _SecurityIdentifier
-    {
-        const byte DEFAULT_REVISION = 1;
-        private byte[] buffer;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="binary">The binary to be encoded</param>
-        /// <param name="offset">The offset in the binary</param>
-        unsafe public _SecurityIdentifier(byte[] binary, int offset)
-        {
-            if (binary == null)
-            {
-                throw new ArgumentNullException(nameof(binary));
-            }
-
-            if ((offset < 0) || (offset > binary.Length - 2))
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
-
-            fixed (byte* binaryPtr = binary)CreateFromBinaryForm((IntPtr)(binaryPtr + offset), binary.Length - offset);
-        }
-
-        public _SecurityIdentifier(string sddl)
-        {
-            _SID sid = DtypUtility.ToSid(sddl);
-            this.buffer = TypeMarshal.ToBytes<_SID>(sid);
-        }
-
-        /// <summary>
-        /// Create the buffer from the binary input
-        /// </summary>
-        /// <param name="binary">The input binary</param>
-        /// <param name="length">The length of the binary</param>
-        void CreateFromBinaryForm(IntPtr binary, int length)
-        {
-            _SID sid = new _SID();
-
-            sid.Revision = Marshal.ReadByte(binary, 0);
-            sid.SubAuthorityCount = Marshal.ReadByte(binary, 1);
-            if (sid.Revision != DEFAULT_REVISION)
-            {
-                throw new ArgumentException("The value of Revision MUST be set to 0x01.");
-            }
-            if (sid.SubAuthorityCount > 15)
-            {
-                throw new ArgumentException("The maximum number of elements allowed is 15");
-            }
-
-            sid.IdentifierAuthority = new byte[6];
-            for (int i = 0; i < 6; i++)
-            {
-                sid.IdentifierAuthority[i] = Marshal.ReadByte(binary, i + 2);
-            }
-
-            sid.SubAuthority = new uint[sid.SubAuthorityCount];
-            for (int i = 0; i < sid.SubAuthorityCount; i++)
-            {
-                byte[] temp = new byte[4];
-
-                for (int j = 0; j < 4; j++)
-                {
-                    temp[j] = Marshal.ReadByte(binary, i * 4 + j + 8);
-                }
-
-                sid.SubAuthority[i] = BitConverter.ToUInt32(temp);
-            }
-
-            this.buffer = TypeMarshal.ToBytes<_SID>(sid);
-        }
-
-        /// <summary>
-        /// The binary length of the buffer in bytes
-        /// </summary>
-        public int Size
-        {
-            get { return buffer.Length; }
-        }
-
-        /// <summary>
-        /// Create the binary from the buffer
-        /// </summary>
-        /// <param name="binary">The binary></param>
-        /// <param name="offset">The offset in the binary</param>
-        public void GetBinaryForm(byte[] binary, int offset)
-        {
-            if (binary == null)
-            {
-                throw new ArgumentNullException(nameof(binary));
-            }
-            if ((offset < 0) || (offset > binary.Length - buffer.Length))
-            {
-                throw new ArgumentOutOfRangeException(nameof(offset));
-            }
-
-            Array.Copy(buffer, 0, binary, offset, buffer.Length);
-        }
-
-        public string GetSddlForm()
-        {
-            StringBuilder result = new StringBuilder();
-            _SID sid = TypeMarshal.ToStruct<_SID>(buffer);
-            string sddl = DtypUtility.ToSddlString(sid);
-            result.AppendFormat(CultureInfo.InvariantCulture, "O:{0}", sddl);
-
-            return result.ToString();
-        }
-    }
-
     /// <summary>
     /// The ace header to be inherited
     /// </summary>
@@ -221,7 +101,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         private int access_mask;
         //An unsigned 16-bit integer that specifies the size, in bytes, of the ACE
         private int aceSize;
-        private _SecurityIdentifier identifier;
+        private _SID identifier;
         private byte[] applicationData;
 
         #region Properties
@@ -237,7 +117,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <summary>
         /// A security identifier (SID) uniquely identifies a security principal
         /// </summary>
-        public _SecurityIdentifier _SecurityIdentifier
+        public _SID _SecurityIdentifier
         {
             get { return identifier; }
             set { identifier = value; }
@@ -265,7 +145,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             }
 
             _AccessMask = BitConverter.ToInt32(binary, offset + DtypUtility.ACE_HEADER_LENGTH);
-            _SecurityIdentifier = new _SecurityIdentifier(binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH);
+            _SecurityIdentifier = new _SID(binary, offset + DtypUtility.SHORT_FIXED_ACE_LENGTH);
 
             int dataLength = aceSize - (DtypUtility.SHORT_FIXED_ACE_LENGTH + _SecurityIdentifier.Size);
             if (dataLength > 0)// If there is still other application data exists
@@ -325,7 +205,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     public class _ObjectAce : _AceHeader
     {
         private int access_mask;
-        private _SecurityIdentifier identifier;
+        private _SID identifier;
         private byte[] applicationData;
         private _ObjectAceFlags objectFlags;
         private Guid objectType;
@@ -371,7 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <summary>
         /// A security identifier (SID) uniquely identifies a security principal
         /// </summary>
-        public _SecurityIdentifier _SecurityIdentifier
+        public _SID _SecurityIdentifier
         {
             get { return identifier; }
             set { identifier = value; }
@@ -407,7 +287,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 pointer += 16;
             }
 
-            _SecurityIdentifier = new _SecurityIdentifier(binary, offset + pointer);
+            _SecurityIdentifier = new _SID(binary, offset + pointer);
             pointer += _SecurityIdentifier.Size;
 
             int appDataLength = length - pointer;
@@ -622,8 +502,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
     public class _RawSecurityDescriptor
     {
         private SECURITY_DESCRIPTOR_Control controlFlags;
-        private _SecurityIdentifier ownerSid;
-        private _SecurityIdentifier groupSid;
+        private _SID? ownerSid;
+        private _SID? groupSid;
         private _RawAcl dacl;
         private _RawAcl sacl;
 
@@ -658,7 +538,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <summary>
         /// The SID of the group of the object
         /// </summary>
-        public _SecurityIdentifier Group
+        public _SID? Group
         {
             get { return groupSid; }
             set { groupSid = value; }
@@ -667,7 +547,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <summary>
         /// The SID of the owner of the object
         /// </summary>
-        public _SecurityIdentifier Owner
+        public _SID? Owner
         {
             get { return ownerSid; }
             set { ownerSid = value; }
@@ -697,14 +577,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             int ownerStart = BitConverter.ToInt32(binary, offset + 4);
             if (ownerStart != 0)
             {
-                ownerSid = new _SecurityIdentifier(binary, ownerStart);
+                ownerSid = new _SID(binary, ownerStart);
             }
 
             //Get group sid
             int groupStart = BitConverter.ToInt32(binary, offset + 8);
             if (groupStart != 0)
             {
-                groupSid = new _SecurityIdentifier(binary, groupStart);
+                groupSid = new _SID(binary, groupStart);
             }
 
             //Get sacl
@@ -731,8 +611,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="sacl">the sacl</param>
         /// <param name="dacl">the dacl</param>
         public _RawSecurityDescriptor(SECURITY_DESCRIPTOR_Control flags,
-            _SecurityIdentifier owner,
-            _SecurityIdentifier group,
+            _SID? owner,
+            _SID? group,
             _RawAcl sacl,
             _RawAcl dacl)
         {
@@ -758,11 +638,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
                 int length = DtypUtility.SECURITY_DESCRIPTOR_FIXED_LENGTH;
                 if (Owner != null)
                 {
-                    length += Owner.Size;
+                    length += Owner.Value.Size;
                 }
                 if (Group != null)
                 {
-                    length += Group.Size;
+                    length += Group.Value.Size;
                 }
                 if (this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent))
                 {
@@ -805,8 +685,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             if (Owner != null)
             {
                 DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 4);
-                Owner.GetBinaryForm(binary, offset + pointer);
-                pointer += Owner.Size;
+                Owner.Value.GetBinaryForm(binary, offset + pointer);
+                pointer += Owner.Value.Size;
             }
             else
             {
@@ -816,8 +696,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             if (Group != null)
             {
                 DtypUtility.WriteInt32ToByteArray(pointer, binary, offset + 8);
-                Group.GetBinaryForm(binary, offset + pointer);
-                pointer += Group.Size;
+                Group.Value.GetBinaryForm(binary, offset + pointer);
+                pointer += Group.Value.Size;
             }
             else
             {
@@ -855,12 +735,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 
             if (Owner != null && sections.HasFlag(AccessControlSections.Owner))
             {
-                result.AppendFormat(CultureInfo.InvariantCulture, "O:{0}", Owner.GetSddlForm());
+                result.AppendFormat(CultureInfo.InvariantCulture, "O:{0}", Owner.Value.GetSddlForm());
             }
 
             if (Group != null && sections.HasFlag(AccessControlSections.Group))
             {
-                result.AppendFormat(CultureInfo.InvariantCulture, "G:{0}", Group.GetSddlForm());
+                result.AppendFormat(CultureInfo.InvariantCulture, "G:{0}", Group.Value.GetSddlForm());
             }
 
             if (sections.HasFlag(AccessControlSections.Access) && this.controlFlags.HasFlag(SECURITY_DESCRIPTOR_Control.DACLPresent))

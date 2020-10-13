@@ -5250,7 +5250,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             byte[] informationBuffer = null;
             _RawSecurityDescriptor ReceivedSD = new _RawSecurityDescriptor(" ");
 
-            ReceivedSD.Owner = new _SecurityIdentifier(testConfig.GetProperty("SDOwner"));
+            ReceivedSD.Owner = new _SID(testConfig.GetProperty("SDOwner"));
             if (ownerSidEnum == OwnerSid.OpenFileSecDesOwnerIsNull)
             {
                 ReceivedSD.Owner = null;

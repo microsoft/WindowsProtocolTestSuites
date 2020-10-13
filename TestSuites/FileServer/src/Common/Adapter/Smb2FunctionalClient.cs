@@ -6,13 +6,14 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
+using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Security.Principal;
-using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
@@ -923,7 +924,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             out uint treeId,
             ResponseChecker<TREE_CONNECT_Response> checker = null,
             TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE,
-            WindowsIdentity identity = null)
+            _WindowsIdentity identity = null)
         {
             return TreeConnect(
                 testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
@@ -941,14 +942,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="uncSharePath">UNC path of the share to be connected</param>
         /// <param name="treeId">Tree id returned by server</param>
         /// <param name="checker">Delegate to check the response</param>
-        /// <returns></returns>
+        /// <param name="flags">Flags field in TreeConnect request, which indicates how to process the operation</param>
+        /// <param name="identity"><see cref="_WindowsIdentity"/> instance contains the user account information to form an SMB2 TREE_CONNECT Request Extension structure if SMB2_SHAREFLAG_EXTENSION_PRESENT is set in <paramref name="flags"/></param>
+        /// <returns>The status code of TreeConnect response.</returns>
         public uint TreeConnect(
             Packet_Header_Flags_Values headerFlags,
             string uncSharePath,
             out uint treeId,
             ResponseChecker<TREE_CONNECT_Response> checker = null,
             TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE,
-            WindowsIdentity identity = null)
+            _WindowsIdentity identity = null)
         {
             Packet_Header header;
             TREE_CONNECT_Response treeConnectResponse;
@@ -3201,7 +3204,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         #region SMB2 TREE_CONNECT Request Extension
-        private byte[] CreateTreeConnectRequestExt(string sharePath, WindowsIdentity identity)
+        private byte[] CreateTreeConnectRequestExt(string sharePath, _WindowsIdentity identity)
         {
             ushort treeConnectContextCount = 1;
             byte[] pathName = Encoding.Unicode.GetBytes(sharePath);
@@ -3228,7 +3231,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return buffer;
         }
 
-        private byte[] CreateTreeConnectContext(WindowsIdentity identity)
+        private byte[] CreateTreeConnectContext(_WindowsIdentity identity)
         {
             byte[] buffer;
             Tree_Connect_Context ctx = new Tree_Connect_Context();
@@ -3241,7 +3244,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return buffer;
         }
 
-        private byte[] CreateRemotedIdentity(out ushort dataLength, WindowsIdentity identity)
+        private byte[] CreateRemotedIdentity(out ushort dataLength, _WindowsIdentity identity)
         {
             REMOTED_IDENTITY_TREE_CONNECT_Context remotedIdentity = new REMOTED_IDENTITY_TREE_CONNECT_Context();
             ushort currentOffset = 0;
@@ -3250,12 +3253,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             // User: SID_ATTR_DATA
             remotedIdentity.User = currentOffset;
-            byte[] userBinary = new byte[identity.User.BinaryLength];
+            byte[] userBinary = new byte[identity.User.Size];
             identity.User.GetBinaryForm(userBinary, 0);
             remotedIdentity.TicketInfo.User = new SID_ATTR_DATA();
             remotedIdentity.TicketInfo.User.SidData = new BLOB_DATA();
             remotedIdentity.TicketInfo.User.SidData.BlobData = userBinary;
-            remotedIdentity.TicketInfo.User.SidData.BlobSize = (ushort)identity.User.BinaryLength;
+            remotedIdentity.TicketInfo.User.SidData.BlobSize = (ushort)identity.User.Size;
             remotedIdentity.TicketInfo.User.Attr = (SID_ATTR)0;
             currentOffset += (ushort)(2 /* BlobSize */ + remotedIdentity.TicketInfo.User.SidData.BlobSize + 4 /* Attr */);
 
@@ -3278,10 +3281,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SID_ATTR_DATA[] groups = new SID_ATTR_DATA[identity.Groups.Count];
             for (int i = 0; i < identity.Groups.Count; i++)
             {
-                SecurityIdentifier curGroupSid = (SecurityIdentifier)identity.Groups[i];
-                byte[] curGroupBinary = new byte[curGroupSid.BinaryLength];
+                _SID curGroupSid = identity.Groups[i];
+                byte[] curGroupBinary = new byte[curGroupSid.Size];
                 curGroupSid.GetBinaryForm(curGroupBinary, 0);
-                groups[i].SidData.BlobSize = (ushort)curGroupSid.BinaryLength;
+                groups[i].SidData.BlobSize = (ushort)curGroupSid.Size;
                 groups[i].SidData.BlobData = curGroupBinary;
                 groups[i].Attr = SID_ATTR.SE_GROUP_ENABLED;
                 currentOffset += (ushort)(2 /* BlobSize */ + groups[i].SidData.BlobSize + 4 /* Attr */);
@@ -3297,10 +3300,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Owner: BLOB_DATA
             remotedIdentity.Owner = currentOffset;
             remotedIdentity.TicketInfo.Owner = new BLOB_DATA();
-            byte[] ownerBinary = new byte[identity.Owner.BinaryLength];
+            byte[] ownerBinary = new byte[identity.Owner.Size];
             identity.Owner.GetBinaryForm(ownerBinary, 0);
             remotedIdentity.TicketInfo.Owner.BlobData = ownerBinary;
-            remotedIdentity.TicketInfo.Owner.BlobSize = (ushort)identity.Owner.BinaryLength;
+            remotedIdentity.TicketInfo.Owner.BlobSize = (ushort)identity.Owner.Size;
             currentOffset += (ushort)(2 /* BlobSize */ + remotedIdentity.TicketInfo.Owner.BlobSize);
 
             // DefaultDacl: BLOB_DATA
@@ -3350,6 +3353,105 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         #endregion
 
         #endregion
+    }
 
+    /// <summary>
+    /// _WindowsIdentity class contains the necessary information to form an SMB2 TREE_CONNECT Request Extension.
+    /// </summary>
+    public class _WindowsIdentity
+    {
+        /// <summary>
+        /// The down-level logon name of the domain user.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The user _SID.
+        /// </summary>
+        public _SID User { get; set; }
+
+        /// <summary>
+        /// An _SID collection of groups.
+        /// The user is a member of the groups.
+        /// </summary>
+        public List<_SID> Groups { get; set; }
+
+        /// <summary>
+        /// The owner _SID.
+        /// </summary>
+        public _SID Owner { get; set; }
+
+        /// <summary>
+        /// Get a _WindowsIdentity instance from the DC by the user name.
+        /// </summary>
+        /// <param name="domainName">The domain name.</param>
+        /// <param name="domainAdmin">The user name of the domain administrator.</param>
+        /// <param name="domainAdminPassword">The password of the domain administrator.</param>
+        /// <param name="userName">The user name for searching the directory.</param>
+        /// <returns>A _WindowsIdentity instance represents the user.</returns>
+        public static _WindowsIdentity GetFromDomain(string domainName, string domainAdmin, string domainAdminPassword, string userName)
+        {
+            var identity = new _WindowsIdentity();
+
+            var domainNetbios = domainName.Split('.')[0];
+            identity.Name = $"{domainNetbios}\\{userName}";
+
+            // Connect to LDAP server.
+            var ldapPort = 389;
+            var domainAdminLogonName = $"{domainNetbios}\\{domainAdmin}";
+            using var conn = new LdapConnection();
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(domainAdminLogonName, domainAdminPassword);
+
+            // Construct fully qualified names for LDAP search requests.
+            var domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            var userFqn = $"CN={userName},CN=Users,{domainFqn}";
+
+            // Get User _SID and Owner _SID.
+            var userSearchBase = userFqn;
+            var userSearchFilter = "(objectClass=user)";
+            var userSearchQueue = conn.Search(userSearchBase, LdapConnection.ScopeSub, userSearchFilter, null, false, null, null);
+
+            LdapMessage userSearchMessage = null;
+            LdapEntry userEntry = null;
+            while ((userSearchMessage = userSearchQueue.GetResponse()) != null)
+            {
+                if (userSearchMessage is LdapSearchResult userSearchResult)
+                {
+                    userEntry = userSearchResult.Entry;
+                    byte[] userSidBinary = userEntry.GetAttribute("objectSid").ByteValue;
+                    _SID userSid = TypeMarshal.ToStruct<_SID>(userSidBinary);
+                    identity.User = userSid;
+                    identity.Owner = userSid;
+                    break;
+                }
+            }
+
+            if (userEntry is null)
+            {
+                throw new ActiveDirectoryObjectNotFoundException($"The user \"{userName}\" does not exist in domain \"{domainName}\".");
+            }
+
+            // Get _SIDs of Groups.
+            identity.Groups = new List<_SID>();
+
+            var groupSearchBase = domainFqn;
+            var groupSearchFilter = $"(member={userFqn})";
+            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
+
+            LdapMessage groupSearchMessage = null;
+            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            {
+                if (groupSearchMessage is LdapSearchResult groupSearchResult)
+                {
+                    LdapEntry groupEntry = groupSearchResult.Entry;
+                    byte[] groupSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
+                    _SID groupSid = TypeMarshal.ToStruct<_SID>(groupSidBinary);
+                    identity.Groups.Add(groupSid);
+                }
+            }
+
+            return identity;
+        }
     }
 }

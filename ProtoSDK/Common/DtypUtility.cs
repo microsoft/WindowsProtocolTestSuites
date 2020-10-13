@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,10 +9,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
-using Novell.Directory.Ldap;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
 {
@@ -1794,15 +1793,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         {
             _RawAcl sRawAcl = null;
             _RawAcl dRawAcl = null;
-            _SecurityIdentifier rawOwnerSid = null;
-            _SecurityIdentifier rawGroupSid = null;
+            _SID? rawOwnerSid = null;
+            _SID? rawGroupSid = null;
             if (ownerSid != null)
             {
-                rawOwnerSid = new _SecurityIdentifier(TypeMarshal.ToBytes(ownerSid.Value), 0);
+                rawOwnerSid = new _SID(TypeMarshal.ToBytes(ownerSid.Value), 0);
             }
             if (groupSid != null)
             {
-                rawGroupSid = new _SecurityIdentifier(TypeMarshal.ToBytes(groupSid.Value), 0);
+                rawGroupSid = new _SID(TypeMarshal.ToBytes(groupSid.Value), 0);
             }
             if (sacl != null)
             {
