@@ -71,6 +71,8 @@ then
     exit 1
 fi
 
+cp $TestSuiteRoot/AssemblyInfo/.version $OutDir/Bin -f
+
 echo ==========================================================
 echo          Build FileServer test suite successfully         
 echo ==========================================================

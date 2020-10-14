@@ -10,9 +10,8 @@
 
 namespace Microsoft.Protocols.TestManager.CLI {
     using System;
-    using System.Runtime.Serialization;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -62,6 +61,24 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finish running test cases..
+        /// </summary>
+        internal static string FinishRunningTips {
+            get {
+                return ResourceManager.GetString("FinishRunningTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version of the test suite is invalid.
+        /// </summary>
+        internal static string InvalidTestSuiteVersion {
+            get {
+                return ResourceManager.GetString("InvalidTestSuiteVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The PTM profile has been upgraded. New profile is saved as {0}..
         /// </summary>
         internal static string PtmProfileUpgraded {
@@ -69,40 +86,16 @@ namespace Microsoft.Protocols.TestManager.CLI {
                 return ResourceManager.GetString("PtmProfileUpgraded", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a finish running tips. The path is as {0}..
+        ///   Looks up a localized string similar to You can find the test results under {0}.
         /// </summary>
-        internal static string FinishRunningTips
-        {
-            get
-            {
-                return ResourceManager.GetString("FinishRunningTips", resourceCulture);
+        internal static string TestResultPath {
+            get {
+                return ResourceManager.GetString("TestResultPath", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up test suites path..
-        /// </summary>
-        internal static string TestSuitesPath
-        {
-            get
-            {
-                return ResourceManager.GetString("TestSuitesPath", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///  Looks up a dll version error.
-        /// </summary>
-        internal static string DllhasInvaildVersion
-        {
-            get
-            {
-                return ResourceManager.GetString("DllhasInvaildVersion", resourceCulture);
-            }
-        }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Unknown format: {0}..
         /// </summary>

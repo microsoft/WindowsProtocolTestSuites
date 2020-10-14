@@ -51,6 +51,8 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+Copy-Item "$TestSuiteRoot/AssemblyInfo/.version" -Destination "$OutDir/Bin/" -Force
+
 Write-Host ==========================================================
 Write-Host          Build FileServer test suite successfully         
 Write-Host ==========================================================

@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
                 }
 
-                Console.WriteLine(String.Format(StringResources.TestSuitesPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
+                Console.WriteLine(String.Format(StringResources.TestResultPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
             }
             catch (Exception e)
             {
@@ -238,23 +238,19 @@ namespace Microsoft.Protocols.TestManager.CLI
         {
             List<string> paths = new List<string>();
             var allVersions = new HashSet<string>();
-            foreach (var dllpath in Directory.EnumerateFiles(testsuitepath, "*.dll", SearchOption.AllDirectories))
+
+            // Version info is saved in ".version" file.
+            var versionPath = Directory.GetFiles(testsuitepath, ".version", SearchOption.TopDirectoryOnly);
+            if (versionPath != null && versionPath.Length == 1)
             {
-                var info = Utility.GetInfoFromDll(dllpath);
-                if (info.ProductName == "Windows Protocol Test Suites")
+                var version = File.ReadAllLines(versionPath[0]);
+                if (version != null)
                 {
-                    allVersions.Add(info.ProductVersion);
+                    return version[0];
                 }
             }
-            if (allVersions.Count == 1)
-            {
-                return allVersions.First();
-            }
-            else
-            {
-                throw new Exception(StringResources.DllhasInvaildVersion);
-            }
 
+            throw new Exception(StringResources.InvalidTestSuiteVersion);
         }
     }
 }
