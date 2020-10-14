@@ -143,7 +143,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 port = portL;
             }
 
-            if(cookie == null)
+            if (cookie == null)
             {
                 // Not receive a Server Initiate Multitransport Request PDU
                 throw new InvalidOperationException("Cannot establish the connection, since the corresponding Server Initiate Multitransport Request PDU wasn't received!");
@@ -157,17 +157,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
                 UnhandledExceptionReceived?.Invoke(ex);
             };
 
-            if (!rdpeudpClient.Running)
-            {
-                rdpeudpClient.Start();
-            }
+            rdpeudpClient.Start();
+
             rdpeudpClient.Connect(timeout);
 
             rdpemtClient = new RdpemtClient(rdpeudpClient.Socket, ((IPEndPoint)clientSessionContext.RemoteIdentity).Address.ToString(), false);
             rdpemtClient.Received += ReceivedBytes;
 
             rdpemtClient.Connect(requestId, cookie, timeout);
-            
+
         }
 
         #endregion Private Methods

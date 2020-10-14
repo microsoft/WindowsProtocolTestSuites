@@ -1,13 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Net;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
+using System;
+using System.Net;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -30,14 +26,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         // Transport mode
         private TransportMode transMode;
 
-        // Whether the client the running, this mean the server can receive and send normally
-        private bool running = false;
-
         // Thread handle for receiving thread
         private Thread receiveThread;
 
+        // Cancellation token source for receiving thread.
+        private CancellationTokenSource receiveThreadCancellationTokenSource;
+
         // Socket of this client. RDPEUDP client only have one socket
         private RdpeudpClientSocket socket;
+
+        // Indicating the client is started successfully.
+        private bool started;
 
         #endregion Private variables
 
@@ -58,17 +57,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// Whether socket in RDPEUDP client is auto handled
         /// </summary>
         public bool AutoHandle { get; set; }
-
-        /// <summary>
-        /// Whether the RdpeudpClient is running
-        /// </summary>
-        public bool Running
-        {
-            get
-            {
-                return running;
-            }
-        }
 
         #endregion Properties
 
@@ -103,10 +91,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         public void Start()
         {
+            if (started)
+            {
+                return;
+            }
+
             udpTransport.Start();
-            running = true;
+
             receiveThread = new Thread(ReceiveLoop);
+
+            receiveThreadCancellationTokenSource = new CancellationTokenSource();
+
             receiveThread.Start();
+
+            started = true;
         }
 
         /// <summary>
@@ -114,14 +112,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         public void Stop()
         {
-            running = false;
+            if (!started)
+            {
+                return;
+            }
+
+            receiveThreadCancellationTokenSource.Cancel();
+
             if (receiveThread.IsAlive)
             {
-                receiveThread.Abort();
                 receiveThread.Join();
             }
             socket.Close();
             udpTransport.Stop();
+
+            started = false;
         }
 
         /// <summary>
@@ -139,7 +144,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         public void Dispose()
         {
-            if (running)
+            if (started)
             {
                 this.Stop();
             }
@@ -158,8 +163,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 object remoteEndpoint;
                 StackPacket receivedPacket;
                 timeout = new TimeSpan(0, 0, 0, 0, 100); // 100 milliseconds.
-                while (running)
-                {                   // An infinite loop to receive packet from transport stack.
+
+                // Check whether cancellation is requested before entering each receive loop.
+                while (!receiveThreadCancellationTokenSource.IsCancellationRequested)
+                {
                     try
                     {
                         receivedPacket = udpTransport.ExpectPacket(timeout, out remoteEndpoint);
