@@ -9,10 +9,16 @@ param(
 
 $triedCount = 0
 $sutStatus = $null
-while($triedCount -lt 300 -and $sutStatus -eq $null)
+$maximumRetryCount = 5
+while($triedCount -lt $maximumRetryCount -and $sutStatus -eq $null)
 {
     $triedCount++
     $sutStatus = Test-WSMan $computerName -ErrorAction Ignore
+
+    # Sleep before retry if last attempt failed.
+    if($sutStatus -eq $null) {
+        Start-Sleep -Seconds 1
+    }
 }
 
 if($sutStatus -ne $null)
