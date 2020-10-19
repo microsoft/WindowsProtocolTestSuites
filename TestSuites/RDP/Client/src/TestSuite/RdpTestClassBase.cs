@@ -12,6 +12,7 @@ using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -653,8 +654,51 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
             }
         }
-                
+
         #endregion
+
+        /// <summary>
+        /// Try the function until it does not throw exceptions or the time is out.
+        /// </summary>
+        /// <param name="func">Specifies the pointer that points to the function that is under trial, if the function throws out exception we would try the function again until succeed or timeout.</param>
+        /// <param name="timeout">Specifies the overall retry time span.</param>
+        /// <param name="retryInterval">Specifies the retry interval.</param>
+        /// <param name="format">Specifies the retry error message format.</param>
+        /// <param name="args">Specifies the retry error message format's args.</param>
+        /// <returns>true,false</returns>
+        protected bool DoUntilSucceed(Func<bool> func, TimeSpan timeout, TimeSpan retryInterval, string format, params object[] args)
+        {
+            DateTime endTime = DateTime.Now.Add(timeout);
+            string lastException = null;
+            bool result = false;
+            string desc = string.Format(format, args);
+            DateTime retryStart = DateTime.Now;
+            do
+            {
+                try
+                {
+                    result = func();
+                }
+                catch (Exception e)
+                {
+                    lastException = e.Message;
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Throw an exception: {0}.", e.Message);
+                    Thread.Sleep(retryInterval);
+                }
+            } while (!result && DateTime.Now < endTime);
+            TimeSpan retryDuration = DateTime.Now - retryStart;
+            BaseTestSite.Log.Add(LogEntryKind.Debug, "Retry {0} after retry duration: {1}",
+                result == true ? "succeed" : "fail",
+                retryDuration.ToString());
+
+            if (result != true)
+            {
+                throw new InvalidOperationException(String.Format("Retry failed. The last exception is: {0}", lastException?? desc));
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Provide a generic method to handle the invalid request from RDP server
         /// For Windows, it drops the rdp connection directly.

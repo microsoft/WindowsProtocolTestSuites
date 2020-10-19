@@ -75,11 +75,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             foreach (TransportMode transportMode in transportModeArray)
             {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
-                this.EstablishUDPConnection(transportMode, waitTime, true);
+                DoUntilSucceed(() =>
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
+                    this.EstablishUDPConnection(transportMode, waitTime, true);
 
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
-                this.EstablishRdpemtConnection(transportMode, waitTime);
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
+                    return this.EstablishRdpemtConnection(transportMode, waitTime);
+                },
+                this.waitTime * 5,
+                TimeSpan.FromSeconds(0.5),
+                "RDPEMT tunnel creation failed");
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Send one RDPUDP packet.");
                 this.SendNextValidUdpPacket(transportMode);
@@ -164,11 +170,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             foreach (TransportMode transportMode in transportModeArray)
             {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
-                this.EstablishUDPConnection(transportMode, waitTime, true);
+                DoUntilSucceed(() =>
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
+                    this.EstablishUDPConnection(transportMode, waitTime, true);
 
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
-                this.EstablishRdpemtConnection(transportMode, waitTime);
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
+                    return this.EstablishRdpemtConnection(transportMode, waitTime);
+                },
+                this.waitTime * 5,
+                TimeSpan.FromSeconds(0.5),
+                "RDPEMT tunnel creation failed");
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Send one RDPUDP packet.");
                 this.SendNextValidUdpPacket(transportMode);
@@ -327,12 +339,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
             foreach (TransportMode transportMode in transportModeArray)
             {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
-                initSequenceNumber = uint.MaxValue - 3;
-                this.EstablishUDPConnection(transportMode, waitTime, true);
+                DoUntilSucceed(() =>
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
+                    initSequenceNumber = uint.MaxValue - 3;
+                    this.EstablishUDPConnection(transportMode, waitTime, true);
 
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
-                this.EstablishRdpemtConnection(transportMode, waitTime);
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
+                    return this.EstablishRdpemtConnection(transportMode, waitTime);
+                },
+                this.waitTime * 5,
+                TimeSpan.FromSeconds(0.5),
+                "RDPEMT tunnel creation failed");
 
                 if (getSourcePacketSequenceNumber(transportMode) > getSnInitialSequenceNumber(transportMode))
                 {
@@ -371,20 +389,25 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will add RDPUDP_FLAG_ACKDELAYED flag in uFlags field of ACK packet if client delayed the ack")]
         public void S2_DataTransfer_ClientAckDelay()
         {
-            CheckSecurityProtocolForMultitransport();
-
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
             TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
             foreach (TransportMode transportMode in transportModeArray)
             {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
-                initSequenceNumber = uint.MaxValue - 3;
-                this.EstablishUDPConnection(transportMode, waitTime, true);
+                DoUntilSucceed(() =>
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
+                    initSequenceNumber = uint.MaxValue - 3;
+                    this.EstablishUDPConnection(transportMode, waitTime, true);
 
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
-                this.EstablishRdpemtConnection(transportMode, waitTime);
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
+                    return this.EstablishRdpemtConnection(transportMode, waitTime);
+                },
+                this.waitTime * 5,
+                TimeSpan.FromSeconds(0.5),
+                "RDPEMT tunnel creation failed");
+               
                 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Send three RDPUDP packets, wait {0} ms between each send");
                 Thread.Sleep(DelayedACKTimer);

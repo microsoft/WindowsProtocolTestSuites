@@ -328,8 +328,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// </summary>
         /// <param name="udpTransportMode">Transport Mode: Reliable or Lossy.</param>
         /// <param name="timeout">Wait time.</param>
-        private void EstablishRdpemtConnection(TransportMode udpTransportMode, TimeSpan timeout)
+        /// <returns>true,false.</returns>
+        private bool EstablishRdpemtConnection(TransportMode udpTransportMode, TimeSpan timeout)
         {
+            bool pass = true;
             RdpeudpServerSocket rdpeudpSocket = rdpeudpSocketR;
             if (udpTransportMode == TransportMode.Lossy)
             {
@@ -352,7 +354,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             byte[] receivedSecurityCookie;
             if (!rdpemtServer.ExpectConnect(waitTime, out receivedRequestId, out receivedSecurityCookie))
             {
-                Site.Assert.Fail("RDPEMT tunnel creation failed");
+                pass = false;
             }
 
             rdpeudpSocket.AutoHandle = false;
@@ -366,7 +368,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 rdpemtServerL = rdpemtServer;
             }
 
+            if (!pass && rdpeudpServer.Running)
+            {
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection failed, stop rdpeudpServer and close socket connection and retry.", udpTransportMode);
+                rdpeudpServer.Stop();
+                rdpeudpServer = null;
+                if (udpTransportMode == TransportMode.Reliable)
+                {
+                    rdpeudpSocketR.Close();
+                    rdpeudpSocketR = null;
+                }
+                else
+                {
+                    rdpeudpSocketL.Close();
+                    rdpeudpSocketL = null;
+                }
+            }
 
+            return pass;
         }
 
         private int GetMaxiumPayloadSizeForSourcePacket(int upStreamMtu)

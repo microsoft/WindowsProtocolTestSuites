@@ -96,11 +96,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
             foreach (TransportMode transportMode in transportModeArray)
             {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
-                this.EstablishUDPConnection(transportMode, waitTime, true);
+                DoUntilSucceed(() =>
+                {
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
+                    this.EstablishUDPConnection(transportMode, waitTime, true);
 
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
-                this.EstablishRdpemtConnection(transportMode, waitTime);
+                    this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection.", transportMode);
+                    return this.EstablishRdpemtConnection(transportMode, waitTime);
+                },
+                this.waitTime * 5,
+                TimeSpan.FromSeconds(0.5),
+                "RDPEMT tunnel creation failed");
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to send an ACK packet to keep alive or acknowledge the receipt");
                 RdpeudpPacket ackpacket = WaitForACKPacket(transportMode, waitTime);
