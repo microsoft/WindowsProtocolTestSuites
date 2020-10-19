@@ -211,11 +211,11 @@
       <Description>The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP.</Description>
     </Property>
     <!-- Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
-    <Property name="RDPRFX.Image" value=".\Rdprfx.bmp">
+    <Property name="RDPRFX.Image" value="../TestData/Rdprfx.bmp">
       <Description>Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.</Description>
     </Property>
     <!-- Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
-    <Property name="RDPRFXVideoMode.Image" value=".\RdprfxVideoMode.bmp">
+    <Property name="RDPRFXVideoMode.Image" value="../TestData/RdprfxVideoMode.bmp">
       <Description>Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.</Description>
     </Property>
     <!-- Enable or disable the verification of Display on RDP Client(SUT)-->
@@ -249,7 +249,7 @@
       <Description>Turn off the RDPBCGR requirements verification for RFX</Description>
     </Property>
     <!-- Path used to save screenshot on SUT-->
-    <Property name="VerifySUTDisplay.BitmapSavePath" value="..\..\ScreenShot\">
+    <Property name="VerifySUTDisplay.BitmapSavePath" value="../../ScreenShot/">
       <Description>Path used to save screenshot on SUT.</Description>
     </Property>
     <!-- Set the algorithm used to assess whether two images are similar, the algorithm should be one of SSIM, MS-SSIM, G-SSIM -->
@@ -296,48 +296,48 @@
 
     <!--Block Begin: Properties that should only be taken care of by Test Suite Development Team-->
     <!-- RDPEVOR test data file, which contains H.264 video data -->
-    <Property name="RdpevorTestDataPath" value=".\RdpevorTestData.xml">
+    <Property name="RdpevorTestDataPath" value="../TestData/RdpevorTestData.xml">
       <Description>RDPEVOR test data file, which contains H.264 video data.</Description>
     </Property>
     <!-- Block End -->
 
     <!--Block Begin: Properties that should only be taken care of by RDPEGFX Test Suite Development Team-->
     <!-- RDPEGFX ClearCodec test Image file -->
-    <Property name="ClearCodecImage" value=".\RdpegfxClearCodecTestImage.bmp">
+    <Property name="ClearCodecImage" value="../TestData/RdpegfxClearCodecTestImage.bmp">
       <Description>RDPEGFX ClearCodec test Image file.</Description>
     </Property>
     <!-- RDPEGFX RFX Progressive test Image file -->
-    <Property name="RfxProgressiveCodecImage" value=".\RdpegfxRfxProgressiveCodecTestImage.bmp">
+    <Property name="RfxProgressiveCodecImage" value="../TestData/RdpegfxRfxProgressiveCodecTestImage.bmp">
       <Description>RDPEGFX RFX Progressive test Image file.</Description>
     </Property>
     <!-- RDPEGFX H264 codec test data -->
-    <Property name="RdpegfxH264TestDataPath" value=".\">
+    <Property name="RdpegfxH264TestDataPath" value="../TestData/">
       <Description>RDPEGFX H264 codec test data</Description>
     </Property>
     <!-- RDPEDISP Test Image file -->
-    <Property name="RdpedispTestImage" value=".\RdpedispTestImage.bmp">
+    <Property name="RdpedispTestImage" value="../TestData/RdpedispTestImage.bmp">
       <Description>RDPEDISP Test Image file.</Description>
     </Property>
     <!-- RDPEDISP Advanced Adapter Image file -->
-    <Property name="RdpedispEndImage" value=".\End.png">
+    <Property name="RdpedispEndImage" value="../TestData/End.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
-    <Property name="RdpedispOrientationChange1Image" value=".\OrientationChange1.png">
+    <Property name="RdpedispOrientationChange1Image" value="../TestData/OrientationChange1.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
-    <Property name="RdpedispOrientationChange2Image" value=".\OrientationChange2.png">
+    <Property name="RdpedispOrientationChange2Image" value="../TestData/OrientationChange2.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
-    <Property name="RdpedispOrientationChange3Image" value=".\OrientationChange3.png">
+    <Property name="RdpedispOrientationChange3Image" value="../TestData/OrientationChange3.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
-    <Property name="RdpedispOrientationChange4Image" value=".\OrientationChange4.png">
+    <Property name="RdpedispOrientationChange4Image" value="../TestData/OrientationChange4.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
-    <Property name="RdpedispMonitorAddImage" value=".\MonitorAdd.png">
+    <Property name="RdpedispMonitorAddImage" value="../TestData/MonitorAdd.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
-    <Property name="RdpedispMonitorRemoveImage" value=".\MonitorRemove.png">
+    <Property name="RdpedispMonitorRemoveImage" value="../TestData/MonitorRemove.png">
       <Description>RDPEDISP Advanced Adapter Image file.</Description>
     </Property>
     <!-- Block End -->
