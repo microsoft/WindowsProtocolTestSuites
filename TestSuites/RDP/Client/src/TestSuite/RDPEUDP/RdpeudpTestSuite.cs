@@ -368,7 +368,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 rdpemtServerL = rdpemtServer;
             }
 
-            if (!pass && rdpeudpServer.Running)
+            if (!pass)
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} RDPEMT connection failed, stop rdpeudpServer and close socket connection and retry.", udpTransportMode);
                 rdpeudpServer.Stop();
