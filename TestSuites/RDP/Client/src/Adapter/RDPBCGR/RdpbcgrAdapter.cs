@@ -255,7 +255,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (rdpemtServerLossy != null)
                 rdpemtServerLossy.Dispose();
 
-            if (rdpeudpServer != null && rdpeudpServer.Running)
+            if (rdpeudpServer != null)
                 rdpeudpServer.Stop();
 
             if (rdpbcgrServerStack != null)
@@ -2046,8 +2046,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                     Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpServer: {ex}");
                 };
             }
-            if (!rdpeudpServer.Running)
-                rdpeudpServer.Start();
+
+            rdpeudpServer.Start();
 
             //Send a Server Initiate Multitransport Request PDU
             byte[] securityCookie = new byte[16];

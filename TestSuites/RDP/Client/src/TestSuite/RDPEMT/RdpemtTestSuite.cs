@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
         RTTMeasureDataStore rttDataStore;
         BandwidthDataStore bwDataStore;
-        
+
         uint autoDetectedBaseRTT;
         uint autoDetectedBandwidth;
         uint autoDetectedAverageRTT;
@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
             if (rdpemtServerR != null)
                 rdpemtServerR.Dispose();
-            if (rdpeudpServer != null && rdpeudpServer.Running)
+            if (rdpeudpServer != null)
                 rdpeudpServer.Stop();
             if (rdpeudpSocketR != null && rdpeudpSocketR.Connected)
                 rdpeudpSocketR.Close();
@@ -166,12 +166,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             }
 
             this.rdpbcgrAdapter.EstablishRDPConnection(
-                selectedProtocol, 
-                enMethod, 
-                enLevel, 
-                true, 
-                false, 
-                rdpServerVersion, 
+                selectedProtocol,
+                enMethod,
+                enLevel,
+                true,
+                false,
+                rdpServerVersion,
                 flags,
                 false,
                 false);
@@ -207,7 +207,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         {
             //Start UDP listening
             if (rdpeudpServer == null)
-            { 
+            {
                 rdpeudpServer = new RdpeudpServer((IPEndPoint)this.rdpbcgrAdapter.SessionContext.LocalIdentity, true);
 
                 rdpeudpServer.UnhandledExceptionReceived += (ex) =>
@@ -215,8 +215,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                     Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpServer: {ex}");
                 };
             }
-            if (!rdpeudpServer.Running)
-                rdpeudpServer.Start();
+
+            rdpeudpServer.Start();
 
             //Send a Server Initiate Multitransport Request PDU
             byte[] securityCookie = new byte[16];
@@ -262,7 +262,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             String certPwd = this.Site.Properties["CertificatePassword"];
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
             RdpemtServer rdpemtServer = new RdpemtServer(rdpeudpSocket, cert, false);
-                        
+
             uint receivedRequestId;
             byte[] receivedSecurityCookie;
             if (!rdpemtServer.ExpectConnect(waitTime, out receivedRequestId, out receivedSecurityCookie))
@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             {
                 VerifyTunnelCreateRequestPacket(receivedRequestId, receivedSecurityCookie);
             }
-            
+
             if (udpTransportMode == TransportMode.Reliable)
             {
                 rdpemtServerR = rdpemtServer;
@@ -307,11 +307,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 VerifyClientInitiateMultitransportResponsePDU(rdpbcgrAdapter.SessionContext.ClientInitiateMultitransportResponsePDU, requestIdList[0], HrResponse_Value.S_OK);
 
             #region Start EDYC soft sync
-            if(rdpedycServer == null)
+            if (rdpedycServer == null)
             {
                 rdpedycServer = new Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc.RdpedycServer(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
             }
-   
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start Dynamic VC Version Negotiation");
             rdpedycServer.ExchangeCapabilities(waitTime);
 
@@ -349,7 +349,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start Dynamic VC Version Negotiation");
             ushort version = rdpedycServer.ExchangeCapabilities(waitTime);
-            if(version < 0x0003)
+            if (version < 0x0003)
             {
                 this.TestSite.Log.Add(LogEntryKind.TestError, "Client doesn's support Version 3 DYNVC.");
             }
@@ -514,7 +514,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         /// <param name="sequenceNumber"></param>
         private void SendTunnelDataPdu_NetcharResult(Multitransport_Protocol_value requestedProtocol, ushort sequenceNumber)
         {
-            autoDetectedBaseRTT = (uint) (rttDataStore.responseTime - rttDataStore.requestTime).Milliseconds;
+            autoDetectedBaseRTT = (uint)(rttDataStore.responseTime - rttDataStore.requestTime).Milliseconds;
             autoDetectedAverageRTT = (uint)(rttDataStore.responseTime - rttDataStore.requestTime).Milliseconds;
             if (bwDataStore.timeDelta != 0)
             {

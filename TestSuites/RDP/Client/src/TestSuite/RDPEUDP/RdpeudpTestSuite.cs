@@ -117,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             if (rdpemtServerR != null)
                 rdpemtServerR.Dispose();
-            if (rdpeudpServer != null && rdpeudpServer.Running)
+            if (rdpeudpServer != null)
                 rdpeudpServer.Stop();
             if (rdpeudpSocketR != null && rdpeudpSocketR.Connected)
                 rdpeudpSocketR.Close();
@@ -234,8 +234,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                     Site.Log.Add(LogEntryKind.Debug, $"Unhandled exception from RdpeudpServer: {ex}");
                 };
             }
-            if (!rdpeudpServer.Running)
-                rdpeudpServer.Start();
+
+            rdpeudpServer.Start();
 
             // Send a Server Initiate Multitransport Request PDU.
             byte[] securityCookie = new byte[16];
