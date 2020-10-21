@@ -70,6 +70,15 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The test result directory does not exist: {0}..
+        /// </summary>
+        internal static string InvalidTestResultDir {
+            get {
+                return ResourceManager.GetString("InvalidTestResultDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The version of the test suite is invalid.
         /// </summary>
         internal static string InvalidTestSuiteVersion {

@@ -36,6 +36,12 @@ namespace Microsoft.Protocols.TestManager.CLI
                 Program p = new Program();
                 p.Init();
 
+                var resultFileDir = Path.GetDirectoryName(options.ReportFile);
+                if (!string.IsNullOrEmpty(resultFileDir) && !Directory.Exists(resultFileDir))
+                {
+                    throw new ArgumentException(String.Format(StringResources.InvalidTestResultDir, resultFileDir));
+                }
+
                 if (!Path.IsPathRooted(options.Profile))
                 {
                     options.Profile = Utility.RelativePath2AbsolutePath(options.Profile);
