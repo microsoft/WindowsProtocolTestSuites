@@ -121,7 +121,7 @@
     <value>Finish running test cases.</value>
   </data>
   <data name="InvalidTestResultDir" xml:space="preserve">
-    <value>The test result directory was not exist: {0}.</value>
+    <value>The test result directory does not exist: {0}.</value>
   </data>
   <data name="InvalidTestSuiteVersion" xml:space="preserve">
     <value>The version of the test suite is invalid</value>

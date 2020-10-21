@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The test result directory was not exist: {0}..
+        ///   Looks up a localized string similar to The test result directory does not exist: {0}..
         /// </summary>
         internal static string InvalidTestResultDir {
             get {

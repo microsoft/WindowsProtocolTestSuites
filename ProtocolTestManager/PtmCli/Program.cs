@@ -37,7 +37,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 p.Init();
 
                 var resultFileDir = Path.GetDirectoryName(options.ReportFile);
-                if (resultFileDir!=null && resultFileDir.Any() && !Directory.Exists(resultFileDir))
+                if (resultFileDir!=null && !string.IsNullOrEmpty(resultFileDir) && !Directory.Exists(resultFileDir))
                 {
                     throw new ArgumentException(String.Format(StringResources.InvalidTestResultDir, resultFileDir));
                 }
