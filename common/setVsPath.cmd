@@ -20,13 +20,40 @@ if [vswhere] equ [] (
 )
 
 set vspath=
+set /A maxvsversion=0
 
 for /f "usebackq tokens=1*" %%i in (`"%vswhere%"`) do (
-	if %%i equ installationPath: (
-		set vspath=%%j
-		exit /b 0
-	)
+    if %%i equ catalog_productLineVersion: (
+        call :SetMaxVSVersion %%j
+    )
 )
 
-echo Error: please make sure you have installed Visual Studio 2017 or later.
-exit /b 1
+goto EndSetMaxVSVersion
+
+:SetMaxVSVersion
+set /A previousmaxvsversion=%maxvsversion%
+set /A maxvsversion=%1
+if [%maxvsversion%] lss [%previousmaxvsversion%] (
+    set /A maxvsversion=%previousmaxvsversion%
+)
+goto :eof
+
+:EndSetMaxVSVersion
+
+if [maxvsversion] equ [0] (
+	echo Error: please make sure you have installed Visual Studio 2017 or later.
+	exit /b 1
+)
+
+for /f "usebackq tokens=1*" %%i in (`"%vswhere%"`) do (
+    if %%i equ installationPath: (
+        (echo "%%j" | findstr /i /c:"%maxvsversion%" >nul) && (set vspath=%%j)
+    )
+)
+
+if [vspath] equ [] (
+	echo Error: please make sure you have installed Visual Studio 2017 or later.
+	exit /b 1
+)
+
+exit /b 0
