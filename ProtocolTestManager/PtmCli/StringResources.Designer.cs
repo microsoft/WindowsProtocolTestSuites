@@ -61,11 +61,29 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ERROR:.
+        /// </summary>
+        internal static string ErrorMessage {
+            get {
+                return ResourceManager.GetString("ErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finish running test cases..
         /// </summary>
         internal static string FinishRunningTips {
             get {
                 return ResourceManager.GetString("FinishRunningTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies the report format.\nValid values are: plain, json, xunit..
+        /// </summary>
+        internal static string FormatErrorMessage {
+            get {
+                return ResourceManager.GetString("FormatErrorMessage", resourceCulture);
             }
         }
         
@@ -84,6 +102,15 @@ namespace Microsoft.Protocols.TestManager.CLI {
         internal static string InvalidTestSuiteVersion {
             get {
                 return ResourceManager.GetString("InvalidTestSuiteVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specifies the outcome of the test cases to be included in the report file.\nValue should be separated by comma or space.\nValid values are: pass, fail, inconclusive..
+        /// </summary>
+        internal static string OutcomeErrorMessage {
+            get {
+                return ResourceManager.GetString("OutcomeErrorMessage", resourceCulture);
             }
         }
         

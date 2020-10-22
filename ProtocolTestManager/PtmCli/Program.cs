@@ -19,6 +19,7 @@ namespace Microsoft.Protocols.TestManager.CLI
     {
         static void Main(string[] args)
         {
+            CheckParameters(args);
             var parser = new Parser(cfg =>
             {
                 cfg.CaseInsensitiveEnumValues = true;
@@ -76,7 +77,7 @@ namespace Microsoft.Protocols.TestManager.CLI
             }
             catch (Exception e)
             {
-                Console.Error.WriteLine("ERROR:");
+                Console.Error.WriteLine(StringResources.ErrorMessage);
                 Console.Error.WriteLine(e.Message);
                 Environment.Exit(-1);
             }
@@ -87,6 +88,71 @@ namespace Microsoft.Protocols.TestManager.CLI
             Environment.Exit(-1);
         }
 
+        static void CheckParameters(string[] args)
+        {
+            var _param = new Dictionary<string, string>();
+
+            // Parse parameters to dictionary
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == null) continue;
+                string key = null;
+                string val = null;
+
+                // If the beginning of this string instance matches the specified string '-', it should be key
+                if (args[i].StartsWith('-'))
+                {
+                    key = args[i].Replace("-", string.Empty);
+
+                    // Get the value from next
+                    if (i + 1 < args.Length && !args[i + 1].StartsWith('-'))
+                    {
+                        val = args[i + 1];
+                        i++;
+                    }
+                }
+                else
+                {
+                    val = args[i];
+                }
+
+                // Adjustment
+                if (key == null)
+                {
+                    key = val;
+                    val = null;
+                }
+                _param[key] = val;
+            }
+
+            if (_param.ContainsKey("outcome"))
+            {
+                var outcomeValue = _param["outcome"].Split(',');
+                foreach (var e in outcomeValue)
+                {
+                    // if the value converts integer succeeded, it shows error. valid values are: pass, fail, inconclusive. 
+                    if (int.TryParse(e, out _))
+                    {
+                        Console.Error.WriteLine(StringResources.ErrorMessage);
+                        Console.WriteLine(StringResources.OutcomeErrorMessage);
+                        Environment.Exit(-1);
+                    }
+                }
+            }
+
+            if (_param.ContainsKey("f") || _param.ContainsKey("format"))
+            {
+                var formatValue = _param.ContainsKey("f") ?
+                    _param["f"] :
+                    _param["format"];
+                if (int.TryParse(formatValue, out _))
+                {
+                    Console.Error.WriteLine(StringResources.ErrorMessage);
+                    Console.WriteLine(StringResources.FormatErrorMessage);
+                    Environment.Exit(-1);
+                }
+            }
+        }
         Utility util;
         List<TestSuiteInfo> testSuites;
 
