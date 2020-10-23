@@ -347,7 +347,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     internal class RdpbcgrServerTransportStack : IDisposable
     {
         #region Field members
-        private SecurityStreamType streamType;
         private bool disposed;
         private RdpcbgrServerTransportConfig config;
         private DecodePacketCallback decoder;
@@ -355,8 +354,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private Dictionary<Socket, RdpbcgrReceiveThread> receivingStreams;
         private Socket listenSock;
         private Thread acceptThread;
+
+        private CancellationTokenSource acceptThreadCancellationTokenSource;
+
+        private bool started;
+
         private bool isTcpServerTransportStarted;
-        private volatile bool exitLoop;
         private RdpbcgrServer rdpbcgrServer;
         //private string certName;
         private X509Certificate2 cert;
@@ -409,12 +412,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             this.decoder = decodePacketCallback;
             this.packetQueue = new QueueManager();
-            this.listenSock = new Socket(transportConfig.LocalIpAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            this.streamType = config.StreamType;
-            IPEndPoint endPoint = new IPEndPoint(config.LocalIpAddress, config.LocalIpPort);
-            this.listenSock.Bind(endPoint);
-            this.listenSock.Listen(config.MaxConnections);
-            this.acceptThread = new Thread(new ThreadStart(AcceptLoop));
+
             this.receivingStreams = new Dictionary<Socket, RdpbcgrReceiveThread>();
         }
 
@@ -440,12 +438,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             this.decoder = decodePacketCallback;
             this.packetQueue = new QueueManager();
-            this.listenSock = new Socket(transportConfig.LocalIpAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            this.streamType = transportConfig.StreamType;
-            IPEndPoint endPoint = new IPEndPoint(config.LocalIpAddress, config.LocalIpPort);
-            this.listenSock.Bind(endPoint);
-            this.listenSock.Listen(config.MaxConnections);
-            this.acceptThread = new Thread(new ThreadStart(AcceptLoop));
             this.receivingStreams = new Dictionary<Socket, RdpbcgrReceiveThread>();
             this.cert = certificate;
         }
@@ -497,14 +489,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             if (!this.disposed)
             {
-                exitLoop = true;
                 // If disposing equals true, dispose all managed and unmanaged resources.
                 if (disposing)
                 {
-                    if (this.listenSock != null)
+                    if (started)
                     {
-                        this.listenSock.Close();
-                        this.listenSock = null;
+                        Stop();
                     }
 
                     lock (this.receivingStreams)
@@ -524,11 +514,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     {
                         this.packetQueue.Dispose();
                         this.packetQueue = null;
-                    }
-
-                    if (this.acceptThread != null && this.acceptThread.ThreadState != ThreadState.Unstarted)
-                    {
-                        this.acceptThread.Join();
                     }
                 }
 
@@ -553,10 +538,45 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public void Start()
         {
+            if (started)
+            {
+                return;
+            }
+
+            acceptThreadCancellationTokenSource = new CancellationTokenSource();
+
+            this.acceptThread = new Thread(new ThreadStart(AcceptLoop));
+
             this.acceptThread.Start();
             this.isTcpServerTransportStarted = true;
+
+            started = true;
         }
 
+        /// <summary>
+        /// Stop the server.
+        /// </summary>
+        public void Stop()
+        {
+            if (!started)
+            {
+                return;
+            }
+
+            listenSock.Close();
+
+            acceptThreadCancellationTokenSource.Cancel();
+
+            acceptThread.Join();
+
+            acceptThreadCancellationTokenSource = null;
+
+            acceptThread = null;
+
+            listenSock = null;
+
+            started = false;
+        }
 
         /// <summary>
         /// Disconnect from all remote hosts.
@@ -567,8 +587,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 foreach (KeyValuePair<Socket, RdpbcgrReceiveThread> kvp in this.receivingStreams)
                 {
-                    kvp.Value.Abort();
                     kvp.Key.Close();
+                    kvp.Value.Abort();
                 }
                 this.receivingStreams.Clear();
             }
@@ -762,7 +782,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         private void AcceptLoop()
         {
-            while (!exitLoop)
+            try
+            {
+                AcceptLoopInternal();
+            }
+            catch (Exception ex)
+            {
+                var exceptionEvent = new TransportEvent(EventType.Exception, null, ex);
+
+                packetQueue.AddObject(exceptionEvent);
+            }
+        }
+
+        private void AcceptLoopInternal()
+        {
+            listenSock = new Socket(config.LocalIpAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+            var streamType = config.StreamType;
+
+            var endPoint = new IPEndPoint(config.LocalIpAddress, config.LocalIpPort);
+
+            listenSock.Bind(endPoint);
+
+            listenSock.Listen(config.MaxConnections);
+
+            while (!acceptThreadCancellationTokenSource.IsCancellationRequested)
             {
                 if (this.receivingStreams.Count >= config.MaxConnections)
                 {
@@ -779,7 +823,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 catch (SocketException)
                 {
-                    exitLoop = true;
                     continue;
                 }
 
@@ -939,9 +982,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private DecodePacketCallback decoder;
         private object endPointIdentity;
         private Thread receivingThread;
+
+        private CancellationTokenSource receiveThreadCancellationTokenSource;
+
+        private bool started;
+
         private Stream receiveStream;
         private int maxBufferSize;
-        private volatile bool exitLoop;
+
         // Give RdpbcgrReceiveThread object a reference of RdpbcgrServer, so that it can access necessary variable
         private RdpbcgrServer rdpbcgrServer;
         #endregion
@@ -1039,10 +1087,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 if (disposing)
                 {
                     // Free managed resources & other reference types:
-                    if (this.receivingThread != null)
+                    if (started)
                     {
                         this.Abort();
-                        this.receivingThread = null;
                     }
                 }
 
@@ -1067,7 +1114,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public void Start()
         {
+            if (started)
+            {
+                return;
+            }
+
+            receiveThreadCancellationTokenSource = new CancellationTokenSource();
+
             this.receivingThread.Start();
+
+            started = true;
         }
 
 
@@ -1076,13 +1132,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public void Abort()
         {
-            this.exitLoop = true;
-            this.receiveStream.Close();
-            if (this.receivingThread.ThreadState != ThreadState.Unstarted)
+            if (!started)
             {
-                this.receivingThread.Abort();
-                this.receivingThread.Join();
+                return;
             }
+
+            receiveThreadCancellationTokenSource.Cancel();
+
+            this.receivingThread.Join();
+
+            receiveThreadCancellationTokenSource = null;
+
+            receivingThread = null;
+
+            started = false;
         }
 
 
@@ -1090,6 +1153,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Receive data, decode Packet and add them to QueueManager in the loop.
         /// </summary>
         private void ReceiveLoop()
+        {
+            try
+            {
+                ReceiveLoopInternal();
+            }
+            catch (Exception ex)
+            {
+                var exceptionEvent = new TransportEvent(EventType.Exception, this.endPointIdentity, ex);
+
+                packetQueue.AddObject(exceptionEvent);
+            }
+        }
+
+        private void ReceiveLoopInternal()
         {
             StackPacket[] packets = null;
             ReceiveStatus receiveStatus = ReceiveStatus.Success;
@@ -1099,7 +1176,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int expectedLength = this.maxBufferSize;
             byte[] receivedCaches = new byte[0];
 
-            while (!exitLoop)
+            while (!receiveThreadCancellationTokenSource.IsCancellationRequested)
             {
                 if (expectedLength <= 0)
                 {
@@ -1123,34 +1200,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 catch (System.IO.IOException)
                 {
                     // If this is an IOException, treat it as a disconnection.
-                    if (!exitLoop)
+                    if (this.packetQueue != null)
                     {
-                        if (this.packetQueue != null)
-                        {
-                            TransportEvent exceptionEvent = new TransportEvent(EventType.Disconnected, this.endPointIdentity, null);
-                            this.packetQueue.AddObject(exceptionEvent);
-                            break;
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        TransportEvent exceptionEvent = new TransportEvent(EventType.Disconnected, this.endPointIdentity, null);
+                        this.packetQueue.AddObject(exceptionEvent);
+                        break;
                     }
-                }
-                catch (Exception e)
-                {
-                    if (!exitLoop)
+                    else
                     {
-                        if (this.packetQueue != null)
-                        {
-                            TransportEvent exceptionEvent = new TransportEvent(EventType.Exception, this.endPointIdentity, e);
-                            this.packetQueue.AddObject(exceptionEvent);
-                            break;
-                        }
-                        else
-                        {
-                            throw;
-                        }
+                        throw;
                     }
                 }
 

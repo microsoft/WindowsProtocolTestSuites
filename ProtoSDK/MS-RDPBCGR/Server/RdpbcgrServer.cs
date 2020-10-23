@@ -1725,7 +1725,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                                      defaultSecurityHeaderFlag);
 
             TS_SYNCHRONIZE_PDU synchronizePduData = new TS_SYNCHRONIZE_PDU();
-            synchronizePduData.messageType = TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC ;
+            synchronizePduData.messageType = TS_SYNCHRONIZE_PDU_messageType_Values.SYNCMSGTYPE_SYNC;
             synchronizePduData.targetUser = (ushort)sessionContext.IOChannelId;
 
             RdpbcgrUtility.FillShareDataHeader(ref synchronizePduData.shareDataHeader,
@@ -3774,10 +3774,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             if (sessionContext.SVCManager != null)
             {
-                if (!sessionContext.SVCManager.IsRunning)
-                {
-                    sessionContext.SVCManager.Start();
-                }
+                sessionContext.SVCManager.Start();
             }
         }
 
@@ -3789,10 +3786,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             if (sessionContext.SVCManager != null)
             {
-                if (sessionContext.SVCManager.IsRunning)
-                {
-                    sessionContext.SVCManager.Stop();
-                }
+                sessionContext.SVCManager.Stop();
             }
         }
 

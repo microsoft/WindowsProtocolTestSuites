@@ -23,11 +23,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         protected TimeSpan timeout = new TimeSpan(0, 0, 1);
 
         /// <summary>
-        /// Whether the manager is running
-        /// </summary>
-        protected bool running;
-
-        /// <summary>
         /// Dictionary of channels, use channel ID as key
         /// </summary>
         protected Dictionary<UInt16, StaticVirtualChannel> channelDicById;
@@ -42,24 +37,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         protected Thread receiveThread;
 
+        /// <summary>
+        /// Cancellation token source for receiving thread.
+        /// </summary>
+        private CancellationTokenSource receiveThreadCancellationTokenSource;
+
+        /// <summary>
+        /// Indicating the client is started successfully.
+        /// </summary>
+        private bool started;
+
         protected TimeSpan waitInterval = new TimeSpan(0, 0, 0, 0, 10);
 
         #endregion protected variables
 
-        #region Properties
-
-        /// <summary>
-        /// Whether the automatic receive thread is running
-        /// </summary>
-        public bool IsRunning
-        {
-            get
-            {
-                return running;
-            }
-        }
-
-        #endregion Properties
 
         #region Public Methods
 
@@ -76,12 +67,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public void Start()
         {
-            if (!this.running)
+            if (started)
             {
-                this.running = true;
-                this.receiveThread = new Thread(ReceiveLoop);
-                this.receiveThread.Start();
+                return;
             }
+
+            receiveThreadCancellationTokenSource = new CancellationTokenSource();
+
+            this.receiveThread = new Thread(ReceiveLoop);
+            this.receiveThread.Start();
+
+            started = true;
         }
 
         /// <summary>
@@ -89,12 +85,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public void Stop()
         {
-            running = false;
-            if (receiveThread.IsAlive)
+            if (!started)
             {
-                receiveThread.Abort();
-                receiveThread.Join();
-            }            
+                return;
+            }
+
+            receiveThreadCancellationTokenSource.Cancel();
+
+            receiveThread.Join();
+
+            receiveThreadCancellationTokenSource = null;
+
+            receiveThread = null;
+
+            started = false;
         }
 
         /// <summary>
@@ -130,7 +134,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         public void Dispose()
         {
-            if (this.running)
+            if (started)
             {
                 this.Stop();
             }
@@ -145,7 +149,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// </summary>
         private void ReceiveLoop()
         {
-            while (running)
+            while (!receiveThreadCancellationTokenSource.IsCancellationRequested)
             {
                 UInt16 channelId;
                 try
@@ -170,7 +174,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         #region Internal Methods
 
-         /// <summary>
+        /// <summary>
         /// Split and compress the complete virtual channel data into chunk data.
         /// </summary>
         /// <param name="completeData">The compete virtual channel data. This argument can be null.</param>
@@ -178,7 +182,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         internal ChannelChunk[] SplitToChunks(UInt16 channelId, byte[] completeData)
         {
             if (!channelDicById.ContainsKey(channelId))
-            {                
+            {
                 throw new ArgumentException("The channel id does not exist!");
             }
             StaticVirtualChannel channel = channelDicById[channelId];

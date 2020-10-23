@@ -47,23 +47,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
             if (sessionContext.SVCManager == null)
             {
-                throw new NotSupportedException("Cannot get SVC from RDPBCGR connection for RDPEDYC, this transport must be created after RDPBCGR connection established.");                
+                throw new NotSupportedException("Cannot get SVC from RDPBCGR connection for RDPEDYC, this transport must be created after RDPBCGR connection established.");
             }
 
             channel = sessionContext.SVCManager.GetChannelByName(StaticVirtualChannelName.RDPEDYC);
             if (channel == null)
             {
-                throw new NotSupportedException("Cannot get SVC from RDPBCGR connection for RDPEDYC, the static virtual channel is not created."); 
+                throw new NotSupportedException("Cannot get SVC from RDPBCGR connection for RDPEDYC, the static virtual channel is not created.");
             }
 
             channel.Received += ReceivedBytes;
 
-            if (!sessionContext.SVCManager.IsRunning)
-            {
-                // Better start the SVC manager here, so as to make sure the first packet of RDPEDYC can be processed
-                // it is not same restrict as client, since the first packet is sent by server
-                sessionContext.SVCManager.Start();
-            }
+            // Better start the SVC manager here, so as to make sure the first packet of RDPEDYC can be processed
+            // it is not same restrict as client, since the first packet is sent by server
+            sessionContext.SVCManager.Start();
 
             decoder = new ServerDecodingPduBuilder();
             pduBuilder = new PduBuilder();

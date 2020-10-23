@@ -60,11 +60,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
             }
 
             channel.Received += ReceivedBytes;
-            if (!context.SVCManager.IsRunning)
-            {
-                // Must start the SVC manager here, so as to make sure the first packet of RDPEDYC can be processed
-                context.SVCManager.Start();
-            }
+
+            // Must start the SVC manager here, so as to make sure the first packet of RDPEDYC can be processed
+            context.SVCManager.Start();
 
             decoder = new ClientDecodingPduBuilder();
             pduBuilder = new PduBuilder();

@@ -744,10 +744,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             if (this.context.SVCManager != null)
             {
-                if (!this.context.SVCManager.IsRunning)
-                {
-                    this.context.SVCManager.Start();
-                }
+                this.context.SVCManager.Start();
             }
         }
 
@@ -758,10 +755,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             if (this.context.SVCManager != null)
             {
-                if (this.context.SVCManager.IsRunning)
-                {
-                    this.context.SVCManager.Stop();
-                }
+                this.context.SVCManager.Stop();
             }
         }
 
