@@ -795,7 +795,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         {
             // update the MsvAvTargetName of targetInfo
             // Add an AV_PAIR structure (section 2.2.2.1) and set the AvId field to MsvAvTargetName and the Value field to ClientSuppliedTargetName without terminating NULL.
-            byte[] targetName = NlmpUtility.Unicode(this.credential.TargetName);
+            byte[] targetName = new byte[0];
+            if (!string.IsNullOrEmpty(this.credential.TargetName))
+            {
+                targetName = NlmpUtility.Unicode(this.credential.TargetName);
+            }
 
             if (NlmpUtility.AvPairContains(targetInfo, AV_PAIR_IDs.MsvAvTargetName))
             {

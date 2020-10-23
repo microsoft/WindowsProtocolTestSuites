@@ -157,11 +157,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 ClientSecurityContextAttribute attributes)
             : base(SecurityPackageType.Kerberos)
         {
-            string fullDomainName = KerberosUtility.GetFullDomainName(serviceName, account.DomainName);
             this.clientCredential = account;
             this.logonName = account.AccountName;
             this.serviceName = serviceName;
-            this.kdcIpAddress = fullDomainName.ParseIPAddress();
+            this.kdcIpAddress = account.DomainName.ParseIPAddress();
             this.securityAttributes = attributes;
             this.transportType = TransportType.TCP;
         }

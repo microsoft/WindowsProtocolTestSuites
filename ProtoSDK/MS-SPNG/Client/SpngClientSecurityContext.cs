@@ -280,175 +280,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
         /// <exception cref="InvalidOperationException">Invalid MechListMic</exception>
         public override void Initialize(byte[] inToken)
         {
-            byte[] securityToken = null;
-            MechTypeList serverMechList = null;
-            bool isNeedWrap = true;
-
-            switch (this.client.Context.NegotiationState)
+            try
             {
-                case SpngNegotiationState.Initial:
-                    if ((inToken == null) || (inToken.Length == 0)) // Client Initiation Mode
-                    {
-                        InitializeSecurityContext(this.client.Config.MechList.Elements[0], securityToken);
-                        this.client.Context.NegotiationState = SpngNegotiationState.AcceptIncomplete;
-                    }
-                    else
-                    {
-                        try
+                switch (this.client.Context.NegotiationState)
+                {
+                    case SpngNegotiationState.Initial:
+                        SpngNegotiationInitial(inToken);
+                        break;
+
+                    case SpngNegotiationState.RequestMic:
+                        SpngNegotiationRequestMic(inToken);
+                        break;
+
+                    case SpngNegotiationState.AcceptIncomplete:
+                        SpngNegotiationAcceptIncomplete(inToken);
+                        break;
+
+                    case SpngNegotiationState.AcceptCompleted:
+                        throw new InvalidOperationException("Authentication completed!");
+
+                    case SpngNegotiationState.SspiNegotiation:
+                        if (securityMechContext != null)
                         {
-                            securityToken = UnwrapInitialNegToken2(inToken, out serverMechList);
-                            this.client.NegotiateMechType(serverMechList);
-                            if (this.client.Context.NegotiationState == SpngNegotiationState.Reject)
-                            {
-                                //Negotiation failed. Do not need to throw exception in this case.
-                                return;
-                            }
+                            securityMechContext.Initialize(inToken);
                         }
-                        catch
-                        {
-                            // check if reauth token
-                            SpngNegotiationToken negToken = new SpngNegotiationToken();
-                            negToken.FromBytes(inToken);
-                            this.client.Context.NegotiatedMechType = negToken.SupportedMechType;    // try use preview MechType to do Re-Initialize
-                            securityToken = null;
-                        }
+                        break;
 
-                        InitializeSecurityContext(this.client.Context.NegotiatedMechType, securityToken);
-                    }
-
-                    if (this.client.Context.NegotiationState == SpngNegotiationState.AcceptIncomplete) // server prefered mechtype can find from local support mechtype list.
-                    {
-                        try
-                        {
-                            securityMechContext.Initialize(securityToken);
-                        }
-                        catch
-                        {
-                            securityMechContext = null; // try use NTLM
-                            InitializeSecurityContext(this.client.Config.MechList.Elements[1], securityToken);
-                            this.client.Context.NegotiationState = SpngNegotiationState.AcceptIncomplete;
-                            securityMechContext.Initialize(securityToken);
-                        }
-                    }
-                    else
-                    {
-                        securityMechContext.Initialize(null);
-                    }
-
-                    if (this.client.Context.NegotiationState == SpngNegotiationState.SspiNegotiation)
-                    {
-                        //SSPI negotiation already has an SPNG wrapper.
-                        this.token = securityToken;
-                    }
-                    else
-                    {
-                        if (CurrentSecurityConfig.GetType() == typeof(NlmpClientSecurityConfig))
-                        {
-                            NlmpClientSecurityConfig nlmpConfig = CurrentSecurityConfig as NlmpClientSecurityConfig;
-                            if ((nlmpConfig.SecurityAttributes & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
-                            {
-                                isNeedWrap = false;
-                            }
-                        }
-
-                        if (isNeedWrap)
-                        {
-                            this.token = WrapInitialNegToken(securityMechContext.Token);
-                        }
-                        else
-                        {
-                            this.token = securityMechContext.Token;
-                        }
-                    }
-                    break;
-
-                case SpngNegotiationState.RequestMic:
-                    if ((inToken == null) || (inToken.Length == 0))
-                    {
-                        throw new ArgumentNullException("inToken");
-                    }
-                    securityToken = UnwrapNegotiationToken(inToken);
-                    this.needMechListMic = true;
-                    this.client.Context.NegotiationState = SpngNegotiationState.AcceptIncomplete;
-
-                    securityMechContext.Initialize(securityToken);
-                    if (securityMechContext.Token != null)
-                    {
-                        this.token = WrapNegotiationToken(SpngPayloadType.NegResp, securityMechContext.Token);
-                    }
-                    break;
-
-                case SpngNegotiationState.AcceptIncomplete:
-                    if ((inToken == null) || (inToken.Length == 0))
-                    {
-                        throw new ArgumentNullException("inToken");
-                    }
-
-                    byte[] mechListMic = null;
-                    if (CurrentSecurityConfig.GetType() == typeof(NlmpClientSecurityConfig))
-                    {
-                        NlmpClientSecurityConfig nlmpConfig = CurrentSecurityConfig as NlmpClientSecurityConfig;
-                        if ((nlmpConfig.SecurityAttributes & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
-                        {
-                            isNeedWrap = false;
-                        }
-                    }
-
-                    if (isNeedWrap)
-                    {
-                        securityToken = UnwrapNegotiationToken(inToken, out mechListMic);
-                        if (!securityMechContext.NeedContinueProcessing)
-                        {
-                            this.needContinueProcessing = false;
-                            this.client.Context.NegotiationState = SpngNegotiationState.AcceptCompleted;
-                            this.token = null;
-                            if (mechListMic != null && !this.client.VerifyMechListMIC(securityMechContext, mechListMic))
-                            {
-                                throw new InvalidOperationException("Invalid MechListMic");
-                            }
-                        }
-                        else
-                        {
-                            securityMechContext.Initialize(securityToken);
-                            if (!securityMechContext.NeedContinueProcessing)
-                            {
-                                this.needMechListMic = true;
-                            }
-
-                            this.token = WrapNegotiationToken(SpngPayloadType.NegResp, securityMechContext.Token);
-                        }
-                    }
-                    else
-                    {
-                        this.needContinueProcessing = false;
-
-                        if (!securityMechContext.NeedContinueProcessing)
-                        {
-                            this.client.Context.NegotiationState = SpngNegotiationState.AcceptCompleted;
-                            this.token = null;
-                        }
-                        else
-                        {
-                            securityToken = inToken;
-                            securityMechContext.Initialize(securityToken);
-                            this.token = securityMechContext.Token;
-                        }
-                    }
-
-                    break;
-
-                case SpngNegotiationState.AcceptCompleted:
-                    throw new InvalidOperationException("Authentication completed!");
-
-                case SpngNegotiationState.SspiNegotiation:
-                    if (securityMechContext != null)
-                    {
-                        securityMechContext.Initialize(inToken);
-                    }
-                    break;
-
-                default: // MUST be SpngNegotiationState.Reject
-                    throw new InvalidOperationException("Authentication rejected!");
+                    default: // MUST be SpngNegotiationState.Reject
+                        throw new InvalidOperationException("Authentication rejected!");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (securityMechContext is NlmpClientSecurityContext)
+                {
+                    throw ex;
+                }
+                SwitchToNTLMSSP(null); // try use NTLM
             }
         }
 
@@ -699,6 +567,156 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
             return negToken.ToBytes();
         }
 
+        private void SpngNegotiationInitial(byte[] inToken)
+        {
+            byte[] securityToken = null;
+            MechTypeList serverMechList = null;
+
+            if ((inToken == null) || (inToken.Length == 0)) // Client Initiation Mode
+            {
+                InitializeSecurityContext(this.client.Config.MechList.Elements[0], securityToken);
+                this.client.Context.NegotiationState = SpngNegotiationState.AcceptIncomplete;
+            }
+            else // Server Initiation Mode
+            {
+                try
+                {
+                    securityToken = UnwrapInitialNegToken2(inToken, out serverMechList);
+                    this.client.NegotiateMechType(serverMechList);
+                    if (this.client.Context.NegotiationState == SpngNegotiationState.Reject)
+                    {
+                        //Negotiation failed. Do not need to throw exception in this case.
+                        return;
+                    }
+                }
+                catch
+                {
+                    // check if reauth token
+                    SpngNegotiationToken negToken = new SpngNegotiationToken();
+                    negToken.FromBytes(inToken);
+                    this.client.Context.NegotiatedMechType = negToken.SupportedMechType;    // try use preview MechType to do Re-Initialize
+                    securityToken = null;
+                }
+
+                InitializeSecurityContext(this.client.Context.NegotiatedMechType, securityToken);
+            }
+
+            if (this.client.Context.NegotiationState == SpngNegotiationState.AcceptIncomplete) // server prefered mechtype can find from local support mechtype list.
+            {
+                try
+                {
+                    securityMechContext.Initialize(securityToken);
+                }
+                catch (Exception ex)
+                {
+                    if (securityMechContext is NlmpClientSecurityContext)
+                    {
+                        throw ex;
+                    }
+                    SwitchToNTLMSSP(securityToken); // try use NTLM
+                }
+            }
+            else
+            {
+                securityMechContext.Initialize(null);
+            }
+
+            UpdateNegotiationToken(securityToken);
+        }
+
+        private void SpngNegotiationRequestMic(byte[] inToken)
+        {
+            byte[] securityToken = null;
+            if ((inToken == null) || (inToken.Length == 0))
+            {
+                throw new ArgumentNullException("inToken");
+            }
+            securityToken = UnwrapNegotiationToken(inToken);
+            this.needMechListMic = true;
+            this.client.Context.NegotiationState = SpngNegotiationState.AcceptIncomplete;
+
+            securityMechContext.Initialize(securityToken);
+            if (securityMechContext.Token != null)
+            {
+                this.token = WrapNegotiationToken(SpngPayloadType.NegResp, securityMechContext.Token);
+            }
+        }
+
+        private void SpngNegotiationAcceptIncomplete(byte[] inToken)
+        {
+            byte[] securityToken = null;
+            bool isNeedWrap = true;
+            if ((inToken == null) || (inToken.Length == 0))
+            {
+                throw new ArgumentNullException("inToken");
+            }
+
+            byte[] mechListMic = null;
+            if (CurrentSecurityConfig.GetType() == typeof(NlmpClientSecurityConfig))
+            {
+                NlmpClientSecurityConfig nlmpConfig = CurrentSecurityConfig as NlmpClientSecurityConfig;
+                if ((nlmpConfig.SecurityAttributes & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
+                {
+                    isNeedWrap = false;
+                }
+            }
+
+            securityToken = isNeedWrap ? UnwrapNegotiationToken(inToken, out mechListMic) : inToken;
+
+            if (!securityMechContext.NeedContinueProcessing)
+            {
+                this.needContinueProcessing = false;
+                this.client.Context.NegotiationState = SpngNegotiationState.AcceptCompleted;
+                this.token = null;
+
+                if (isNeedWrap && mechListMic != null && !this.client.VerifyMechListMIC(securityMechContext, mechListMic))
+                {
+                    throw new InvalidOperationException("Invalid MechListMic");
+                }
+            }
+            else
+            {
+                securityMechContext.Initialize(securityToken);
+                if (!securityMechContext.NeedContinueProcessing)
+                {
+                    this.needMechListMic = true;
+                }
+                this.token = isNeedWrap ? WrapNegotiationToken(SpngPayloadType.NegResp, securityMechContext.Token) : securityMechContext.Token;
+            }
+        }
+
+        private void SwitchToNTLMSSP(byte[] securityToken)
+        {
+            securityMechContext = null; // try use NTLM
+            this.client.Config.MechList = new MechTypeList(new MechType[] { this.client.Config.MechList.Elements[1] });
+            InitializeSecurityContext(this.client.Config.MechList.Elements[0], null);
+            //this.client.Context.NegotiationState = SpngNegotiationState.AcceptIncomplete;
+            securityMechContext.Initialize(securityToken);
+
+            UpdateNegotiationToken(securityToken);
+        }
+
+        private void UpdateNegotiationToken(byte[] securityToken)
+        {
+            if (this.client.Context.NegotiationState == SpngNegotiationState.SspiNegotiation)
+            {
+                //SSPI negotiation already has an SPNG wrapper.
+                this.token = securityToken;
+            }
+            else
+            {
+                bool isNeedWrap = true;
+                if (CurrentSecurityConfig.GetType() == typeof(NlmpClientSecurityConfig))
+                {
+                    NlmpClientSecurityConfig nlmpConfig = CurrentSecurityConfig as NlmpClientSecurityConfig;
+                    if ((nlmpConfig.SecurityAttributes & ClientSecurityContextAttribute.DceStyle) == ClientSecurityContextAttribute.DceStyle)
+                    {
+                        isNeedWrap = false;
+                    }
+                }
+                this.token = isNeedWrap ? WrapInitialNegToken(securityMechContext.Token) : securityMechContext.Token;
+            }
+        }
 
         #region IDispose
         /// <summary>

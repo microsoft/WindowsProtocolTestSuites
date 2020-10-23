@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
+using System.Net;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
 {
@@ -208,6 +209,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// <param name="accountCredential"></param>
         protected void AcquireCredentialsHandle<T>(T accountCredential)
         {
+            if (!string.IsNullOrEmpty(this.serverPrincipalName))
+            {
+                this.serverPrincipalName = GetServicePrincipalName(this.serverPrincipalName);
+            }
+
             switch (packageType)
             {
                 case SecurityPackageType.Ntlm:
@@ -366,6 +372,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                     securityContextAttributes,
                     targetDataRepresentaion
                );
+            }
+        }
+
+        private static string GetServicePrincipalName(string serverName)
+        {
+            try
+            {
+                if (!serverName.Contains("/")) // check SPN is valid
+                {
+                    // If the server name is an IP address. No need to query DNS.
+                    // The server may not support kerberos. Use NTLM instead.
+                    IPAddress address;
+                    if (IPAddress.TryParse(serverName, out address))
+                    {
+                        return null;
+                    }
+
+                    // sometimes uplayer only provider hostname as serverPrincipalName for example "PDC.contoso.com", so here it'll become "HOST/PDC.contoso.com" to let it as a valid SPN.
+                    // [TODO]: find a way to determin which service descriptor the uplayer used then set correct service descriptor, ldap/host/rpc/nfs/imap/pop/http...
+                    serverName = $"HOST/{serverName}"; // use host as default service descriptor
+                }
+                return serverName;
+            }
+            catch
+            {
+                // For workgroup environment, it will use NTLM authentication method
+                return serverName;
             }
         }
 
