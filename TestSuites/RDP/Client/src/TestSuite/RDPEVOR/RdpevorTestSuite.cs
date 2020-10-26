@@ -70,8 +70,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
                 rdpedycServer.Dispose();
             
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+
+            TriggerClientDisconnectAll();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter.StopRDPListening();
@@ -133,8 +133,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         //Stop RDP connection.
         private void StopRDPConnection()
         {
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            TriggerClientDisconnectAll();
+
             this.rdpbcgrAdapter.Reset();
             this.rdpevorAdapter.Reset();
             this.rdpegtAdapter.Reset();

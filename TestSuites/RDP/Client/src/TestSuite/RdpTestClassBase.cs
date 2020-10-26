@@ -608,7 +608,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(image, sutDisplayShift, compareRect, usingRemoteFX);
             this.TestSite.Assert.IsTrue(compareRes, "SUT display verification should success, the output on RDP client should be equal (or similar enough if using RemoteFX codec) as expected.");
         }
-        
+
         /// <summary>
         /// End the test case with inconclusive if it's Windows implementation and using RDP security protocol
         /// Used in test cases which need to establish TLS/DTLS on RDP-UDP connection.
@@ -721,6 +721,27 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 this.TestSite.Log.Add(LogEntryKind.Warning, "Non-Windows RDP client did not terminate the connection when invalid " + requestDesc + " received.");
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Please double check the RDP client behavior is as expected.");
             }
+        }
+
+        /// <summary>
+        /// Trigger RDP client to disconnect all RDP connections.
+        /// </summary>
+        public void TriggerClientDisconnectAll()
+        {
+            int iResult;
+
+            try
+            {
+                iResult = sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during TriggerClientDisconnectAll(): {0}.", ex);
+
+                return;
+            }
+
+            TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
         }
     }
 }

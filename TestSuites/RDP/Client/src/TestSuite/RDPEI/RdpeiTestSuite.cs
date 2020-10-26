@@ -74,8 +74,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                 rdpedycServer.Dispose();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+
+            TriggerClientDisconnectAll();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter.StopRDPListening();
@@ -135,8 +135,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         //Stop RDP connection.
         private void StopRDPConnection()
         {
-            int iResult = this.sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            TriggerClientDisconnectAll();
+
             this.rdpbcgrAdapter.Reset();
             this.rdpeiServer.Reset();
         }
@@ -154,7 +154,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             bool verifyProtocolVersion = pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V100 || pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V101
                 || pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V200;
             Site.Assert.IsTrue(verifyProtocolVersion, "The protocolVersion in RDPINPUT_CS_READY_PDU is expected to be RDPINPUT_PROTOCOL_V1.");
-            
+
         }
 
         public void VerifyRdpInputDismissHoveringContactPdu(RDPINPUT_DISMISS_HOVERING_CONTACT_PDU pdu)
