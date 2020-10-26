@@ -58,7 +58,13 @@ namespace Microsoft.Protocols.TestManager.CLI
             StringBuilder outputBuilder = new StringBuilder();
             Console.CursorLeft = Console.WindowLeft;
             outputBuilder.Append(text);
-            outputBuilder.Append(' ', Console.WindowWidth - text.Length - 1);
+            int repeatCount = Console.WindowWidth - text.Length - 1;
+            // repeatCount could be negative on Linux while testing.
+            // Do not need to append space when it's negative or zero.
+            if (repeatCount > 0)
+            {
+                outputBuilder.Append(' ', repeatCount);
+            }
             Console.Write(outputBuilder);
         }
 

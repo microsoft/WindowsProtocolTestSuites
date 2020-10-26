@@ -111,24 +111,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             get;
             set;
         }
-        /// <summary>
-        /// Update the case status and case log
-        /// Find the related case name, change its status and show log to user
-        /// </summary>
-        public void UpdateCaseFromHtmlLog(TestCaseStatus status, string testCaseName, TestCaseDetail detail, string testCaseLogPath)
-        {
-            RunningTestCase = AllTestCases.FirstOrDefault(c => c.Name == testCaseName);
-            if (RunningTestCase == null) return;
-            GroupByOutcome.ChangeStatus(testCaseName, status);
-            RunningTestCase.LogUri = new Uri(testCaseLogPath);
-            RunningTestCase.Assembly = detail.Source;
-            RunningTestCase.StartTime = DateTimeOffset.Parse(detail.StartTime);
-            RunningTestCase.EndTime = DateTimeOffset.Parse(detail.EndTime);
-            RunningTestCase.StdOut = String.Join("\n", detail.StandardOut.Select(output => output.Content));
-            RunningTestCase.ErrorMessage = String.Join("\n", detail.ErrorMessage);
-            RunningTestCase.ErrorStackTrace = String.Join("\n", detail.ErrorStackTrace);
-            RunningTestCase = null;
-        }
 
         /// <summary>
         /// If existing running test cases, change the status to Other.
@@ -146,17 +128,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             foreach (var testcase in AllTestCases)
             {
-                // Clear Waiting cases.
-                if (testcase.Status == TestCaseStatus.Waiting && CurrentPageCaseList.Contains(testcase.Name))
-                {
-                    TestCaseStatus status = TestCaseStatus.NotRun;
-                    TestCaseDetail caseDetail;
-                    if (testcase.LogUri != null && System.IO.File.Exists(testcase.LogUri.AbsolutePath))
-                    {
-                        Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, out status, out caseDetail); 
-                    }
-                    testcase.Status = status;
-                }
                 // Clear Running cases. Should not be here
                 if(testcase.Status == TestCaseStatus.Running && CurrentPageCaseList.Contains(testcase.Name))
                 {

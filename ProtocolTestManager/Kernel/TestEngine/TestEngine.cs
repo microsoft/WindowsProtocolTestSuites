@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         private string EnginePath;
         private Logger logger;
-
+        public string PipeName { get; set; }
         public List<string> TestAssemblies { get; set; }
         public string TestSetting { get; set; }
         public string WorkingDirectory { get; set; }
@@ -171,8 +171,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             doc.Save(runsettingsPath);
         }
 
-        HtmlResultChecker htmlResultChecker;
-
         private delegate void RunByCaseDelegate(Stack<TestCase> caseStack);
 
         Stack<TestCase> runningCaseStack = null;
@@ -183,10 +181,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void RunByCase(Stack<TestCase> caseStack)
         {
             runningCaseStack = caseStack;
-
-            htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
-            htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
-            htmlResultChecker.Start(this.WorkingDirectory, ResultOutputFolder);
 
             var exception = new List<Exception>();
             try
@@ -224,6 +218,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     }
                 };
 
+                PipeSinkServer.ParseLogMessage = ParseLogMessage;
+                PipeSinkServer.Start(PipeName);
+
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
                 int err = vstestProcess.ExitCode;
@@ -235,15 +232,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             catch (Exception exception)
             {
+                PipeSinkServer.Stop();
                 Console.WriteLine(exception.Message);
                 return exception;
             }
+
+            PipeSinkServer.Stop();
             return null;
         }
 
         private void ParseLogMessage(string message)
         {
-
             if (message.IndexOf(StringResource.InprogressTag) != -1 ||
                 message.IndexOf(StringResource.PassedTag) != -1 ||
                 message.IndexOf(StringResource.FailedTag) != -1 ||
@@ -257,9 +256,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     return;
                 }
 
-                if (message.IndexOf(StringResource.InprogressTag) != -1)
+                if (message.Contains(StringResource.InprogressTag))
                 {
                     logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
+                }
+                else if (message.Contains(StringResource.FailedTag))
+                {
+                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Failed);
+                }
+                else if (message.Contains(StringResource.PassedTag))
+                {
+                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Passed);
+                }
+                else if (message.Contains(StringResource.InconclusiveTag))
+                {
+                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Other);
                 }
                 else
                 {
@@ -282,10 +293,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             var exception = new List<Exception>();
             try
             {
-                htmlResultChecker = HtmlResultChecker.GetHtmlResultChecker();
-                htmlResultChecker.UpdateCase = logger.UpdateCaseFromHtmlLog;
-                htmlResultChecker.Start(this.WorkingDirectory, ResultOutputFolder);
-
                 StringBuilder args = ConstructVstestArgs();
                 args.AppendFormat("/TestCaseFilter:\"{0}\" ", filterExpr);
                 var innerException = Run(args.ToString());
@@ -313,8 +320,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         e));
             }
 
-            htmlResultChecker.Stop();
-            logger.IndexHtmlFilePath = htmlResultChecker.IndexHtmlFilePath;
             logger.FinishTest();
         }
 

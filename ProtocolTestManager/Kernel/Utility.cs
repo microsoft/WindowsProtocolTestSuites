@@ -853,7 +853,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 TestSetting = appConfig.TestSetting,
                 ResultOutputFolder = Path.Combine("HtmlTestResults", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}"),
                 PtfConfigDirectory = ptfconfigDirectory,
-                RunSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}.runsettings")
+                RunSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}.runsettings"),
+                PipeName = appConfig.PipeName,
             };
             testEngine.InitializeLogger(selectedCases);
         }
@@ -1132,53 +1133,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             throw new TimeoutException(String.Format("Failed to read {0} within {1}s.", filePath, timeoutInSecond));
-        }
-
-        /// <summary>
-        /// Parse the file content to get the case status and detail
-        /// </summary>
-        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status, out TestCaseDetail detail)
-        {
-            status = TestCaseStatus.NotRun;
-            detail = null;
-
-            // The file may be opened exclusively by vstest.console.exe. Retry opening here
-            // to wait for vstest.console.exe writing logs.
-            string content = ReadFileWithRetry(filePath);
-
-            var detailLine = content.Split(new char[] { '\r', '\n' }).Where(l => l.StartsWith(AppConfig.DetailKeyword));
-            string detailStr;
-            if (detailLine.Count() == 0)
-            {
-                return false;
-            }
-            else
-            {
-                detailStr = detailLine.First();
-            }
-
-            int startIndex = AppConfig.DetailKeyword.Length;
-            int endIndex = detailStr.Length - 1;
-            string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
-            detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
-
-            switch (detail.Result)
-            {
-                case AppConfig.HtmlLogStatusPassed:
-                    status = TestCaseStatus.Passed;
-                    break;
-                case AppConfig.HtmlLogStatusFailed:
-                    status = TestCaseStatus.Failed;
-                    break;
-                case AppConfig.HtmlLogStatusInconclusive:
-                    status = TestCaseStatus.Other;
-                    break;
-                default:
-                    // The file name format is not correct
-                    return false;
-            }
-
-            return true;
         }
 
         /// <summary>
