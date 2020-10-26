@@ -16,7 +16,7 @@ resources:
       ref: AzurePipelines-main
 
 jobs:
-  - template: pipelines/local/DotNetCore-LocalRegression-steps.yml@template
+  - template: pipelines/local/DotNetCore-LocalBuildAndRegression-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
