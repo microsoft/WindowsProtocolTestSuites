@@ -171,7 +171,7 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
   
   Although you can install and run the **Test Suite** components on virtual machines, this User Guide describes the setup of physical machines only.
 
-  * **Driver computer** (Client01) − this machine must be running the [Operating System](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 3.1. 
+  * **Driver computer** (Client01) − this machine must be running the [Operating System](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 5.0. 
 
     See section [3.3.1 Driver Computer Minimum Requirements](#3.3.1) for hardware requirements and section [5.1.1 Set up the Driver Computer in the Workgroup Environment](#5.1.1) for setup instructions.
 
@@ -225,7 +225,7 @@ The minimum requirements for the Driver computer are specified in Table 2 that f
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
-The requirements that follow apply only to a Driver computer that has .NET Core 3.1 installed in the **WORKGROUP** or **DOMAIN** environments.
+The requirements that follow apply only to a Driver computer that has .NET Core 5.0 installed in the **WORKGROUP** or **DOMAIN** environments.
 
 <a name="table.2"></a>
 
@@ -234,7 +234,7 @@ The requirements that follow apply only to a Driver computer that has .NET Core 
 | Requirement       | Description                                                  |
 |-------------------|--------------------------------------------------------------|
 | Computer name     | Client01                                                     |
-| Operating system  | The [operating system](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 3.1
+| Operating system  | The [operating system](https://docs.microsoft.com/en-us/dotnet/core/install/) that can install .NET Core 5.0
 | Memory            | 2 GB RAM                                                     |
 | Disk space        | 60 GB                                                        |
 | Network interface | Requires dual network interface cards (NICs)                 |

@@ -349,7 +349,7 @@ Please upgrade Protocol Test Manager to the same version with the test suite.</v
 Please upgrade the test suite to the same version of Protocol Test Manager.</value>
   </data>
   <data name="CannotFindDotnet" xml:space="preserve">
-    <value>.NET Core is not installed. Please download and install .NET Core 3.1 from the link: https://dotnet.microsoft.com/download/dotnet-core/3.1</value>
+    <value>.NET Core is not installed. Please download and install .NET Core 5.0 from the link: https://dotnet.microsoft.com/download/dotnet-core/5.0</value>
   </data>
   <data name="ConfigNotRight" xml:space="preserve">
     <value>Config file is not right</value>
