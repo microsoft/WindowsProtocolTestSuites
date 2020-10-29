@@ -2,18 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
     public partial class WspMessageHeaderTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private enum ArgumentType
         {
             InvalidMsg,
@@ -41,9 +37,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
+            wspAdapter.CPMConnectOutResponse -= EnsureSuccessfulCPMConnectOut;
             wspAdapter.CPMConnectOutResponse += CPMConnectOut;
         }
 

@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
         public uint BufferSize;
 
-        public uint LCID_VALUE;
+        public uint LcidValue;
 
         public uint ClientBase;
 
@@ -1117,7 +1117,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._prval = prVal; 
 
-            node._lcid = parameter.LCID_VALUE;
+            node._lcid = parameter.LcidValue;
 
             result.Restriction = node;
 
@@ -1180,7 +1180,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._pwcsPhrase = queryString;
 
-            node.Lcid = parameter.LCID_VALUE;
+            node.Lcid = parameter.LcidValue;
 
             node._ulGenerateMethod = generateMethod;
 
@@ -1548,7 +1548,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 aGroupArray = new CColumnGroup[0]
             };
 
-            message.Lcid = parameter.LCID_VALUE;
+            message.Lcid = parameter.LcidValue;
 
             message.Header = new WspMessageHeader
             {

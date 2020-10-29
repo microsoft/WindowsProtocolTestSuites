@@ -85,6 +85,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (uint)FetchType.ForwardOrder,
                 (uint)RowSeekType.eRowSeekNext,
                 out var getRowsOut2);
+            verificationAdapter.Reset();
 
             Site.Assert.AreEqual(13U, getRowsOut2._cRowsReturned, "The count of rows returned should be 13 since the total rows count is 13.");
             LogCPMGetRowsOut(getRowsOut2);
@@ -156,6 +157,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 (uint)FetchType.ForwardOrder,
                 (uint)RowSeekType.eRowSeekNext,
                 out var getRowsOut2);
+            verificationAdapter.Reset();
 
             Site.Assert.AreEqual(5U, getRowsOut2._cRowsReturned, "The count of rows returned should be 5 since the RowsToTransfer sent in CPMGetRowsIn is 5.");
             LogCPMGetRowsOut(getRowsOut2);

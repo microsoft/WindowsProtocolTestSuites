@@ -1062,10 +1062,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             inGroupSortAggregSets.SortSets[0].sortArray = new CSort[1];
             inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
             inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 3; // Sort by file name.
-            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = wspAdapter.builder.parameter.LCID_VALUE;
+            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = wspAdapter.builder.parameter.LcidValue;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {

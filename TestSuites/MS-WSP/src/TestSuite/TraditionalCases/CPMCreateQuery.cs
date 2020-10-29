@@ -1,24 +1,20 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
     public partial class CPMCreateQueryTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private IWSPSUTAdapter wspSutAdapter;
+
+        private WspAdapter prepareAdapter;
 
         // Size values of files under test whose size is queried.
         private int test1Size;
@@ -74,13 +70,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-
+            wspAdapter.CPMCreateQueryOutResponse -= EnsureSuccessfulCPMCreateQueryOut;
             wspAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
+
+            wspAdapter.CPMSetBindingsInResponse -= EnsureSuccessfulCPMSetBindingsOut;
             wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
+
+            wspAdapter.CPMGetRowsOut -= EnsureSuccessfulCPMGetRowsOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
 
             wspSutAdapter = Site.GetAdapter<IWSPSUTAdapter>();
@@ -96,6 +93,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         protected override void TestCleanup()
         {
+            prepareAdapter?.Reset();
             base.TestCleanup();
         }
         #endregion
@@ -125,7 +123,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -162,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with query \".doc\" and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -222,7 +220,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with a not-equal query \"test\" and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -348,7 +346,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn without ColumnSet.");
             argumentType = ArgumentType.ColumnSetAbsent;
-            wspAdapter.CPMCreateQueryIn(null, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(null, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
         }
 
         [TestMethod]
@@ -376,7 +374,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with an empty ColumnSet.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -417,7 +415,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.Debug, $"columnSet.count: {columnSet.count}");
             Site.Log.Add(LogEntryKind.Debug, $"Length of columnSet.indexes: {columnSet.indexes.Length}");
             argumentType = ArgumentType.InvalidColumnSet;
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
         }
 
         [TestMethod]
@@ -448,7 +446,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.Debug, $"columnSet.count: {columnSet.count}");
             Site.Log.Add(LogEntryKind.Debug, $"Length of columnSet.indexes: {columnSet.indexes.Length}");
             argumentType = ArgumentType.InvalidColumnSet;
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
         }
 
         [TestMethod]
@@ -476,7 +474,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -510,7 +508,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn without RestrictionArray.");
             argumentType = ArgumentType.RestrictionArrayAbsent;
-            wspAdapter.CPMCreateQueryIn(columnSet, null, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, null, null, new CCategorizationSet(), new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
         }
 
         [TestMethod]
@@ -529,7 +527,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var restrictionArray = wspAdapter.builder.GetRestrictionArray(Site.Properties.Get("QueryText"), Site.Properties.Get("QueryPath"), WspConsts.System_FileName);
 
             argumentType = ArgumentType.PidMapperAbsent;
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), new CPidMapper(), new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, new CCategorizationSet(), new CRowsetProperties(), new CPidMapper(), new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
         }
 
         [TestMethod]
@@ -555,7 +553,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -598,7 +596,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -680,7 +678,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects QRY_E_INVALIDSCOPES.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
         }
         #endregion
 
@@ -705,7 +703,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 inGroupSortAggregSets.SortSets[0].sortArray[i].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
                 inGroupSortAggregSets.SortSets[0].sortArray[i].pidColumn = pidColumns[i];
-                inGroupSortAggregSets.SortSets[0].sortArray[i].locale = wspAdapter.builder.parameter.LCID_VALUE;
+                inGroupSortAggregSets.SortSets[0].sortArray[i].locale = wspAdapter.builder.parameter.LcidValue;
                 inGroupSortAggregSets.SortSets[0].sortArray[i].dwIndividual = dwIndividual_Values.QUERY_SORTALL;
             }
 
@@ -754,7 +752,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn with query {queryString} and expects success.");
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -821,7 +819,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
 
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn to query the file whose size is {log} and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -959,7 +957,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn to query the file {log} and expects success.");
             var columnSet = wspAdapter.builder.GetColumnSet(2);
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, CreateSortSets(), null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -1001,7 +999,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 1; // Sort by Size.
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -1067,7 +1065,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             inGroupSortAggregSets.SortSets[0].sortArray[0].locale = sortingLCID; // Sort Chinese textual values by phonetic order (2052), stroke count order (133124) or other orders.
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -1192,14 +1190,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         /// Construct a whereID:
         /// Another WSP client sends CPMCreateQuery and returns whereID by CPMGetQueryStatusEx.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The whereID of the query.</returns>
         private uint GetWhereID()
         {
-            WspAdapter prepareAdapter = new WspAdapter();
+            prepareAdapter = new WspAdapter();
             prepareAdapter.Initialize(this.Site);
             prepareAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            prepareAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
             prepareAdapter.CPMGetQueryStatusExOutResponse += EnsureSuccessfulCPMGetQueryStatusExOut;
+            prepareAdapter.CPMCreateQueryOutResponse += CPMCreateQueryOut;
             Site.Log.Add(LogEntryKind.TestStep, "A second Client sends CPMConnectIn and expects success.");
             prepareAdapter.CPMConnectInRequest();
 
@@ -1216,7 +1214,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "The second Client sends CPMCreateQueryIn and expects success.");
-            prepareAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), prepareAdapter.builder.parameter.LCID_VALUE);
+            prepareAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), prepareAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "The second Client sends CPMGetQueryStatusExIn and expects success.");
             prepareAdapter.CPMGetQueryStatusExIn(out CPMGetQueryStatusExOut response);

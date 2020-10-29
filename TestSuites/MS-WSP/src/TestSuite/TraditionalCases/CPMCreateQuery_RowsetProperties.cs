@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             rowsetProperties._cMaxResults = _cMaxResults; // Use an alternative _cMaxResults value rather than the deault value.
 
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn with _cMaxResults set to {_cMaxResults} and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {

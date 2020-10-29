@@ -16,7 +16,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMConnectTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
         private const uint InvalidClientVersion = 0;
         private const string InvalidCatalogNameFormat = "InvalidCatalogNameFormat";
         private string EmptyCatalogName = string.Empty;
@@ -60,9 +59,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
+            wspAdapter.CPMConnectOutResponse -= EnsureSuccessfulCPMConnectOut;
             wspAdapter.CPMConnectOutResponse += CPMConnectOut;
         }
 
@@ -78,7 +76,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to test the basic functionality of CPMConnect.")]
         public void BVT_CPMConnect()
-        {           
+        {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
 
             argumentType = ArgumentType.AllValid;
@@ -89,8 +87,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestCategory("CPMConnect")]
         [Description("This test case is designed to verify the server response if invalid isClientRemote is sent in CPMConnectIn.")]
         public void CPMConnect_InvalidIsClientRemote()
-        {            
-            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid isClientRemote and expects STATUS_INVALID_PARAMETER.");           
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid isClientRemote and expects STATUS_INVALID_PARAMETER.");
 
             argumentType = ArgumentType.InvalidIsClientRemote;
             wspAdapter.CPMConnectInRequest(wspAdapter.clientVersion, (int)ClientType.LocalClient, wspAdapter.catalogName);

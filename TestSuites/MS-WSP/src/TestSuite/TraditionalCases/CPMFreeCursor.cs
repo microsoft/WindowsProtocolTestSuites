@@ -3,7 +3,6 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
@@ -11,8 +10,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMFreeCursorTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private ArgumentType argumentType;
 
         public enum ArgumentType
@@ -45,14 +42,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-
+            wspAdapter.CPMSetBindingsInResponse -= EnsureSuccessfulCPMSetBindingsOut;
             wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
+
+            wspAdapter.CPMGetRowsOut -= EnsureSuccessfulCPMGetRowsOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
+
+            wspAdapter.CPMFreeCursorOutResponse -= EnsureSuccessfulCPMFreeCursorOut;
             wspAdapter.CPMFreeCursorOutResponse += CPMFreeCursorOut;
         }
 
@@ -245,7 +242,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                                 dwOrder = dwOrder_Values.QUERY_SORTASCEND,
                                 dwIndividual = dwIndividual_Values.QUERY_SORTALL,
                                 pidColumn = 0,
-                                locale = wspAdapter.builder.parameter.LCID_VALUE
+                                locale = wspAdapter.builder.parameter.LcidValue
                             }
                         }
                     }
@@ -268,7 +265,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                                 dwOrder = dwOrder_Values.QUERY_SORTASCEND,
                                 dwIndividual = dwIndividual_Values.QUERY_SORTALL,
                                 pidColumn = 0,
-                                locale = wspAdapter.builder.parameter.LCID_VALUE
+                                locale = wspAdapter.builder.parameter.LcidValue
                             }
                         },
                         _AggregSet = new CAggregSet { cCount = 0, AggregSpecs = new CAggregSpec[0] },
@@ -280,14 +277,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(
-                columnSet, 
-                restrictionArray, 
-                sortSets, 
-                categorizationSet, 
-                new CRowsetProperties(), 
-                pidMapper, 
-                new CColumnGroupArray(), 
-                wspAdapter.builder.parameter.LCID_VALUE,
+                columnSet,
+                restrictionArray,
+                sortSets,
+                categorizationSet,
+                new CRowsetProperties(),
+                pidMapper,
+                new CColumnGroupArray(),
+                wspAdapter.builder.parameter.LcidValue,
                 out var createQueryOut);
 
             Site.Assert.AreEqual(2, createQueryOut.aCursors.Length, "The count of hierarchical cursors of the current query should be 2.");

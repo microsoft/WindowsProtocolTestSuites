@@ -1,23 +1,17 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Protocols.TestTools;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
     public partial class CPMSetBindingsTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         public enum ArgumentType
         {
             AllValid,
@@ -46,13 +40,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
-
+            wspAdapter.CPMSetBindingsInResponse -= EnsureSuccessfulCPMSetBindingsOut;
             wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
         }
 
@@ -108,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with multiple columns and expects success.");
             var columns = GetTableColumns();
@@ -151,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with columns contained in CreateQuery and expects success.");
             wspAdapter.CPMSetBindingsIn(true, true);
@@ -242,7 +231,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn with column not contained in CreateQuery and expects NOT SUCCEED.");
             var columns = GetTableColumns();
@@ -282,7 +271,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             CTableColumn[] columns = new CTableColumn[] { };
             switch (argumentType)
-            {               
+            {
                 case ArgumentType.InvalidaColumns:
                     columns = new CTableColumn[]
                     {

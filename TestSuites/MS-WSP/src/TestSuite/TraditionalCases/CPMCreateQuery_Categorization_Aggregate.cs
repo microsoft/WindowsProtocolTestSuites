@@ -3,9 +3,9 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 GetRowsetProperties(),
                 GetPidMapper(propSpec),
                 new CColumnGroupArray(),
-                wspAdapter.builder.parameter.LCID_VALUE,
+                wspAdapter.builder.parameter.LcidValue,
                 out CPMCreateQueryOut createQueryResponse);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 GetRowsetProperties(),
                 GetPidMapper(propSpec), 
                 new CColumnGroupArray(), 
-                wspAdapter.builder.parameter.LCID_VALUE,
+                wspAdapter.builder.parameter.LcidValue,
                 out CPMCreateQueryOut createQueryResponse);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn to the first two cursors and expects success.");
@@ -213,7 +213,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             // Construct sortKey.
             var sortKey = new CSort();
-            sortKey.locale = wspAdapter.builder.parameter.LCID_VALUE;
+            sortKey.locale = wspAdapter.builder.parameter.LcidValue;
             sortKey.dwOrder = dwOrder_Values.QUERY_SORTASCEND;
             sortKey.pidColumn = aggregateType == CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT ? idColumn : 0;
             sortKey.dwIndividual = dwIndividual_Values.QUERY_SORTALL;

@@ -622,7 +622,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 new CRowsetProperties(),
                 pidMapper,
                 new CColumnGroupArray(),
-                wspAdapter.builder.parameter.LCID_VALUE,
+                wspAdapter.builder.parameter.LcidValue,
                 out var createQueryOut);
 
             return createQueryOut;
@@ -672,7 +672,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     dwOrder = dwOrder_Values.QUERY_SORTASCEND,
                     dwIndividual = dwIndividual_Values.QUERY_SORTALL,
                     pidColumn = columnId,
-                    locale = wspAdapter.builder.parameter.LCID_VALUE
+                    locale = wspAdapter.builder.parameter.LcidValue
                 };
                 idx++;
             }
@@ -692,7 +692,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private CCategorizationSpec GetUniqueCCategorizationSpec(uint columnIdForGrouping)
         {
-            var lcid = wspAdapter.builder.parameter.LCID_VALUE;
+            var lcid = wspAdapter.builder.parameter.LcidValue;
 
             var ret = new CCategorizationSpec();
 
@@ -724,7 +724,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private CCategorizationSpec GetRangeCCategorizationSpec(Dictionary<object, string> rangePivots, uint columnIdForGrouping)
         {
-            var lcid = wspAdapter.builder.parameter.LCID_VALUE;
+            var lcid = wspAdapter.builder.parameter.LcidValue;
 
             vType_Values prValVType;
             var keyType = rangePivots.First().Key.GetType();

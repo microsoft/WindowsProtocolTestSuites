@@ -3,7 +3,6 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -13,8 +12,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMFetchValueTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private ArgumentType argumentType;
 
         private ulong documentSize;
@@ -43,13 +40,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
-
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
 
             wspAdapter.CPMFetchValueOutResponse += CPMFetchValueOut;
 
@@ -292,7 +282,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {

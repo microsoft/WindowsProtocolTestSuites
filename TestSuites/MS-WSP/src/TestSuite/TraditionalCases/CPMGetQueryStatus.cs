@@ -3,7 +3,6 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
@@ -11,8 +10,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMGetQueryStatusTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private bool isCursorValid = true;
 
         #region Test Initialize and Cleanup
@@ -33,14 +30,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
-
+            wspAdapter.CPMGetQueryStatusOutResponse -= EnsureSuccessfulCPMGetQueryStatusOut;
             wspAdapter.CPMGetQueryStatusOutResponse += CPMGetQueryStatusOut;
         }
 

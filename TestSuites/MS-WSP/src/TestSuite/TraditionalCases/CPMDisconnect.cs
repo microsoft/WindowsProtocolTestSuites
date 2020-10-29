@@ -2,16 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
     public partial class CPMDisconnectTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
+        private const uint STATUS_PIPE_DISCONNECTED = 0xC00000B0;
 
         #region Test Class Initialize and Cleanup
         [ClassInitialize()]
@@ -31,14 +30,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
-
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
-            wspAdapter.CPMFreeCursorOutResponse += EnsureSuccessfulCPMFreeCursorOut;
         }
 
         protected override void TestCleanup()
@@ -177,18 +168,19 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects that exceptions should be thrown.");
                 wspAdapter.CPMConnectInRequest();
             }
-            catch (InvalidOperationException e)
+            catch (RequestSender.RequestSenderException e)
             {
-                Site.Assert.IsTrue(e.Message.ToLower().Contains("unexpected end of channel stream"), "The exception message should indicate the end of stream since the underlying connection of the client is disconnected.");
-                isExpectedExeceptionThrown = true;
-            }
-            finally
-            {
-                if (!isExpectedExeceptionThrown)
+                if (e.Smb2Status == STATUS_PIPE_DISCONNECTED)
                 {
-                    Site.Assert.Fail("There should be an expected exception thrown since the since the underlying connection of the client is disconnected.");
+                    isExpectedExeceptionThrown = true;
+                }
+                else
+                {
+                    throw;
                 }
             }
+
+            Site.Assert.IsTrue(isExpectedExeceptionThrown, "There should be an expected exception thrown which indicates the underlying named pipe of the client is disconnected.");
         }
         #endregion
     }

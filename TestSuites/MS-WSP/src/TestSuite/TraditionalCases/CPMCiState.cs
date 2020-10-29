@@ -12,8 +12,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMCiStateTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private bool isClientConnected = true;
 
         #region Test Class Initialize and Cleanup
@@ -34,14 +32,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
-
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
-            wspAdapter.CPMFreeCursorOutResponse += EnsureSuccessfulCPMFreeCursorOut;
 
             wspAdapter.CPMCiStateInOutResponse += CPMCiStateInOut;
         }

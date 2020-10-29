@@ -3,11 +3,36 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     public abstract partial class WspCommonTestBase : TestClassBase
     {
+        protected WspAdapter wspAdapter;
+
+        protected override void TestInitialize()
+        {
+            base.TestInitialize();
+            wspAdapter = new WspAdapter();
+            wspAdapter.Initialize(this.Site);
+
+            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
+            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
+            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
+            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
+            wspAdapter.CPMFreeCursorOutResponse += EnsureSuccessfulCPMFreeCursorOut;
+            wspAdapter.CPMGetQueryStatusOutResponse += EnsureSuccessfulCPMGetQueryStatusOut;
+            wspAdapter.CPMGetQueryStatusExOutResponse += EnsureSuccessfulCPMGetQueryStatusExOut;
+            wspAdapter.CPMRestartPositionInResponse += EnsureSuccessfulCPMRestartPositionIn;
+        }
+
+        protected override void TestCleanup()
+        {
+            wspAdapter.Reset();
+            base.TestCleanup();
+        }
+
         protected void EnsureSuccessfulCPMConnectOut(uint errorCode)
         {
             Site.Assert.AreEqual((uint)WspErrorCode.SUCCESS, errorCode, "CPMConnectIn should succeed.");

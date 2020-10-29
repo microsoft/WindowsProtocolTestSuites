@@ -55,16 +55,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Maps a cursor corresponding to a client
         /// </summary>
-        Dictionary<string, uint> cursorMap
-            = new Dictionary<string, uint>();
+        Dictionary<string, uint> cursorMap = new Dictionary<string, uint>();
         /// <summary>
         /// Name of the Server hosting Windows Search Service
         /// </summary>
         string serverMachineName = null;
         /// <summary>
-        /// Path of the PIPE (Communication channel)
+        /// Timeout of the underlying SMB2Client used by the RequestSender.
         /// </summary>
-        string pipePath = null;
+        TimeSpan smb2ClientTimeout = default(TimeSpan);
         /// <summary>
         /// Number of bytes read from the server for a 
         /// given request message
@@ -79,9 +78,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public string catalogName = null;
         /// <summary>
-        /// Name of the connected username
+        /// Name of the connected user
         /// </summary>
         string userName = null;
+        /// <summary>
+        /// Domain of the connected user
+        /// </summary>
+        string domainName = null;
+        /// <summary>
+        /// Password of the connected user
+        /// </summary>
+        string password = null;
+        /// <summary>
+        /// Security package used for authentication.
+        /// </summary>
+        private string securityPackage = null;
+        /// <summary>
+        /// Whether the client will use server-initiated SPNEGO authentication.
+        /// </summary>
+        private bool useServerGssToken = false;
         /// <summary>
         /// Determines whether the client is connected
         /// </summary>
@@ -143,17 +158,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             connectedClients = new Dictionary<string, WspClient>();
             wspTestSite.DefaultProtocolDocShortName = "MS-WSP";
             validator = new MessageValidator(wspTestSite);
-            serverMachineName
-                = wspTestSite.Properties.Get("ServerComputerName");
+            serverMachineName = wspTestSite.Properties.Get("ServerComputerName");
             clientMachineName = wspTestSite.Properties.Get("ClientName");
             catalogName = wspTestSite.Properties.Get("CatalogName");
             userName = wspTestSite.Properties.Get("UserName");
-            pipePath
-                = string.Format(@"\\{0}\\pipe\MSFTEWDS", serverMachineName);
-            clientVersion = (uint)Convert.ToUInt32
-                (wspTestSite.Properties["ClientVersion"]);
+            domainName = wspTestSite.Properties.Get("DomainName");
+            password = wspTestSite.Properties.Get("Password");
+            clientVersion = Convert.ToUInt32(wspTestSite.Properties["ClientVersion"]);
 
-            defaultSender = new RequestSender(pipePath);
+            securityPackage = wspTestSite.Properties.Get("SupportedSecurityPackage");
+            useServerGssToken = bool.Parse(wspTestSite.Properties.Get("UseServerGssToken"));
+            smb2ClientTimeout = TimeSpan.FromSeconds(int.Parse(wspTestSite.Properties.Get("SMB2ClientTimeout")));
+            defaultSender = new RequestSender(
+                serverMachineName,
+                userName,
+                domainName,
+                password,
+                securityPackage,
+                useServerGssToken,
+                smb2ClientTimeout);
 
             defaultClient = new WspClient();
 
@@ -197,7 +220,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
 
-            parameter.LCID_VALUE = UInt32.Parse(wspTestSite.Properties.Get("LCID_VALUE"));
+            parameter.LcidValue = UInt32.Parse(wspTestSite.Properties.Get("LcidValue"));
 
             parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
 
@@ -207,14 +230,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Closes all the communication Pipe and deallocate the resources used
+        /// Closes all the communication Pipe and deallocate the resources used.
         /// </summary>
         public override void Reset()
         {
-            //defaultSender.handle.Close();
+            defaultClient.sender.Disconnect();
             foreach (var client in connectedClients.Values)
             {
-                client.sender.handle.Close();
+                client.sender.Disconnect();
             }
             connectedClients.Clear();
             cursorMap.Clear();
@@ -254,8 +277,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             string locale = wspTestSite.Properties.Get("LanguageLocale");
 
-            string serverName = serverMachineName;
-            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverName, catalogName, locale, cPropSets, cExtPropSet);
+            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverMachineName, catalogName, locale, cPropSets, cExtPropSet);
 
             WspMessageHeader? header = GetWspMessageHeader(connectInMessage.Header._msg, connectInMessage.Header._status, connectInMessage.Header._ulChecksum);
 
@@ -263,7 +285,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             if (!connectedClients.ContainsKey(clientMachineName))
             {
                 client = new WspClient();
-                client.sender = new RequestSender(pipePath);
+                client.sender = new RequestSender(
+                    serverMachineName,
+                    userName,
+                    domainName,
+                    password,
+                    securityPackage,
+                    useServerGssToken,
+                    smb2ClientTimeout);
                 connectedClients.Add(clientMachineName, client);
             }
             else
@@ -1917,11 +1946,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Returns a WspClient object to send message to Server 
         /// </summary>
-        /// <param name="isclientConnected">true if the client is already Connected through CPMConnectIn request</param>
+        /// <param name="isClientConnected">Whether the client is already Connected through CPMConnectIn request</param>
         /// <returns>WspClient</returns>
-        private WspClient GetClient(bool isclientConnected)
+        private WspClient GetClient(bool isClientConnected)
         {
-            if (isclientConnected)
+            if (isClientConnected)
             {
                 return connectedClients[clientMachineName];
             }

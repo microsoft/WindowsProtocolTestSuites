@@ -12,8 +12,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMGetRowsTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private const uint validRowsToTransfer = 40;
         private const uint validReadBuffer = 0x4000;
         private static readonly uint validRowWidth = MessageBuilder.rowWidth;
@@ -71,14 +69,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMGetQueryStatusExOutResponse += EnsureSuccessfulCPMGetQueryStatusExOut;
-
+            wspAdapter.CPMGetRowsOut -= EnsureSuccessfulCPMGetRowsOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
         }
 

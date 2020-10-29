@@ -3,7 +3,6 @@
 
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -12,8 +11,6 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMGetQueryStatusExTestCases : WspCommonTestBase
     {
-        private WspAdapter wspAdapter;
-
         private bool isCursorValid = true;
 
         #region Test Initialize and Cleanup
@@ -34,14 +31,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             base.TestInitialize();
-            wspAdapter = new WspAdapter();
-            wspAdapter.Initialize(this.Site);
 
-            wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
-            wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
-            wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
-
+            wspAdapter.CPMGetQueryStatusExOutResponse -= EnsureSuccessfulCPMGetQueryStatusExOut;
             wspAdapter.CPMGetQueryStatusExOutResponse += CPMGetQueryStatusExOut;
         }
 
@@ -75,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetQueryStatusIn and expects success.");
             wspAdapter.CPMGetQueryStatusExIn(out var response);
@@ -105,7 +96,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -143,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
@@ -187,7 +178,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             rowsetProperties._uBooleanOptions = _uBooleanOptions_Values.eDoNotComputeExpensiveProps;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LCID_VALUE);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetQueryStatusIn and expects success.");
             wspAdapter.CPMGetQueryStatusExIn(out var response);
