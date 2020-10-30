@@ -516,33 +516,28 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 TurnOffRDPRFXVerification = true; //if property not found, set to true as default value
             }
 
-            String rdprfxImageFile;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, "RDPRFX.Image", out rdprfxImageFile))
+            if (image_64X64 == null)
             {
-                rdprfxImageFile = ""; //if property not found, set to true as default value
-            }
+                String rdprfxImageFile;
+                if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.MSRDPRFX_Image, out rdprfxImageFile))
+                {
+                    assumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_Image);
+                }
 
-            String rdprfxVideoModeImageFile;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, "RDPRFXVideoMode.Image", out rdprfxVideoModeImageFile))
-            {
-                rdprfxVideoModeImageFile = ""; //if property not found, set to true as default value
-            }
-
-            try
-            {
-                //Get image from file
                 image_64X64 = Image.FromFile(rdprfxImageFile);
+            }
+
+            if (imageForVideoMode == null)
+            {
+                String rdprfxVideoModeImageFile;
+                if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.MSRDPRFX_VideoModeImage, out rdprfxVideoModeImageFile))
+                {
+                    assumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_VideoModeImage);
+                }
+
                 imageForVideoMode = Image.FromFile(rdprfxVideoModeImageFile);
             }
-            catch (System.IO.FileNotFoundException)
-            {
-                //capture screen if failed to get image from file
-                //Capture 64*64 bitmap for Image Mode
-                image_64X64 = captureScreenImage(0, 0, TileSize, TileSize);
 
-                //Capture screen bitmap for Vedio Mode
-                imageForVideoMode = captureScreenImage(0, 0, TileSize * VideoMode_TileRowNum, TileSize * VideoMode_TileColNum);
-            }
             #endregion
 
             #endregion
@@ -693,7 +688,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             if (result != true)
             {
-                throw new InvalidOperationException(String.Format("Retry failed. The last exception is: {0}", lastException?? desc));
+                throw new InvalidOperationException(String.Format("Retry failed. The last exception is: {0}", lastException ?? desc));
             }
 
             return result;

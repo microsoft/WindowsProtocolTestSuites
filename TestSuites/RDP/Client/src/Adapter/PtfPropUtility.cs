@@ -28,6 +28,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public const string RDPClientSupportRdpNegDataEmpty = "RDP.Client.SupportRdpNegDataEmpty";
         public const string MSRDPRFX_64X64BitmapFile = "MSRDPRFX_64X64BitmapFile";
         public const string MSRDPRFX_BitmapFileForVideoMode = "MSRDPRFX_BitmapFileForVideoMode";
+        public const string MSRDPRFX_Image = "RDPRFX.Image";
+        public const string MSRDPRFX_VideoModeImage = "RDPRFXVideoMode.Image";
     }
 
     /// <summary>
