@@ -43,27 +43,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             XmlReader xmlReader = XmlReader.Create(family.TestSuiteSelectionConfigXml, settings);
             doc.Load(xmlReader);
 
-            // Get Registry info 
-            XmlNode registryPathNode = doc.DocumentElement.SelectSingleNode("DefaultRegistryPath");
-            if (registryPathNode != null)
-            {
-                family.RegistryPath = registryPathNode.InnerText.Trim();
-            }
-            else
-            {
-                throw new InvalidOperationException(StringResource.RegistryPathNotSpecified);
-            }
-
-            XmlNode registryPathNode64 = doc.DocumentElement.SelectSingleNode("DefaultRegistryPath64");
-            if (registryPathNode64 != null)
-            {
-                family.RegistryPath64 = registryPathNode64.InnerText.Trim();
-            }
-            else
-            {
-                throw new InvalidOperationException(StringResource.RegistryPathNotSpecified);
-            }
-
             // Add group and test suites
             if (doc.DocumentElement.SelectNodes("Group") != null)
             {

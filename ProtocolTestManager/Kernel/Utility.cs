@@ -880,7 +880,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Retrives the object of the logger.
         /// </summary>
         /// <returns>Logger object.</returns>
-        public Logger GetLogger()
+        public TestSuiteLogManager GetLogger()
         {
             return testEngine.GetLogger();
         }

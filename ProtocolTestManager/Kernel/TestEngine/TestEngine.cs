@@ -12,7 +12,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     public class TestEngine
     {
         private string EnginePath;
-        private Logger logger;
+        private TestSuiteLogManager tsLogManager;
         public string PipeName { get; set; }
         public List<string> TestAssemblies { get; set; }
         public string TestSetting { get; set; }
@@ -34,8 +34,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public void InitializeLogger(List<TestCase> testcases)
         {
-            logger = new Logger();
-            logger.Initialize(testcases);
+            tsLogManager = new TestSuiteLogManager();
+            tsLogManager.Initialize(testcases);
             this.testcases = testcases;
         }
 
@@ -43,9 +43,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Retrieves the Logger object.
         /// </summary>
         /// <returns></returns>
-        public Logger GetLogger()
+        public TestSuiteLogManager GetLogger()
         {
-            return logger;
+            return tsLogManager;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     filteredTestcases.Add(t);
                 }
             }
-            logger.ApplyFilteredList(filteredTestcases);
+            tsLogManager.ApplyFilteredList(filteredTestcases);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void RemoveFilter()
         {
-            logger.ApplyFilteredList(testcases);
+            tsLogManager.ApplyFilteredList(testcases);
         }
 
         /// <summary>
@@ -134,9 +134,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 args.Append("\"");
             }
 
+            Logger.AddLog(LogLevel.Debug, $"vstest arguments: {args}");
             return args;
         }
-
 
         /// <summary>
         /// Construct .runsettings file to specify the location of ptfconfig files.
@@ -258,25 +258,25 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 if (message.Contains(StringResource.InprogressTag))
                 {
-                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
+                    tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
                 }
                 else if (message.Contains(StringResource.FailedTag))
                 {
-                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Failed);
+                    tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Failed);
                 }
                 else if (message.Contains(StringResource.PassedTag))
                 {
-                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Passed);
+                    tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Passed);
                 }
                 else if (message.Contains(StringResource.InconclusiveTag))
                 {
-                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Other);
+                    tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Other);
                 }
                 else
                 {
                     // Case status from Running -> Waiting.
                     // Waiting QT close or Html Report.
-                    logger.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Waiting);
+                    tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Waiting);
                 }
             }
         }
@@ -314,13 +314,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 TestFinished(this,
                     new TestFinishedEventArgs(
-                        logger.GroupByOutcome.PassedTestCases.TestCaseList.Count,
-                        logger.GroupByOutcome.FailedTestCases.TestCaseList.Count,
-                        logger.GroupByOutcome.OtherTestCases.TestCaseList.Count,
+                        tsLogManager.GroupByOutcome.PassedTestCases.TestCaseList.Count,
+                        tsLogManager.GroupByOutcome.FailedTestCases.TestCaseList.Count,
+                        tsLogManager.GroupByOutcome.OtherTestCases.TestCaseList.Count,
                         e));
             }
 
-            logger.FinishTest();
+            tsLogManager.FinishTest();
         }
 
         /// <summary>

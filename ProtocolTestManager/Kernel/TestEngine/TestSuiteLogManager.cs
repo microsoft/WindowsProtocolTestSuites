@@ -12,12 +12,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// <summary>
     /// This class defines the logger.
     /// </summary>
-    public class Logger : INotifyPropertyChanged
+    public class TestSuiteLogManager : INotifyPropertyChanged
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Logger()
+        public TestSuiteLogManager()
         {
             GroupByOutcome = new GroupByOutcome();
             GroupByCategory = new GroupByCategory();

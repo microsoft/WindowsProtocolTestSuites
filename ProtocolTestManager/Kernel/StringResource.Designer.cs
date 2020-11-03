@@ -580,6 +580,15 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Package closed..
+        /// </summary>
+        internal static string PackageClosed {
+            get {
+                return ResourceManager.GetString("PackageClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [TestPassed].
         /// </summary>
         internal static string PassedTag {
@@ -660,15 +669,6 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         internal static string RDP_ServerTestSuite_ptfconfig {
             get {
                 return ResourceManager.GetString("RDP_ServerTestSuite_ptfconfig", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DefaultRegistryPath is not specified..
-        /// </summary>
-        internal static string RegistryPathNotSpecified {
-            get {
-                return ResourceManager.GetString("RegistryPathNotSpecified", resourceCulture);
             }
         }
         

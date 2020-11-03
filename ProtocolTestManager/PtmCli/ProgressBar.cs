@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestManager.Kernel;
 using System;
 using System.Text;
 using System.Threading;
@@ -65,6 +66,13 @@ namespace Microsoft.Protocols.TestManager.CLI
             {
                 outputBuilder.Append(' ', repeatCount);
             }
+            else
+            {
+                Logger.AddLog(LogLevel.Debug, "ProgressBar.UpdateText(text)");
+                Logger.AddLog(LogLevel.Debug, $"text: {text}");
+                Logger.AddLog(LogLevel.Debug, $"repeatCount: {repeatCount}");
+            }
+
             Console.Write(outputBuilder);
         }
 
