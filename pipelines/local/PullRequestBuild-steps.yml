@@ -1,0 +1,28 @@
+parameters:
+  extRepoUrl : ""
+
+steps:
+  - checkout: self
+    path: s
+
+  - checkout: git://${{parameters.extRepoUrl}}
+
+  - task: PowerShell@2
+    displayName: 'Validate Git commit author emails'
+    inputs:
+      filePath: 'WindowsProtocolTestSuitesHelper/CommonScript/ValidateGitCommitAuthorEmails.ps1'
+      workingDirectory: 'WindowsProtocolTestSuitesHelper'  
+      arguments: '-TestSuiteDir $(Build.Repository.LocalPath) -TargetBranchRef $(system.pullRequest.targetBranch) -SourceBranchRef $(system.pullRequest.sourceBranch) -PullRequestId $(system.pullRequest.pullRequestId)'
+
+  - task: PowerShell@2
+    displayName: 'Copy lab scripts to test suite root dir'
+    inputs:
+      filePath: '$(Agent.BuildDirectory)/s/WindowsProtocolTestSuitesHelper/CopyLabScriptToTestSuite.ps1'
+      workingDirectory: 'WindowsProtocolTestSuitesHelper'
+
+  - task: PowerShell@2
+    displayName: 'Check License Header'
+    inputs:
+      filePath: '$(Agent.BuildDirectory)/s/WindowsProtocolTestSuitesHelper/CommonScript/CheckLicenseHeader.ps1'
+      workingDirectory: 'WindowsProtocolTestSuitesHelper'  
+      arguments: '-TestSuitePath $(Build.Repository.LocalPath) -IsCheckAll "$(test.IsCheckAllFilesLicenseHeader)" -targetBranch "$(system.pullRequest.targetBranch)" -sourceBranch "$(system.pullRequest.sourceBranch)" '
