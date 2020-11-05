@@ -1,0 +1,511 @@
+// This is a Spec Explorer coordination script (Cord version 1.0).
+// Here we have  defined configurations and machines describing the
+// behaviour of MS-WSP Protocol
+
+using Microsoft.Protocols.TestSuites.WspTS; 
+
+
+config Main 
+{
+	action all IWspAdapter;
+switch generatedtestpath = "..\\TestSuite";
+        switch generatedtestnamespace = "Microsoft.Protocols.TestSuites.WspTS";
+    switch graphtimeout = 1000;
+    bound steps = 6000;
+}
+
+machine ModelProgram() : Main
+{
+	construct model program from Main 
+	where namespace = "Microsoft.Protocols.TestSuites.WspTS"
+}
+
+//=============================================================================
+// The value for isCursorValid is bind for all the actions because for the 
+// false value,the server is expected to return error code.
+// But,it is found that,error status is causing the server stopping the WSS.
+//=============================================================================
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Query a catalog for result sets
+//  3) Release the cursor 
+//  4) Finally free the connection from the server.
+machine TestCaseQueryForResultSets() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(_);
+CPMSetBindingsIn(true,true);
+CPMSetBindingsInResponse(_);
+CPMGetRowsIn(true);
+CPMGetRowsOut(_);
+CPMFetchValueIn(true);
+CPMFetchValueOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)
+}
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Query a catalog for result sets
+//  3) Check different query status 
+//  4) Finally free the connection from the server.
+machine TestCaseQueryForDifferentQueryStatus() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(_);
+CPMGetQueryStatusIn(true);
+CPMGetQueryStatusOutResponse(_);
+CPMGetQueryStatusExIn(true);
+CPMGetQueryStatusExOutResponse(_);
+CPMRatioFinishedIn(true);
+CPMRatioFinishedOutResponse(_);
+CPMGetNotify(true);
+CPMSendNotifyOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)
+}
+
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Various Catalog Management task
+//  3) Finally free the connection from the server.
+machine QueryAdminMessages() : Main
+{
+CPMConnectInRequest(); 
+CPMConnectOutResponse(WspErrorCode.SUCCESS);
+CPMCiStateInOut();
+CPMCiStateInOutResponse(_);
+CPMForceMergeIn(_);
+CPMForceMergeInResponse(_);
+CPMDisconnect();
+|| ModelProgram
+}
+
+machine TestCaseQueryAdminMessages() : Main
+{
+	construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for QueryAdminMessages()
+}
+
+
+//Validates the server response for the request sent by the client to 
+//  1) Various Catalog Management task
+//  2) Finally free the connection from the server.
+machine TestCaseAdmin_StatusInvalidParameter() : Main
+{
+CPMCiStateInOut();
+CPMCiStateInOutResponse(_);
+CPMForceMergeIn(true);
+CPMForceMergeInResponse(_);
+CPMDisconnect();
+|| ModelProgram
+}
+
+//Validates the error code returned by the server when already 
+//connected client sends ConnectIn request.
+machine TestCaseConnectOut_StatusInvalidParameter() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when a non-connected 
+//client sends CreateQueryIn request to create query.
+machine QueryOut_ClientNotConnectedCase() : Main
+{
+CPMCreateQueryIn(false);
+CPMCreateQueryOutResponse(_);
+|| ModelProgram
+}
+
+machine TestCaseForQueryOut_ClientNotConnectedCase() : Main
+{
+	construct test cases where strategy 
+	= "LongTests" for QueryOut_ClientNotConnectedCase()
+}
+
+//Validates the error code returned by the server when the 
+//client sends the request to create an already existing query.
+machine TestCaseForQueryOut_CreatingExistingQueryCasee() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when the 
+//client sends the request whether the cursor handle passed is in a list of the client's cursor handles.
+machine TestcaseQueryOutExFor_E_Fail() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMGetQueryStatusIn(true);
+CPMGetQueryStatusOutResponse(_);
+CPMGetQueryStatusExIn(_);
+CPMGetQueryStatusExOutResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when the 
+//client sends the request whether the cursor handle passed is in a list of the client's cursor handles.
+machine TestcaseRatioFinishInFor_E_Fail() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMRatioFinishedIn(_);
+CPMRatioFinishedOutResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when the 
+//client sends different query status requests for any non-existing query.
+machine TestCaseForQueryNotAssociatedCase() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMGetQueryStatusIn(true);
+CPMGetQueryStatusOutResponse(_);
+CPMGetQueryStatusExIn(true);
+CPMGetQueryStatusExOutResponse(_);
+CPMRatioFinishedIn(true);
+CPMRatioFinishedOutResponse(_);
+CPMGetNotify(true);
+CPMSendNotifyOutResponse(_);
+CPMSetBindingsIn(false,true);
+CPMSetBindingsInResponse(_);
+CPMFetchValueIn(true);
+CPMFetchValueOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when client sends 
+//GetRowsIn request with invalid binding information for the query.
+machine TestCaseGetRowsOut_E_FailErrorWithInvalidBinding() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMSetBindingsIn(false,true);
+CPMSetBindingsInResponse(_);
+GetServerPlatform(_);
+CPMGetRowsIn(true);
+CPMGetRowsOut(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when client sends 
+//GetRowsIn request whether the cursor handle passed is in the list of the client's cursor handles.
+machine TestCaseGetRowsOutFor_E_Fail() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMSetBindingsIn(true,true);
+CPMSetBindingsInResponse(0);
+CPMGetRowsIn(_);
+CPMGetRowsOut(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when client sends 
+//GetRowsIn request whether the client has a query associated with it.
+machine TestCaseGetRowsOutFor_InvalidParameter() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMSetBindingsIn(true,true);
+CPMSetBindingsInResponse(_);
+CPMGetRowsIn(true);
+CPMGetRowsOut(_);
+|| ModelProgram
+)
+}
+
+
+//Validates the error code returned by the server when the SetBindingsIn 
+//request is sent with invalid binding information for the query.
+machine TestCaseSetbindingsError() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(_);
+CPMSetBindingsIn(false,true);
+CPMSetBindingsInResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when the SetBindingsIn 
+//request is sent with invalid binding information for the query.
+machine TestCaseSetbindingsFor_E_Error() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMSetBindingsIn(true,false);
+CPMSetBindingsInResponse(_);
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when FetchValueIn 
+//request is sent for the non-existing query.
+machine TestCaseFetchValue_StatusInvalidParameterError() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMFetchValueIn(_);
+CPMFetchValueOutResponse(_);
+|| ModelProgram
+)
+}
+
+
+//Validates the error code returned by the server when CPMForceMergeIn
+//request is sent and client is not the admin
+machine StatusAccessDenied() : Main
+{
+    CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMForceMergeIn(false);
+CPMForceMergeInResponse(_);
+|| ModelProgram  
+}
+
+//Validates the error code returned by the server when CPMFindIndicesIn
+//request is sent for the non-existing query.
+machine TestCaseFindIndices_StatusInvalidParameter() : Main
+{
+    CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMFindIndicesIn(true);
+CPMFindIndicesOutResponse(_);
+CPMDisconnect();
+|| ModelProgram  
+}
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Create query
+//	3) Execute CPMFindIndicesIn request
+//  4) Finally free the cursor and connection from the server.
+machine TestCaseFindIndices() : Main
+{
+    CPMConnectInRequest(); 
+CPMConnectOutResponse(_);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(_);
+CPMFindIndicesIn(true);
+CPMFindIndicesOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram  
+}
+
+//Validates the error code returned by the server when CPMFindIndicesIn
+//request is sent for the non-existing query.
+machine TestCaseGetRowsetNotify_StatusInvalidParameter() : Main
+{
+    construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(WspErrorCode.SUCCESS);
+CPMGetRowsetNotifyIn({0,1,2,3,4},_);
+CPMGetRowsetNotifyOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)
+}
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Create query
+//	3) Execute CPMGetRowsetNotifyIn request
+//  4) Finally free the cursor and connection from the server.
+machine TestCaseGetRowsetNotify() : Main
+{
+    construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(WspErrorCode.SUCCESS);
+CPMCreateQueryIn(_);
+CPMCreateQueryOutResponse(0);
+CPMGetRowsetNotifyIn({0,1,2,3,4},_);
+CPMGetRowsetNotifyOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)  
+}
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Create query
+//	3) Execute CPMSetScopePrioritizationIn request
+//  4) Finally free the cursor and connection from the server.
+machine TestCaseSetScopePrioritization() : Main
+{
+    construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(_);
+CPMSetScopePrioritizationIn({0,1,2,3});
+CPMSetScopePrioritizationOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)  
+}
+
+//Validates the error code returned by the server when CPMSetScopePrioritizationIn
+//request is sent for the non-existing query.
+machine TestCaseSetScopePrioritization_StatusInvalidParameter() : Main
+{
+    construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMSetScopePrioritizationIn({0,1,2,3});
+CPMSetScopePrioritizationOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)  
+}
+
+
+//Validates the error code returned by the server when CPMGetScopeStatisticsIn
+//request is sent for the non-existing query.
+machine TestCaseGetScopeStatistics_StatusInvalid() : Main
+{
+    CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMGetScopeStatisticsIn();
+CPMGetScopeStatisticsOutResponse(_);
+CPMDisconnect();
+|| ModelProgram  
+}
+
+
+//Validates the server response for the request sent by the client to 
+//  1) Connect to the server
+//  2) Create query
+//	3) Execute CPMGetScopeStatisticsIn request
+//  4) Finally free the cursor and connection from the server.
+machine TestCaseGetScopeStatistics() : Main
+{
+    construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(_);
+CPMCreateQueryOutResponse(0);
+CPMGetScopeStatisticsIn();
+CPMGetScopeStatisticsOutResponse(_);
+CPMFreeCursorIn(true);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)  
+}
+
+//Validates the error code returned by the server when CPMUpdateDocumentsIn
+machine TestCaseUpdateDocumentsIn_StatusInvalid() : Main
+{
+construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(WspErrorCode.SUCCESS);
+CPMUpdateDocumentsIn({0,1,2},{0,1});
+CPMUpdateDocumentsOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)
+}
+
+//Validates the error code returned by the server when CPMFreeCursor with invalid cursor
+machine TestCaseFreeCursorFor_E_Fail() : Main
+{
+    construct test cases where strategy = "LongTests" , allowundeterminedcoverage = true for
+(
+CPMConnectInRequest(); 
+CPMConnectOutResponse(0);
+CPMCreateQueryIn(true);
+CPMCreateQueryOutResponse(0);
+CPMFreeCursorIn(false);
+CPMFreeCursorOutResponse(_);
+CPMDisconnect();
+|| ModelProgram
+)  
+}

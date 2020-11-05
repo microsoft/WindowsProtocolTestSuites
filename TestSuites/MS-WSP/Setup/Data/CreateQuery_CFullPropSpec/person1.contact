@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c:contact c:Version="1" xmlns:c="http://schemas.microsoft.com/Contact" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:MSP2P="http://schemas.microsoft.com/Contact/Extended/MSP2P">
+	<c:Gender xsi:nil="true" c:Version="5" c:ModificationDate="2020-07-17T07:44:18Z" />
+	<c:CreationDate>2020-06-30T02:41:49Z</c:CreationDate>
+	<c:Extended xsi:nil="true" />
+	<c:ContactIDCollection>
+		<c:ContactID c:ElementID="a18c2ba3-b01a-44ef-8833-cb30b2ac4959">
+			<c:Value>7dea729b-8ff7-461c-8048-5bd55b7e8792</c:Value>
+		</c:ContactID>
+	</c:ContactIDCollection>
+	<c:EmailAddressCollection>
+		<c:EmailAddress c:ElementID="6dd6e6cd-1c4c-4428-a288-6d96a3eae51e">
+			<c:Type>SMTP</c:Type>
+			<c:Address>AAA.BBB@example.com</c:Address>
+			<c:LabelCollection>
+				<c:Label>Preferred</c:Label>
+			</c:LabelCollection>
+		</c:EmailAddress>
+		<c:EmailAddress c:ElementID="282d7c63-4a99-415c-b449-984cafb4d669" xsi:nil="true" c:Version="9" c:ModificationDate="2020-07-17T07:44:18Z" />
+	</c:EmailAddressCollection>
+	<c:NameCollection>
+		<c:Name c:ElementID="b97f3c2d-e7b8-4b92-afab-911330c79943">
+			<c:NickName c:Version="1" c:ModificationDate="2020-07-17T07:23:44Z">aaa</c:NickName>
+			<c:FormattedName>AAA BBB</c:FormattedName>
+			<c:FamilyName>BBB</c:FamilyName>
+			<c:GivenName>AAA</c:GivenName>
+		</c:Name>
+	</c:NameCollection>
+	<c:PositionCollection>
+		<c:Position c:ElementID="a1a4fda4-4160-444e-9126-e47dd494f75c">
+			<c:Company>AAA Corp</c:Company>
+			<c:LabelCollection>
+				<c:Label>Business</c:Label>
+			</c:LabelCollection>
+		</c:Position>
+	</c:PositionCollection>
+	<c:PhotoCollection>
+		<c:Photo c:ElementID="a2df0cfc-7ce2-4e60-8718-bc723cc18b44">
+			<c:LabelCollection>
+				<c:Label>UserTile</c:Label>
+			</c:LabelCollection>
+		</c:Photo>
+	</c:PhotoCollection>
+	<c:PhoneNumberCollection c:Version="1" c:ModificationDate="2020-06-30T02:51:05Z">
+		<c:PhoneNumber c:ElementID="0f74b915-510b-4d8e-9861-a3d7343a488a" c:Version="1" c:ModificationDate="2020-06-30T03:24:42Z">
+			<c:Number c:Version="1" c:ModificationDate="2020-06-30T03:24:42Z">123456789</c:Number>
+			<c:LabelCollection>
+				<c:Label c:Version="1" c:ModificationDate="2020-06-30T03:24:42Z">Voice</c:Label>
+				<c:Label c:Version="1" c:ModificationDate="2020-06-30T03:24:42Z">Personal</c:Label>
+			</c:LabelCollection>
+		</c:PhoneNumber>
+		<c:PhoneNumber c:ElementID="39876474-a6e3-4aba-9a93-9834bee9258f" c:Version="1" c:ModificationDate="2020-06-30T02:51:05Z">
+			<c:Number c:Version="1" c:ModificationDate="2020-06-30T02:51:05Z">111222333</c:Number>
+			<c:LabelCollection>
+				<c:Label c:Version="1" c:ModificationDate="2020-06-30T02:51:05Z">Voice</c:Label>
+				<c:Label c:Version="1" c:ModificationDate="2020-06-30T02:51:05Z">Business</c:Label>
+			</c:LabelCollection>
+		</c:PhoneNumber>
+	</c:PhoneNumberCollection>
+	<c:PhysicalAddressCollection c:Version="1" c:ModificationDate="2020-07-17T07:44:18Z">
+		<c:PhysicalAddress c:ElementID="d8abb155-4ab3-468d-a407-7f0cc4ce1368" c:Version="1" c:ModificationDate="2020-07-17T07:44:18Z">
+			<c:Street c:Version="1" c:ModificationDate="2020-07-17T07:44:18Z">AAA</c:Street>
+			<c:LabelCollection>
+				<c:Label c:Version="1" c:ModificationDate="2020-07-17T07:44:18Z">Personal</c:Label>
+			</c:LabelCollection>
+		</c:PhysicalAddress>
+	</c:PhysicalAddressCollection>
+</c:contact>
