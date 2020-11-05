@@ -1,0 +1,119 @@
+parameters:
+  extRepoUrl : ''
+
+steps:
+  - checkout: self
+    path: s
+
+  - checkout: git://${{parameters.extRepoUrl}}
+
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk 5.0.x'
+    inputs:
+      version: 5.0.x
+      includePreviewVersions: true
+      performMultiLevelLookup: true
+
+  - powershell: |
+     Add-Type -AssemblyName System.Net.Http
+     Add-Type -AssemblyName System.IO.Compression.FileSystem
+   
+     $tokenBytes = [System.Text.Encoding]::UTF8.GetBytes(":$(System.AccessToken)")
+     $authString = [System.Convert]::ToBase64String($tokenBytes)
+     $authHeaders = @{ "Authorization" = "Basic $authString" }
+   
+     $buildId = "$(build.ptfBuildId)"
+     $artifactUrl = "$(build.apiUrl)/build/builds/$buildId/artifacts?artifactName=drop&api-version=5.0"
+     $artifactInfo = Invoke-RestMethod -Uri $artifactUrl -Method Get -Headers $authHeaders
+     $downloadUrl = $artifactInfo.resource.downloadUrl
+   
+     $artifactsLocalPath = "$(System.ArtifactsDirectory)"
+     $localFilePath = "$artifactsLocalPath/$buildId"
+     $localFileName = "$localFilePath.zip"
+       
+     $fileStream = [System.IO.File]::Create($localFileName)
+   
+     $httpClient = New-Object System.Net.Http.HttpClient
+     $httpClient.DefaultRequestHeaders.Authorization = New-Object System.Net.Http.Headers.AuthenticationHeaderValue("Basic", $authString)
+               
+     $stream = $httpClient.GetStreamAsync($downloadUrl).GetAwaiter().GetResult()
+     $fileStream.Seek(0, [System.IO.SeekOrigin]::Begin)
+     $stream.CopyTo($fileStream)
+               
+     $stream.Close()
+     $httpClient.Dispose()
+     $fileStream.Close()
+   
+     [System.IO.Compression.ZipFile]::ExtractToDirectory($localFileName, $localFilePath)
+     Remove-Item $localFileName -Force
+       
+     $artifactFilesPath = "$localFilePath/drop"
+     $nuGetSourcePath = "$artifactsLocalPath/drop"
+     New-Item $nuGetSourcePath -ItemType Directory
+     Get-ChildItem -Recurse $artifactFilesPath | Where-Object {
+         $_.Extension -eq ".nupkg"
+     } | Foreach-Object {
+         $newPath = "$nuGetSourcePath/$($_.Name)"
+         Move-Item $_.FullName -Destination $newPath -Force
+     }
+     Remove-Item $localFilePath -Recurse -Force
+  displayName: 'Download PTF of Specific Version'
+  condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), ne(variables['build.ptfBuildId'], 'latest'))
+
+  - task: DownloadBuildArtifacts@0
+    displayName: 'Download PTF of Latest Version'
+    inputs:
+      buildType: specific
+      project: 'b67fd756-1c65-48ef-9824-eeb3cb9b2728'
+      pipeline: 55923
+      buildVersionToDownload: latestFromBranch
+      branchName: 'refs/heads/$(build.ptfDefaultBranch)'
+      downloadType: specific
+      itemPattern: 'drop/*.nupkg'
+    condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), eq(variables['build.ptfBuildId'], 'latest'))
+
+  - powershell: |
+         $content = '<?xml version="1.0" encoding="utf-8"?>
+         <configuration>
+             <packageSources>
+                 <add key="LocalSource" value="LOCAL_SOURCE" />
+                 <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+             </packageSources>
+         </configuration>'
+   
+         $content = $content.Replace("LOCAL_SOURCE", $env:LOCAL_SOURCE)
+         [System.IO.File]::WriteAllText("NuGet.config", $content)
+    workingDirectory: TestSuites
+    displayName: 'Add NuGet.config'
+    condition: and(succeeded(), ne(variables['build.usePublicPtf'], true)) 
+    env:
+      LOCAL_SOURCE: $(System.ArtifactsDirectory)/drop
+
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: '$(build.solutionFolder)/**/*.csproj'
+      feedsToUse: config
+      nugetConfigPath: TestSuites/NuGet.config
+    condition: and(succeeded(), ne(variables['build.usePublicPtf'], true)) 
+
+  - task: PowerShell@2
+    displayName: Build
+    inputs:
+      targetType: filePath
+      filePath: './$(build.solutionFolder)/build.ps1'
+      arguments: '-Configuration $(build.configuration) -OutDir $(Build.ArtifactStagingDirectory)/staging'
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive $(Build.ArtifactStagingDirectory)/staging'
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/staging'
+      includeRootFolder: false
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(build.archiveName).zip'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(build.archiveName).zip'
+    condition: succeededOrFailed()

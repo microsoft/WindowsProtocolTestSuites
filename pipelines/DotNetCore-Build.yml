@@ -1,0 +1,29 @@
+trigger: none 
+
+variables:
+  - group: Azure Account
+  - group: Build Variables
+  - group: External Repo Variables
+    value: $(Build.DefinitionName)-$(Build.BuildNumber)
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: v-hazh/dotnetcore-build-yml
+
+jobs:
+- job:
+  displayName: DotNetCore Build
+  pool: 
+    vmImage: windows-2019
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+
+  steps:
+  - template: pipelines/build/DotNetCore-Build-steps.yml@template
+    parameters:
+      extRepoUrl: $(extRepo.url)
+      extRepoDir: $(extRepo.dir)
