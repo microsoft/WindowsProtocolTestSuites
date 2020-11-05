@@ -3,9 +3,6 @@ parameters:
 
 steps:
   - checkout: self
-    path: s
-
-  - checkout: git://${{parameters.extRepoUrl}}
 
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 5.0.x'

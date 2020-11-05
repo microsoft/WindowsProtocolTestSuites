@@ -1,11 +1,8 @@
 trigger: none 
 
 variables:
-  - group: Azure Account
   - group: Build Variables
-  - group: External Repo Variables
-  - name: build.buildPipelineName
-    value: $(Build.DefinitionName)-$(Build.BuildNumber)
+
 
 resources:
   repositories:
@@ -25,6 +22,3 @@ jobs:
 
   steps:
   - template: pipelines/build/DotNetCore-Build-steps.yml@template
-    parameters:
-      extRepoUrl: $(extRepo.url)
-      extRepoDir: $(extRepo.dir)
