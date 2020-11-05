@@ -57,8 +57,8 @@ steps:
          Move-Item $_.FullName -Destination $newPath -Force
      }
      Remove-Item $localFilePath -Recurse -Force
-  displayName: 'Download PTF of Specific Version'
-  condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), ne(variables['build.ptfBuildId'], 'latest'))
+   displayName: 'Download PTF of Specific Version'
+   condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), ne(variables['build.ptfBuildId'], 'latest'))
 
   - task: DownloadBuildArtifacts@0
     displayName: 'Download PTF of Latest Version'
