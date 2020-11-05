@@ -4,6 +4,7 @@ variables:
   - group: Azure Account
   - group: Build Variables
   - group: External Repo Variables
+  - name: build.buildPipelineName
     value: $(Build.DefinitionName)-$(Build.BuildNumber)
 
 resources:
