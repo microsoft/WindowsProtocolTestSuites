@@ -9,7 +9,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines-main
+      ref: v-hazh/dotnetcore-build-yml-to-AzurePipelines-main-v2
 
 jobs:
 - job:
