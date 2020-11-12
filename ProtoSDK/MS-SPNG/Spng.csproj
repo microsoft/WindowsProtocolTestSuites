@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <targetframework>net5.0</targetframework>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -31,11 +31,5 @@
       <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
       <Name>SspiLib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>
