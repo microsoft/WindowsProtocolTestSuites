@@ -60,7 +60,7 @@ namespace CodecToolSet.Core
         /// Remote FX encode includes sub transforms like 
         /// DWT, Quantization, Linearization and RLGR encode.
         /// </example>
-        IEnumerable<ICodecAction> SubActions { get; }
+        List<ICodecAction> SubActions { get; }
 
         /// <summary>
         /// All the parameters needed to perform the transformation.

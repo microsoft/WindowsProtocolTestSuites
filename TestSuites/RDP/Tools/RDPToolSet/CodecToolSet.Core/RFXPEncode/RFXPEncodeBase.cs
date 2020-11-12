@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -183,7 +184,7 @@ namespace CodecToolSet.Core.RFXPEncode
 
         public abstract Tile[] DoAction(Tile[] inputs);
 
-        public IEnumerable<ICodecAction> SubActions { get; protected set; }
+        public List<ICodecAction> SubActions { get; protected set; }
 
         public Dictionary<String, ICodecParam> Parameters { get; protected set; }
     }

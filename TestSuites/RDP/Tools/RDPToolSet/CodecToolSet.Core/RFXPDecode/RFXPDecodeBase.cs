@@ -167,7 +167,7 @@ namespace CodecToolSet.Core.RFXPDecode
 
         public abstract Tile[] DoAction(Tile[] inputs);
 
-        public IEnumerable<ICodecAction> SubActions { get; protected set; }
+        public List<ICodecAction> SubActions { get; protected set; }
 
         public Dictionary<String, ICodecParam> Parameters { get; protected set; }
     }

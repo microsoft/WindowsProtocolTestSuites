@@ -1,0 +1,326 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>RLGREncoder.cs</title>
+<link href="../../Content/csharp.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- code formatted by http://manoli.net/csharpformat/ -->
+<div class="csharpcode">
+<pre><span class="lnum">   1:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   2:  </span><span class="rem">// Copyright (c) Microsoft Corporation. All rights reserved.</span></pre>
+<pre><span class="lnum">   3:  </span><span class="rem">//------------------------------------------------------------------------------</span></pre>
+<pre><span class="lnum">   4:  </span>&nbsp;</pre>
+<pre><span class="lnum">   5:  </span><span class="kwrd">using</span> System;</pre>
+<pre><span class="lnum">   6:  </span><span class="kwrd">using</span> System.Collections.Generic;</pre>
+<pre><span class="lnum">   7:  </span>&nbsp;</pre>
+<pre><span class="lnum">   8:  </span><span class="kwrd">namespace</span> Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</pre>
+<pre><span class="lnum">   9:  </span>{</pre>
+<pre><span class="lnum">  10:  </span>    <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  11:  </span>    <span class="rem">/// The RLGR encoder</span></pre>
+<pre><span class="lnum">  12:  </span>    <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  13:  </span>    <span class="kwrd">public</span> <span class="kwrd">class</span> RLGREncoder</pre>
+<pre><span class="lnum">  14:  </span>    {</pre>
+<pre><span class="lnum">  15:  </span>        <span class="rem">// Constants used within the RLGR1/RLGR3 algorithm</span></pre>
+<pre><span class="lnum">  16:  </span>&nbsp;</pre>
+<pre><span class="lnum">  17:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> KPMAX = 80;  <span class="rem">// max value for kp or krp</span></pre>
+<pre><span class="lnum">  18:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> LSGR = 3;  <span class="rem">// shift count to convert kp to k</span></pre>
+<pre><span class="lnum">  19:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> UP_GR = 4;  <span class="rem">// increase in kp after a zero run in RL mode</span></pre>
+<pre><span class="lnum">  20:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> DN_GR = 6;  <span class="rem">// decrease in kp after a nonzero symbol in RL mode</span></pre>
+<pre><span class="lnum">  21:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> UQ_GR = 3;   <span class="rem">// increase in kp after nonzero symbol in GR mode</span></pre>
+<pre><span class="lnum">  22:  </span>        <span class="kwrd">const</span> <span class="kwrd">int</span> DQ_GR = 3;   <span class="rem">// decrease in kp after zero symbol in GR mode</span></pre>
+<pre><span class="lnum">  23:  </span>&nbsp;</pre>
+<pre><span class="lnum">  24:  </span>        <span class="kwrd">short</span>[] inputData;</pre>
+<pre><span class="lnum">  25:  </span>        <span class="kwrd">int</span> nextInputIdx;</pre>
+<pre><span class="lnum">  26:  </span>        <span class="kwrd">int</span> bufferOffset = 0;</pre>
+<pre><span class="lnum">  27:  </span>        <span class="kwrd">byte</span>[] pBuffer;</pre>
+<pre><span class="lnum">  28:  </span>&nbsp;</pre>
+<pre><span class="lnum">  29:  </span>        <span class="rem">/// &lt;summary&gt;</span></pre>
+<pre><span class="lnum">  30:  </span>        <span class="rem">/// Do ALGR encode to the input data.</span></pre>
+<pre><span class="lnum">  31:  </span>        <span class="rem">/// &lt;/summary&gt;</span></pre>
+<pre><span class="lnum">  32:  </span>        <span class="rem">/// &lt;param name="inputArr"&gt;Input data to be encoded.&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  33:  </span>        <span class="rem">/// &lt;param name="mode"&gt;The ALGR mode, can be RLGR1 or RLGR3.&lt;/param&gt;</span></pre>
+<pre><span class="lnum">  34:  </span>        <span class="rem">/// &lt;returns&gt;The encoded data.&lt;/returns&gt;</span></pre>
+<pre id="Encode"><span class="lnum">  35:  </span>        <span class="kwrd">public</span> <span class="kwrd">byte</span>[] Encode(<span class="kwrd">short</span>[] inputArr, EntropyAlgorithm mode)</pre>
+<pre><span class="lnum">  36:  </span>        {</pre>
+<pre><span class="lnum">  37:  </span>            inputData = inputArr;</pre>
+<pre><span class="lnum">  38:  </span>            nextInputIdx = 0;</pre>
+<pre><span class="lnum">  39:  </span>            bufferOffset = 0; <span class="rem">//offset&amp;0xFFFFFFF8 = byte offset, offset&amp;0x7 = bit offset</span></pre>
+<pre><span class="lnum">  40:  </span>            pBuffer = <span class="kwrd">new</span> <span class="kwrd">byte</span>[inputArr.Length];</pre>
+<pre><span class="lnum">  41:  </span>&nbsp;</pre>
+<pre><span class="lnum">  42:  </span>            <a class="func-ref" href="#RLGR_Encode">RLGR_Encode</a>(mode);</pre>
+<pre><span class="lnum">  43:  </span>            <span class="kwrd">int</span> numbytes = bufferOffset &gt;&gt; 3;</pre>
+<pre><span class="lnum">  44:  </span>            <span class="kwrd">int</span> bitOffset = bufferOffset &amp; 7;</pre>
+<pre><span class="lnum">  45:  </span>            <span class="kwrd">if</span> (bitOffset != 0) numbytes++;</pre>
+<pre><span class="lnum">  46:  </span>&nbsp;</pre>
+<pre><span class="lnum">  47:  </span>            <span class="kwrd">byte</span>[] encodedBytes = <span class="kwrd">new</span> <span class="kwrd">byte</span>[numbytes];</pre>
+<pre><span class="lnum">  48:  </span>            Array.Copy(pBuffer, encodedBytes, encodedBytes.Length);</pre>
+<pre><span class="lnum">  49:  </span>            <span class="kwrd">return</span> encodedBytes;</pre>
+<pre><span class="lnum">  50:  </span>        }</pre>
+<pre><span class="lnum">  51:  </span>&nbsp;</pre>
+<pre><span class="lnum">  52:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  53:  </span>        <span class="rem">// Returns the next coefficient (a signed int) to encode, from the input stream</span></pre>
+<pre><span class="lnum">  54:  </span>        <span class="rem">//</span></pre>
+<pre id="GetNextInput"><span class="lnum">  55:  </span>        <span class="kwrd">int</span> GetNextInput()</pre>
+<pre><span class="lnum">  56:  </span>        {</pre>
+<pre><span class="lnum">  57:  </span>            <span class="kwrd">return</span> (<span class="kwrd">int</span>)inputData[nextInputIdx++];</pre>
+<pre><span class="lnum">  58:  </span>        }</pre>
+<pre><span class="lnum">  59:  </span>&nbsp;</pre>
+<pre id="hasMoreData"><span class="lnum">  60:  </span>        <span class="kwrd">bool</span> hasMoreData()</pre>
+<pre><span class="lnum">  61:  </span>        {</pre>
+<pre><span class="lnum">  62:  </span>            <span class="kwrd">return</span> (nextInputIdx &lt;= inputData.Length - 1);</pre>
+<pre><span class="lnum">  63:  </span>        }</pre>
+<pre><span class="lnum">  64:  </span>&nbsp;</pre>
+<pre><span class="lnum">  65:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  66:  </span>        <span class="rem">// Emit bitPattern to the output bitstream.</span></pre>
+<pre><span class="lnum">  67:  </span>        <span class="rem">// The bitPattern value represents a bit sequence that is generated by shifting </span></pre>
+<pre><span class="lnum">  68:  </span>        <span class="rem">// new bits in from the right. If we take the binary representation of bitPattern, </span></pre>
+<pre><span class="lnum">  69:  </span>        <span class="rem">// with N(numBits-1) being the leftmost bit position and 0 being the rightmost bit position, </span></pre>
+<pre><span class="lnum">  70:  </span>        <span class="rem">// the mapping of bitPattern to the output bytes is as follows:</span></pre>
+<pre><span class="lnum">  71:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  72:  </span>        <span class="rem">//     bitPattern[N..0] -&gt; byte[MSB..LSB] .. byte[MSB..LSB]</span></pre>
+<pre><span class="lnum">  73:  </span>        <span class="rem">//</span></pre>
+<pre id="OutputBits"><span class="lnum">  74:  </span>        <span class="kwrd">public</span> <span class="kwrd">void</span> OutputBits(</pre>
+<pre><span class="lnum">  75:  </span>            <span class="kwrd">int</span> numBits,      <span class="rem">// number of bits in bitPattern</span></pre>
+<pre><span class="lnum">  76:  </span>            <span class="kwrd">int</span> bitPattern   <span class="rem">// bit pattern</span></pre>
+<pre><span class="lnum">  77:  </span>            )</pre>
+<pre><span class="lnum">  78:  </span>        {</pre>
+<pre><span class="lnum">  79:  </span>            <span class="kwrd">int</span> patternOffset = numBits - 1;</pre>
+<pre><span class="lnum">  80:  </span>&nbsp;</pre>
+<pre><span class="lnum">  81:  </span>            while (patternOffset &gt;= 0)</pre>
+<pre><span class="lnum">  82:  </span>            {</pre>
+<pre><span class="lnum">  83:  </span>                <span class="kwrd">int</span> bit = ((bitPattern &amp; (1 &lt;&lt; patternOffset)) != 0) ? 1 : 0;</pre>
+<pre><span class="lnum">  84:  </span>                <a class="func-ref" href="#OutputBit">OutputBit</a>(1, bit);</pre>
+<pre><span class="lnum">  85:  </span>                patternOffset--;</pre>
+<pre><span class="lnum">  86:  </span>            }</pre>
+<pre><span class="lnum">  87:  </span>        }</pre>
+<pre><span class="lnum">  88:  </span>&nbsp;</pre>
+<pre><span class="lnum">  89:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum">  90:  </span>        <span class="rem">// Emit a bit (0 or 1), count number of times, to the output bitstream</span></pre>
+<pre><span class="lnum">  91:  </span>        <span class="rem">//</span></pre>
+<pre id="OutputBit"><span class="lnum">  92:  </span>        <span class="kwrd">void</span> OutputBit(</pre>
+<pre><span class="lnum">  93:  </span>            <span class="kwrd">int</span> count,     <span class="rem">// number of times to emit the bit</span></pre>
+<pre><span class="lnum">  94:  </span>            <span class="kwrd">int</span> bit        <span class="rem">// 0 or 1</span></pre>
+<pre><span class="lnum">  95:  </span>            )</pre>
+<pre><span class="lnum">  96:  </span>        {</pre>
+<pre><span class="lnum">  97:  </span>            <span class="kwrd">if</span> (count == 0) <span class="kwrd">return</span>;</pre>
+<pre><span class="lnum">  98:  </span>&nbsp;</pre>
+<pre><span class="lnum">  99:  </span>            <span class="kwrd">for</span> (<span class="kwrd">int</span> i = 0; i &lt; count; i++)</pre>
+<pre><span class="lnum"> 100:  </span>            {</pre>
+<pre><span class="lnum"> 101:  </span>                <span class="kwrd">int</span> bitOffset = bufferOffset &amp; 7;</pre>
+<pre><span class="lnum"> 102:  </span>                <span class="kwrd">int</span> bufferBoundary = bufferOffset &gt;&gt; 3;</pre>
+<pre><span class="lnum"> 103:  </span>                <span class="kwrd">if</span> (bit != 0) <span class="rem">// bit 1</span></pre>
+<pre><span class="lnum"> 104:  </span>                {</pre>
+<pre><span class="lnum"> 105:  </span>                    pBuffer[bufferBoundary] |= (<span class="kwrd">byte</span>)(1 &lt;&lt; (7 - bitOffset));</pre>
+<pre><span class="lnum"> 106:  </span>                }</pre>
+<pre><span class="lnum"> 107:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 108:  </span>                {</pre>
+<pre><span class="lnum"> 109:  </span>                    pBuffer[bufferBoundary] &amp;= (<span class="kwrd">byte</span>)(0xFF - ((<span class="kwrd">byte</span>)(1 &lt;&lt; (7 - bitOffset))));</pre>
+<pre><span class="lnum"> 110:  </span>                }</pre>
+<pre><span class="lnum"> 111:  </span>                bufferOffset++;</pre>
+<pre><span class="lnum"> 112:  </span>            }</pre>
+<pre><span class="lnum"> 113:  </span>        }</pre>
+<pre><span class="lnum"> 114:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 115:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum"> 116:  </span>        <span class="rem">// Returns the least number of bits required to represent a given value</span></pre>
+<pre><span class="lnum"> 117:  </span>        <span class="rem">// </span></pre>
+<pre id="GetMinBits"><span class="lnum"> 118:  </span>        <span class="kwrd">uint</span> GetMinBits(</pre>
+<pre><span class="lnum"> 119:  </span>            <span class="kwrd">int</span> val      <span class="rem">// returns ceil(log2(val))</span></pre>
+<pre><span class="lnum"> 120:  </span>            )</pre>
+<pre><span class="lnum"> 121:  </span>        {</pre>
+<pre><span class="lnum"> 122:  </span>            <span class="kwrd">uint</span> m1 = (<span class="kwrd">uint</span>)Math.Ceiling(Math.Log(val, 2));</pre>
+<pre><span class="lnum"> 123:  </span>            while ((val &gt;&gt; (<span class="kwrd">int</span>)m1) != 0)</pre>
+<pre><span class="lnum"> 124:  </span>            {</pre>
+<pre><span class="lnum"> 125:  </span>                m1++;</pre>
+<pre><span class="lnum"> 126:  </span>            }</pre>
+<pre><span class="lnum"> 127:  </span>            <span class="kwrd">return</span> m1;</pre>
+<pre><span class="lnum"> 128:  </span>        }</pre>
+<pre><span class="lnum"> 129:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 130:  </span>        <span class="rem">// </span></pre>
+<pre><span class="lnum"> 131:  </span>        <span class="rem">// Converts the input value to (2 * abs(input) - sign(input)), </span></pre>
+<pre><span class="lnum"> 132:  </span>        <span class="rem">// where sign(input) = (input &lt; 0 ? 1 : 0) and returns it</span></pre>
+<pre><span class="lnum"> 133:  </span>        <span class="rem">//</span></pre>
+<pre id="Get2MagSign"><span class="lnum"> 134:  </span>        <span class="kwrd">uint</span> Get2MagSign(</pre>
+<pre><span class="lnum"> 135:  </span>            <span class="kwrd">int</span> input    <span class="rem">// input value</span></pre>
+<pre><span class="lnum"> 136:  </span>            )</pre>
+<pre><span class="lnum"> 137:  </span>        {</pre>
+<pre><span class="lnum"> 138:  </span>            <span class="kwrd">uint</span> output = (<span class="kwrd">uint</span>)(2 * Math.Abs(input));</pre>
+<pre><span class="lnum"> 139:  </span>            <span class="kwrd">if</span> (input &lt; 0) output -= 1;</pre>
+<pre><span class="lnum"> 140:  </span>            <span class="kwrd">return</span> output;</pre>
+<pre><span class="lnum"> 141:  </span>        }</pre>
+<pre><span class="lnum"> 142:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 143:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 144:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum"> 145:  </span>        <span class="rem">// Update the passed parameter and clamp it to the range [0,KPMAX]</span></pre>
+<pre><span class="lnum"> 146:  </span>        <span class="rem">// Return the value of parameter right-shifted by LSGR</span></pre>
+<pre><span class="lnum"> 147:  </span>        <span class="rem">//</span></pre>
+<pre id="UpdateParam"><span class="lnum"> 148:  </span>        <span class="kwrd">int</span> UpdateParam(</pre>
+<pre><span class="lnum"> 149:  </span>            <span class="kwrd">ref</span> <span class="kwrd">int</span> param,    <span class="rem">// parameter to update</span></pre>
+<pre><span class="lnum"> 150:  </span>            <span class="kwrd">int</span> deltaP    <span class="rem">// update delta</span></pre>
+<pre><span class="lnum"> 151:  </span>            )</pre>
+<pre><span class="lnum"> 152:  </span>        {</pre>
+<pre><span class="lnum"> 153:  </span>            param += deltaP;</pre>
+<pre><span class="lnum"> 154:  </span>            <span class="kwrd">if</span> (param &gt; KPMAX) param = KPMAX;</pre>
+<pre><span class="lnum"> 155:  </span>            <span class="kwrd">if</span> (param &lt; 0) param = 0;</pre>
+<pre><span class="lnum"> 156:  </span>            <span class="kwrd">return</span> (param &gt;&gt; LSGR);</pre>
+<pre><span class="lnum"> 157:  </span>        }</pre>
+<pre><span class="lnum"> 158:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 159:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 160:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum"> 161:  </span>        <span class="rem">// Outputs the Golomb/Rice encoding of a non-negative integer</span></pre>
+<pre><span class="lnum"> 162:  </span>        <span class="rem">//</span></pre>
+<pre id="CodeGR"><span class="lnum"> 163:  </span>        <span class="kwrd">void</span> CodeGR(</pre>
+<pre><span class="lnum"> 164:  </span>            <span class="kwrd">ref</span> <span class="kwrd">int</span> krp,   <span class="rem">// GR parameter, used and updated based on the input value</span></pre>
+<pre><span class="lnum"> 165:  </span>            <span class="kwrd">uint</span> val     <span class="rem">// input non-negative value to be encoded</span></pre>
+<pre><span class="lnum"> 166:  </span>            )</pre>
+<pre><span class="lnum"> 167:  </span>        {</pre>
+<pre><span class="lnum"> 168:  </span>            <span class="kwrd">int</span> kr = krp &gt;&gt; LSGR;</pre>
+<pre><span class="lnum"> 169:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 170:  </span>            <span class="rem">// unary part of GR code</span></pre>
+<pre><span class="lnum"> 171:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 172:  </span>            <span class="kwrd">uint</span> vk = val &gt;&gt; kr;</pre>
+<pre><span class="lnum"> 173:  </span>            <a class="func-ref" href="#OutputBit">OutputBit</a>((<span class="kwrd">int</span>)vk, 1);</pre>
+<pre><span class="lnum"> 174:  </span>            <a class="func-ref" href="#OutputBit">OutputBit</a>(1, 0);</pre>
+<pre><span class="lnum"> 175:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 176:  </span>            <span class="rem">// remainder part of GR code, if needed</span></pre>
+<pre><span class="lnum"> 177:  </span>            <span class="kwrd">if</span> (kr != 0)</pre>
+<pre><span class="lnum"> 178:  </span>            {</pre>
+<pre><span class="lnum"> 179:  </span>                <a class="func-ref" href="#OutputBits">OutputBits</a>(kr, (<span class="kwrd">int</span>)(val &amp; ((1 &lt;&lt; kr) - 1)));</pre>
+<pre><span class="lnum"> 180:  </span>            }</pre>
+<pre><span class="lnum"> 181:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 182:  </span>            <span class="rem">// update krp, only if it is not equal to 1</span></pre>
+<pre><span class="lnum"> 183:  </span>            <span class="kwrd">if</span> (vk == 0)</pre>
+<pre><span class="lnum"> 184:  </span>            {</pre>
+<pre><span class="lnum"> 185:  </span>                <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> krp, -2);</pre>
+<pre><span class="lnum"> 186:  </span>            }</pre>
+<pre><span class="lnum"> 187:  </span>            <span class="kwrd">else</span> <span class="kwrd">if</span> (vk &gt; 1)</pre>
+<pre><span class="lnum"> 188:  </span>            {</pre>
+<pre><span class="lnum"> 189:  </span>                <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> krp, (<span class="kwrd">int</span>)vk);</pre>
+<pre><span class="lnum"> 190:  </span>            }</pre>
+<pre><span class="lnum"> 191:  </span>        }</pre>
+<pre><span class="lnum"> 192:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 193:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 194:  </span>        <span class="rem">//</span></pre>
+<pre><span class="lnum"> 195:  </span>        <span class="rem">// Routine that outputs a stream of RLGR1/RLGR3-encoded bits</span></pre>
+<pre><span class="lnum"> 196:  </span>        <span class="rem">//</span></pre>
+<pre id="RLGR_Encode"><span class="lnum"> 197:  </span>        <span class="kwrd">void</span> RLGR_Encode(</pre>
+<pre><span class="lnum"> 198:  </span>            EntropyAlgorithm rlgrMode    <span class="rem">// RLGR1 || RLGR3</span></pre>
+<pre><span class="lnum"> 199:  </span>            )</pre>
+<pre><span class="lnum"> 200:  </span>        {</pre>
+<pre><span class="lnum"> 201:  </span>            <span class="rem">// initialize the parameters</span></pre>
+<pre><span class="lnum"> 202:  </span>            <span class="kwrd">int</span> k = 1;</pre>
+<pre><span class="lnum"> 203:  </span>            <span class="kwrd">int</span> kp = 1 &lt;&lt; LSGR;</pre>
+<pre><span class="lnum"> 204:  </span>            <span class="rem">//int kr = 1;</span></pre>
+<pre><span class="lnum"> 205:  </span>            <span class="kwrd">int</span> krp = 1 &lt;&lt; LSGR;</pre>
+<pre><span class="lnum"> 206:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 207:  </span>            <span class="rem">// process all the input coefficients</span></pre>
+<pre><span class="lnum"> 208:  </span>            while (<a class="func-ref" href="#hasMoreData">hasMoreData</a>())</pre>
+<pre><span class="lnum"> 209:  </span>            {</pre>
+<pre><span class="lnum"> 210:  </span>                <span class="kwrd">int</span> input;</pre>
+<pre><span class="lnum"> 211:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 212:  </span>                <span class="kwrd">if</span> (k != 0)</pre>
+<pre><span class="lnum"> 213:  </span>                {</pre>
+<pre><span class="lnum"> 214:  </span>                    <span class="rem">// RUN-LENGTH MODE</span></pre>
+<pre><span class="lnum"> 215:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 216:  </span>                    <span class="rem">// collect the run of zeros in the input stream</span></pre>
+<pre><span class="lnum"> 217:  </span>                    <span class="kwrd">int</span> numZeros = 0;</pre>
+<pre><span class="lnum"> 218:  </span>                    while ((input = <a class="func-ref" href="#GetNextInput">GetNextInput</a>()) == 0)</pre>
+<pre><span class="lnum"> 219:  </span>                    {</pre>
+<pre><span class="lnum"> 220:  </span>                        ++numZeros;</pre>
+<pre><span class="lnum"> 221:  </span>                        <span class="kwrd">if</span> (!<a class="func-ref" href="#hasMoreData">hasMoreData</a>()) <span class="kwrd">break</span>;</pre>
+<pre><span class="lnum"> 222:  </span>                    }</pre>
+<pre><span class="lnum"> 223:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 224:  </span>                    <span class="rem">// emit output zebros</span></pre>
+<pre><span class="lnum"> 225:  </span>                    <span class="kwrd">int</span> runmax = 1 &lt;&lt; k;</pre>
+<pre><span class="lnum"> 226:  </span>                    while (numZeros &gt;= runmax)</pre>
+<pre><span class="lnum"> 227:  </span>                    {</pre>
+<pre><span class="lnum"> 228:  </span>                        <a class="func-ref" href="#OutputBit">OutputBit</a>(1, 0);             <span class="rem">// output a zero bit</span></pre>
+<pre><span class="lnum"> 229:  </span>                        numZeros -= runmax;</pre>
+<pre><span class="lnum"> 230:  </span>                        k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, UP_GR);  <span class="rem">// update kp, k </span></pre>
+<pre><span class="lnum"> 231:  </span>                        runmax = 1 &lt;&lt; k;</pre>
+<pre><span class="lnum"> 232:  </span>                    }</pre>
+<pre><span class="lnum"> 233:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 234:  </span>                    <span class="rem">// output a 1 to terminate runs</span></pre>
+<pre><span class="lnum"> 235:  </span>                    <a class="func-ref" href="#OutputBit">OutputBit</a>(1, 1);</pre>
+<pre><span class="lnum"> 236:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 237:  </span>                    <span class="rem">// output the remaining run length using k bits</span></pre>
+<pre><span class="lnum"> 238:  </span>                    <a class="func-ref" href="#OutputBits">OutputBits</a>(k, numZeros);</pre>
+<pre><span class="lnum"> 239:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 240:  </span>                    <span class="kwrd">if</span> (input != 0)</pre>
+<pre><span class="lnum"> 241:  </span>                    {</pre>
+<pre><span class="lnum"> 242:  </span>                        <span class="rem">// encode the nonzero value using GR coding</span></pre>
+<pre><span class="lnum"> 243:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 244:  </span>                        <span class="kwrd">int</span> mag = Math.Abs(input);            <span class="rem">// absolute value of input coefficient</span></pre>
+<pre><span class="lnum"> 245:  </span>                        <span class="kwrd">int</span> sign = (input &lt; 0 ? 1 : 0);  <span class="rem">// sign of input coefficient</span></pre>
+<pre><span class="lnum"> 246:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 247:  </span>                        <a class="func-ref" href="#OutputBit">OutputBit</a>(1, sign);      <span class="rem">// output the sign bit</span></pre>
+<pre><span class="lnum"> 248:  </span>                        <a class="func-ref" href="#CodeGR">CodeGR</a>(<span class="kwrd">ref</span> krp, (<span class="kwrd">uint</span>)(mag - 1));   <span class="rem">// output GR code for (mag - 1)</span></pre>
+<pre><span class="lnum"> 249:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 250:  </span>                        k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, -DN_GR);</pre>
+<pre><span class="lnum"> 251:  </span>                    }</pre>
+<pre><span class="lnum"> 252:  </span>                }</pre>
+<pre><span class="lnum"> 253:  </span>                <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 254:  </span>                {</pre>
+<pre><span class="lnum"> 255:  </span>                    <span class="rem">// GOLOMB-RICE MODE</span></pre>
+<pre><span class="lnum"> 256:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 257:  </span>                    <span class="kwrd">if</span> (rlgrMode == EntropyAlgorithm.CLW_ENTROPY_RLGR1)</pre>
+<pre><span class="lnum"> 258:  </span>                    {</pre>
+<pre><span class="lnum"> 259:  </span>                        <span class="rem">// RLGR1 variant</span></pre>
+<pre><span class="lnum"> 260:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 261:  </span>                        <span class="rem">// convert input to (2*magnitude - sign), encode using GR code</span></pre>
+<pre><span class="lnum"> 262:  </span>                        <span class="kwrd">uint</span> twoMs = <a class="func-ref" href="#Get2MagSign">Get2MagSign</a>(<a class="func-ref" href="#GetNextInput">GetNextInput</a>());</pre>
+<pre><span class="lnum"> 263:  </span>                        <a class="func-ref" href="#CodeGR">CodeGR</a>(<span class="kwrd">ref</span> krp, twoMs);</pre>
+<pre><span class="lnum"> 264:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 265:  </span>                        <span class="rem">// update k, kp</span></pre>
+<pre><span class="lnum"> 266:  </span>                        <span class="kwrd">if</span> (twoMs == 0)</pre>
+<pre><span class="lnum"> 267:  </span>                        {</pre>
+<pre><span class="lnum"> 268:  </span>                            k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, UQ_GR);</pre>
+<pre><span class="lnum"> 269:  </span>                        }</pre>
+<pre><span class="lnum"> 270:  </span>                        <span class="kwrd">else</span></pre>
+<pre><span class="lnum"> 271:  </span>                        {</pre>
+<pre><span class="lnum"> 272:  </span>                            k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, -DQ_GR);</pre>
+<pre><span class="lnum"> 273:  </span>                        }</pre>
+<pre><span class="lnum"> 274:  </span>                    }</pre>
+<pre><span class="lnum"> 275:  </span>                    <span class="kwrd">else</span> <span class="rem">// rlgrMode == RLGR3</span></pre>
+<pre><span class="lnum"> 276:  </span>                    {</pre>
+<pre><span class="lnum"> 277:  </span>                        <span class="rem">// RLGR3 variant</span></pre>
+<pre><span class="lnum"> 278:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 279:  </span>                        <span class="rem">// convert the next two input values to (2*magnitude - sign) and</span></pre>
+<pre><span class="lnum"> 280:  </span>                        <span class="rem">// encode their sum using GR code</span></pre>
+<pre><span class="lnum"> 281:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 282:  </span>                        <span class="kwrd">uint</span> twoMs1 = <a class="func-ref" href="#Get2MagSign">Get2MagSign</a>(<a class="func-ref" href="#GetNextInput">GetNextInput</a>());</pre>
+<pre><span class="lnum"> 283:  </span>                        <span class="kwrd">uint</span> twoMs2 = 0;</pre>
+<pre><span class="lnum"> 284:  </span>                        <span class="kwrd">if</span> (<a class="func-ref" href="#hasMoreData">hasMoreData</a>())</pre>
+<pre><span class="lnum"> 285:  </span>                        {</pre>
+<pre><span class="lnum"> 286:  </span>                            twoMs2 = <a class="func-ref" href="#Get2MagSign">Get2MagSign</a>(<a class="func-ref" href="#GetNextInput">GetNextInput</a>());</pre>
+<pre><span class="lnum"> 287:  </span>                        }</pre>
+<pre><span class="lnum"> 288:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 289:  </span>                        <span class="kwrd">uint</span> sum2Ms = twoMs1 + twoMs2;</pre>
+<pre><span class="lnum"> 290:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 291:  </span>                        <a class="func-ref" href="#CodeGR">CodeGR</a>(<span class="kwrd">ref</span> krp, sum2Ms);</pre>
+<pre><span class="lnum"> 292:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 293:  </span>                        <span class="rem">// encode binary representation of the first input (twoMs1).  </span></pre>
+<pre><span class="lnum"> 294:  </span>                        <a class="func-ref" href="#OutputBits">OutputBits</a>((<span class="kwrd">int</span>)<a class="func-ref" href="#GetMinBits">GetMinBits</a>((<span class="kwrd">int</span>)sum2Ms), (<span class="kwrd">int</span>)twoMs1);</pre>
+<pre><span class="lnum"> 295:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 296:  </span>                        <span class="rem">// update k,kp for the two input values</span></pre>
+<pre><span class="lnum"> 297:  </span>                        <span class="kwrd">if</span> (twoMs1 != 0 &amp;&amp; twoMs2 != 0)</pre>
+<pre><span class="lnum"> 298:  </span>                        {</pre>
+<pre><span class="lnum"> 299:  </span>                            k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, -2 * DQ_GR);</pre>
+<pre><span class="lnum"> 300:  </span>                        }</pre>
+<pre><span class="lnum"> 301:  </span>                        <span class="kwrd">else</span> <span class="kwrd">if</span> (twoMs1 == 0 &amp;&amp; twoMs2 == 0)</pre>
+<pre><span class="lnum"> 302:  </span>                        {</pre>
+<pre><span class="lnum"> 303:  </span>                            k = <a class="func-ref" href="#UpdateParam">UpdateParam</a>(<span class="kwrd">ref</span> kp, 2 * UQ_GR);</pre>
+<pre><span class="lnum"> 304:  </span>                        }</pre>
+<pre><span class="lnum"> 305:  </span>                    }</pre>
+<pre><span class="lnum"> 306:  </span>                }</pre>
+<pre><span class="lnum"> 307:  </span>            }</pre>
+<pre><span class="lnum"> 308:  </span>        }</pre>
+<pre><span class="lnum"> 309:  </span>&nbsp;</pre>
+<pre><span class="lnum"> 310:  </span>    }</pre>
+<pre><span class="lnum"> 311:  </span>}</pre>
+</div>
+
+
+</body>
+</html>

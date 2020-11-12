@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using Newtonsoft.Json;
 
 
 // ReSharper disable once CheckNamespace
@@ -57,15 +58,15 @@ namespace CodecToolSet.Core.RFXEncode
         {
             get
             {
-                var parameter = Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY];
-                if (parameter is QuantizationFactorsArray)
+                if (Parameters.ContainsKey(Constants.PARAM_NAME_QUANT_FACTORS_ARRAY))
                 {
-                    return (QuantizationFactorsArray)parameter;
+                    var parameter = Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY];
+                    if (parameter is QuantizationFactorsArray)
+                    {
+                        return (QuantizationFactorsArray)parameter;
+                    }
                 }
-                else
-                {
-                    return RFXEncodeBase.DEFAULT_QUANT_ARRAY;
-                }
+                return RFXEncodeBase.DEFAULT_QUANT_ARRAY;
             }
         }
 
@@ -73,15 +74,15 @@ namespace CodecToolSet.Core.RFXEncode
         {
             get
             {
-                var parameter = Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM];
-                if (parameter is EntropyAlgorithm)
+                if (Parameters.ContainsKey(Constants.PARAM_NAME_ENTROPY_ALGORITHM))
                 {
-                    return (EntropyAlgorithm)parameter;
+                    var parameter = Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM];
+                    if (parameter is EntropyAlgorithm)
+                    {
+                        return (EntropyAlgorithm)parameter;
+                    }
                 }
-                else
-                {
-                    return RFXEncodeBase.ENTROPY_ALG;
-                }
+                return RFXEncodeBase.ENTROPY_ALG;
             }
         }
 
@@ -96,7 +97,7 @@ namespace CodecToolSet.Core.RFXEncode
             return new[] { DoAction(inputs.FirstOrDefault()) };
         }
 
-        public IEnumerable<ICodecAction> SubActions { get; protected set; }
+        public List<ICodecAction> SubActions { get; protected set; }
 
         public Dictionary<String, ICodecParam> Parameters { get; protected set; }
     }
