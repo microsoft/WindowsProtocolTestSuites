@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,7 +21,7 @@ namespace RDPToolSet.WebCore.Controllers
         public RFXEncodeController(IWebHostEnvironment hostingEnvironment)
             : base(hostingEnvironment)
         {
-            
+
         }
 
         public override ActionResult Index()
@@ -26,10 +29,10 @@ namespace RDPToolSet.WebCore.Controllers
             var rfxEncode = new RFXEncode();
             var rfxEnocdeModel = new RFXEncodeViewModel();
             var envValues = new Dictionary<string, object>
-           {
-               {ActionKey, rfxEncode},
-               {ModelKey, rfxEnocdeModel}
-           };
+               {
+                   {ActionKey, rfxEncode},
+                   {ModelKey, rfxEnocdeModel}
+               };
             SaveToSession(envValues);
             LoadFromSession();
             return View(_viewModel);
@@ -37,7 +40,7 @@ namespace RDPToolSet.WebCore.Controllers
 
         public async Task<IActionResult> Encode()
         {
-            try
+            var result = await ActionHelper.ExecuteWithCatchException(async () =>
             {
                 using (var bodyStream = new StreamReader(Request.Body))
                 {
@@ -52,13 +55,9 @@ namespace RDPToolSet.WebCore.Controllers
                     var tile = Tile.FromFile(encodeImagePath);
 
                     _codecAction.DoAction(tile);
-                    //HttpContext.Session.SetObject(ActionKey, _codecAction);
-                    return Json(ReturnResult<string>.Success("Success"));
                 }
-            }catch(Exception ex)
-            {
-                return Json(ReturnResult<string>.Fail(ex.Message));
-            }
+            });
+            return Json(result);
         }
     }
 }

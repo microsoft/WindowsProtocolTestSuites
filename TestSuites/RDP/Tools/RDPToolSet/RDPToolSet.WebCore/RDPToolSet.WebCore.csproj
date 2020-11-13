@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>4765e9a4-bf7a-46dd-89d0-af2fcbb7355e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodecToolSet.Core\CodecToolSet.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Decoded\" />
+    <Folder Include="wwwroot\Images\Uploads\" />
   </ItemGroup>
 
 </Project>

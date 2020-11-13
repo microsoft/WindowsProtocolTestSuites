@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
-using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace RDPToolSet.WebCore.Views.ViewHelpers
 {

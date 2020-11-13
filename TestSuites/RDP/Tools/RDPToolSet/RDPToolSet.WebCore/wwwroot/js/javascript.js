@@ -975,16 +975,20 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
+        }).done(function (response) {
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // hide the first panel and expend the second panel 
-            $('.panel-group .panel-heading:first').find('a').click();
-            $('.panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.panel-group .panel-heading:first').find('a').click();
+                $('.panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('faled:' + response.data);
+            }
         });
     });
 

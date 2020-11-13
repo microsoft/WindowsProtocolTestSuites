@@ -42,8 +42,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodecToolSet.Core", "CodecT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodecToolSet.Tests", "CodecToolSet.Tests\CodecToolSet.Tests.csproj", "{A82D2712-A6B6-4D43-95C3-5C6E3899F0F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPToolSet.Web", "RDPToolSet.Web\RDPToolSet.Web.csproj", "{BF801081-BB5E-41AD-873D-593735C04C00}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cssp", "..\..\..\..\ProtoSDK\MS-CSSP\Cssp.csproj", "{EADACA3F-9082-43E1-9864-755CEAB4C942}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiLib", "..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj", "{C213C635-FCB5-4875-80B2-37EC2170DB32}"
@@ -56,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nlmp", "..\..\..\..\ProtoSD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{49D0DACF-7732-4DC4-8334-F770B68D95F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPToolSet.WebCore", "RDPToolSet.WebCore\RDPToolSet.WebCore.csproj", "{46ACBA9E-1896-4432-97B1-B5FB13516460}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPToolSet.WebCore", "RDPToolSet.WebCore\RDPToolSet.WebCore.csproj", "{46ACBA9E-1896-4432-97B1-B5FB13516460}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -248,18 +246,6 @@ Global
 		{A82D2712-A6B6-4D43-95C3-5C6E3899F0F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A82D2712-A6B6-4D43-95C3-5C6E3899F0F3}.Release|x64.ActiveCfg = Release|Any CPU
 		{A82D2712-A6B6-4D43-95C3-5C6E3899F0F3}.Release|x64.Build.0 = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Debug|x64.Build.0 = Debug|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.fxcop|Any CPU.ActiveCfg = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.fxcop|Any CPU.Build.0 = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.fxcop|x64.ActiveCfg = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.fxcop|x64.Build.0 = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|x64.ActiveCfg = Release|Any CPU
-		{BF801081-BB5E-41AD-873D-593735C04C00}.Release|x64.Build.0 = Release|Any CPU
 		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EADACA3F-9082-43E1-9864-755CEAB4C942}.Debug|x64.ActiveCfg = Debug|x64

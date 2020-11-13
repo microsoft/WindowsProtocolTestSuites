@@ -1,4 +1,7 @@
-﻿using CodecToolSet.Core;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using CodecToolSet.Core;
 using CodecToolSet.Core.RFXPEncode;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,9 +31,7 @@ namespace RDPToolSet.WebCore.Controllers
         protected const string ModelKey = "_viewModel";
         protected const string isActionValid = "isActionValid";
         protected const string isModelValid = "isModelValid";
-
-        private readonly IWebHostEnvironment _hostingEnvironment;
-        private const string ImageUploadFolder = "Images/Uploads";
+        protected readonly IWebHostEnvironment _hostingEnvironment;
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -116,15 +117,15 @@ namespace RDPToolSet.WebCore.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload(List<IFormFile> files, string imageType)
+        public ActionResult Upload(IFormFile file, string imageType)
         {
             // file type
-            if (files.Count > 0 && files[0] != null && files[0].Length > 0)
+            if (file != null && file.Length > 0)
             {
-                string[] filenames = files[0].FileName.Split(new[] { '.' });
+                string[] filenames = file.FileName.Split(new[] { '.' });
                 string filename = String.Format("{0}_{1}.{2}", filenames[0], DateTime.Now.Ticks, filenames.Length >= 2 ? filenames[1] : "");
 
-                string uploadPath = Path.Combine(this._hostingEnvironment.WebRootPath, ImageUploadFolder);
+                string uploadPath = Path.Combine(this._hostingEnvironment.WebRootPath, ActionHelper.ImageUploadFolder);
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
@@ -132,7 +133,7 @@ namespace RDPToolSet.WebCore.Controllers
 
                 var path = Path.Combine(uploadPath, filename);
 
-                using (var fileStream = files[0].OpenReadStream())
+                using (var fileStream = file.OpenReadStream())
                 {
                     using (var newfileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
                     {
@@ -188,7 +189,7 @@ namespace RDPToolSet.WebCore.Controllers
                 this.HttpContext.Session.SetObject(isPreFrameValid, false);
 
                 string filename = Path.GetFileName(this.HttpContext.Session.Get<string>(PreviousFrameImage));
-                string relativePath = $"~/{ImageUploadFolder}/" + filename;
+                string relativePath = $"~/{ActionHelper.ImageUploadFolder}/" + filename;
                 return Json(Url.Content(relativePath));
             }
         }
@@ -223,87 +224,94 @@ namespace RDPToolSet.WebCore.Controllers
                 return Json(ReturnResult<string>.Fail("Action not found"));
             }
 
-            //// retrieve the quant
-            //var quantArray = JsonHelper.RetrieveQuantsArray(request.Params.QuantizationFactorsArray);
+            // retrieve the quant
+            var quantArray = JsonHelper.RetrieveQuantsArray(request.Params.QuantizationFactorsArray);
 
-            //foreach (var _action in _codecAction.SubActions)
-            //{
-            //    _action.Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY] = quantArray;
-            //    _action.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(request.Params.EntropyAlgorithm);
-            //}
+            foreach (var _action in _codecAction.SubActions)
+            {
+                _action.Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY] = quantArray;
+                _action.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(request.Params.EntropyAlgorithm);
+            }
 
-            //// retrive tiles from Inputs
-            //var tileList = new List<Tile>();
-            //foreach (var tileJson in request.Inputs)
-            //{
-            //    Triplet<string> triplet = JsonHelper.RetrieveTriplet(tileJson);
-            //    string dataFormat = request.Params.UseDataFormat;
-            //    Tile tile = null;
-            //    if (dataFormat.Equals(Constants.DataFormat.HEX))
-            //    {
-            //        tile = Tile.FromStrings(triplet, new HexTileSerializer());
-            //    }
-            //    else
-            //    {
-            //        tile = Tile.FromStrings(triplet, new IntegerTileSerializer());
-            //    }
-            //    if (dataFormat.Equals(Constants.DataFormat.FixedPoint_11_5))
-            //    {
-            //        tile.RightShift(5);
-            //    }
-            //    if (dataFormat.Equals(Constants.DataFormat.FixedPoint_12_4))
-            //    {
-            //        tile.RightShift(4);
-            //    }
+            // retrive tiles from Inputs
+            var tileList = new List<Tile>();
+            foreach (var tileJson in request.Inputs)
+            {
+                Triplet<string> triplet = JsonHelper.RetrieveTriplet(tileJson);
+                string dataFormat = request.Params.UseDataFormat;
+                Tile tile = null;
+                if (dataFormat.Equals(Constants.DataFormat.HEX))
+                {
+                    tile = Tile.FromStrings(triplet, new HexTileSerializer());
+                }
+                else
+                {
+                    tile = Tile.FromStrings(triplet, new IntegerTileSerializer());
+                }
+                if (dataFormat.Equals(Constants.DataFormat.FixedPoint_11_5))
+                {
+                    tile.RightShift(5);
+                }
+                if (dataFormat.Equals(Constants.DataFormat.FixedPoint_12_4))
+                {
+                    tile.RightShift(4);
+                }
 
-            //    tileList.Add(tile);
-            //}
+                tileList.Add(tile);
+            }
 
-            //var result = action.DoAction(tileList.FirstOrDefault());
+            var result = action.DoAction(tileList.FirstOrDefault());
 
-            //// recompute the following steps and update
-            //bool following = false;
-            //Tile input = result;
-            //foreach (var act in _codecAction.SubActions)
-            //{
-            //    if (following)
-            //    {
-            //        result = act.DoAction(input);
-            //        input = result;
-            //    }
-            //    else
-            //    {
-            //        if (act.Name.Equals(request.Action))
-            //        {
-            //            following = true;
-            //        }
-            //    }
-            //}
+            // recompute the following steps and update
+            bool following = false;
+            Tile input = result;
+            foreach (var act in _codecAction.SubActions)
+            {
+                if (following)
+                {
+                    result = act.DoAction(input);
+                    input = result;
+                }
+                else
+                {
+                    if (act.Name.Equals(request.Action))
+                    {
+                        following = true;
+                    }
+                }
+            }
 
             return Json(ReturnResult<string>.Success("Success"));
         }
 
         public virtual ActionResult Input()
         {
-            //dynamic json = GetJsonObject(Request.InputStream);
+            try
+            {
+                using (var bodyStream = new StreamReader(Request.Body))
+                {
+                    var bodyText = bodyStream.ReadToEndAsync().GetAwaiter().GetResult();
+                    dynamic json = JsonConvert.DeserializeObject(bodyText);
+                    var action = CodecFactory.GetCodecAction((string)json.Action);
+                    // if action not found
+                    if (action == null)
+                    {
+                        return Json(ReturnResult<string>.Fail("Action not found"));
+                    }
 
-            //var action = CodecFactory.GetCodecAction((string)json.Action);
+                    //TODO: add parameters
+                    var tile = Tile.FromStrings(new Triplet<string>(
+                    json.Inputs.X, json.Inputs.Y, json.Inputs.Z),
+                    new IntegerTileSerializer());
 
-            //// if action not found
-            //if (action == null)
-            //{
-            //    return Json(ReturnResult<string>.Fail("Action not found"));
-            //}
-
-            //    //TODO: add parameters
-
-            //    var tile = Tile.FromStrings(new Triplet<string>(
-            //    json.Inputs.X, json.Inputs.Y, json.Inputs.Z),
-            //    new IntegerTileSerializer());
-
-            //var result = action.DoAction(tile);
-            return Json(ReturnResult<string>.Success("Success"));
-            //return Json(result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer()));
+                    var result = action.DoAction(tile);
+                    return Json(result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer()));
+                }
+            }
+            catch(Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
         public ActionResult DefaultProgQuants()
@@ -325,8 +333,7 @@ namespace RDPToolSet.WebCore.Controllers
         protected void LoadFromSession()
         {
             _codecAction = HttpContext.Session.Get<ICodecAction>(ActionKey);
-            //RemoveDuplicateSubActions();
-
+            
             _viewModel = HttpContext.Session.Get<ICodecViewModel>(ModelKey);
         }
 
@@ -345,33 +352,6 @@ namespace RDPToolSet.WebCore.Controllers
                  rfxpMenu
                  );
             ViewBag.model = layoutModel;
-        }
-
-        private void RemoveDuplicateSubActions()
-        {
-            if(this._codecAction==null || this._codecAction.SubActions == null)
-            {
-                return;
-            }
-
-            List<string> existsActions = new List<string>();
-            List<ICodecAction> needRemoveAcitons = new List<ICodecAction>();
-            this._codecAction.SubActions.ForEach(codeAction =>
-            {
-                if (existsActions.Contains(codeAction.Name))
-                {
-                    needRemoveAcitons.Add(codeAction);
-                }
-                else
-                {
-                    existsActions.Add(codeAction.Name);
-                }
-            });
-
-            needRemoveAcitons.ForEach(nra =>
-            {
-                this._codecAction.SubActions.Remove(nra);
-            });
         }
     }
 

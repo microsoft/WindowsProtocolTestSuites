@@ -1,8 +1,9 @@
-﻿using CodecToolSet.Core;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using CodecToolSet.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RDPToolSet.WebCore.Models
 {

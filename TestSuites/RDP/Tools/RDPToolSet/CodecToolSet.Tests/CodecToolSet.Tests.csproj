@@ -24,10 +24,6 @@
       <Project>{a9b6ec9b-e389-4f7d-820c-3c76d491459f}</Project>
       <Name>CodecToolSet.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RDPToolSet.Web\RDPToolSet.Web.csproj">
-      <Project>{bf801081-bb5e-41ad-873d-593735c04c00}</Project>
-      <Name>RDPToolSet.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
