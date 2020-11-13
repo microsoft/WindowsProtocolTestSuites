@@ -13,6 +13,10 @@ resources:
 pool: 
   vmImage: windows-2019
 
+
+pool: 
+  vmImage: windows-2019
+
 jobs:
 - job:
   displayName: DotNetCore Build
