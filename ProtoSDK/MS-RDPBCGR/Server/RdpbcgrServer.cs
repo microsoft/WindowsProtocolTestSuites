@@ -4426,9 +4426,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             else
             {
                 SocketTransportConfig config = new SocketTransportConfig();
-
-                IPHostEntry heserver = Dns.GetHostEntry(Dns.GetHostName());
-
                 config.LocalIpAddress = address;
                 config.Type = StackTransportType.Tcp;
                 config.Role = Role.Server;

@@ -58,7 +58,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         // Flag of packet header.
         private Packet_Header_Flags_Values headerFlags = Packet_Header_Flags_Values.NONE;
-
         #endregion
 
         #region Constructor
@@ -176,9 +175,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             string password,
             AccessMask accessMask)
         {
-            IPHostEntry hostEntry = Dns.GetHostEntry(server);
-            client.ConnectOverTCP(hostEntry.AddressList[0]);
-            serverPrincipleName = Smb2Utility.GetPrincipleName(hostEntry.HostName);
+            IPAddress address = null;
+            if(IPAddress.TryParse(server, out address)) // server is a ip address
+            {
+                client.ConnectOverTCP(address);
+                serverPrincipleName = server;
+            }
+            else
+            {
+                IPHostEntry hostEntry = Dns.GetHostEntry(server);
+                client.ConnectOverTCP(hostEntry.AddressList[0]);
+                serverPrincipleName = Smb2Utility.GetPrincipleName(hostEntry.HostName);
+            }
 
             Packet_Header header;
             NEGOTIATE_Response negotiateResponse;
@@ -573,8 +581,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             bool useServerToken)
         {
             serverPrincipleName = server;
-            IPHostEntry hostEntry = Dns.GetHostEntry(server);
-            this.client.ConnectOverTCP(hostEntry.AddressList[0]);
+            this.client.ConnectOverTCP(Dns.GetHostAddresses(server).First());
             InternalConnectShare(domain, userName, password, IPC_CONNECT_STRING, timeout, securityPackage, useServerToken);
         }
 
@@ -725,12 +732,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public override void ConnectShare(string serverName, int port, IpVersion ipVersion, string domain,
             string userName, string password, string shareName, SecurityPackageType securityPackage, bool useServerToken)
         {
-            IPHostEntry hostEntry = Dns.GetHostEntry(serverName);
-            serverPrincipleName = Smb2Utility.GetPrincipleName(hostEntry.HostName);
+            List<IPAddress> serverAddresses = new List<IPAddress>();
+            IPAddress ipAddress;
+            if (IPAddress.TryParse(serverName, out ipAddress)) // server is a ip address
+            {
+                serverPrincipleName = serverName;
+                serverAddresses.Add(ipAddress);
+            }
+            else
+            {
+                IPHostEntry hostEntry = Dns.GetHostEntry(serverName);
+                serverPrincipleName = Smb2Utility.GetPrincipleName(hostEntry.HostName);
+                serverAddresses.AddRange(hostEntry.AddressList);
+            }
 
             if (ipVersion == IpVersion.Ipv4)
             {
-                foreach (var ip in hostEntry.AddressList)
+                foreach (var ip in serverAddresses)
                 {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
@@ -741,7 +759,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
             else if (ipVersion == IpVersion.Ipv6)
             {
-                foreach (var ip in hostEntry.AddressList)
+                foreach (var ip in serverAddresses)
                 {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
                     {
@@ -755,7 +773,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 // if specified the IpVersion.Any, try ipv4 first, if failed, try ipv6
                 try
                 {
-                    foreach (var ip in hostEntry.AddressList)
+                    foreach (var ip in serverAddresses)
                     {
                         if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
@@ -766,7 +784,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 }
                 catch (InvalidOperationException)
                 {
-                    foreach (var ip in hostEntry.AddressList)
+                    foreach (var ip in serverAddresses)
                     {
                         if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
                         {
