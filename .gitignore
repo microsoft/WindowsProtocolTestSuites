@@ -117,3 +117,5 @@ ProtoSDK/RDMA/include/ndspi.h
 TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.WebCore/wwwroot/GuestBook
 TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.WebCore/wwwroot/Upload/
 TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.WebCore/wwwroot/Images/Decoded/
+TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.WebCore/wwwroot/Images/Uploads/
+TestSuites/RDP/Tools/RDPToolSet/.nuget

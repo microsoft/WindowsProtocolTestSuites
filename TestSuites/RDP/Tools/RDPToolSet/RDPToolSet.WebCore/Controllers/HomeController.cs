@@ -22,11 +22,6 @@ namespace RDPToolSet.WebCore.Controllers
             return Redirect(Url.Content("~/html/index.html"));
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

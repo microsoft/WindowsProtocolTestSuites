@@ -19,7 +19,6 @@ using System.Linq;
 
 namespace RDPToolSet.WebCore.Controllers
 {
-    //[HandleError]
     public abstract class CodecBaseController : Controller
     {
         protected ICodecViewModel _viewModel;

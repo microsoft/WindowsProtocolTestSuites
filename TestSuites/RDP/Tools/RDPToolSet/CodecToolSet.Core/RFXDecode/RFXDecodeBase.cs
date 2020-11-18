@@ -97,7 +97,7 @@ namespace CodecToolSet.Core.RFXDecode
             return new[] { DoAction(inputs.FirstOrDefault()) };
         }
 
-        public List<ICodecAction> SubActions { get; protected set; }
+        public IEnumerable<ICodecAction> SubActions { get; protected set; }
 
         public Dictionary<String, ICodecParam> Parameters { get; protected set; }
     }
