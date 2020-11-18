@@ -27,7 +27,7 @@ jobs:
   - template: pipelines/build/DotNetCore-Build-steps.yml@template
 
 - job:
-  displayName: Build RDPSUTControlAgent (Java, Csharp, Pyrhon)
+  displayName: Build RDPSUTControlAgent (Java, CSharp, Python)
   pool: 
     vmImage: windows-2019
   workspace:
