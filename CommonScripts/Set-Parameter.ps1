@@ -32,7 +32,7 @@ function Show-ScriptUsage
     Write-host 
     Write-host "Modify an attribute of node in XML file."
     Write-host
-    Write-host "The Path of the XML type file must be a absoluted path!"
+    Write-host "The Path of the XML type file must be an absolute path!"
     Write-host
     Write-host "Example: Set-Parameter.ps1 C:\config.xml ClientOS Vista"
     Write-host
@@ -62,13 +62,6 @@ if ($value -eq $null -or $value -eq "")
 {
     Throw "Parameter value is required."
 }
-
-#----------------------------------------------------------------------------
-# Get the full path of $sourceFileName
-#----------------------------------------------------------------------------
-$fileName = Split-Path $sourceFileName -leaf
-$path = Get-Location
-$sourceFileName = "$path\$fileName"
 
 #----------------------------------------------------------------------------
 # Set parameter
