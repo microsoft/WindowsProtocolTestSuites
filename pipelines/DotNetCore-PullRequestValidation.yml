@@ -23,4 +23,3 @@ jobs:
   - template: pipelines/local/PullRequestBuild-steps.yml@template
     parameters:
       extRepoUrl: $(extRepo.url)
-      extRepoDir: $(extRepo.dir)
