@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             clientBeforeFailover = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             clientAfterFailover = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
 
-            accessIpList = Dns.GetHostEntry(TestConfig.ClusteredFileServerName).AddressList;
+            accessIpList = Dns.GetHostAddresses(TestConfig.ClusteredFileServerName);
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.ClusteredFileServerName, TestConfig.ClusteredFileShare);
             contentWrite = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
             fileName = GetTestFileName(uncSharePath);

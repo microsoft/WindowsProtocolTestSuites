@@ -95,10 +95,6 @@ TestSuites/MS-AZOD/src/Deploy/DOCS_FILES.wxs
 TestSuites/MS-AZOD/src/Deploy/Scripts_FILES.wxs
 TestSuites/MS-AZOD/src/Deploy/TestSuiteBatchFiles.wxs
 TestSuites/MS-AZOD/src/Deploy/TestSuiteBinFiles.wxs
-TestSuites/MS-SMB/src/Deploy/CommonBatch.wxs
-TestSuites/MS-SMB/src/Deploy/TestSuiteBatchFiles.wxs
-TestSuites/MS-SMB/src/Deploy/TestSuiteBinFiles.wxs
-TestSuites/MS-SMB/src/Deploy/TestSuiteScripts.wxs
 TestSuites/MS-SMBD/src/Deploy/Batch.wxs
 TestSuites/MS-SMBD/src/Deploy/Bin.wxs
 TestSuites/MS-SMBD/src/Deploy/CommonBatch.wxs

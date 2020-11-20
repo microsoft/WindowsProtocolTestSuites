@@ -45,17 +45,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         protected override void TestCleanup()
         {
-            try
+            if (secondClient != null)
             {
-                secondClient.Disconnect();
-            }
-            catch (System.Exception ex)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect second client: {0}", ex.ToString());
-            }
+                try
+                {
+                    secondClient.Disconnect();
+                }
+                catch (System.Exception ex)
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect second client: {0}", ex.ToString());
+                }
 
-            secondClient.Dispose();
-
+                secondClient.Dispose();
+            }
             base.TestCleanup();
         }
         #endregion

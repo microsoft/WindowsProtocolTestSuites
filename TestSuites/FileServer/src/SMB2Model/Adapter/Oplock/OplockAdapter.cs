@@ -83,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             if (shareType == ModelShareType.STYPE_CLUSTER_SOFS)
             {
                 server = testConfig.ScaleOutFileServerName;
-                ip = Dns.GetHostEntry(server).AddressList[0];
+                ip = Dns.GetHostAddresses(server)[0];
 
                 if (shareFlag == ModelShareFlag.SMB2_SHAREFLAG_FORCE_LEVELII_OPLOCK)
                 {

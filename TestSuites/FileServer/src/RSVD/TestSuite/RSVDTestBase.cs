@@ -60,16 +60,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite
 
         protected override void TestCleanup()
         {
-            try
+            if (client != null)
             {
-                client.Disconnect();
+                try
+                {
+                    client.Disconnect();
+                }
+                catch (Exception ex)
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect client: {0}", ex.ToString());
+                }
+                client.Dispose();
             }
-            catch (Exception ex)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect client: {0}", ex.ToString());
-            }
-            client.Dispose();
-
             base.TestCleanup();
         }
 
