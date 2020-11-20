@@ -9,7 +9,7 @@
 
   <Adapters>
     <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspAdapter"/>
-    <Adapter xsi:type="powershell" name="IWSPSUTAdapter" scriptdir="."/>
+    <Adapter xsi:type="powershell" name="IWspSutAdapter" scriptdir=".\SutControlAdapter"/>
   </Adapters>
   
   <TestLog defaultprofile="Verbose">
@@ -21,18 +21,6 @@
 
     <Profiles>
       <Profile name="Verbose" extends="Error">
-        <!-- Show for ETW -->
-        <Rule kind="TestStep" sink="Etw" delete="false"/>
-        <Rule kind="Checkpoint" sink="Etw" delete="false"/>
-        <Rule kind="CheckSucceeded" sink="Etw" delete="false"/>
-        <Rule kind="CheckFailed" sink="Etw" delete="false"/>
-        <Rule kind="CheckInconclusive" sink="Etw" delete="false"/>
-        <Rule kind="Comment" sink="Etw" delete="false"/>
-        <Rule kind="Warning" sink="Etw" delete="false"/>
-        <Rule kind="Debug" sink="Etw" delete="false"/>
-        <Rule kind="TestFailed" sink="Etw" delete="false"/>
-        <Rule kind="TestInconclusive" sink="Etw" delete="false"/>
-        <Rule kind="TestPassed" sink="Etw" delete="false"/>
 
         <!-- Show for CommandlineConsole -->
         <Rule kind="TestStep" sink="CommandLineConsole" delete="false"/>

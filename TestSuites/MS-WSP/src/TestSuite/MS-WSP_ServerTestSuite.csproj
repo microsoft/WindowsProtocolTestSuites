@@ -1,114 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{69E2A5FF-3537-4A43-BA9A-64C1452777B7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Protocols.TestSuites.WspTS</RootNamespace>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>MS-WSP_ServerTestSuite</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
+    <RootNamespace>Microsoft.Protocols.TestSuites.WspTS</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>.\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>.\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Protocols.TestTools">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.Protocols.TestTools.VSTS">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.SpecExplorer.Runtime, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>True</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj">
-      <Project>{32326174-6220-4e78-8c0e-bf803162133e}</Project>
-      <Name>WSP</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Adapter\MS-WSP_ServerAdapter.csproj">
-      <Project>{88ACDF6A-978C-4B03-96DD-3F6BF1E4A9C9}</Project>
-      <Name>MS-WSP_ServerAdapter</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="TraditionalCases\CPMCiState.cs" />
-    <Compile Include="TraditionalCases\CPMConnect.cs" />
-    <Compile Include="TestCaseAdmin_StatusInvalidParameter.cs" />
-    <Compile Include="TestCaseConnectOut_StatusInvalidParameter.cs" />
-    <Compile Include="TestCaseFetchValue_StatusInvalidParameterError.cs" />
-    <Compile Include="TestCaseFindIndices.cs" />
-    <Compile Include="TestCaseFindIndices_StatusInvalidParameter.cs" />
-    <Compile Include="TestCaseForQueryNotAssociatedCase.cs" />
-    <Compile Include="TestCaseForQueryOut_ClientNotConnectedCase.cs" />
-    <Compile Include="TestCaseForQueryOut_CreatingExistingQueryCasee.cs" />
-    <Compile Include="TestCaseFreeCursorFor_E_Fail.cs" />
-    <Compile Include="TestCaseGetRowsetNotify.cs" />
-    <Compile Include="TestCaseGetRowsetNotify_StatusInvalidParameter.cs" />
-    <Compile Include="TestCaseGetRowsOutFor_E_Fail.cs" />
-    <Compile Include="TestCaseGetRowsOutFor_InvalidParameter.cs" />
-    <Compile Include="TestCaseGetRowsOut_E_FailErrorWithInvalidBinding.cs" />
-    <Compile Include="TestCaseGetScopeStatistics.cs" />
-    <Compile Include="TestCaseGetScopeStatistics_StatusInvalid.cs" />
-    <Compile Include="TestCaseQueryAdminMessages.cs" />
-    <Compile Include="TestCaseQueryForDifferentQueryStatus.cs" />
-    <Compile Include="TestCaseQueryForResultSets.cs" />
-    <Compile Include="TestcaseQueryOutExFor_E_Fail.cs" />
-    <Compile Include="TestcaseRatioFinishInFor_E_Fail.cs" />
-    <Compile Include="TestCaseSetbindingsError.cs" />
-    <Compile Include="TestCaseSetbindingsFor_E_Error.cs" />
-    <Compile Include="TestCaseSetScopePrioritization.cs" />
-    <Compile Include="TestCaseSetScopePrioritization_StatusInvalidParameter.cs" />
-    <Compile Include="TraditionalCases\CPMCreateQuery.cs" />
-    <Compile Include="TraditionalCases\CPMFetchValue.cs" />
-    <Compile Include="TraditionalCases\CPMCreateQuery_Categorization_Aggregate.cs" />
-    <Compile Include="TraditionalCases\CPMCreateQuery_Categorization.cs" />
-    <Compile Include="TraditionalCases\CPMDisconnect.cs" />
-    <Compile Include="TraditionalCases\CPMFreeCursor.cs" />
-    <Compile Include="TraditionalCases\CPMGetQueryStatus.cs" />
-    <Compile Include="TraditionalCases\CPMGetQueryStatusEx.cs" />
-    <Compile Include="TraditionalCases\CPMCreateQuery_RowsetProperties.cs" />
-    <Compile Include="TraditionalCases\CPMCreateQuery_CFullPropSpec.cs" />
-    <Compile Include="TraditionalCases\CPMGetRows.cs" />
-    <Compile Include="TraditionalCases\CPMGetRows_FetchType.cs" />
-    <Compile Include="TraditionalCases\CPMGetRows_SeekDescription.cs" />
-    <Compile Include="TraditionalCases\CPMSetBindings.cs" />
-    <Compile Include="TraditionalCases\WspCommonTestBase.cs" />
-    <Compile Include="TraditionalCases\WspMessageHeader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MS-WSP_ServerTestSuite.deployment.ptfconfig">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="MS-WSP_ServerTestSuite.ptfconfig" />
+    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin\" />
-    <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin\" />
-  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj" />
+    <ProjectReference Include="..\Adapter\MS-WSP_ServerAdapter.csproj" />
+  </ItemGroup>
+
 </Project>

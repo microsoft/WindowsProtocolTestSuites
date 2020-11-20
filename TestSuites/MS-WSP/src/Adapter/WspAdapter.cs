@@ -53,6 +53,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         Dictionary<string, WspClient> connectedClients = null;
         /// <summary>
+        /// List of disconnected clients for cleaning up underlying SMB2Client instances
+        /// </summary>
+        List<WspClient> disconnectedClients = new List<WspClient>();
+        /// <summary>
         /// Maps a cursor corresponding to a client
         /// </summary>
         Dictionary<string, uint> cursorMap = new Dictionary<string, uint>();
@@ -235,13 +239,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public override void Reset()
         {
             defaultClient.sender.Disconnect();
+
             foreach (var client in connectedClients.Values)
             {
                 client.sender.Disconnect();
             }
+
+            foreach (var client in disconnectedClients)
+            {
+                client.sender.Disconnect();
+            }
+
             connectedClients.Clear();
             cursorMap.Clear();
+
             isClientConnected = false;
+
             base.Reset();
         }
 
@@ -1410,6 +1423,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             if (connectedClients.ContainsKey(clientMachineName) && removeClient)
             {
                 // Remove the Request Sender associated with the client
+                disconnectedClients.Add(connectedClients[clientMachineName]);
                 connectedClients.Remove(clientMachineName);
             }
         }
@@ -1478,7 +1492,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="additionalRowsetEvent"></param>
         public void CPMGetRowsetNotifyIn(int eventType, bool additionalRowsetEvent)
         {
-            IWSPSUTAdapter sutAdapter = Site.GetAdapter<IWSPSUTAdapter>();
+            IWspSutAdapter sutAdapter = Site.GetAdapter<IWspSutAdapter>();
             string fileName;
             int sutStatus;
             switch (eventType)
@@ -1585,7 +1599,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CleanUpSettings(int eventType, bool additionalRowsetEvent)
         {
             string fileName;
-            IWSPSUTAdapter sutAdapter = Site.GetAdapter<IWSPSUTAdapter>();
+            IWspSutAdapter sutAdapter = Site.GetAdapter<IWspSutAdapter>();
             int sutStatus;
             switch (eventType)
             {

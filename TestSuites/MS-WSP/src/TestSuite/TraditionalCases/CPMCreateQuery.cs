@@ -12,7 +12,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     [TestClass]
     public partial class CPMCreateQueryTestCases : WspCommonTestBase
     {
-        private IWSPSUTAdapter wspSutAdapter;
+        private IWspSutAdapter wspSutAdapter;
 
         private WspAdapter prepareAdapter;
 
@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMGetRowsOut -= EnsureSuccessfulCPMGetRowsOut;
             wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
 
-            wspSutAdapter = Site.GetAdapter<IWSPSUTAdapter>();
+            wspSutAdapter = Site.GetAdapter<IWspSutAdapter>();
 
             test1Size = int.Parse(Site.Properties.Get("Test1Size"));
             test27Size = int.Parse(Site.Properties.Get("Test27Size"));

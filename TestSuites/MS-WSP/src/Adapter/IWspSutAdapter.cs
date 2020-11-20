@@ -6,7 +6,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     /// <summary>
     /// SUT Control Adapter to create , delete and modify files on remote server
     /// </summary>
-    public interface IWSPSUTAdapter : IAdapter
+    public interface IWspSutAdapter : IAdapter
     {
   
         /// <summary>

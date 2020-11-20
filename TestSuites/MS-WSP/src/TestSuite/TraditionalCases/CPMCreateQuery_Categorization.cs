@@ -13,6 +13,19 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 {
     public partial class CPMCreateQueryTestCases : WspCommonTestBase
     {
+        public class RangePivot
+        {
+            public object rangeValue;
+
+            public string rangeLabel;
+
+            public RangePivot(object rangeValue, string rangeLabel)
+            {
+                this.rangeValue = rangeValue;
+                this.rangeLabel = rangeLabel;
+            }
+        }
+
         private uint[] hierarchicalCursors;
 
         #region Test Cases
@@ -25,13 +38,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var searchScope = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Categorization";
             var mappedProps = new CFullPropSpec[] { WspConsts.System_Size, WspConsts.System_ItemName };
             var columnIdsForGrouping = new uint[] { 0 };
-            var rangePivots = new Dictionary<object, string>[]
+            var rangePivots = new RangePivot[][]
             {
-                new Dictionary<object, string>
+                new RangePivot[]
                 {
-                    [5UL] = "Small",
-                    [10UL] = "Medium",
-                    [50UL] = "Large"
+                    new RangePivot(5UL, "Small"),
+                    new RangePivot(10UL, "Medium"),
+                    new RangePivot(50UL, "Large")
                 },
             };
             var leafResultColumnIds = new uint[] { 0, 1 };
@@ -88,13 +101,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var searchScope = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Categorization";
             var mappedProps = new CFullPropSpec[] { WspConsts.System_Author, WspConsts.System_ItemName };
             var columnIdsForGrouping = new uint[] { 0 };
-            var rangePivots = new Dictionary<object, string>[]
+            var rangePivots = new RangePivot[][]
             {
-                new Dictionary<object, string>
+                new RangePivot[]
                 {
-                    ["d"] = "Range 1",
-                    ["m"] = "Range 2",
-                    ["r"] = "Range 3"
+                    new RangePivot("d", "Range 1"),
+                    new RangePivot("m", "Range 2"),
+                    new RangePivot("r", "Range 3")
                 },
             };
             var leafResultColumnIds = new uint[] { 0, 1 };
@@ -152,7 +165,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var searchScope = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Categorization";
             var mappedProps = new CFullPropSpec[] { WspConsts.System_Size, WspConsts.System_ItemName };
             var columnIdsForGrouping = new uint[] { 0 };
-            var rangePivots = new Dictionary<object, string>[] { null };
+            var rangePivots = new RangePivot[][] { null };
             var leafResultColumnIds = new uint[] { 0, 1 };
             var createQueryOut = CreateQueryWithCategorization(searchScope, mappedProps, columnIdsForGrouping, rangePivots, leafResultColumnIds);
             hierarchicalCursors = createQueryOut.aCursors;
@@ -213,7 +226,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var searchScope = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Categorization";
             var mappedProps = new CFullPropSpec[] { WspConsts.System_Author, WspConsts.System_ItemName };
             var columnIdsForGrouping = new uint[] { 0 };
-            var rangePivots = new Dictionary<object, string>[] { null };
+            var rangePivots = new RangePivot[][] { null };
             var leafResultColumnIds = new uint[] { 0, 1 };
             var createQueryOut = CreateQueryWithCategorization(searchScope, mappedProps, columnIdsForGrouping, rangePivots, leafResultColumnIds);
             hierarchicalCursors = createQueryOut.aCursors;
@@ -275,14 +288,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var searchScope = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Categorization";
             var mappedProps = new CFullPropSpec[] { WspConsts.System_ItemFolderNameDisplay, WspConsts.System_Author, WspConsts.System_ItemName };
             var columnIdsForGrouping = new uint[] { 0, 1 };
-            var rangePivots = new Dictionary<object, string>[]
+            var rangePivots = new RangePivot[][]
             {
                 null,
-                new Dictionary<object, string>
+                new RangePivot[]
                 {
-                    ["d"] = null,
-                    ["m"] = null,
-                    ["r"] = null
+                    new RangePivot("d", null),
+                    new RangePivot("m", null),
+                    new RangePivot("r", null)
                 }
             };
             var leafResultColumnIds = new uint[] { 0, 1, 2 };
@@ -350,14 +363,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var searchScope = Site.Properties.Get("QueryPath") + "Data/CreateQuery_Categorization";
             var mappedProps = new CFullPropSpec[] { WspConsts.System_ItemFolderNameDisplay, WspConsts.System_Author, WspConsts.System_Size, WspConsts.System_ItemName };
             var columnIdsForGrouping = new uint[] { 0, 1, 2 };
-            var rangePivots = new Dictionary<object, string>[]
+            var rangePivots = new RangePivot[][]
             {
                 null,
-                new Dictionary<object, string>
+                new RangePivot[]
                 {
-                    ["d"] = null,
-                    ["m"] = null,
-                    ["r"] = null
+                    new RangePivot("d", null),
+                    new RangePivot("m", null),
+                    new RangePivot("r", null)
                 },
                 null
             };
@@ -581,7 +594,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             string searchScope,
             CFullPropSpec[] mappedProps,
             uint[] columnIdsForGrouping,
-            Dictionary<object, string>[] rangePivots,
+            RangePivot[][] rangePivots,
             uint[] leafResultColumnIds)
         {
             argumentType = ArgumentType.AllValid;
@@ -596,7 +609,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             var columnSet = wspAdapter.builder.GetColumnSet(mappedProps.Length);
 
-            var pidMapper = GetPidMapper(mappedProps);
+            var pidMapper = GetCPidMapper(mappedProps);
 
             var sortSets = GetCInGroupSortAggregSets(columnIdsForGrouping, leafResultColumnIds);
 
@@ -647,7 +660,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             }
         }
 
-        private CPidMapper GetPidMapper(params CFullPropSpec[] mappedProps)
+        private CPidMapper GetCPidMapper(params CFullPropSpec[] mappedProps)
         {
             var ret = new CPidMapper();
             ret.aPropSpec = mappedProps;
@@ -722,12 +735,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             return ret;
         }
 
-        private CCategorizationSpec GetRangeCCategorizationSpec(Dictionary<object, string> rangePivots, uint columnIdForGrouping)
+        private CCategorizationSpec GetRangeCCategorizationSpec(RangePivot[] rangePivots, uint columnIdForGrouping)
         {
             var lcid = wspAdapter.builder.parameter.LcidValue;
 
             vType_Values prValVType;
-            var keyType = rangePivots.First().Key.GetType();
+            var keyType = rangePivots[0].rangeValue.GetType();
             if (keyType == typeof(ulong))
             {
                 prValVType = vType_Values.VT_UI8;
@@ -762,12 +775,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             spec._sortKey = sortKey;
             var ranges = new CRangeCategSpec();
             ranges._lcid = lcid;
-            ranges.cRange = (uint)rangePivots.Count;
+            ranges.cRange = (uint)rangePivots.Length;
             var boundaries = new RANGEBOUNDARY[ranges.cRange];
             var idx = 0;
-            foreach (var kv in rangePivots)
+            foreach (var rangePivot in rangePivots)
             {
-                var (pivot, label) = (kv.Key, kv.Value);
+                var (pivot, label) = (rangePivot.rangeValue, rangePivot.rangeLabel);
                 boundaries[idx] = new RANGEBOUNDARY
                 {
                     ulType = RANGEBOUNDARY_ulType_Values.DBRANGEBOUNDTTYPE_EXACT,
