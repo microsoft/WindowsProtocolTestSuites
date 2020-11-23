@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nlmp", "..\..\..\..\ProtoSD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{49D0DACF-7732-4DC4-8334-F770B68D95F0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPToolSet.WebCore", "RDPToolSet.WebCore\RDPToolSet.WebCore.csproj", "{46ACBA9E-1896-4432-97B1-B5FB13516460}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPToolSet.Web", "RDPToolSet.Web\RDPToolSet.Web.csproj", "{F54E1C32-B157-40F8-8EE5-4612E22B366D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -318,18 +318,18 @@ Global
 		{49D0DACF-7732-4DC4-8334-F770B68D95F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49D0DACF-7732-4DC4-8334-F770B68D95F0}.Release|x64.ActiveCfg = Release|Any CPU
 		{49D0DACF-7732-4DC4-8334-F770B68D95F0}.Release|x64.Build.0 = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Debug|x64.Build.0 = Debug|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.fxcop|Any CPU.ActiveCfg = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.fxcop|Any CPU.Build.0 = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.fxcop|x64.ActiveCfg = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.fxcop|x64.Build.0 = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Release|Any CPU.Build.0 = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Release|x64.ActiveCfg = Release|Any CPU
-		{46ACBA9E-1896-4432-97B1-B5FB13516460}.Release|x64.Build.0 = Release|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Debug|x64.Build.0 = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.fxcop|Any CPU.ActiveCfg = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.fxcop|Any CPU.Build.0 = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.fxcop|x64.ActiveCfg = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.fxcop|x64.Build.0 = Debug|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|x64.ActiveCfg = Release|Any CPU
+		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
