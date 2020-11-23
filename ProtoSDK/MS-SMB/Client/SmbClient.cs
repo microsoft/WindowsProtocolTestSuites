@@ -400,30 +400,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb
 
             // init remote address of config
             #region Lookup the ip address from server name.
-
-            IPHostEntry ipHostEntry = Dns.GetHostEntry(serverName);
-            if (ipHostEntry != null)
+            
+            foreach (IPAddress address in Dns.GetHostAddresses(serverName))
             {
-                foreach (IPAddress address in ipHostEntry.AddressList)
+                if (ipVersion != IpVersion.Ipv4 && address.AddressFamily == AddressFamily.InterNetworkV6)
                 {
-                    if (ipVersion != IpVersion.Ipv4 && address.AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        config.LocalIpAddress = IPAddress.IPv6Any;
-                        config.RemoteIpAddress = address;
-                        break;
-                    }
-                    else if (ipVersion != IpVersion.Ipv6 && address.AddressFamily == AddressFamily.InterNetwork)
-                    {
-                        config.LocalIpAddress = IPAddress.Any;
-                        config.RemoteIpAddress = address;
-                        break;
-                    }
-                    else
-                    {
-                        continue;
-                    }
+                    config.LocalIpAddress = IPAddress.IPv6Any;
+                    config.RemoteIpAddress = address;
+                    break;
+                }
+                else if (ipVersion != IpVersion.Ipv6 && address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    config.LocalIpAddress = IPAddress.Any;
+                    config.RemoteIpAddress = address;
+                    break;
+                }
+                else
+                {
+                    continue;
                 }
             }
+
             if (config.RemoteIpAddress == null)
             {
                 throw new InvalidOperationException("Failed to get the IP address of SMB server in SmbClient().");

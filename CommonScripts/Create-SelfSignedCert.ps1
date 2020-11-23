@@ -19,6 +19,8 @@ Param
     [String]$CommonName
 )
 
-$certStoreLocation = "cert:\LocalMachine\My"
-$cert = New-SelfSignedCertificate -DnsName $CommonName -CertStoreLocation $certStoreLocation
-Export-Certificate -Cert $cert -FilePath "$env:SystemDrive\$CommonName.cer" -Type CERT
+$MakeCertTool = (Get-ChildItem -Filter "makecert.exe" -Recurse).FullName
+$ServerAuthenticationOid = "1.3.6.1.5.5.7.3.1"
+$CertFile = "$env:SystemDrive\$CommonName.cer"
+$CmdLine = "$MakeCertTool -r -pe -n `"CN=$CommonName`" -ss my -sr LocalMachine -a sha1 -sky exchange -eku $ServerAuthenticationOid -sp `"Microsoft RSA SChannel Cryptographic Provider`" -sy 12 $CertFile"
+cmd.exe /c $CmdLine 2>&1 | Write-Output

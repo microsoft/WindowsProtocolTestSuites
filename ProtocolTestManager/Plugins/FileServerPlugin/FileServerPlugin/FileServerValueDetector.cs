@@ -1436,6 +1436,12 @@ namespace Microsoft.Protocols.TestManager.Detector
                 return null;
             }
 
+            Regex regex = new Regex(@"^(?=.{1,254}$)((?=[a-zA-Z0-9-]{1,63}\.)(xn--+)?[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,63}$");
+            Match match = regex.Match(detectionInfo.targetSUT.ToLower());
+            if (match.Success)
+            {
+                return string.Format("{0}host{1}", detectionInfo.domainName.ToUpper(), detectionInfo.targetSUT.ToLower());
+            }
             return string.Format("{0}host{1}.{2}", detectionInfo.domainName.ToUpper(), detectionInfo.targetSUT.ToLower(), detectionInfo.domainName.ToLower());
         }
 

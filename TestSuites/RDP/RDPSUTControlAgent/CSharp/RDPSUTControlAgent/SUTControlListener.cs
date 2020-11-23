@@ -44,8 +44,7 @@ namespace RDPSUTControlAgent
 
         private IPAddress GetLocalIP()
         {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
+            foreach (IPAddress ip in Dns.GetHostAddresses(Dns.GetHostName()))
             {
                 if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                 {

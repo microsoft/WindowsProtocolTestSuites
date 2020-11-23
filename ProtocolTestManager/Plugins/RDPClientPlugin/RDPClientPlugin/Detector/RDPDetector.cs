@@ -636,10 +636,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private string LocalIPAddress()
         {
-            IPHostEntry host;
             string localIp = "";
-            host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
+            foreach (IPAddress ip in Dns.GetHostAddresses(Dns.GetHostName()))
             {
                 if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                 {
@@ -811,8 +809,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         {
             try
             {
-                IPHostEntry host = Dns.GetHostEntry(hostname);
-                foreach (IPAddress ip in host.AddressList)
+                foreach (IPAddress ip in Dns.GetHostAddresses(hostname))
                 {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
