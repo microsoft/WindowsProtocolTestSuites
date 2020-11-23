@@ -124,7 +124,7 @@ namespace Microsoft.Protocols.TestManager.Kernel {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .NET Core is not installed. Please download and install .NET Core 5.0 from the link: https://dotnet.microsoft.com/download/dotnet-core/5.0.
+        ///   Looks up a localized string similar to .NET is not installed. Please download and install .NET 5.0 from the link: https://dotnet.microsoft.com/download/dotnet/5.0.
         /// </summary>
         internal static string CannotFindDotnet {
             get {
