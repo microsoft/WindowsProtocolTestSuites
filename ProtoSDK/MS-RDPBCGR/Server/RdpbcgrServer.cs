@@ -2,12 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // using Microsoft.Protocols.TestTools.ExtendedLogging;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
+using Microsoft.Protocols.TestTools.StackSdk.Security.Cssp;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Net;
+using System.Net.Security;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -55,13 +56,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         private bool isClientToServerEncrypted;
 
         private List<string> warnings;
-
-        /// <summary>
-        /// This event is used to sync main thread and Receive thread.
-        /// It is used to block receive thread when the main thread want to make TLS handshake with RDP client.
-        /// If not block the receive thread, the receive thread will read bytes from network stream, which should be read by main thread for TLS handshake  
-        /// </summary>
-        public AutoResetEvent ReceiveThreadControlEvent = new AutoResetEvent(false);
 
         #endregion member
 
@@ -477,25 +471,56 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             else if (this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
             {
-                this.directedTransportStack.SendPacket(sessionContext.Identity, pdu);
                 if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
                 {
+                    var remoteEndPoint = sessionContext.Identity;
+
                     // If send a X224 Connection COnfirm Pdu, then should make TLS handshake
-                    UpdateTransport();
+                    if (encryptedProtocol == EncryptedProtocol.NegotiationTls)
+                    {
+                        directedTransportStack.UpdateConfig(remoteEndPoint, oldStream =>
+                        {
+                            directedTransportStack.SendPacket(sessionContext.Identity, pdu);
+
+                            var sslStream = new SslStream(new ETWStream(oldStream));
+
+                            sslStream.AuthenticateAsServer(cert);
+
+                            return sslStream;
+                        });
+                    }
+                    else if (encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
+                    {
+                        directedTransportStack.UpdateConfig(remoteEndPoint, oldStream =>
+                        {
+                            directedTransportStack.SendPacket(sessionContext.Identity, pdu);
+
+                            var localIpAddress = (sessionContext.LocalIdentity as IPEndPoint).Address;
+
+                            string targetSPN = ConstValue.CREDSSP_SERVER_NAME_PREFIX + localIpAddress.ToString();
+
+                            var csspServer = new CsspServer(new ETWStream(oldStream));
+
+                            var credSspStream = csspServer.GetStream();
+
+                            csspServer.Authenticate(cert, targetSPN);
+
+                            return credSspStream;
+                        });
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Unexpected value of encryptedProtocol!");
+                    }
+                }
+                else
+                {
+                    this.directedTransportStack.SendPacket(sessionContext.Identity, pdu);
                 }
             }
             else
             {
                 this.transportStack.SendPacket(sessionContext.Identity, pdu);
-            }
-
-
-            if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu) ||
-                pdu.GetType() == typeof(Server_X_224_Negotiate_Failure_Pdu))
-            {
-                // Receive thread will be blocked by ReceiveThreadControlEvent after receiving Client X224 Connection Request.
-                // If send a X224 Connection Confirm Pdu or X224 Negotiate Failure PDU, should signal the event to resume receive thread.
-                ReceiveThreadControlEvent.Set();
             }
 
             CheckEncryptionCount(sessionContext);
@@ -4437,30 +4462,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 #endif
         }
 
-
-        /// <summary>
-        /// Update transport to an Negotiation-Based Security-Enhanced transport.
-        /// </summary>
-        internal void UpdateTransport()
-        {
-            try
-            {
-                if (encryptedProtocol == EncryptedProtocol.NegotiationTls)
-                {
-                    this.directedTransportStack.UpdateConfig(SecurityStreamType.Ssl);
-                }
-                else if (encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
-                {
-                    this.directedTransportStack.UpdateConfig(SecurityStreamType.CredSsp);
-                }
-            }
-            catch (IOException)
-            {
-                // IOException may occured in some negative cases
-            }
-
-            return;
-        }
         #endregion
 
 
