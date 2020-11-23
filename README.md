@@ -32,7 +32,7 @@ You should install the software listed below based on your testing purpose, incl
 
 1. .NET and related components
 
-   a. For Windows, Linux and macOS, install [.NET 5.0 SDK](https://docs.microsoft.com/en-us/dotnet/core/install/) to build or run test suites.
+   a. For Windows, Linux and macOS, install [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/5.0/) to build or run test suites.
 
    b. For those who work on Windows and prefer IDE, install [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or higher ([Visual Studio 2019 Community](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16) recommended), together with these individual components from the installer:
  
