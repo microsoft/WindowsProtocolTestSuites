@@ -3,11 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Newtonsoft.Json;
-
 
 // ReSharper disable once CheckNamespace
 namespace CodecToolSet.Core.RFXEncode
