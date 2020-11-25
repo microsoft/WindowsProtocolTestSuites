@@ -260,7 +260,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 util.SyncRunByCases(testCases);
             }
 
-            Console.Clear();
+            Console.WriteLine();
             Console.WriteLine(StringResources.FinishRunningTips);
         }
 
@@ -269,7 +269,6 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// </summary>
         public void AbortExecution()
         {
-            Console.CursorVisible = true;
             util.AbortExecution();
             Logger.AddLog(LogLevel.Information, "Execution is aborted");
         }
