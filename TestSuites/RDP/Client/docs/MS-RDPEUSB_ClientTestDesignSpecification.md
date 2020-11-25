@@ -278,7 +278,7 @@ Figure 3-1 illustrates the architecture of the MS-RDPEUSB test suite for client 
 
 ![image5.png](./image/MS-RDPEUSB_ClientTestDesignSpecification/image5.png)
 
- _Figure 3-1 MS-SMB Test Suite Architecture_
+ _Figure 3-1 MS-RDPEUSB Test Suite Architecture_
  
 As shown in Figure 3-1, MS-RDPEUSB is using the synthetic server pattern to design the test suite. The MS-RDPEUSB test suite contains the following components:
 

@@ -187,8 +187,7 @@ namespace Microsoft.Protocols.TestSuites
             {
                 try
                 {
-                    IPHostEntry host = Dns.GetHostEntry(hostnameOrIP);
-                    foreach (IPAddress ip in host.AddressList)
+                    foreach (IPAddress ip in Dns.GetHostAddresses(hostnameOrIP))
                     {
                         if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {

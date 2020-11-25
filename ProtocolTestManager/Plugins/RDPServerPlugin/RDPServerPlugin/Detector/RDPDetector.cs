@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             if (!IPAddress.TryParse(clientName, out clientAddress))
             {
-                clientAddress = Dns.GetHostEntry(clientName).AddressList.First();
+                clientAddress = Dns.GetHostAddresses(clientName).First();
             }
 
             requestedProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;

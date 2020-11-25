@@ -239,7 +239,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     // Windows Server: when stopping a non-owner node of ScaleOutFS, no notification will be sent by SMB witness.
                     // So get one IP of the owner node of ScaleOutFS to access.                    
                     string resourceOwnerNode = sutController.GetClusterResourceOwner(server);
-                    IPAddress[] ownerIpList = Dns.GetHostEntry(resourceOwnerNode).AddressList;
+                    IPAddress[] ownerIpList = Dns.GetHostAddresses(resourceOwnerNode);
                     foreach (var ip in ownerIpList)
                     {
                         BaseTestSite.Log.Add(LogEntryKind.Debug, "Owner IP: {0}", ip);
@@ -247,7 +247,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     if (!ownerIpList.Contains(currentAccessIpAddr))
                     {
                         currentAccessIpAddr = null;
-                        IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
+                        IPAddress[] accessIpList = Dns.GetHostAddresses(server);
                         foreach (var ip in accessIpList)
                         {
                             if (ownerIpList.Contains(ip))
@@ -359,8 +359,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     DoUntilSucceed(() =>
                     {
                         this.sutController.FlushDNS();
-                        IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
-                        foreach (IPAddress ipAddress in accessIpList)
+                        foreach (IPAddress ipAddress in Dns.GetHostAddresses(server))
                         {
                             Smb2FunctionalClient pingClient = new Smb2FunctionalClient(TestConfig.FailoverTimeout, TestConfig, BaseTestSite);
 
@@ -386,8 +385,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     DoUntilSucceed(() =>
                     {
                         this.sutController.FlushDNS();
-                        IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
-                        foreach (IPAddress ipAddress in accessIpList)
+                        foreach (IPAddress ipAddress in Dns.GetHostAddresses(server))
                         {
                             if (TestConfig.IsWindowsPlatform)
                             {
@@ -521,7 +519,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             BaseTestSite.Assert.IsTrue(
                 errCtx.IPAddrCount > 0,
                 "The number of MOVE_DST_IPADDR structures in the IPAddrMoveList field should be greater than 0. Actually server returns {0}.", errCtx.IPAddrCount);
-            IPAddress[] ipv4AddressList = Dns.GetHostEntry(sofsHostedNode).AddressList;
+            IPAddress[] ipv4AddressList = Dns.GetHostAddresses(sofsHostedNode);
             System.Net.Sockets.AddressFamily addressFamily = ipv4AddressList[0].AddressFamily;
 
             for (int i = 0; i < errCtx.IPAddrCount; i++)
@@ -593,12 +591,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             bool isRedirectToOwnerTested = false;
             #region Get IP address list from ScaleOutFS
             string server = TestConfig.ClusteredScaleOutFileServerName;
-            IPAddress[] accessIpList = Dns.GetHostEntry(server).AddressList;
+            IPAddress[] accessIpList = Dns.GetHostAddresses(server);
             #endregion
 
             #region Get IP address from nonSofsHostedNode
             IPAddress currentAccessIpAddr = null;
-            IPAddress[] accessIpListNonSoftHosted = Dns.GetHostEntry(nonSofsHostedNode).AddressList;
+            IPAddress[] accessIpListNonSoftHosted = Dns.GetHostAddresses(nonSofsHostedNode);
             for (int i = 0; i < accessIpList.Length; i++)
             {
                 for (int j = 0; j < accessIpListNonSoftHosted.Length; j++)
@@ -707,7 +705,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         /// <returns>Share capabilities</returns>
         private Share_Capabilities_Values GetShareCapabilities(string server, string sharePath, TreeConnect_Flags flags = TreeConnect_Flags.SMB2_SHAREFLAG_NONE)
         {
-            IPAddress shareIpAddr = Dns.GetHostEntry(server).AddressList[0];
+            IPAddress shareIpAddr = Dns.GetHostAddresses(server)[0];
 
             Smb2FunctionalClient client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client.ConnectToServer(TestConfig.UnderlyingTransport, server, shareIpAddr);

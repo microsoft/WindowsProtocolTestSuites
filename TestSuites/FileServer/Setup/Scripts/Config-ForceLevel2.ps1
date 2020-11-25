@@ -84,15 +84,23 @@ $ShareUtil = "$binDir\ShareUtil.exe"
 #----------------------------------------------------------------------------
 # Configure forcelevel2
 #----------------------------------------------------------------------------
-Write-Info.ps1 "Configure forcelevel2 for share: ShareForceLevel2"
-CMD /C "$ShareUtil $sutComputerName ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
+$retryCount = 0
+for (; $retryCount -lt 10; $retryCount++) 
+{
+    Write-Info.ps1 "Configure forcelevel2 for share: ShareForceLevel2"
+    CMD /C "$ShareUtil $sutComputerName ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
 
-if($config.lab.ha){
-    $scaleoutFSName = $config.lab.ha.scaleoutfs.name
-    if((gwmi win32_computersystem).partofdomain -eq $true -and (Test-Connection -ComputerName $scaleoutFSName -Quiet))
+    if($config.lab.ha){
+        $scaleoutFSName = $config.lab.ha.scaleoutfs.name
+        if((gwmi win32_computersystem).partofdomain -eq $true -and (Test-Connection -ComputerName $scaleoutFSName -Quiet))
+        {
+            Write-Info.ps1 "Configure forcelevel2 for share: SMBClusteredForceLevel2"
+            CMD /C "$ShareUtil $scaleoutFSName SMBClusteredForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
+        }
+    }
+    if ($lastExitCode -eq 0)
     {
-        Write-Info.ps1 "Configure forcelevel2 for share: SMBClusteredForceLevel2"
-        CMD /C "$ShareUtil $scaleoutFSName SMBClusteredForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true" 2>&1 | Write-Info.ps1
+        break;
     }
     sleep 5
 }

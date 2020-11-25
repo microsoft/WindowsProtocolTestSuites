@@ -375,9 +375,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr
         /// <returns>IPv4 address. Null if not found.</returns>
         public static string GetIPAddress(string dnsName)
         {
-            System.Net.IPHostEntry hostEntry = System.Net.Dns.GetHostEntry(dnsName);
-            System.Net.IPAddress[] addrs = hostEntry.AddressList;
-            foreach (System.Net.IPAddress addr in addrs)
+            foreach (System.Net.IPAddress addr in System.Net.Dns.GetHostAddresses(dnsName))
             {
                 if (addr.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                 {

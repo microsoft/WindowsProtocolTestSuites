@@ -171,7 +171,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             treeId = 0;
 
             string serverName = Smb2Utility.GetServerName(uncSharePath);
-            var serverIPs = Dns.GetHostEntry(serverName).AddressList;
+            var serverIPs = Dns.GetHostAddresses(serverName);
             if (serverIPs == null || serverIPs.Length == 0)
             {
                 return false;

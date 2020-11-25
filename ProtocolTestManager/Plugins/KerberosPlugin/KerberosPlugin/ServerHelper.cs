@@ -368,10 +368,8 @@ namespace Microsoft.Protocols.TestManager.KerberosPlugin
 
         public static string GetComputerIP(string computerName)
         {
-            IPHostEntry host;
             string localIP = string.Empty;
-            host = Dns.GetHostEntry(computerName);
-            foreach (IPAddress ip in host.AddressList)
+            foreach (IPAddress ip in Dns.GetHostAddresses(computerName))
             {
                 if (ip.AddressFamily.ToString() == "InterNetwork")
                 {
