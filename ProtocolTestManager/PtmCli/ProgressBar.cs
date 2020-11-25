@@ -55,17 +55,17 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         private void UpdateText(string text)
         {
-            Console.CursorVisible = false;
-
-            Console.SetCursorPosition(0, 0);
-
-            var output = new StringBuilder();
-
-            output.Append(text);
-
-            output.Append(' ', Console.WindowWidth * Console.WindowHeight - text.Length - 1);
-
-            Console.Write(output.ToString());
+            StringBuilder outputBuilder = new StringBuilder();
+            Console.CursorLeft = Console.WindowLeft;
+            outputBuilder.Append(text);
+            int repeatCount = Console.WindowWidth - text.Length - 1;
+            // repeatCount could be negative on Linux while testing.
+            // Do not need to append space when it's negative or zero.
+            if (repeatCount > 0)
+            {
+                outputBuilder.Append(' ', repeatCount);
+            }
+            Console.Write(outputBuilder);
         }
 
         private void EnableTimer()
@@ -80,7 +80,6 @@ namespace Microsoft.Protocols.TestManager.CLI
                 disposed = true;
                 timer.Dispose();
                 UpdateText(string.Empty);
-                Console.CursorVisible = true;
             }
         }
     }

@@ -212,8 +212,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         WorkingDirectory = WorkingDirectory,
                         FileName = EnginePath,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
+                        UseShellExecute = true,
+                        CreateNoWindow = false,
                         Arguments = "test " + runArgs,
                     }
                 };
