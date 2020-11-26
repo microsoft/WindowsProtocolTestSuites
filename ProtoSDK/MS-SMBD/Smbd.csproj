@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <targetframework>net5.0</targetframework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd</AssemblyName>

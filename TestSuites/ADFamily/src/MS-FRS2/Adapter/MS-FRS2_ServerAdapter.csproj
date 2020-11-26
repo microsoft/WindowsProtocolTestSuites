@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.MS_FRS2</RootNamespace>
     <AssemblyName>MS_FRS2Adapter</AssemblyName>

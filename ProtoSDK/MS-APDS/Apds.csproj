@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <targetframework>net5.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Apds</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Apds</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -16,12 +16,4 @@
   <ItemGroup>
     <ProjectReference Include="..\MS-NRPC\Nrpc.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.Analyzers.Compatibility" Version="0.2.12-alpha">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
 </Project>
