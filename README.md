@@ -27,18 +27,18 @@ Windows Protocol Test Suites contain below components:
 * **ProtocolTestManager**. A tool to help you configure and run test suites.
 
 ## Prerequisites
-**Windows Protocol Test Suites** are based on [.NET Core](https://dotnet.microsoft.com/) so they can be developed and run across different platforms.
+**Windows Protocol Test Suites** are based on [.NET](https://dotnet.microsoft.com/) so they can be developed and run across different platforms.
 You should install the software listed below based on your testing purpose, including their own dependencies.
 
-1. .NET Core and related components
+1. .NET and related components
 
-   a. For Windows, Linux and macOS, install [.NET Core 3.1 SDK](https://docs.microsoft.com/en-us/dotnet/core/install/) to build or run test suites.
+   a. For Windows, Linux and macOS, install [.NET 5.0 SDK](https://dotnet.microsoft.com/download/dotnet/5.0/) to build or run test suites.
 
    b. For those who work on Windows and prefer IDE, install [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or higher ([Visual Studio 2019 Community](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=16) recommended), together with these individual components from the installer:
  
       |Section|Individual Component in Visual Studio 2019|Run Windows Protocol Test Suites|Build Windows Protocol Test Suites from source code|
       |---|---|---|---|
-      |.NET|.NET Core SDK|Required|Required|
+      |.NET|.NET SDK|Required|Required|
       |Compilers, build tools, and runtime|C# and Visual Basic Roslyn compilers||Required|
       |Compilers, build tools, and runtime|MSVC v142 - VS 2019 C++ x64/x86 build tools (v14.27)||Required<sup>[1](#footnote1)</sup>|
       |Compilers, build tools, and runtime|C++/CLI support for v142 build tools (14.27)||Required<sup>[1](#footnote1)</sup>|
