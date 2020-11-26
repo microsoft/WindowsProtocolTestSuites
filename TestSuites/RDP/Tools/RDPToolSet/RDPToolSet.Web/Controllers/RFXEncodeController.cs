@@ -38,9 +38,10 @@ namespace RDPToolSet.Web.Controllers
             return View(_viewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Encode()
         {
-            var result = await ActionHelper.ExecuteWithCatchException(async () =>
+            try
             {
                 using (var bodyStream = new StreamReader(Request.Body))
                 {
@@ -55,9 +56,14 @@ namespace RDPToolSet.Web.Controllers
                     var tile = Tile.FromFile(encodeImagePath);
 
                     _codecAction.DoAction(tile);
+
+                    return Json(ReturnResult<string>.Success("Success"));
                 }
-            });
-            return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
     }
 }

@@ -2,11 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Net;
 
 namespace RDPToolSet.Web
 {
@@ -47,7 +50,23 @@ namespace RDPToolSet.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(
+                    options =>
+                    {
+                        options.Run(
+                            async context =>
+                            {
+                                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                                context.Response.ContentType = "text/html";
+                                var exceptionObject = context.Features.Get<IExceptionHandlerFeature>();
+                                if (null != exceptionObject)
+                                {
+                                    var errorMessage = $"StatusCode: {context.Response.StatusCode}\n Error Message: {exceptionObject.Error.Message}\n StackTrace: {exceptionObject.Error.StackTrace}";
+                                    await context.Response.WriteAsync(errorMessage).ConfigureAwait(false);
+                                }
+                            });
+                    });
+
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }

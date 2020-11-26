@@ -76,9 +76,10 @@ namespace RDPToolSet.Web.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Decode()
         {
-            var result = await ActionHelper.ExecuteWithCatchException(async () =>
+            try
             {
                 using (var bodyStream = new StreamReader(Request.Body))
                 {
@@ -86,9 +87,12 @@ namespace RDPToolSet.Web.Controllers
                     var obj = JsonConvert.DeserializeObject(bodyText);
                     Decode(obj);
                 }
-            });
-
-            return Json(result);
+                return Json(ReturnResult<string>.Success("Success"));
+            }
+            catch(Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
         public override ActionResult LayerPanel([FromBody] LayerPanelRequest request)
@@ -216,6 +220,7 @@ namespace RDPToolSet.Web.Controllers
             return PartialView("_Image", $"~/Images/Decoded/{decodeImage}");
         }
 
+        [HttpPost]
         public async Task<IActionResult> IndexWithInputs()
         {
             try

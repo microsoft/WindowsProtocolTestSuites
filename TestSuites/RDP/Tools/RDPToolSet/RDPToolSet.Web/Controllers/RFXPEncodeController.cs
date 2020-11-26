@@ -45,7 +45,7 @@ namespace RDPToolSet.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Encode()
         {
-            var result = await ActionHelper.ExecuteWithCatchException(async () =>
+            try
             {
                 using (var bodyStream = new StreamReader(Request.Body))
                 {
@@ -84,8 +84,12 @@ namespace RDPToolSet.Web.Controllers
 
                     _codecAction.DoAction(new[] { tile });
                 }
-            });
-            return Json(result);
+                return Json(ReturnResult<string>.Success("Success"));
+            }
+            catch(Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
         // This Action may cost much time. TODO: improve it

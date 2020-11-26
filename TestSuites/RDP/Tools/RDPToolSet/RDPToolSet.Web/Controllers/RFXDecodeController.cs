@@ -53,6 +53,7 @@ namespace RDPToolSet.Web.Controllers
             return View(_viewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Decode()
         {
             try
@@ -101,9 +102,10 @@ namespace RDPToolSet.Web.Controllers
         /// return an index page according to the inputs
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public async Task<IActionResult> IndexWithInputs()
         {
-            var result = await ActionHelper.ExecuteWithCatchException(async () =>
+            try
             {
                 using (var bodyStream = new StreamReader(Request.Body))
                 {
@@ -128,9 +130,12 @@ namespace RDPToolSet.Web.Controllers
 
                     SaveToSession(envValues);
                 }
-            });
-
-            return Json(result);
+                return Json(ReturnResult<string>.Success("Success"));
+            }
+            catch (Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
     }
 }

@@ -1,4 +1,12 @@
 $(function () {
+
+    $.ajaxSetup({
+        error: function (result) {
+            console.log(result);
+            alert("Request failed: " + result.responseText);
+        }
+    });
+
     var ENCODED_IMAGE = "EncodedImage";
     var PREVIOUS_FRAME_IMAGE = "PreviousFrameImage";
 
@@ -864,9 +872,13 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // redirect to RFXDecode page
-            window.location.href = location.pathname + '/../RFXDecode';
+        }).done(function (response) {
+            if (response.status === true) {
+                // redirect to RFXDecode page
+                window.location.href = location.pathname + '/../RFXDecode';
+            } else {
+                alert('Process inputs failed, Details:' + response.data);
+            }
         });
     });
 
@@ -947,9 +959,13 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // redirect to RFXDecode page
-            window.location.href = location.pathname + '/../RFXPDecode';
+        }).done(function (response) {
+            if (response.status === true) {
+                // redirect to RFXDecode page
+                window.location.href = location.pathname + '/../RFXPDecode';
+            } else {
+                alert('Process inputs failed, Details:' + response.data);
+            }
         });
     });
 
@@ -987,7 +1003,7 @@ $(function () {
                 $('.panel-group .panel-heading:first').find('a').click();
                 $('.panel-group .panel-heading:eq(1)').find('a').click();
             } else {
-                alert('faled:' + response.data);
+                alert('Decode faled:' + response.data);
             }
         });
     });
@@ -1008,6 +1024,7 @@ $(function () {
             contentType: "application/json",
             data: JSON.stringify(data),
         }).done(function (response) {
+            console.log(response)
             if (response.status === true) {
                 // set the default data format to Integer
                 $('.data-format-selector').val("Integer");
@@ -1046,17 +1063,20 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
+        }).done(function (response) {
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
-
-            // hide the first panel and expend the second panel 
-            $('.panel-group .panel-heading:first').find('a').click();
-            $('.panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.panel-group .panel-heading:first').find('a').click();
+                $('.panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('Encode failed, Details:' + response.data)
+            }
         });
     });
 
@@ -1103,16 +1123,20 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
+        }).done(function (response) {
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // hide the first panel and expend the second panel 
-            $('.tab-pane.active .panel-group .panel-heading:first').find('a').click();
-            $('.tab-pane.active .panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.tab-pane.active .panel-group .panel-heading:first').find('a').click();
+                $('.tab-pane.active .panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('Decode failed, Details:' + response.data);
+            }
         });
     }
 
