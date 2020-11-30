@@ -54,7 +54,7 @@ stages:
               msbuildArgs: '/t:clean;rebuild /p:OutDir=$(Build.ArtifactStagingDirectory)\CSharp'
 
           - task: BatchScript@1
-            displayName: "Build Java RDPSUTControlAgent."
+            displayName: "Build Java RDPSUTControlAgent"
             inputs:
               filename: TestSuites/RDP/RDPSUTControlAgent/Java/gradlew.bat
               arguments: build
