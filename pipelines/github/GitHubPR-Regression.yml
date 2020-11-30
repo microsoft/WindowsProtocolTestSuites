@@ -128,7 +128,7 @@ stages:
             inputs:
               targetType: filePath
               filePath: "$(extRepo.dir)/CommonScript/Get-DotNetCoreArchiveByBuildId.ps1"
-              arguments: '-AccessToken "$(tokens.pipelineTriggerToken)" -ApiUrl "$(extRepo.apiUrl)" -BuildId "$(test.regressionBuildId)" -ArtifactName "results" -GetAllFiles $true -ArtifactsLocalPath "$(Build.ArtifactStagingDirectory)/TestResults"'
+              arguments: '-AccessToken "$(tokens.pipelineTriggerToken)" -ApiUrl "$(extRepo.apiUrl)" -BuildId "$(test.regressionBuildId)" -ArtifactName "results" -GetAllFiles $true -ArtifactLocalPath "$(Build.ArtifactStagingDirectory)/TestResults"'
               workingDirectory: "$(extRepo.dir)/CommonScript"
             condition: succeededOrFailed()
 
