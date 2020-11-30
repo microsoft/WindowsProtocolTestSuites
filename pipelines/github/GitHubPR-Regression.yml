@@ -99,7 +99,7 @@ stages:
       - job:
         displayName: Run Regression
         workspace:
-          clean: true
+          clean: all
         timeoutInMinutes: 0
         steps:
           - checkout: none
