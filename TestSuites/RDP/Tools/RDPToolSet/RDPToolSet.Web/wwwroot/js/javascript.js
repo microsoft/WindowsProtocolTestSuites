@@ -1036,7 +1036,7 @@ $(function () {
                 $('.panel-group .panel-heading:first').find('a').click();
                 $('.panel-group .panel-heading:eq(1)').find('a').click();
             } else {
-                alert('faled:' + response.data);
+                alert('Encode failed:' + response.data);
             }
         });
     });

@@ -118,6 +118,10 @@ namespace RDPToolSet.Web.Controllers
         [HttpPost]
         public ActionResult Upload(IFormFile file, string imageType)
         {
+            if (this.Request.Form.Files.Count > 1)
+            {
+                return Json(ReturnResult<string>.Fail("Please upload 1 image each time."));
+            }
             // file type
             if (file != null && file.Length > 0)
             {
@@ -157,11 +161,11 @@ namespace RDPToolSet.Web.Controllers
         {
             if (imageType.Equals(EncodedImage))
             {
-                this.HttpContext.Session.Set(EncodedImage, null);
+                this.HttpContext.Session.Set(EncodedImage, new byte[0]);
             }
             if (imageType.Equals(PreviousFrameImage))
             {
-                this.HttpContext.Session.Set(PreviousFrameImage, null);
+                this.HttpContext.Session.Set(PreviousFrameImage, new byte[0]);
             }
 
             return Json(ReturnResult<string>.Success("Success"));
