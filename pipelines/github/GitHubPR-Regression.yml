@@ -104,5 +104,38 @@ stages:
         steps:
           - checkout: none
 
-          - script: "git clone -b $(extRepo.branchName) $(extRepo.url) _Helper"
+          - script: "git clone -b $(extRepo.branchName) $(extRepo.url) $(extRepo.dir)"
             displayName: "Fetch Helper"
+
+          - task: PowerShell@2
+            displayName: "Queue Regression"
+            inputs:
+              targetType: filePath
+              filePath: "$(extRepo.dir)/CommonScript/Queue-SinglePipelineWithParameters.ps1"
+              arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -RemoteAccessToken "$(tokens.pipelineTriggerToken)" -RemoteApiUrl "$(extRepo.apiUrl)" -PipelineName "$(test.regressionPipelineName)" -TargetRepoBranch "$(extRepo.branchName)" -PipelineParameters "`"targetRepo.csvFile`": `"$(test.targetRepoCsvFile)`", `"test.filter`": `"$(test.filter)`", `"test.buildId`": `"$(Build.BuildId)`", `"test.remoteApiUrl`": `"$(build.apiUrl)`"" -BuildIdVariableName "test.regressionBuildId"'
+              workingDirectory: "$(extRepo.dir)/CommonScript"
+
+          - task: PowerShell@2
+            displayName: "Wait Regression Completion"
+            inputs:
+              targetType: filePath
+              filePath: "$(extRepo.dir)/CommonScript/Wait-SinglePipelineCompletionByBuildId.ps1"
+              arguments: '-AccessToken "$(tokens.pipelineTriggerToken)" -ApiUrl "$(extRepo.apiUrl)" -BuildId "$(test.regressionBuildId)"'
+              workingDirectory: "$(extRepo.dir)/CommonScript"
+
+          - task: PowerShell@2
+            displayName: "Get Regression Results"
+            inputs:
+              targetType: filePath
+              filePath: "$(extRepo.dir)/CommonScript/Get-DotNetCoreArchiveByBuildId.ps1"
+              arguments: '-AccessToken "$(tokens.pipelineTriggerToken)" -ApiUrl "$(extRepo.apiUrl)" -BuildId "$(test.regressionBuildId)" -ArtifactName "results" -GetAllFiles $true -ArtifactsLocalPath "$(Build.ArtifactStagingDirectory)/TestResults"'
+              workingDirectory: "$(extRepo.dir)/CommonScript"
+            condition: succeededOrFailed()
+
+          - task: PublishTestResults@2
+            displayName: "Publish Regression Results"
+            inputs:
+              testResultsFormat: VSTest
+              searchFolder: "$(Build.ArtifactStagingDirectory)/TestResults"
+              testResultsFiles: "**/*.trx"
+            condition: always()
