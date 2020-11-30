@@ -120,7 +120,7 @@ stages:
             inputs:
               targetType: filePath
               filePath: "$(extRepo.dir)/CommonScript/Wait-SinglePipelineCompletionByBuildId.ps1"
-              arguments: '-AccessToken "$(tokens.pipelineTriggerToken)" -ApiUrl "$(extRepo.apiUrl)" -BuildId "$(test.regressionBuildId)"'
+              arguments: '-AccessToken "$(tokens.pipelineTriggerToken)" -ApiUrl "$(extRepo.apiUrl)" -BuildId "$(test.regressionBuildId)" -TimeoutInMinutes 0'
               workingDirectory: "$(extRepo.dir)/CommonScript"
 
           - task: PowerShell@2
