@@ -43,7 +43,7 @@ stages:
         workspace:
           clean: true
         timeoutInMinutes: 0
-        condition: and(succeeded(), eq(variables['build.testSuiteName'], "RDPClient"))
+        condition: and(succeeded(), eq(variables['test.testSuiteName'], 'RDPClient'))
         steps:
           - checkout: self
 
