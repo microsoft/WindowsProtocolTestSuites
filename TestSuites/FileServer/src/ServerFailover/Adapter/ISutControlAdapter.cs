@@ -27,10 +27,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.Adapter
 
         #endregion
 
-        #region Windows only
         /// <summary>
         /// Get status string of cluster service on a specific cluster node
-        /// It's a Windows behavior. Non-windows implementation does not need to implement this method.
         /// </summary>
         /// <param name="nodeName">Name of the cluster node</param>
         /// <returns>
@@ -39,7 +37,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.Adapter
         /// </returns>
         [MethodHelp("Get the status of the cluster service on a specific cluster node. \r\nThe return value should be Running.\r\nNote: If it's not running right now, wait and then fill in Running when it becomes running.")]
         string GetClusterNodeStatus(string nodeName);
-        #endregion
 
         /// <summary>
         /// Enable a specific cluster node by rebooting the specified node
