@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public static class Logger
     {
-        public static string FileName = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".txt";
+        public static string FileName = "PTMLog_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".txt";
 
         /// <summary>
         /// Write a log message.

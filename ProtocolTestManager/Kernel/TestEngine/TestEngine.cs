@@ -40,10 +40,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
-        /// Retrieves the Logger object.
+        /// Retrieves the TestSuiteLogManager object.
         /// </summary>
-        /// <returns></returns>
-        public TestSuiteLogManager GetLogger()
+        public TestSuiteLogManager GetTestSuiteLogManager()
         {
             return tsLogManager;
         }

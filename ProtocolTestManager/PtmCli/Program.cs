@@ -85,6 +85,10 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         static void HandleArgumentError(IEnumerable<Error> errors)
         {
+            foreach(var error in errors)
+            {
+                Logger.AddLog(LogLevel.Error, error.ToString());
+            }
             Environment.Exit(-1);
         }
 
@@ -243,7 +247,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 int total = testCases.Count;
                 int executed = 0;
 
-                TestSuiteLogManager tsLogManager = util.GetLogger();
+                TestSuiteLogManager tsLogManager = util.GetTestSuiteLogManager();
                 var caseSet = new HashSet<string>();
                 tsLogManager.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
                 {
