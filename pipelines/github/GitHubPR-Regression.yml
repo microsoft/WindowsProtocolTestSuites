@@ -1,0 +1,103 @@
+stages:
+  - stage: Build_Test_Suite
+    pool:
+      vmImage: windows-2019
+    jobs:
+      - job:
+        displayName: Build Test Suite
+        workspace:
+          clean: true
+        timeoutInMinutes: 0
+        steps:
+          - checkout: self
+
+          - task: PowerShell@2
+            displayName: Run Build Script
+            inputs:
+              targetType: filePath
+              filePath: "./$(build.solutionFolder)/build.ps1"
+              arguments: "-Configuration $(build.configuration) -OutDir $(Build.ArtifactStagingDirectory)/staging"
+
+          - task: ArchiveFiles@2
+            displayName: "Archive $(Build.ArtifactStagingDirectory)/staging"
+            inputs:
+              rootFolderOrFile: "$(Build.ArtifactStagingDirectory)/staging"
+              includeRootFolder: false
+              archiveFile: "$(Build.ArtifactStagingDirectory)/$(build.archiveName).zip"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact"
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)/$(build.archiveName).zip"
+            condition: succeededOrFailed()
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Command Scripts"
+            inputs:
+              PathtoPublish: CommonScripts
+              ArtifactName: CommonScripts
+            condition: succeededOrFailed()
+
+      - job:
+        displayName: Build RDP SUT Control Agents
+        workspace:
+          clean: true
+        timeoutInMinutes: 0
+        condition: and(succeeded(), eq(variables['build.testSuiteName'], "RDPClient"))
+        steps:
+          - checkout: self
+
+          - task: VSBuild@1
+            displayName: "Build CSharp RDPSUTControlAgent"
+            inputs:
+              solution: TestSuites/RDP/RDPSUTControlAgent/CSharp/RDPSUTControlAgent.sln
+              msbuildArgs: '/t:clean;rebuild /p:OutDir=$(Build.ArtifactStagingDirectory)\CSharp'
+
+          - task: BatchScript@1
+            displayName: "Build Java RDPSUTControlAgent."
+            inputs:
+              filename: TestSuites/RDP/RDPSUTControlAgent/Java/gradlew.bat
+              arguments: build
+              workingFolder: TestSuites/RDP/RDPSUTControlAgent/Java
+
+          - task: CopyFiles@2
+            displayName: "Copy Java Agent to: $(Build.ArtifactStagingDirectory)/Java"
+            inputs:
+              SourceFolder: TestSuites/RDP/RDPSUTControlAgent/Java/Build
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Java"
+
+          - task: CopyFiles@2
+            displayName: "Copy Java Agent Config to: $(Build.ArtifactStagingDirectory)/Java"
+            inputs:
+              SourceFolder: TestSuites/RDP/RDPSUTControlAgent/Java
+              Contents: freerdp.config
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Java"
+
+          - task: CopyFiles@2
+            displayName: "Copy Python Agent to: $(Build.ArtifactStagingDirectory)/Python"
+            inputs:
+              SourceFolder: TestSuites/RDP/RDPSUTControlAgent/Python
+              TargetFolder: "$(Build.ArtifactStagingDirectory)/Python"
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact: RDPSUTControlAgent"
+            inputs:
+              ArtifactName: RDPSUTControlAgent
+            condition: succeededOrFailed()
+
+  - stage: Run_Regression
+    dependsOn: Build_Test_Suite
+    condition: succeeded()
+    pool:
+      name: Azure Agents
+    jobs:
+      - job:
+        displayName: Run Regression
+        workspace:
+          clean: true
+        timeoutInMinutes: 0
+        steps:
+          - checkout: none
+
+          - script: "git clone -b $(extRepo.branchName) $(extRepo.url) _Helper"
+            displayName: "Fetch Helper"
