@@ -48,9 +48,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private static void AppendLog(string msg)
         {
-            using (StreamWriter sw = File.AppendText(FileName))
+            lock (FileName)
             {
-                sw.WriteLine(msg);
+                using (StreamWriter sw = File.AppendText(FileName))
+                {
+                    sw.WriteLine(msg);
+                }
             }
         }
     }
