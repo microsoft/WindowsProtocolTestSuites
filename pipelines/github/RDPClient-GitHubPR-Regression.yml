@@ -9,7 +9,10 @@ pr:
       - ProtoSDK/Asn1Base/*
       - ProtoSDK/Common/*
       - ProtoSDK/CryptoLib/*
+      - ProtoSDK/KerberosLib/*
       - ProtoSDK/Messages/*
+      - ProtoSDK/MS-CSSP/*
+      - ProtoSDK/MS-NLMP/*
       - ProtoSDK/MS-RDPBCGR/*
       - ProtoSDK/MS-RDPEDISP/*
       - ProtoSDK/MS-RDPEDYC/*
@@ -22,7 +25,10 @@ pr:
       - ProtoSDK/MS-RDPEUSB/*
       - ProtoSDK/MS-RDPEVOR/*
       - ProtoSDK/MS-RDPRFX/*
+      - ProtoSDK/MS-SPNG/*
       - ProtoSDK/Sspi/*
+      - ProtoSDK/SspiLib/*
+      - ProtoSDK/SspiService/*
       - ProtoSDK/TransportStack/*
       - TestSuites/RDP/Client/*
     exclude:
