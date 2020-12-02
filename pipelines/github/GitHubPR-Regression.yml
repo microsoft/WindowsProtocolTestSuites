@@ -137,5 +137,5 @@ stages:
             inputs:
               testResultsFormat: VSTest
               searchFolder: "$(Build.ArtifactStagingDirectory)/TestResults"
-              testResultsFiles: "**/*.trx"
+              testResultsFiles: "*/*.trx"
             condition: always()
