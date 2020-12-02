@@ -27,6 +27,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         static void Run(Options options)
         {
+            Logger.EnableDebugging = options.EnableDebugging;
             try
             {
                 Program p = new Program();
@@ -47,6 +48,9 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     options.TestSuite = Utility.RelativePath2AbsolutePath(options.TestSuite);
                 }
+
+                Logger.AddLog(LogLevel.Information, options.ToString());
+
                 p.LoadTestSuite(options.Profile, options.TestSuite);
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
@@ -57,7 +61,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.AbortExecution();
                 };
 
-                p.RunTestSuite(testCases, options.TestSuite);
+                p.RunTestSuite(testCases);
 
                 if (options.ReportFile == null)
                 {
@@ -74,12 +78,17 @@ namespace Microsoft.Protocols.TestManager.CLI
             {
                 Console.Error.WriteLine(StringResources.ErrorMessage);
                 Console.Error.WriteLine(e.Message);
+                Logger.AddLog(LogLevel.Error, e.Message);
                 Environment.Exit(-1);
             }
         }
 
         static void HandleArgumentError(IEnumerable<Error> errors)
         {
+            foreach(var error in errors)
+            {
+                Logger.AddLog(LogLevel.Error, error.ToString());
+            }
             Environment.Exit(-1);
         }
 
@@ -164,8 +173,11 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Load test suite.
         /// </summary>
         /// <param name="filename">Filename of the profile</param>
+        /// <param name="testSuiteFolder">Path of the specified test suite</param>
         public void LoadTestSuite(string filename, string testSuiteFolder)
         {
+            Logger.AddLog(LogLevel.Information, "Load Test Suite");
+
             TestSuiteInfo tsinfo;
             using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
             {
@@ -225,8 +237,9 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Run test suite
         /// </summary>
         /// <param name="testCases">The list of test cases to run</param>
-        public void RunTestSuite(List<TestCase> testCases, string testCasePath)
+        public void RunTestSuite(List<TestCase> testCases)
         {
+            Logger.AddLog(LogLevel.Information, "Run Test Suite");
             using (ProgressBar progress = new ProgressBar())
             {
                 util.InitializeTestEngine();
@@ -234,9 +247,9 @@ namespace Microsoft.Protocols.TestManager.CLI
                 int total = testCases.Count;
                 int executed = 0;
 
-                Logger logger = util.GetLogger();
+                TestSuiteLogManager tsLogManager = util.GetTestSuiteLogManager();
                 var caseSet = new HashSet<string>();
-                logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
+                tsLogManager.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
                 {
                     if (caseSet.Contains(runningcase.Name))
                     {
@@ -261,6 +274,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         public void AbortExecution()
         {
             util.AbortExecution();
+            Logger.AddLog(LogLevel.Information, "Execution is aborted");
         }
 
         /// <summary>
@@ -268,6 +282,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// </summary>
         public void PrintTestReport(IEnumerable<Outcome> outcomes)
         {
+            Logger.AddLog(LogLevel.Information, "Print Test Report");
             bool pass = outcomes.Contains(Outcome.Pass);
             bool fail = outcomes.Contains(Outcome.Fail);
             bool inconclusive = outcomes.Contains(Outcome.Inconclusive);
@@ -282,6 +297,8 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// </summary>
         public void SaveTestReport(string filename, ReportFormat format, IEnumerable<Outcome> outcomes)
         {
+            Logger.AddLog(LogLevel.Information, "Save Test Report");
+
             bool pass = outcomes.Contains(Outcome.Pass);
             bool fail = outcomes.Contains(Outcome.Fail);
             bool inconclusive = outcomes.Contains(Outcome.Inconclusive);
@@ -301,7 +318,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// load test suite version info
         /// </summary>
         /// <param name="testsuitepath">The path of test case</param>
-        public string LoadTestsuiteVersion(string testsuitepath)
+        private string LoadTestsuiteVersion(string testsuitepath)
         {
             List<string> paths = new List<string>();
             var allVersions = new HashSet<string>();

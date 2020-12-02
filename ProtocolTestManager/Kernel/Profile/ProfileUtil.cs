@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void Close()
         {
-            if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
+            CheckIfClosed();
             profileUtilClosed = true;
             playlistStream.Flush();
             playlistStream.Close();
@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="filename">File name</param>
         public void AddPtfCfg(string filename)
         {
-            if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
+            CheckIfClosed();
             string name = Path.GetFileName(filename);
             Uri partUri = PackUriHelper.CreatePartUri(new Uri(string.Format(@"ptfconfig\{0}", name), UriKind.Relative));
             PackagePart ptfconfig = profilePackage.CreatePart(partUri, System.Net.Mime.MediaTypeNames.Text.Xml);
@@ -151,7 +151,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="path">Path</param>
         public void SavePtfCfgTo(string path)
         {
-            if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
+            CheckIfClosed();
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             get
             {
-                if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
+                CheckIfClosed();
                 return playlistStream;
             }
         }
@@ -195,7 +195,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             get
             {
-                if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
+                CheckIfClosed();
                 return profileStream;
             }
         }
@@ -324,5 +324,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 "MS-SMBD_ServerTestSuite.deployment.ptfconfig",
             },
         };
+
+        private void CheckIfClosed()
+        {
+            if (profileUtilClosed)
+            {
+                throw new InvalidOperationException(StringResource.PackageClosed);
+            }
+        }
     }
 }

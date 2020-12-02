@@ -877,12 +877,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
-        /// Retrives the object of the logger.
+        /// Retrives the object of the TestSuiteLogManager.
         /// </summary>
-        /// <returns>Logger object.</returns>
-        public Logger GetLogger()
+        /// <returns>TestSuiteLogManager object.</returns>
+        public TestSuiteLogManager GetTestSuiteLogManager()
         {
-            return testEngine.GetLogger();
+            return testEngine.GetTestSuiteLogManager();
         }
 
         /// <summary>
