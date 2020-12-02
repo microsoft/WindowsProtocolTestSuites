@@ -10,20 +10,20 @@ using System.Text;
 namespace Microsoft.Protocols.TestManager.Kernel
 {
     /// <summary>
-    /// This class defines the logger.
+    /// This class defines how to manage the logs of test cases.
     /// </summary>
-    public class Logger : INotifyPropertyChanged
+    public class TestSuiteLogManager : INotifyPropertyChanged
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Logger()
+        public TestSuiteLogManager()
         {
             GroupByOutcome = new GroupByOutcome();
             GroupByCategory = new GroupByCategory();
         }
         /// <summary>
-        /// Initialize the logger.
+        /// Initialize the TestSuiteLogManager.
         /// </summary>
         /// <param name="allTestCases">all test cases</param>
         public void Initialize(List<TestCase> allTestCases)

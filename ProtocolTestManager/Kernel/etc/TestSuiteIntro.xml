@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TestSuiteSelectionConfig>
-  <DefaultRegistryPath>SOFTWARE\Microsoft\ProtocolTestSuites</DefaultRegistryPath>
-  <DefaultRegistryPath64>SOFTWARE\Wow6432Node\Microsoft\ProtocolTestSuites</DefaultRegistryPath64>
   <Group name="File Sharing">
     <TestSuite name="FileServer">
       <Description></Description>
