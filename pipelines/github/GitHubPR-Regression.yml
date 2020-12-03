@@ -138,4 +138,5 @@ stages:
               testResultsFormat: VSTest
               searchFolder: "$(Build.ArtifactStagingDirectory)/TestResults"
               testResultsFiles: "*/*.trx"
+              failTaskOnFailedTests: true
             condition: always()
