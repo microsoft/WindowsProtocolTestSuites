@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_GET_REFS_VOLUME_DATA request to the server that contains the file and check if the response is correct.")]
         public void FsCtl_Get_REFS_Volume_Data_File()
         {
-            FsCtl_Get_Volume_Data(FileType.DataFile, FileSystem.REFS);
+            //FsCtl_Get_Volume_Data(FileType.DataFile, FileSystem.REFS);
         }
 
         [TestMethod()]
