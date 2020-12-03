@@ -37,6 +37,11 @@ if($config -eq $null)
 # Define common variables
 #----------------------------------------------------------------------------
 $password = $config.lab.core.password
+
+#test Code
+$password ="WrongPassword01!"
+#end test code
+
 if([System.String]::IsNullOrEmpty($password)) 
 {
     $password = "Password01!"
