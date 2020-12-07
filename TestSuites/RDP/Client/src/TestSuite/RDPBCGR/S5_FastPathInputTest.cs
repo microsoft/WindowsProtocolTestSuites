@@ -103,9 +103,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             bool bMouseEventPassed = bMouseEventReceived || bExtendedMouseEventReceived;
             bool bKeyboardEventPassed = bKeyboardEventReceived || bUnicodeKeyboardEventReceived;
-            bool bControlServerGrphicsOutputPassed = bClientSuppressOutputPDUReceived;
+            bool bControlServerGraphicsOutputPassed = bClientSuppressOutputPDUReceived;
 
-            this.TestSite.Assert.IsTrue(bMouseEventPassed && bKeyboardEventPassed && bSynchronizeEventReceived && bControlServerGrphicsOutputPassed,
+            this.TestSite.Assert.IsTrue(bMouseEventPassed && bKeyboardEventPassed && bSynchronizeEventReceived && bControlServerGraphicsOutputPassed,
                 @"Successfully received the followings: Keyboard Event or Unicode Keyboard Event, Mouse Event or Extended Mouse Event, Synchronize Event, 
                   Client Refresh Rect and Client Suppress Output.");
 
