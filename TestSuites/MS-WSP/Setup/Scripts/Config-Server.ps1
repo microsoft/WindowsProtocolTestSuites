@@ -3,7 +3,7 @@
 
 #############################################################################
 ##
-## Microsoft Windows Powershell Sripting
+## Microsoft Windows Powershell Scripting
 ## File:           Config-Server.ps1
 ## Author:         v-mankuc
 ## Purpose:        Configure server for MS-WSP test suite.
@@ -13,131 +13,91 @@
 ##
 ##############################################################################
 
-Param(
-[String]$ToolsPath, 
-[String]$ScriptsPath, 
-[String]$TestSuitePath,
-[String]$LogPath,
-[String]$clientOS,
-
-[String]$IPVersion,
-[String]$workgroupDomain,
-[string]$userNameInVM,
-[string]$userPwdInVM,
-[string]$domainInVM
+param(
+     [string]$WorkingDir = "$env:SystemDrive\Temp", 
+     [string]$ProtocolConfigFile = "$workingDir\Protocol.xml"
 )
 
 #----------------------------------------------------------------------------
 # Starting script
 #----------------------------------------------------------------------------
-$logFile = $logPath+"\Config-Server.ps1.log"
-Start-Transcript $logFile -force
+$logFile = $WorkingDir + "\Config-Server.ps1.log"
+Start-Transcript $logFile -Force
 
-Write-Host "EXECUTING [Config-Server.ps1] ..." -foregroundcolor cyan
-Write-Host "`$toolsPath       = $toolsPath"
-Write-Host "`$scriptsPath     = $scriptsPath"
-Write-Host "`$TestSuitePath   = $TestSuitePath"
-Write-Host "`$logFile         = $logFile"
-Write-Host "`$clientOS        = $clientOS"
-Write-Host "`$IPVersion       = $IPVersion"
-Write-Host "`$workgroupDomain = $workgroupDomain"
-Write-Host "`$userNameInVM    = $userNameInVM"
-Write-Host "`$userPwdInVM     = $userPwdInVM"
-Write-Host "`$domainInVM      = $domainInVM"
+Write-Host "EXECUTING [Config-Server.ps1] ..." -ForegroundColor Cyan
+Write-Host "`$WorkingDir             = $WorkingDir"
+Write-Host "`$ProtocolConfigFile     = $ProtocolConfigFile"
 
-Write-Host "Put current dir as $scriptsPath."
-pushd $scriptsPath
+Write-Host "Put current directory as $WorkingDir."
+Push-Location $WorkingDir
 
 Write-Host  "Verifying environment..."
-.\Verify-NetworkEnvironment.ps1 $IPVersion $workgroupDomain
-
-$dataPath = $scriptsPath.Substring(0, $scriptsPath.Length - $scriptsPath.LastIndexOf('\')) + "Data"
-$myToolsPath = $scriptsPath.Substring(0, $scriptsPath.Length - $scriptsPath.LastIndexOf('\')) + "MyTools"
+& .\Verify-NetworkEnvironment.ps1 "IPv4" "Workgroup"
  
 #-----------------------------------------------------
 # Begin to config server
 #-----------------------------------------------------
-Write-Host "Begin to config Server..."        
+Write-Host "Begin to config Server..."
 
-$OSVersion = .\Get-OSVersion.ps1
-$sysdrive=$env:systemdrive
-.\Share-Folder.ps1 %systemdrive%\test\data Data
-$OSArchitechture = .\Get-OSArchitechture.ps1 $computerName $userNameInVM $userPwdInVM 
-
-.\Turnoff-FileReadonly.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig
-
-if(($OSversion -ne $Null) -and ($OSVersion -eq "WS7"))
-{
-    Write-Host "Installing File services Server and Window search..." -foregroundcolor yellow
-    cmd.exe /c "servermanagercmd.exe -install FS-Search-Service -allSubFeatures" 
-    cmd /c net start "Windows Search"
-
-   .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerOffset" "64"
-   .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerVersion" "67328"
-
-  
-}
-else
-{    $OSSYSVersion = .\Get-OSVersion.ps1 SUT01 $userNameInVM $userPwdInVM
-     if ($OSSYSVersion -eq "W2K3") # W2k3    
-     {
-        Write-Host "Installing Windows desktop search.." -foregroundcolor yellow
-        
-        if($OSArchitechture -eq "x64")       
-        {
-             cmd.exe /c "$myToolsPath\WindowsSearch-KB940157-Srv2K3_XP-x64-enu" /q
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerOffset" "64"
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerVersion" "65801"
-
-        }
-        else
-        {
-             cmd.exe /c "$myToolsPath\WindowsSearch-KB940157-Srv2K3-x86-enu.exe" /q
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerOffset" "32"
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerVersion" "265"
-        }      
-
-    }
-    else # W2K8
-    {
-    Write-Host "Installing File services Server and Window search..." -foregroundcolor yellow
-    cmd.exe /c "servermanagercmd.exe -install FS-Search-Service -allSubFeatures"
-    cmd /c net start "Windows Search"
-
-    if($OSArchitechture -eq "x64")
-       {
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerOffset" "64"
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerVersion" "65794"
-
-       }
-       else
-       {
-              
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerOffset" "32"
-             .\Modify-ConfigFileNode.ps1 $TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig "ServerVersion" "258"
-       }
-
-
-   
-    }
+Write-Host "Enable and restart Windows Search service..."
+$serviceName = "WSearch"
+$serviceInfo = Get-Service -Name $serviceName
+if ($serviceInfo.Status -ne "Running") {
+     Set-Service -Name $serviceName -StartupType Automatic
+     Restart-Service -Name $serviceName
 }
 
+Write-Host "Copy test data to the destination..."
 
-xcopy /y "$TestSuitePath\MS-WSP_ServerTestSuite.deployment.ptfconfig" "$datapath\" 2>&1 | Write-Host
+Write-Host "Create the test folder in a default indexed location..."
+$testPath = "$env:USERPROFILE\Test"
+if (-not (Test-Path $testPath)) {
+     New-Item -ItemType Directory -Path $testPath -Force
+}
 
+Write-Host "The test folder is located at $testPath"
+
+[xml]$config = Get-Content $ProtocolConfigFile
+$server = $config.lab.servers.vm | Where-Object { $_.role -eq "Server" }
+$tsTargetFolder = $server.tools.TestsuiteZip.targetFolder
+$tsDataFolder = "$tsTargetFolder\Data"
+
+Copy-Item "$tsDataFolder" -Destination $testPath -Recurse -Force
+
+Write-Host "Modify the CreateTime of some files to meet the requirements of some test cases..."
+[array]$dataFiles = Get-ChildItem "$testPath\Data\CreateQuery_Size" -Force
+for ($i = 0; $i -lt $dataFiles.Length; $i++) {
+     $dataFile = $dataFiles[$i]
+     $dataFile.CreationTime = $dataFile.CreationTime.AddDays(-10 * $i)
+     Write-Host "The CreationTime of $($dataFile.FullName) is $($dataFile.CreationTime)"
+}
+
+Write-Host "Make the test data folder to a share..."
+
+Write-Host "Grant user access to shared folder..."
+icacls.exe "$testPath" /grant "*S-1-1-0:(OI)(CI)(F)" 2>&1 | Write-Host
+
+Write-Host "Share $testPath..."
+$smbShare = Get-SmbShare | Where-Object { $_.Name -eq "Test" -and $_.Path -eq "$testPath" }
+if ($smbShare -eq $null) {        
+     New-SMBShare -Name "Test" -Path "$testPath" -FullAccess "Everyone"
+}
+
+Write-Host "Wait for reindexing..."
+Start-Sleep -Seconds 30
 
 #----------------------------------------------------------------------------
 # Finished to config server
 #----------------------------------------------------------------------------
-popd
-Write-Host "Write signal file: config.finished.signal to system drive."
-cmd /C ECHO CONFIG FINISHED>$ENV:HOMEDRIVE\config.finished.signal
+Pop-Location
 
+Write-Host "Write signal file: config.finished.signal to system drive."
+Set-Content -Path "$env:SystemDrive\config.finished.signal" -Value "CONFIG FINISHED"
 
 #----------------------------------------------------------------------------
 # Ending script
 #----------------------------------------------------------------------------
 Write-Host "Config finished."
 Write-Host "EXECUTE [Config-Server.ps1] FINISHED (NOT VERIFIED)."
-Stop-Transcript
-exit 0
+
+Stop-Transcript -ErrorAction SilentlyContinue
