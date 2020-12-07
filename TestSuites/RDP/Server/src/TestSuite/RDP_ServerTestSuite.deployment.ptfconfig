@@ -38,16 +38,16 @@
     <Property name="RDP.Security.Protocol" value="TLS">
       <Choice>TLS, CredSSP, RDP</Choice>
       <Description>
-          The Security protocol server supports: TLS, CredSSP, RDP
+        The Security protocol server supports: TLS, CredSSP, RDP
       </Description>
     </Property>
 
-    <Property name="RDP.Security.TLS.Version" value="TLS1.0">
+    <Property name="RDP.Security.TLS.Version" value="TLS1.2">
       <Choice>TLS1.0, TLS1.1, TLS1.2</Choice>
       <Description>
-          The TLS version server supports: TLS1.0, TLS1.1, or TLS1.2
-        </Description>
-      </Property>
+        The TLS version server supports: TLS1.0, TLS1.1, or TLS1.2
+      </Description>
+    </Property>
 
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
@@ -65,17 +65,17 @@
     <!-- Whether verify RDPBCGR message received -->
     <Property name="VerifyRdpbcgrMessages" value="True">
       <Choice>True,False</Choice>
-        <Description>
-          If this property is set to true, the test suite will verify the RDPBCGR reponse messages.
+      <Description>
+        If this property is set to true, the test suite will verify the RDPBCGR reponse messages.
       </Description>
     </Property>
-    
+
     <Property name="VerifyShouldBehaviors" value="True">
       <Choice>True,False</Choice>
-        <Description>
-          If this property is set to true, the test suite will verify SHOULD behaviors in TD.
-        </Description>
-      </Property>
+      <Description>
+        If this property is set to true, the test suite will verify SHOULD behaviors in TD.
+      </Description>
+    </Property>
 
     <!--Indicates if SUT is Windows Implementation.-->
     <Property name="IsWindowsImplementation" value="True">
@@ -92,32 +92,32 @@
     <!-- Whether the SUT supports RDPEDYC. The value should be true or false.-->
     <Property name="RDPEDYCSupported" value="True">
       <Choice>True,False</Choice>
-        <Description>
-          The property specifies whether the server supports RDPEDYC protocol.
-        </Description>
-      </Property>
+      <Description>
+        The property specifies whether the server supports RDPEDYC protocol.
+      </Description>
+    </Property>
 
     <!-- Whether the SUT supports RDPELE. The value should be true or false.-->
     <Property name="RDPELESupported" value="True">
       <Choice>True,False</Choice>
-        <Description>
-          The property specifies whether the server supports RDPELE protocol.
-        </Description>
-      </Property>
+      <Description>
+        The property specifies whether the server supports RDPELE protocol.
+      </Description>
+    </Property>
 
     <!--Whether the SUT issues a temporary license when issuing a license to the client for the first time-->
     <Property name="IssueTemporaryLicenseForTheFirstTime" value="True">
       <Choice>True,False</Choice>
-        <Description>
-          If this property is set to true, the the SUT issues a temporary license when issuing a license to the client for the first time.
-        </Description>
-      </Property>
+      <Description>
+        If this property is set to true, the the SUT issues a temporary license when issuing a license to the client for the first time.
+      </Description>
+    </Property>
     <!--The timeout used for main transport based on RDPBCGR.-->
-	<Property name="Timeout" value="60"/>
+    <Property name="Timeout" value="60"/>
 
-	<!--The timeout used for multiple transport based on RDPEUDP.-->
+    <!--The timeout used for multiple transport based on RDPEUDP.-->
     <Property name="MultiTransportTimeout" value="70"/>
- 
+
   </Properties>
   <Adapters>
   </Adapters>
