@@ -16,6 +16,7 @@ using System.Net.NetworkInformation;
 using Microsoft.Protocols.TestManager.FileServerPlugin;
 using System.Windows;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestManager.Detector
 {
