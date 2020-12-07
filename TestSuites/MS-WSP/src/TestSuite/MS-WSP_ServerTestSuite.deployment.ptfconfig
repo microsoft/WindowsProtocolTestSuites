@@ -45,7 +45,7 @@
 
     <Property name="SMB2ClientTimeout" value="120">
       <Description>
-        Timeout in seconds of the underlying SMB2Client used for named pipe transport.
+        Timeout in seconds of the underlying SMB2Client used for named pipe transport and other purposes.
       </Description>
     </Property>
 
@@ -155,6 +155,7 @@
     <Property name="QueryPath" value="file://SutComputer/Test/">
       <Description>
         It specifies the search scope (Path of the network folder to be searched).
+        Please specify this value with computer name or IP address of the server.
       </Description>
     </Property>
 

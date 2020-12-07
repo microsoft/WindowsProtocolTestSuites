@@ -7,7 +7,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
@@ -92,16 +94,38 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 wspSutAdapter.ModifyFileAttributes(fileName, i == 2, i == 3);
             }
 
-            var queryResult = GetQueryResult(WspConsts.System_FileAttributes, "attr");
-
-            var expectedResults = new uint[]
+            // Retry to wait for the index update.
+            var retryTimes = 5;
+            while (retryTimes-- > 0)
             {
-                    32, // Archive file
-                    33, // Read-only file
-                    34  // Hidden file
-            };
+                try
+                {
+                    var queryResult = GetQueryResult(WspConsts.System_FileAttributes, "attr");
 
-            ValidateQueryResult(nameof(WspConsts.System_FileAttributes), expectedResults, queryResult);
+                    var expectedResults = new uint[]
+                    {
+                        32, // Archive file
+                        33, // Read-only file
+                        34  // Hidden file
+                    };
+
+                    ValidateQueryResult(nameof(WspConsts.System_FileAttributes), expectedResults, queryResult);
+
+                    break;
+                }
+                catch (AssertFailedException)
+                {
+                    if (retryTimes <= 0)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        wspAdapter.CPMDisconnect();
+                        Thread.Sleep(5000);
+                    }
+                }
+            }
         }
 
         [TestMethod]
@@ -963,9 +987,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test if System.ComputerName property can be retrieved by CPMCreateQuery.")]
         public void CPMCreateQuery_CFullPropSpec_Shell_System_ComputerName()
         {
+            var sutComputerName = Site.Properties.Get("ServerComputerName");
+            if (IPAddress.TryParse(sutComputerName, out _))
+            {
+                Site.Assume.Inconclusive($"The ServerComputerName is an IP address, which is not supported in this case.");
+            }
+            sutComputerName = sutComputerName.Split('.')[0]; // Handle FQDN.
+
             var queryResult = GetQueryResult(WspConsts.System_ComputerName, "document");
 
-            var sutComputerName = Site.Properties.Get("ServerComputerName");
             foreach (var row in queryResult.Rows)
             {
                 var propValue = row.Columns[1].Data as string;
@@ -1085,7 +1115,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             for (var i = 0; i < totalRows; i++)
             {
-                var fileNamePrefix = $"{queryText}{i + 1}.";
+                var fileNamePrefix = $"{queryText}{i + 1}";
                 Site.Assert.IsTrue((getRowsOut.Rows[i].Columns[2].Data as string).StartsWith(fileNamePrefix), $"The file name of Row {i} in Ascend order should start with \"{fileNamePrefix}\".");
             }
 

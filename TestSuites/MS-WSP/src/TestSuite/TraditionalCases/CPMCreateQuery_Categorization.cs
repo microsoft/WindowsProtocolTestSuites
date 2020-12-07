@@ -15,14 +15,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     {
         public class RangePivot
         {
-            public object rangeValue;
+            public object RangeValue { get; }
 
-            public string rangeLabel;
+            public string RangeLabel { get; }
 
             public RangePivot(object rangeValue, string rangeLabel)
             {
-                this.rangeValue = rangeValue;
-                this.rangeLabel = rangeLabel;
+                this.RangeValue = rangeValue;
+                this.RangeLabel = rangeLabel;
             }
         }
 
@@ -740,7 +740,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var lcid = wspAdapter.builder.parameter.LcidValue;
 
             vType_Values prValVType;
-            var keyType = rangePivots[0].rangeValue.GetType();
+            var keyType = rangePivots[0].RangeValue.GetType();
             if (keyType == typeof(ulong))
             {
                 prValVType = vType_Values.VT_UI8;
@@ -780,7 +780,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var idx = 0;
             foreach (var rangePivot in rangePivots)
             {
-                var (pivot, label) = (rangePivot.rangeValue, rangePivot.rangeLabel);
+                var (pivot, label) = (rangePivot.RangeValue, rangePivot.RangeLabel);
                 boundaries[idx] = new RANGEBOUNDARY
                 {
                     ulType = RANGEBOUNDARY_ulType_Values.DBRANGEBOUNDTTYPE_EXACT,

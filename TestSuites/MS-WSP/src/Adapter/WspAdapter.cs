@@ -251,6 +251,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
 
             connectedClients.Clear();
+            disconnectedClients.Clear();
             cursorMap.Clear();
 
             isClientConnected = false;

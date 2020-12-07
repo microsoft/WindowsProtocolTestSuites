@@ -9,7 +9,7 @@
 
   <Adapters>
     <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspAdapter"/>
-    <Adapter xsi:type="powershell" name="IWspSutAdapter" scriptdir=".\SutControlAdapter"/>
+    <Adapter xsi:type="managed" name="IWspSutAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspSutAdapter"/>
   </Adapters>
   
   <TestLog defaultprofile="Verbose">

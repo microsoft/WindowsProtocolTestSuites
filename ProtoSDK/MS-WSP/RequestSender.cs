@@ -115,19 +115,109 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             this.securityPackage = securityPackage;
             this.useServerGssToken = useServerGssToken;
             this.smb2ClientTimeout = smb2ClientTimeout;
+        }
 
-            smb2Client = new Smb2Client(this.smb2ClientTimeout);
+        /// <summary>
+        /// Sends the message blob to the named pipe and obtains the response on a buffer.
+        /// </summary>
+        /// <param name="messageBlob">Message sent across the pipe.</param>
+        /// <param name="readBuffer">Buffer read from the response.</param>
+        /// <returns>Number of bytes read from the buffer.</returns>
+        public int SendMessage(byte[] messageBlob, out byte[] readBuffer)
+        {
+            if (smb2Client == null || !smb2Client.IsConnected)
+            {
+                ConnectToServer();
+            }
+
+            var bufferRead = TransactNamedPipe(messageBlob, out var tempBuffer);
+            if (tempBuffer == null)
+            {
+                // If the response contains no data, set the following varaibles to specific values,
+                // these specific values are compatible with the previous implementation.
+                readBuffer = new byte[0];
+                bufferRead = -1;
+            }
+            else
+            {
+                readBuffer = new byte[bufferRead];
+                Buffer.BlockCopy(tempBuffer, 0, readBuffer, 0, bufferRead);
+            }
+
+            return bufferRead;
+        }
+
+        /// <summary>
+        /// Terminate the named pipe transport.
+        /// </summary>
+        public void Disconnect()
+        {
+            if (smb2Client == null || !smb2Client.IsConnected)
+            {
+                return;
+            }
+
+            if (fileId.Persistent != 0 || fileId.Volatile != 0)
+            {
+                var status = smb2Client.Close(
+                    creditCharge: 1,
+                    creditRequest: 1,
+                    flags: defaultFlags,
+                    messageId: messageId++,
+                    sessionId: sessionId,
+                    treeId: treeId,
+                    fileId: fileId,
+                    closeFlags: Flags_Values.NONE,
+                    out _,
+                    out _);
+                CheckStatusCode(status, nameof(Smb2Client.Close));
+
+                fileId = default(FILEID);
+            }
+
+            if (treeId != 0)
+            {
+                var status = smb2Client.TreeDisconnect(
+                    creditCharge: 1,
+                    creditRequest: 1,
+                    flags: defaultFlags,
+                    messageId: messageId++,
+                    sessionId: sessionId,
+                    treeId: treeId,
+                    out _,
+                    out _);
+                CheckStatusCode(status, nameof(Smb2Client.TreeDisconnect));
+
+                treeId = 0;
+            }
+
+            if (sessionId != 0)
+            {
+                var status = smb2Client.LogOff(
+                    creditCharge: 1,
+                    creditRequest: 1,
+                    flags: defaultFlags,
+                    messageId: messageId++,
+                    sessionId: sessionId,
+                    out _,
+                    out _);
+                CheckStatusCode(status, nameof(Smb2Client.LogOff));
+
+                sessionId = 0;
+            }
+
+            defaultFlags = Packet_Header_Flags_Values.NONE;
+            messageId = 0;
+            smb2Client.Disconnect();
+            smb2Client = null;
         }
 
         /// <summary>
         /// Connect to the Server and establish the named pipe transport.
         /// </summary>
-        public void ConnectToServer()
+        private void ConnectToServer()
         {
-            if (smb2Client.IsConnected)
-            {
-                return;
-            }
+            smb2Client = new Smb2Client(smb2ClientTimeout);
 
             if (IPAddress.TryParse(serverName, out var serverIp))
             {
@@ -263,88 +353,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         }
 
         /// <summary>
-        /// Terminate the named pipe transport.
-        /// </summary>
-        public void Disconnect()
-        {
-            if (!smb2Client.IsConnected)
-            {
-                return;
-            }
-
-            var status = smb2Client.Close(
-                creditCharge: 1,
-                creditRequest: 1,
-                flags: defaultFlags,
-                messageId: messageId++,
-                sessionId: sessionId,
-                treeId: treeId,
-                fileId: fileId,
-                closeFlags: Flags_Values.NONE,
-                out _,
-                out _);
-            CheckStatusCode(status, nameof(Smb2Client.Close));
-
-            status = smb2Client.TreeDisconnect(
-                creditCharge: 1,
-                creditRequest: 1,
-                flags: defaultFlags,
-                messageId: messageId++,
-                sessionId: sessionId,
-                treeId: treeId,
-                out _,
-                out _);
-            CheckStatusCode(status, nameof(Smb2Client.TreeDisconnect));
-
-            status = smb2Client.LogOff(
-                creditCharge: 1,
-                creditRequest: 1,
-                flags: defaultFlags,
-                messageId: messageId++,
-                sessionId: sessionId,
-                out _,
-                out _);
-            CheckStatusCode(status, nameof(Smb2Client.LogOff));
-
-            defaultFlags = Packet_Header_Flags_Values.NONE;
-            messageId = 0;
-            sessionId = 0;
-            treeId = 0;
-            fileId = default(FILEID);
-            smb2Client.Disconnect();
-        }
-
-        /// <summary>
-        /// Sends the message blob to the named pipe and obtains the response on a buffer.
-        /// </summary>
-        /// <param name="messageBlob">Message sent across the pipe.</param>
-        /// <param name="readBuffer">Buffer read from the response.</param>
-        /// <returns>Number of bytes read from the buffer.</returns>
-        public int SendMessage(byte[] messageBlob, out byte[] readBuffer)
-        {
-            if (!smb2Client.IsConnected)
-            {
-                ConnectToServer();
-            }
-
-            var bufferRead = TransactNamedPipe(messageBlob, out var tempBuffer);
-            if (tempBuffer == null)
-            {
-                // If the response contains no data, set the following varaibles to specific values,
-                // these specific values are compatible with the previous implementation.
-                readBuffer = new byte[0];
-                bufferRead = -1;
-            }
-            else
-            {
-                readBuffer = new byte[bufferRead];
-                Buffer.BlockCopy(tempBuffer, 0, readBuffer, 0, bufferRead);
-            }
-
-            return bufferRead;
-        }
-
-        /// <summary>
         /// Check the SMB2 status code and throw specific exceptions if the status code is not a successful status code.
         /// </summary>
         /// <param name="status">The SMB2 status code to be checked.</param>
@@ -356,7 +364,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 status != Smb2Status.STATUS_MORE_PROCESSING_REQUIRED &&
                 status != Smb2Status.STATUS_END_OF_FILE)
             {
-                throw new RequestSenderException(status, $"Operation \"{opName}\" failed with error code {Smb2Status.GetStatusCode(status)}");
+                throw new RequestSenderException(status, $"Operation \"{opName}\" failed with error code {Smb2Status.GetStatusCode(status)}.");
             }
         }
 
