@@ -88,7 +88,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         {
             base.TestCleanup();
 
-            rdpbcgrServer.Dispose();
+            if (rdpbcgrServer != null)
+                rdpbcgrServer.Dispose();
 
             if (rdpedycServer != null)
                 rdpedycServer.Dispose();
