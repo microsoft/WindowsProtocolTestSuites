@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Threading;
-using System.Configuration;
 
 namespace RDPSUTControlAgent
 {
@@ -130,6 +130,7 @@ namespace RDPSUTControlAgent
             }
             else
             {
+                //TODO: implement the logic in other OS platform, such as Linux
                 return 0;
             }
         }
@@ -172,6 +173,7 @@ namespace RDPSUTControlAgent
                 return 1;
             }
             else {
+                //TODO: implement the logic in other OS platform, such as Linux
                 return 0;
             }
         }
@@ -193,10 +195,10 @@ namespace RDPSUTControlAgent
             }
             else
             {
+                //TODO: implement the logic in other OS platform, such as Linux
                 return 0;
             }
         }
-
 
         /// <summary>
         /// Trigger auto reconnect event, make a short-term network failure
@@ -207,7 +209,6 @@ namespace RDPSUTControlAgent
             Thread restartNetworkThread = new Thread(new ThreadStart(RestartNetWorkThread));
             restartNetworkThread.Start();
         }
-
 
         /// <summary>
         /// Type a screenshot
@@ -274,11 +275,11 @@ namespace RDPSUTControlAgent
 
         private static bool IsWindowsPlatform()
         {
-            return ConfigurationManager.AppSettings["currentOS"].Equals("Windows");
+            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
         private static string GetCurrentOSType() {
-            return ConfigurationManager.AppSettings["currentOS"];
+            return RuntimeInformation.OSDescription;
         }
 
         #endregion
