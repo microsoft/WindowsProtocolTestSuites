@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
             StopRDPConnection();
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
 
             DynamicVCException.SetCleanUp(false);
         }
@@ -153,8 +153,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             TriggerClientDisconnectAll();
 
-            this.rdpbcgrAdapter.Reset();
-            this.rdpegfxAdapter.Reset();
+            this.rdpbcgrAdapter?.Reset();
+            this.rdpegfxAdapter?.Reset();
         }
 
         /// <summary>

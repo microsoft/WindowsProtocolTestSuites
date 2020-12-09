@@ -10,11 +10,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDP_ClientAdapter", "Adapte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDP_ClientTestSuite", "TestSuite\RDP_ClientTestSuite.csproj", "{1CEBA0F7-04B6-49F7-AF02-322FDF6CC5D2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BCE67A85-2784-499F-8C41-32BF5DB6D7BC}"
-	ProjectSection(SolutionItems) = preProject
-		ClientLocal.TestSettings = ClientLocal.TestSettings
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtocolSDK", "ProtocolSDK", "{1A351693-124D-47D0-A001-818FDCB04F59}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\..\..\..\ProtoSDK\Common\Common.csproj", "{FE653643-6342-4300-871E-683C7BA31494}"

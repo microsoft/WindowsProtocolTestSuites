@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         {
             if (isInteractiveAdapter)
             {
-                Site.Assert.Inconclusive("This case will not be bun when using interactive client control adapter.");
+                Site.Assume.Inconclusive("This case will not be bun when using interactive client control adapter.");
             }
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
@@ -318,7 +318,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             // Trigger the user to determin whether the client device supports proximity. If not, negative value will be returned when using interactive adapter.
             if (this.rdpeiSUTControlAdapter.TriggerDismissHoveringContactPduOnClient(this.TestContext.TestName) < 0)
             {
-                TestSite.Assert.Inconclusive("The client device does not support proximity.");
+                TestSite.Assume.Inconclusive("The client device does not support proximity.");
             }
             // RDPEI running phase
             RDPINPUT_TOUCH_EVENT_PDU touchEventPdu = this.rdpeiServer.ExpectRdpInputTouchEventPdu(waitTime);
@@ -341,7 +341,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                         int y = d.y.ToInt();
                         if (x >= left && x <= (left + width) && y >= top && y <= (top + height))
                         {
-                            TestSite.Assert.Inconclusive("The client device does not support proximity.");
+                            TestSite.Assume.Inconclusive("The client device does not support proximity.");
                         }
                     }
                 }
