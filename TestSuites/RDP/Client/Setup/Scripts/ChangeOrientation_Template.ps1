@@ -6,5 +6,5 @@ Param(
 $Orientation = 1
 )
 
-. ScriptPath\Set-DisplaySettings.ps1
+Import-Module ScriptPath\Set-DisplaySettings.ps1
 Set-ScreenOrientation $Orientation
