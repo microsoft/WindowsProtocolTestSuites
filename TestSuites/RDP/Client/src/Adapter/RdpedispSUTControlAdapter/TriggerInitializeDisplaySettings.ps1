@@ -7,37 +7,25 @@
 # Run Task to change remote screen orientation
 $pwdConverted = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential $ptfprop_SUTUserName, $pwdConverted -ErrorAction Stop
-# use regular expression to extract build number from the path or current script
-$buildFolderRegEx = New-Object -TypeName regex -ArgumentList "^C:\\MicrosoftProtocolTests\\RDP\\Client-Endpoint\\(?<buildNo>\d+\.\d+\.\d+\.\d+)\\"
-$buildNo = $null
-$scriptFolder = $MyInvocation.MyCommand.Definition
-$matchResult = $buildFolderRegEx.Match($scriptFolder)
-if($matchResult.Success)
-{
-	$buildNo = $matchResult.Groups["buildNo"].Value
-}
-if($buildNo -eq $null)
-{
-    return -1 # failed to get build number
-}
-$path = "C:\MicrosoftProtocolTests\RDP\Client-Endpoint\" + $buildNo + "\Scripts"
+$path = "/RDP-TestSuite-ClientEP/Scripts"
 $scriptblock = {
 	param([int]$width, [int]$height, [int]$orientation, [string]$path)
     $taskname = "ChangeResolution" + $width + "X" + $height
-	$script = $path + "\ChangeResolution.ps1"
+	$systemDrive = $env:SystemDrive
+	$script = $systemDrive + $path + "/ChangeResolution.ps1"
 	cmd /c schtasks /Create /SC Weekly /TN $taskname /TR "powershell $script $width $height" /IT /F
 	cmd /c schtasks /Run /TN $taskname
 	cmd /c schtasks /Delete /TN $taskname /F
 	$taskname = "ChangeOrientation" + $orientation
-	$script = $path + "\ChangeOrientation.ps1"
+	$script = $systemDrive + $path + "/ChangeOrientation.ps1"
 	cmd /c schtasks /Create /SC Weekly /TN $taskname /TR "powershell $script $orientation" /IT /F
 	cmd /c schtasks /Run /TN $taskname
 	cmd /c schtasks /Delete /TN $taskname /F
 	}
 	
-$cmdOutput = Invoke-Command -ComputerName $ptfprop_SUTName -credential $cred -ScriptBlock $scriptblock -ArgumentList ($width, $height, $orientation, $path)
+$cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($width, $height, $orientation, $path)
 
-$cmdOutput | out-file ".\InitialDisplaySetting.log"
+$cmdOutput | out-file "./InitialDisplaySetting.log"
 
 if($cmdOutput -ne $null)
 {

@@ -3,9 +3,14 @@
 
 # This script is used to trigger one touch event on client.
 
-cmd /c schtasks /run /s $PtfProp_SUTName /U $PtfProp_SUTUserName /P $PtfProp_SUTUserPassword /TN $PtfProp_TriggerMultiTouchEvent_Task 2>&1 | out-file ".\error.txt"
+$scriptblock = {
+	param([string]$PtfProp_SUTName, [string]$PtfProp_SUTUserName, [string]$PtfProp_SUTUserPassword, [string]$PtfProp_TriggerMultiTouchEvent_Task)
+    cmd /c schtasks /run /s $PtfProp_SUTName /U $PtfProp_SUTUserName /P $PtfProp_SUTUserPassword /TN $PtfProp_TriggerMultiTouchEvent_Task
+	}
+	
+$cmdError = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($PtfProp_SUTName, $PtfProp_SUTUserName, $PtfProp_SUTUserPassword, $PtfProp_TriggerMultiTouchEvent_Task) 2>&1 | out-file "./error.txt"
 
-$cmdError = get-content ".\error.txt"
+$cmdError = get-content "./error.txt"
 if($cmdError -ne $null)
 {
     if($cmdError.GetType().IsArray)

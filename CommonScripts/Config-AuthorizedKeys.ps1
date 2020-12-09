@@ -69,17 +69,28 @@ if($config -eq $null)
 $node01 = $config.lab.servers.vm | Where {$_.role -match "ClusterNode01"}
 $tool = $node01.tools| Where {$_.name -match "Win32-OpenSSH-Certs"}
 $OpenSSHPath = $tool.targetFolder
-$dc = $config.lab.servers.vm | Where {$_.role -match "DC"}
-$dcUserName = $dc.username
-$domainName  = $dc.domain
-if($domainName -match "\.")
-{
-	$domainName = $domainName.Split(".")[0].ToUpper()
-}
 
-if($dcUserName -eq $null)
+$dc = $config.lab.servers.vm | Where {$_.role -match "DC"}
+if($dc -eq $null)
 {
-	$dcUserName = "Administrator"
+    # for non-domain environments, just get username
+    $userFoldername = $config.lab.core.username
+}
+else
+{
+    $dcUserName = $dc.username
+    if($dcUserName -eq $null)
+    {
+	    $dcUserName = "Administrator"
+    }
+
+    $domainName  = $dc.domain
+    if($domainName -match "\.")
+    {
+	    $domainName = $domainName.Split(".")[0].ToUpper()
+    }
+
+    $userFoldername = "$dcUserName.$domainName"
 }
 
 #----------------------------------------------------------------------------
@@ -90,11 +101,11 @@ if($OpenSSHPath -eq $null)
     $OpenSSHPath = "$systemDrive\OpenSSH-Win64"
 }
 
-if (!(Test-Path "$systemDrive\Users\$dcUserName.$domainName\.ssh")) {
-        New-Item -ItemType Directory "$systemDrive\Users\$dcUserName.$domainName\.ssh"
+if (!(Test-Path "$systemDrive\Users\$userFoldername\.ssh")) {
+        New-Item -ItemType Directory "$systemDrive\Users\$userFoldername\.ssh"
 }
 
-Copy "$OpenSSHPath\authorized_keys" "$systemDrive\Users\$dcUserName.$domainName\.ssh\authorized_keys" -Force
+Copy "$OpenSSHPath\authorized_keys" "$systemDrive\Users\$userFoldername\.ssh\authorized_keys" -Force
 
 # restart sshd service to take affect
 Restart-Service sshd
