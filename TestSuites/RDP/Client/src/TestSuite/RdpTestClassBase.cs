@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     if (testcaseRdpVer > currentRDPVer)
                     {
-                        this.Site.Assert.Inconclusive("Test case {0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
+                        this.Site.Assume.Inconclusive("Test case {0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
                     }
                 }
                 else
@@ -613,7 +613,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         {
             if (transportProtocol == EncryptedProtocol.Rdp && isWindowsImplementation)
             {
-                Site.Assert.Inconclusive("Not Applicable, Microsoft RDP clients fail the TLS or DTLS handshake for a multitransport connection if Enhanced RDP Security is not in effect for the main RDP connection.");
+                Site.Assume.Inconclusive("Not Applicable, Microsoft RDP clients fail the TLS or DTLS handshake for a multitransport connection if Enhanced RDP Security is not in effect for the main RDP connection.");
             }
         }
         //override, assume fail for an invalid PTF property.
@@ -723,11 +723,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         public void TriggerClientDisconnectAll()
         {
-            int iResult;
+            int? iResult;
 
             try
             {
-                iResult = sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+                iResult = sutControlAdapter?.TriggerClientDisconnectAll(this.TestContext.TestName);
             }
             catch (Exception ex)
             {
@@ -736,7 +736,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 return;
             }
 
-            TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            }
         }
     }
 }

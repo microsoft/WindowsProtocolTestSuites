@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
                 rdpedycServer.Dispose();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
 

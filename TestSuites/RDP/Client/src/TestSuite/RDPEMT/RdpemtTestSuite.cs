@@ -88,8 +88,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         {
             base.TestCleanup();
 
-            if (rdpbcgrServer != null)
-                rdpbcgrServer.Dispose();
+            rdpbcgrServer?.Dispose();
 
             if (rdpedycServer != null)
                 rdpedycServer.Dispose();
@@ -111,7 +110,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpeudpSocketL.Close();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
         }
         #endregion
 
