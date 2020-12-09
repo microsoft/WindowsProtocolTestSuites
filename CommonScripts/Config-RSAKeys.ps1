@@ -74,18 +74,30 @@ if($config -eq $null)
 $driver = $config.lab.servers.vm | Where {$_.role -match "DriverComputer"}
 $tool = $driver.tools| Where {$_.name -match "certs"}
 $RSAKeysPath = $tool.targetFolder
+
 $dc = $config.lab.servers.vm | Where {$_.role -match "DC"}
-$dcUserName = $dc.username
-$domainName  = $dc.domain
-if($domainName -match "\.")
+if($dc -eq $null)
 {
-	$domainName = $domainName.Split(".")[0].ToUpper()
+    # for non-domain environments, just get username
+    $userFoldername = $config.lab.core.username
+}
+else
+{
+    $dcUserName = $dc.username
+    if($dcUserName -eq $null)
+    {
+	    $dcUserName = "Administrator"
+    }
+
+    $domainName  = $dc.domain
+    if($domainName -match "\.")
+    {
+	    $domainName = $domainName.Split(".")[0].ToUpper()
+    }
+
+    $userFoldername = "$dcUserName.$domainName"
 }
 
-if($dcUserName -eq $null)
-{
-	$dcUserName = "Administrator"
-}
 
 #----------------------------------------------------------------------------
 # Copy authorized_keys
@@ -95,7 +107,7 @@ if($RSAKeysPath -eq $null)
     $RSAKeysPath = "$systemDrive\id_rsa\.ssh"
 }
 
-Copy "$RSAKeysPath" "$systemDrive\Users\$dcUserName.$domainName" -Recurse -Force
+Copy "$RSAKeysPath" "$systemDrive\Users\$userFoldername" -Recurse -Force
 
 # restart sshd service to take affect
 Restart-Service sshd

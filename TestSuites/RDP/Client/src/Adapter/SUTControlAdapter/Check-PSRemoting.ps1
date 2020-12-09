@@ -13,11 +13,20 @@ $maximumRetryCount = 5
 while($triedCount -lt $maximumRetryCount -and $sutStatus -eq $null)
 {
     $triedCount++
-    $sutStatus = Test-WSMan $computerName -ErrorAction Ignore
-
-    # Sleep before retry if last attempt failed.
-    if($sutStatus -eq $null) {
+    try
+    {
+        Get-PSSession|Remove-PSSession
+        $psSession=New-PSSession -HostName $computerName -UserName $ptfprop_SUTUserName
+        $sutStatus = "pass"
+    }
+    catch
+    {
+        # Sleep before retry if last attempt failed.
         Start-Sleep -Seconds 1
+    }
+    finally
+    {
+        Get-PSSession|Remove-PSSession
     }
 }
 
