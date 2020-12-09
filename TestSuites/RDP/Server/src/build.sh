@@ -58,6 +58,8 @@ then
     exit 1
 fi
 
+cp $TestSuiteRoot/AssemblyInfo/.version $OutDir/Bin -f
+
 echo ==========================================================
 echo          Build RDP Server test suite successfully         
 echo ==========================================================
