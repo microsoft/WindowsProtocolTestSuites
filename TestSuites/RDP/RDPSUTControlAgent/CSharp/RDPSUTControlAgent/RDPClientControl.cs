@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Management;
 using System.Runtime.InteropServices;
@@ -46,7 +48,6 @@ namespace RDPSUTControlAgent
                         int index = 0;
                         if (rdpPayload.Decode(requestMessage.payload, (int)requestMessage.payloadLength, ref index))
                         {
-
                             if (rdpPayload.type == RDP_Connect_Payload_Type.RDP_FILE)
                             {
                                 if (Start_RDP_Connection(rdpPayload.rdpFileConfig) > 0)
@@ -55,7 +56,7 @@ namespace RDPSUTControlAgent
                                 }
                                 else
                                 {
-                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId;
+                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId +"when it is .rdp file";
                                 }
                             }
                             else
@@ -81,11 +82,10 @@ namespace RDPSUTControlAgent
                         PostOperation = AUTO_RECONNECT;
                         break;
                     case RDPSUTControl_CommandId.SCREEN_SHOT:
-                        //if (TAKE_SCREEN_SHOT(out payload) > 0)
-                        //{
-                        //    resultCode = (uint)SUTControl_ResultCode.SUCCESS;
-                        //}
-                        errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId;
+                        if (TAKE_SCREEN_SHOT(out payload) > 0)
+                        {
+                            resultCode = (uint)SUTControl_ResultCode.SUCCESS;
+                        }
                         break;
                     default:
                         errorMessage = "SUT control agent doesn't support this command:" + commandId;
@@ -130,13 +130,7 @@ namespace RDPSUTControlAgent
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                //Start RDP connection
-                Process rdpProcess = new Process();
-                rdpProcess.StartInfo.FileName = "xfreerdp";
-                rdpProcess.StartInfo.Arguments = TmpRDPFile;
-                rdpProcess.Start();
-                rdpProcess.Close();
-                return 1;
+                return 0;
             }
             else
             {
@@ -243,41 +237,44 @@ namespace RDPSUTControlAgent
         /// </summary>
         /// <param name="screenImageBinary">out parameter for screen image data</param>
         /// <returns></returns>
-        //public static int TAKE_SCREEN_SHOT(out byte[] screenImageBinary)
-        //{
-        //    Bitmap bmpmapScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
-        //    Graphics graphicScreen = Graphics.FromImage(bmpmapScreen);
-        //    graphicScreen.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
+        public static int TAKE_SCREEN_SHOT(out byte[] screenImageBinary)
+        {
+            Bitmap testBitmap = new Bitmap(300,400);
+            Graphics graphicScreen = Graphics.FromImage(testBitmap);
+            graphicScreen.CopyFromScreen(0, 0, 0, 0, testBitmap.Size, CopyPixelOperation.SourceCopy);
 
-        //    List<byte> imageBuffer = new List<byte>();
-        //    byte[] width = BitConverter.GetBytes(Screen.PrimaryScreen.Bounds.Width);
-        //    if (!BitConverter.IsLittleEndian)
-        //    {
-        //        Array.Reverse(width);
-        //    }
-        //    imageBuffer.AddRange(width);
+            testBitmap.Save("testBitmap.bmp", ImageFormat.Bmp);
 
-        //    byte[] height = BitConverter.GetBytes(Screen.PrimaryScreen.Bounds.Height);
-        //    if (!BitConverter.IsLittleEndian)
-        //    {
-        //        Array.Reverse(height);
-        //    }
-        //    imageBuffer.AddRange(height);
+            List<byte> imageBuffer = new List<byte>();
+            byte[] width = BitConverter.GetBytes(testBitmap.Width);
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(width);
+            }
+            imageBuffer.AddRange(width);
 
-        //    for(int j=0; j< Screen.PrimaryScreen.Bounds.Height; j++)
-        //    {
-        //        for (int i = 0; i < Screen.PrimaryScreen.Bounds.Width; i++)
-        //        {
-        //            Color c = bmpmapScreen.GetPixel(i, j);
-        //            imageBuffer.Add(c.R);
-        //            imageBuffer.Add(c.G);
-        //            imageBuffer.Add(c.B);
-        //        }
-        //    }
+            byte[] height = BitConverter.GetBytes(testBitmap.Height);
+            if (!BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(height);
+            }
+            imageBuffer.AddRange(height);
 
-        //    screenImageBinary = imageBuffer.ToArray();
-        //    return 1;
-        //}
+            for (int j = 0; j < testBitmap.Height; j++)
+            {
+                for (int i = 0; i < testBitmap.Width; i++)
+                {
+                    Color c = testBitmap.GetPixel(i, j);
+                    imageBuffer.Add(c.R);
+                    imageBuffer.Add(c.G);
+                    imageBuffer.Add(c.B);
+                }
+            }
+
+            screenImageBinary = imageBuffer.ToArray();
+
+            return 1;
+        }
 
         /// <summary>
         /// Restart all network on the system

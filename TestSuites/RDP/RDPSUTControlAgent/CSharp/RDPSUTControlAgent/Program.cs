@@ -48,7 +48,7 @@ namespace RDPSUTControlAgent
             Console.WriteLine("Start listening on port {0}", listenPort);
 
             Console.Read();
-
+            
             listener.Stop();
             Console.WriteLine("Stop listening");
         }
