@@ -119,7 +119,7 @@ namespace RDPSUTControlAgent
             rdpFile.Close();
 
             //Start RDP connection
-            if (IsWindowsPlatform())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 Process rdpProcess = new Process();
                 rdpProcess.StartInfo.FileName = "mstsc.exe";
@@ -128,9 +128,19 @@ namespace RDPSUTControlAgent
                 rdpProcess.Close();
                 return 1;
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                //Start RDP connection
+                Process rdpProcess = new Process();
+                rdpProcess.StartInfo.FileName = "xfreerdp";
+                rdpProcess.StartInfo.Arguments = TmpRDPFile;
+                rdpProcess.Start();
+                rdpProcess.Close();
+                return 1;
+            }
             else
             {
-                //TODO: implement the logic in other OS platform, such as Linux
+                //TODO: implement the logic in other OS platform
                 return 0;
             }
         }
@@ -162,7 +172,7 @@ namespace RDPSUTControlAgent
                 arguments += string.Format(@" /w:{0} /h:{1}", configureParameters.desktopWidth, configureParameters.desktopHeight);
             }
 
-            if (IsWindowsPlatform())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 //Start RDP connection
                 Process rdpProcess = new Process();
@@ -172,8 +182,18 @@ namespace RDPSUTControlAgent
                 rdpProcess.Close();
                 return 1;
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                //Start RDP connection
+                Process rdpProcess = new Process();
+                rdpProcess.StartInfo.FileName = "xfreerdp";
+                rdpProcess.StartInfo.Arguments = arguments;
+                rdpProcess.Start();
+                rdpProcess.Close();
+                return 1;
+            }
             else {
-                //TODO: implement the logic in other OS platform, such as Linux
+                //TODO: implement the logic in other OS platform
                 return 0;
             }
         }
@@ -184,7 +204,7 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Close_RDP_Connection()
         {
-            if (IsWindowsPlatform())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 Process[] rdpProcesses = Process.GetProcessesByName("mstsc");
                 foreach (Process process in rdpProcesses)
@@ -193,9 +213,17 @@ namespace RDPSUTControlAgent
                 }
                 return 1;
             }
-            else
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                //TODO: implement the logic in other OS platform, such as Linux
+                Process[] rdpProcesses = Process.GetProcessesByName("xfreerdp");
+                foreach (Process process in rdpProcesses)
+                {
+                    process.Kill();
+                }
+                return 1;
+            }
+            else {
+                //TODO: implement the logic in other OS platform
                 return 0;
             }
         }
@@ -271,11 +299,6 @@ namespace RDPSUTControlAgent
             }
 
             return;
-        }
-
-        private static bool IsWindowsPlatform()
-        {
-            return RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         }
 
         private static string GetCurrentOSType() {
