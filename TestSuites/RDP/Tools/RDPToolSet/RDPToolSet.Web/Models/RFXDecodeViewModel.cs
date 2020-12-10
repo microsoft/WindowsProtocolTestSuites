@@ -1,9 +1,9 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Collections.Generic;
 using CodecToolSet.Core;
 using CodecToolSet.Core.RFXDecode;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RDPToolSet.Web.Models
@@ -86,7 +86,7 @@ namespace RDPToolSet.Web.Models
         {
             PanelViewModel tileInput = new PanelViewModel("encoded-input", Constants.DECODE_NAME_TILEINPUT, true, new[] { "Y", "Cb", "Cr" }, inputs);
             _panels[0] = tileInput;
-            
+
         }
 
         public void ProvideParam(params ICodecParam[] parameters)
@@ -94,5 +94,4 @@ namespace RDPToolSet.Web.Models
             _params = parameters.AsEnumerable();
         }
     }
-
 }

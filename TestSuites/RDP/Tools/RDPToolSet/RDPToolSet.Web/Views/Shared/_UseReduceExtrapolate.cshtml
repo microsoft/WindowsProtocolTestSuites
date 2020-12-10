@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<ICodecParam>
+@using CodecToolSet.Core;
 
 @{
-    // if an EntropyAlgorithm instance is not found, an exception will be thrown 
+    // if an EntropyAlgorithm instance is not found, an exception will be thrown
     var reduceExtrapolate = (UseReduceExtrapolate)Model.First(param => param is UseReduceExtrapolate);
 }
 

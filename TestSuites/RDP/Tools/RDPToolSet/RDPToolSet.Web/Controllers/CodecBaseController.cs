@@ -1,23 +1,24 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Linq;
-using System.Web.Helpers;
-using System.Web.Mvc;
 using CodecToolSet.Core;
+using CodecToolSet.Core.RFXPEncode;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json;
 using RDPToolSet.Web.Models;
-using System.IO;
-using System.Collections.Generic;
-using System.Web;
+using RDPToolSet.Web.Utils;
 using System;
-using System.Net;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using CodecToolSet.Core.RFXPEncode;
+using System.IO;
+using System.Linq;
 
 namespace RDPToolSet.Web.Controllers
 {
-    [HandleError]
     public abstract class CodecBaseController : Controller
     {
         protected ICodecViewModel _viewModel;
@@ -29,12 +30,18 @@ namespace RDPToolSet.Web.Controllers
         protected const string ModelKey = "_viewModel";
         protected const string isActionValid = "isActionValid";
         protected const string isModelValid = "isModelValid";
+        protected readonly IWebHostEnvironment _hostingEnvironment;
 
-        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            base.Initialize(requestContext);
+            base.OnActionExecuting(context);
             LoadFromSession();
             SetViewBag();
+        }
+
+        public CodecBaseController(IWebHostEnvironment hostingEnvironment)
+        {
+            this._hostingEnvironment = hostingEnvironment;
         }
 
         public virtual ActionResult Index()
@@ -42,96 +49,111 @@ namespace RDPToolSet.Web.Controllers
             return View(_viewModel);
         }
 
-        public virtual ActionResult LayerPanel()
+        public virtual ActionResult LayerPanel([FromBody] LayerPanelRequest request)
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.name);
-
-            if (name.Equals(Constants.DECODE_NAME_RECONSTRUCTEDFRAME))
+            if (request.name.Equals(Constants.DECODE_NAME_RECONSTRUCTEDFRAME))
             {
                 return DecodedImage();
             }
 
             var layers = new List<PanelViewModel>();
 
-            // gets the action with the same name as the argument
-            var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(name));
-            if (action == null || action.Result == null) return PartialView("_Layers", layers);
-
-            for (int index = 0; index < action.Result.Length; index++)
+            try
             {
-                string idPrefix = name.Replace(' ', '-') + "-layer-" + index;
-                var layer = new PanelViewModel(idPrefix, "Layer " + index);
-                Tile result = action.Result[index];
-                Triplet<string> triplet = result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
-                var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = false };
-                var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = false };
-                var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = false };
-                layer.Tabs = new List<TabViewModel> { tabx, taby, tabz };
-                layers.Add(layer);
+                var action = _codecAction.SubActions.FirstOrDefault(c => c.Name.Equals(request.name));
+                if (action == null || action.Result == null) return PartialView("_Layers", layers);
+
+                for (int index = 0; index < action.Result.Length; index++)
+                {
+                    string idPrefix = request.name.Replace(' ', '-') + "-layer-" + index;
+                    var layer = new PanelViewModel(idPrefix, "Layer " + index);
+                    Tile result = action.Result[index];
+                    Triplet<string> triplet = result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
+                    var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = false };
+                    var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = false };
+                    var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = false };
+                    layer.Tabs = new List<TabViewModel> { tabx, taby, tabz };
+                    layers.Add(layer);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
             }
 
             return PartialView("_Layers", layers);
         }
 
-        public virtual ActionResult InputPanel()
+        public virtual ActionResult InputPanel([FromBody] LayerPanelRequest request)
         {
-            // TODO: Merge this with above
-
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.name);
-
             var layers = new List<PanelViewModel>();
 
-            // gets the action with the same name as the argument
-            var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(name));
-            if (action == null || action.Input == null) return PartialView("_Layers", layers);
-
-            for (int index = 0; index < action.Input.Length; index++)
+            try
             {
-                string idPrefix = name.Replace(' ', '-').Replace('/', '-') + "-input-layer-" + index;
-                var layer = new PanelViewModel(idPrefix, "Layer " + index);
-                Tile result = action.Input[index];
-                Triplet<string> triplet = result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
-                var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = true };
-                var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = true };
-                var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = true };
-                layer.Tabs = new List<TabViewModel> { tabx, taby, tabz };
-                layers.Add(layer);
+                // gets the action with the same name as the argument
+                var action = _codecAction.SubActions.FirstOrDefault(c => c.Name.Equals(request.name));
+                if (action == null || action.Input == null) return PartialView("_Layers", layers);
+
+                for (int index = 0; index < action.Input.Length; index++)
+                {
+                    string idPrefix = request.name.Replace(' ', '-').Replace('/', '-') + "-input-layer-" + index;
+                    var layer = new PanelViewModel(idPrefix, "Layer " + index);
+                    Tile result = action.Input[index];
+                    Triplet<string> triplet = result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
+                    var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = true };
+                    var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = true };
+                    var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = true };
+                    layer.Tabs = new List<TabViewModel> { tabx, taby, tabz };
+                    layers.Add(layer);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
             }
 
             return PartialView("_Layers", layers);
         }
 
         [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase file, string imageType)
+        public ActionResult Upload(IFormFile file, string imageType)
         {
+            if (this.Request.Form.Files.Count > 1)
+            {
+                return Json(ReturnResult<string>.Fail("Please upload 1 image each time."));
+            }
             // file type
-            if (file != null && file.ContentLength > 0)
+            if (file != null && file.Length > 0)
             {
                 string[] filenames = file.FileName.Split(new[] { '.' });
                 string filename = String.Format("{0}_{1}.{2}", filenames[0], DateTime.Now.Ticks, filenames.Length >= 2 ? filenames[1] : "");
 
-                string uploadPath = Server.MapPath("~/Images/Uploads");
+                string uploadPath = Path.Combine(this._hostingEnvironment.WebRootPath, ActionHelper.ImageUploadFolder);
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
 
                 var path = Path.Combine(uploadPath, filename);
-                file.SaveAs(path);
+
+                using (var fileStream = file.OpenReadStream())
+                {
+                    using (var newfileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    {
+                        fileStream.CopyTo(newfileStream);
+                    }
+                }
+
                 if (imageType.Equals(EncodedImage))
                 {
-                    Session[EncodedImage] = path;
+                    this.HttpContext.Session.SetObject(EncodedImage, path);
                 }
                 else if (imageType.Equals(PreviousFrameImage))
                 {
-                    Session[PreviousFrameImage] = path;
+                    this.HttpContext.Session.SetObject(PreviousFrameImage, path);
                 }
             }
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return Json(ReturnResult<string>.Success("Success"));
         }
 
         [HttpGet]
@@ -139,36 +161,38 @@ namespace RDPToolSet.Web.Controllers
         {
             if (imageType.Equals(EncodedImage))
             {
-                Session[EncodedImage] = null;
+                this.HttpContext.Session.Set(EncodedImage, new byte[0]);
             }
             if (imageType.Equals(PreviousFrameImage))
             {
-                Session[PreviousFrameImage] = null;
+                this.HttpContext.Session.Set(PreviousFrameImage, new byte[0]);
             }
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
-        }
 
+            return Json(ReturnResult<string>.Success("Success"));
+        }
 
         [HttpGet]
         public ActionResult SetSamples(string sample)
         {
-            string samplePath = Server.MapPath("~/Static/");
+            string samplePath = Path.Combine(this._hostingEnvironment.WebRootPath, "html");
             var path = Path.Combine(samplePath, sample);
-            Session[EncodedImage] = path;
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            this.HttpContext.Session.SetObject(EncodedImage, path);
+
+            return Json(ReturnResult<string>.Success("Success"));
         }
 
         public ActionResult PreviousFrame()
         {
-            if (Session == null || Session[isPreFrameValid] == null || (bool)Session[isPreFrameValid] == false || Session[PreviousFrameImage] == null)
+            if (this.HttpContext.Session.Get<bool>(isPreFrameValid) == false || string.IsNullOrEmpty(this.HttpContext.Session.Get<string>(PreviousFrameImage)))
             {
                 return Json(string.Empty);
             }
             else
             {
-                Session[isPreFrameValid] = false;
-                string filename = Path.GetFileName((string)Session[PreviousFrameImage]);
-                string relativePath = "~/Images/Uploads/" + filename;
+                this.HttpContext.Session.SetObject(isPreFrameValid, false);
+
+                string filename = Path.GetFileName(this.HttpContext.Session.Get<string>(PreviousFrameImage));
+                string relativePath = $"~/{ActionHelper.ImageUploadFolder}/" + filename;
                 return Json(Url.Content(relativePath));
             }
         }
@@ -181,45 +205,43 @@ namespace RDPToolSet.Web.Controllers
             Tile result = restructedFrame.Result.FirstOrDefault();
             Bitmap bitmap = result.GetBitmap();
 
-            string decodedPath = Server.MapPath("~/Images/Decoded");
+            string decodedPath = Path.Combine(this._hostingEnvironment.WebRootPath, "Images/Decoded");
             if (!Directory.Exists(decodedPath))
             {
                 Directory.CreateDirectory(decodedPath);
             }
 
-            var path = "~/Images/Decoded/" + decodeImage;
-            var physicalPath = Server.MapPath(path);
-            bitmap.Save(physicalPath, ImageFormat.Bmp);
-            return PartialView("_Image", path);
+            var path = Path.Combine(decodedPath, decodeImage);
+            bitmap.Save(path, ImageFormat.Bmp);
+            return PartialView("_Image", $"~/Images/Decoded/{decodeImage}");
         }
 
-        public virtual ActionResult Recompute()
+        public virtual ActionResult Recompute([FromBody] RecomputeRequest request)
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.Action);
-
             // gets the action with the same name as the argument
-            var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(name));
+            var action = _codecAction.SubActions.FirstOrDefault(c => c.Name.Equals(request.Action));
 
             // if action not found
-            if (action == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            if (action == null)
+            {
+                return Json(ReturnResult<string>.Fail("Action not found"));
+            }
 
             // retrieve the quant
-            var quantArray = JsonHelper.RetrieveQuantsArray(obj.Params.QuantizationFactorsArray);
+            var quantArray = JsonHelper.RetrieveQuantsArray(request.Params.QuantizationFactorsArray);
 
             foreach (var _action in _codecAction.SubActions)
             {
                 _action.Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY] = quantArray;
-                _action.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(obj.Params.EntropyAlgorithm);
+                _action.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(request.Params.EntropyAlgorithm);
             }
 
             // retrive tiles from Inputs
             var tileList = new List<Tile>();
-            foreach (var tileJson in obj.Inputs)
+            foreach (var tileJson in request.Inputs)
             {
                 Triplet<string> triplet = JsonHelper.RetrieveTriplet(tileJson);
-                string dataFormat = obj.Params.UseDataFormat;
+                string dataFormat = request.Params.UseDataFormat;
                 Tile tile = null;
                 if (dataFormat.Equals(Constants.DataFormat.HEX))
                 {
@@ -255,34 +277,44 @@ namespace RDPToolSet.Web.Controllers
                 }
                 else
                 {
-                    if (act.Name.Equals(name))
+                    if (act.Name.Equals(request.Action))
                     {
                         following = true;
                     }
                 }
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return Json(ReturnResult<string>.Success("Success"));
         }
 
         public virtual ActionResult Input()
         {
-            dynamic json = GetJsonObject(Request.InputStream);
+            try
+            {
+                using (var bodyStream = new StreamReader(Request.Body))
+                {
+                    var bodyText = bodyStream.ReadToEndAsync().GetAwaiter().GetResult();
+                    dynamic json = JsonConvert.DeserializeObject(bodyText);
+                    var action = CodecFactory.GetCodecAction((string)json.Action);
+                    // if action not found
+                    if (action == null)
+                    {
+                        return Json(ReturnResult<string>.Fail("Action not found"));
+                    }
 
-            var action = CodecFactory.GetCodecAction((string)json.Action);
+                    //TODO: add parameters
+                    var tile = Tile.FromStrings(new Triplet<string>(
+                    json.Inputs.X, json.Inputs.Y, json.Inputs.Z),
+                    new IntegerTileSerializer());
 
-            // if action not found
-            if (action == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-
-            //TODO: add parameters
-
-            var tile = Tile.FromStrings(new Triplet<string>(
-                json.Inputs.X, json.Inputs.Y, json.Inputs.Z),
-                new IntegerTileSerializer());
-
-            var result = action.DoAction(tile);
-
-            return Json(result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer()));
+                    var result = action.DoAction(tile);
+                    return Json(result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer()));
+                }
+            }
+            catch(Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
         public ActionResult DefaultProgQuants()
@@ -297,23 +329,15 @@ namespace RDPToolSet.Web.Controllers
         {
             foreach (var key in envValues.Keys)
             {
-                Session[key] = envValues[key];
+                HttpContext.Session.SetObject(key, envValues[key]);
             }
         }
 
         protected void LoadFromSession()
         {
-            if (Session != null)
-            {
-                if (Session[ActionKey] != null)
-                {
-                    _codecAction = (ICodecAction)Session[ActionKey];
-                }
-                if (Session[ModelKey] != null)
-                {
-                    _viewModel = (ICodecViewModel)Session[ModelKey];
-                }
-            }
+            _codecAction = HttpContext.Session.Get<ICodecAction>(ActionKey);
+            
+            _viewModel = HttpContext.Session.Get<ICodecViewModel>(ModelKey);
         }
 
         private void SetViewBag()
@@ -332,25 +356,16 @@ namespace RDPToolSet.Web.Controllers
                  );
             ViewBag.model = layoutModel;
         }
-
-        internal static dynamic GetJsonObject(Stream jsonRequest)
-        {
-            string json;
-            using (var reader = new StreamReader(jsonRequest))
-                json = reader.ReadToEnd();
-            dynamic obj = System.Web.Helpers.Json.Decode(json);
-            return obj;
-        }
     }
 
     internal static class JsonHelper
     {
         public static T CastTo<T>(this object obj)
         {
-            return Json.Decode<T>(Json.Encode(obj));
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
         }
 
-        public static QuantizationFactorsArray RetrieveQuantsArray(DynamicJsonArray obj)
+        public static QuantizationFactorsArray RetrieveQuantsArray(dynamic obj)
         {
             var quantList = new List<QuantizationFactors>();
             foreach (var componet in obj)
@@ -365,7 +380,7 @@ namespace RDPToolSet.Web.Controllers
             return quantArray;
         }
 
-        public static Triplet<string> RetrieveTriplet(DynamicJsonArray obj)
+        public static Triplet<string> RetrieveTriplet(dynamic obj)
         {
             var componentList = new List<String>();
             foreach (var component in obj)

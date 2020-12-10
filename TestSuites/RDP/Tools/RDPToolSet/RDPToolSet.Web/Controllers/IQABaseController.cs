@@ -1,27 +1,32 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using RDPToolSet.Web.Models;
+using RDPToolSet.Web.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using RDPToolSet.Web.Models;
 
 namespace RDPToolSet.Web.Controllers
 {
     public class IQABaseController : Controller
     {
-        //
-        // GET: /IQA/
-
+        protected readonly IWebHostEnvironment _hostingEnvironment;
         protected const string Image1 = "ImageCompare1";
         protected const string Image2 = "ImageCompare2";
 
-        public IQABaseController()
+        public IQABaseController(IWebHostEnvironment hostingEnvironment)
         {
+            this._hostingEnvironment = hostingEnvironment;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
             SetViewBag();
         }
 
@@ -36,43 +41,40 @@ namespace RDPToolSet.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Upload(HttpPostedFileBase file, string imageType)
+        public ActionResult Upload(IFormFile file, string imageType)
         {
             // file type
-            if (file != null && file.ContentLength > 0)
+            if (file != null && file.Length > 0)
             {
                 string[] filenames = file.FileName.Split(new[] { '.' });
                 string filename = String.Format("{0}_{1}.{2}", filenames[0], DateTime.Now.Ticks, filenames.Length >= 2 ? filenames[1] : "");
 
-                string uploadPath = Server.MapPath("~/Images/Uploads");
+                string uploadPath = Path.Combine(this._hostingEnvironment.WebRootPath, ActionHelper.ImageUploadFolder);
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
                 }
 
                 var path = Path.Combine(uploadPath, filename);
-                file.SaveAs(path);
+
+                using (var fileStream = file.OpenReadStream())
+                {
+                    using (var newfileStream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                    {
+                        fileStream.CopyTo(newfileStream);
+                    }
+                }
 
                 if (imageType.Equals(Image1))
                 {
-                    Session[Image1] = path;
+                    this.HttpContext.Session.SetObject(Image1, path);
                 }
                 else if (imageType.Equals(Image2))
                 {
-                    Session[Image2] = path;
+                    this.HttpContext.Session.SetObject(Image2, path);
                 }
-                
             }
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
-        }
-
-        internal static dynamic GetJsonObject(Stream jsonRequest)
-        {
-            string json;
-            using (var reader = new StreamReader(jsonRequest))
-                json = reader.ReadToEnd();
-            dynamic obj = System.Web.Helpers.Json.Decode(json);
-            return obj;
+            return Json(ReturnResult<string>.Success("Success"));
         }
 
         private void SetViewBag()
@@ -91,6 +93,5 @@ namespace RDPToolSet.Web.Controllers
                  );
             ViewBag.model = layoutModel;
         }
-
     }
 }

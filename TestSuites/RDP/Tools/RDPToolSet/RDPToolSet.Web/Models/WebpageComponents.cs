@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
@@ -28,9 +28,11 @@ namespace RDPToolSet.Web.Models
             this.Title = title;
             this.Id = id.ToLowerInvariant();
 
-            if (tabs != null) {
+            if (tabs != null)
+            {
                 this.Tabs = new List<TabViewModel>(
-                    tabs.Select(tab => new TabViewModel {
+                    tabs.Select(tab => new TabViewModel
+                    {
                         Content = null,
                         Title = tab,
                         Id = string.Format("{0}-{1}", id, tab.Replace(' ', '-')).ToLowerInvariant(),
@@ -51,24 +53,24 @@ namespace RDPToolSet.Web.Models
                 {
                     var content = contents == null ? null : (i < contents.Length ? contents[i] : null);
                     var tab = new TabViewModel
-                        {
-                            Content = content,
-                            Title = tabs[i],
-                            Id = string.Format("{0}-{1}", id, tabs[i].Replace(' ', '-')).ToLowerInvariant(),
-                            Editable = tabEditable,
-                        };
+                    {
+                        Content = content,
+                        Title = tabs[i],
+                        Id = string.Format("{0}-{1}", id, tabs[i].Replace(' ', '-')).ToLowerInvariant(),
+                        Editable = tabEditable,
+                    };
                     ((List<TabViewModel>)Tabs).Add(tab);
                 }
             }
         }
     }
 
-    public class TabViewModel 
+    public class TabViewModel
     {
-        public string Id       { get; set; }
-        public string Title    { get; set; }
-        public string Content  { get; set; }
-        public bool   Editable { get; set; }
+        public string Id { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public bool Editable { get; set; }
     }
 
     public class DialogViewModel
