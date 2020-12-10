@@ -239,7 +239,7 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int TAKE_SCREEN_SHOT(out byte[] screenImageBinary)
         {
-            Bitmap testBitmap = new Bitmap(300,400);
+            Bitmap testBitmap = new Bitmap(400,300);
             Graphics graphicScreen = Graphics.FromImage(testBitmap);
             graphicScreen.CopyFromScreen(0, 0, 0, 0, testBitmap.Size, CopyPixelOperation.SourceCopy);
 
