@@ -32,12 +32,19 @@
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            var alertBegin = GenerateAlert("success"),
-                content = "Thanks! You message have been send to us successfully.",
-                alertEnd = "</div>";
-            $('#guestbook-form').hide();
-            $('#status').html(alertBegin + content + alertEnd);
+        }).done(function (response) {
+            if (response.status === true) {
+                var alertBegin = GenerateAlert("success"),
+                    content = "Thanks! You message have been send to us successfully.",
+                    alertEnd = "</div>";
+                $('#guestbook-form').hide();
+                $('#status').html(alertBegin + content + alertEnd);
+            } else {
+                var alertBegin = GenerateAlert("danger"),
+                    content = "Submit failed, error:" + response.data,
+                    alertEnd = "</div>";
+                $('#status').html(alertBegin + content + alertEnd);
+            }
         });
     });
 

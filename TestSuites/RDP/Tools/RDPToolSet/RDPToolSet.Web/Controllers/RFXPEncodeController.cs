@@ -1,22 +1,30 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
+using System.Threading.Tasks;
 using CodecToolSet.Core;
 using CodecToolSet.Core.RFXPEncode;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RDPToolSet.Web.Models;
+using RDPToolSet.Web.Utils;
 
 namespace RDPToolSet.Web.Controllers
 {
     public class RFXPEncodeController : CodecBaseController
     {
+        public RFXPEncodeController(IWebHostEnvironment hostingEnvironment)
+        : base(hostingEnvironment)
+        {
+
+        }
+
         public override ActionResult Index()
         {
             var rfxPEncode = new RFXPEncode();
@@ -29,56 +37,65 @@ namespace RDPToolSet.Web.Controllers
             SaveToSession(envValues);
             LoadFromSession();
             // Clear the previous frame in session
-            Session[PreviousFrameImage] = null;
+
+            this.HttpContext.Session.SetObject(PreviousFrameImage, null);
             return View(_viewModel);
         }
 
         [HttpPost]
-        public ActionResult Encode()
+        public async Task<IActionResult> Encode()
         {
-            dynamic obj = GetJsonObject(Request.InputStream);
-
-            // retrieve the quant
-            var quantArray = JsonHelper.RetrieveQuantsArray(obj.Params.QuantizationFactorsArray);
-            _codecAction.Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY] = quantArray;
-
-            // retrive the progressive quants
-            var progQuantList = new List<QuantizationFactorsArray>();
-            foreach (var layer in obj.Params.ProgQuantizationArray)
+            try
             {
-                var layerQuants = JsonHelper.RetrieveQuantsArray(layer);
-                progQuantList.Add(layerQuants);
+                using (var bodyStream = new StreamReader(Request.Body))
+                {
+                    var bodyText = await bodyStream.ReadToEndAsync();
+                    dynamic obj = JsonConvert.DeserializeObject(bodyText);
+
+                    // retrieve the quant
+                    var quantArray = JsonHelper.RetrieveQuantsArray(obj.Params.QuantizationFactorsArray);
+                    _codecAction.Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY] = quantArray;
+
+                    // retrive the progressive quants
+                    var progQuantList = new List<QuantizationFactorsArray>();
+                    foreach (var layer in obj.Params.ProgQuantizationArray)
+                    {
+                        var layerQuants = JsonHelper.RetrieveQuantsArray(layer);
+                        progQuantList.Add(layerQuants);
+                    }
+                    var progQuantarray = new ProgressiveQuantizationFactors
+                    {
+                        ProgQuants = progQuantList
+                    };
+                    _codecAction.Parameters[Constants.PARAM_NAME_PROGRESSIVE_QUANT_LIST] = progQuantarray;
+
+                    _codecAction.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(obj.Params.EntropyAlgorithm);
+                    _codecAction.Parameters[Constants.PARAM_NAME_USE_REDUCE_EXTRAPOLATE] = JsonHelper.CastTo<UseReduceExtrapolate>(obj.Params.UseReduceExtrapolate);
+
+                    // TODO: error handle
+                    var preFramePath = this.HttpContext.Session.Get<string>(PreviousFrameImage);
+                    Frame preFrame = Utility.GetPreviousFrame(preFramePath, _codecAction.Parameters);
+
+                    var encodeImagePath = this.HttpContext.Session.Get<string>(EncodedImage);
+                    var tile = Tile.FromFile(encodeImagePath);
+
+                    ICodecAction diffing = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(Constants.PENCODE_NAME_SUBBANDDIFFING));
+                    diffing.Parameters[Constants.PARAM_NAME_PREVIOUS_FRAME] = preFrame;
+
+                    _codecAction.DoAction(new[] { tile });
+                }
+                return Json(ReturnResult<string>.Success("Success"));
             }
-            var progQuantarray = new ProgressiveQuantizationFactors
+            catch(Exception ex)
             {
-                ProgQuants = progQuantList
-            };
-            _codecAction.Parameters[Constants.PARAM_NAME_PROGRESSIVE_QUANT_LIST] = progQuantarray;
-                       
-            _codecAction.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(obj.Params.EntropyAlgorithm);
-            _codecAction.Parameters[Constants.PARAM_NAME_USE_REDUCE_EXTRAPOLATE] = JsonHelper.CastTo<UseReduceExtrapolate>(obj.Params.UseReduceExtrapolate);
-
-            // TODO: error handle
-            var preFramePath = (string)Session[PreviousFrameImage];
-            Frame preFrame = Utility.GetPreviousFrame(preFramePath, _codecAction.Parameters);
-
-            var encodeImagePath = (string)Session[EncodedImage];
-            var tile = Tile.FromFile(encodeImagePath);
-
-            ICodecAction diffing = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(Constants.PENCODE_NAME_SUBBANDDIFFING));
-            diffing.Parameters[Constants.PARAM_NAME_PREVIOUS_FRAME] = preFrame;
-
-            _codecAction.DoAction(new[] { tile });
-
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
         // This Action may cost much time. TODO: improve it
-        public override ActionResult LayerPanel()
+        public override ActionResult LayerPanel([FromBody] LayerPanelRequest request)
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.name);
+            string name = JsonHelper.CastTo<string>(request.name);
 
             var layers = new List<PanelViewModel>();
             // gets the action with the same name as the argument
@@ -92,7 +109,7 @@ namespace RDPToolSet.Web.Controllers
             {
                 var parameters = new Dictionary<string, string>();
                 var use_diffing = "False";
-                if(action.Parameters.ContainsKey(Constants.PARAM_NAME_USE_DIFFERENCE_TILE) &&
+                if (action.Parameters.ContainsKey(Constants.PARAM_NAME_USE_DIFFERENCE_TILE) &&
                     action.Parameters[Constants.PARAM_NAME_USE_DIFFERENCE_TILE] is UseDifferenceTile &&
                     ((UseDifferenceTile)action.Parameters[Constants.PARAM_NAME_USE_DIFFERENCE_TILE]).Enabled)
                 {
@@ -105,11 +122,9 @@ namespace RDPToolSet.Web.Controllers
             return PartialView("_Layers", layers);
         }
 
-        public override ActionResult InputPanel()
+        public override ActionResult InputPanel([FromBody] LayerPanelRequest request)
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.name);
+            string name = JsonHelper.CastTo<string>(request.name);
 
             // gets the action with the same name as the argument
             var layers = new List<PanelViewModel>();
@@ -127,7 +142,7 @@ namespace RDPToolSet.Web.Controllers
             var formedstr = name.Replace(' ', '-').Replace('/', '-');
             if ((!name.Equals(Constants.PENCODE_NAME_RLGRSRLENCODE)) || editable)
             {
-                
+
                 for (int index = 0; index < layerData.Length; index++)
                 {
                     string idPrefix = editable ? formedstr + "-input-layer-" + index : formedstr + "-output-layer-" + index;
@@ -178,26 +193,27 @@ namespace RDPToolSet.Web.Controllers
             return layers;
         }
 
-        public override ActionResult Recompute()
+        public override ActionResult Recompute([FromBody] RecomputeRequest request)
         {
             // TODO: Add parameters obtain into a function
-            dynamic obj = GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.Action);
+            string name = JsonHelper.CastTo<string>(request.Action);
 
             // gets the action with the same name as the argument
             var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(name));
 
             // if action not found
-            if (action == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            if (action == null)
+            {
+                return Json(ReturnResult<string>.Fail("Action not found"));
+            }
 
             // retrieve the quant
-            var quantArray = JsonHelper.RetrieveQuantsArray(obj.Params.QuantizationFactorsArray);
+            var quantArray = JsonHelper.RetrieveQuantsArray(request.Params.QuantizationFactorsArray);
             _codecAction.Parameters[Constants.PARAM_NAME_QUANT_FACTORS_ARRAY] = quantArray;
 
             // retrive the progressive quants
             var progQuantList = new List<QuantizationFactorsArray>();
-            foreach (var layer in obj.Params.ProgQuantizationArray)
+            foreach (var layer in request.Params.ProgQuantizationArray)
             {
                 var layerQuants = JsonHelper.RetrieveQuantsArray(layer);
                 progQuantList.Add(layerQuants);
@@ -208,11 +224,11 @@ namespace RDPToolSet.Web.Controllers
             };
             _codecAction.Parameters[Constants.PARAM_NAME_PROGRESSIVE_QUANT_LIST] = progQuantarray;
 
-            _codecAction.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(obj.Params.EntropyAlgorithm);
-            _codecAction.Parameters[Constants.PARAM_NAME_USE_REDUCE_EXTRAPOLATE] = JsonHelper.CastTo<UseReduceExtrapolate>(obj.Params.UseReduceExtrapolate);
+            _codecAction.Parameters[Constants.PARAM_NAME_ENTROPY_ALGORITHM] = JsonHelper.CastTo<EntropyAlgorithm>(request.Params.EntropyAlgorithm);
+            _codecAction.Parameters[Constants.PARAM_NAME_USE_REDUCE_EXTRAPOLATE] = JsonHelper.CastTo<UseReduceExtrapolate>(request.Params.UseReduceExtrapolate);
 
             // TODO: error handle
-            var preFramePath = (string)Session[PreviousFrameImage];
+            var preFramePath = this.HttpContext.Session.Get<string>(PreviousFrameImage);
             Frame preFrame = Utility.GetPreviousFrame(preFramePath, _codecAction.Parameters);
 
             ICodecAction diffing = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(Constants.PENCODE_NAME_SUBBANDDIFFING));
@@ -220,11 +236,11 @@ namespace RDPToolSet.Web.Controllers
 
             // retrive tiles from Inputs
             var tileList = new List<Tile>();
-            foreach (var tileJson in obj.Inputs)
+            foreach (var tileJson in request.Inputs)
             {
                 Triplet<string> triplet = JsonHelper.RetrieveTriplet(tileJson);
 
-                string dataFormat = obj.Params.UseDataFormat;
+                string dataFormat = request.Params.UseDataFormat;
                 Tile tile = null;
                 if (dataFormat.Equals(Constants.DataFormat.HEX))
                 {
@@ -268,8 +284,7 @@ namespace RDPToolSet.Web.Controllers
             }
 
             // TODO: recompute the following steps and update
-
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return Json(ReturnResult<string>.Success("Success"));
         }
 
     }

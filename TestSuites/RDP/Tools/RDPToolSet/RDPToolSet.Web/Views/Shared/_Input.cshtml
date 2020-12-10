@@ -8,8 +8,12 @@
                 <p class="input-prompt text-left" style="display:none"></p>
                 <!-- for user to input their data -->
                 <div class="input-data">
-                    @Html.Partial("_Tabs", dataSets.Select(x => new TabViewModel {
-                        Title = x, Id = x.ToLower(), Editable = true }))
+                    @Html.Partial("_Tabs", dataSets.Select(x => new TabViewModel
+                    {
+                        Title = x,
+                        Id = x.ToLower(),
+                        Editable = true
+                    }))
                 </div>
             </div>
             <div class="modal-footer" style="margin-top:-20px">

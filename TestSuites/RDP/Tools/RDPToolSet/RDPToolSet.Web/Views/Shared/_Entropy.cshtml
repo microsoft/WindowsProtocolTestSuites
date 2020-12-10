@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<ICodecParam>
+@using CodecToolSet.Core;
 
 @{
-    // if an EntropyAlgorithm instance is not found, an exception will be thrown 
+    // if an EntropyAlgorithm instance is not found, an exception will be thrown
     var entropy = (EntropyAlgorithm)Model.First(param => param is EntropyAlgorithm);
 }
 
@@ -9,11 +10,14 @@
     <label style="float: left; padding-top: 5px; padding-bottom: 5px; padding-right: 5px;">Entropy Algorithm: </label>
     <div style="float: left">
         <select class="form-control input-sm entropy-alg">
-            @foreach (var item in entropy.Algorithm.GetType().GetEnumNames()) {
-                <option @(item == entropy.Algorithm.ToString() ? Html.Raw("selected=\"selected\"") : Html.Raw(""))>
+            @foreach (var item in entropy.Algorithm.GetType().GetEnumNames())
+            {
+                var selectOption = (item == entropy.Algorithm.ToString()) ? "selected" : "";
+                <option selected="@selectOption" >
                     @item
                 </option>
             }
+
         </select>
     </div>
 </div>

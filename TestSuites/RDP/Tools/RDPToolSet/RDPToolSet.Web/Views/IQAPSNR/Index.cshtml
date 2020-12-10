@@ -1,7 +1,7 @@
 ﻿<div class="container">
-    <div id="intro">@Html.Partial("_Intro") </div>
+    <div id="intro">@await Html.PartialAsync("_Intro") </div>
 
-    @Html.Partial("_ImageCompare")
+    @await Html.PartialAsync("_ImageCompare")
 
     <div class="text-center">
         @Html.ButtonFor(name: "Compare", id: "ImageCompare")

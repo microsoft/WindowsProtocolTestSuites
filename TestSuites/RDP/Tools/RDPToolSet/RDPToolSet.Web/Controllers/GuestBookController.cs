@@ -1,62 +1,63 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using RDPToolSet.Web.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
 
 namespace RDPToolSet.Web.Controllers
 {
     public class GuestBookController : Controller
     {
-        //
-        // GET: /GuestBook/
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public GuestBookController(IWebHostEnvironment hostingEnvironment)
+        {
+            this._hostingEnvironment = hostingEnvironment;
+        }
 
         public ActionResult Index()
         {
             return PartialView();
         }
 
-        public ActionResult Save()
+        [HttpPost]
+        public IActionResult Save([FromBody] GuestBookRequestModel request)
         {
-            string json;
-            using (var reader = new StreamReader(Request.InputStream))
+            try
             {
-                json = reader.ReadToEnd();
-            }
-            dynamic obj = System.Web.Helpers.Json.Decode(json);
+                if(string.IsNullOrEmpty(request.email) || string.IsNullOrEmpty(request.message))
+                {
+                    return Json(ReturnResult<string>.Fail("Reqeust data is invalide"));
+                }
 
-            if (obj.email == null || obj.message == null || ((string)obj.email).Equals("") || ((string)obj.message).Equals(""))
+                string guestbookPath = Path.Combine(this._hostingEnvironment.WebRootPath, "GuestBook");
+                if (!Directory.Exists(guestbookPath))
+                {
+                    Directory.CreateDirectory(guestbookPath);
+                }
+                string guestbook = Path.Combine(guestbookPath, "gb-7E96D408-835C-474B-AED5-0214B3709DFB.txt");
+                if (!System.IO.File.Exists(guestbook))
+                {
+                    System.IO.File.CreateText(guestbook).Close();
+                }
+                using (var writer = new StreamWriter(guestbook, true))
+                {
+                    writer.WriteLine("{");
+                    writer.WriteLine("Email: " + request.email);
+                    writer.WriteLine("Message:");
+                    writer.WriteLine(request.message);
+                    writer.WriteLine("}");
+                    writer.WriteLine();
+                    writer.WriteLine();
+                }
+                return Json(ReturnResult<string>.Success("Success"));
+            }
+            catch (Exception ex)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return Json(ReturnResult<string>.Fail(ex.Message));
             }
-
-            string guestbookPath = Server.MapPath("~/Static/GuestBook");
-            if(!Directory.Exists(guestbookPath)){
-                Directory.CreateDirectory(guestbookPath);
-            }
-            string guestbook = Path.Combine(guestbookPath, "gb-7E96D408-835C-474B-AED5-0214B3709DFB.txt");
-            if (!System.IO.File.Exists(guestbook))
-            {
-                System.IO.File.CreateText(guestbook).Close();
-            }
-            using (var writer = new StreamWriter(guestbook, true))
-            {
-                writer.WriteLine("{");
-                writer.WriteLine("Email: " + obj.email);
-                writer.WriteLine("Message:");
-                writer.WriteLine(obj.message);
-                writer.WriteLine("}");
-                writer.WriteLine();
-                writer.WriteLine();
-            }
-
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
-
     }
 }
