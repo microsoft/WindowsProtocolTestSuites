@@ -133,7 +133,103 @@ namespace Microsoft.Protocols.TestTools
             listCaseClass = listCaseClass.Distinct().ToList();
             listCaseClass.Sort();
             return listCaseClass;
-        }                
+        }
+
+        /// <summary>
+        /// Gets the path to the capture file folder from .ptfconfig file
+        /// </summary>
+        /// <returns>Returns a list of capture file path when the NetworkCapture is enabled. Returns null when the NetworkCapture is not enabled.</returns>
+        private List<string> GetCaptureFilesPath()
+        {
+            List<string> captureFolders = new List<string>();
+            DirectoryInfo info = new DirectoryInfo(Directory.GetCurrentDirectory());
+            bool existBatch = false;
+            if (info.FullName.EndsWith("Batch"))
+                existBatch = true;
+            string fullPath = existBatch ? info.Parent.FullName : info.FullName;
+            string cfgFolder = Path.Combine(fullPath, "bin");
+            try
+            {
+                string[] ptfconfigFiles = Directory.GetFiles(cfgFolder, "*.ptfconfig", SearchOption.TopDirectoryOnly);
+                foreach (string configFile in ptfconfigFiles)
+                {
+                    XmlDocument configXml = new XmlDocument();
+                    configXml.Load(configFile);
+
+                    XmlNodeList groupNodes = configXml.GetElementsByTagName("Group");
+                    if (groupNodes == null || groupNodes.Count <= 0) { continue; }
+
+                    bool isNetworkCaptureEnabled = false;
+                    string captureFileFolder = null;
+                    foreach (XmlNode gNode in groupNodes)
+                    {
+                        if (gNode.Attributes["name"].Value == "NetworkCapture")
+                        {
+                            foreach (XmlNode pNode in gNode.ChildNodes)
+                            {
+                                if (pNode.Attributes["name"].Value == "Enabled")
+                                {
+                                    isNetworkCaptureEnabled = bool.Parse(pNode.Attributes["value"].Value);
+                                }
+                                if (pNode.Attributes["name"].Value == "CaptureFileFolder")
+                                {
+                                    captureFileFolder = pNode.Attributes["value"].Value;
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    if (!isNetworkCaptureEnabled) { continue; }
+
+                    if (!string.IsNullOrEmpty(captureFileFolder))
+                    {
+                        captureFolders.Add(captureFileFolder);
+                    }
+                }
+            }
+            catch
+            {
+                return captureFolders;
+            }
+            return captureFolders;
+        }
+
+        /// <summary>
+        /// Copies a specified capture file to the log folder and returns the destination path.
+        /// </summary>
+        /// <param name="caseName">The specified case name</param> 
+        /// <param name="captureFolder">The path of the destination capture folder</param>
+        /// <returns>Returns the destination path of the specified case name</returns>
+        private string CopyCaptureAndReturnPath(string caseName, string captureFolder)
+        {
+            List<string> srcCaptureFolders = GetCaptureFilesPath();
+
+            foreach (string srcCapturePath in srcCaptureFolders)
+            {
+                if (string.IsNullOrEmpty(srcCapturePath) || !Directory.Exists(srcCapturePath))
+                {
+                    continue;
+                }
+                string[] files = Directory.GetFiles(srcCapturePath, string.Format("*{0}.etl", caseName));
+                foreach (var file in files)
+                {
+                    string captureName = Path.GetFileNameWithoutExtension(file); // Get file name
+                    captureName = captureName.Substring(captureName.IndexOf('#') + 1);
+                    if (String.Compare(captureName, caseName, true) != 0)
+                        continue;
+                    string desCapturePath = Path.Combine(captureFolder, Path.GetFileName(file));
+                    if (File.Exists(desCapturePath))
+                    {
+                        File.Delete(desCapturePath);
+                    }
+                    File.Copy(file, desCapturePath);
+                    return desCapturePath;
+                }
+            }
+
+            return null;
+        }
 
         private string Serialize<T>(T obj)
         {
