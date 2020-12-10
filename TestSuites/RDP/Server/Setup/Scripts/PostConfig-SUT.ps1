@@ -140,6 +140,10 @@ Function Config-RDS {
     
     # This value can enable the group policy: "Require use of specific security layer for remote (RDP) connections" to "Negotiate".
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "SecurityLayer" -value "1" -Type DWord
+
+    # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
+    gpupdate /Force
+    
 }
 
 Function RestartAndResume {
