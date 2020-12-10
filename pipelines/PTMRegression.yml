@@ -24,3 +24,4 @@ jobs:
     parameters:
       extRepoUrl: $(extRepo.url)
       extRepoDir: $(extRepo.dir)
+      HelperBranch: $(test.helperBranch)
