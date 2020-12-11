@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -56,7 +57,7 @@ namespace RDPSUTControlAgent
                                 }
                                 else
                                 {
-                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId +"when it is .rdp file";
+                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId +" when it is .rdp file";
                                 }
                             }
                             else
@@ -74,7 +75,7 @@ namespace RDPSUTControlAgent
                             resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         }
                         else {
-                            errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId;
+                            errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command: " + commandId;
                         }
                         break;
                     case RDPSUTControl_CommandId.AUTO_RECONNECT:
@@ -88,7 +89,7 @@ namespace RDPSUTControlAgent
                         }
                         break;
                     default:
-                        errorMessage = "SUT control agent doesn't support this command:" + commandId;
+                        errorMessage = "SUT control agent doesn't support this command: " + commandId;
                         break;
                 }
             }
@@ -110,6 +111,11 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Start_RDP_Connection(string rdpFileConfig)
         {
+            string remoteClientName = GetRemoteClientName();
+            if (remoteClientName == "XFREERDP") {
+                return 0;
+            }
+
             //Create RDP File
             FileStream rdpFile = new FileStream(TmpRDPFile, FileMode.Create);
             StreamWriter sw = new StreamWriter(rdpFile);
@@ -119,24 +125,7 @@ namespace RDPSUTControlAgent
             rdpFile.Close();
 
             //Start RDP connection
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Process rdpProcess = new Process();
-                rdpProcess.StartInfo.FileName = "mstsc.exe";
-                rdpProcess.StartInfo.Arguments = TmpRDPFile;
-                rdpProcess.Start();
-                rdpProcess.Close();
-                return 1;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                return 0;
-            }
-            else
-            {
-                //TODO: implement the logic in other OS platform
-                return 0;
-            }
+            return InvokeRemoteClientProcess(TmpRDPFile);
         }
 
         /// <summary>
@@ -146,50 +135,45 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Start_RDP_Connection(RDP_Connection_Configure_Parameters configureParameters)
         {
-            string arguments = "";
-
-            if (configureParameters.port == 0)
+            string arguments;
+            if (configureParameters.connectApproach == RDP_Connect_Approach.Negotiate && configureParameters.screenType == RDP_Screen_Type.NORMAL)
             {
-                arguments += string.Format(@" /v:{0}", configureParameters.address);
+                arguments = GetConfiguredValue("Negotiate");
             }
-            else
+            else if (configureParameters.connectApproach == RDP_Connect_Approach.Negotiate && configureParameters.screenType == RDP_Screen_Type.FULL_SCREEN)
             {
-                arguments += string.Format(@" /v:{0}:{1}", configureParameters.address, configureParameters.port);
+                arguments = GetConfiguredValue("NegotiateFullScreen");
             }
-
-            if (configureParameters.screenType == RDP_Screen_Type.FULL_SCREEN)
+            else if (configureParameters.connectApproach == RDP_Connect_Approach.Direct && configureParameters.screenType == RDP_Screen_Type.NORMAL)
             {
-                arguments += @" /f";
+                arguments = GetConfiguredValue("DirectCredSSP");
             }
-            else
+            else if (configureParameters.connectApproach == RDP_Connect_Approach.Direct && configureParameters.screenType == RDP_Screen_Type.FULL_SCREEN)
             {
-                arguments += string.Format(@" /w:{0} /h:{1}", configureParameters.desktopWidth, configureParameters.desktopHeight);
-            }
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                //Start RDP connection
-                Process rdpProcess = new Process();
-                rdpProcess.StartInfo.FileName = "mstsc.exe";
-                rdpProcess.StartInfo.Arguments = arguments;
-                rdpProcess.Start();
-                rdpProcess.Close();
-                return 1;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                //Start RDP connection
-                Process rdpProcess = new Process();
-                rdpProcess.StartInfo.FileName = "xfreerdp";
-                rdpProcess.StartInfo.Arguments = arguments;
-                rdpProcess.Start();
-                rdpProcess.Close();
-                return 1;
+                arguments = GetConfiguredValue("DirectCredSSPFullScreen");
             }
             else {
-                //TODO: implement the logic in other OS platform
-                return 0;
+                arguments = GetConfiguredValue("Negotiate");
             }
+
+            try {
+                arguments = arguments.Replace("{{address}}", configureParameters.address);
+                if (configureParameters.port == 0) {
+                    arguments = arguments.Replace(":{{port}}", "");
+                }
+                else {
+                    arguments = arguments.Replace("{{port}}", configureParameters.port.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+
+            //Start RDP connection
+            InvokeRemoteClientProcess(arguments);
+
+            return 1;
         }
 
         /// <summary>
@@ -198,28 +182,9 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Close_RDP_Connection()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Process[] rdpProcesses = Process.GetProcessesByName("mstsc");
-                foreach (Process process in rdpProcesses)
-                {
-                    process.Kill();
-                }
-                return 1;
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process[] rdpProcesses = Process.GetProcessesByName("xfreerdp");
-                foreach (Process process in rdpProcesses)
-                {
-                    process.Kill();
-                }
-                return 1;
-            }
-            else {
-                //TODO: implement the logic in other OS platform
-                return 0;
-            }
+            string arguments = GetConfiguredValue("StopRDP");
+
+            return InvokeRemoteClientProcess(arguments);
         }
 
         /// <summary>
@@ -239,7 +204,7 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int TAKE_SCREEN_SHOT(out byte[] screenImageBinary)
         {
-            Bitmap testBitmap = new Bitmap(400,300);
+            Bitmap testBitmap = new Bitmap(400, 300);
             Graphics graphicScreen = Graphics.FromImage(testBitmap);
             graphicScreen.CopyFromScreen(0, 0, 0, 0, testBitmap.Size, CopyPixelOperation.SourceCopy);
 
@@ -296,6 +261,63 @@ namespace RDPSUTControlAgent
             }
 
             return;
+        }
+
+        private static int InvokeRemoteClientProcess(string arguments) {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return InvokeWindowsCmdProcess(arguments);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return InvokeLinuxShellProcess(arguments);
+            }
+            else {
+                throw new NotImplementedException($"Not Implement in OS {GetCurrentOSType()}");
+            }
+        }
+
+        private static int InvokeWindowsCmdProcess(string arguments) {
+            Process rdpProcess = new Process();
+            rdpProcess.StartInfo.FileName = "cmd.exe";
+            rdpProcess.StartInfo.Arguments = $"/c {arguments}";
+            rdpProcess.Start();
+            rdpProcess.Close();
+
+            return 1;
+        }
+
+        private static int InvokeLinuxShellProcess(string arguments) {
+
+            Process rdpProcess = new Process();
+            rdpProcess.StartInfo.FileName = "/bin/bash";
+            rdpProcess.StartInfo.Arguments = $"-c \"{arguments}\"";
+            rdpProcess.Start();
+            rdpProcess.Close();
+
+            return 1;
+        }
+
+        private static string GetRemoteClientName()
+        {
+            string remoteClientName = ConfigurationManager.AppSettings["REMOTE_CLIENT"];
+
+            if (string.IsNullOrWhiteSpace(remoteClientName))
+            {
+                throw new ArgumentNullException("The REMOTE_CLIENT parameter is NOT configured well!");
+            }
+
+            return remoteClientName.ToUpper();
+        }
+
+        private static string GetConfiguredValue(string key) {
+
+            string currentRemoteClient = GetRemoteClientName();
+            string platformKey = $"{key.ToUpper()}_{currentRemoteClient}";
+
+            string value = ConfigurationManager.AppSettings[platformKey];
+
+            return value;
         }
 
         private static string GetCurrentOSType() {
