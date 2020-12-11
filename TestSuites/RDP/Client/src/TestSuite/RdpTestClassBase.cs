@@ -1,17 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.IO;
-using System.Drawing;
-using System.Reflection;
-using System.Diagnostics;
-using Microsoft.Protocols.TestTools;
-using System.Text.RegularExpressions;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Runtime.CompilerServices;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
@@ -118,6 +116,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
                 }
             }
+
+            CheckPlatformCompatibility();
         }
 
         protected override void TestCleanup()
@@ -739,6 +739,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (iResult != null)
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            }
+        }
+
+        /// <summary>
+        /// Check platform compatibility.
+        /// </summary>
+        private void CheckPlatformCompatibility()
+        {
+            // Check CredSSP, which is currently only supported on Windows.
+            if (transportProtocol == EncryptedProtocol.NegotiationCredSsp || transportProtocol == EncryptedProtocol.DirectCredSsp)
+            {
+                if (!OperatingSystem.IsWindows())
+                {
+                    TestSite.Assume.Inconclusive("The transport protocols based on CredSSP are only supported on Windows.");
+                }
             }
         }
     }
