@@ -238,16 +238,16 @@ New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices 
 
 #-----------------------------------------------------
 # Edit registery.
-# Force client to use TLS 1.0, not to use TLS 1.1 and TLS 1.2
+# Enable TLS 1.1 and TLS 1.2 for client
 #-----------------------------------------------------
 Write-Host "Change Registry, force client to use TLS 1.0"
 New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.1" -Force
 New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.1"\Client -Force
-New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.1"\Client Enabled -value 0 -PropertyType DWORD -Force
+New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.1"\Client Enabled -value 1 -PropertyType DWORD -Force
 
 New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.2" -Force
 New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.2"\Client -Force
-New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.2"\Client Enabled -value 0 -PropertyType DWORD -Force
+New-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.2"\Client Enabled -value 1 -PropertyType DWORD -Force
 
 #-----------------------------------------------------
 # Save CredSSP credential to Credential Manager
