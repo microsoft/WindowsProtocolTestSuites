@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
         {
-            int iResult = 0;
+            int iResult;
             string strMethod = null;
             switch (enProtocol)
             {
@@ -237,9 +237,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         strMethod = "RDPConnectWithDirectCredSSP";
                     }
                     break;
+
+                default:
+                    {
+                        throw new InvalidOperationException($"Unexpected encryption protocol: {enProtocol}!");
+                    }
             }
 
-            TestSite.Assert.IsTrue(strMethod != null, "Unknown encryption protocol: {0}!", enProtocol);
             TestSite.Assert.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
         }
 
