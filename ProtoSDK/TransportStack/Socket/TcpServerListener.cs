@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
-using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
@@ -43,6 +44,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// a bool value that indicates whether lsp hooked the transport.
         /// </summary>
         private bool lspHooked;
+
+        /// <summary>
+        /// The interval for accept loop in millisecond.
+        /// </summary>
+        private const int intervalForAcceptLoop = 1;
 
         #endregion
 
@@ -158,6 +164,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             {
                 try
                 {
+                    if (!listener.Pending())
+                    {
+                        Thread.Sleep(intervalForAcceptLoop);
+
+                        continue;
+                    }
+
                     TcpClient client = this.listener.AcceptTcpClient();
 
                     TcpServerConnection connection =
