@@ -8,5 +8,5 @@ $Width = 1024,
 $Height = 768
 )
 
-Import-Module ScriptPath\Set-DisplaySettings.ps1
+. ScriptPath\Set-DisplaySettings.ps1
 Set-ScreenResolution $Width $Height
