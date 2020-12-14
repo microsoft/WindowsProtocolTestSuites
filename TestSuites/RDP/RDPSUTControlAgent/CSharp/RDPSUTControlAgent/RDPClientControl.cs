@@ -173,6 +173,7 @@ namespace RDPSUTControlAgent
                 Process[] rdpProcesses = Process.GetProcessesByName("mstsc");
                 foreach (Process process in rdpProcesses)
                 {
+                    process.CloseMainWindow();
                     process.Kill();
                 }
             return 1;
