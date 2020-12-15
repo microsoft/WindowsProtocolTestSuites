@@ -403,34 +403,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             //Free all marshal allocated memory
             foreach (MarshalMemory mem in this.marshalMemory)
             {
-                try
-                {
-                    Marshal.FreeHGlobal(mem.pointer);
-                }
-                //catch (Exception e) //Catch Exception instead of COMException 
-                catch (COMException e)
-                {
-                    // Catch this exception in case the mem.pointer is an invalid handler
-                    // throw new InvalidOperationException ("Unable to free allocated memory with Marshal.FreeHGlobal: " + e.Message);                    
-                }
+                Marshal.FreeHGlobal(mem.pointer);
             }
 
-            //Free memory allocated by security package 
-            Array.Sort(buffers, delegate (SspiSecurityBuffer x, SspiSecurityBuffer y)
-            {
-                return x.pSecBuffer.ToInt64().CompareTo(y.pSecBuffer.ToInt64());
-            });
-            //buffers are sorted by address order(low to high), To avoid the possibility of two buffers overlaps some address place,
-            //use variable nextMinAddr to indicate the min address should next buffer have to avoid freeing some memory multiple times
-            long nextMinAddr = 0;
-            foreach (SspiSecurityBuffer buf in buffers)
-            {
-                if (isAllocatedBySecurityPackage(buf.pSecBuffer) && buf.pSecBuffer.ToInt64() >= nextMinAddr)
-                {
-                    NativeMethods.FreeContextBuffer(buf.pSecBuffer);
-                    nextMinAddr = buf.pSecBuffer.ToInt64() + buf.bufferLength;
-                }
-            }
             //Free SecBufferDesc
             this.marshalMemory = new MarshalMemory[0];
             Marshal.FreeHGlobal(this.securityBufferDesc.pBuffers);
