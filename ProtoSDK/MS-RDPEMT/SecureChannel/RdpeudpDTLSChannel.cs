@@ -483,7 +483,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                     null,
                     ServerSecurityContextAttribute.ReplayDetect | ServerSecurityContextAttribute.SequenceDetect |
                      ServerSecurityContextAttribute.Confidentiality | ServerSecurityContextAttribute.ExtendedError |
-                     ServerSecurityContextAttribute.AllocMemory | ServerSecurityContextAttribute.Datagram,
+                     ServerSecurityContextAttribute.Datagram,
                     SecurityTargetDataRepresentation.SecurityNativeDrep);
 
                 // First accept.
@@ -534,7 +534,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                     (string)targetHost,
                     ClientSecurityContextAttribute.ReplayDetect | ClientSecurityContextAttribute.SequenceDetect |
                      ClientSecurityContextAttribute.Confidentiality | ClientSecurityContextAttribute.ExtendedError |
-                     ClientSecurityContextAttribute.AllocMemory | ClientSecurityContextAttribute.Datagram |
+                     ClientSecurityContextAttribute.Datagram |
                      ClientSecurityContextAttribute.UseSuppliedCreds,
                     SecurityTargetDataRepresentation.SecurityNativeDrep);
 
