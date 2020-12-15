@@ -5,9 +5,11 @@
 }
 
 <div class="container">
-    <div id="intro">@Html.Partial("_Intro") </div>
+    <div id="intro">
+        @await Html.PartialAsync("_Intro")
+    </div>
 
-    @Html.Partial("_ImageCompare")
+    @await Html.PartialAsync("_ImageCompare")
 
     <div class="text-center">
         <div class="row" style="padding: 15px 30px;">
@@ -38,7 +40,7 @@
 
     <div class="compare-status text-left" style="padding-top: 15px;"></div>
 
-    @Html.Partial("_ref")
+    @await Html.PartialAsync("_ref")
 
     <div class="modal fade input-modal" tabindex="-1" role="dialog" aria-hidden="true" id="param-modal">
         <div class="modal-dialog">
@@ -50,7 +52,7 @@
 
                 <div class="modal-body">
                     @for (int i = 1; i <= 5; i++)
-                    { 
+                    {
                         <div class="row" style="padding: 15px 30px;">
                             <div class="col-xs-4">
                                 <div class="input-group">
@@ -73,9 +75,7 @@
                         </div>
                     }
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>

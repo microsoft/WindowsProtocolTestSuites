@@ -100,7 +100,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpeudpClient.Connect(testConfig.multiTransportTimeout);
 
 
-                var rdpemtClient = new RdpemtClient(rdpeudpClient.Socket, testConfig.serverName, false);
+                var rdpemtClient = new RdpemtClient(rdpeudpClient.Socket, testConfig.serverName, false, testConfig.tlsVersion);
 
                 rdpemtClient.PDUReceived += VerifyPDU;
 

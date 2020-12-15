@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         #region variables
 
         const string interfaceFullName = "Microsoft.Protocols.TestSuites.Rdp.IRdpSutControlAdapter";
-        const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\nauthentication level:i:0\n";
+        const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\nauthentication level:i:0\nuse redirection server name:i:1\n";
 
         private bool isClientSupportCompression = false;
 

@@ -1,18 +1,21 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using CodecToolSet.Core;
+using CodecToolSet.Core.RFXPDecode;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RDPToolSet.Web.Models;
+using RDPToolSet.Web.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using CodecToolSet.Core;
-using CodecToolSet.Core.RFXPDecode;
-using RDPToolSet.Web.Models;
+using System.Threading.Tasks;
 
 namespace RDPToolSet.Web.Controllers
 {
@@ -26,27 +29,33 @@ namespace RDPToolSet.Web.Controllers
         // Judge whether the current data in session is valid
         const string IsValid = "RFXPDecode_IsValid";
 
-        public RFXPDecodeController() : base() { }
+        public RFXPDecodeController(IWebHostEnvironment hostingEnvironment)
+        : base(hostingEnvironment)
+        {
+
+        }
 
         public override ActionResult Index()
         {
-            if (Session == null || Session[IsValid] == null || ((bool)Session[IsValid]) == false)
+            if (this.HttpContext.Session.Get<bool>(IsValid) == false)
             {
                 // Clear Session data if the data is not valid
-                Session[ConstantDAS] = null;
-                Session[ConstantCodecActionDic] = null;
-                Session[DecodePreviousFrame] = null;
-                Session[ConstantDASDic] = null;
-                Session[PreviousFrameDic] = null;
+                this.HttpContext.Session.SetObject(ConstantDAS, null);
+                this.HttpContext.Session.SetObject(ConstantCodecActionDic, null);
+                this.HttpContext.Session.SetObject(DecodePreviousFrame, null);
+                this.HttpContext.Session.SetObject(ConstantDASDic, null);
+                this.HttpContext.Session.SetObject(PreviousFrameDic, null);
+                
                 var viewModel = new RFXPDecodeViewModel(0);
-                Session[ModelKey] = viewModel;
+                this.HttpContext.Session.SetObject(ModelKey, viewModel);
                 LoadFromSession();
                 return View(_viewModel);
             }
             else
             {
-                Session[IsValid] = false;
-                Dictionary<int, ICodecAction> SessionCodecActionDic = (Dictionary<int, ICodecAction>)Session[ConstantCodecActionDic];
+                this.HttpContext.Session.SetObject(IsValid, false);
+
+                Dictionary<int, ICodecAction> SessionCodecActionDic = this.HttpContext.Session.Get<Dictionary<int, ICodecAction>>(ConstantCodecActionDic);
                 if (SessionCodecActionDic != null)
                 {
                     // put the inputs in the viewbag
@@ -65,104 +74,117 @@ namespace RDPToolSet.Web.Controllers
                 }
                 return View(_viewModel);
             }
-            
         }
 
-        public ActionResult Decode()
+        [HttpPost]
+        public async Task<IActionResult> Decode()
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            Decode(obj);
-
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            try
+            {
+                using (var bodyStream = new StreamReader(Request.Body))
+                {
+                    var bodyText = await bodyStream.ReadToEndAsync();
+                    var obj = JsonConvert.DeserializeObject(bodyText);
+                    Decode(obj);
+                }
+                return Json(ReturnResult<string>.Success("Success"));
+            }
+            catch(Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
-        public override ActionResult LayerPanel()
+        public override ActionResult LayerPanel([FromBody] LayerPanelRequest request)
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.name);
-            int layer = JsonHelper.CastTo<int>(obj.layer);
-
             var layersGroup = new List<PanelViewModel>();
 
-            var CodecActionDic = (Dictionary<int, ICodecAction>)Session[ConstantCodecActionDic];
-            _codecAction = CodecActionDic == null ? null : (CodecActionDic.ContainsKey(layer) ? CodecActionDic[layer] : null);
-
-            if (_codecAction == null) return PartialView("_Layers", layersGroup);
-
-            if (name.Equals(Constants.DECODE_NAME_RECONSTRUCTEDFRAME))
+            try
             {
-                return DecodedImage(layer);
+                var CodecActionDic = this.HttpContext.Session.Get<Dictionary<int, ICodecAction>>(ConstantCodecActionDic);
+                _codecAction = CodecActionDic == null ? null : (CodecActionDic.ContainsKey(request.layer) ? CodecActionDic[request.layer] : null);
+
+                if (_codecAction == null) return PartialView("_Layers", layersGroup);
+
+                if (request.name.Equals(Constants.DECODE_NAME_RECONSTRUCTEDFRAME))
+                {
+                    return DecodedImage(request.layer);
+                }
+
+                // gets the action with the same name as the argument
+                var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(request.name));
+                if (action == null || action.Result == null) return PartialView("_Layers", layersGroup);
+
+                // create layers accroding to the given layer.
+                // This is different with others
+                string idPrefix = request.name.Replace(' ', '-').Replace('/', '-') + "-input-layer-" + request.layer;
+                var layerPanel = new PanelViewModel(idPrefix, "Layer " + request.layer);
+                Tile result = action.Result.FirstOrDefault();
+                Triplet<string> triplet = result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
+                var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = false };
+                var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = false };
+                var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = false };
+                layerPanel.Tabs = new List<TabViewModel> { tabx, taby, tabz };
+                layersGroup.Add(layerPanel);
             }
-
-            // gets the action with the same name as the argument
-            var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(name));
-            if (action == null || action.Result == null) return PartialView("_Layers", layersGroup);
-
-            // create layers accroding to the given layer.
-            // This is different with others
-            string idPrefix = name.Replace(' ', '-').Replace('/', '-') + "-input-layer-" + layer;
-            var layerPanel = new PanelViewModel(idPrefix, "Layer " + layer);
-            Tile result = action.Result.FirstOrDefault();
-            Triplet<string> triplet = result.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
-            var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = false };
-            var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = false };
-            var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = false };
-            layerPanel.Tabs = new List<TabViewModel> { tabx, taby, tabz };
-            layersGroup.Add(layerPanel);
+            catch (Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
 
             return PartialView("_Layers", layersGroup);
         }
 
-        public override ActionResult InputPanel()
+        public override ActionResult InputPanel([FromBody] LayerPanelRequest request)
         {
             // TODO: Extract Common with function Panel
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
-
-            string name = JsonHelper.CastTo<string>(obj.name);
-            int layer = JsonHelper.CastTo<int>(obj.layer);
-
             var layersGroup = new List<PanelViewModel>();
 
-            var CodecActionDic = (Dictionary<int, ICodecAction>)Session[ConstantCodecActionDic];
-            _codecAction = CodecActionDic == null ? null : (CodecActionDic.ContainsKey(layer) ? CodecActionDic[layer] : null);
-
-            if (_codecAction == null) return PartialView("_Layers", layersGroup);
-
-            // gets the action with the same name as the argument
-            var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(name));
-            if (action == null || action.Input == null) return PartialView("_Layers", layersGroup);
-
-            // create layers accroding to the given layer.
-            // This is different with others
-            string idPrefix = name.Replace(' ', '-').Replace('/', '-') + "-output-layer-" + layer;
-            var layerPanel = new PanelViewModel(idPrefix, "Layer " + layer);
-            if (action.Input.Length > 1 && layer > 0)
+            try
             {
-                Tile input = action.Input[0];
-                Tile rawInput = action.Input[1];
-                Triplet<string> triplet = input.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
-                Triplet<string> rawTriplet = rawInput.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
-                var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = true };
-                var tabrawx = new TabViewModel { Id = idPrefix + "-YRaw", Title = "Y Raw Data", Content = rawTriplet.X, Editable = true };
-                var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = true };
-                var tabrawy = new TabViewModel { Id = idPrefix + "-CbRaw", Title = "Cb Raw Data", Content = rawTriplet.Y, Editable = true };
-                var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = true };
-                var tabrawz = new TabViewModel { Id = idPrefix + "-CrRaw", Title = "Cr Raw Data", Content = rawTriplet.Z, Editable = true };
+                var CodecActionDic = this.HttpContext.Session.Get<Dictionary<int, ICodecAction>>(ConstantCodecActionDic);
+                _codecAction = CodecActionDic == null ? null : (CodecActionDic.ContainsKey(request.layer) ? CodecActionDic[request.layer] : null);
 
-                layerPanel.Tabs = new List<TabViewModel> { tabx, tabrawx, taby, tabrawy, tabz, tabrawz };
-                layersGroup.Add(layerPanel);
+                if (_codecAction == null) return PartialView("_Layers", layersGroup);
+
+                // gets the action with the same name as the argument
+                var action = _codecAction.SubActions.SingleOrDefault(c => c.Name.Equals(request.name));
+                if (action == null || action.Input == null) return PartialView("_Layers", layersGroup);
+
+                // create layers accroding to the given layer.
+                // This is different with others
+                string idPrefix = request.name.Replace(' ', '-').Replace('/', '-') + "-output-layer-" + request.layer;
+                var layerPanel = new PanelViewModel(idPrefix, "Layer " + request.layer);
+                if (action.Input.Length > 1 && request.layer > 0)
+                {
+                    Tile input = action.Input[0];
+                    Tile rawInput = action.Input[1];
+                    Triplet<string> triplet = input.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
+                    Triplet<string> rawTriplet = rawInput.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
+                    var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = true };
+                    var tabrawx = new TabViewModel { Id = idPrefix + "-YRaw", Title = "Y Raw Data", Content = rawTriplet.X, Editable = true };
+                    var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = true };
+                    var tabrawy = new TabViewModel { Id = idPrefix + "-CbRaw", Title = "Cb Raw Data", Content = rawTriplet.Y, Editable = true };
+                    var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = true };
+                    var tabrawz = new TabViewModel { Id = idPrefix + "-CrRaw", Title = "Cr Raw Data", Content = rawTriplet.Z, Editable = true };
+
+                    layerPanel.Tabs = new List<TabViewModel> { tabx, tabrawx, taby, tabrawy, tabz, tabrawz };
+                    layersGroup.Add(layerPanel);
+                }
+                else
+                {
+                    Tile input = action.Input.FirstOrDefault();
+                    Triplet<string> triplet = input.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
+                    var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = true };
+                    var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = true };
+                    var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = true };
+                    layerPanel.Tabs = new List<TabViewModel> { tabx, taby, tabz };
+                    layersGroup.Add(layerPanel);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Tile input = action.Input.FirstOrDefault();
-                Triplet<string> triplet = input.GetStrings(TileSerializerFactory.GetDefaultSerizlizer());
-                var tabx = new TabViewModel { Id = idPrefix + "-Y", Title = "Y", Content = triplet.X, Editable = true };
-                var taby = new TabViewModel { Id = idPrefix + "-Cb", Title = "Cb", Content = triplet.Y, Editable = true };
-                var tabz = new TabViewModel { Id = idPrefix + "-Cr", Title = "Cr", Content = triplet.Z, Editable = true };
-                layerPanel.Tabs = new List<TabViewModel> { tabx, taby, tabz };
-                layersGroup.Add(layerPanel);
+                return Json(ReturnResult<string>.Fail(ex.Message));
             }
 
             return PartialView("_Layers", layersGroup);
@@ -177,115 +199,141 @@ namespace RDPToolSet.Web.Controllers
 
         public ActionResult DecodedImage(int layer)
         {
-            var CodecActionDic = (Dictionary<int, ICodecAction>)Session[ConstantCodecActionDic];
+            var CodecActionDic = this.HttpContext.Session.Get<Dictionary<int, ICodecAction>>(ConstantCodecActionDic);
             ICodecAction action = CodecActionDic == null ? null : (CodecActionDic.ContainsKey(layer) ? CodecActionDic[layer] : null);
             // TODO: Error Handler
             if (action == null) return null;
-
-            string decodedPath = Server.MapPath("~/Images/Decoded");
-            if (!Directory.Exists(decodedPath))
-            {
-                Directory.CreateDirectory(decodedPath);
-            }
 
             string decodeImage = DateTime.Now.Ticks + ".bmp";
             ICodecAction restructedFrame = action.SubActions.LastOrDefault();
             Tile result = restructedFrame.Result.FirstOrDefault();
             Bitmap bitmap = result.GetBitmap();
-            var path = "~/Images/Decoded/" + decodeImage;
-            var physicalPath = Server.MapPath(path);
-            bitmap.Save(physicalPath, ImageFormat.Bmp);
-            return PartialView("_Image", path);
+
+            string decodedPath = Path.Combine(this._hostingEnvironment.WebRootPath, "Images/Decoded");
+            if (!Directory.Exists(decodedPath))
+            {
+                Directory.CreateDirectory(decodedPath);
+            }
+
+            var path = Path.Combine(decodedPath, decodeImage);
+            bitmap.Save(path, ImageFormat.Bmp);
+            return PartialView("_Image", $"~/Images/Decoded/{decodeImage}");
         }
 
-        public ActionResult IndexWithInputs()
+        [HttpPost]
+        public async Task<IActionResult> IndexWithInputs()
         {
-            dynamic obj = GetJsonObject(Request.InputStream);
-
-            foreach (var input in obj)
+            try
             {
-                // TODO: refine this
-                if (input != null && input.Inputs != null)
+                using (var bodyStream = new StreamReader(Request.Body))
                 {
-                    int layer = JsonHelper.CastTo<int>(input.Layer);
-                    if (layer == 0)
+                    var bodyText = await bodyStream.ReadToEndAsync();
+                    dynamic obj = JsonConvert.DeserializeObject(bodyText);
+
+                    foreach (var input in obj)
                     {
                         // TODO: refine this
-                        // retrieve the quant
-                        var quantArray = JsonHelper.RetrieveQuantsArray(input.Params.QuantizationFactorsArray);
-                        // retrive the progressive quants
-                        var progQuantList = new List<QuantizationFactorsArray>();
-                        foreach (var layerQuant in input.Params.ProgQuantizationArray)
+                        if (input != null && input.Inputs != null)
                         {
-                            var layerQuants = JsonHelper.RetrieveQuantsArray(layerQuant);
-                            progQuantList.Add(layerQuants);
+                            int layer = JsonHelper.CastTo<int>(input.Layer);
+                            if (layer == 0)
+                            {
+                                // TODO: refine this
+                                // retrieve the quant
+                                var quantArray = JsonHelper.RetrieveQuantsArray(input.Params.QuantizationFactorsArray);
+                                // retrive the progressive quants
+                                var progQuantList = new List<QuantizationFactorsArray>();
+                                foreach (var layerQuant in input.Params.ProgQuantizationArray)
+                                {
+                                    var layerQuants = JsonHelper.RetrieveQuantsArray(layerQuant);
+                                    progQuantList.Add(layerQuants);
+                                }
+                                var progQuantarray = new ProgressiveQuantizationFactors
+                                {
+                                    ProgQuants = progQuantList
+                                };
+
+                                EntropyAlgorithm algorithm = JsonHelper.CastTo<EntropyAlgorithm>(input.Params.EntropyAlgorithm);
+                                UseDifferenceTile useDifferenceTile = JsonHelper.CastTo<UseDifferenceTile>(input.Params.UseDifferenceTile);
+                                UseReduceExtrapolate useReduceExtrapolate = JsonHelper.CastTo<UseReduceExtrapolate>(input.Params.UseReduceExtrapolate);
+
+                                _viewModel = new RFXPDecodeViewModel(0);
+                                ((RFXPDecodeViewModel)_viewModel).ProvideParam(quantArray, progQuantarray, algorithm, useDifferenceTile, useReduceExtrapolate);
+
+                                JArray jsonInputs = JArray.Parse(input["Inputs"].ToString());
+                                ((RFXPDecodeViewModel)_viewModel).ProvidePanelInputs(layer, jsonInputs[0].TrimEnter(), jsonInputs[1].TrimEnter(), jsonInputs[2].TrimEnter());
+
+                                this.HttpContext.Session.SetObject(ModelKey, _viewModel);
+                                this.HttpContext.Session.SetObject(isPreFrameValid, true);
+                            }
+                            
+                            Decode(input);
+                            // Updates Decode Status
+                            await UpdateDecodeStatus(layer);
                         }
-                        var progQuantarray = new ProgressiveQuantizationFactors
-                        {
-                            ProgQuants = progQuantList
-                        };
-
-                        EntropyAlgorithm algorithm = JsonHelper.CastTo<EntropyAlgorithm>(input.Params.EntropyAlgorithm);
-                        UseDifferenceTile useDifferenceTile = JsonHelper.CastTo<UseDifferenceTile>(input.Params.UseDifferenceTile);
-                        UseReduceExtrapolate useReduceExtrapolate = JsonHelper.CastTo<UseReduceExtrapolate>(input.Params.UseReduceExtrapolate);
-
-                        _viewModel = new RFXPDecodeViewModel(0);
-                        ((RFXPDecodeViewModel)_viewModel).ProvideParam(quantArray, progQuantarray, algorithm, useDifferenceTile, useReduceExtrapolate);
-                        ((RFXPDecodeViewModel)_viewModel).ProvidePanelInputs(layer, input.Inputs[0], input.Inputs[1], input.Inputs[2]);
-
-                        Session[ModelKey] = _viewModel;
-                        Session[isPreFrameValid] = true;
                     }
-                    Decode(input);
-                    // Updates Decode Status
-                    UpdateDecodeStatus(layer);
                 }
-                
+
+                this.HttpContext.Session.SetObject(IsValid, true);
+                return Json(ReturnResult<string>.Success("Success"));
             }
-            Session[IsValid] = true;
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            catch(Exception ex)
+            {
+                return Json(ReturnResult<string>.Fail(ex.Message));
+            }
         }
 
-        public ActionResult UpdateDecodeStatus(int layer)
+        public async Task<IActionResult> UpdateDecodeStatus(int layer)
         {
-            Dictionary<int, Tile> dasDic = (Dictionary<int, Tile>)Session[ConstantDASDic];
-            if (dasDic.ContainsKey(layer))
+            try
             {
-                ((Tile)Session[ConstantDAS]).Add(dasDic[layer]);
-            }
+                Dictionary<int, Tile> dasDic = this.HttpContext.Session.Get<Dictionary<int, Tile>>(ConstantDASDic);
 
-            Dictionary<int, Frame> preFrameDic = (Dictionary<int, Frame>)Session[PreviousFrameDic];
-            if (preFrameDic.ContainsKey(layer))
+                if (dasDic.ContainsKey(layer))
+                {
+                    this.HttpContext.Session.Get<Tile>(ConstantDAS).Add(dasDic[layer]);
+                }
+
+                Dictionary<int, Frame> preFrameDic = this.HttpContext.Session.Get<Dictionary<int, Frame>>(PreviousFrameDic);
+                if (preFrameDic.ContainsKey(layer))
+                {
+                    this.HttpContext.Session.SetObject(DecodePreviousFrame, preFrameDic[layer]);
+                }
+
+                return Json(ReturnResult<string>.Success("Success"));
+            }
+            catch(Exception ex)
             {
-                Session[DecodePreviousFrame] = preFrameDic[layer];
+                return Json(ReturnResult<string>.Fail(ex.Message));
             }
-
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        public override ActionResult Recompute()
+        public override ActionResult Recompute([FromBody] RecomputeRequest request)
         {
-            dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
+            //dynamic obj = CodecBaseController.GetJsonObject(Request.InputStream);
 
-            int layer = JsonHelper.CastTo<int>(obj.Layer);
+            //int layer = JsonHelper.CastTo<int>(request.Layer);
 
-            ICodecAction _rfxDecode = GetDecoderWithParameters(obj);
+            ICodecAction _rfxDecode = GetDecoderWithParameters(request);
 
-            string name = JsonHelper.CastTo<string>(obj.Action);
+            string name = JsonHelper.CastTo<string>(request.Action);
 
             // gets the action with the same name as the argument
             var action = _rfxDecode.SubActions.SingleOrDefault(c => c.Name.Equals(name));
 
             // if action not found
-            if (action == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            if (action == null)
+            {
+                return Json(ReturnResult<string>.Fail("Action not found"));
+            }
 
             // retrive tiles from Inputs
             var tileList = new List<Tile>();
-            foreach (var tileJson in obj.Inputs)
+            foreach (var tileJson in request.Inputs)
             {
                 Triplet<string> triplet = JsonHelper.RetrieveTriplet(tileJson);
 
-                string dataFormat = obj.Params.UseDataFormat;
+                string dataFormat = request.Params.UseDataFormat;
                 Tile tile = null;
                 if (dataFormat.Equals(Constants.DataFormat.HEX))
                 {
@@ -339,18 +387,17 @@ namespace RDPToolSet.Web.Controllers
                 }
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return Json(ReturnResult<string>.Success("Success"));
         }
 
         // TODO: it not correct to put it here.
         private void Decode(dynamic obj)
         {
-
             int layer = JsonHelper.CastTo<int>(obj.Layer);
-
             ICodecAction _rfxPDecode = GetDecoderWithParameters(obj);
 
             string decOrHex = (string)obj.Params.DecOrHex;
+            JArray jsonInputs = JArray.Parse(obj["Inputs"].ToString());
 
             if (layer >= 1)
             {
@@ -360,21 +407,21 @@ namespace RDPToolSet.Web.Controllers
                 if (decOrHex.Equals("hex"))
                 {
                     tile = Tile.FromStrings(new Triplet<string>(
-                        obj.Inputs[0], obj.Inputs[2], obj.Inputs[4]),
+                        jsonInputs[0].TrimEnter(), jsonInputs[2].TrimEnter(), jsonInputs[4].TrimEnter()),
                         new HexTileSerializer());
 
                     tileRaw = Tile.FromStrings(new Triplet<string>(
-                        obj.Inputs[1], obj.Inputs[3], obj.Inputs[5]),
+                        jsonInputs[1].TrimEnter(), jsonInputs[3].TrimEnter(), jsonInputs[5].TrimEnter()),
                         new HexTileSerializer());
                 }
                 else
                 {
                     tile = Tile.FromStrings(new Triplet<string>(
-                        obj.Inputs[0], obj.Inputs[2], obj.Inputs[4]),
+                        jsonInputs[0].TrimEnter(), jsonInputs[2].TrimEnter(), jsonInputs[4].TrimEnter()),
                         new IntegerTileSerializer());
 
                     tileRaw = Tile.FromStrings(new Triplet<string>(
-                        obj.Inputs[1], obj.Inputs[3], obj.Inputs[5]),
+                        jsonInputs[3].TrimEnter(), jsonInputs[3].TrimEnter(), jsonInputs[5].TrimEnter()),
                         new IntegerTileSerializer());
                 }
 
@@ -386,13 +433,13 @@ namespace RDPToolSet.Web.Controllers
                 if (decOrHex.Equals("hex"))
                 {
                     tile = Tile.FromStrings(new Triplet<string>(
-                        obj.Inputs[0], obj.Inputs[1], obj.Inputs[2]),
+                        jsonInputs[0].TrimEnter(), jsonInputs[1].TrimEnter(), jsonInputs[2].TrimEnter()),
                         new HexTileSerializer());
                 }
                 else
                 {
                     tile = Tile.FromStrings(new Triplet<string>(
-                        obj.Inputs[0], obj.Inputs[1], obj.Inputs[2]),
+                        jsonInputs[0].TrimEnter(), jsonInputs[1].TrimEnter(), jsonInputs[2].TrimEnter()),
                         new IntegerTileSerializer());
                 }
 
@@ -401,12 +448,12 @@ namespace RDPToolSet.Web.Controllers
 
             // Update DAS
             ICodecAction rlgrSRLDecode = _rfxPDecode.SubActions.SingleOrDefault(c => c.Name.Equals(Constants.PDECODE_NAME_RLGRSRLDECODE));
-            Dictionary<int, Tile> dasDic = (Dictionary<int, Tile>)Session[ConstantDASDic];
+            Dictionary<int, Tile> dasDic = this.HttpContext.Session.Get<Dictionary<int, Tile>>(ConstantDASDic);
             dasDic[layer] = rlgrSRLDecode.Result.FirstOrDefault();
 
             // Update PreFrame
             ICodecAction subbandDiffing = _rfxPDecode.SubActions.SingleOrDefault(c => c.Name.Equals(Constants.PDECODE_NAME_SUBBANDDIFFING));
-            Dictionary<int, Frame> preFrameDic = (Dictionary<int, Frame>)Session[PreviousFrameDic];
+            Dictionary<int, Frame> preFrameDic = this.HttpContext.Session.Get<Dictionary<int, Frame>>(PreviousFrameDic);
             preFrameDic[layer] = new Frame { Tile = subbandDiffing.Result.FirstOrDefault() };
         }
 
@@ -446,20 +493,20 @@ namespace RDPToolSet.Web.Controllers
                     new short[Tile.TileSize * Tile.TileSize])
                     );
                 Dictionary<int, ICodecAction> CodecActionDic = new Dictionary<int, ICodecAction>();
-                Session[ConstantDAS] = DAS;
-                Session[ConstantCodecActionDic] = CodecActionDic;
-                Session[ConstantDASDic] = new Dictionary<int, Tile>();
-
+                this.HttpContext.Session.SetObject(ConstantDAS, DAS);
+                this.HttpContext.Session.SetObject(ConstantCodecActionDic, CodecActionDic);
+                this.HttpContext.Session.SetObject(ConstantDASDic, new Dictionary<int, Tile>());
+                
                 // TODO: error handle
-                var preFramePath = (string)Session[PreviousFrameImage];
+                var preFramePath = this.HttpContext.Session.Get<string>(PreviousFrameImage);
                 Frame preFrame = Utility.GetPreviousFrame(preFramePath, _rfxPDecode.Parameters);
-                Session[DecodePreviousFrame] = preFrame;
-                Session[PreviousFrameDic] = new Dictionary<int, Frame>();
+                this.HttpContext.Session.SetObject(DecodePreviousFrame, preFrame);
+                this.HttpContext.Session.SetObject(PreviousFrameDic, new Dictionary<int, Frame>());
             }
 
             // TODO: deal with null
             // Add current codecAction in the session
-            Dictionary<int, ICodecAction> SessionCodecActionDic = (Dictionary<int, ICodecAction>)Session[ConstantCodecActionDic];
+            Dictionary<int, ICodecAction> SessionCodecActionDic = this.HttpContext.Session.Get<Dictionary<int, ICodecAction>>(ConstantCodecActionDic);
             SessionCodecActionDic[layer] = _rfxPDecode;
 
             var EncodeType = layer == 0 ? CodecToolSet.Core.EncodedTileType.EncodedType.FirstPass : CodecToolSet.Core.EncodedTileType.EncodedType.UpgradePass;
@@ -471,7 +518,7 @@ namespace RDPToolSet.Web.Controllers
             progDeQuantization.Parameters[Constants.PARAM_NAME_PROGRESSIVE_QUANTS] = progQuant;
 
             ICodecAction subbandDiffing = _rfxPDecode.SubActions.SingleOrDefault(c => c.Name.Equals(Constants.PDECODE_NAME_SUBBANDDIFFING));
-            Frame preframe = (Frame)Session[DecodePreviousFrame];
+            Frame preframe = this.HttpContext.Session.Get<Frame>(DecodePreviousFrame);
             subbandDiffing.Parameters[Constants.PARAM_NAME_PREVIOUS_FRAME] = preframe;
             subbandDiffing.Parameters[Constants.PARAM_NAME_ENCODED_TILE_TYPE] = new CodecToolSet.Core.EncodedTileType { Type = EncodeType };
 
@@ -480,13 +527,12 @@ namespace RDPToolSet.Web.Controllers
             // deal with some intermediate parameters
             if (layer >= 1)
             {
-                rlgrSRLDecode.Parameters[Constants.PARAM_NAME_DAS] = new Frame { Tile = (Tile)Session[ConstantDAS] };
+                rlgrSRLDecode.Parameters[Constants.PARAM_NAME_DAS] = new Frame { Tile = this.HttpContext.Session.Get<Tile>(ConstantDAS) };
                 rlgrSRLDecode.Parameters[Constants.PARAM_NAME_PREVIOUS_PROGRESSIVE_QUANTS] = progQuantarray.ProgQuants[layer - 1];
                 rlgrSRLDecode.Parameters[Constants.PARAM_NAME_PROGRESSIVE_QUANTS] = progQuantarray.ProgQuants[layer];
             }
 
             return _rfxPDecode;
         }
-
     }
 }

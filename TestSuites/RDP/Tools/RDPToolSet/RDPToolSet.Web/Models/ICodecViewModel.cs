@@ -1,20 +1,20 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using CodecToolSet.Core;
 using System;
 using System.Collections.Generic;
-using CodecToolSet.Core;
 
 namespace RDPToolSet.Web.Models
 {
     public interface ICodecViewModel
     {
-        String                   Name   { get; }
+        String Name { get; }
 
         IEnumerable<ICodecParam> Params { get; }
 
-        IList<PanelViewModel>    Panels { get; }
+        IList<PanelViewModel> Panels { get; }
 
-        IList<PanelViewModel>    InPanels { get; }
+        IList<PanelViewModel> InPanels { get; }
     }
 }

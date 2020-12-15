@@ -1,4 +1,12 @@
 $(function () {
+
+    $.ajaxSetup({
+        error: function (result) {
+            console.log(result);
+            alert("Request failed: " + result.responseText);
+        }
+    });
+
     var ENCODED_IMAGE = "EncodedImage";
     var PREVIOUS_FRAME_IMAGE = "PreviousFrameImage";
 
@@ -22,7 +30,7 @@ $(function () {
 
     //initalize the ZeroClipboard
     var currentURL = location.href,
-        swfPath = currentURL + "/../Static/ZeroClipboard.swf";
+        swfPath = currentURL + "/../html/ZeroClipboard.swf";
     ZeroClipboard.config({ swfPath: swfPath });
     var client = new ZeroClipboard($('.btn-copy'));
     AddClipboardListener();
@@ -202,20 +210,20 @@ $(function () {
             var mockFile = { name: "LoadExample", size: 12345 };
             var ImageDropZone = Dropzone.forElement("#dropUploader");
             ImageDropZone.options.addedfile.call(ImageDropZone, mockFile);
-            ImageDropZone.options.thumbnail.call(ImageDropZone, mockFile, location.pathname + "/../static/RFXEncodeExample.bmp");
+            ImageDropZone.options.thumbnail.call(ImageDropZone, mockFile, location.pathname + "/../html/RFXEncodeExample.bmp");
             ImageDropZone.files.push(mockFile);
             $.ajax({
                 type: 'GET',
                 url: location.pathname + "/SetSamples?sample=RFXEncodeExample.bmp"
             });
         }
-        );
+    );
 
     $('#remotefx-decoding-codec').click(
         function () {
             $.ajax({
                 type: 'GET',
-                url: location.pathname + "/../static/RFXDecodeSample.txt",
+                url: location.pathname + "/../html/RFXDecodeSample.txt",
             }).done(function (data) {
                 var encodedData = JSON.parse(data);
                 $('#encoded-input-y textarea').text(arrayToString(encodedData.YData));
@@ -225,7 +233,7 @@ $(function () {
                 $('#encoded-input .dec-hex-selector').val("hex");
             })
         }
-        );
+    );
 
     function arrayToString(array) {
         var str = "";
@@ -235,7 +243,7 @@ $(function () {
                 count++;
                 str += value + (count % 16 == 0 ? "\n" : " ");
             }
-            );
+        );
         return str;
     }
 
@@ -323,7 +331,7 @@ $(function () {
                     if (addZero) array[i] = '0' + array[i];
                 }
             }
-            
+
             var text = FormatOutputString(array);
             $(this).text(text);
         }
@@ -338,7 +346,7 @@ $(function () {
         }
         var text = "";
         for (var i = 0; i < array.length; i++) {
-            text += array[i] + ((i+1) % cols == 0 ? "\n" : "\t");
+            text += array[i] + ((i + 1) % cols == 0 ? "\n" : "\t");
         }
         return text;
     }
@@ -356,8 +364,8 @@ $(function () {
         // if the click is collapsing the panel
         // do not make the ajax request
         if ($this.parents('.panel')
-                 .find('.panel-collapse')
-                 .hasClass('in')) return;
+            .find('.panel-collapse')
+            .hasClass('in')) return;
 
         // update the _currentPanel object on each click
         _currentpanel = $this.parents('.panel');
@@ -566,8 +574,8 @@ $(function () {
                 currentTab = _currentpanel.find('.content.output-tab-pane .nav-tabs li.active').text();
 
             $prompt.text('Paste your data of Dimension ' + currentTab +
-                         ' from the output of ' + currentPanel +
-                         ' here: ');
+                ' from the output of ' + currentPanel +
+                ' here: ');
 
             // clear the input box and result box
             $input.val("");
@@ -637,8 +645,8 @@ $(function () {
         }
 
         var length = userData.length < tabData.length
-                   ? userData.length
-                   : tabData.length;
+            ? userData.length
+            : tabData.length;
 
         diffResult += '<table class="diff-table">';
 
@@ -655,7 +663,7 @@ $(function () {
         tableBody += '</tr>';
 
         var lineCount = 0;
-        for (var row = 0; row < Math.ceil(length / cols) ; row++) {
+        for (var row = 0; row < Math.ceil(length / cols); row++) {
             var lineDiff = 0,
                 originalLine = "",
                 diffLine = "";
@@ -864,9 +872,13 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // redirect to RFXDecode page
-            window.location.href = location.pathname + '/../RFXDecode';
+        }).done(function (response) {
+            if (response.status === true) {
+                // redirect to RFXDecode page
+                window.location.href = location.pathname + '/../RFXDecode';
+            } else {
+                alert('Process inputs failed, Details:' + response.data);
+            }
         });
     });
 
@@ -947,9 +959,13 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // redirect to RFXDecode page
-            window.location.href = location.pathname + '/../RFXPDecode';
+        }).done(function (response) {
+            if (response.status === true) {
+                // redirect to RFXDecode page
+                window.location.href = location.pathname + '/../RFXPDecode';
+            } else {
+                alert('Process inputs failed, Details:' + response.data);
+            }
         });
     });
 
@@ -975,16 +991,20 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
+        }).done(function (response) {
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // hide the first panel and expend the second panel 
-            $('.panel-group .panel-heading:first').find('a').click();
-            $('.panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.panel-group .panel-heading:first').find('a').click();
+                $('.panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('Decode faled:' + response.data);
+            }
         });
     });
 
@@ -1003,16 +1023,21 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
+        }).done(function (response) {
+            console.log(response)
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // hide the first panel and expend the second panel 
-            $('.panel-group .panel-heading:first').find('a').click();
-            $('.panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.panel-group .panel-heading:first').find('a').click();
+                $('.panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('Encode failed:' + response.data);
+            }
         });
     });
     // TODO:
@@ -1038,16 +1063,20 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
+        }).done(function (response) {
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // hide the first panel and expend the second panel 
-            $('.panel-group .panel-heading:first').find('a').click();
-            $('.panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.panel-group .panel-heading:first').find('a').click();
+                $('.panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('Encode failed, Details:' + response.data)
+            }
         });
     });
 
@@ -1059,9 +1088,9 @@ $(function () {
         var Inputs;
         if (layer == 0) {
             Inputs = [
-               $('#tile-input-layer0-y textarea').val(),
-               $('#tile-input-layer0-cb textarea').val(),
-               $('#tile-input-layer0-cr textarea').val()
+                $('#tile-input-layer0-y textarea').val(),
+                $('#tile-input-layer0-cb textarea').val(),
+                $('#tile-input-layer0-cr textarea').val()
             ];
         } else {
             Inputs = [
@@ -1094,16 +1123,20 @@ $(function () {
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify(data),
-        }).done(function () {
-            // set the default data format to Integer
-            $('.data-format-selector').val("Integer");
-            $('.data-format-previous').val("Integer");
-            $('.input-data-format').val("Integer");
-            $('.tab-pane .dec-hex-selector').val('dec');
+        }).done(function (response) {
+            if (response.status === true) {
+                // set the default data format to Integer
+                $('.data-format-selector').val("Integer");
+                $('.data-format-previous').val("Integer");
+                $('.input-data-format').val("Integer");
+                $('.tab-pane .dec-hex-selector').val('dec');
 
-            // hide the first panel and expend the second panel 
-            $('.tab-pane.active .panel-group .panel-heading:first').find('a').click();
-            $('.tab-pane.active .panel-group .panel-heading:eq(1)').find('a').click();
+                // hide the first panel and expend the second panel 
+                $('.tab-pane.active .panel-group .panel-heading:first').find('a').click();
+                $('.tab-pane.active .panel-group .panel-heading:eq(1)').find('a').click();
+            } else {
+                alert('Decode failed, Details:' + response.data);
+            }
         });
     }
 
@@ -1200,9 +1233,9 @@ $(function () {
 
     function GenerateAlert(type) {
         return '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
-                    '<button type="button" class="close" data-dismiss="alert">' +
-                      '<span aria-hidden="true">&times;</span>' +
-                      '<span class="sr-only">Close</span>' +
-                    '</button>';
+            '<button type="button" class="close" data-dismiss="alert">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '<span class="sr-only">Close</span>' +
+            '</button>';
     }
 })

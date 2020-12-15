@@ -1,16 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
-using System.Security.Cryptography.X509Certificates;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Security;
 // using Microsoft.Protocols.TestTools.ExtendedLogging;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 {
@@ -292,6 +290,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 
         private byte[] readBuffer = new byte[readBufferMaxLen];
 
+        private SslProtocols SelectedSslProtocols;
+
         private RemoteCertificateValidationCallback remoteCertValCallback;
 
         #endregion Private Variables
@@ -367,7 +367,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 // ETW Provider Dump Message
                 string messageName = "RDPEMT:SentPDU";
                 // ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer2, "RDPEMT Sent PDU", data);
-            }            
+            }
         }
 
         /// <summary>
@@ -423,13 +423,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// a client-server connection.
         /// </summary>
         /// <param name="targetHost">The name of the server that shares this System.Net.Security.SslStream.</param>
+        /// <param name="selectedSslProtocols">The selected SSL protocols.</param>
         /// <param name="certValCallback">A System.Net.Security.RemoteCertificateValidationCallback delegate responsible for validating the certificate supplied by the remote party.</param>
-        public void AuthenticateAsClient(string targetHost, RemoteCertificateValidationCallback certValCallback = null)
+        public void AuthenticateAsClient(string targetHost, SslProtocols selectedSslProtocols, RemoteCertificateValidationCallback certValCallback = null)
         {
             if (certValCallback == null)
             {
                 certValCallback = new RemoteCertificateValidationCallback(CertificateValidationCallback);
             }
+
+            SelectedSslProtocols = selectedSslProtocols;
+
             remoteCertValCallback = certValCallback;
             // Using thread in threadpool to manage the authentication process
             ThreadPool.QueueUserWorkItem(AuthenticateAsClient, targetHost);
@@ -581,7 +585,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 try
                 {
                     sslStream = new SslStream(innerStream, false, remoteCertValCallback);
-                    sslStream.AuthenticateAsClient(targetHost as string, null, System.Security.Authentication.SslProtocols.Tls, false);
+                    sslStream.AuthenticateAsClient(targetHost as string, null, SelectedSslProtocols, false);
                     isAuthenticated = true;
                 }
                 catch
