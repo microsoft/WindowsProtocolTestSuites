@@ -44,8 +44,11 @@ else
 }
 
 $DropConnectionForInvalidRequest = "true"
-[decimal]$SutOsVersion = "" #How to get this value in Linux Driver
-[int]$SutOsBuildNumber = "" #How to get this value in Linux Driver
+[decimal]$SutOsVersion = Invoke-Command -HostName $tcComputerName -UserName $userNameInTC -ScriptBlock { "$([System.Environment]::OSVersion.Version.Major.ToString()).$([System.Environment]::OSVersion.Version.Minor.ToString())" }
+[int]$SutOsBuildNumber = Invoke-Command -HostName $tcComputerName -UserName $userNameInTC -ScriptBlock { [System.Environment]::OSVersion.Version.Build }
+
+Write-Host "SutOsVersion: $SutOsVersion "
+Write-Host "SutOsBuildNumber: $SutOsBuildNumber "
 
 if ($SutOSVersion -ge 10.0) {
     if ($SutOsBuildNumber -ge 19041) {
