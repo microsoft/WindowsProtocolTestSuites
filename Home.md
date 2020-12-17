@@ -24,6 +24,4 @@ All the documents of the test suites contained in this repo are listed below:
 # References
 
 [Protocol Test Framework (PTF)](https://github.com/microsoft/protocoltestframework): PTF implements the fundamentals to support Protocol Test Suite.
-
-
   
