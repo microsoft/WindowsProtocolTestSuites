@@ -8,5 +8,5 @@ $isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to simulate a client initiated disconnect request
-$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerClientDisconnectAll_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
+$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerClientDisconnectAll_Task $PtfProp_SUTUserName
 return $returnValue

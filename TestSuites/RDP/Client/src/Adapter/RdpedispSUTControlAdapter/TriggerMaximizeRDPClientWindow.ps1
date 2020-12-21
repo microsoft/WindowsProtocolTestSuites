@@ -9,6 +9,6 @@ $isSutPSRemotingStarted = . "../SUTControlAdapter/Check-PSRemoting.ps1" $PtfProp
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to start RDP connection (Direct Tls) remotely
-$returnValue = . "../SUTControlAdapter/Run-TaskWithPSRemoting.ps1" $PtfProp_SUTName $PtfProp_MaximizeRDPClientWindow_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
+$returnValue = . "../SUTControlAdapter/Run-TaskWithPSRemoting.ps1" $PtfProp_SUTName $PtfProp_MaximizeRDPClientWindow_Task $PtfProp_SUTUserName
 return $returnValue
 
