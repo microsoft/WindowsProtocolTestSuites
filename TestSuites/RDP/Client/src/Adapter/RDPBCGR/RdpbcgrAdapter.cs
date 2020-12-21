@@ -1673,7 +1673,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="presentRoutingToken">Indicates if present routing token (LoadBalanceInfo).</param>
         public void SendServerRedirectionPdu(bool presentRoutingToken)
         {
-            UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
             redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
@@ -1699,7 +1698,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             redirectPacket.Domain = RdpbcgrTestData.Test_Domain;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_DOMAIN;
 
-            redirectPacket.Password = encoder.GetBytes(RdpbcgrTestData.Test_Password);
+            redirectPacket.Password = RdpbcgrUtility.EncodeUnicodeStringToBytes(RdpbcgrTestData.Test_Password);
             redirectPacket.RedirFlags |= RedirectionFlags.LB_PASSWORD;
 
             redirectPacket.Pad = new byte[8];
@@ -1720,7 +1719,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         public void SendServerRedirectionPduRDSTLS()
         {
-            UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
             redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
