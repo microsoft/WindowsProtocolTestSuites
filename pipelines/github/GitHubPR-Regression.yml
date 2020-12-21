@@ -78,6 +78,12 @@ stages:
               Contents: freerdp.config
               TargetFolder: "$(Build.ArtifactStagingDirectory)/Java"
 
+          - task: CmdLine@2
+            displayName: Install Jinja2 to local path
+            inputs:
+              script: >
+                pip install --prefix="$(Build.Repository.LocalPath)/TestSuites/RDP/RDPSUTControlAgent/Python" jinja2
+
           - task: CopyFiles@2
             displayName: "Copy Python Agent to: $(Build.ArtifactStagingDirectory)/Python"
             inputs:
