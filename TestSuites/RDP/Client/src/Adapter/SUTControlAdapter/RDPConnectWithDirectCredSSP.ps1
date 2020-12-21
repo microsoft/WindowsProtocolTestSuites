@@ -9,6 +9,6 @@ $isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to start RDP connection (Direct CSSP) remotely
-$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithDirectCredSSP_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
+$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithDirectCredSSP_Task $PtfProp_SUTUserName
 return $returnValue
 

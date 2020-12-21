@@ -8,5 +8,5 @@ $isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to initial an Auto-reconnecton sequence
-$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerClientAutoReconnect_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
+$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerClientAutoReconnect_Task $PtfProp_SUTUserName
 return $returnValue

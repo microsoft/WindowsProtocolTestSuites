@@ -19,6 +19,6 @@ $isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to trigger different input events
-$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerInputEvents_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
+$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerInputEvents_Task $PtfProp_SUTUserName
 sleep 20 # take couple of seconds to generate input events
 return $returnValue
