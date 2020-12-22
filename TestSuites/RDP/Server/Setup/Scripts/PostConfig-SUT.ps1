@@ -145,7 +145,7 @@ Function Config-RDS {
     # Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "fDisableAutoReconnect" -value "0"
 
     # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
-    gpupdate /Force
+    # gpupdate /Force
 }
 
 Function RestartAndResume {
