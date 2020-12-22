@@ -1,14 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.Rdpemt
 {
@@ -55,6 +51,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [Description("Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly via an encrypted lossy RDPEUDP connection.")]
         public void S2_AutoDetect_RTTMeasure_Lossy()
         {
+            CheckPlatformCompatibility(TransportMode.Lossy);
+
             ushort sequenceNumber = 1;
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
@@ -123,6 +121,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [Description("Verify the RDP client can complete the bandwidth measure auto detection in a lossy UDP transport.")]
         public void S2_AutoDetect_LossyBandwidthMeasure()
         {
+            CheckPlatformCompatibility(TransportMode.Lossy);
+
             ushort sequenceNumber = 2;
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
@@ -158,6 +158,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [Description("Verify the RDP client doesn't respond Bandwidth detection request in a lossy UDP transport if the sequenceNumber field in the Bandwidth Measure Stop structure is not the same as that in the Bandwidth Measure Start structure.")]
         public void S2_AutoDetect_NegtiveLossyBandwidthMeasure()
         {
+            CheckPlatformCompatibility(TransportMode.Lossy);
+
             ushort sequenceNumber = 2;
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
@@ -176,7 +178,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             this.SendRandomTunnelData(TransportMode.Lossy);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send a Bandwidth Measure Stop");
-            this.SendTunnelDataPdu_BWStop(Multitransport_Protocol_value.INITITATE_REQUEST_PROTOCOL_UDPFECL, (ushort)(sequenceNumber+1000));
+            this.SendTunnelDataPdu_BWStop(Multitransport_Protocol_value.INITITATE_REQUEST_PROTOCOL_UDPFECL, (ushort)(sequenceNumber + 1000));
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Try to wait for a Bandwidth Measure Result");
             this.WaitForAndCheckTunnelDataPdu_BWResult(Multitransport_Protocol_value.INITITATE_REQUEST_PROTOCOL_UDPFECL, (ushort)(sequenceNumber + 1000), timeout, true);
