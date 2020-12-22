@@ -182,14 +182,9 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Close_RDP_Connection()
         {
-            string remoteClientName = GetRemoteClientName().ToLower();
-            Process[] rdpProcesses = Process.GetProcessesByName(remoteClientName);
-            foreach (Process process in rdpProcesses)
-            {
-                process.Kill();
-            }
+            string arguments = GetConfiguredValue("StopRDP");
 
-            return 1;
+            return InvokeRemoteClientProcess(arguments);
         }
 
         /// <summary>
