@@ -234,13 +234,13 @@ Function Main {
             # Start configure
             Config-Environment
             Install-RDSFeature
-            Config-RDS
             RestartAndResume
         }
         2 { 
             Activate-LicenseServer
             Install-License
-            Set-LicenseServer            
+            Config-RDS
+            Set-LicenseServer
             Complete-Configure
         }
     }
