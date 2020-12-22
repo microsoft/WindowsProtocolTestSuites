@@ -142,10 +142,10 @@ Function Config-RDS {
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "SecurityLayer" -value "1" -Type DWord
 
     # Allow automatic reconnection from clients: this key needs a reboot to take effect
-    # Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "fDisableAutoReconnect" -value "0"
+    Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "fDisableAutoReconnect" -value "0"
 
     # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
-    # gpupdate /Force
+    gpupdate /Force
 }
 
 Function RestartAndResume {
@@ -239,8 +239,11 @@ Function Main {
         2 { 
             Activate-LicenseServer
             Install-License
-            Config-RDS
             Set-LicenseServer
+            Config-RDS
+            RestartAndResume
+        }
+        3 {
             Complete-Configure
         }
     }
