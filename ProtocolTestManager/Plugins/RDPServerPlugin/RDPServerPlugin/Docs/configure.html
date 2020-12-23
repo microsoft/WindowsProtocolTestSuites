@@ -76,23 +76,20 @@
         </h2>
         <p>
             Important: Microsoft Visual Studio 2017 (or later), Protocol Test Framework (build 1.0.7500.0) and Spec Explorer (3.5.3146.0) must be installed on the driver computer before you run the
-            test suite installer.
+            test suite installer. 
         </p>
         <p>
             To set up the driver computer:
         </p>
         <p>
-            1. Copy the test suite package to the driver computer.
-        </p>
-        <p>
-            2. Extract the files of the test suite from the package.
-        </p>
-        <p>
-            3. Install the required and optional software described earlier.
-        </p>
-        <p>
-            4. Run <strong>RDP-TestSuite-ServerEP.msi</strong> on the driver computer.
+            1. Download the test suite installer file RDP-TestSuite-ServerEP.msi (version <= 3.20.1.0) from <a href="https://github.com/microsoft/WindowsProtocolTestSuites/releases">GitHub Release Page</a> to the driver computer.
         </p>        
+        <p>
+            2. Install the required and optional software described earlier.
+        </p>
+        <p>
+            3. Run <strong>RDP-TestSuite-ServerEP.msi</strong> on the driver computer.
+        </p>
         <h2>
             Set Up a Windows-Based SUT
         </h2>
@@ -107,7 +104,7 @@
         </p>
         <p>
             3. Run <strong>RDP-TestSuite-ServerEP.msi</strong> on the Windows-based SUT.
-        </p>       
+        </p>
         <p>
             To set up a SUT that is not based on the Windows operating system, see Configuring Computers that are Not Based on Windows.
         </p>
@@ -155,9 +152,9 @@
         <p>To configure the SUT: </p>
         <p>
             1. Log on to the SUT as <strong>Administrator</strong>. Enable the Administrator account if it is disabled.
-            <a href="javascript:void(0)" onclick="toggle_visibility('enableadmin');">Detail</a>
+            <a href="javascript:void(0)" onclick="toggle_visibility('enableadminonsut');">See details.</a>
         </p>
-        <div id="enableadmin" class="hidden-detail">
+        <div id="enableadminonsut" class="hidden-detail">
             <p>
                 a. In <strong>Control Panel</strong>, open <strong>Administrative Tools</strong> and then open <strong>Computer Management</strong>.
             </p>
@@ -173,7 +170,8 @@
         </p>
         <p>
             3. Review the properties shown in the xml file, updating the property values as necessary.
-
+        </p>
+        <p>
             4. Run <strong>Windows PowerShell</strong> as <strong>Administrator</strong>.
         </p>
         <p>
@@ -184,14 +182,14 @@
         </p>
         <p>
             7. Type .\PostConfig-SUT.ps1 and press <strong>Enter</strong>.
-        </p>  
+        </p>
 
         <p>To configure the driver computer: </p>
         <p>
             1. Log on to the SUT as <strong>Administrator</strong>. Enable the Administrator account if it is disabled.
-            <a href="javascript:void(0)" onclick="toggle_visibility('enableadmin');">Detail</a>
+            <a href="javascript:void(0)" onclick="toggle_visibility('enableadminondriver');">See details.</a>
         </p>
-        <div id="enableadmin" class="hidden-detail">
+        <div id="enableadminondriver" class="hidden-detail">
             <p>
                 a. In <strong>Control Panel</strong>, open <strong>Administrative Tools</strong> and then open <strong>Computer Management</strong>.
             </p>
@@ -207,7 +205,8 @@
         </p>
         <p>
             3. Review the properties shown in the xml file, updating the property values as necessary.
-
+        </p>
+        <p>
             4. Run <strong>Windows PowerShell</strong> as <strong>Administrator</strong>.
         </p>
         <p>
