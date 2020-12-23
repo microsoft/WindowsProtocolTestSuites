@@ -2,28 +2,7 @@
 <TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
   <Properties>
     <!--Protocol Section begins. All the property elements for the Protocol information should be in this section.-->
-    <Group name="PTF">
-      <Group name="NetworkCapture">
-        <Property name="Enabled" value="false">
-          <Choice>true,false</Choice>
-          <Description>
-            If it is true, enable the auto-capture feature.
-          </Description>
-        </Property>
-        <Property name="CaptureFileFolder" value="C:\MS-SMB_CaptureFileDirectory">
-          <Description>
-            The path to put the capture files. Old files will be overwritten.
-          </Description>
-        </Property>
-        <Property name="StopRunningOnError" value="false">
-          <Choice>true,false</Choice>
-          <Description>
-            If it is true, fail the test case when error happens in running network capture commands. Otherwise, ignore the error.
-          </Description>
-        </Property>
-      </Group>
-    </Group>
-    
+       
     <!-- The default protocol short name.-->
     <Property name="ProtocolShortName" value="MS-SMB" />
     <!--Protocol Section ends.-->

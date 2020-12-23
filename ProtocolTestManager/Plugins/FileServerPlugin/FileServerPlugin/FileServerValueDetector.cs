@@ -797,9 +797,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             else if (isFsaSelected && !isSMB2Selected && !isClusterSwnFsrvpSelected && !isDfscSelected && !isRsvdSelected && !isSqosSelected && !isAuthSelected)
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("CommonTestSuite.deployment.ptfconfig"));
-                hiddenPropertiesList.Remove("PTF.NetworkCapture.Enabled");
-                hiddenPropertiesList.Remove("PTF.NetworkCapture.CaptureFileFolder");
-                hiddenPropertiesList.Remove("PTF.NetworkCapture.StopRunningOnError");
                 hiddenPropertiesList.Remove("Common.SutComputerName");
                 hiddenPropertiesList.Remove("Common.SutIPAddress");
                 hiddenPropertiesList.Remove("Common.DomainName");
