@@ -48,7 +48,7 @@ You should install the software listed below based on your testing purpose, incl
 
       Note:
 
-         <a name="footnote1">1</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
+<a name="footnote1">1</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
 
 1. [Protocol Test Framework v2.0 (build 2.0.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.0.0)
 
@@ -58,6 +58,13 @@ You should install the software listed below based on your testing purpose, incl
 
    From `NetworkDirect_DDK.zip` extract `ndspi.h` and `ndstatus.h` into project path `ProtoSDK\RDMA\include`. This is to build SMBD test suite.
 
+1. [PowerShell Core](https://github.com/PowerShell/PowerShell/releases)
+
+   This is required only when user want to use [PowerShell Core Remoting over SSH](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/Run-Test-Suites-With-Enabling-PowerShell-Core-Remoting-Over-SSH).
+
+1. [Win32-OpenSSH](https://github.com/PowerShell/Win32-OpenSSH/releases)
+
+   This is required only when user want to use [PowerShell Core Remoting over SSH](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/Run-Test-Suites-With-Enabling-PowerShell-Core-Remoting-Over-SSH) for Windows platform.
 
 If your work on Windows, you can use the script in `InstallPrerequisites` folder to automatically download and install these software.
 
