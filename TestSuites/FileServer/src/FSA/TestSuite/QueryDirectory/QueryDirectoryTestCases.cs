@@ -686,7 +686,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
             Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
+            Site.Assert.AreEqual(shortName, getShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
         }
 
         /// <summary>
@@ -710,7 +710,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, "The AllocationSize of the entry should be 0.");
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
             Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, Encoding.Unicode.GetString(entry.ShortName).Replace("\0", String.Empty), $"The ShortName of the entry should be \"{shortName}\".");
+            Site.Assert.AreEqual(shortName, getShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
         }
 
         /// <summary>
@@ -787,6 +787,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             string shortName = fileName.Substring(0, 6).ToUpper();
             shortName += "~1";
             return shortName;
+        }
+
+        /// <summary>
+        /// Get 8.3 short name from the entry.
+        /// </summary>
+        /// <param name="shortName">The short name of the entry</param>
+        /// <param name="shortNameLength">The length of the short name</param>
+        private string getShortName(byte[] shortName, int shortNameLength)
+        {
+            if (shortNameLength == 0)
+            {
+                return "";
+            }
+
+            var newShortNameBytes = new byte[shortNameLength];
+            Array.Copy(shortName, 0, newShortNameBytes, 0, shortNameLength);
+
+            return Encoding.Unicode.GetString(newShortNameBytes);
         }
         #endregion
     }
