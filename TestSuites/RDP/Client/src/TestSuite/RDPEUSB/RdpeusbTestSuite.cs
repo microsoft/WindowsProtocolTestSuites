@@ -2,15 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
+using System.Reflection;
+using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeusb;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdpeusb;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.Rdpeusb
 {
@@ -42,6 +43,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
 
         protected override void TestInitialize()
         {
+            VerifyInteractiveOrDeviceNeededRdpeusbTestCase();
+
             base.TestInitialize();
 
             if (null == rdpeusbAdapter)
@@ -85,10 +88,56 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
 
             DynamicVCException.SetCleanUp(false);
         }
-        
+
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Inconclude the interactive test cases.
+        /// </summary>
+        private void VerifyInteractiveOrDeviceNeededRdpeusbTestCase()
+        {
+            var isInteractiveTestCase = IsInteractiveRdpeusbTestCase();
+            var isDeviceNeededTestCase = IsDeviceNeededRdpeusbTestCase();
+            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpeusbAdapter").GetType().Name == "InteractiveAdapterConfig";
+
+            if (isInteractiveTestCase && !isInteractiveAdapter)
+            {
+                Site.Assume.Inconclusive("The RDPEUSB case requires interactive operation.");
+            }
+
+            if (isDeviceNeededTestCase && !isInteractiveAdapter)
+            {
+                Site.Assume.Inconclusive("The RDPEUSB case requires device operation.");
+            }
+        }
+
+        /// <summary>
+        /// Determine whether the executing Rdpeusb test case is interactive or not
+        /// </summary>
+        /// <returns>The executing Rdpeusb test case is interactive or not</returns>
+        private bool IsInteractiveRdpeusbTestCase()
+        {
+            var testName = this.TestContext.TestName;
+            var method = GetType().GetMethod(testName);
+            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
+
+            return attrs.Any(attr => attr.TestCategories.Contains("Interactive"));
+        }
+
+        /// <summary>
+        /// Determine whether the executing Rdpeusb test case needs device
+        /// </summary>
+        /// <returns>The executing Rdpeusb test case needs device or not</returns>
+        private bool IsDeviceNeededRdpeusbTestCase()
+        {
+            var testName = this.TestContext.TestName;
+            var method = GetType().GetMethod(testName);
+            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
+
+            return attrs.Any(attr => attr.TestCategories.Contains("DeviceNeeded"));
+        }
 
         //Set default server capabilities
         private void setServerCapabilitiesWithRemoteFxSupported()

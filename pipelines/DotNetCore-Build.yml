@@ -1,0 +1,38 @@
+trigger: none 
+
+variables:
+  - group: Build Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: v-hazh/dotnetcore-build-yml-to-AzurePipelines-main-v2
+
+pool: 
+  vmImage: windows-2019
+
+
+pool: 
+  vmImage: windows-2019
+
+jobs:
+- job:
+  displayName: DotNetCore Build
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+  steps:
+  - template: pipelines/build/DotNetCore-Build-steps.yml@template
+
+- job:
+  displayName: Build RDPSUTControlAgent (Java, CSharp, Python)
+  pool: 
+    vmImage: windows-2019
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+  condition: and(succeeded(), eq(variables['test.testSuiteName'], 'RDPClient'))
+  steps:
+  - template: pipelines/build/DotNetCore-Build-RDPSUTControlAgent-steps.yml@template
