@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
             RDPEGFX_CapabilityExchange();
             bool h264Supported = IsH264Supported();
-            this.TestSite.Assert.IsTrue(h264Supported, "To test H264 codec, client must indicates support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
+            this.TestSite.Assume.IsTrue(h264Supported, "To test H264 codec, client must indicates support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
         }
 
 
