@@ -30,6 +30,11 @@
   </ItemGroup>
   <ItemGroup>
     <_CopyItems Include="$(TargetDir)\*.*" />
+    <_TestDataFiles Include="$(ProjectDir)TestData\*.*" />
+    <_H264TestDataFiles Include="$(ProjectDir)RDPEGFX\H264TestData\*.*" />
+    <_BaseImageFiles Include="$(ProjectDir)RDPEGFX\H264TestData\BaseImage\*.*" />
+    <_RdpedispEnhancedAdapterImages Include="$(ProjectDir)RDPEDISP\RdpedispEnhancedAdapterImages\*.png" />
+    <_DataFiles Include="$(ProjectDir)..\..\Setup\Data\*.*" />
   </ItemGroup>
   <ItemGroup>
     <None Update="RDP_ClientTestSuite.deployment.ptfconfig">
@@ -44,6 +49,10 @@
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\" />
   </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="IF Not Exist &quot;$(OutDir)../TestData&quot; mkdir &quot;$(OutDir)../TestData&quot;&#xD;&#xA;Copy &quot;$(ProjectDir)TestData&quot; &quot;$(OutDir)../TestData&quot;&#xD;&#xA;Copy &quot;$(ProjectDir)RDPEGFX/H264TestData&quot; &quot;$(OutDir)../TestData&quot;&#xD;&#xA;Copy &quot;$(ProjectDir)RDPEGFX/H264TestData/BaseImage&quot; &quot;$(OutDir)../TestData&quot;&#xD;&#xA;&#xD;&#xA;IF Not Exist &quot;$(OutDir)../Data&quot; mkdir &quot;$(OutDir)../Data&quot;&#xD;&#xA;Copy &quot;$(ProjectDir)../../Setup/Data&quot; &quot;$(OutDir)../Data&quot;" />
+    <Copy SourceFiles="@(_TestDataFiles)" DestinationFolder="$(OutDir)../TestData" />
+    <Copy SourceFiles="@(_H264TestDataFiles)" DestinationFolder="$(OutDir)../TestData" />
+    <Copy SourceFiles="@(_BaseImageFiles)" DestinationFolder="$(OutDir)../TestData" />
+    <Copy SourceFiles="@(_RdpedispEnhancedAdapterImages)" DestinationFolder="$(OutDir)../TestData" />
+    <Copy SourceFiles="@(_DataFiles)" DestinationFolder="$(OutDir)../Data" />
   </Target>
 </Project>
