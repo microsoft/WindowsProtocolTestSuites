@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 
 import binascii
-import logging
-import threading
-import subprocess
-import struct
-import socket
-import sys
 import datetime
-from struct import *
+import logging
+import socket
+import subprocess
+import sys
+import threading
 from jinja2 import Environment
+from struct import Struct, unpack
 
 try:
     from configparser import ConfigParser
@@ -77,32 +76,32 @@ class Payload:
     def decode(self, raw_payload):
         self.type = unpack('<i', raw_payload[:4])
         self.type = self.type[0]
-        logging.debug("payload type:", self.type)
+        logging.debug("payload type: %s", self.type)
         if self.type == payload_type['RDP_FILE']:
             content_length = len(raw_payload) - 4
             self.content = unpack('<%sc' % content_length, raw_payload[4:])
-            logging.debug("content", self.content)
+            logging.debug("content: %s", self.content)
         elif self.type == payload_type['PARAMETERS_STRUCT']:
             start = 4
             self.port = unpack('<h', raw_payload[start:start + 2])
             self.port = self.port[0]
-            logging.debug("port", self.port)
+            logging.debug("port: %d", self.port)
             start += 2
             self.screen_type = unpack('<h', raw_payload[start:start + 2])
             self.screen_type = self.screen_type[0]
-            logging.debug("screen_type", self.screen_type)
+            logging.debug("screen_type: %s", self.screen_type)
             start += 2
             self.desktop_width = unpack('<h', raw_payload[start:start + 2])
             self.desktop_width = self.desktop_width[0]
-            logging.debug("desktop_width", self.desktop_width)
+            logging.debug("desktop_width: %d", self.desktop_width)
             start += 2
             self.desktop_height = unpack('<h', raw_payload[start:start + 2])
             self.desktop_height = self.desktop_height[0]
-            logging.debug("desktop_height", self.desktop_height)
+            logging.debug("desktop_height: %d", self.desktop_height)
             start += 2
             self.connect_approach = unpack('<h', raw_payload[start:start + 2])
             self.connect_approach = self.connect_approach[0]
-            logging.debug("connect_approach", self.connect_approach)
+            logging.debug("connect_approach: %s", self.connect_approach)
             start += 2
             address_length = unpack('<h', raw_payload[start:start + 2])
             address_length = address_length[0]
@@ -111,7 +110,7 @@ class Payload:
                 self.address = unpack(
                     '<%ss' % address_length, raw_payload[start:start + address_length])
                 self.address = self.address[0].decode('utf-8', errors="ignore")
-                logging.debug("address", self.address)
+                logging.debug("address: %s", self.address)
         else:
             logging.error("wrong payload type")
 
@@ -130,7 +129,7 @@ class Message:
         self.monitor_action = 0
 
     def encode(self):
-        packer = struct.Struct('< h h h i %ss h i i i' %
+        packer = Struct('< h h h i %ss h i i i' %
                                len(self.testcase_name))
         fields = (self.type, self.testsuite_id, self.command_id,
                   len(self.testcase_name), self.testcase_name,
@@ -185,21 +184,21 @@ class Message:
                 logging.debug(self.payload)
 
 
-def build_client_cmd(cmd, ip_address, ip_port):
+def build_client_cmd(cmd, ip_address=None, ip_port=None):
+    if cmd == "StopRDP":
+        return Environment().from_string(cmd).render()
 
     if ip_port == 0:
         address = ip_address
     else:
         address = "%s:%s" % (ip_address, ip_port)
-    client_cmd = Environment().from_string(cmd).render(address=address)
-
-    return client_cmd
+    return Environment().from_string(cmd).render(address=address)
 
 
 def handle_connection(client_socket, config):
-    processes = []
-
-    while True:
+    now = datetime.datetime.now()
+    end = now + datetime.timedelta(seconds=15)
+    while datetime.datetime.now() < end:
         buffer_size = int(config.get('general', 'buffer_size'))
         request = client_socket.recv(buffer_size)
         if len(request) == 0:
@@ -222,15 +221,22 @@ def handle_connection(client_socket, config):
 
         logging.info("Command ID: %s", msg.command_id)
         if msg.command_id == command_id['START_RDP_CONNECTION']:
-            config_cmd = config.get('client', 'Negotiate')
+            cmd_key = "Negotiate"
+            if msg.payload.connect_approach == connect_approach['DIRECT']:
+                cmd_key = "DirectCredSSP"
+            if msg.payload.screen_type == screen_type['FULL_SCREEN']:
+                cmd_key += "FullScreen"
+            config_cmd = config.get('client', cmd_key)
             cmd = build_client_cmd(
                 config_cmd, msg.payload.address, msg.payload.port)
             logging.info("Executing client: %s" % cmd)
-            processes.append(subprocess.Popen(cmd.split(' ')))
+            subprocess.Popen(cmd.split(' '))
         elif msg.command_id == command_id['CLOSE_RDP_CONNECTION']:
-            for p in processes:
-                logging.debug("Terminate the client %s" % p)
-                p.terminate()
+            config_cmd = config.get('client', 'StopRDP')
+            cmd = build_client_cmd(config_cmd)
+            logging.debug("Terminate all clients...")
+            proc = subprocess.Popen(cmd.split(' '))
+            proc.wait()
         elif msg.command_id == command_id['AUTO_RECONNECT']:
             # TODO
             pass
@@ -257,15 +263,17 @@ def handle_connection(client_socket, config):
             pass
         elif msg.command_id == command_id['DISPLAY_FULLSCREEN']:
             config_cmd = config.get('client', 'NegotiateFullScreen')
+            if msg.payload.connect_approach == connect_approach['DIRECT']:
+                config_cmd = config.get('client', 'DirectCredSSPFullScreen')
             cmd = build_client_cmd(
                 config_cmd, msg.payload.address, msg.payload.port)
             logging.info("Executing client: %s" % cmd)
-            processes.append(subprocess.Popen(cmd.split(' ')))
+            subprocess.Popen(cmd.split(' '))
 
         # FIXME: response.request_message = ""
         # FIXME: response.error_message = ""
-        logging.debug("Response has been sent")
         client_socket.sendall(response.encode())
+        logging.debug("Response has been sent")
 
 
 def main():
