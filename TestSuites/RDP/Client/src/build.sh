@@ -50,13 +50,6 @@ do
     cp $TestSuiteRoot/CommonScripts/$curr $OutDir/Scripts/ -f
 done
 
-mkdir -p $OutDir/TestData
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/TestData/*.bmp $OutDir/TestData -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/TestData/*.xml $OutDir/TestData -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png $OutDir/TestData -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.* $OutDir/TestData -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/* $OutDir/TestData -f
-
 cp $TestSuiteRoot/TestSuites/RDP/Client/src/Deploy/LICENSE.rtf $OutDir/LICENSE.rtf -f
 
 Cmd="dotnet publish \"$TestSuiteRoot/TestSuites/RDP/Client/src/RDP_Client.sln\" -c $Configuration -o $OutDir/Bin"
