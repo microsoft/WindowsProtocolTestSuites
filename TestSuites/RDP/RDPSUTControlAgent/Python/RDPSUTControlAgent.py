@@ -196,14 +196,13 @@ def build_client_cmd(cmd, ip_address=None, ip_port=None):
 
 
 def handle_connection(client_socket, config):
-    now = datetime.datetime.now()
-    end = now + datetime.timedelta(seconds=15)
+    end = datetime.datetime.now() + datetime.timedelta(seconds=15)
     while datetime.datetime.now() < end:
         buffer_size = int(config.get('general', 'buffer_size'))
         request = client_socket.recv(buffer_size)
         if len(request) == 0:
             continue
-
+        
         msg = Message()
         msg.decode(request)
         logging.info("testcase: %s" % msg.testcase_name)
