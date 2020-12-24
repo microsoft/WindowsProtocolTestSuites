@@ -33,6 +33,7 @@
     <_TestDataFiles Include="$(ProjectDir)TestData\*.*" />
     <_H264TestDataFiles Include="$(ProjectDir)RDPEGFX\H264TestData\*.*" />
     <_BaseImageFiles Include="$(ProjectDir)RDPEGFX\H264TestData\BaseImage\*.*" />
+    <_DataFiles Include="$(ProjectDir)..\..\Setup/Data\*.*" />
   </ItemGroup>
   <ItemGroup>
     <None Update="RDP_ClientTestSuite.deployment.ptfconfig">
@@ -50,5 +51,6 @@
     <Copy SourceFiles="@(_TestDataFiles)" DestinationFolder="$(OutDir)../TestData" />
     <Copy SourceFiles="@(_H264TestDataFiles)" DestinationFolder="$(OutDir)../TestData" />
     <Copy SourceFiles="@(_BaseImageFiles)" DestinationFolder="$(OutDir)../TestData" />
+    <Copy SourceFiles="@(_DataFiles)" DestinationFolder="$(OutDir)../Data" />
   </Target>
 </Project>
