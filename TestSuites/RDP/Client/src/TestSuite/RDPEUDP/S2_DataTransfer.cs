@@ -1,16 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Threading;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdpeudp
 {
@@ -27,10 +25,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will send an ACK to acknowledge the received package")]
         public void S2_DataTransfer_ClientReceiveData()
         {
+            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
+
+            CheckPlatformCompatibility(ref transportModeArray);
+
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
-            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
             foreach (TransportMode transportMode in transportModeArray)
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Create a {0} UDP connection.", transportMode);
@@ -66,12 +67,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will send an ACK to acknowledge the package loss when detect a package loss in a reliable connection.")]
         public void S2_DataTransfer_AcknowledgeTest_AcknowlegeLossyPackage()
         {
+            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
+
+            CheckPlatformCompatibility(ref transportModeArray);
+
             CheckSecurityProtocolForMultitransport();
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
-
-            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
 
             foreach (TransportMode transportMode in transportModeArray)
             {
@@ -161,12 +164,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client support congestion control as a receiver.")]
         public void S2_DataTransfer_CongestionControlTest_ClientReceiveData()
         {
+            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
+
+            CheckPlatformCompatibility(ref transportModeArray);
+
             CheckSecurityProtocolForMultitransport();
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
-
-            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
 
             foreach (TransportMode transportMode in transportModeArray)
             {
@@ -251,6 +256,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the DTLS handshake process on the lossy RDP-UDP connection.")]
         public void S2_DataTransfer_SecurityChannelCreation_LossyConnection()
         {
+            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Lossy };
+
+            CheckPlatformCompatibility(ref transportModeArray);
+
             CheckSecurityProtocolForMultitransport();
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
@@ -331,12 +340,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will send ACK correctly when sequence number is wrapped around")]
         public void S2_DataTransfer_SequenceNumberWrapAround()
         {
+            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
+
+            CheckPlatformCompatibility(ref transportModeArray);
+
             CheckSecurityProtocolForMultitransport();
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
-            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
             foreach (TransportMode transportMode in transportModeArray)
             {
                 DoUntilSucceed(() =>
@@ -389,12 +401,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [Description("Verify the RDP client will add RDPUDP_FLAG_ACKDELAYED flag in uFlags field of ACK packet if client delayed the ack")]
         public void S2_DataTransfer_ClientAckDelay()
         {
+            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
+
+            CheckPlatformCompatibility(ref transportModeArray);
+
             CheckSecurityProtocolForMultitransport();
 
             Site.Log.Add(LogEntryKind.Debug, "Establishing RDP connection ...");
             StartRDPConnection();
 
-            TransportMode[] transportModeArray = new TransportMode[] { TransportMode.Reliable, TransportMode.Lossy };
             foreach (TransportMode transportMode in transportModeArray)
             {
                 DoUntilSucceed(() =>

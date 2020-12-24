@@ -140,13 +140,12 @@ Function Config-RDS {
     
     # This value can enable the group policy: "Require use of specific security layer for remote (RDP) connections" to "Negotiate": this key needs gpupdate /force to take effect.
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "SecurityLayer" -value "1" -Type DWord
-    
-    # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
-    gpupdate /Force
 
     # Allow automatic reconnection from clients: this key needs a reboot to take effect
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "fDisableAutoReconnect" -value "0"
-    
+
+    # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
+    gpupdate /Force
 }
 
 Function RestartAndResume {
@@ -235,13 +234,16 @@ Function Main {
             # Start configure
             Config-Environment
             Install-RDSFeature
-            Config-RDS
             RestartAndResume
         }
         2 { 
             Activate-LicenseServer
             Install-License
-            Set-LicenseServer            
+            Set-LicenseServer
+            Config-RDS
+            RestartAndResume
+        }
+        3 {
             Complete-Configure
         }
     }
