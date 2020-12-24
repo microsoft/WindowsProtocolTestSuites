@@ -42,8 +42,8 @@ foreach ($curr in $CommonScripts) {
 }
 
 New-Item -ItemType Directory $OutDir/TestData -Force
-Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.bmp" -Destination "$OutDir/TestData/" -Force
-Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.xml" -Destination "$OutDir/TestData/" -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/TestData/*.bmp" -Destination "$OutDir/TestData/" -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/TestData/*.xml" -Destination "$OutDir/TestData/" -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png" -Destination "$OutDir/TestData/" -Recurse -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.*" -Destination "$OutDir/TestData/" -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/*" -Destination "$OutDir/TestData/" -Recurse -Force    
