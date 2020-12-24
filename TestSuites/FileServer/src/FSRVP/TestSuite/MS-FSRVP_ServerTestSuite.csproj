@@ -32,10 +32,6 @@
     <ProjectReference Include="..\..\SMB2\TestSuite\MS-SMB2_ServerTestSuite.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-FSRVP_ServerTestSuite.deployment.ptfconfig"></Content>
-    <Content Include="MS-FSRVP_ServerTestSuite.ptfconfig"></Content>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
@@ -46,5 +42,13 @@
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="MS-FSRVP_ServerTestSuite.deployment.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-FSRVP_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

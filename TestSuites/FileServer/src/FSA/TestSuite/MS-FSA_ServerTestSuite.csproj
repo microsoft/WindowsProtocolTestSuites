@@ -30,18 +30,14 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="MS-FSA_ServerTestSuite.deployment.ptfconfig">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="MS-FSA_ServerTestSuite.ptfconfig" />
-    <Content Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
+    <None Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
       <Link>CommonTestSuite.ptfconfig</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>      
-    </Content>
-    <Content Include="..\..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig">
+    </None>
+    <None Include="..\..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig">
       <Link>CommonTestSuite.deployment.ptfconfig</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>    
+    </None>    
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
@@ -59,5 +55,14 @@
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="MS-FSA_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-FSA_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

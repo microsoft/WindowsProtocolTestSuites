@@ -35,18 +35,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-FSAModel_ServerTestSuite.deployment.ptfconfig">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="MS-FSAModel_ServerTestSuite.ptfconfig" />
-    <Content Include="..\..\FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig">
+    <None Include="..\..\FSA\TestSuite\MS-FSA_ServerTestSuite.deployment.ptfconfig">
       <Link>MS-FSA_ServerTestSuite.deployment.ptfconfig</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig">
+    </None>
+    <None Include="..\..\FSA\TestSuite\MS-FSA_ServerTestSuite.ptfconfig">
       <Link>MS-FSA_ServerTestSuite.ptfconfig</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
       <Link>CommonTestSuite.ptfconfig</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -67,5 +63,14 @@
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="MS-FSAModel_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-FSAModel_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
