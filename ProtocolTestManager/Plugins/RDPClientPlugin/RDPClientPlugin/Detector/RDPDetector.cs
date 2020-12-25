@@ -14,6 +14,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using System.IO;
+using System.Diagnostics;
 
 namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
@@ -58,7 +59,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             "System.Management.Automation, Version=3.0.0.0, Culture=neutral, " +
             "PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL";
         public const string SUTControlScriptLocation = @"..\etc\RDP-Client\SUTControlAdapter\";
-            
+        public const string SUTShellControlScriptLocation = @"..\etc\RDP-Client\ShellSUTControlAdapter\";
+
         #endregion Variables
         #region Constructor
 
@@ -310,6 +312,14 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 {
                     detectInfo.RdpVersion = "10.6";
                 }
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V10)
+                {
+                    detectInfo.RdpVersion = "10.7";
+                }
+                else if (rdpVersion == TS_UD_CS_CORE_version_Values.V11)
+                {
+                    detectInfo.RdpVersion = "10.8";
+                }
             }
         }
 
@@ -323,6 +333,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             if (triggerMethod == TriggerMethod.Powershell)
             {
                 ExecutePowerShellCommand("RDPConnectWithNegotiationApproach");
+            }
+            else if (triggerMethod == TriggerMethod.Shell)
+            {
+                ExecuteShellCommand("RDPConnectWithNegotiationApproach");
             }
             else if (triggerMethod == TriggerMethod.Manual)
             {
@@ -349,6 +363,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 iResult = ExecutePowerShellCommand("TriggerClientDisconnectAll");
                 if (iResult <= 0) return false;
             }
+            else if (triggerMethod == TriggerMethod.Shell)
+            {
+                int iResult = 0;
+                iResult = ExecuteShellCommand("TriggerClientDisconnectAll");
+                if (iResult <= 0) return false;
+            }
             else if (triggerMethod == TriggerMethod.Manual)
             {
                 MessageBox.Show("Please Close All RDP Connetion Manually on SUT.");
@@ -365,10 +385,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// </summary>
         private void StartRDPListening()
         {
-            rdpbcgrServerStack = new RdpbcgrServer(port, encryptedProtocol, null);            
-            rdpbcgrServerStack.Start(IPAddress.Any);            
-        }               
-        
+            rdpbcgrServerStack = new RdpbcgrServer(port, encryptedProtocol, null);
+            rdpbcgrServerStack.Start(IPAddress.Any);
+        }
+
         /// <summary>
         /// Establish RDP Connection
         /// </summary>
@@ -407,12 +427,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             int dwKeysize = 2048;
 
             byte[] privateExp, publicExp, modulus;
-            cert = rdpbcgrServerStack.GenerateCertificate(dwKeysize, out privateExp, out publicExp, out modulus);            
+            cert = rdpbcgrServerStack.GenerateCertificate(dwKeysize, out privateExp, out publicExp, out modulus);
             certLen = 120 + dwKeysize / 8;
 
             Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response connectRespPdu = rdpbcgrServerStack.CreateMCSConnectResponsePduWithGCCConferenceCreateResponsePdu(
-                    sessionContext, 
-                    EncryptionMethods.ENCRYPTION_METHOD_128BIT, 
+                    sessionContext,
+                    EncryptionMethods.ENCRYPTION_METHOD_128BIT,
                     EncryptionLevel.ENCRYPTION_LEVEL_LOW,
                     cert,
                     certLen,
@@ -451,8 +471,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             #endregion Channel Connection
 
             #region RDP Security Commencement
-            
-            securityExchangePDU =  ExpectPacket<Client_Security_Exchange_Pdu>(sessionContext, timeout);
+
+            securityExchangePDU = ExpectPacket<Client_Security_Exchange_Pdu>(sessionContext, timeout);
 
             #endregion RDP Security Commencement
 
@@ -503,7 +523,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                     ExpectPacket<Client_Persistent_Key_List_Pdu>(sessionContext, timeout);
                 }
             }
-            
+
             ExpectPacket<Client_Font_List_Pdu>(sessionContext, timeout);
 
             Server_Font_Map_Pdu fontMapPdu = rdpbcgrServerStack.CreateFontMapPdu(sessionContext);
@@ -535,7 +555,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 this.rdpedycServer = null;
             }
             if (this.rdpbcgrServerStack != null)
-            {             
+            {
                 this.rdpbcgrServerStack.Dispose();
                 this.rdpbcgrServerStack = null;
             }
@@ -570,12 +590,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// <param name="session"></param>
         /// <param name="waitTimeSpan"></param>
         /// <returns></returns>
-        private T ExpectPacket<T>(RdpbcgrServerSessionContext session, TimeSpan waitTimeSpan) where T: StackPacket
+        private T ExpectPacket<T>(RdpbcgrServerSessionContext session, TimeSpan waitTimeSpan) where T : StackPacket
         {
             DateTime endTime = DateTime.Now + waitTimeSpan;
             object receivedPdu = null;
             while (waitTimeSpan.TotalMilliseconds > 0)
-            { 
+            {
                 try
                 {
                     receivedPdu = this.rdpbcgrServerStack.ExpectPdu(session, waitTimeSpan);
@@ -589,7 +609,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 }
                 waitTimeSpan = endTime - DateTime.Now;
             }
-            throw new TimeoutException("Timeout when expecting "+typeof(T).Name +" message.");
+            throw new TimeoutException("Timeout when expecting " + typeof(T).Name + " message.");
         }
 
         /// <summary>
@@ -664,10 +684,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                         reqId, helpMessage, payload);
 
             TCPSUTControlTransport transport = new TCPSUTControlTransport();
-            IPAddress sutIP = GetHostIP(detectInfo.SUTName);           
-                
+            IPAddress sutIP = GetHostIP(detectInfo.SUTName);
+
             IPEndPoint agentEndpoint = new IPEndPoint(sutIP, detectInfo.AgentListenPort);
-            
+
             transport.Connect(timeout, agentEndpoint);
             transport.SendSUTControlRequestMessage(requestMessage);
             transport.Disconnect();
@@ -683,8 +703,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             TCPSUTControlTransport transport = new TCPSUTControlTransport();
             IPAddress sutIP = GetHostIP(detectInfo.SUTName);
             IPEndPoint agentEndpoint = new IPEndPoint(sutIP, detectInfo.AgentListenPort);
-            
-            transport.Connect(timeout, agentEndpoint); 
+
+            transport.Connect(timeout, agentEndpoint);
             transport.SendSUTControlRequestMessage(requestMessage);
             transport.Disconnect();
         }
@@ -767,18 +787,11 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 null
                 );
 
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTName", detectInfo.SUTName });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTUserName", detectInfo.UserNameInTC });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTUserPassword", detectInfo.UserPwdInTC });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithNegotiationAppoachFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationAppoachFullScreen_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectCredSSPFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSPFullScreen_Task") }); methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectCredSSP_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSP_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectTLS_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLS_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithDrectTLSFullScreen_Task", DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLSFullScreen_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_RDPConnectWithNegotiationApproach_Task", DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_TriggerClientDisconnectAll_Task", DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_TriggerClientAutoReconnect_Task", DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_SUTSystemDrive", DetectorUtil.GetPropertyValue("SUTSystemDrive") });
-            methodSetVariable.Invoke(proxyInstance, new object[] { "PtfProp_TriggerInputEvents_Task", DetectorUtil.GetPropertyValue("TriggerInputEvents_Task") });
+            var testsiteConfigureValues = GetTestSiteConfigureValues();
+            foreach (KeyValuePair<string, string> kvp in testsiteConfigureValues)
+            {
+                methodSetVariable.Invoke(proxyInstance, new object[] { kvp.Key, kvp.Value });
+            }
 
             Type pipelineType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Pipeline");
             object pipelineInstance = runspaceType.InvokeMember(
@@ -799,7 +812,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             object myCommand = Activator.CreateInstance(CommandType, scriptPath);
             CommandCollectionType.InvokeMember(
                 "Add", flag, null, CommandCollectionInstance, new object[] { myCommand });
-            
+
             pipelineType.InvokeMember("Invoke", flag, null, pipelineInstance, null);
 
             runspaceType.InvokeMember("Close", flag, null, runspaceInstance, null);
@@ -807,6 +820,96 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             return 0;
         }
+
+        private int ExecuteShellCommand(string scriptFile)
+        {
+            string lastOutput = string.Empty;
+            StringBuilder errorMsg = new StringBuilder();
+            //RDPConnectWithNegotiationApproach
+            //TriggerClientDisconnectAll
+            int exitCode = 0;
+            try
+            {
+                string path = Path.Combine(SUTShellControlScriptLocation, scriptFile + ".sh");
+                using (Process proc = new Process())
+                {
+                    string wslPath = "/bin/bash";
+                    string winDir = Environment.GetEnvironmentVariable("WINDIR");
+                    if (!string.IsNullOrEmpty(winDir))
+                    {
+                        if (Environment.Is64BitProcess)
+                        {
+                            wslPath = string.Format(@"{0}\System32\bash.exe", winDir);
+                        }
+                        else
+                        {
+                            wslPath = string.Format(@"{0}\Sysnative\bash.exe", winDir);
+                        }
+
+                        if (!File.Exists(wslPath))
+                        {
+                            throw new Exception("Windows Subsystem for Linux (WSL) is not installed.");
+                        }
+                    }
+
+                    proc.StartInfo.FileName = wslPath;
+                    proc.StartInfo.Arguments = path;
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.CreateNoWindow = true;
+                    proc.StartInfo.RedirectStandardError = true;
+                    proc.StartInfo.RedirectStandardOutput = true;
+
+                    Dictionary<string, string> testSiteParas = GetTestSiteConfigureValues();
+
+                    List<string> wslEnvs = new List<string>();
+
+                    // set ptfconfig properties as environment variables
+                    foreach (var kvp in testSiteParas)
+                    {
+                        if (proc.StartInfo.EnvironmentVariables.ContainsKey(kvp.Key))
+                        {
+                            proc.StartInfo.EnvironmentVariables.Remove(kvp.Key);
+                        }
+                        proc.StartInfo.EnvironmentVariables.Add(kvp.Key, kvp.Value);
+
+                        wslEnvs.Add(kvp.Key + "/u");
+                    }
+
+                    // Set WSLENV to pass those environment variables into WSL
+                    proc.StartInfo.EnvironmentVariables.Add("WSLENV", String.Join(":", wslEnvs));
+
+                    proc.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
+                    {
+                        if (e.Data != null && !String.IsNullOrEmpty(e.Data.Trim()))
+                        {
+                            if (!String.IsNullOrEmpty(e.Data.Trim()))
+                            {
+                                lastOutput = e.Data.Trim();
+                            }
+                        }
+                    };
+                    proc.ErrorDataReceived += (object sender, DataReceivedEventArgs e) =>
+                    {
+                        if (e.Data != null)
+                        {
+                            errorMsg.Append(e.Data);
+                        }
+                    };
+                    proc.Start();
+                    proc.BeginOutputReadLine();
+                    proc.BeginErrorReadLine();
+                    proc.WaitForExit();
+                    exitCode = proc.ExitCode;
+                    proc.Close();
+                }
+            }
+            catch (System.ComponentModel.Win32Exception ex)
+            {
+                throw ex;
+            }
+            return exitCode;
+        }
+
         private IPAddress GetHostIP(string hostname)
         {
             try
@@ -816,11 +919,11 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
-                        DetectorUtil.WriteLog("Parse the host name or the ip address as: " + ip.ToString()); 
+                        DetectorUtil.WriteLog("Parse the host name or the ip address as: " + ip.ToString());
                         return ip;
                     }
                 }
-            }            
+            }
             catch (Exception e)
             {
                 DetectorUtil.WriteLog("Exception occured when parsing the host name or the ip address: " + e.Message);
@@ -830,10 +933,31 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                     DetectorUtil.WriteLog("**" + e.InnerException.Message);
                     DetectorUtil.WriteLog("**" + e.InnerException.StackTrace);
                 }
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);                
+                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
             }
             return null;
 
+        }
+
+        private Dictionary<string, string> GetTestSiteConfigureValues()
+        {
+            return new Dictionary<string, string>()
+                    {
+                        { "PtfProp_SUTName",detectInfo.SUTName},
+                        { "PtfProp_SUTUserName",detectInfo.UserNameInTC},
+                        { "PtfProp_SUTUserPassword",detectInfo.UserPwdInTC},
+                        { "PtfProp_RDPConnectWithNegotiationAppoachFullScreen_Task",DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationAppoachFullScreen_Task")},
+                        { "PtfProp_RDPConnectWithDrectCredSSPFullScreen_Task",DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSPFullScreen_Task")},
+                        { "PtfProp_RDPConnectWithDrectCredSSP_Task",DetectorUtil.GetPropertyValue("RDPConnectWithDrectCredSSP_Task")},
+                        { "PtfProp_RDPConnectWithDrectTLS_Task",DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLS_Task")},
+                        { "PtfProp_RDPConnectWithDrectTLSFullScreen_Task",DetectorUtil.GetPropertyValue("RDPConnectWithDrectTLSFullScreen_Task")},
+                        { "PtfProp_RDPConnectWithNegotiationApproach_Task",DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task")},
+                        { "PtfProp_TriggerClientDisconnectAll_Task",DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task")},
+                        { "PtfProp_TriggerClientAutoReconnect_Task",DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task")},
+                        { "PtfProp_SUTSystemDrive",DetectorUtil.GetPropertyValue("SUTSystemDrive")},
+                        { "PtfProp_TriggerInputEvents_Task",DetectorUtil.GetPropertyValue("TriggerInputEvents_Task")},
+
+                    };
         }
 
         #endregion Methods

@@ -112,7 +112,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             propertiesDic.Add(tcComputerNameTitle, sutNames);
             propertiesDic.Add(isWindowsImplementationTitle, isWindowsImplementationList);
             propertiesDic.Add(dropConnectionForInvalidRequestTitle, dropConnectionForInvalidRequestList);
-            propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Managed", "Interactive" });
+            propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Shell", "Managed", "Interactive" });
             propertiesDic.Add(userNameInTCTitle, userNamesInTC);
             propertiesDic.Add(userPwdInTCTitle, userPwdsInTC);
             propertiesDic.Add(agentPortTitle, new List<string>() { "4488" });
@@ -147,6 +147,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             else if (properties[triggerMethodTitle] != null && properties[triggerMethodTitle].Equals("Managed"))
             {
                 detectionInfo.TriggerMethod = TriggerMethod.Managed;
+            }
+            else if (properties[triggerMethodTitle] != null && properties[triggerMethodTitle].Equals("Shell"))
+            {
+                detectionInfo.TriggerMethod = TriggerMethod.Shell;
             }
             detectionInfo.AgentListenPort = 4488;
             if (properties[agentPortTitle] != null)
