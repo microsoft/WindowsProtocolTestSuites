@@ -13,6 +13,8 @@ resources:
 jobs:
 - job:
   displayName: Verify Pull Requests
+  pool: 
+    vmImage: windows-2019
   workspace:
     clean: false
   timeoutInMinutes: 0
