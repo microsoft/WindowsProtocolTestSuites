@@ -13,8 +13,6 @@ resources:
 jobs:
 - job:
   displayName: Verify Pull Requests
-  pool: 
-    name: TestSuiteBuildPool
   workspace:
     clean: false
   timeoutInMinutes: 0
