@@ -8,7 +8,7 @@ resources:
     - repository: template
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: v-hazh/validate_pr_header_to_AzurePipelines_main
+      ref: AzurePipelines-main
 
 jobs:
 - job:
