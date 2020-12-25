@@ -357,6 +357,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
             serverConfig.selectedProtocol = protocol;
             serverConfig.isExtendedClientDataSupported = bSupportExtClientData;
+            bool isSendTLSHandshakeAfterX224ConnectionConfirmPdu = true;
 
             Server_X_224_Connection_Confirm_Pdu confirmPdu
                 = rdpbcgrServerStack.CreateX224ConnectionConfirmPdu(sessionContext, protocol);
@@ -385,19 +386,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 case NegativeType.InvalidTPKTHeader:
                     confirmPdu.tpktHeader.version = 0;
+                    isSendTLSHandshakeAfterX224ConnectionConfirmPdu = false;
                     break;
                 case NegativeType.InvalidX224:
                     confirmPdu.x224Ccf.lengthIndicator--;
                     break;
                 case NegativeType.InvalidRdpNegData:
                     confirmPdu.rdpNegData.type = RDP_NEG_RSP_type_Values.Invalid;
+                    isSendTLSHandshakeAfterX224ConnectionConfirmPdu = false;
                     break;
             }
             if (!setRdpNegData)
             {
                 confirmPdu.rdpNegData = null;
             }
-            SendPdu(confirmPdu);
+            SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
             sessionState = ServerSessionState.X224ConnectionResponseSent;
         }
 
@@ -2785,9 +2788,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// This method is used to send packet to SUT.
         /// </summary>
         /// <param name="packet">The packet to be sent.</param>
-        private void SendPdu(RdpbcgrServerPdu packet)
+        private void SendPdu(RdpbcgrServerPdu packet, bool isSendTLSHandshakeAfterX224ConnectionConfirmPdu = true)
         {
-            rdpbcgrServerStack.SendPdu(sessionContext, packet);
+            rdpbcgrServerStack.SendPdu(sessionContext, packet, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
             System.Threading.Thread.Sleep(100);//To avoid the combination with other sending request.
         }
         #endregion "PDU transport"

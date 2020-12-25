@@ -444,7 +444,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// An error occurred when The session has not been established.</exception>
         public void SendPdu(
             RdpbcgrServerSessionContext sessionContext,
-            RdpbcgrServerPdu pdu)
+            RdpbcgrServerPdu pdu,
+            bool isSendTLSHandshakeAfterX224ConnectionConfirmPdu = true)
         {
             if (pdu == null)
             {
@@ -471,7 +472,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             else if (this.encryptedProtocol == EncryptedProtocol.NegotiationTls ||
                 this.encryptedProtocol == EncryptedProtocol.NegotiationCredSsp)
             {
-                if (pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
+                if (isSendTLSHandshakeAfterX224ConnectionConfirmPdu && pdu.GetType() == typeof(Server_X_224_Connection_Confirm_Pdu))
                 {
                     var remoteEndPoint = sessionContext.Identity;
 
