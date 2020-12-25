@@ -79,6 +79,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
+            if (!TestConfig.IsPersistentHandlesSupported)
+            {
+                Site.Assert.Inconclusive("Test case is applicable in servers that support persistent handles");
+            }
             #endregion 
 
             DialectRevision[] requestDialect = Smb2Utility.GetDialects(DialectRevision.Smb311);
