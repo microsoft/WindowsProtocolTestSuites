@@ -272,6 +272,13 @@
     </Property>
     <!-- Block End -->
 
+    <!--Block Begin: Properties that need to be set in specific situations-->
+    <!--The RDP proxy IP, which should be set when a proxy is used.-->
+    <Property name="RDP.ProxyIP" value="">
+      <Description>The RDP proxy IP, which should be set when a proxy is used.</Description>
+    </Property>
+    <!-- Block End -->
+
     <!--Block Begin: Properties that should only be taken care of by Test Suite Development Team-->
     <!-- RDPEVOR test data file, which contains H.264 video data -->
     <Property name="RdpevorTestDataPath" value="../TestData/RdpevorTestData.xml">

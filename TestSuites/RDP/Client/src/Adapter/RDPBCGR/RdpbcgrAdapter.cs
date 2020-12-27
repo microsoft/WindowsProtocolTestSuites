@@ -40,6 +40,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         //private RDPBCGRCapSet m_serverCapSet = null; 
         private string certFile;
         private string certPwd;
+        private string proxyIP = null;
         private int port = ConstValue.TEST_PORT;
         private IpVersion ipVersion = IpVersion.Ipv4;
         private string rdpVersionString = "7.0";
@@ -1686,8 +1687,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             else
             {
-                string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
-                redirectPacket.TargetNetAddress = serverIP;
+                redirectPacket.TargetNetAddress = this.GetRedirectIpAddress();
                 redirectPacket.RedirFlags = RedirectionFlags.LB_TARGET_NET_ADDRESS;
             }
 
@@ -1724,7 +1724,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
             redirectPacket.SessionID = RdpbcgrTestData.Test_Redirection_SessionId;
 
-            string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
+            var serverIP = this.GetRedirectIpAddress();
             redirectPacket.TargetNetAddress = serverIP;
             redirectPacket.RedirFlags = RedirectionFlags.LB_TARGET_NET_ADDRESS;
 
@@ -3123,6 +3123,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         #region Private mothods
 
+        private string GetRedirectIpAddress()
+        {
+            string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
+            return string.IsNullOrEmpty(proxyIP) ? serverIP : proxyIP;
+        }
+
         private void LoadServerConfiguation()
         {
             serverConfig = new RdpbcgrServerConfig();
@@ -3135,6 +3141,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 ipVersion = IpVersion.Ipv4;
             }
+            proxyIP = site.Properties["RDP.ProxyIP"];
             certFile = site.Properties["CertificatePath"];
             certPwd = site.Properties["CertificatePassword"];
             rdpVersionString = site.Properties["RDP.Version"];
