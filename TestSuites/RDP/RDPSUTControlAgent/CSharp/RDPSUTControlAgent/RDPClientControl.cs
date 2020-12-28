@@ -182,9 +182,18 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Close_RDP_Connection()
         {
-            string arguments = GetConfiguredValue("StopRDP");
+            string stopRDPArguments = GetConfiguredValue("StopRDP");
+            int result = InvokeRemoteClientProcess(stopRDPArguments);
+            
+            if (GetRemoteClientName().Equals("mstsc", StringComparison.OrdinalIgnoreCase))
+            {
+                Thread.Sleep(1000);
 
-            return InvokeRemoteClientProcess(arguments);
+                string killRDPArguments = GetConfiguredValue("KillRDP");
+                result = InvokeRemoteClientProcess(killRDPArguments);
+            }
+
+            return result;
         }
 
         /// <summary>
