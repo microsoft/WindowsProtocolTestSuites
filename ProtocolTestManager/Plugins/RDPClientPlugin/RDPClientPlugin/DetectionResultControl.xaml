@@ -22,9 +22,9 @@
             </StackPanel>
         </HierarchicalDataTemplate>
     </Control.Resources>
- 
-    <Grid>
-            <Border HorizontalAlignment="Stretch" Margin="0,0,0,50" BorderBrush="Gray" BorderThickness="1">
+
+    <Grid>             
+        <Border HorizontalAlignment="Stretch" Margin="0,0,0,50" BorderBrush="Gray" BorderThickness="1">
                 <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible"
                               PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >
                     <ListBox x:Name="ResultMapList" HorizontalAlignment="Stretch" VerticalAlignment="Top" BorderThickness="0"

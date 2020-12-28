@@ -684,8 +684,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                         reqId, helpMessage, payload);
 
             TCPSUTControlTransport transport = new TCPSUTControlTransport();
-            IPAddress sutIP = GetHostIP(detectInfo.SUTName);
 
+            IPAddress sutIP = GetHostIP(detectInfo.SUTName);           
+                
             IPEndPoint agentEndpoint = new IPEndPoint(sutIP, detectInfo.AgentListenPort);
 
             transport.Connect(timeout, agentEndpoint);
@@ -820,7 +821,6 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             return 0;
         }
-
         private int ExecuteShellCommand(string scriptFile)
         {
             string lastOutput = string.Empty;
@@ -909,7 +909,6 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             return exitCode;
         }
-
         private IPAddress GetHostIP(string hostname)
         {
             try

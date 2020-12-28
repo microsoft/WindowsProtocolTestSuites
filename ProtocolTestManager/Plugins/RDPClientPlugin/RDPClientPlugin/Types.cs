@@ -7,9 +7,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
     public enum TriggerMethod
     {
         Powershell,
-        Shell,
         Manual,
         Managed,
+        Shell
     }
     /// <summary>
     /// The detection information
@@ -20,6 +20,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public string SUTName;
         public string UserNameInTC;
         public string UserPwdInTC;
+        public string ProxyIP;//The Proxy IP in SUT side if there's proxy setup.
         public string IsWindowsImplementation;
         public string DropConnectionForInvalidRequest;
         public int AgentListenPort;

@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         public static string GetPropertyValue(string name)
         {
             if (UtilCallBackFunctions.GetPropertyValue != null)
-                return UtilCallBackFunctions.GetPropertyValue(name);
+                return UtilCallBackFunctions.GetPropertyValue(name).Trim();
             return null;
         }
 

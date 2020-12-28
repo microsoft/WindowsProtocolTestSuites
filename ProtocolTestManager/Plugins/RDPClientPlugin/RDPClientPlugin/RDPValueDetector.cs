@@ -28,27 +28,40 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private EnvironmentType env = EnvironmentType.Workgroup;
         private DetectionInfo detectionInfo = new DetectionInfo();
-        
+
         #endregion Variables
 
         #region Constant
-        private const string tcComputerNameTitle = "SUT Name";
+        private const string tcComputerNameTitle = "SUT IP or proxy IP in Dirver LAN ";
+        private const string proxyIPTitle = "The Proxy IP in SUT LAN \n *Leave it blank if no proxy";
         private const string isWindowsImplementationTitle = "IsWindowsImplementation";
         private const string dropConnectionForInvalidRequestTitle = "DropConnectionForInvalidRequest";
         private const string triggerMethodTitle = "Trigger RDP Client By";
         private const string userNameInTCTitle = "SUT User Name \n* Only for PowerShell Trigger";
         private const string userPwdInTCTitle = "SUT Password \n* Only for PowerShell Trigger";
-        private const string agentPortTitle = "Agent Listen Port \n* Only for Managed Trigger";
+        private const string agentPortTitle = "Agent Listening Port \n* Only for Managed Trigger";
+        private const string propSutName = "SUTName";
+        private const string propSUTUserName = "SUTUserName";
+        private const string propSUTUserPassword = "SUTUserPassword";
+        private const string propProxyIP = "RDP.ProxyIP";
+        private const string propIsWindowsImplementation = "IsWindowsImplementation";
+        private const string propDropConnectionForInvalidRequest = "DropConnectionForInvalidRequest";
+        private const string propSupportAutoReconnect = "RDP.Client.SupportAutoReconnect";
+        private const string propSupportServerRedirection = "RDP.Client.SupportServerRedirection";
+        private const string propSupportRDPEFS = "RDP.Client.SupportRDPEFS";
+        private const string propRDPVersion = "RDP.Version";
+        private const string propAgentAddress = "SUTControl.AgentAddress";
+        private const string propIsClientSupportRDPFile = "SUTControl.ClientSupportRDPFile";
 
-        #endregion Constant
+#endregion Constant
 
-        #region Implemented IValueDetector
+#region Implemented IValueDetector
 
-        /// <summary>
-        /// Sets selected test environment.
-        /// </summary>
-        /// <param name="Environment"></param>
-        public void SelectEnvironment(string NetworkEnvironment)
+/// <summary>
+/// Sets selected test environment.
+/// </summary>
+/// <param name="Environment"></param>
+public void SelectEnvironment(string NetworkEnvironment)
         {
             Enum.TryParse<EnvironmentType>(NetworkEnvironment, out env);
         }
@@ -66,17 +79,22 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             Dictionary<string, List<string>> propertiesDic = new Dictionary<string, List<string>>();
 
             //Retrieve values from *.ptfconfig file
-            string sutName = DetectorUtil.GetPropertyValue("SUTName");
-            string userNameInTC = DetectorUtil.GetPropertyValue("SUTUserName");
-            string userPwdInTC = DetectorUtil.GetPropertyValue("SUTUserPassword");
-            string isWindowsImplementation = DetectorUtil.GetPropertyValue("IsWindowsImplementation");
-            string DropConnectionForInvalidRequest = isWindowsImplementation.ToUpper().Equals("TRUE") ? "true" : DetectorUtil.GetPropertyValue("DropConnectionForInvalidRequest"); // The value is always true for Windows implementation.
+            string sutName = DetectorUtil.GetPropertyValue(propSutName);
+            string userNameInTC = DetectorUtil.GetPropertyValue(propSUTUserName);
+            string userPwdInTC = DetectorUtil.GetPropertyValue(propSUTUserPassword);
+            
+            //The RDP proxy IP, which should be set when a proxy is used.
+            //Leave it blank if there's no proxy in the env
+            string proxyIP = DetectorUtil.GetPropertyValue(propProxyIP);
+            string isWindowsImplementation = DetectorUtil.GetPropertyValue(propIsWindowsImplementation);
+            string DropConnectionForInvalidRequest = isWindowsImplementation.ToUpper().Equals("TRUE") ? "true" : DetectorUtil.GetPropertyValue(propDropConnectionForInvalidRequest); // The value is always true for Windows implementation.
 
             List<string> sutNames = new List<string>();
             List<string> userNamesInTC = new List<string>();
             List<string> userPwdsInTC = new List<string>();
+            List<string> proxyIPs = new List<string>();
             List<string> isWindowsImplementationList = new List<string>();
-            List<string> dropConnectionForInvalidRequestList = new List<string>();
+            List<string> dropConnectionForInvalidRequestList = new List<string>();            
 
             if (string.IsNullOrWhiteSpace(sutName)
                 || string.IsNullOrWhiteSpace(userNameInTC)
@@ -105,11 +123,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                     isWindowsImplementationList.Add("true");
                 }
             }
+            proxyIPs.Add(proxyIP);
 
             dropConnectionForInvalidRequestList.Add("true");
             dropConnectionForInvalidRequestList.Add("false");
-
             propertiesDic.Add(tcComputerNameTitle, sutNames);
+            propertiesDic.Add(proxyIPTitle, proxyIPs);
             propertiesDic.Add(isWindowsImplementationTitle, isWindowsImplementationList);
             propertiesDic.Add(dropConnectionForInvalidRequestTitle, dropConnectionForInvalidRequestList);
             propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Shell", "Managed", "Interactive" });
@@ -120,7 +139,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             prerequisites.Properties = propertiesDic;
 
             return prerequisites;
-        }
+        }       
 
         /// <summary>
         /// Sets the values for the required properties.
@@ -137,6 +156,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             detectionInfo.SUTName = properties[tcComputerNameTitle];
             detectionInfo.UserNameInTC = properties[userNameInTCTitle];
             detectionInfo.UserPwdInTC = properties[userPwdInTCTitle];
+            detectionInfo.ProxyIP = properties[proxyIPTitle];
             detectionInfo.IsWindowsImplementation = properties[isWindowsImplementationTitle];
             detectionInfo.DropConnectionForInvalidRequest = properties[dropConnectionForInvalidRequestTitle];
             detectionInfo.TriggerMethod = TriggerMethod.Powershell;
@@ -170,8 +190,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public List<DetectingItem> GetDetectionSteps()
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
-            DetectingItems.Add(new DetectingItem("Detect Target SUT IP Address", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect Target SUT or Proxy IP Address", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT or Proxy", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
             return DetectingItems;
@@ -216,20 +236,22 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         {
             propertiesDic = new Dictionary<string, List<string>>();
 
-            propertiesDic.Add("SUTName", new List<string>() { detectionInfo.SUTName });
-            propertiesDic.Add("SUTUserName", new List<string>() { detectionInfo.UserNameInTC });
-            propertiesDic.Add("SUTUserPassword", new List<string>() { detectionInfo.UserPwdInTC });
-            propertiesDic.Add("IsWindowsImplementation", new List<string>() { detectionInfo.IsWindowsImplementation });
-            propertiesDic.Add("DropConnectionForInvalidRequest", new List<string>() { detectionInfo.DropConnectionForInvalidRequest });
+            propertiesDic.Add(propSutName, new List<string>() { detectionInfo.SUTName });
+            propertiesDic.Add(propSUTUserName, new List<string>() { detectionInfo.UserNameInTC });
+            propertiesDic.Add(propSUTUserPassword, new List<string>() { detectionInfo.UserPwdInTC });
+            propertiesDic.Add(propProxyIP, new List<string>() { detectionInfo.ProxyIP});
 
-            propertiesDic.Add("RDP.Client.SupportAutoReconnect", new List<string>() { NullableBoolToString(detectionInfo.IsSupportAutoReconnect) });
-            propertiesDic.Add("RDP.Client.SupportServerRedirection", new List<string>() { NullableBoolToString(detectionInfo.IsSupportServerRedirection) });
-            propertiesDic.Add("RDP.Client.SupportRDPEFS", new List<string>() { NullableBoolToString(detectionInfo.IsSupportRDPEFS) });
+            propertiesDic.Add(propIsWindowsImplementation, new List<string>() { detectionInfo.IsWindowsImplementation });
+            propertiesDic.Add(propDropConnectionForInvalidRequest, new List<string>() { detectionInfo.DropConnectionForInvalidRequest });
 
-            propertiesDic.Add("RDP.Version", new List<string>() { detectionInfo.RdpVersion });
+            propertiesDic.Add(propSupportAutoReconnect, new List<string>() { NullableBoolToString(detectionInfo.IsSupportAutoReconnect) });
+            propertiesDic.Add(propSupportServerRedirection, new List<string>() { NullableBoolToString(detectionInfo.IsSupportServerRedirection) });
+            propertiesDic.Add(propSupportRDPEFS, new List<string>() { NullableBoolToString(detectionInfo.IsSupportRDPEFS) });
 
-            propertiesDic.Add("SUTControl.AgentAddress", new List<string>() { detectionInfo.SUTName + ":" + detectionInfo.AgentListenPort });
-            propertiesDic.Add("SUTControl.ClientSupportRDPFile", new List<string>() { detectionInfo.IsWindowsImplementation });
+            propertiesDic.Add(propRDPVersion, new List<string>() { detectionInfo.RdpVersion });
+
+            propertiesDic.Add(propAgentAddress, new List<string>() { detectionInfo.SUTName + ":" + detectionInfo.AgentListenPort });
+            propertiesDic.Add(propIsClientSupportRDPFile, new List<string>() { detectionInfo.IsWindowsImplementation });
 
             return true;
         }
@@ -398,8 +420,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 DetectorUtil.WriteLog(string.Format("Failed with error message:", ex.Message), true, LogStyle.StepFailed);               
                 return false;
             }           
-        }
-
+        }      
+        
         private CaseSelectRule CreateRule(string ruleCategoryName, bool? isSupported)
         {
             CaseSelectRule rule = null;
