@@ -27,4 +27,13 @@
     <ProjectReference Include="..\Adapter\MS-SMB2_ServerAdapter.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="MS-SMB2_ServerTestSuite.deployment.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-SMB2_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
