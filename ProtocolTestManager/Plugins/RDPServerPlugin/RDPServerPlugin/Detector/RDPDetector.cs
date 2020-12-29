@@ -188,7 +188,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             requestedProtocol = requestedProtocols_Values.PROTOCOL_RDP_FLAG;
             encryptedProtocol = EncryptedProtocol.Rdp;
 
-            string strWaitTime = DetectorUtil.GetPropertyValue("WaitTime");
+            string strWaitTime = DetectorUtil.GetPropertyValue("Timeout");
             if (strWaitTime != null)
             {
                 int waitTime = Int32.Parse(strWaitTime);
@@ -521,6 +521,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             else if (rdpVersion == TS_UD_SC_CORE_version_Values.V10)
             {
                 config.Version = "10.7";
+            }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V11)
+            {
+                config.Version = "10.8";
             }
             else
             {
