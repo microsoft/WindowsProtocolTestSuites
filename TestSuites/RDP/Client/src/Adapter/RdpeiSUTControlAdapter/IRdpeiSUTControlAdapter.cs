@@ -23,10 +23,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// This method is used to trigger one touch event on the client.
         /// </summary>
         /// <param name="caseName">Name of test case</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        [MethodHelp("1.Touch the screen of the client.\r\n\r\n" +
-                    "2.Enter a return value, using a positive value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
-                    "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please touch the screen of the client.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
         int TriggerOneTouchEventOnClient(string caseName);
 
@@ -34,10 +33,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// This method is used to trigger continuous touch events on the client.
         /// </summary>
         /// <param name="caseName">Name of test case</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        [MethodHelp("1.Touch the screen several times to trigger touch events (at least touch 5 times).\r\n\r\n" +
-                    "2.Enter a return value, using a positive value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
-                    "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please touch the screen several times to trigger touch events (at least touch 5 times).\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
         int TriggerContinuousTouchEventOnClient(string caseName);
 
@@ -46,10 +44,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// </summary>
         /// <param name="caseName">Name of test case</param>
         /// <param name="contactCount">The number of multitouch contacts.</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        [MethodHelp("1.Touch the screen of the client with multiple touch points, the number of touch points is specified in the parameter contactCout.\r\n\r\n" +
-                    "2.Enter a return value, using a positive value for a successful operation or a negative value for a failed operation.\r\n\r\n" +
-                    "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please touch the screen of the client with multiple touch points, the number of touch points is specified in the parameter contactCout.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
         int TriggerMultiTouchEventOnClient(string caseName, ushort contactCount);
 
@@ -57,17 +54,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// This method is only used by managed adapter. This method is used to touch events at specified position. 
         /// </summary>
         /// <param name="caseName">Name of test case</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please touch the screen with specified position.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
         int TriggerPositionSpecifiedTouchEventOnClient(string caseName);
 
         /// <summary>
         /// This method is used to trigger the RDPINPUT_DISMISS_HOVERING_CONTACT_PDU message.
         /// </summary>
         /// <param name="caseName">Name of test case</param>
-        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        [MethodHelp("1.If your device supports proximity, trigger the RDPINPUT_DISMISS_HOVERING_CONTACT_PDU message on client, and enter a positive return value. \r\n\r\n" +
-                    "2.If your device does not support proximity, enter a negative return value.\r\n\r\n" +
-                    "3.To pass the value to the test case, click the Succeed button. Or, to end the test case, enter a message into the Failure Message dialog box and then click Fail.")]
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("If your device supports proximity, trigger the RDPINPUT_DISMISS_HOVERING_CONTACT_PDU message on client, and enter a positive return value. \r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
         int TriggerDismissHoveringContactPduOnClient(string caseName);
     }

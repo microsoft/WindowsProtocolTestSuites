@@ -57,6 +57,24 @@
     <None Update="RdpeiSUTControlAdapter\TriggerPositionSpecifiedTouchEventOnClient.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ShellSUTControlAdapter\RDPConnectWithDirectCredSSP.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ShellSUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ShellSUTControlAdapter\RDPConnectWithNegotiationApproach.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ShellSUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ShellSUTControlAdapter\TriggerClientDisconnect.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ShellSUTControlAdapter\TriggerClientDisconnectAll.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SUTControlAdapter\Check-PSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
