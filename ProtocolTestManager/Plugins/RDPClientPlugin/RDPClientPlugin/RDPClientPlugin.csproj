@@ -171,8 +171,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ShellSUTControlAdapter\RDPConnectWithNegotiationApproach.sh" />
-    <None Include="ShellSUTControlAdapter\TriggerClientDisconnectAll.sh" />
+    <None Include="ShellSUTControlAdapter\RDPConnectWithNegotiationApproach.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ShellSUTControlAdapter\TriggerClientDisconnectAll.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="SUTControlAdapter\Check-PSRemoting.ps1" />
     <None Include="SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1" />
     <None Include="SUTControlAdapter\Run-TaskWithPSRemoting.ps1" />

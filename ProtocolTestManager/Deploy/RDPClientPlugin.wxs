@@ -58,6 +58,14 @@
               <File Id="fil2064AF90A3974DEE9990E7DDE1305F97" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\SUTControlAdapter\TriggerClientDisconnectAll.ps1" />
             </Component>
           </Directory>
+           <Directory Id="dirEDE390724EA84B74801DA990077AA588" Name="ShellSUTControlAdapter">
+            <Component Id="cmpFB946ECE9D0B41F78DE203C02BC56F40" Guid="{B53BF9EB-15A8-4C94-BB0A-331CC9366A37}">
+              <File Id="filCDF2FA834FF54CB49B0B9A48231F8C87" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\ShellSUTControlAdapter\RDPConnectWithNegotiationApproach.sh" />
+            </Component>
+            <Component Id="cmp58E4BD68F2564E98B5DBD676C11E8FE4" Guid="{69C38E37-E508-46B1-B202-18B633FF1971}">
+              <File Id="filBCE6C8A212DA41C29FA807EE1DC67B39" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\ShellSUTControlAdapter\TriggerClientDisconnectAll.sh" />
+            </Component>          
+          </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
@@ -73,6 +81,8 @@
             <ComponentRef Id="cmp58E4BD68F2564E50B5DBD676C11E8FE4" />
             <ComponentRef Id="cmp86675A4CCAB34FE49AF8470276FD7046" />
             <ComponentRef Id="cmpE33ABD3C9FC64AB29CE375FFD400ED3C" />
+            <ComponentRef Id="cmpFB946ECE9D0B41F78DE203C02BC56F40" />
+            <ComponentRef Id="cmp58E4BD68F2564E98B5DBD676C11E8FE4" />
             <ComponentRef Id="RDPClientPlugin.dll" />
             <ComponentRef Id="RDPClientConfigFile" />
             <?if $(env.DEBUGVER) = 1?>

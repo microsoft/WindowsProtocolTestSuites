@@ -408,8 +408,7 @@ public void SelectEnvironment(string NetworkEnvironment)
                     }
                     else
                     {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :",addList.ToString()), true, LogStyle.StepPassed);
-                        DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
+                        DetectorUtil.WriteLog("SUT detection finished", true, LogStyle.StepPassed);
                         
                         return true;
                     }
