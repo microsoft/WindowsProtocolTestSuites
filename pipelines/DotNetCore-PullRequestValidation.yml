@@ -14,7 +14,7 @@ jobs:
 - job:
   displayName: Verify Pull Requests
   pool: 
-    name: TestSuiteBuildPool
+    vmImage: windows-2019
   workspace:
     clean: false
   timeoutInMinutes: 0
