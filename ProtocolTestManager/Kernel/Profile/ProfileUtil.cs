@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Packaging;
+using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -149,7 +150,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Saves the PTFConfig files in the profile to the specified path.
         /// </summary>
         /// <param name="path">Path</param>
-        public void SavePtfCfgTo(string path)
+        public void SavePtfCfgTo(string path, string testSuiteFolderBin)
         {
             CheckIfClosed();
             if (!Directory.Exists(path))
@@ -166,7 +167,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     string name = uri.Substring(uri.LastIndexOf("/") + 1);
                     using (var fs = new FileStream(Path.Combine(path, name), FileMode.Create))
                     {
-                        CopyStream(part.GetStream(), fs);
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(part.GetStream());
+                        var adapters = doc.DocumentElement.GetElementsByTagName("Adapter");
+                        foreach(XmlNode subnode in adapters)
+                        {
+                            string type = subnode.Attributes["xsi:type"].Value;
+                            if(string.Equals(type, "powershell"))
+                            {
+                                string scriptDir = subnode.Attributes["scriptdir"].Value;
+                                // update
+                                if (!Path.IsPathRooted(scriptDir) && !string.IsNullOrEmpty(testSuiteFolderBin))
+                                {
+                                    subnode.Attributes["scriptdir"].Value = System.IO.Path.Combine(testSuiteFolderBin, scriptDir);
+                                }
+                            }
+                        }
+
+                        doc.Save(fs);                        
                         fs.Flush();
                         fs.Close();
                     }

@@ -460,7 +460,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="filename">File name of the saved profile</param>
         /// <param name="newFilename">File name of the newly upgraded profile</param>
         /// <returns>Return true when the file is upgraded, false when no need to upgrade the profile.</returns>
-        public bool TryUpgradeProfileSettings(string filename, out string newFilename)
+        public bool TryUpgradeProfileSettings(string filename, string testSuiteFolderBin, out string newFilename)
         {
             newFilename = null;
 
@@ -484,7 +484,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 // Create a temp folder to save ptfconfig files
                 string tmpDir = Path.Combine(Path.GetTempPath(), $"PTM-{Guid.NewGuid()}");
                 Directory.CreateDirectory(tmpDir);
-                oldProfile.SavePtfCfgTo(tmpDir);
+                oldProfile.SavePtfCfgTo(tmpDir, testSuiteFolderBin);
 
                 MergeWithDefaultPtfConfig(tmpDir);
                 foreach (string ptfconfig in Directory.GetFiles(tmpDir))
@@ -778,7 +778,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Loads the configurations from a saved profile.
         /// </summary>
         /// <param name="filename">File name</param>
-        public void LoadProfileSettings(string filename)
+        public void LoadProfileSettings(string filename, string testSuiteFolderBin)
         {
             using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
             {
@@ -800,7 +800,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 ptfconfigDirectory = Path.Combine("PtfConfigDirectory", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}");
                 string desCfgDir = ptfconfigDirectory;
-                profile.SavePtfCfgTo(desCfgDir);
+                profile.SavePtfCfgTo(desCfgDir, testSuiteFolderBin);
                 filter.LoadProfile(profile.ProfileStream);
                 ImportPlaylist(profile.PlaylistStream);
                 GetSelectedCaseList();
