@@ -458,6 +458,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Upgrade the saved profile if needed.
         /// </summary>
         /// <param name="filename">File name of the saved profile</param>
+        /// <param name="testSuiteFolderBin">Test Suite Bin Folder</param>
         /// <param name="newFilename">File name of the newly upgraded profile</param>
         /// <returns>Return true when the file is upgraded, false when no need to upgrade the profile.</returns>
         public bool TryUpgradeProfileSettings(string filename, string testSuiteFolderBin, out string newFilename)

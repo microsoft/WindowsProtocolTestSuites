@@ -150,6 +150,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Saves the PTFConfig files in the profile to the specified path.
         /// </summary>
         /// <param name="path">Path</param>
+        /// <param name="testSuiteFolderBin">test Suite Bin Folder</param>
         public void SavePtfCfgTo(string path, string testSuiteFolderBin)
         {
             CheckIfClosed();
@@ -173,13 +174,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         foreach(XmlNode subnode in adapters)
                         {
                             string type = subnode.Attributes["xsi:type"].Value;
-                            if(string.Equals(type, "powershell"))
+                            if (string.Equals(type, "powershell") || string.Equals(type, "shell"))
                             {
                                 string scriptDir = subnode.Attributes["scriptdir"].Value;
                                 // update
                                 if (!Path.IsPathRooted(scriptDir) && !string.IsNullOrEmpty(testSuiteFolderBin))
                                 {
-                                    subnode.Attributes["scriptdir"].Value = System.IO.Path.Combine(testSuiteFolderBin, scriptDir);
+                                    Uri wScriptDir = new Uri(System.IO.Path.Combine(testSuiteFolderBin, scriptDir));                                    
+                                    subnode.Attributes["scriptdir"].Value = wScriptDir.LocalPath;
                                 }
                             }
                         }
