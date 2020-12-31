@@ -44,15 +44,15 @@ You should install the software listed below based on your testing purpose, incl
       |Compilers, build tools, and runtime|C++/CLI support for v142 build tools (14.27)||Required<sup>[1](#footnote1)</sup>|
       |Compilers, build tools, and runtime|C++ 2019 Redistributable Update|Required<sup>[1](#footnote1)</sup>|Required<sup>[1](#footnote1)</sup>|
       |Development Activities|C++ core features||Required<sup>[1](#footnote1)</sup>|
-      |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.19041.0)||Required<sup>[1](#footnote1)</sup>|
+      |SDKs, libraries, and frameworks|Windows 10 SDK (10.0.19041.0)||Required<sup>[1](#footnote1)</sup>|      
 
       Note:
 
 <a name="footnote1">1</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
 
-1. [Protocol Test Framework v2.0 (build 2.0.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.0.0)
+1. [Protocol Test Framework v2.1 (build 2.1.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.1.0)
 
-   Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.0.0).
+   Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.1.0).
 
 1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)
 
