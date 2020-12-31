@@ -685,8 +685,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             TCPSUTControlTransport transport = new TCPSUTControlTransport();
 
-            IPAddress sutIP = GetHostIP(detectInfo.SUTName);           
-                
+            IPAddress sutIP = GetHostIP(detectInfo.SUTName);
+
             IPEndPoint agentEndpoint = new IPEndPoint(sutIP, detectInfo.AgentListenPort);
 
             transport.Connect(timeout, agentEndpoint);
@@ -825,8 +825,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         {
             string lastOutput = string.Empty;
             StringBuilder errorMsg = new StringBuilder();
-            //RDPConnectWithNegotiationApproach
-            //TriggerClientDisconnectAll
+
             int exitCode = 0;
             try
             {
@@ -851,9 +850,13 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                             throw new Exception("Windows Subsystem for Linux (WSL) is not installed.");
                         }
                     }
+                    var shellPath = Path.Combine(Environment.CurrentDirectory, path);
+                    var shellScriptDirectory = (new FileInfo(shellPath)).Directory.FullName;
 
                     proc.StartInfo.FileName = wslPath;
-                    proc.StartInfo.Arguments = path;
+                    proc.StartInfo.WorkingDirectory = shellScriptDirectory;
+                    proc.StartInfo.Arguments = $"./{scriptFile}.sh";
+
                     proc.StartInfo.UseShellExecute = false;
                     proc.StartInfo.CreateNoWindow = true;
                     proc.StartInfo.RedirectStandardError = true;

@@ -131,7 +131,7 @@ public void SelectEnvironment(string NetworkEnvironment)
             propertiesDic.Add(proxyIPTitle, proxyIPs);
             propertiesDic.Add(isWindowsImplementationTitle, isWindowsImplementationList);
             propertiesDic.Add(dropConnectionForInvalidRequestTitle, dropConnectionForInvalidRequestList);
-            propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Shell", "Managed", "Interactive" });
+            propertiesDic.Add(triggerMethodTitle, new List<string>() { "Powershell", "Managed", "Interactive" });
             propertiesDic.Add(userNameInTCTitle, userNamesInTC);
             propertiesDic.Add(userPwdInTCTitle, userPwdsInTC);
             propertiesDic.Add(agentPortTitle, new List<string>() { "4488" });
@@ -191,7 +191,7 @@ public void SelectEnvironment(string NetworkEnvironment)
         {
             List<DetectingItem> DetectingItems = new List<DetectingItem>();
             DetectingItems.Add(new DetectingItem("Detect Target SUT or Proxy IP Address", DetectingStatus.Pending, LogStyle.Default));
-            DetectingItems.Add(new DetectingItem("Establish RDP Connection with SUT or Proxy", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect RDP connection with SUT/Proxy", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified features Support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Check Specified Protocols Support", DetectingStatus.Pending, LogStyle.Default));
             return DetectingItems;
