@@ -21,7 +21,7 @@
     * [Set Up a Windows-Based SUT](#_Toc396908237)    
     * [Set Up the Driver Computer](#_Toc396908236)
     * [Set up Computers that are Not Based on Windows](#_Toc396908242)    
-* [Installed Files and Folders](#_Toc396908239)
+* [Extract Files and Folders](#_Toc396908239)
 * [Configure and Run Test Cases](#_Toc396908244)
     * [Configure the Test Suite](#_Toc396908243)
     * [Run All Test Cases](#_Toc396908245)
@@ -57,7 +57,7 @@ Note
 
 |  **Check**|  **Task**|  **Topic**| 
 | -------------| -------------| ------------- |
-| □| Download the test suite for the protocol implementation.| For a list of the files that the download package contains, see [Installed Files and Folders](#_Toc396908239).| 
+| □| Download the test suite for the protocol implementation.| For a list of the files that the download package contains, see [Extract Files and Folders](#_Toc396908239).| 
 | □| Confirm that your test environment and computers meet the requirements of the test suite.| For information about the requirements of the test suite, see [Requirements](#_Toc396908224). | 
 | □| Install the software prerequisites.| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#_Toc396908229).| 
 | □| Set up the network.| See [Network Setup](#_Toc396908230).| 
@@ -104,7 +104,7 @@ Note
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual: 
 
-* A driver computer running any version of Windows which is compatible with Visual Studio 2017.
+* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 .
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -112,7 +112,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual: 
 
-* A driver computer running any version of Windows which is compatible with Visual Studio 2017.
+* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 .
 
 * A computer configured as the SUT (System Under Test). It  can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -122,7 +122,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Any version of Windows which is compatible with Visual Studio 2017.| 
+| Operating system| [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0.| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -247,6 +247,11 @@ To check the connection from the driver computer
 * Repeat these steps until you confirm connectivity between all computers in the test environment.
 
 Do not proceed with the configuration of the test suite until connectivity is confirmed. Any issues with network connectivity must be resolved before you configure the test suite.
+
+![image2.png](./image/RDP_ServerUserGuide/image2.png)
+Note 
+
+>If you use Linux driver, you can run `ping SUT01` to check if your connectivity is fine.
 
 ## <a name="_Toc396908235"/>Computer Setup 
 
@@ -402,7 +407,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->Microsoft Visual Studio 2017 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
+>.NET 5.0 must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
@@ -410,9 +415,9 @@ To set up the driver computer
 
 1. Install the required and optional software described earlier.
 
-1. Build the test suite from source code or download **RDP-TestSuite-ServerEP.msi** from [GitHub](https://github.com/microsoft/WindowsProtocolTestSuites/releases)
+1. Build the test suite from source code or download **RDP-TestSuite-ServerEP.zip** from [GitHub](https://github.com/microsoft/WindowsProtocolTestSuites/releases)
 
-1. Run **RDP-TestSuite-ServerEP.msi** on the driver computer.
+1. Extract **RDP-TestSuite-ServerEP.zip** to C:\RDP-TestSuite-ServerEP on the driver computer.
 
 ### <a name="_Toc396908242"/>Set Up Computers that are Not Based on Windows
 
@@ -432,9 +437,9 @@ To configure the DC
 
 * Install directory domain services.
 
-### <a name="_Toc396908239"/>Installed Files and Folders
+### <a name="_Toc396908239"/>Extract Files and Folders
 
-The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\\.
+After you download the **RDP-TestSuite-ServerEP.zip** package on the driver computer,  you can extract it to C:\RDP-TestSuite-ServerEP on Windows or /RDP-TestSuite-ServerEP on Linux .
 
 ![image2.png](./image/RDP_ServerUserGuide/image2.png)
 Note 
@@ -466,14 +471,14 @@ You can define various options for the test suite, such as the following:
 
 * Set time limits on discrete test tasks and for test runs.
 
-To change configuration settings, edit the **RDP_ServerTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Bin.
+To change configuration settings, edit the **RDP_ServerTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\RDP-TestSuite-ServerEP\Bin.
 
 ### <a name="_Toc396908245"/>Run All Test Cases
 
 This test suite includes command files that you can use to complete some basic test cases. Each test case verifies the protocol implementation based on a given scenario. 
 
 You can find and run all test cases in the following directories: 
- C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Batch
+ C:\RDP-TestSuite-ServerEP\Batch
 
 You can run test cases via the graphical user interface or the command files:
 
@@ -483,19 +488,18 @@ You can run test cases via the graphical user interface or the command files:
 
 * Via command files
 
-    From the desktop of the driver computer, double-click the **Run All Test Cases** shortcut.
-    Alternatively, go to C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\_&#60;version&#35;&#62;_\Batch, and double-click the **RunAllTestCases.cmd** file. 
+    Go to C:\RDP-TestSuite-ServerEP\Batch, and run the PowerShell command **.\RunAllTestCases.ps1**.
 
 ### <a name="_Toc396908246"/>Check Test Results
 Test suite generates test result files in different paths based on the way how test case is executed.
 
-* For running test cases with PTM: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\HtmlTestResults_
+* For running test cases with PTM: _C:\RDP-TestSuite-ServerEP\HtmlTestResults_
 
-* For running test cases with batch: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Batch\TestResults_
+* For running test cases with batch: _C:\RDP-TestSuite-ServerEP\Batch\TestResults_
 
-* For running test cases with Visual Studio: _C:\MicrosoftProtocolTests\RDP\Server-Endpoint\\&#60;version&#35;&#62;\Source\Server\TestCode\TestResults_
+* For running test cases with Visual Studio: _C:\RDP-TestSuite-ServerEP\Source\Server\TestCode\TestResults_
 
-For further information about test log settings, see the PTF User Guide in the PTF installation directory.
+For further information about test log settings, see [PTF User Guide](https://github.com/Microsoft/ProtocolTestFramework/blob/main/docs/PTFUserGuide.md).
 
 
 ## <a name="_Toc396908247"/>Debug Test Cases
