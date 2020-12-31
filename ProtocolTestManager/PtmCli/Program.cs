@@ -177,7 +177,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         public void LoadTestSuite(string filename, string testSuiteFolder)
         {
             Logger.AddLog(LogLevel.Information, "Load Test Suite");
-
+            string testSuiteFolderBin = Path.Combine(testSuiteFolder, "Bin");
             TestSuiteInfo tsinfo;
             using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
             {
@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     throw new ArgumentException(String.Format(StringResources.UnknownTestSuiteMessage, profile.Info.TestSuiteName));
                 }
-                string testSuiteFolderBin = Path.Combine(testSuiteFolder, "Bin");
+                
                 tsinfo.TestSuiteFolder = testSuiteFolder;
                 tsinfo.TestSuiteVersion = LoadTestsuiteVersion(testSuiteFolderBin);
             }
@@ -195,12 +195,12 @@ namespace Microsoft.Protocols.TestManager.CLI
             util.LoadTestSuiteAssembly();
 
             string newProfile;
-            if (util.TryUpgradeProfileSettings(filename, out newProfile))
+            if (util.TryUpgradeProfileSettings(filename, testSuiteFolderBin, out newProfile))
             {
                 Console.WriteLine(String.Format(StringResources.PtmProfileUpgraded, newProfile));
                 filename = newProfile;
             }
-            util.LoadProfileSettings(filename);
+            util.LoadProfileSettings(filename, testSuiteFolderBin);
         }
 
         /// <summary>
