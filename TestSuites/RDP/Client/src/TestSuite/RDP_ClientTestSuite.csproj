@@ -5,6 +5,7 @@
     <IsPackable>false</IsPackable>
     <AssemblyName>RDP_ClientTestSuite</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestSuites.Rdp</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +29,13 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj" />
     <ProjectReference Include="..\Adapter\RDP_ClientAdapter.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
   <ItemGroup>
     <_CopyItems Include="$(TargetDir)\*.*" />
     <_TestDataFiles Include="$(ProjectDir)TestData\*.*" />

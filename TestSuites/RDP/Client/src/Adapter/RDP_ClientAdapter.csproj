@@ -5,6 +5,7 @@
     <AssemblyName>RDP_ClientAdapter</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestSuites.Rdp</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,12 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
