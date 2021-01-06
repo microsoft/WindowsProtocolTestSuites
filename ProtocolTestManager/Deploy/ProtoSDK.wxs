@@ -123,6 +123,10 @@
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.pdb" />
       </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.pdb" Guid="*" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.pdb"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.pdb" />
+      </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.pdb" Guid="*" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.pdb"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.pdb" />
@@ -263,6 +267,10 @@
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.dll" Guid="{8F518DE7-798D-4659-BA94-F1FD8B189864}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.dll"
               Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei.dll" />
+      </Component>
+      <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.dll" Guid="{FFD61A67-F13B-44DB-8912-945A5AB56185}" Feature="PTM_Feature">
+        <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.dll"
+              Source="$(var.SDK_SRCDIR)\Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele.dll" />
       </Component>
       <Component Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.dll" Guid="{62DEE27E-1B18-455F-A644-501436486836}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt.dll"
