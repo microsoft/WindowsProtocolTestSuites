@@ -111,8 +111,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                         true,
                         false,
                         false,
-                        false,
-                        false,
+                        true,
+                        true,
                         false);
                     if (!status)
                     {
