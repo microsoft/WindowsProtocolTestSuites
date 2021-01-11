@@ -73,7 +73,7 @@ Currently, there are 4 different implementations of **RDP SUT Control Agent** av
 
 		In the config file, you need to specify the commands which will be used to start and stop RDP client.
 
-		Here is an example file for [FreeRDP](freerdp.config).
+		Here is an example file for [FreeRDP](./Java/freerdp.config).
 
 		Take RDP connection via negotiate as an example, 
 		
