@@ -83,7 +83,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             {
                 DetectorUtil.WriteLog("Establish RDP connection with SUT...");
 
-                StartRDPListening();
+                StartRDPListening(detectInfo.RDPServerPort);
                 triggerClientRDPConnect(detectInfo.TriggerMethod);
                 EstablishRDPConnection();
                 // Set RDP Version
@@ -383,8 +383,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// <summary>
         /// Start RDP listening.
         /// </summary>
-        private void StartRDPListening()
+        /// <param name="rdpServerPort">RDP server port</param>
+        private void StartRDPListening(int rdpServerPort)
         {
+            port = rdpServerPort;
             rdpbcgrServerStack = new RdpbcgrServer(port, encryptedProtocol, null);
             rdpbcgrServerStack.Start(IPAddress.Any);
         }

@@ -40,6 +40,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         private const string userNameInTCTitle = "SUT User Name \n* Only for PowerShell Trigger";
         private const string userPwdInTCTitle = "SUT Password \n* Only for PowerShell Trigger";
         private const string agentPortTitle = "Agent Listening Port \n* Only for Managed Trigger";
+        private const string rdpServerPortTitle = "RDP Server Listening Port";
         private const string propSutName = "SUTName";
         private const string propSUTUserName = "SUTUserName";
         private const string propSUTUserPassword = "SUTUserPassword";
@@ -50,6 +51,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         private const string propSupportServerRedirection = "RDP.Client.SupportServerRedirection";
         private const string propSupportRDPEFS = "RDP.Client.SupportRDPEFS";
         private const string propRDPVersion = "RDP.Version";
+        private const string propRDPServerPort = "RDP.ServerPort";
         private const string propAgentAddress = "SUTControl.AgentAddress";
         private const string propIsClientSupportRDPFile = "SUTControl.ClientSupportRDPFile";
 
@@ -82,7 +84,8 @@ public void SelectEnvironment(string NetworkEnvironment)
             string sutName = DetectorUtil.GetPropertyValue(propSutName);
             string userNameInTC = DetectorUtil.GetPropertyValue(propSUTUserName);
             string userPwdInTC = DetectorUtil.GetPropertyValue(propSUTUserPassword);
-            
+            string rdpServerPort = DetectorUtil.GetPropertyValue(propRDPServerPort);
+
             //The RDP proxy IP, which should be set when a proxy is used.
             //Leave it blank if there's no proxy in the env
             string proxyIP = DetectorUtil.GetPropertyValue(propProxyIP);
@@ -135,6 +138,7 @@ public void SelectEnvironment(string NetworkEnvironment)
             propertiesDic.Add(userNameInTCTitle, userNamesInTC);
             propertiesDic.Add(userPwdInTCTitle, userPwdsInTC);
             propertiesDic.Add(agentPortTitle, new List<string>() { "4488" });
+            propertiesDic.Add(rdpServerPortTitle, new List<string>() { string.IsNullOrWhiteSpace(rdpServerPort) ? "3389" : rdpServerPort });
 
             prerequisites.Properties = propertiesDic;
 
@@ -178,6 +182,15 @@ public void SelectEnvironment(string NetworkEnvironment)
                 try
                 {
                     detectionInfo.AgentListenPort = Int32.Parse(properties[agentPortTitle]);
+                }
+                catch (Exception) { };
+            }
+            detectionInfo.RDPServerPort = 3389;
+            if (properties[rdpServerPortTitle] != null)
+            {
+                try
+                {
+                    detectionInfo.RDPServerPort = Int32.Parse(properties[rdpServerPortTitle]);
                 }
                 catch (Exception) { };
             }
@@ -249,6 +262,7 @@ public void SelectEnvironment(string NetworkEnvironment)
             propertiesDic.Add(propSupportRDPEFS, new List<string>() { NullableBoolToString(detectionInfo.IsSupportRDPEFS) });
 
             propertiesDic.Add(propRDPVersion, new List<string>() { detectionInfo.RdpVersion });
+            propertiesDic.Add(propRDPServerPort, new List<string>() { detectionInfo.RDPServerPort.ToString() });
 
             propertiesDic.Add(propAgentAddress, new List<string>() { detectionInfo.SUTName + ":" + detectionInfo.AgentListenPort });
             propertiesDic.Add(propIsClientSupportRDPFile, new List<string>() { detectionInfo.IsWindowsImplementation });

@@ -24,6 +24,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public string IsWindowsImplementation;
         public string DropConnectionForInvalidRequest;
         public int AgentListenPort;
+        public int RDPServerPort;
         public TriggerMethod TriggerMethod;
                 
         // Detect Result
