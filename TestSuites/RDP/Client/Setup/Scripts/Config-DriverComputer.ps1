@@ -205,6 +205,14 @@ if($listeningPort -eq "3389")
             Write-Warning  "Enable firewall for RDP Port with 4488 failed..."
        }
    }
+
+   # If listening port is 3389, we need to enable firewall for it.
+    try {
+           netsh advfirewall firewall add rule name="enable3389" dir=in action=allow protocol=TCP localport=3389 enable=yes
+    }
+    catch {
+        Write-Warning  "Enable 3389 port firewall failed..."
+    }
 }
 
 #-----------------------------------------------------
