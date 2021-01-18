@@ -340,6 +340,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
             this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
 
+            TestTools.StackSdk.Security.SspiLib.Consts.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.SspiLib.Consts.KDCPort = testConfig.KDCPort;
+
             sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
 
             this.Reset();

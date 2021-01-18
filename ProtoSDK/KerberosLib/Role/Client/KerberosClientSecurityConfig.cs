@@ -130,6 +130,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 string logonName,
                 string serviceName,
                 IPAddress kdcIpAddress,
+                int kdcPort,
                 ClientSecurityContextAttribute attributes,
                 TransportType transportType)
             : base(SecurityPackageType.Kerberos)
@@ -138,6 +139,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             this.logonName = logonName;
             this.serviceName = serviceName;
             this.kdcIpAddress = kdcIpAddress;
+            this.kdcPort = kdcPort;
             this.securityAttributes = attributes;
             this.transportType = transportType;
         }
