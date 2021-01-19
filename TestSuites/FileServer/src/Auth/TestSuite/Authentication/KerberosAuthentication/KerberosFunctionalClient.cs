@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.KerberosV5.Preauth;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
 using System;
+using System.Net;
 using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
@@ -26,7 +27,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         /// This argument cannot be null.</param>
         /// <param name="password">The password of the user. This argument cannot be null.</param>
         /// <param name="accountType">The type of the logon account. User or Computer</param>
-        public KerberosFunctionalClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt, ITestSite baseTestSite, string salt = null)
+        public KerberosFunctionalClient(string domain, string cName, string password, KerberosAccountType accountType, IPAddress kdcAddress, int kdcPort, TestTools.StackSdk.Security.KerberosLib.TransportType transportType, KerberosConstValue.OidPkt oidPkt, ITestSite baseTestSite, string salt = null)
             : base(domain, cName, password, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt)
         {
             testSite = baseTestSite;
@@ -71,7 +72,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         /// This argument cannot be null.</param>
         /// <param name="password">The password of the user. This argument cannot be null.</param>
         /// <param name="accountType">The type of the logon account. User or Computer</param>
-        public KerberosFunctionalClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt omiPkt, ITestSite baseTestSite)
+        public KerberosFunctionalClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, IPAddress kdcAddress, int kdcPort, TestTools.StackSdk.Security.KerberosLib.TransportType transportType, KerberosConstValue.OidPkt omiPkt, ITestSite baseTestSite)
             : base(domain, cName, password, accountType, armorTicket, armorSessionKey, kdcAddress, kdcPort, transportType, omiPkt)
         {
             testSite = baseTestSite;
