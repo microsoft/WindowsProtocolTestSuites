@@ -197,7 +197,22 @@ if($listeningPort -eq "3389")
             Write-Warning  "Restart-Service TermService failed..."
        }
        
+       try {
+              $systemroot = get-content env:systemroot
+              netsh advfirewall firewall add rule name="Remote Desktop - Custom Port" dir=in program=$systemroot\system32\svchost.exe service=termservice action=allow protocol=TCP localport=4488 enable=yes
+       }
+       catch {
+            Write-Warning  "Enable firewall for RDP Port with 4488 failed..."
+       }
    }
+
+   # If listening port is 3389, we need to enable firewall for it.
+    try {
+           netsh advfirewall firewall add rule name="enable3389" dir=in action=allow protocol=TCP localport=3389 enable=yes
+    }
+    catch {
+        Write-Warning  "Enable 3389 port firewall failed..."
+    }
 }
 
 #-----------------------------------------------------
