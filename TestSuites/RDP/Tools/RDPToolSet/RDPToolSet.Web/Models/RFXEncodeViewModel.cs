@@ -1,25 +1,23 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using CodecToolSet.Core;
 using CodecToolSet.Core.RFXEncode;
-using System;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace RDPToolSet.Web.Models
 {
     public class RFXEncodeSteps
     {
-        public ushort ImageInput      = 0;
-        public ushort RGBToYCbCr      = 1;
-        public ushort DWT             = 2;
-        public ushort Quantization    = 3;
-        public ushort Linearization   = 4;
+        public ushort ImageInput = 0;
+        public ushort RGBToYCbCr = 1;
+        public ushort DWT = 2;
+        public ushort Quantization = 3;
+        public ushort Linearization = 4;
         public ushort EntropyEncoding = 5;
     }
-    
+
     public class RFXEncodeViewModel : ICodecViewModel
     {
         public string Name
@@ -39,7 +37,6 @@ namespace RDPToolSet.Web.Models
                 return new List<ICodecParam>
                 {
                     RFXEncodeBase.ENTROPY_ALG,
-
                     RFXEncodeBase.DEFAULT_QUANT_ARRAY
                 };
             }

@@ -1,12 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using System;
+using System.Collections.Generic;
+using System.Security.Authentication;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 {
@@ -56,7 +55,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="socket"></param>
         /// <param name="targetHost"></param>
         /// <param name="autoHandle"></param>
-        public RdpemtClient(RdpeudpSocket socket, string targetHost, bool autoHandle = true)
+        /// <param name="selectedSslProtocols">The selected SSL protocols.</param>
+        public RdpemtClient(RdpeudpSocket socket, string targetHost, bool autoHandle = true, SslProtocols selectedSslProtocols = SslProtocols.Tls)
             : base(autoHandle)
         {
             if (!socket.AutoHandle)
@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             {
                 RdpeudpTLSChannel secChannel = new RdpeudpTLSChannel(socket);
                 secChannel.Received += ReceiveBytes;
-                secChannel.AuthenticateAsClient(targetHost);
+                secChannel.AuthenticateAsClient(targetHost, selectedSslProtocols);
                 this.secureChannel = secChannel;
             }
             else

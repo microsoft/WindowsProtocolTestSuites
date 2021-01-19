@@ -22,11 +22,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         #region variables
 
         const string interfaceFullName = "Microsoft.Protocols.TestSuites.Rdp.IRdpSutControlAdapter";
-        const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\nauthentication level:i:0\n";
+        const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\nauthentication level:i:0\nuse redirection server name:i:1\n";
 
         private bool isClientSupportCompression = false;
 
-        string localIP;
+        string rdpServerIP;
         ushort localPort;
         RDP_Connect_Payload_Type connectPayloadType;
         SUTControlProtocolHandler controlHandler;
@@ -46,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, false);
+            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, true, false);
 
             return Start_RDP_Connection(caseName, payload, helpMessage);
         }
@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, true, true);
+            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, true, true);
 
             return Start_RDP_Connection(caseName, payload, helpMessage);
         }
@@ -76,7 +76,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, false, false);
+            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, false, false);
 
             return Start_RDP_Connection(caseName, payload, helpMessage);
         }
@@ -91,7 +91,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, localIP, localPort, false, true);
+            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, false, true);
 
             return Start_RDP_Connection(caseName, payload, helpMessage);
         }
@@ -233,9 +233,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         {
             base.Initialize(testSite);
 
-            controlHandler = SUTControlProtocolHandler.GetInstance(testSite);         
+            controlHandler = SUTControlProtocolHandler.GetInstance(testSite);
             // Initiate local IP
-            localIP = GetLocalIP();
+            string proxyIP = testSite.Properties["RDP.ProxyIP"];
+            if (string.IsNullOrEmpty(proxyIP))
+            {
+                rdpServerIP = GetLocalIP();
+            }
+            else
+            {
+                rdpServerIP = proxyIP;
+            }
 
             // Initiate local port
             try

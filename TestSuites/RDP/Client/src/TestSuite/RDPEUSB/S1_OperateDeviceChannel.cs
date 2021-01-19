@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [Priority(0)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPEUSB")]
+        [TestCategory("Interactive")]
+        [TestCategory("DeviceNeeded")]
         [Description("Verify creating device channels and responding to the retract request.")]
         public void BVT_EUSB_OperateDeviceChannel()
         {
@@ -43,6 +45,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPEUSB")]
+        [TestCategory("Interactive")]
+        [TestCategory("DeviceNeeded")]
         [Description("Verify responding to the invalid CHANNEL_CREATED message.")]
         public void S1_EUSB_RdpeusbOperateDeviceChannel_Invalid_MajorVersion()
         {

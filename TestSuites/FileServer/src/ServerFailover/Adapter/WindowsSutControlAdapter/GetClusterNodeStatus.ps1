@@ -7,22 +7,17 @@
 [string]$userName = $PtfProp_Common_AdminUserName
 [string]$password = $PtfProp_Common_PasswordForAllUsers
 
-$SecurePassword = New-Object System.Security.SecureString
-if($Domain -eq $null -or $Domain.trim() -eq "")
+$mydir=Split-Path $MyInvocation.MyCommand.Path -Parent
+
+if($nodeName -match "\.")
 {
-	$account = $UserName
-}
-else
-{
-    $NetBIOSName = $Domain.Split(".")[0]
-    $account = "$NetBIOSName\$UserName"
+	$nodeName=$nodeName.Split(".")[0]
 }
 
-for($i=0; $i -lt $Password.Length; $i++)
+if($clusterName -notmatch "\.")
 {
-	$SecurePassword.AppendChar($Password[$i])
+	$clusterName = "$clusterName.$domain"
 }
-$credential = New-Object system.Management.Automation.PSCredential($account,$SecurePassword)
 
 if($clusterName -eq "" -or $nodeName -eq "")
 {
@@ -30,10 +25,10 @@ if($clusterName -eq "" -or $nodeName -eq "")
 }
 else 
 {
-	Try
+	try
 	{
-		$nodeObj = Get-WmiObject -class MSCluster_Node -namespace "root\mscluster" -computername $clusterName -Authentication PacketPrivacy -Credential $credential | Where-Object {$nodeName -match $_.Name}
-	
+		$nodeObj = . "$mydir/Get-WMIObject.ps1" -ComputerName $clusterName -Namespace "root\mscluster" -ClassName MSCluster_Node -Filter "Name = '$nodeName'"
+
 		if ($nodeObj -ne $null)
 		{
 			if($nodeObj.State -eq 0)
@@ -50,8 +45,9 @@ else
 			return $null
 		}
 	}
-	Catch
+	catch
 	{
+		Get-Error
 		return $null
 	}
 }

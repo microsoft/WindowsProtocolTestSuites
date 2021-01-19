@@ -116,12 +116,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         UseSuppliedCreds = 0x00000080,
 
         /// <summary>
-        /// The security package must allocate memory. The caller must eventually call the FreeContextBuffer function
-        /// to free memory allocated by the security package.
-        /// </summary>
-        AllocMemory = 0x00000100,
-
-        /// <summary>
         ///  This flag is added for use with Microsoft's implementation of Distributed Computing Environment.
         /// </summary>
         DceStyle = 0x00000200,
@@ -204,12 +198,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         /// The Digest SSP supports this flag for SASL only.
         /// </summary>
         Confidentiality = 0x00000010,
-
-        /// <summary>
-        /// Digest and Schannel will allocate output buffers for you. When you have finished using the output buffers,
-        /// free them by calling the FreeContextBuffer function.
-        /// </summary>
-        AllocMemory = 0x00000100,
 
         /// <summary>
         /// This flag is added for use with Microsoft's implementation of Distributed Computing Environment.

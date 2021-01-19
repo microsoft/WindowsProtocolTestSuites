@@ -3,16 +3,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Threading;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Imaging;
 
 namespace RDPSUTControlAgent
 {
@@ -35,10 +33,10 @@ namespace RDPSUTControlAgent
             }
             if (requestMessage.messageType != SUTControl_MessageType.SUT_CONTROL_REQUEST || requestMessage.testsuiteId != SUTControl_TestsuiteId.RDP_TESTSUITE)
             {
-                throw new ArgumentException("Not available request message." +requestMessage.messageType+","+ requestMessage.testsuiteId);
+                throw new ArgumentException("Not available request message." + requestMessage.messageType + "," + requestMessage.testsuiteId);
             }
 
-            RDPSUTControl_CommandId commandId =(RDPSUTControl_CommandId) requestMessage.commandId;
+            RDPSUTControl_CommandId commandId = (RDPSUTControl_CommandId)requestMessage.commandId;
             byte[] payload = null;
             string errorMessage = null;
             uint resultCode = 1;
@@ -51,12 +49,15 @@ namespace RDPSUTControlAgent
                         int index = 0;
                         if (rdpPayload.Decode(requestMessage.payload, (int)requestMessage.payloadLength, ref index))
                         {
-
                             if (rdpPayload.type == RDP_Connect_Payload_Type.RDP_FILE)
                             {
                                 if (Start_RDP_Connection(rdpPayload.rdpFileConfig) > 0)
                                 {
                                     resultCode = (uint)SUTControl_ResultCode.SUCCESS;
+                                }
+                                else
+                                {
+                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId +" when it is .rdp file";
                                 }
                             }
                             else
@@ -73,10 +74,13 @@ namespace RDPSUTControlAgent
                         {
                             resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         }
+                        else {
+                            errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command: " + commandId;
+                        }
                         break;
-                    case RDPSUTControl_CommandId.AUTO_RECONNECT:                        
-                        resultCode = (uint)SUTControl_ResultCode.SUCCESS;                            
-                        PostOperation = AUTO_RECONNECT;                        
+                    case RDPSUTControl_CommandId.AUTO_RECONNECT:
+                        resultCode = (uint)SUTControl_ResultCode.SUCCESS;
+                        PostOperation = AUTO_RECONNECT;
                         break;
                     case RDPSUTControl_CommandId.SCREEN_SHOT:
                         if (TAKE_SCREEN_SHOT(out payload) > 0)
@@ -85,11 +89,11 @@ namespace RDPSUTControlAgent
                         }
                         break;
                     default:
-                        errorMessage = "SUT control agent doesn't support this command:"+commandId;
+                        errorMessage = "SUT control agent doesn't support this command: " + commandId;
                         break;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 errorMessage = "Exception found when process " + commandId + "," + e.Message;
             }
@@ -107,23 +111,21 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Start_RDP_Connection(string rdpFileConfig)
         {
+            string remoteClientName = GetRemoteClientName();
+            if (remoteClientName == "XFREERDP") {
+                return 0;
+            }
 
-                //Create RDP File
-                FileStream rdpFile = new FileStream(TmpRDPFile, FileMode.Create);
-                StreamWriter sw = new StreamWriter(rdpFile);
-                sw.Write(rdpFileConfig);
-                sw.Flush();
-                sw.Close();
-                rdpFile.Close();
-                
-                //Start RDP connection
-                Process rdpProcess = new Process();
-                rdpProcess.StartInfo.FileName = "mstsc.exe";
-                rdpProcess.StartInfo.Arguments = TmpRDPFile;
-                rdpProcess.Start();
-                rdpProcess.Close();
-                return 1;
-            
+            //Create RDP File
+            FileStream rdpFile = new FileStream(TmpRDPFile, FileMode.Create);
+            StreamWriter sw = new StreamWriter(rdpFile);
+            sw.Write(rdpFileConfig);
+            sw.Flush();
+            sw.Close();
+            rdpFile.Close();
+
+            //Start RDP connection
+            return InvokeRemoteClientProcess(TmpRDPFile);
         }
 
         /// <summary>
@@ -133,35 +135,45 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Start_RDP_Connection(RDP_Connection_Configure_Parameters configureParameters)
         {
-            string arguments = "";
+            string arguments;
+            if (configureParameters.connectApproach == RDP_Connect_Approach.Negotiate && configureParameters.screenType == RDP_Screen_Type.NORMAL)
+            {
+                arguments = GetConfiguredValue("Negotiate");
+            }
+            else if (configureParameters.connectApproach == RDP_Connect_Approach.Negotiate && configureParameters.screenType == RDP_Screen_Type.FULL_SCREEN)
+            {
+                arguments = GetConfiguredValue("NegotiateFullScreen");
+            }
+            else if (configureParameters.connectApproach == RDP_Connect_Approach.Direct && configureParameters.screenType == RDP_Screen_Type.NORMAL)
+            {
+                arguments = GetConfiguredValue("DirectCredSSP");
+            }
+            else if (configureParameters.connectApproach == RDP_Connect_Approach.Direct && configureParameters.screenType == RDP_Screen_Type.FULL_SCREEN)
+            {
+                arguments = GetConfiguredValue("DirectCredSSPFullScreen");
+            }
+            else {
+                arguments = GetConfiguredValue("Negotiate");
+            }
 
-            if (configureParameters.port == 0)
-            {
-                arguments += string.Format(@" /v:{0}", configureParameters.address);
+            try {
+                arguments = arguments.Replace("{{address}}", configureParameters.address);
+                if (configureParameters.port == 0) {
+                    arguments = arguments.Replace(":{{port}}", "");
+                }
+                else {
+                    arguments = arguments.Replace("{{port}}", configureParameters.port.ToString());
+                }
             }
-            else
+            catch (Exception e)
             {
-                arguments += string.Format(@" /v:{0}:{1}", configureParameters.address, configureParameters.port);
-            }
-
-            if (configureParameters.screenType == RDP_Screen_Type.FULL_SCREEN)
-            {
-                arguments += @" /f";
-            }
-            else
-            {
-                arguments += string.Format(@" /w:{0} /h:{1}", configureParameters.desktopWidth, configureParameters.desktopHeight);
+                return -1;
             }
 
             //Start RDP connection
-            Process rdpProcess = new Process();
-            rdpProcess.StartInfo.FileName = "mstsc.exe";
-            rdpProcess.StartInfo.Arguments = arguments;
-            rdpProcess.Start();
-            rdpProcess.Close();
+            InvokeRemoteClientProcess(arguments);
+
             return 1;
-
-
         }
 
         /// <summary>
@@ -170,14 +182,19 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int Close_RDP_Connection()
         {
-                Process[] rdpProcesses = Process.GetProcessesByName("mstsc");
-                foreach (Process process in rdpProcesses)
-                {
-                    process.Kill();
-                }
-            return 1;
-        }
+            string stopRDPArguments = GetConfiguredValue("StopRDP");
+            int result = InvokeRemoteClientProcess(stopRDPArguments);
+            
+            if (GetRemoteClientName().Equals("mstsc", StringComparison.OrdinalIgnoreCase))
+            {
+                Thread.Sleep(1000);
 
+                string killRDPArguments = GetConfiguredValue("KillRDP");
+                result = InvokeRemoteClientProcess(killRDPArguments);
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Trigger auto reconnect event, make a short-term network failure
@@ -189,7 +206,6 @@ namespace RDPSUTControlAgent
             restartNetworkThread.Start();
         }
 
-
         /// <summary>
         /// Type a screenshot
         /// </summary>
@@ -197,30 +213,32 @@ namespace RDPSUTControlAgent
         /// <returns></returns>
         public static int TAKE_SCREEN_SHOT(out byte[] screenImageBinary)
         {
-            Bitmap bmpmapScreen = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
-            Graphics graphicScreen = Graphics.FromImage(bmpmapScreen);
-            graphicScreen.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
+            Bitmap testBitmap = new Bitmap(400, 300);
+            Graphics graphicScreen = Graphics.FromImage(testBitmap);
+            graphicScreen.CopyFromScreen(0, 0, 0, 0, testBitmap.Size, CopyPixelOperation.SourceCopy);
+
+            testBitmap.Save("testBitmap.bmp", ImageFormat.Bmp);
 
             List<byte> imageBuffer = new List<byte>();
-            byte[] width = BitConverter.GetBytes(Screen.PrimaryScreen.Bounds.Width);
+            byte[] width = BitConverter.GetBytes(testBitmap.Width);
             if (!BitConverter.IsLittleEndian)
             {
                 Array.Reverse(width);
             }
             imageBuffer.AddRange(width);
 
-            byte[] height = BitConverter.GetBytes(Screen.PrimaryScreen.Bounds.Height);
+            byte[] height = BitConverter.GetBytes(testBitmap.Height);
             if (!BitConverter.IsLittleEndian)
             {
                 Array.Reverse(height);
             }
             imageBuffer.AddRange(height);
 
-            for(int j=0; j< Screen.PrimaryScreen.Bounds.Height; j++)
+            for (int j = 0; j < testBitmap.Height; j++)
             {
-                for (int i = 0; i < Screen.PrimaryScreen.Bounds.Width; i++)
+                for (int i = 0; i < testBitmap.Width; i++)
                 {
-                    Color c = bmpmapScreen.GetPixel(i, j);
+                    Color c = testBitmap.GetPixel(i, j);
                     imageBuffer.Add(c.R);
                     imageBuffer.Add(c.G);
                     imageBuffer.Add(c.B);
@@ -228,6 +246,7 @@ namespace RDPSUTControlAgent
             }
 
             screenImageBinary = imageBuffer.ToArray();
+
             return 1;
         }
 
@@ -241,16 +260,77 @@ namespace RDPSUTControlAgent
             ManagementObjectCollection collection = searcher.Get();
             List<string> netWorkList = new List<string>();
             foreach (ManagementObject network in collection)
-            {                
-                network.InvokeMethod("Disable", null);                
+            {
+                network.InvokeMethod("Disable", null);
             }
-            System.Threading.Thread.Sleep(new TimeSpan(0,0, (int)WaitSeconds));
+            System.Threading.Thread.Sleep(new TimeSpan(0, 0, (int)WaitSeconds));
             foreach (ManagementObject network in collection)
             {
-                network.InvokeMethod("Enable", null);                
+                network.InvokeMethod("Enable", null);
             }
 
             return;
+        }
+
+        private static int InvokeRemoteClientProcess(string arguments) {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return InvokeWindowsCmdProcess(arguments);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return InvokeLinuxShellProcess(arguments);
+            }
+            else {
+                throw new NotImplementedException($"Not Implement in OS {GetCurrentOSType()}");
+            }
+        }
+
+        private static int InvokeWindowsCmdProcess(string arguments) {
+            Process rdpProcess = new Process();
+            rdpProcess.StartInfo.FileName = "cmd.exe";
+            rdpProcess.StartInfo.Arguments = $"/c {arguments}";
+            rdpProcess.Start();
+            rdpProcess.Close();
+
+            return 1;
+        }
+
+        private static int InvokeLinuxShellProcess(string arguments) {
+
+            Process rdpProcess = new Process();
+            rdpProcess.StartInfo.FileName = "/bin/bash";
+            rdpProcess.StartInfo.Arguments = $"-c \"{arguments}\"";
+            rdpProcess.Start();
+            rdpProcess.Close();
+
+            return 1;
+        }
+
+        private static string GetRemoteClientName()
+        {
+            string remoteClientName = ConfigurationManager.AppSettings["REMOTE_CLIENT"];
+
+            if (string.IsNullOrWhiteSpace(remoteClientName))
+            {
+                throw new ArgumentNullException("The REMOTE_CLIENT parameter is NOT configured well!");
+            }
+
+            return remoteClientName.ToUpper();
+        }
+
+        private static string GetConfiguredValue(string key) {
+
+            string currentRemoteClient = GetRemoteClientName();
+            string platformKey = $"{key.ToUpper()}_{currentRemoteClient}";
+
+            string value = ConfigurationManager.AppSettings[platformKey];
+
+            return value;
+        }
+
+        private static string GetCurrentOSType() {
+            return RuntimeInformation.OSDescription;
         }
 
         #endregion

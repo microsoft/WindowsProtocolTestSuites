@@ -6,29 +6,50 @@
 [string]$userName = $PtfProp_Common_AdminUserName
 [string]$password = $PtfProp_Common_PasswordForAllUsers
 
-$SecurePassword = New-Object System.Security.SecureString
-if($Domain -eq $null -or $Domain.trim() -eq "")
+if($nodeName -notmatch "\.")
 {
-    $account = $UserName
+	$nodeName = "$nodeName.$domain"
 }
-else
-{
-    $NetBIOSName = $Domain.Split(".")[0]
-    $account = "$NetBIOSName\$UserName"
-}
-
-for($i=0; $i -lt $Password.Length; $i++)
-{
-    $SecurePassword.AppendChar($Password[$i])
-}
-$credential = New-Object system.Management.Automation.PSCredential($account,$SecurePassword)
+$clusterServiceName = "ClusSvc"
 
 try
 {
-    $ret = Restart-Computer -ComputerName $nodeName -Force -Credential $credential
+    Get-PSSession|Remove-PSSession
+    $psSession=New-PSSession -HostName $nodeName -UserName "$domain\$userName"
 }
 catch
 {
-    return $FALSE
+    Get-Error
 }
-return $TRUE
+
+$myScriptBlock = {
+    param(
+    [string] $className,
+    [string] $filter
+    )
+    $result = Get-CimInstance -ClassName $className -Filter $filter
+    if($result -eq $null)
+    {
+        return $FALSE
+    }
+
+    return $result | Invoke-CimMethod -Name StartService
+}
+
+$ret = $FALSE
+try
+{
+    $className="Win32_Service"
+    $filter="Name = '$clusterServiceName'"
+    $result = Invoke-Command -Session $psSession -ScriptBlock $myScriptBlock -ArgumentList $className,$filter
+    $ret = $TRUE
+}
+catch
+{
+    Get-Error
+}
+finally
+{
+    Get-PSSession|Remove-PSSession
+}
+return $ret

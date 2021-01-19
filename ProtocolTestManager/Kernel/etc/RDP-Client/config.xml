@@ -1,0 +1,124 @@
+<Config>
+  <ConfigFilePath>
+    <PtfFileName>Bin\RDP_ClientTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Bin\RDP_ClientTestSuite.ptfconfig</PtfFileName>
+  </ConfigFilePath>
+  <Adapters>
+    <Adapter  displayname="Basic RDP SUT Control Adapter" name="IRdpSutControlAdapter">
+      <Adapter type="powershell" name="IRdpSutControlAdapter" scriptdir=".\"/>
+      <Adapter type="shell" name="IRdpSutControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="IRdpSutControlAdapter"/>
+      <Adapter type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>
+    </Adapter>
+    <Adapter  displayname="RDPEI SUT Control Adapter (Only used for RDPEI test cases)" name="IRdpeiSUTControlAdapter">
+      <Adapter type="powershell" name="IRdpeiSUTControlAdapter" scriptdir =".\" />
+      <Adapter type="interactive" name="IRdpeiSUTControlAdapter"/>
+      <Adapter type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpeiSUTControlAdapter"/>
+    </Adapter>
+    <Adapter  displayname="RDPEDISP SUT Control Adapter (Only used for RDPEDISP test cases)" name="IRdpedispSUTControlAdapter">
+      <Adapter type="powershell" name="IRdpedispSUTControlAdapter" scriptdir=".\" />
+      <Adapter type="interactive" name="IRdpedispSUTControlAdapter" />
+      <Adapter type="managed" name="IRdpedispSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpedispSUTControlAdapter"/>
+    </Adapter>
+  </Adapters>
+  <PtfFileNames>
+    <PtfFileName>RDP_ClientTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>RDP_ClientTestSuite.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>Bin\RDP_ClientTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>RDPClientPlugin.dll</AutoDetectionDllName>
+
+  <ConfigCaseRule>
+    <Group name ="Protocol" >
+      <Rule name = "RDPBCGR">
+        <Category name = "RDPBCGR"/>
+      </Rule>
+
+      <Rule name = "RDPEDISP">
+        <Category name = "RDPEDISP"/>
+      </Rule>
+
+      <Rule name = "RDPEGFX">
+        <Category name = "RDPEGFX"/>
+      </Rule>
+
+      <Rule name = "RDPEI">
+        <Category name = "RDPEI"/>
+      </Rule>
+
+      <Rule name = "RDPEMT">
+        <Category name = "RDPEMT"/>
+      </Rule>
+
+      <Rule name = "RDPEUDP">
+        <Category name = "RDPEUDP"/>
+      </Rule>
+
+      <Rule name = "RDPEUSB">
+        <Category name = "RDPEUSB"/>
+      </Rule>
+
+      <Rule name = "RDPEVOR">
+        <Category name = "RDPEVOR"/>
+      </Rule>
+
+      <Rule name = "RDPRFX">
+        <Category name = "RDPRFX"/>
+      </Rule>
+
+    </Group>
+
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+
+      <Rule name = "NonBVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+
+    <Group name="Enable Supported Feature" type="Remover">
+      <Rule name = "AutoReconnect">
+        <Category name = "AutoReconnect"/>
+      </Rule>
+
+      <Rule name = "FastPathInput">
+        <Category name = "FastPathInput"/>
+      </Rule>
+
+      <Rule name = "HeartBeat">
+        <Category name = "HeartBeat"/>
+      </Rule>
+
+      <Rule name = "ServerRedirection">
+        <Category name = "ServerRedirection"/>
+      </Rule>
+
+      <Rule name = "StaticVirtualChannel">
+        <Category name = "StaticVirtualChannel"/>
+      </Rule>
+
+      <Rule name = "NetcharAutoDetect">
+        <Category name = "NetcharAutoDetect"/>
+      </Rule>
+
+      <Rule name = "RDSTLSAuthentication">
+        <Category name = "RDSTLSAuthentication"/>
+      </Rule>
+    </Group>
+
+    <Group name="Specific Requirements" type="Remover">
+      <Rule name = "Interactive">
+        <Category name = "Interactive"/>
+      </Rule>
+
+      <Rule name = "DeviceNeeded">
+        <Category name = "DeviceNeeded"/>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+  <TestSetting>Bin\ClientLocal.TestSettings</TestSetting>
+</Config>

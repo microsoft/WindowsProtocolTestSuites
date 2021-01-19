@@ -7,16 +7,13 @@
 Param(
 [string]$computer, # host name or ip address
 [string]$taskName,
-[string]$userName,
-[string]$userPassword
+[string]$userName
 )
 
 # Run Task to start RDP connection remotely
-$pwdConverted = ConvertTo-SecureString $userPassword -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential $userName, $pwdConverted -ErrorAction Stop
-$cmdOutput = Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList $taskName
+$cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList $taskName
 
-$cmdOutput | out-file ".\RunTask_$taskName.log"
+$cmdOutput | out-file "./RunTask_$taskName.log"
 
 if($cmdOutput -ne $null)
 {

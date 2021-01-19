@@ -44,19 +44,54 @@ else
 }
 
 $DropConnectionForInvalidRequest = "true"
-$SutOsVersion = "" #How to get this value in Linux Driver
-$SutOsBuildNumber =  "" #How to get this value in Linux Driver
+[decimal]$SutOsVersion = Invoke-Command -HostName $tcComputerName -UserName $userNameInTC -ScriptBlock { "$([System.Environment]::OSVersion.Version.Major.ToString()).$([System.Environment]::OSVersion.Version.Minor.ToString())" }
+[int]$SutOsBuildNumber = Invoke-Command -HostName $tcComputerName -UserName $userNameInTC -ScriptBlock { [System.Environment]::OSVersion.Version.Build }
 
-if([double]$SutOSVersion -ge "10.0")
-{
-    if([double] $SutOsBuildNumber -eq "15063")
-    {
-        $RDPVersion = "10.3"
+Write-Host "SutOsVersion: $SutOsVersion "
+Write-Host "SutOsBuildNumber: $SutOsBuildNumber "
+
+if ($SutOSVersion -ge 10.0) {
+    if ($SutOsBuildNumber -ge 19041) {
+        $RDPVersion = "10.8"
     }
-
-    if([double] $SutOsBuildNumber -ge "15063")
-    {
+    elseif ($SutOsBuildNumber -ge 18362) {
+        $RDPVersion = "10.7"
+    }
+    elseif ($SutOsBuildNumber -ge 17763) {
+        $RDPVersion = "10.6"
+    }
+    elseif ($SutOsBuildNumber -ge 17134) {
+        $RDPVersion = "10.5"
+    }
+    elseif ($SutOsBuildNumber -ge 16299) {
+        $RDPVersion = "10.4"
+    }
+    elseif ($SutOsBuildNumber -ge 15063) {
+        $RDPVersion = "10.3"
         $DropConnectionForInvalidRequest = "false"
+    }
+    elseif ($SutOsBuildNumber -ge 14393) {
+        $RDPVersion = "10.2"
+    }
+    elseif ($SutOsBuildNumber -ge 10586) {
+        $RDPVersion = "10.1"
+    }
+    else {
+        $RDPVersion = "10.0"
+    }
+}
+elseif ($SutOsVersion -ge 6.3) {
+    $RDPVersion = "8.1"
+}
+elseif ($SutOsVersion -ge 6.2) {
+    $RDPVersion = "8.0"
+}
+elseif ($SutOsVersion -ge 6.1) {
+    if ($SutOsBuildNumber -ge 7601) {
+        $RDPVersion = "7.1"
+    }
+    else {
+        $RDPVersion = "7.0"
     }
 }
 

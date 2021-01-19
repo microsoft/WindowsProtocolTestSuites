@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ICodecParam>
+@using CodecToolSet.Core;
 
 @{
     // if a QuantizationFactors instance is not found, an exception will be thrown
@@ -24,13 +25,13 @@
                             <p>
                                 @(items[0].Name)
                                 <input id="@(items[0].Name)" class="quant-factor-slider quant-@(items[0].Name)"
-                               data-slider-min="@(isProg ? 0 : 6)" 
-                               data-slider-max="@(isProg ? 8 : 15)" 
-                               data-slider-step="1"
-                               data-slider-value="@(items[0].GetValue(quant))" 
-                               data-slider-orientation="horizontal" 
-                               data-slider-selection="after"
-                               data-slider-tooltip="show" />
+                                       data-slider-min="@(isProg ? 0 : 6)"
+                                       data-slider-max="@(isProg ? 8 : 15)"
+                                       data-slider-step="1"
+                                       data-slider-value="@(items[0].GetValue(quant))"
+                                       data-slider-orientation="horizontal"
+                                       data-slider-selection="after"
+                                       data-slider-tooltip="show" />
                             </p>
                         </div>
                     </div>
@@ -42,23 +43,23 @@
                                 <div class="col-xs-4">
                                     <p>
                                         @(items[i * 3 + j].Name)
-                                        <input id="@(items[i * 3 + j].Name)" class="quant-factor-slider quant-@(items[i * 3 + j].Name)" 
-                               data-slider-min="@(isProg ? 0 : 6)" 
-                               data-slider-max="@(isProg ? 8 : 15)" 
-                               data-slider-step="1"
-                               data-slider-value="@(items[i * 3 + j].GetValue(quant))" 
-                               data-slider-orientation="horizontal" 
-                               data-slider-selection="after"
-                               data-slider-tooltip="show" />
+                                        <input id="@(items[i * 3 + j].Name)" class="quant-factor-slider quant-@(items[i * 3 + j].Name)"
+                                               data-slider-min="@(isProg ? 0 : 6)"
+                                               data-slider-max="@(isProg ? 8 : 15)"
+                                               data-slider-step="1"
+                                               data-slider-value="@(items[i * 3 + j].GetValue(quant))"
+                                               data-slider-orientation="horizontal"
+                                               data-slider-selection="after"
+                                               data-slider-tooltip="show" />
                                     </p>
                                 </div>
-                        
+
                             }
                         </div>
                     }
                 </div>
             </div>
         </div>
-                    index++;
+        index++;
     }
 </div>

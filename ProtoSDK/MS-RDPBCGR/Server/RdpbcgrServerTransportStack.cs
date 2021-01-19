@@ -321,7 +321,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         public override void Write(byte[] buffer, int offset, int count)
         {
-            stream.Write(buffer, offset, count);
+            var attemptTimes = 10;
+            while (true)
+            {
+                try
+                {
+                    stream.Write(buffer, offset, count);
+                    break;
+                }
+                catch(IOException e)
+                {
+                    if(attemptTimes == 0)
+                    {
+                        throw;
+                    }
+
+                    var socketException = e.InnerException as SocketException;
+                    if (socketException != null && socketException.ErrorCode == (int)Win32ErrorCode_32.WSAEWOULDBLOCK)
+                    {
+                        Thread.Sleep(1000);
+                        attemptTimes--;
+                        continue;
+                    }
+
+                    throw;
+                }
+            }
+            
 
             // ETW Provider Dump Message and Reassembly
             string messageName = "RDPBCGR:TLSSent";
