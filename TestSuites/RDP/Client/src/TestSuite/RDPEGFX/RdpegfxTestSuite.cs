@@ -1,22 +1,19 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Reflection;
-using System.Threading;
-using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -77,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
             StopRDPConnection();
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
 
             DynamicVCException.SetCleanUp(false);
         }
@@ -153,8 +150,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             TriggerClientDisconnectAll();
 
-            this.rdpbcgrAdapter.Reset();
-            this.rdpegfxAdapter.Reset();
+            this.rdpbcgrAdapter?.Reset();
+            this.rdpegfxAdapter?.Reset();
         }
 
         /// <summary>
@@ -445,6 +442,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 {
                     Rectangle compareRect = new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
                     base.VerifySUTDisplay(usingRemoteFX, compareRect, callStackIndex + 1);
+                }
+            }
+        }
+
+        private void CheckPlatformCompatibility(DynamicVC_TransportType dvcTransportType)
+        {
+            // Check lossy dynamic virtual channel transport type, which is currently only supported on Windows.
+            if (dvcTransportType == DynamicVC_TransportType.RDP_UDP_Lossy)
+            {
+                if (!OperatingSystem.IsWindows())
+                {
+                    TestSite.Assume.Inconclusive("The lossy dynamic virtual channel transport type is only supported on Windows.");
                 }
             }
         }

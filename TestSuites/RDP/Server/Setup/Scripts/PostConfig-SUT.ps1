@@ -138,8 +138,14 @@ Function Config-RDS {
     # Configure Network detection on RDP Server
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "SelectNetworkDetect" -value "0"
     
-    # This value can enable the group policy: "Require use of specific security layer for remote (RDP) connections" to "Negotiate".
+    # This value can enable the group policy: "Require use of specific security layer for remote (RDP) connections" to "Negotiate": this key needs gpupdate /force to take effect.
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "SecurityLayer" -value "1" -Type DWord
+
+    # Allow automatic reconnection from clients: this key needs a reboot to take effect
+    Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "fDisableAutoReconnect" -value "0"
+
+    # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
+    gpupdate /Force
 }
 
 Function RestartAndResume {
@@ -235,6 +241,9 @@ Function Main {
             Install-License
             Set-LicenseServer
             Config-RDS
+            RestartAndResume
+        }
+        3 {
             Complete-Configure
         }
     }

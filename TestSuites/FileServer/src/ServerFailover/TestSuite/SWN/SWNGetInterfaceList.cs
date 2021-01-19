@@ -85,7 +85,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             if (disabledNode != null)
             {
-                RestoreClusterNodes(disabledNode);
+                // if all nodes are disabled, we want to keep next case good environment.
+                RestoreClusterNodes(TestConfig.ClusterNode01, TestConfig.ClusterNode02);
                 disabledNode = null;
             }
 

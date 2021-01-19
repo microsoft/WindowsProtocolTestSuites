@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using CommandLine;
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.CLI
@@ -48,6 +49,19 @@ namespace Microsoft.Protocols.TestManager.CLI
             },
             HelpText = "Specifies the outcome of the test cases to be included in the report file.\nValue should be separated by comma or space.\nValid values are: pass, fail, inconclusive.")]
         public IEnumerable<Outcome> Outcome { get; set; }
+
+        [Option('d', "debug",
+            Required = false,
+            Default = false,
+            HelpText = "Enable debugging of PTMCli.")]
+        public bool EnableDebugging { get; set; }
+
+        public override string ToString()
+        {
+            return "Input Options:" + Environment.NewLine + 
+                $"Profile: {Profile}; TestSuite: {TestSuite}; SelectedOnly: {SelectedOnly}; Categories: {string.Join(", ", Categories)}; ReportFile: {ReportFile}; " +
+                $"ReportFormat: {ReportFormat}; Outcome: {string.Join(", ", Outcome)}; Debug: {EnableDebugging}";
+        }
     }
 
     public enum ReportFormat

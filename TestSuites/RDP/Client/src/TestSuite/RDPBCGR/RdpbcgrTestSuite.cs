@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TriggerClientDisconnectAll();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
 
             if (this.rdpefsAdapter != null)
                 this.rdpefsAdapter.Dispose();

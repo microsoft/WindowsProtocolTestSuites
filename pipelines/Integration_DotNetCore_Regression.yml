@@ -1,10 +1,8 @@
 trigger: none 
 
 variables:
-  - group: Azure Account
   - group: Build Variables
   - group: External Repo Variables
-  - group: SMTP Account
 
 resources:
   repositories:
@@ -16,10 +14,12 @@ resources:
 jobs:
   - template: pipelines/Integration_DotNetCore_Regression_steps.yml@template
     parameters:
-      extRepoUrl: $(extRepo.url)
-      HelperBranch: $(test.helperBranch)
-      FilterSuffix: $(test.FilterSuffix)
-      BuildPipelineName: $(test.BuildPipelineName)
-      RegressionPipelineNames: $(test.RegressionPipelineNames)
-      TargetRepoCsvFile: $(targetRepo.csvFile)
-      targetRepoBranch: $(Build.SourceBranch)
+      build.helperUrl: $(extRepo.url)
+      build.helperBranch: $(build.helperBranch)
+      build.ptfBranch: $(build.ptfBranch)
+      build.ptfBuildPipelineName: $(build.ptfBuildPipelineName)
+      build.buildPipelineName: $(build.buildPipelineName)
+      test.testSuiteName: $(test.testSuiteName)
+      test.filterSuffix: $(test.filterSuffix)
+      test.regressionPipelineNames: $(test.regressionPipelineNames)
+      test.targetRepoCsvFile: $(test.targetRepoCsvFile)

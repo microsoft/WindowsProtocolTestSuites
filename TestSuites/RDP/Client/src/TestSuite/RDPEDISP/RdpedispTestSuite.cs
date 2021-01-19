@@ -1,19 +1,21 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpegfx;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.Protocols.TestSuites.Rdpegfx;
+using Microsoft.Protocols.TestSuites.Rdprfx;
+using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdprfx;
-using System.Drawing;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedisp
@@ -73,6 +75,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         {
             base.TestInitialize();
 
+            VerifyInteractiveRdpedispTestCase();
+
             try
             {
                 originalDesktopWidth = Convert.ToUInt16(Site.Properties["originalDesktopWidth"]);
@@ -95,6 +99,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.rdpedispAdapter = this.TestSite.GetAdapter<IRdpedispAdapter>();
             this.rdpedispAdapter.Reset();
             this.rdpedispSutControlAdapter = this.TestSite.GetAdapter<IRdpedispSUTControlAdapter>();
+
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -118,13 +123,40 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
 
             DynamicVCException.SetCleanUp(false);
         }
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Inconclude the interactive test cases.
+        /// </summary>
+        private void VerifyInteractiveRdpedispTestCase()
+        {
+            var isInteractiveTestCase = IsInteractiveRdpedispTestCase();
+            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpeiSUTControlAdapter").GetType().Name == "InteractiveAdapterConfig";
+
+            if (isInteractiveTestCase && !isInteractiveAdapter)
+            {
+                Site.Assume.Inconclusive("This case only supports interactive SUT control adapter.");
+            }
+        }
+
+        /// <summary>
+        /// Determine whether the executing Rdpedisp test case is interactive or not
+        /// </summary>
+        /// <returns>The executing Rdpedisp test case is interactive or not</returns>
+        private bool IsInteractiveRdpedispTestCase()
+        {
+            var testName = this.TestContext.TestName;
+            var method = GetType().GetMethod(testName);
+            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
+
+            return attrs.Any(attr => attr.TestCategories.Contains("Interactive"));
+        }
 
         /// <summary>
         /// Verify the version of operation system or MSTSC
@@ -192,7 +224,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             else
             {
                 this.rdprfxAdapter = this.TestSite.GetAdapter<IRdprfxAdapter>();
-                this.rdprfxAdapter.Reset();                
+                this.rdprfxAdapter.Reset();
                 //Initial the RDPRFX adapter context.
                 rdprfxAdapter.Accept(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
                 receiveAndLogClientRfxCapabilites();
@@ -208,10 +240,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         {
             TriggerClientDisconnectAll();
 
-            this.rdpbcgrAdapter.Reset();
-            if(this.rdpegfxAdapter != null)
+            this.rdpbcgrAdapter?.Reset();
+            if (this.rdpegfxAdapter != null)
                 this.rdpegfxAdapter.Reset();
-            if(this.rdprfxAdapter != null)
+            if (this.rdprfxAdapter != null)
                 this.rdprfxAdapter.Reset();
         }
 
@@ -310,7 +342,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             }
         }
 
-       
+
         /// <summary>
         /// Check whether two monitors are overlapped
         /// </summary>
@@ -368,11 +400,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// </summary>
         /// <param name="monitors">Monitor array</param>
         /// <returns></returns>
-        private bool VerifyMonitorsOverlap(DISPLAYCONTROL_MONITOR_LAYOUT[] monitors){
+        private bool VerifyMonitorsOverlap(DISPLAYCONTROL_MONITOR_LAYOUT[] monitors)
+        {
             bool anyOverlap = false;
-            for (int i = 0; i < monitors.Length-1; i++)
+            for (int i = 0; i < monitors.Length - 1; i++)
             {
-                for (int j = i+1; j < monitors.Length; j++)
+                for (int j = i + 1; j < monitors.Length; j++)
                 {
                     if (isOverlap(monitors[i], monitors[j])) anyOverlap = true;
                 }
@@ -469,8 +502,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
 
-            ushort startX = (ushort) (screenWidth / 2 - bitmap.Width / 2);
-            ushort startY = (ushort) (screenHeight / 2 - bitmap.Height / 2);
+            ushort startX = (ushort)(screenWidth / 2 - bitmap.Width / 2);
+            ushort startY = (ushort)(screenHeight / 2 - bitmap.Height / 2);
             surfRect = RdpegfxTestUtility.ConvertToRect(new RDPGFX_POINT16(startX, startY), (ushort)bitmap.Width, (ushort)bitmap.Height);
             surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
 

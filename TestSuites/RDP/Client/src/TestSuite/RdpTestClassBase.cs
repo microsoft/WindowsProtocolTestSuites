@@ -1,17 +1,15 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.IO;
-using System.Drawing;
-using System.Reflection;
-using System.Diagnostics;
-using Microsoft.Protocols.TestTools;
-using System.Text.RegularExpressions;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Runtime.CompilerServices;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
@@ -118,6 +116,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
                 }
             }
+
+            CheckPlatformCompatibility();
         }
 
         protected override void TestCleanup()
@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     if (testcaseRdpVer > currentRDPVer)
                     {
-                        this.Site.Assert.Inconclusive("Test case {0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
+                        this.Site.Assume.Inconclusive("Test case {0} is only supported by RDP {1} or above. But current RDP version is set to {2}", testCaseName, version, currentRDPVersion);
                     }
                 }
                 else
@@ -206,7 +206,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
         {
-            int iResult = 0;
+            int iResult;
             string strMethod = null;
             switch (enProtocol)
             {
@@ -237,9 +237,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         strMethod = "RDPConnectWithDirectCredSSP";
                     }
                     break;
+
+                default:
+                    {
+                        throw new InvalidOperationException($"Unexpected encryption protocol: {enProtocol}!");
+                    }
             }
 
-            TestSite.Assert.IsTrue(strMethod != null, "Unknown encryption protocol: {0}!", enProtocol);
             TestSite.Assert.IsTrue(iResult >= 0, "SUT Control Adapter: {0} should be successful: {1}.", strMethod, iResult);
         }
 
@@ -613,7 +617,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         {
             if (transportProtocol == EncryptedProtocol.Rdp && isWindowsImplementation)
             {
-                Site.Assert.Inconclusive("Not Applicable, Microsoft RDP clients fail the TLS or DTLS handshake for a multitransport connection if Enhanced RDP Security is not in effect for the main RDP connection.");
+                Site.Assume.Inconclusive("Not Applicable, Microsoft RDP clients fail the TLS or DTLS handshake for a multitransport connection if Enhanced RDP Security is not in effect for the main RDP connection.");
             }
         }
         //override, assume fail for an invalid PTF property.
@@ -723,11 +727,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         public void TriggerClientDisconnectAll()
         {
-            int iResult;
+            int? iResult;
 
             try
             {
-                iResult = sutControlAdapter.TriggerClientDisconnectAll(this.TestContext.TestName);
+                iResult = sutControlAdapter?.TriggerClientDisconnectAll(this.TestContext.TestName);
             }
             catch (Exception ex)
             {
@@ -736,7 +740,25 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 return;
             }
 
-            TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            }
+        }
+
+        /// <summary>
+        /// Check platform compatibility.
+        /// </summary>
+        private void CheckPlatformCompatibility()
+        {
+            // Check CredSSP, which is currently only supported on Windows.
+            if (transportProtocol == EncryptedProtocol.NegotiationCredSsp || transportProtocol == EncryptedProtocol.DirectCredSsp)
+            {
+                if (!OperatingSystem.IsWindows())
+                {
+                    TestSite.Assume.Inconclusive("The transport protocols based on CredSSP are only supported on Windows.");
+                }
+            }
         }
     }
 }

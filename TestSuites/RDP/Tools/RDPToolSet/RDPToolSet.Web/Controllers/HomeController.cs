@@ -1,23 +1,31 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RDPToolSet.Web.Models;
+using System.Diagnostics;
 
 namespace RDPToolSet.Web.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
+        private readonly ILogger<HomeController> _logger;
 
-        public ActionResult Index()
+        public HomeController(ILogger<HomeController> logger)
         {
-            return Redirect(Url.Content("~/Static/index.html"));
+            _logger = logger; 
         }
 
+        public IActionResult Index()
+        {
+            return Redirect(Url.Content("~/html/index.html"));
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }

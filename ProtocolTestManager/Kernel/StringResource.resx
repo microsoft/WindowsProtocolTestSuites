@@ -135,9 +135,6 @@
   <data name="LoadProfileError" xml:space="preserve">
     <value>Error in loading profile: {0}</value>
   </data>
-  <data name="RegistryPathNotSpecified" xml:space="preserve">
-    <value>DefaultRegistryPath is not specified.</value>
-  </data>
   <data name="TestSuiteFolder" xml:space="preserve">
     <value>C:\MicrosoftProtocolTests\{0}\{1}-Endpoint\{2}</value>
   </data>
@@ -223,7 +220,7 @@ The test suite is {2} {3}.</value>
   <data name="HtmlTestLoggerNotInstalled" xml:space="preserve">
     <value>Cannot find html test logger, try to reinstall Protocol Test Framework.</value>
   </data>
-   <data name="AD_ServerTestSuite_ptfconfig" xml:space="preserve">
+  <data name="AD_ServerTestSuite_ptfconfig" xml:space="preserve">
     <value>..\..\TestSuites\ADFamily\src\TestSuite\AD_ServerTestSuite.ptfconfig;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="AD_ServerTestSuite_deployment_ptfconfig" xml:space="preserve">
@@ -359,5 +356,8 @@ Please upgrade the test suite to the same version of Protocol Test Manager.</val
   </data>
   <data name="RunCaseError" xml:space="preserve">
     <value>dotnet test exits with error.</value>
+  </data>
+  <data name="PackageClosed" xml:space="preserve">
+    <value>Package closed.</value>
   </data>
 </root>

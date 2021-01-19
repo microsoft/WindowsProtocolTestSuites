@@ -10,10 +10,10 @@
     <title>RDP Protocol Tool Set</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="Content/jumbotron-narrow.css" rel="stylesheet">
+    <link href="~/css/jumbotron-narrow.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -27,15 +27,14 @@
     <div class="container">
         <div class="header">
             <ul class="nav nav-pills pull-right">
-                <li><a href="~/Static/index.html">Home</a></li>
-                <li><a href="~/Static/about.html">About</a></li>
+                <li><a href="~/html/index.html">Home</a></li>
+                <li><a href="~/html/about.html">About</a></li>
                 <li class="active"><a href="#">Contact</a></li>
             </ul>
             <h3 class="text-muted"><a class="tool-set-link" href="~/Static/index.html">RDP Protocol Tool Set</a></h3>
         </div>
 
-        @Html.Partial("_GuestBook")
-        
+        @await Html.PartialAsync("_GuestBook")
         <!-- Footer -->
         <div class="footer">
             <div class="container">
@@ -46,10 +45,9 @@
             </div>
         </div>
 
-        <script src="Scripts/jquery-1.7.1.js"></script>
-        <script src="Scripts/bootstrap.js"></script>
-        <script src="Scripts/guestbook.js"></script>
-
+        <script src="~/js/jquery-1.7.1.js"></script>
+        <script src="~/js/bootstrap.js"></script>
+        <script src="~/js/guestbook.js"></script>
     </div>
     <!-- /container -->
 

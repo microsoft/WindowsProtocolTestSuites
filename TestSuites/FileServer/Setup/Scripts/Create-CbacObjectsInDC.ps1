@@ -9,6 +9,40 @@ $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
 Push-Location $workingDir
 #----------------------------------------------------------------------------
+# if working dir is not exists. it will use scripts path as working path
+#----------------------------------------------------------------------------
+if(!(Test-Path "$workingDir"))
+{
+    $workingDir = $scriptPath
+}
+
+$protocolConfigFile = "$workingDir\Protocol.xml"
+if(!(Test-Path "$protocolConfigFile")) 
+{
+    .\Write-Error.ps1 "No protocol.xml found."
+    exit ExitCode
+}
+
+#----------------------------------------------------------------------------
+# Get content from protocol config files
+#----------------------------------------------------------------------------
+[xml]$config = Get-Content "$protocolConfigFile"
+if($config -eq $null)
+{
+    .\Write-Error.ps1 "Protocol config file $protocolConfigFile is not a valid XML file."
+    exit ExitCode
+}
+
+#----------------------------------------------------------------------------
+# Define common variables
+#----------------------------------------------------------------------------
+$password = $config.lab.core.password
+if([System.String]::IsNullOrEmpty($password)) 
+{
+    $password = "Password01!"
+}
+
+#----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
@@ -282,16 +316,16 @@ CreateClaimTypes -DisplayName "Company" -Values $domain.name,"Kerb"
 CreateClaimTypes -DisplayName "CountryCode" -Values "840","392","156"
 
 .\Write-Info.ps1 "Create ADUsers"
-CreateADUser -Username "claimuser" -Password "Password01!" -Company $domain.name
-CreateADUser -Username "noclaimuser" -Password "Password01!"
+CreateADUser -Username "claimuser" -Password $password -Company $domain.name
+CreateADUser -Username "noclaimuser" -Password $password
 
-CreateADUser -Username "ITadmin01" -Password "Password01!" -Group "IT Admins" -CountryCode "156" -Department "IT"
-CreateADUser -Username "ITmember01" -Password "Password01!" -Group "IT" -CountryCode "392" -Department "IT"
+CreateADUser -Username "ITadmin01" -Password $password -Group "IT Admins" -CountryCode "156" -Department "IT"
+CreateADUser -Username "ITmember01" -Password $password -Group "IT" -CountryCode "392" -Department "IT"
 
-CreateADUser -Username "Payrolladmin01" -Password "Password01!" -Group "Payroll" -CountryCode "840" -Department "Payroll"
-CreateADUser -Username "Payrollmember01" -Password "Password01!" -Group "Payroll" -CountryCode "156" -Department "Payroll" -Company $domain.name
-CreateADUser -Username "Payrollmember02" -Password "Password01!" -Group "Payroll" -CountryCode "840" -Department "Payroll"
-CreateADUser -Username "Payrollmember03" -Password "Password01!" -Group "Payroll" -CountryCode "392" -Department "Payroll"
+CreateADUser -Username "Payrolladmin01" -Password $password -Group "Payroll" -CountryCode "840" -Department "Payroll"
+CreateADUser -Username "Payrollmember01" -Password $password -Group "Payroll" -CountryCode "156" -Department "Payroll" -Company $domain.name
+CreateADUser -Username "Payrollmember02" -Password $password -Group "Payroll" -CountryCode "840" -Department "Payroll"
+CreateADUser -Username "Payrollmember03" -Password $password -Group "Payroll" -CountryCode "392" -Department "Payroll"
 
 .\Write-Info.ps1 "Create Resource Properties"
 CreateResourceProperty -DisplayName "Company" -ValueType "MS-DS-SinglevaluedChoice" -Values $domain.name,"kerb"

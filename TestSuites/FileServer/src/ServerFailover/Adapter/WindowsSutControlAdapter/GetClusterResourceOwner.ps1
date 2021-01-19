@@ -7,22 +7,43 @@
 [string]$userName = $PtfProp_Common_AdminUserName
 [string]$password = $PtfProp_Common_PasswordForAllUsers
 
-$SecurePassword = New-Object System.Security.SecureString
-if($Domain -eq $null -or $Domain.trim() -eq "")
+$mydir=Split-Path $MyInvocation.MyCommand.Path -Parent
+
+$node01 = $PtfProp_Cluster_ClusterNode01
+$node02 = $PtfProp_Cluster_ClusterNode02
+
+if($resName -match "\.")
 {
-	$account = $UserName
-}
-else
-{
-    $NetBIOSName = $Domain.Split(".")[0]
-    $account = "$NetBIOSName\$UserName"
+	$resName=$resName.Split(".")[0]
 }
 
-for($i=0; $i -lt $Password.Length; $i++)
+if($clusterName -notmatch "\.")
 {
-	$SecurePassword.AppendChar($Password[$i])
+	$clusterName = "$clusterName.$domain"
 }
-$credential = New-Object system.Management.Automation.PSCredential($account,$SecurePassword)
+
+function Get-OwnerNode {
+    param (
+		$mydir,
+        $nodeName,
+		$resName
+    )
+
+    try
+	{
+		$ret = . "$mydir/Get-WMIObject.ps1" -ComputerName $nodeName -Namespace "root\mscluster" -ClassName MSCluster_Resource -Filter "Name = '$resName'"
+		if($ret -ne $null -and $ret.State -eq 2)
+		{
+			return $ret.OwnerNode
+		}
+	}
+	catch
+	{
+		Get-Error
+	}
+
+	return $null
+}
 
 if ($resName -eq $null -or $resName -eq "")
 {
@@ -30,20 +51,11 @@ if ($resName -eq $null -or $resName -eq "")
 }
 else
 {
-	Try
+	# Try to get OwnerNode from node01 and node02, if we get the OwnerNode the cluster is ready.
+	$ownerNode = Get-OwnerNode -mydir $mydir -nodeName $node01 -resName $resName
+	if($ownerNode -eq $null)
 	{
-		$ret = Get-WMIObject -ComputerName $clusterName -Authentication PacketPrivacy -Namespace "root\mscluster" -Class MSCluster_Resource -Credential $credential | Where-Object{$resName -match $_.Name}
-		if($ret -ne $null -and $ret.State -eq 2)
-		{
-			return $ret.OwnerNode
-		}
-		else
-		{
-			return $null
-		}
+		$ownerNode = Get-OwnerNode -mydir $mydir -nodeName $node02 -resName $resName
 	}
-	Catch
-	{
-		return $null
-	}
+	return $ownerNode
 }

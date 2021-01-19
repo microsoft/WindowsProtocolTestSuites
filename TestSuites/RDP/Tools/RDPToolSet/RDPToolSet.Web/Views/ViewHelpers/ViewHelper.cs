@@ -1,36 +1,36 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.IO;
-using System.Web.Mvc;
 
-namespace RDPToolSet.Web.Views.ViewHelpers
+namespace RDPToolSet.Web
 {
     public static class ViewHelper
     {
-        public static string FormatId(this HtmlHelper htmlHelper, params string[] strings)
+        public static string FormatId(this IHtmlHelper htmlHelper, params string[] strings)
         {
             return string.Join("-", strings).Replace(" ", string.Empty).ToLowerInvariant();
         }
 
-        public static MvcHtmlString ButtonFor(this HtmlHelper htmlHelper, string name, 
+        public static HtmlString ButtonFor(this IHtmlHelper htmlHelper, string name,
             string id = null, string @class = null)
         {
             if (id == null) id = string.Empty;
             if (@class == null) @class = string.Empty;
 
-            return new MvcHtmlString(string.Format(
+            return new HtmlString(string.Format(
                 "<button type=\"button\" id=\"{0}\" " +
-                "class=\"btn btn-primary {1}\">{2}"   +
+                "class=\"btn btn-primary {1}\">{2}" +
                 "</button>", id, @class, name));
         }
 
-        public static IDisposable BeginPanel(this HtmlHelper htmlHelper, string id, string title)
+        public static IDisposable BeginPanel(this IHtmlHelper htmlHelper, string id, string title)
         {
             var writer = htmlHelper.ViewContext.Writer;
 
-            // write bootstrap penel code to the view
             writer.WriteLine(
                 @"<div class=""panel panel-default""><div class=""panel-heading"">" + // panel heading
                 @"<h4 class=""panel-title""><a data-toggle=""collapse"" href=""#{0}"">{1}</a></h4></div>" +
@@ -58,20 +58,20 @@ namespace RDPToolSet.Web.Views.ViewHelpers
             }
         }
 
-        public static IDisposable BeginInOutTabs(this HtmlHelper htmlHelper, string inputId, string outputId)
+        public static IDisposable BeginInOutTabs(this IHtmlHelper htmlHelper, string inputId, string outputId)
         {
             var writer = htmlHelper.ViewContext.Writer;
 
             writer.WriteLine(
                 @"<div class=""tabs"">" +
-                @"<ul class=""nav nav-tabs nav-justified"">" + 
-                @"<li>" + 
-                @"<a href=""#{0}"" data-toggle=""tab"">Input</a>" + 
+                @"<ul class=""nav nav-tabs nav-justified"">" +
+                @"<li>" +
+                @"<a href=""#{0}"" data-toggle=""tab"">Input</a>" +
                 @"</li>" +
                 @"<li class=""active"">" +
                 @"<a href=""#{1}"" data-toggle=""tab"">Ouput</a>" +
-                @"</li>" + 
-                @"</ul>" + 
+                @"</li>" +
+                @"</ul>" +
                 @"<div class=""tab-content"">",
                 inputId, outputId
             );

@@ -45,5 +45,5 @@ openssl req -newkey rsa:4096 \
 
 openssl pkcs12 -export -nodes -out $pfxFileName -inkey $keyFileName -in $crtFileName -passout pass:$certPwd
 
-cp $certificateFileName.* /
+cp $certificateFileName.* $certificatePath
 

@@ -81,7 +81,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cssp
             | ClientSecurityContextAttribute.ReplayDetect
             | ClientSecurityContextAttribute.SequenceDetect
             | ClientSecurityContextAttribute.Confidentiality
-            | ClientSecurityContextAttribute.AllocMemory
             | ClientSecurityContextAttribute.ExtendedError
             | ClientSecurityContextAttribute.Stream;
 

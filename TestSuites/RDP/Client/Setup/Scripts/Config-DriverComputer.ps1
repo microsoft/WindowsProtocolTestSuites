@@ -12,7 +12,6 @@ Push-Location $scriptsPath
 # Starting script
 #----------------------------------------------------------------------------
 
-
 $settingFile = "$scriptsPath\ParamConfig.xml"
 if(Test-Path -Path $settingFile)
 {    
@@ -44,20 +43,51 @@ else
 }
 
 $DropConnectionForInvalidRequest = "true"
-$SutOsVersion = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {""+[System.Environment]::OSVersion.Version.Major.ToString() + "." + [System.Environment]::OSVersion.Version.Minor.ToString()}
-$SutOsBuildNumber = Invoke-Command -ComputerName $tcComputerName -ScriptBlock {[System.Environment]::OSVersion.Version.Build}
+[decimal]$SutOsVersion = Invoke-Command -ComputerName $tcComputerName -ScriptBlock { "$([System.Environment]::OSVersion.Version.Major.ToString()).$([System.Environment]::OSVersion.Version.Minor.ToString())" }
+[int]$SutOsBuildNumber = Invoke-Command -ComputerName $tcComputerName -ScriptBlock { [System.Environment]::OSVersion.Version.Build }
 
-if([double]$SutOSVersion -ge "10.0")
-{
-    
-    if([double] $SutOsBuildNumber -eq "15063")
-    {
-        $RDPVersion = "10.3"
+if ($SutOSVersion -ge 10.0) {
+    if ($SutOsBuildNumber -ge 19041) {
+        $RDPVersion = "10.8"
     }
-
-    if([double] $SutOsBuildNumber -ge "15063")
-    {
+    elseif ($SutOsBuildNumber -ge 18362) {
+        $RDPVersion = "10.7"
+    }
+    elseif ($SutOsBuildNumber -ge 17763) {
+        $RDPVersion = "10.6"
+    }
+    elseif ($SutOsBuildNumber -ge 17134) {
+        $RDPVersion = "10.5"
+    }
+    elseif ($SutOsBuildNumber -ge 16299) {
+        $RDPVersion = "10.4"
+    }
+    elseif ($SutOsBuildNumber -ge 15063) {
+        $RDPVersion = "10.3"
         $DropConnectionForInvalidRequest = "false"
+    }
+    elseif ($SutOsBuildNumber -ge 14393) {
+        $RDPVersion = "10.2"
+    }
+    elseif ($SutOsBuildNumber -ge 10586) {
+        $RDPVersion = "10.1"
+    }
+    else {
+        $RDPVersion = "10.0"
+    }
+}
+elseif ($SutOsVersion -ge 6.3) {
+    $RDPVersion = "8.1"
+}
+elseif ($SutOsVersion -ge 6.2) {
+    $RDPVersion = "8.0"
+}
+elseif ($SutOsVersion -ge 6.1) {
+    if ($SutOsBuildNumber -ge 7601) {
+        $RDPVersion = "7.1"
+    }
+    else {
+        $RDPVersion = "7.0"
     }
 }
 
@@ -167,7 +197,22 @@ if($listeningPort -eq "3389")
             Write-Warning  "Restart-Service TermService failed..."
        }
        
+       try {
+              $systemroot = get-content env:systemroot
+              netsh advfirewall firewall add rule name="Remote Desktop - Custom Port" dir=in program=$systemroot\system32\svchost.exe service=termservice action=allow protocol=TCP localport=4488 enable=yes
+       }
+       catch {
+            Write-Warning  "Enable firewall for RDP Port with 4488 failed..."
+       }
    }
+
+   # If listening port is 3389, we need to enable firewall for it.
+    try {
+           netsh advfirewall firewall add rule name="enable3389" dir=in action=allow protocol=TCP localport=3389 enable=yes
+    }
+    catch {
+        Write-Warning  "Enable 3389 port firewall failed..."
+    }
 }
 
 #-----------------------------------------------------
@@ -246,23 +291,6 @@ else
 
 Write-Host  "TurnOff FileReadonly for $DepPtfConfig due to Execution Console..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
-
-#-----------------------------------------------------
-# Modify ClientLocal.testsettings file
-#-----------------------------------------------------
-Write-Host  "Modify ClientLocal.testsettings fileg..."
-$settingFile = "$binPath\ClientLocal.testsettings"
-[XML]$settingXml = Get-Content $settingFile
-$depFiles = $settingXml.GetElementsByTagName("DeploymentItem")
-foreach ($depFile in $depFiles)
-{
-    $fileOrg = $depFile.filename
-    $idx     = $fileOrg.LastIndexOf("\")
-    $fileNew = ".\" + $fileOrg.SubString($idx + 1)
-    Write-Host "Change $fileOrg to $fileNew."
-    $depFile.filename = $fileNew
-}
-$settingXml.Save("$settingFile")
 
 #-----------------------------------------------------
 # Create task to detect whether the SUT Adapter works

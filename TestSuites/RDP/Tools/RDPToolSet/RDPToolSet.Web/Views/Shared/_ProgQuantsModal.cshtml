@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ICodecParam>
+@using CodecToolSet.Core;
 
 @{
     // if a QuantizationFactors instance is not found, an exception will be thrown
@@ -35,7 +36,7 @@
                             @for (int i = 0; i < progQuant.ProgQuants.Count; i++)
                             {
                                 <div class="tab-pane @(i == 0 ? Html.Raw("active") : Html.Raw(""))" id="quant-tab-layer-@(i)">
-                                    @Html.Partial("_Quants", new[] { progQuant.ProgQuants[i] })
+                                    @await Html.PartialAsync("_Quants", new[] { progQuant.ProgQuants[i] })
                                 </div>
                             }
                         </div>

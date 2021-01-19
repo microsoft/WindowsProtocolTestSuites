@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -658,7 +659,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                         "Cannot resolve network address.",
                         "networkAddress");
                 }
-                IPAddress addr = addresses[0];
+
+                // Get the IPV4 address.
+                IPAddress addr = addresses.Where(addr => addr.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
+                if (addr == null)
+                {
+                    throw new ArgumentException("Cannot get IPV4 network address.", "networkAddress");
+                }
 
                 int port;
                 if (!int.TryParse(endpoint, out port))

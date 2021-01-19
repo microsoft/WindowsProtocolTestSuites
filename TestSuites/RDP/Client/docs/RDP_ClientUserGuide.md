@@ -22,7 +22,7 @@
     * [Set Up the Driver Computer](#set-up-the-driver-computer)
     * [Set Up a Windows-Based SUT](#set-up-a-windows-based-sut)
     * [Set Up a Windows-Based Domain Controller](#set-up-a-windows-based-domain-controller)
-    * [Installed Files and Folders](#installed-files-and-folders)
+    * [Extracted Files and Folders](#extracted-files-and-folders)
 * [Configuration](#configuration)
     * [Configure Windows-based Computers](#configure-windows-based-computers)
     * [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows)
@@ -63,7 +63,6 @@
     * [Test Run Issues](#test-run-issues)
     * [Most RDPEUSB Test Cases Failed](#most-rdpeusb-test-cases-failed)
     * [Most RDPEUDP and RDPEMT Test Cases Failed](#most-rdpeudp-and-rdpemt-test-cases-failed)
-    * [3 RDPBCGR Test Cases Must be Run Under Interactive Mode](#3-rdpbcgr-test-cases-must-be-run-under-interactive-mode)
     * [3 RDPEGFX Test Cases Require H264 Enabled on SUT](#3-rdpegfx-test-cases-require-h264-enabled-on-sut)
     * [Most Test Cases Failed When Using TLS/CredSSP protocol](#most-test-cases-failed-when-using-tlscredssp-protocol)
 
@@ -116,7 +115,7 @@ Note
 
 |  **Check**|  **Task**|  **Topic**|
 | -------------| -------------| ------------- |
-| | Download the test suite for the protocol implementation.| For a list of the files that the download package contains, see [Installed Files and Folders](#installed-files-and-folders).|
+| | Download the test suite for the protocol implementation.| For a list of the files that the download package contains, see [Extracted Files and Folders](#extracted-files-and-folders).|
 | | Confirm that your test environment and computers meet the requirements of the test suite.| For information about the requirements of the test suite, see [Requirements](#requirements). |
 | | Install the software prerequisites.| For information about software that must be installed on the computers in your test environment before the test suite is installed, see [Software](#software).|
 | | Set up the driver computer.| See [Set Up the Driver Computer](#set-up-the-driver-computer).|
@@ -155,12 +154,12 @@ This section describes the requirements for the test environment that are used t
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->The requirements in this section apply only to the Windows-based computers in the test environment.
+>The requirements in this section apply to the Windows-based or Linux-based computers in the test environment.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
 
->The driver computer must use a Windows-based operating system.
+>The driver computer use a Windows-based or Linux-based operating system.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -171,7 +170,7 @@ Note
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual:
 
-* A driver computer running any version of Windows which is compatible with Visual Studio 2017.
+* A driver computer must be running the Operating System that can install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/).
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -179,7 +178,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual:
 
-* A driver computer running any version of Windows which is compatible with Visual Studio 2017.
+* A driver computer must be running the Operating System that can install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/).
 
 A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -187,11 +186,6 @@ A computer configured as the SUT (System Under Test). It can be any version of W
 Note
 
 >If SUT computer is an implementation that is not based on Windows operating system or its version is below Windows 7, part of test cases cannot be executed automatically.
-
-![image2.png](./image/RDP_ClientUserGuide/image2.png)
-Note
-
->The RDP test suite has a known issue when used with the Windows 10 November Update. Previous releases of Windows 10 do not have this issue, and the issue should be fixed in the next update of Windows 10.
 
 ![image2.png](./image/RDP_ClientUserGuide/image2.png)
 Note
@@ -221,7 +215,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**|
 | -------------| ------------- |
-| Operating system| Any version of Windows which is compatible with Visual Studio 2017.|
+| Operating system| Operating System that can install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/).|
 | Memory| 2 GB RAM|
 | Disk space| 60 GB |
 
@@ -257,7 +251,7 @@ Note
 | Disk space| 60 GB|
 
 ### Software
-All of the following software must be installed on the driver computer _before_ the installation of this test suite.
+All of the following software must be installed on the driver computer _before_ you run this test suite.
 
 **Required Software**
 
@@ -366,35 +360,20 @@ Note
 
 This section describes how to set up the driver computer.
 
-![image6.png](./image/RDP_ClientUserGuide/image6.png)
-Important
-
->Microsoft Visual Studio 2017 (or later), Spec Explorer (build 3.5.3146.0) and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
-
 To set up the driver computer
 
-* Copy the test suite package to the driver computer.
+* [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/) must be installed on the driver computer before you run the test suite.
 
-* Extract the files of the test suite from the package.
-
-* Install the required and optional software described earlier.
-
-* Run **RDP-TestSuite-ClientEP.msi** on the driver computer.
-
-* On the **Options** dialog box, select **Install Test Suite on Driver Computer**.
+* Download and extract the **RDP-TestSuite-ClientEP.zip** package to the driver computer.
 
 ### Set Up a Windows Based SUT
 This section provides information about how to set up a SUT for use with this test suite.
 
 To set up a Windows-based SUT
 
-* Copy the test suite package to the Windows-based SUT.
+* [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/) must be installed on the SUT computer before you run the test suite.
 
-* Extract the files of the test suite from the package.
-
-* Run **RDP-TestSuite-ClientEP.msi** on the Windows-based SUT.
-
-* On the **Options** dialog box, select **Install Configuration Scripts on System Under Test (SUT)**.
+* Download and extract the **RDP-TestSuite-ClientEP.zip** package to the SUT computer.
 
 To set up a SUT that is not based on the Windows operating system, see [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows).
 
@@ -412,54 +391,18 @@ To set up a Windows-based DC
 
 To set up a DC that is not based on the Windows operating system, see [Configure Computers that are Not Based on Windows](#configure-computers-that-are-not-based-on-windows).
 
-### Installed Files and Folders
+### Extracted Files and Folders
 
-The installation process adds the following folders and files to the driver computer at C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \.
-
-![image2.png](./image/RDP_ClientUserGuide/image2.png)
-Note
-
->The  _&#60; version &#35;  &#62;_  placeholder indicates the installed build of the test suite.
+After you download the **RDP-TestSuite-ClientEP.zip** package to the driver computer and SUT,  you can extract it to a local path, for example: `C:\RDP-TestSuite-ClientEP` on Windows or `$HOME/RDP-TestSuite-ClientEP` on Linux .
 
 |  **File or Folder**|  **Description**|
 | -------------| ------------- |
-| Batch| Command files that you can use to run individual test cases or all test cases|
+| Batch| PowerShell scripts and shell scripts files that you can use to run individual test cases or all test cases|
 | Bin| Test suite binaries and configuration files|
-| Docs| The version of each of the following protocol specifications used to develop this test suite:|
-| | **MS-RDPBCGR.pdf** |
-| | **MS-RDPEUSB.pdf** |
-| | **MS-RDPRFX.pdf** |
-| | **MS-RDPEVOR.pdf** |
-| |  **MS-RDPEUDP.pdf** |
-| |  **MS-RDPEMT.pdf** |
-| |  **MS-RDPEI.pdf** |
-| |  **MS-RDPEGFX.pdf** |
-| |  **MS-RDPEDISP.pdf** |
-| |  **MS-RDPEDYC.pdf** |
-| |  **MS-RDPEGT.pdf** |
-| | **RDP_ClientUserGuide.md** – A user guide that explains how to install and configure the driver computer, the SUT, and the DC, as well as how to run test cases|
-| | **RDP_Overview_ClientTestDesignSpecification.md** – An overview document containing references to the test suite design for MS-RDPBCGR, MS-RDPEUSB, MS-RDPRFX, MS-RDPEVOR, MS-RDPEUDP, MS-RDPEMT, MS-RDPEI and MS-RDPEGFX.|
-| | **Test suite design documents**, containing conceptual information about the protocol, including probable use, relationships to other protocols, message flow, state diagrams, a short list of properties, and justification for the test and adapter design choices:|
-| |  **MS-RDPBCGR_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEUSB_ClientTestDesignSpecification.md** |
-| |  **MS-RDPRFX_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEVOR_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEUDP_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEMT_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEI_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEGFX_ClientTestDesignSpecification.md** |
-| |  **MS-RDPEDISP_ClientTestDesignSpecification.md** |
-| Scripts| Scripts that are used to set up and configure the driver computer, the Windows-based SUT, and the DC|
 | Data| Data files that used to by scripts to set up and configure the driver computer, the Windows-based SUT, and the DC|
+| Scripts| Scripts that are used to set up and configure the driver computer, the Windows-based SUT, and the DC|
+| TestData| Data files that used by test suite for sending to SUT|
 | License.rtf| The End User License Agreement|
-
-The installation process adds the following files and folders to the Windows-based SUT at C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \.
-
-|  **File or Folder**|  **Description**|
-| -------------| ------------- |
-| Scripts| Scripts that are used to set up and configure the driver computer, the Windows-based SUT, and the DC|
-| Data| Data files that used to by scripts to set up and configure the driver computer, the Windows-based SUT, and the DC|
-| License.rtf| The End User License Agreement.|
 
 ## Configuration
 
@@ -494,11 +437,11 @@ Note
 
 >	* In the right panel, double click **Administrator** and then uncheck the **Account is disabled** box.
 
->	* Right click **Administrator** and then click the **Set Password…** pop up menu, then ”Proceed” button, and then input the “Password01!” in the New Password and Confirm Password fields. Click OK to save the password for local administrator user.
+>	* Right click **Administrator** and then click the **Set Password…** pop up menu, then "Proceed" button, and then input the "Password01!" in the New Password and Confirm Password fields. Click OK to save the password for local administrator user.
 
->	* Or run commands: ”net user /active administrator” “net user administrator Password01!” to enable the local administrator and set the password.
+>	* Or run commands: "net user /active administrator" "net user administrator Password01!" to enable the local administrator and set the password.
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
+* Go to the extracted test suite folder, for example: C:\RDP-TestSuite-ClientEP\Scripts, and open the ParamConfig.xml file.
 
 * Review the properties shown in the following table, updating the property values as necessary.
 
@@ -513,9 +456,9 @@ Note
 | | Required value: **Administrator**|
 |  **userPwdInTC**| The password that is used to log on to the local administrator account of SUT.|
 | | Default value: **Password01!**|
-|  **domainName**| The domain name that is configured in DC.|
+|  **domainName**| The domain name that is configured in DC, leave it blank if not domain in the environment.|
 | | Default value: **contoso.com**|
-|  **dcComputerName**| The machine name or IP address of DC.|
+|  **dcComputerName**| The machine name or IP address of DC, leave it blank if not domain in the environment.|
 | | Default value: **DC01**|
 |  **tcComputerName**| The machine name or IP address of SUT.|
 | | Default value: **SUT01**|
@@ -530,11 +473,11 @@ Note
 |  **compressionInTC**| Determine whether compression is used in terminal client. If compression is used, set the value to **Yes**; otherwise, set the value to **No**. |
 | | Default value: **No**|
 
-* Start Windows PowerShell by right-clicking on the **Windows PowerShell** icon, and then click **Run as Administrator**, or from a Windows PowerShell command window, type: Start-process powershell -verb runAs
+* Start Windows PowerShell by right-clicking on the **Windows PowerShell** icon, and then click **Run as Administrator**, or from a Windows PowerShell command window, type: Start-process PowerShell -verb runAs
 
 * At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press **Enter**.
 
-* Type cd C:\MicrosoftProtocolTests\RDP \Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
+* Type cd C:\RDP-TestSuite-ClientEP\Scripts, and press **Enter**.
 
 * Type .\Enable-USBRedirection.ps1 and press **Enter** if you want to test MS-RDPEUSB cases.
 
@@ -570,7 +513,7 @@ Note
 
    * Enabling the 2 group policies will help you set up an AVC 444 supported environment.
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Data, and edit **Negotiate.RDP**, **DirectTls.RDP** and **DirectCredSSP.RDP** files respectively:
+* Go to C:\RDP-TestSuite-ClientEP\Data, and edit **Negotiate.RDP**, **DirectTls.RDP** and **DirectCredSSP.RDP** files respectively:
 
 	* Right-click on the RDP file, and then click **Edit**.
 
@@ -592,7 +535,7 @@ Note
 
 * Log on to the driver computer as Administrator.
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and open the ParamConfig.xml file.
+* Go to the test suite extracted folder for example: C:\RDP-TestSuite-ClientEP\Scripts, and open the ParamConfig.xml file.
 
 * Edit the properties as shown in the following table.
 
@@ -609,11 +552,11 @@ Note
 |  **CredSSPUser**| User name used in CredSSP authentication. |
 | | It should be a member of RDP User Group on Drive Computer.|
 | | Default value: **Administrator**|
-|  **CredSSPPwd**| The user password of “CredSSPUser**”.**|
+|  **CredSSPPwd**| The user password of "CredSSPUser**".**|
 | | Default value: **Password01!**|
-|  **domainName**| The domain name that is configured in DC.|
+|  **domainName**| The domain name that is configured in DC, leave it blank if not domain in the environment.|
 | | Default value: **contoso.com**|
-|  **dcComputerName**| The machine name or IP address of DC.|
+|  **dcComputerName**| The machine name or IP address of DC, leave it blank if not domain in the environment.|
 | | Default value: **DC01**|
 |  **tcComputerName**| The machine name or IP address of SUT.|
 | | Default value: **SUT01**|
@@ -626,18 +569,18 @@ Note
 |  **osVersion**| The operating system of terminal client.|
 | | It can be Windows, or NonWindows.|
 | | Default value: **Windows**|
-|  **workgroupDomain**| The test environment. If it is in domain environment, set the value to “Domain”; if it is in workgroup environment, set the value to “Workgroup”.|
+|  **workgroupDomain**| The test environment. If it is in domain environment, set the value to "Domain"; if it is in workgroup environment, set the value to "Workgroup".|
 | | Default value: **Workgroup**|
 |  **tcSystemDrive**| The system drive letter of SUT machine.|
 | | Only apply to Windows SUT.|
 | | Default value: **C**|
 
 * Start Windows PowerShell by right-clicking on the **Windows PowerShell** icon, and then click **Run as Administrator**, or from a Windows PowerShell command window, type:
-Start-process powershell -verb runAs
+Start-process PowerShell -verb runAs
 
 * At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press **Enter**.
 
-* Type cd C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Scripts, and press **Enter**.
+* Type cd C:\RDP-TestSuite-ClientEP\Scripts, and press **Enter**.
 
 * Type .\Config-DriverComputer.ps1, and press **Enter**.
 
@@ -754,7 +697,7 @@ You can define various options for the test suite, such as the following:
 
 * Set time limits on discrete test tasks and for test runs.
 
-To change configuration settings, edit the **RDP_ClientTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin.
+To change configuration settings, edit the **RDP_ClientTestSuite.deployment.ptfconfig** file. You can find this file in the directory C:\RDP-TestSuite-ClientEP\Bin.
 
 #### Required Configuration Settings
 
@@ -769,8 +712,8 @@ The following table describes the required properties for all the test cases.
 | | Default value: **Ipv4**|
 |  **RDP.Version**| The RDP version of the SUT.|
 | | Default value: **7.0**|
-|  **RDP.Security.Negotiation**| Indicates if the test suite uses the “Negotiation Approach” to select the security mechanism.|
-| | The possible values are **True** and **False.** If the value is set to **False**, it indicates that the “Direct Approach” will be used.|
+|  **RDP.Security.Negotiation**| Indicates if the test suite uses the "Negotiation Approach" to select the security mechanism.|
+| | The possible values are **True** and **False.** If the value is set to **False**, it indicates that the "Direct Approach" will be used.|
 | | Default value: **True**|
 |  **RDP.Security.Protocol**| The security protocol used to secure the RDP session. The possible values are **TLS**, **CredSSP** and **RDP**.|
 | | Default value: **TLS**|
@@ -798,7 +741,7 @@ The following table describes the required properties for all the test cases.
 |  **VerifySUTDisplay.Enable**| Enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
 | | Default value: **False**|
 |  **VerifySUTDisplay.BitmapSavePath**| Path used to save screenshot on SUT. If VerifySUTDisplay.Enable is false, this property should be ignored.|
-| | Default value: **..\..\ScreenShot\**|
+| | Default value: **../../ScreenShot/**|
 |  **VerifySUTDisplay.IQA.Algorithm**| The algorithm used to assess whether two images are similar, the algorithm should be one of:|
 | | **SSIM**: Structural Similarity Index|
 | | **MS-SSIM**: Multiscale-SSIM|
@@ -841,7 +784,9 @@ The following table describes the properties which are only required for test ca
 |  **Property**|  **Description**|
 | -------------| ------------- |
 |  **RDPRFX.Image**| Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be Screen, or the path of an image file.|
-| | Default value: **Screen**|
+| | Default value: **../TestData/Rdprfx.bmp**|
+|  **RDPRFXVideoMode.Image**| Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.|
+| | Default value: **../TestData/RdprfxVideoMode.bmp**|
 
 ##### Required Properties for RDPEUDP
 There’s no other required property for test cases of RDPEUDP.
@@ -872,13 +817,13 @@ The following table describes the properties which are only required for test ca
 | | The requirement for the image:|
 | | Size :  256  &#42;  256 pixels|
 | | The top-left 64  &#42;  64 rectangle should have some different color from background, like text, sign, … etc|
-| | Default value: **.\RdpegfxClearCodecTestImage.bmp**. This image is included in the RDP test suite.|
+| | Default value: **../TestData/RdpegfxClearCodecTestImage.bmp**. This image is included in the RDP test suite.|
 |  **RfxProgressiveCodecImage**| The path of an image file, which is used to do RemoteFx Progressive Codec test.|
 | | The requirement for the image:|
 | | Size :  256  &#42;  256 pixels|
-| | Default value: **.\RdpegfxRfxProgressiveCodecTestImage.bmp** **.** This image is included in the RDP test suite.|
+| | Default value: **../TestData/RdpegfxRfxProgressiveCodecTestImage.bmp** **.** This image is included in the RDP test suite.|
 |  **RdpegfxH264TestDataPath**| The path of data files, which is used to test H264 codec.|
-| | Default value: **.\**|
+| | Default value: **../TestData/**|
 
 ##### Required Properties for RDPEDISP
 
@@ -886,7 +831,7 @@ The following table describes the properties which are only required for test ca
 | -------------| ------------- |
 |  **RdpedispTestImage**| The path of an image file, which is used to do RDPEDISP test.|
 | | There are no specific requirements for the image.|
-| | Default value: **.\RdpedispTestImage.bmp**. This image is included in the RDP test suite.|
+| | Default value: **../TestData/RdpedispTestImage.bmp**. This image is included in the RDP test suite.|
 |  **originalDesktopWidth**| The original width of screen resolution.|
 | | Default value: **1024**|
 |  **originalDesktopHeight**| The original height of screen resolution|
@@ -929,7 +874,7 @@ This test suite includes command files that you can use to complete some basic t
 
 You can find all command files for test cases in the following directories:
 
-* C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch
+* C:\RDP-TestSuite-ClientEP\Batch
 
 You can run these command files at the command prompt or via the graphical user interface.
 
@@ -941,13 +886,13 @@ Test cases control the remote desktop client on the SUT to generate events, such
 
 **To configure the test suite mode for Windows-based clients:**
 
-* Open _RDP_ClientTestSuite.ptfconfig_ configuration file from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin
+* Open _RDP_ClientTestSuite.ptfconfig_ configuration file from C:\RDP-TestSuite-ClientEP\Bin
 
-* Find the  &#60; Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir ="." / &#62;  option in the **adapters** node. The default mode is **PowerShell**. To use **interactive** mode, replace it to  &#60; Adapter xsi:type="interactive" name="IRdpSutControlAdapter" / &#62; .
+* Find the  &#60; Adapter xsi:type="PowerShell" name="IRdpSutControlAdapter" scriptdir =".\SUTControlAdapter" / &#62;  option in the **adapters** node. The default mode is **PowerShell**. To use **interactive** mode, replace it to  &#60; Adapter xsi:type="interactive" name="IRdpSutControlAdapter" / &#62; .
 
 * To use **protocol-based** mode, replace it to  &#60; Adapter xsi:type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/ &#62; .
 
-When using the PowerShell mode, test cases control the client automatically via the PowerShell script. You can change the following scripts to customize the PowerShell operation.
+When using the PowerShell mode, test cases control the client automatically via the PowerShell Core script. You can change the following scripts to customize the PowerShell operation.
 
 * RDPConnectWithDirectCredSSP.ps1
 
@@ -969,28 +914,13 @@ When using the PowerShell mode, test cases control the client automatically via 
 
 * TriggerInputEvents.ps1
 
-When using the interactive mode, test cases will pop up dialogs and guide you to perform testing steps manually. The implementation of PowerShell scripts is not necessary when use this mode.
+When using the interactive mode, test cases will pop up dialogs and guide you to perform testing steps manually. The implementation of PowerShell Core scripts is not necessary when use this mode.
 
-When using the protocol-based mode, test cases use a protocol-based manner to control the RDP client. An agent must be implemented on SUT according to [RDP SUT control protocol](SUT\_Remote\_Control\_Protocol.pdf), the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
+When using the protocol-based mode, test cases use a protocol-based manner to control the RDP client. An agent must be implemented on SUT according to [RDP SUT control protocol](..\..\RDP SUT control protocol\Docs\SUT_Remote_Control_Protocol.md), the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
 
 **To configure the test suite mode for other operating systems:**
 
-If running test cases on operating systems that are not based on Windows, you can still use the three modes. However, if you are using PowerShell, you must do the following:
-
-* Implement all the features that are listed in C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin\NonWindowsSUTImplementation\
-
-* Copy and replace all files from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin\NonWindowsSUTImplementation\**to** C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin\
-
-![image2.png](./image/RDP_ClientUserGuide/image2.png)
-Note
-
->The following RDPBCGR test cases must be run under “interactive” mode, and will fail when running under “Powershell” mode
-
->	* BVT\_ClientInputTest_FastPath
-
->	* BVT\_ClientInputTest_SlowPath
-
->	* S1\_ConnectionTest\_Disconnection\_PositiveTest_ClientInitiated
+If running test cases on operating systems that are not based on Windows, you can still use the three modes.
 
 #### Configuration for RDPEI
 
@@ -998,7 +928,7 @@ Except common events, MS-RDPEI test cases need to control remote desktop client 
 
 **To configure the test suite mode for remote desktop clients:**
 
-* Open _RDP_ClientTestSuite.ptfconfig_ configuration file from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin
+* Open _RDP_ClientTestSuite.ptfconfig_ configuration file from C:\RDP-TestSuite-ClientEP\Bin
 
 * Find the  &#60; Adapter xsi:type="interactive" name="IRdpeiSUTControlAdapter" / &#62;  option in the **adapters** node. The default mode is **interactive**.
 
@@ -1014,69 +944,71 @@ When using the **protocol-based** mode, an agent is also need on SUT according t
 
 #### Configuration for RDPEDISP
 
-For MS-RDPEDISP, test suite also need to control SUT to trigger some specific events. There are also three modes to control the client: **PowerShell, interactive,** and **protocol-based**.
+For MS-RDPEDISP, test suite also need to control SUT to trigger some specific events. There are also three modes to control the client: **PowerShell, interactive,protocol-based,** and **shell**.
 
 **To configure the test suite mode for remote desktop clients:**
 
-* Open _RDP_ClientTestSuite.ptfconfig_ configuration file from C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Bin
+* Open _RDP_ClientTestSuite.ptfconfig_ configuration file from C:\RDP-TestSuite-ClientEP\Bin
 
-* Find  &#60; Adapter xsi:type="powershell" name="IRdpedispSUTControlAdapter" scriptdir="." / &#62;  option in the **adapters** node. The default mode is **powershell**.
+* Find  &#60; Adapter xsi:type="PowerShell" name="IRdpedispSUTControlAdapter" scriptdir=".\SUTControlAdapter" / &#62;  option in the **adapters** node. The default mode is **PowerShell**.
 
 * To use **interactive** mode, replace it to &#60; Adapter xsi:type="interactive" name="IRdpedispSUTControlAdapter" / &#62; .
 
 * To use **protocol-based** mode, replace it to &#60; Adapter xsi:type="managed" name="IRdpedispSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpedispSUTControlAdapter"/ &#62;
 
-When using the **powershell** mode, test cases automatically trigger SUT to connect to the test suite and change display configuration of SUT.
+* To use **shell** mode, replace it to &#60; Adapter xsi:type="shell" name="IRdpedispSUTControlAdapter" scriptdir ="./ShellSUTControlAdapter" / &#62; .
+
+When using the **PowerShell** mode, test cases automatically trigger SUT using [PowerShell Core Remoting over SSH](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/Run-Test-Suites-With-Enabling-PowerShell-Core-Remoting-Over-SSH) to connect to the test suite and change display configuration of SUT.
 
 When using the **interactive** mode, test cases pop up dialogs and guide you to perform testing steps manually.
 
-When using the **protocol-based** mode, an agent is also needed on SUT according to **SUT\_Remote\_Control\_Protocol.pdf**, the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
+When using the **protocol-based** mode, an agent is also needed on SUT according to [RDP SUT control protocol](..\..\RDP SUT control protocol\Docs\SUT_Remote_Control_Protocol.md), the agent is used to receive SUT control request from test suite and operate RDP client on SUT accordingly.
+
+When using the **shell** mode, test cases often trigger Linux SUT shell scripts.
 
 ### Run the Smoke Test
 
 This test suite includes a set of basic tests called build verification tests (BVTs). Together these test cases perform a simple smoke test to confirm that the test suite is properly configured and ready to run. Use the steps below to run all scenario0 test cases.
 
-Note: Desktop shortcuts referenced below are created during the installation process.
-
 **To run all smoke tests**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT"**.
 
 **To run the smoke test of MS-RDPBCGR**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPBCGR"**.
 
 **To run the smoke test of MS-RDPEUSB**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEUSB**.
 
 **To run the smoke test of MS-RDPRFX**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPRFX**.
 
 **To run the smoke test of MS-RDPEVOR**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEVOR**.
 
 **To run the smoke test of MS-RDPEUDP**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEUDP**.
 
 **To run the smoke test of MS-RDPEMT**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEMT**.
 
 **To run the smoke test of MS-RDPEI**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEI**.
 
 **To run the smoke test of MS-RDPEGFX**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEGFX**.
 
 **To run the smoke test of MS-RDPEDISP**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunBVTTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=BVT&TestCategory=RDPEDISP**.
 
 ### Run All Test Cases
 
@@ -1084,44 +1016,43 @@ Use the steps below to run all test cases.
 
 **To run all test cases**
 
-* From the desktop of the driver computer, double-click the **Run All Test Cases** shortcut.
-* Alternatively, go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run the PowerShell command **.\RunAllTestCases.ps1**.
 
 **To run all test cases of MS-RDPBCGR**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpbcgr_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPBCGR**.
 
 **To run all test cases of MS-RDPEUSB**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeusb_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEUSB**.
 
 **To run all test cases of MS-RDPRFX**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdprfx_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPRFX**.
 
 **To run all test cases of MS-RDPEVOR**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpevor_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEVOR**.
 
 **To run all test cases of MS-RDPEUDP**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpeudp_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEUDP**.
 
 **To run all test cases of MS-RDPEMT**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpemt_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEMT**.
 
 **To run all test cases of MS-RDPEI**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpei_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEI**.
 
 **To run all test cases of MS-RDPEGFX**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpegfx_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEGFX**.
 
 **To run all test cases of MS-RDPEDISP**
 
-* Go to C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch, and double-click the **Rdpedisp_RunAllTestCases.cmd** file.
+* Go to C:\RDP-TestSuite-ClientEP\Batch, and run PowerShell command **.\RunTestCasesByFilter.ps1 -Filter "TestCategory=RDPEDISP**.
 
 ### Run Specified Test Cases
 
@@ -1129,28 +1060,28 @@ Use the step below to run specific test cases.
 
 **To run specified test cases**
 
-* From the command prompt, run C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\CommonRunSingleCase.cmd\ &#60; TestCaseName &#62; to run specific test case.
+* From the PowerShell command, run C:\RDP-TestSuite-ClientEP\Batch\RunTestCasesByFilter.ps1 -Filter "Name=&#60; TestCaseName &#62;" to run specific test case.
 
 ### Example of How to Run Test Case Under Interactive Mode
 The following example illustrates how to run test case under interactive mode.
 
 On the driver computer, configure the test suite mode to interactive mode. For the details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
 
-* On the driver computer, from the directory C:\MicrosoftProtocolTests\RDP\Client-Endpoint\ _&#60; version &#35;  &#62;_ \Batch\_RDPBCGR_\, double-click the **BVT_ConnectionTest_CapabilityExchange_PositiveTest.cmd** file to run this test case.
+* On the driver computer, from the PowerShell command, run C:\RDP-TestSuite-ClientEP\Batch\RunTestCasesByFilter.ps1 -Filter "Name=BVT_ConnectionTest_CapabilityExchange_PositiveTest" to run this test case.
 
-* When the test case start to run, a dialog will be popped up, as following:
+* When the test case start to run, a new console will be popped up, as following:
 
 ![image7.jpg](./image/RDP_ClientUserGuide/image7.jpg)
 
-Please read the **Help Message** shown in the dialog to perform the operations manually. In this case, you will do:
+Please read the **Help Message** shown on the console to perform the operations manually. In this case, you will do:
 
 	On the SUT, start a remote desktop (RDP) connection to the driver computer using the negotiation-based approach, and either of the TLS, CredSSP or RDP standard security protocol.
 
-	Once you start the RDP connection successfully, on the driver computer, fill a non-negative number (such as 0) in Return Value field and click Succeed button. Otherwise, if you cannot start the RDP connection, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
+	Once you start the RDP connection successfully, on the driver computer, input 'Y' and press "Enter" key on the console. Otherwise, if you want to abort the case, input 'N' and press "Enter" key on the console.
 
-	The test case will continue to run if you click the Succeed button, otherwise, it will end and fail.
+	The test case will continue to run if you press "Enter" key, otherwise, it will end and fail.
 
-* After the test finished, another dialog will be popped up on the driver computer, as following:
+* After the test finished, another console will be popped up on the driver computer, as following:
 
 ![image8.jpg](./image/RDP_ClientUserGuide/image8.jpg)
 
@@ -1158,14 +1089,14 @@ According to the **Help Message**, you will do:
 
 	On the SUT, close all the RDP connections to driver computer.
 
-	On the driver computer, fill a non-negative number (such as 0) in Return Value and click Succeed if you close all the RDP connections successfully. Otherwise, if you cannot stop any of the existing RDP connections, fill a negative number (such as -1) in Return Value field, and fill the error message in the Failure Message field, then click Fail.
+	On the driver computer, input 'Y' on the console and press "Enter" key if you close all the RDP connections successfully. Otherwise, if you want to abort the case, input 'N' and press "Enter" key on the console.
 
 ### Example of How to Run RDPEI Test Case Under Enhanced Interactive Mode
-The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under powershell mode.
+The following example illustrates how to run MS-RDPEI test case under **enhanced interactive** mode with **connection** under PowerShell mode.
 
 On the driver computer, configure the MS-RDPEI test suite mode to enhanced interactive mode. For the details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).
 
-* On the driver computer, run the test case named **Rdpei_TouchInputTest_Positive_SingleTouchEvent**.
+* On the driver computer, From the PowerShell command, run C:\RDP-TestSuite-ClientEP\Batch\RunTestCasesByFilter.ps1 -Filter "Name=TouchInputTest_Positive_SingleTouchEvent".
 
 * When the test case start to run, the SUT will start a remote desktop (RDP) connection to the driver computer using the negotiation-based approach, and either of the TLS, CredSSP or RDP standard security protocol. The remote desktop window on SUT will show as follows:
 
@@ -1222,7 +1153,11 @@ Open the Protocol Test Manager from the shortcut on the desktop.
 
 ![image11.png](./image/RDP_ClientUserGuide/image11.png)
 
-Only the installed protocol test suite is usable. The first time you need to click “Configure Wizard” to configure the protocol test suite. Once the test suite is configured with PTM, you can click “Run” to run the test suite with last settings.
+You need to select a protocol test suite as following.
+
+![image11-2.png](./image/RDP_ClientUserGuide/image11-2.png)
+
+Then it will show "Configure Wizard" button, and you need to click the button to configure the protocol test suite. Once the test suite is configured with PTM, you can click "Run" to run the test suite with last settings.
 
 ### Test Suite Introduction
 
@@ -1308,7 +1243,7 @@ You may right click on the test cases to uncheck all the test cases.
 
 ![image22.png](./image/RDP_ClientUserGuide/image22.png)
 
-Click “Run All” to run all the test cases. Click “Run Selected Test” to run only the checked test cases.
+Click "Run All" to run all the test cases. Click "Run Selected Test" to run only the checked test cases.
 
 ![image23.png](./image/RDP_ClientUserGuide/image23.png)
 
@@ -1344,9 +1279,9 @@ You can also save the test case list in a text file.
 
 Protocol Test Manager has a command line interface (ptmcli.exe) which can be used for automation test run.
 
-The command line interface ptmcli.exe is located in the bin folder of the Protocol Test Framework installation folder. To use PTM, you need to provide a profile using –p option.
+The command line interface ptmcli.exe is extracted from [PTMCli release](https://github.com/microsoft/WindowsProtocolTestSuites/releases). To use PTM, you need to provide a profile using –p option.
 
-You can use ptmcli.exe –h to show more information.
+You can use ptmcli.exe –-help to show more information.
 
 ![image27.png](./image/RDP_ClientUserGuide/image27.png)
 
@@ -1404,7 +1339,7 @@ This section describes how to troubleshoot common test suite issues.
 
 | | |
 | -------------| -------------|
-| **PROBLEM**| Test cases failed with message like “Timeout when expecting  &#60; Message Type &#62; ”.|
+| **PROBLEM**| Test cases failed with message like "Timeout when expecting  &#60; Message Type &#62; ".|
 | **CAUSE**| For Windows RDP client, the test suites must be run using the Administrator account.|
 | | For non-Windows RDP client, the SUT control adapter may be not implemented properly. |
 | **RESOLUTION**| For Windows RDP client, enable Administrator and log on.|
@@ -1413,7 +1348,7 @@ This section describes how to troubleshoot common test suite issues.
 
 | | |
 | -------------| -------------|
-| **PROBLEM**| Test cases failed with exception “The handle is invalid”.|
+| **PROBLEM**| Test cases failed with exception "The handle is invalid".|
 | **CAUSE**| The driver computer’s screen is locked when running test cases. |
 | **RESOLUTION**| Do not lock the screen of the driver computer when running test cases. |
 
@@ -1432,17 +1367,6 @@ This section describes how to troubleshoot common test suite issues.
 | **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.|
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. |
 | **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configure the Test Suite](#configure-the-test-suite)|
-
-### 3 RDPBCGR Test Cases Must be Run Under Interactive Mode
-
-| | |
-| -------------| -------------|
-| **PROBLEM**| The following RDPBCGR test cases will fail when running under “Powershell” mode:|
-| | BVT_ClientInputTest_FastPath |
-| | BVT_ClientInputTest_SlowPath |
-| | S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated|
-| **CAUSE**| These test cases must be run under the “interactive” mode.|
-| **RESOLUTION**| Use the “interactive” mode when running these test cases. For more details, please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
 
 ### 3 RDPEGFX Test Cases Require H264 Enabled on SUT
 

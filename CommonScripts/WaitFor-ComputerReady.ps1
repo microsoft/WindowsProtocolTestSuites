@@ -135,7 +135,14 @@ for (; $retryCount -lt $timeoutSec/2; $retryCount++)
     #----------------------------------------------------------------------------
     # Remove the credential from cache.
     #----------------------------------------------------------------------------
-    cmd /c $disconnectCmd
+    try
+    {
+        cmd /c $disconnectCmd
+    }
+    catch
+    {
+        Write-Host Write-Host "disconnectCmd failed:$_"
+    }
 
     #----------------------------------------------------------------------------
     # Reset client cache because computer's IP address may change after restart
@@ -147,7 +154,14 @@ for (; $retryCount -lt $timeoutSec/2; $retryCount++)
     # Setup the credential to access remote computer
     #----------------------------------------------------------------------------
     Write-Host "." -noNewLine -foregroundcolor Yellow
-    cmd.exe /c $connectCmd
+    try
+    {
+        cmd.exe /c $connectCmd
+    }
+    catch
+    {
+        Write-Host Write-Host "connectCmd failed:$_"
+    }
 	
 	sleep 3
 
@@ -159,7 +173,14 @@ for (; $retryCount -lt $timeoutSec/2; $retryCount++)
         if (($signalFileName -eq $null) -or ($signalFileName -eq ""))
         {
             $isReady = $True
-            cmd /c $disconnectCmd
+            try
+            {
+                cmd /c $disconnectCmd
+            }
+            catch
+            {
+                Write-Host Write-Host "disconnectCmd failed:$_"
+            }
             break
         }
 
@@ -170,7 +191,14 @@ for (; $retryCount -lt $timeoutSec/2; $retryCount++)
         if ( [System.IO.File]::Exists( $SignalFileFullName ) -eq $true )
         {
             $isReady = $True
-            cmd /c $disconnectCmd
+            try
+            {
+                cmd /c $disconnectCmd
+            }
+            catch
+            {
+                Write-Host Write-Host "disconnectCmd failed:$_"
+            }
             break
         }
 
@@ -183,7 +211,14 @@ for (; $retryCount -lt $timeoutSec/2; $retryCount++)
             if ( [System.IO.File]::Exists( $errorSignalFileFullName ) -eq $true )
             {
                 $errorFound = $True
-                cmd /c $disconnectCmd
+                try
+                {
+                    cmd /c $disconnectCmd
+                }
+                catch
+                {
+                    Write-Host Write-Host "disconnectCmd failed:$_"
+                }
                 break
             }
         }
