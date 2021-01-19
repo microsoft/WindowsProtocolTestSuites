@@ -5,10 +5,10 @@
 # and the client should use Direct Approach with CredSSP as the security protocol.
 
 # Check SUT started the PS Remoting
-$isSutPSRemotingStarted = .\Check-PSRemoting.ps1 $PtfProp_SUTName
+$isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to start RDP connection (Direct CSSP) remotely
-$returnValue = .\Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithDirectCredSSPFullScreen_Task $PtfProp_SUTUserName $PtfProp_SUTUserPassword
+$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithDirectCredSSPFullScreen_Task $PtfProp_SUTUserName
 return $returnValue
 

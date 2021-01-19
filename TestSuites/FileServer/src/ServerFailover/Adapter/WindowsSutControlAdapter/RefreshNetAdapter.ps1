@@ -7,23 +7,20 @@
 [string]$userName = $PtfProp_Common_AdminUserName
 [string]$password = $PtfProp_Common_PasswordForAllUsers
 
-
-$SecurePassword = New-Object System.Security.SecureString
-if($domain -eq $null -or $domain.trim() -eq "")
+if($nodeName -notmatch "\.")
 {
-    $account = $userName
-}
-else
-{
-    $NetBIOSName = $Domain.Split(".")[0]
-    $account = "$NetBIOSName\$UserName"
+	$nodeName = "$nodeName.$domain"
 }
 
-for($i=0; $i -lt $password.Length; $i++)
+try
 {
-    $SecurePassword.AppendChar($password[$i])
+    Get-PSSession|Remove-PSSession
+    $psSession=New-PSSession -HostName $nodeName -UserName "$domain\$userName"
 }
-$credential = New-Object system.Management.Automation.PSCredential($account,$SecurePassword)
+catch
+{
+    Get-Error
+}
 
 $command = {
     Param
@@ -37,11 +34,19 @@ $command = {
 	Enable-NetAdapter -Name $adapter.Name -Confirm:$false
 }
 
+$ret = $FALSE
 try
 {
-    invoke-Command -ComputerName $nodeName -Credential $credential -scriptblock $command -ArgumentList $IPAddress
+    $result = Invoke-Command -Session $psSession -ScriptBlock $command -ArgumentList $IPAddress
+    $ret = $TRUE
 }
 catch
 {
+	Get-Error
     throw "Failed to refresh NetAdapter."
 }
+finally
+{
+    Get-PSSession|Remove-PSSession
+}
+return $ret

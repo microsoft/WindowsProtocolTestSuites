@@ -80,7 +80,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cssp
             | ServerSecurityContextAttribute.ReplayDetect
             | ServerSecurityContextAttribute.SequenceDetect
             | ServerSecurityContextAttribute.Confidentiality
-            | ServerSecurityContextAttribute.AllocMemory
             | ServerSecurityContextAttribute.ExtendedError
             | ServerSecurityContextAttribute.Stream;
 

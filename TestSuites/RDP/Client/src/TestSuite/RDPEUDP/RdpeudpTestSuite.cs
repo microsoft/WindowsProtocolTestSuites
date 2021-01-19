@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Protocols.TestSuites.Rdpeudp
 {
@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 rdpeudpSocketL.Close();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
-            this.rdpbcgrAdapter.StopRDPListening();
+            this.rdpbcgrAdapter?.StopRDPListening();
         }
         #endregion
 
@@ -863,5 +863,28 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         }
 
         #endregion
+
+        private void CheckPlatformCompatibility(ref TransportMode[] transportModes)
+        {
+            var applicableTransportModes = transportModes.AsEnumerable();
+
+            // Check lossy transport mode, which is currently only supported on Windows.
+            if (applicableTransportModes.Any(transportMode => transportMode == TransportMode.Lossy))
+            {
+                if (!OperatingSystem.IsWindows())
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.Comment, "The lossy transport mode is only supported on Windows.");
+
+                    applicableTransportModes = applicableTransportModes.Where(transportMode => transportMode != TransportMode.Lossy);
+                }
+            }
+
+            if (applicableTransportModes.Count() == 0)
+            {
+                BaseTestSite.Assume.Inconclusive("No transport mode is applicable to the running operating system.");
+            }
+
+            transportModes = applicableTransportModes.ToArray();
+        }
     }
 }

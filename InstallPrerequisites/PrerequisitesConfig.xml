@@ -2,6 +2,9 @@
   <tools>
     <tool Type="Custom" name="VisualStudio" FileName="vs_community.exe" url="https://aka.ms/vs/16/release/vs_community.exe" command="InstallVisualStudio.ps1" />
     <tool Type="Custom" name="NetworkDirectDDK" FileName="NetworkDirect_DDK.zip" url="https://download.microsoft.com/download/4/B/8/4B8C0949-F5C0-4E14-BA40-49073F727A8B/NetworkDirect_DDK.zip" Command="ExtractHeaderFilesFromDDK.ps1"/>
+    <tool Type="Installer" name="Microsoft .NET SDK 5.0" FileName="dotnetsdk5.exe" url="https://download.visualstudio.microsoft.com/download/pr/acff3e6a-d8d6-4c2a-a0cb-1853b58055cc/7910b2a414caa17d30b0cb82583cb542/dotnet-sdk-5.0.101-win-x64.exe" version="5.0" BackwardCompatible="true" arguments="/q" />
+    <tool Type="Installer" name="Powershell 7" FileName="PowershellCore.msi" version="7.1" url="https://github.com/PowerShell/PowerShell/releases/download/v7.1.0/PowerShell-7.1.0-win-x64.msi" BackwardCompatible="true" arguments="/q" />
+    <tool Type="Custom" name="Win32-OpenSSH" FileName="Win32OpenSSH.zip" url="https://github.com/PowerShell/Win32-OpenSSH/releases/download/v8.1.0.0p1-Beta/OpenSSH-Win64.zip" Command="InstallWin32OpenSSH.ps1"/>
   </tools>
   <BuildTestSuites>
     <tool>VisualStudio</tool>
@@ -20,7 +23,9 @@
     <tool>VisualStudio</tool>
   </SMBD>
   <RDP>
-    <tool>VisualStudio</tool>
+    <tool>DotNet5</tool>
+    <tool>PowershellCore</tool>
+    <tool>Win32-OpenSSH</tool>
   </RDP>
   <BranchCache>
     <tool>VisualStudio</tool>

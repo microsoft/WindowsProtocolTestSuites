@@ -69,8 +69,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
         protected override void TestCleanup()
         {
-            client.Disconnect();
-            DeleteExistingFile(FilePermissionTestShareUncPath, tempFileName);
+            client?.Disconnect();
+            if (FilePermissionTestShareUncPath != null)
+            {
+                DeleteExistingFile(FilePermissionTestShareUncPath, tempFileName);
+            }
             base.TestCleanup();
         }
         #endregion

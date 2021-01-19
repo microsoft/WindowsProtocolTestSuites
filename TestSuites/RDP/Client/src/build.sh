@@ -51,8 +51,8 @@ do
 done
 
 mkdir -p $OutDir/TestData
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.bmp $OutDir/TestData -f
-cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/*.xml $OutDir/TestData -f
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/TestData/*.bmp $OutDir/TestData -f
+cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/TestData/*.xml $OutDir/TestData -f
 cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEDISP/RdpedispEnhancedAdapterImages/*.png $OutDir/TestData -f
 cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/*.* $OutDir/TestData -f
 cp -R $TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestData/BaseImage/* $OutDir/TestData -f
@@ -68,6 +68,8 @@ then
     echo "Failed to build RDP Client test suite"
     exit 1
 fi
+
+cp $TestSuiteRoot/AssemblyInfo/.version $OutDir/Bin -f
 
 echo ==========================================================
 echo          Build RDP Client test suite successfully        

@@ -666,13 +666,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             byte[] data = PduMarshaler.Marshal(packet, false);
             SendBytesByUDP(data);
 
-            lock (outPacketDic)         // Deal with outPacketDic and retransmit packet.
+            // Deal with outPacketDic and retransmit packet.
+            if (outPacketDic.ContainsKey(packet.sourceHeader.Value.snSourceStart))
             {
-                if (outPacketDic.ContainsKey(packet.sourceHeader.Value.snSourceStart))
-                {
-                    outPacketDic[packet.sourceHeader.Value.snSourceStart].retransmitTimes++;
-                    outPacketDic[packet.sourceHeader.Value.snSourceStart].SendTime = DateTime.Now;
-                }
+                outPacketDic[packet.sourceHeader.Value.snSourceStart].retransmitTimes++;
+                outPacketDic[packet.sourceHeader.Value.snSourceStart].SendTime = DateTime.Now;
             }
             return true;
         }
@@ -1186,9 +1184,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         private void InitTimers()
         {
-            retransmitTimer = new Timer(ManageRetransmit, null, 0, this.SocketConfig.retransmitTimerInterval);
-            keepAliveTimer = new Timer(ManageKeepLive, null, 0, this.SocketConfig.keepAliveTimerInterval);
-            delayACKTimer = new Timer(ManageDelayAck, null, 0, this.SocketConfig.delayAckInterval);
+            // Wrap handlers in try-catch blocks to ignore exceptions thrown in handler threads.
+            retransmitTimer = new Timer((object state) => { try { ManageRetransmit(state); } catch { } }, null, 0, this.SocketConfig.retransmitTimerInterval);
+            keepAliveTimer = new Timer((object state) => { try { ManageKeepLive(state); } catch { } }, null, 0, this.SocketConfig.keepAliveTimerInterval);
+            delayACKTimer = new Timer((object state) => { try { ManageDelayAck(state); } catch { } }, null, 0, this.SocketConfig.delayAckInterval);
         }
 
         /// <summary>
@@ -1238,15 +1237,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
             TimeSpan retransmitDuration = ((RTT + RTT) > _retransmitDuration) ? (RTT + RTT) : _retransmitDuration;
             // Packets may need to retransmit must in send window
-            uint curpos = SendWindowStartPosition;
-            while (outPacketDic.ContainsKey(curpos)
-                && (outPacketDic[curpos].retransmitTimes > 0 || outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now))
+            lock (outPacketDic)
             {
-                if (outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now)
+                uint curpos = SendWindowStartPosition;
+                while (outPacketDic.ContainsKey(curpos)
+                    && (outPacketDic[curpos].retransmitTimes > 0 || outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now))
                 {
-                    RetransmitPacket(outPacketDic[curpos].Packet);
+                    if (outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now)
+                    {
+                        RetransmitPacket(outPacketDic[curpos].Packet);
+                    }
+                    curpos++;
                 }
-                curpos++;
             }
         }
 

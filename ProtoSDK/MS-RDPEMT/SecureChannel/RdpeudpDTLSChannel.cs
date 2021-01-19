@@ -6,11 +6,13 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
 {
+    [SupportedOSPlatform("Windows")]
     public class RdpeudpDTLSChannel : ISecureChannel
     {
         #region Private variables
@@ -87,6 +89,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
         /// <param name="eudpSocket">RDPEUDP Socket, which is transport</param>
         public RdpeudpDTLSChannel(RdpeudpSocket eudpSocket)
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                throw new PlatformNotSupportedException("The implementation of RdpeudpDTLSChannel is only supported on Windows.");
+            }
+
             if (eudpSocket == null || eudpSocket.TransMode == TransportMode.Reliable)
             {
                 throw new NotSupportedException("RdpeudpSocket is null or it is a socket for reliable RDPEUDP connection.");
@@ -483,7 +490,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                     null,
                     ServerSecurityContextAttribute.ReplayDetect | ServerSecurityContextAttribute.SequenceDetect |
                      ServerSecurityContextAttribute.Confidentiality | ServerSecurityContextAttribute.ExtendedError |
-                     ServerSecurityContextAttribute.AllocMemory | ServerSecurityContextAttribute.Datagram,
+                     ServerSecurityContextAttribute.Datagram,
                     SecurityTargetDataRepresentation.SecurityNativeDrep);
 
                 // First accept.
@@ -534,7 +541,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                     (string)targetHost,
                     ClientSecurityContextAttribute.ReplayDetect | ClientSecurityContextAttribute.SequenceDetect |
                      ClientSecurityContextAttribute.Confidentiality | ClientSecurityContextAttribute.ExtendedError |
-                     ClientSecurityContextAttribute.AllocMemory | ClientSecurityContextAttribute.Datagram |
+                     ClientSecurityContextAttribute.Datagram |
                      ClientSecurityContextAttribute.UseSuppliedCreds,
                     SecurityTargetDataRepresentation.SecurityNativeDrep);
 

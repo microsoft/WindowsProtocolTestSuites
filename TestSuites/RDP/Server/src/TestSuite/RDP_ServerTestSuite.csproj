@@ -25,17 +25,17 @@
     <ProjectReference Include="..\Adapter\RDP_ServerAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="RDP_ServerTestSuite.deployment.ptfconfig">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="RDP_ServerTestSuite.ptfconfig">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="System.Management" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="RDP_ServerTestSuite.deployment.ptfconfig">
+      <SubType>Designer</SubType>
+    </None>
+    <None Update="RDP_ServerTestSuite.ptfconfig">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
 </Project>

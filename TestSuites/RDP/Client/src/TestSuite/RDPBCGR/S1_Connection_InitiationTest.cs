@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Test Implementation
             if (transportProtocol != EncryptedProtocol.NegotiationCredSsp && transportProtocol != EncryptedProtocol.DirectCredSsp)
             {
-                this.TestSite.Assert.Inconclusive("This case requires using CredSSP encrypted protocol");
+                this.TestSite.Assume.Inconclusive("This case requires using CredSSP encrypted protocol");
             }
             this.selectedProtocol = selectedProtocols_Values.PROTOCOL_HYBRID_EX;
             

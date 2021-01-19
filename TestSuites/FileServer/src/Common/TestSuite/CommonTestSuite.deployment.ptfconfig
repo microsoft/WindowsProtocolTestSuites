@@ -7,18 +7,7 @@
     <!--
         Tag named Choice is used for the ComboBox in UI design
         Tag named Description is used for the comment
-    -->
-
-    <Group name="PTF">
-      <Group name="NetworkCapture">
-        <Property name="StopRunningOnError" value="false">
-          <Choice>true,false</Choice>
-          <Description>
-            If it is true, fail the test case when error happens in running network capture commands. Otherwise, ignore the error.
-          </Description>
-        </Property>
-      </Group>
-    </Group>
+    -->    
 
     <Group name="Common">
 
