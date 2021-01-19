@@ -1,0 +1,59 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - ProtoSDK/Asn1Base/*
+      - ProtoSDK/Common/*
+      - ProtoSDK/CryptoLib/*
+      - ProtoSDK/KerberosLib/*
+      - ProtoSDK/Messages/*
+      - ProtoSDK/MS-CSSP/*
+      - ProtoSDK/MS-NLMP/*
+      - ProtoSDK/MS-RDPBCGR/*
+      - ProtoSDK/MS-RDPEDYC/*
+      - ProtoSDK/MS-RDPEFS/*
+      - ProtoSDK/MS-RDPEGFX/*
+      - ProtoSDK/MS-RDPEMT/*
+      - ProtoSDK/MS-RDPEUDP/*
+      - ProtoSDK/MS-RDPRFX/*
+      - ProtoSDK/MS-SPNG/*
+      - ProtoSDK/Sspi/*
+      - ProtoSDK/SspiLib/*
+      - ProtoSDK/SspiService/*
+      - ProtoSDK/TransportStack/*
+      - TestSuites/RDP/Tools/RDPToolSet/CodecToolSet.Core/*
+      - TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.Web/*
+
+jobs:
+  - job:
+    displayName: Build RDPToolSet
+    workspace:
+      clean: true
+    timeoutInMinutes: 0
+    steps:
+      - checkout: self
+
+      - task: DotNetCoreCLI@2
+        displayName: Restore RDPToolSet
+        inputs:
+          command: restore
+          projects: "$(build.solutionFolder)/**/*.csproj"
+
+      - task: DotNetCoreCLI@2
+        displayName: Publish Web Project
+        inputs:
+          command: publish
+          arguments: --configuration $(build.configuration) --output $(Build.ArtifactStagingDirectory)
+          publishWebProjects: true
+          zipAfterPublish: true
+          modifyOutputPath: true
+
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact"
+        inputs:
+          ArtifactName: drop
+        condition: succeededOrFailed()
