@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
 
             #region Test Code
 
-            ConnectionInitiationTest(NegativeType.None);
+            //ConnectionInitiationTest(NegativeType.None);
 
             #endregion Test Code
         }
