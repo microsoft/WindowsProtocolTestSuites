@@ -17,7 +17,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
     public class ModelManagedAdapterBase : ManagedAdapterBase
     {
         protected SMB2ModelTestConfig testConfig;
-        protected ISutProtocolControlAdapter sutProtocolController;
         protected List<string> testFiles = new List<string>();
         protected List<string> testDirectories = new List<string>();
 
@@ -33,8 +32,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
             Site.DefaultProtocolDocShortName = "MS-SMB2";
 
             testConfig = new SMB2ModelTestConfig(Site);
-
-            sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
         }
 
         public override void Reset()
