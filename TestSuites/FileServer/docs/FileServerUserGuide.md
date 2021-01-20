@@ -124,21 +124,21 @@ The following table summarizes the tasks that are required to get the **File Ser
 
 **Table 1. Overview of Test Suite setup tasks**
 
-| Check | Task Overview                                                                                                       | Related Topic                                                                                                                                                                          |
-|-------|---------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| □     | Download the Test Suite package **FileServer-TestSuite-ServerEP.zip** or **FileServer-TestSuite-ServerEP.tar.gz** from GitHub.                                  | For a complete list of files contained in the Test Suite, please see section [6 Installed Files and Folders](#6).                                                            |
-| □     | Plan your test environment and computer configurations with respect to the **File Server Test Suite** requirements. | To review the network, environment, and hardware requirements for the **Test Suite**, see section [3 Requirements](#3).                                                                |
-| □     | Extract the **File Server Test Suite** and install supporting software on what will be your Driver computer.                | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
-| □     | Set up the network.                                                                                                 | To review details, see section [4 Network Setup](#4).                                                                                                                                  |
-| □     | Verify connectivity between the Driver computer, SUT, and other network computers, as necessary.                    | To review details, see section [4.3 Verifying Network Computer Connectivity](#4.3).                                                                                                    |
-| □     | Set up a Workgroup environment.                                                                                     | To review details, see section [5.1 Workgroup Environment](#5.1).                                                                                                                      |
-| □     | Set up a Domain environment.                                                                                        | To review details, see section [5.2 Domain Environment](#5.2).                                                                                                                         |
-| □     | Configure the **Test Suite** settings.                                                                              | To review the details about configuring your Test Suite settings, see section [7 Configure and Run Test Cases Using Protocol Test Manager](#7).                                        |
-| □     | Run build verification tests (BVT).                                                                                 | To review details, see section [7.3.1 Run the BVT Tests](#7.3.1).                                                                                                                      |
-| □     | Run test cases.                                                                                                     | To review details, see section [7.3.2 Run All Test Cases](#7.3.2).                                                                                                                     |
-| □     | Assess the results of test cases you have run.                                                                      | To review details, see section [7.4 Reviewing Test Results](#7.4).                                                                                                                     |
-| □     | Create your own test cases.                                                                                         | For further details, see section [8 Creating a Custom Test Environment](#8).                                                                                                           |
-| □     | Debug your test cases.                                                                                              | For further details, see section [9 Debugging Test Cases](#9).                                                                                                                         |
+| Check | Task Overview                                                                                                                  | Related Topic                                                                                                                                                                          |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| □     | Download the Test Suite package **FileServer-TestSuite-ServerEP.zip** or **FileServer-TestSuite-ServerEP.tar.gz** from GitHub. | For a complete list of files contained in the Test Suite, please see section [6 Installed Files and Folders](#6).                                                                      |
+| □     | Plan your test environment and computer configurations with respect to the **File Server Test Suite** requirements.            | To review the network, environment, and hardware requirements for the **Test Suite**, see section [3 Requirements](#3).                                                                |
+| □     | Extract the **File Server Test Suite** and install supporting software on what will be your Driver computer.                   | To review the complete list of software that must be sequentially installed, which includes the **Test Suite** and supporting software, see section [3.4 Software Requirements](#3.4). |
+| □     | Set up the network.                                                                                                            | To review details, see section [4 Network Setup](#4).                                                                                                                                  |
+| □     | Verify connectivity between the Driver computer, SUT, and other network computers, as necessary.                               | To review details, see section [4.3 Verifying Network Computer Connectivity](#4.3).                                                                                                    |
+| □     | Set up a Workgroup environment.                                                                                                | To review details, see section [5.1 Workgroup Environment](#5.1).                                                                                                                      |
+| □     | Set up a Domain environment.                                                                                                   | To review details, see section [5.2 Domain Environment](#5.2).                                                                                                                         |
+| □     | Configure the **Test Suite** settings.                                                                                         | To review the details about configuring your Test Suite settings, see section [7 Configure and Run Test Cases Using Protocol Test Manager](#7).                                        |
+| □     | Run build verification tests (BVT).                                                                                            | To review details, see section [7.3.1 Run the BVT Tests](#7.3.1).                                                                                                                      |
+| □     | Run test cases.                                                                                                                | To review details, see section [7.3.2 Run All Test Cases](#7.3.2).                                                                                                                     |
+| □     | Assess the results of test cases you have run.                                                                                 | To review details, see section [7.4 Reviewing Test Results](#7.4).                                                                                                                     |
+| □     | Create your own test cases.                                                                                                    | For further details, see section [8 Creating a Custom Test Environment](#8).                                                                                                           |
+| □     | Debug your test cases.                                                                                                         | For further details, see section [9 Debugging Test Cases](#9).                                                                                                                         |
 
 ## <a name="3"/> 3 Requirements
 
@@ -231,13 +231,13 @@ The requirements that follow apply only to a Driver computer that has .NET 5.0 i
 
 **Table 2. Driver computer minimum requirements in WORKGROUP or DOMAIN environment**
 
-| Requirement       | Description                                                  |
-|-------------------|--------------------------------------------------------------|
-| Computer name     | Client01                                                     |
-| Operating system  | The [operating system](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0
-| Memory            | 2 GB RAM                                                     |
-| Disk space        | 60 GB                                                        |
-| Network interface | Requires dual network interface cards (NICs)                 |
+| Requirement       | Description                                                                                         |
+| ----------------- | --------------------------------------------------------------------------------------------------- |
+| Computer name     | Client01                                                                                            |
+| Operating system  | The [operating system](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 |
+| Memory            | 2 GB RAM                                                                                            |
+| Disk space        | 60 GB                                                                                               |
+| Network interface | Requires dual network interface cards (NICs)                                                        |
 
 #### <a name="3.3.2"/> 3.3.2 System Under Test (SUT) Minimum Requirements
 
@@ -251,22 +251,22 @@ The requirements that follow apply only to Windows-based SUT computers in the te
 
 **Table 3. SUT computer minimum requirements in the WORKGROUP environment**
 
-| Requirement       | Description                                                                                                                               |
-|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
-| Computer name     | Node01                                                                                                                                    |
+| Requirement       | Description                                                                                                                                   |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Computer name     | Node01                                                                                                                                        |
 | Operating system  | Microsoft® Windows Server 2012 R2, Standard Edition or later versions. Note that this computer is **not** set up as a domain controller (DC). |
-| Features          | N/A                                                                                                                                       |
-| Role Services     | File Server                                                                                                                               |
-| Memory            | 2 GB RAM                                                                                                                                  |
-| Disk space        | 60 GB                                                                                                                                     |
-| Network interface | Requires dual network interface cards (NICs)                                                                                              |
+| Features          | N/A                                                                                                                                           |
+| Role Services     | File Server                                                                                                                                   |
+| Memory            | 2 GB RAM                                                                                                                                      |
+| Disk space        | 60 GB                                                                                                                                         |
+| Network interface | Requires dual network interface cards (NICs)                                                                                                  |
 
 <a name="table.4"></a>
 
 **Table 4. SUT computer minimum requirements in the DOMAIN environment**
 
 | Requirement       | Description                                                                              |
-|-------------------|------------------------------------------------------------------------------------------|
+| ----------------- | ---------------------------------------------------------------------------------------- |
 | Computer name     | Node01,Node02                                                                            |
 | Operating system  | Microsoft® Windows Server 2012 R2, Standard Edition or later versions.                   |
 | Features          | Failover Clustering                                                                      |
@@ -288,7 +288,7 @@ The requirements that follow apply only to a Windows-based DC in the test enviro
 **Table 5. Domain Controller computer minimum requirements in the DOMAIN environment**
 
 | Requirement       | Description                                                            |
-|-------------------|------------------------------------------------------------------------|
+| ----------------- | ---------------------------------------------------------------------- |
 | Computer name     | DC01                                                                   |
 | Operating system  | Microsoft® Windows Server 2012 R2, Standard Edition or later versions. |
 | Features          | AD DS Tools, DNS Server Tools                                          |
@@ -310,7 +310,7 @@ The requirements that follow apply only to a Windows-based SAN server in the tes
 **Table 6. SAN server computer minimum requirements in DOMAIN environment**
 
 | Requirement      | Description                                                            |
-|------------------|------------------------------------------------------------------------|
+| ---------------- | ---------------------------------------------------------------------- |
 | Computer name    | Storage01                                                              |
 | Operating system | Microsoft® Windows Server 2012 R2, Standard Edition or later versions. |
 | Features         | N/A                                                                    |
@@ -388,7 +388,7 @@ As a non-Windows SUT computer, **Node01** should host an implementation-specific
 **Table 7. Suggested machine names and network configuration for the WORKGROUP environment**
 
 | Machine Name/Access Point | NIC       | IPv4          | Subnet Mask   |
-|---------------------------|-----------|---------------|---------------|
+| ------------------------- | --------- | ------------- | ------------- |
 | Client01                  | External1 | 192.168.1.111 | 255.255.255.0 |
 |                           | External2 | 192.168.1.112 | 255.255.255.0 |
 | Node01                    | External1 | 192.168.1.11  | 255.255.255.0 |
@@ -441,7 +441,7 @@ In non-Windows environments, the **Node01**, **Node02**, and **Storage01** compu
 **Table 8. Suggested machine names and network configuration for the DOMAIN environment**
 
 | Machine Name/EndPoint | NIC       | IPv4          | Subnet Mask   | Default Gateway | DNS Server    |
-|-----------------------|-----------|---------------|---------------|-----------------|---------------|
+| --------------------- | --------- | ------------- | ------------- | --------------- | ------------- |
 | DC01                  | External1 | 192.168.1.1   | 255.255.255.0 | &lt;empty&gt;   | 127.0.0.1     |
 |                       | External2 | 192.168.2.1   | 255.255.255.0 | &lt;empty&gt;   | 127.0.0.1     |
 | Client01              | External1 | 192.168.1.111 | 255.255.255.0 | 192.168.1.1     | 192.168.1.1   |
@@ -1012,32 +1012,32 @@ Authorization testing is not applicable to the **WORKGROUP** environment on Wind
 
 1. Create a share named **AzShare** with the following permissions configuration:
 
-    | NTFS Permission      | Share Permission        |
-    |----------------------|-------------------------|
-    | Allow Everyone       | Allow Domain Admins     |
+    | NTFS Permission | Share Permission    |
+    | --------------- | ------------------- |
+    | Allow Everyone  | Allow Domain Admins |
 
 2. Create a share named **AzFolder** with the following permissions configuration:
 
-    | NTFS Permission      | Share Permission        |
-    |----------------------|-------------------------|
-    | Allow Domain Admins  | Allow Everyone          |
+    | NTFS Permission     | Share Permission |
+    | ------------------- | ---------------- |
+    | Allow Domain Admins | Allow Everyone   |
 
 3. Create a share named **AzFile** with the following permissions configuration:
 
-    | NTFS Permission      | Share Permission        |
-    |----------------------|-------------------------|
-    | Allow Domain Admins  | Allow Everyone          |
+    | NTFS Permission     | Share Permission |
+    | ------------------- | ---------------- |
+    | Allow Domain Admins | Allow Everyone   |
 
 4. Create a share named **AzCBAC** with the following permissions configuration:
 
-    | NTFS Permission      | Share Permission        |
-    |----------------------|-------------------------|
-    | Allow Everyone       | Allow Everyone          |
+    | NTFS Permission | Share Permission |
+    | --------------- | ---------------- |
+    | Allow Everyone  | Allow Everyone   |
 
 5. If the Server Service Remote Protocol (**MS-SRVS**) is not supported, create shares **AzShare01** through AzShare06 on the SUT computer. Permissions for each share should be set as specified in the following table:
 
     | Share Name | Permissions                                                 |
-    |------------|-------------------------------------------------------------|
+    | ---------- | ----------------------------------------------------------- |
     | AzShare01  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)  |
     | AzShare02  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA) |
     | AzShare03  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)  |
@@ -1960,7 +1960,7 @@ To create user accounts in Active Directory, perform the steps that follow.
     **Table 9. Department and countryCode values**
 
     | user                | department | countryCode |
-    |---------------------|------------|-------------|
+    | ------------------- | ---------- | ----------- |
     | **ITmember01**      | IT         | 392         |
     | **Payrollmember01** | Payroll    | 156         |
     | **Payrollmember02** | Payroll    | 840         |
@@ -2480,11 +2480,11 @@ This procedure should be performed only after installing the iSCSI target via se
 
     **Table 10. New virtual storage disks**
 
-    | Disk Name     | Size     | Purpose                                                                        |
-    |---------------|----------|--------------------------------------------------------------------------------|
-    | Quorumdisk    | 1 GB     | Quorum disk for a two-node cluster                                             |
-    | FSDisk01      | 10 GB    | Storage used by file server for general use on failover cluster                |
-    | FSDisk02      | 10 GB    | Storage used by file server for scale-out application data on failover cluster |
+    | Disk Name  | Size  | Purpose                                                                        |
+    | ---------- | ----- | ------------------------------------------------------------------------------ |
+    | Quorumdisk | 1 GB  | Quorum disk for a two-node cluster                                             |
+    | FSDisk01   | 10 GB | Storage used by file server for general use on failover cluster                |
+    | FSDisk02   | 10 GB | Storage used by file server for scale-out application data on failover cluster |
 
     ![](./image/FileServerUserGuide/image1.png)**Note**
 
@@ -3270,13 +3270,13 @@ The extracted folders and files are described in the Table that follows.
 
 **Table 11. Installed files and folders**
 
-| File or Folder | Description                                                                |
-|----------------|----------------------------------------------------------------------------|
-| Batch          | Command files that you use to run a group of test cases or all test cases. |
+| File or Folder | Description                                                                                                                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Batch          | Command files that you use to run a group of test cases or all test cases.                                                                                                                   |
 | Bin            | Test Suite binaries and configuration files. This folder contains the following sub-folders:<br>&emsp;&emsp;- ServerFailover — contains .ps1 scripts that are called by specific test cases. |
-| Scripts        | The folder contains .ps1 scripts that are used to set up the test environment. |
-| Utils          | The folder contains ShareUtil that is used to config share properties. |
-| License.rtf    | The End User License Agreement.                                            |
+| Scripts        | The folder contains .ps1 scripts that are used to set up the test environment.                                                                                                               |
+| Utils          | The folder contains ShareUtil that is used to config share properties.                                                                                                                       |
+| License.rtf    | The End User License Agreement.                                                                                                                                                              |
 
 \*PowerShell scripts are located in the **WindowsSutControlAdapter** folder.
 
