@@ -12,6 +12,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SutCommonControlAdapter\GetGroupMembers.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SutCommonControlAdapter\GetGroups.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SutCommonControlAdapter\GetUsers.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SutCommonControlAdapter\GetUserSid.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
   </ItemGroup>
 
