@@ -3,7 +3,7 @@
 
 [string]$target
 [string]$adminUserName
-[string]$adminPassword 
+[string]$adminPassword
 
 $domainName = $PtfProp_Common_Domain
 $sutComputerName = $PtfProp_Common_SutComputerName
@@ -11,7 +11,7 @@ $dcName = $PtfProp_Common_DCServerComputerName
 
 $sessionUserName = $PtfProp_Common_AdminUserName
 
-$isDomainEnv = $domainName -ne $sutComputerName
+$isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
 $remoteComputerName = if ($isDomainEnv) {
     $dcName
 }
@@ -29,24 +29,22 @@ $commandForDomain = {
     $passwordConverted = $adminPassword | ConvertTo-SecureString -AsPlainText -Force
     $cred = New-Object PSCredential -ArgumentList @("$target\$adminUserName", $passwordConverted)
 
-    $target
+    $domainFqn = "DC=" + $target.Replace(".", ",DC=")
+    $usersFqn = "CN=Users,$domainFqn"
 
-    [array]$domainUsers = Get-ADUser -Filter "*" -SearchBase 
-    
+    [array]$domainUsers = Get-ADUser -Credential $cred -Filter "*" -SearchBase $usersFqn 
+    [array]$results = $domainUsers | ForEach-Object {
+        @{
+            Name = $_.Name
+            Sid  = $_.SID.Value
+        }
+    }
 
+    return $results
 }
 
 $commandForLocalComputer = {
-    param (
-        [string]$target,
-        [string]$adminUserName,
-        [string]$adminPassword
-    )
-
-    $passwordConverted = $adminPassword | ConvertTo-SecureString -AsPlainText -Force
-    $cred = New-Object PSCredential -ArgumentList @($adminUserName, $passwordConverted)
-
-    $localUsers = Invoke-Command -ComputerName "." -Credential $cred -ScriptBlock { return @(Get-LocalUser) }
+    $localUsers = @(Get-LocalGroup)
     [array]$results = $localUsers | ForEach-Object {
         @{
             Name = $_.Name
@@ -59,18 +57,11 @@ $commandForLocalComputer = {
 
 $users = @()
 try {
-    $commmand = if ($isDomainEnv) {
-        $commandForDomain
-    }
-    else {
-        $commandForLocalComputer
-    }
-
     $users = if ($isDomainEnv) {
         Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $adminUserName, $adminPassword)
     }
     else {
-        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForLocalComputer 
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForLocalComputer
     }
 }
 catch {
