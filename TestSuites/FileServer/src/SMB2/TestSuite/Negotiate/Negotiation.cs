@@ -609,7 +609,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
 
                     bool isExpectedCompressionContext = false;
-                    if (TestConfig.Platform < Platform.WindowsServerV2004)
+                    if (TestConfig.Platform != Platform.WindowsServerV2004)
                     {
                         isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
                     }
