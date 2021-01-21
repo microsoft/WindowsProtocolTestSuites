@@ -10,7 +10,7 @@ using System.Text.Json;
 namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 {
     /// <summary>
-    /// This class is to query commn info from domain or local computer.
+    /// This class is to query common info from domain or local computer.
     /// </summary>
     public class SutCommonControlManagedAdapter : ManagedAdapterBase, ISutCommonControlManagedAdapter
     {
