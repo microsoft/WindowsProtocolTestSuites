@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -16,23 +17,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         #region Test Cases
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with values equals -2 to a file and check if success is returned.")]
-        public void FileInfo_Set_FileBasicInformation_File_CheckValidParameter_Positivetest()
+        [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_File()
         {
-            //Arrange
-            int changeTime = -2;
-            int creationTime = -2;
-            int lastAccessTime = -2;
-            int lastWriteTime = -2;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DataFile, fileBasicInformation);
+            FileInfo_Set_FileBasicInformation(FileType.DataFile);
         }
 
         [TestMethod()]
@@ -40,264 +33,195 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with time values less than -2 and attribute equals directory to a file and check if invalid parameter is returned.")]
-        public void FileInfo_Set_FileBasicInformation_File_CheckValidParameter_NegativeTest()
+        [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_Dir()
         {
-            //Arrange
-            int changeTime = -3;
-            int creationTime = -3;
-            int lastAccessTime = -3;
-            int lastWriteTime = -3;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-            fileBasicInformation = SetFileBasicInformationAttributeDirectory(fileBasicInformation);
-
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DataFile, fileBasicInformation);
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with a time value less than -2 to a file and check if invalid parameter is returned.")]
-        public void FileInfo_Set_FileBasicInformation_File_CheckValidTimeParameter()
-        {
-            //Arrange
-            int changeTime = -4;
-            int creationTime = -3;
-            int lastAccessTime = -2;
-            int lastWriteTime = -1;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-            
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DataFile, fileBasicInformation);
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with attribute value equal directory to a file and check if invalid parameter is returned.")]
-        public void FileInfo_Set_FileBasicInformation_File_CheckValidAttributeParameter()
-        {
-            //Arrange
-            int changeTime = -2;
-            int creationTime = -2;
-            int lastAccessTime = -2;
-            int lastWriteTime = -2;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-            fileBasicInformation = SetFileBasicInformationAttributeDirectory(fileBasicInformation);
-
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DataFile, fileBasicInformation);
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with value equals -2 to a directory and check if success is returned.")]
-        public void FileInfo_Set_FileBasicInformation_Dir_CheckValidParameter_PositiveTest()
-        {
-            //Arrange
-            int changeTime = -2;
-            int creationTime = -2;
-            int lastAccessTime = -2;
-            int lastWriteTime = -2;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DirectoryFile, fileBasicInformation);
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with time values less than -2 and attribute equals Temporary to a directory and check if invalid parameter is returned.")]
-        public void FileInfo_Set_FileBasicInformation_Dir_CheckValidParameter_NegativeTest()
-        {
-            //Arrange
-            int changeTime = -3;
-            int creationTime = -3;
-            int lastAccessTime = -3;
-            int lastWriteTime = -3;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-            fileBasicInformation = SetFileBasicInformationAttributeTemporary(fileBasicInformation);
-
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DirectoryFile, fileBasicInformation);
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with two time value less than -2 to a directory and check if invalid parameter is returned.")]
-        public void FileInfo_Set_FileBasicInformation_Dir_CheckValidTimeParameter()
-        {
-            //Arrange
-            int changeTime = -4;
-            int creationTime = -3;
-            int lastAccessTime = -2;
-            int lastWriteTime = -1;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-            
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DirectoryFile, fileBasicInformation);
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to set fileBasicInformation with attribute value equal Temporary to a directory and check if invalid parameter is returned.")]
-        public void FileInfo_Set_FileBasicInformation_Dir_CheckValidAttributeParameter()
-        {
-            //Arrange
-            int changeTime = -2;
-            int creationTime = -2;
-            int lastAccessTime = -2;
-            int lastWriteTime = -2;
-
-            FileBasicInformation fileBasicInformation = SetFileBasicInformationTimes(changeTime, creationTime, lastAccessTime, lastWriteTime);
-            fileBasicInformation = SetFileBasicInformationAttributeTemporary(fileBasicInformation);
-
-            //Act & Assert
-            FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType.DirectoryFile, fileBasicInformation);
+            FileInfo_Set_FileBasicInformation(FileType.DirectoryFile);
         }
 
         #endregion
 
-
         #region Test Case Utility
 
-        private void FileInfo_Set_FileBasicInformation_CheckValidParameter(FileType fileType, FileBasicInformation fileBasicInformation)
+        private void FileInfo_Set_FileBasicInformation(FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
 
             //Step 1: Create File
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
 
             status = this.fsaAdapter.CreateFile(
-                        FileAttribute.NORMAL | FileAttribute.INTEGRITY_STREAM, // Set field
-                        fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
-                        fileType == FileType.DataFile ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.INDEX_ALLOCATION, //Stream Type
-                        FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
-                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                        CreateDisposition.OPEN_IF,
-                        StreamFoundType.StreamIsFound,
-                        SymbolicLinkType.IsNotSymbolicLink,
-                        fileType, 
-                        FileNameStatus.PathNameValid);
+                fileName,
+                FileAttribute.NORMAL,
+                fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
+                FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
+                ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.CREATE);
 
-            //Step 2: Set FILE_BASIC_INFORMATION
+            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
 
-            byte[] inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation);
+            //Step 2: Set file basic information time stamp less than -2
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Set FileBasicInformation time stamp to -3 and expect INVALID_PARAMETER");
+            SetChangeTime(-3);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION.");
-            status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
-
-            //Step 3: Verify test result
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify returned NTSTATUS code.");
-            
-            int sizeOfFileBasicInformation = System.Runtime.InteropServices.Marshal.SizeOf(typeof(FileBasicInformation));
-            if (inputBuffer.Length < sizeOfFileBasicInformation)
+            if(this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS)
             {
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "InputBuffer size is invalid.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INFO_LENGTH_MISMATCH, status,
-                    "If InputBufferSize is less than sizeof(FILE_BASIC_INFORMATION), the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
+                if(fileType == FileType.DataFile)
+                {
+                    CheckWriteOperation();
+                }
+                CheckReadOperation();
+            }
+        }
+
+        private void CheckWriteOperation()
+        {
+            //Step 3: Set file basic information time stamp to -1 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Set FileBasicInformation timestamp to -1");
+
+            long initialChangeTime;
+            long initialCreationTime;
+            long initialLastAccessTime;
+            long initialLastWriteTime;
+
+            QueryFileBasicInformation(out initialChangeTime, out initialCreationTime,
+                out initialLastAccessTime, out initialLastWriteTime);
+
+            SetChangeTime(-1);
+
+            //Step 4: Verify file system response
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Write to file and verify file system response");
+
+            WriteToFile();
+
+            long newChangeTime;
+            QueryFileBasicInformation(out newChangeTime, out _, out _, out _);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, DateTime.FromFileTime(initialCreationTime) + " " + DateTime.FromFileTime(newChangeTime));
+            this.fsaAdapter.AssertAreEqual(this.Manager, initialCreationTime, newChangeTime,
+                    "If ChangeTime is -1, don’t update with implicit value for subsequent I/O operations");
+
+            //Step 5: Set file basic information time stamp to -2
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Set FileBasicInformation timestamp to -2");
+
+            SetChangeTime(-2);
+
+            //Step 6: Verify file system response
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. Write to file and verify file system response");
+            WriteToFile();
+
+            long newLastWriteTime;
+            QueryFileBasicInformation(out newChangeTime, out _, out _, out newLastWriteTime);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, DateTime.FromFileTime(newLastWriteTime) + " " + DateTime.FromFileTime(newChangeTime));
+            this.fsaAdapter.AssertAreEqual(this.Manager, newLastWriteTime, newChangeTime,
+                    "If ChangeTime is -2, resume setting timestamp implicitly for subsequent I/O operations");
+        }
+
+        private void CheckReadOperation()
+        {
+            //Step 7: Set file basic information time stamp to -1 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "7. Set FileBasicInformation timestamp to -1");
+
+            long initialChangeTime;
+            long initialCreationTime;
+            long initialLastAccessTime;
+            long initialLastWriteTime;
+
+            QueryFileBasicInformation(out initialChangeTime, out initialCreationTime,
+                out initialLastAccessTime, out initialLastWriteTime);
+
+            SetChangeTime(-1);
+        }
+
+        private void SetChangeTime(long changeTime)
+        {
+            FileBasicInformation fileBasicInformation = new FileBasicInformation();
+            fileBasicInformation.ChangeTime.dwHighDateTime = (uint)(changeTime >> 32);
+            fileBasicInformation.ChangeTime.dwLowDateTime = (uint)(changeTime & 0xFFFFFFFF);
+            fileBasicInformation.Reserved = 0;
+            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation);
+            MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
+
+            if(changeTime < -2)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
+                        "If ChangeTime is less than -2, the operation MUST be failed with STATUS_INVALID_PARAMETER");
             }
             else
             {
-                bool changeTimeValid = VerifyTimeParameter("InputBuffer.ChangeTime", fileBasicInformation.ChangeTime, status);
-                bool creationTimeValid = VerifyTimeParameter("InputBuffer.CreationTime", fileBasicInformation.CreationTime, status);
-                bool lastAccessTimeValid = VerifyTimeParameter("InputBuffer.LastAccessTime", fileBasicInformation.LastAccessTime, status);
-                bool lastWriteTimeValid = VerifyTimeParameter("InputBuffer.LastWriteTime", fileBasicInformation.LastWriteTime, status);
-                bool attributesValid = VerifyFileAttributesParameter(fileType, fileBasicInformation, status);
-
-                if (changeTimeValid && creationTimeValid && lastAccessTimeValid && lastWriteTimeValid && attributesValid)
-                {
-                    this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "The operation returns STATUS_SUCCESS");
-                }
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
+                        "Set file information must succeed");
             }
         }
 
-        private bool VerifyFileAttributesParameter(FileType fileType, FileBasicInformation fileBasicInformation, MessageStatus status)
-        {
-            bool isDirectory = (fileBasicInformation.FileAttributes & (uint)FileAttribute.DIRECTORY) == (uint)FileAttribute.DIRECTORY;
-            bool isTemporary = (fileBasicInformation.FileAttributes & (uint)FileAttribute.TEMPORARY) == (uint)FileAttribute.TEMPORARY;
-            bool isValid = true;
-            if (isDirectory && fileType == FileType.DataFile)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "Parameter InputBuffer.FileAttributes is invalid.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
-                    "If InputBuffer.FileAttributes.FILE_ATTRIBUTE_DIRECTORY is TRUE and Open.Stream.StreamType is DataStream., the operation MUST be failed with STATUS_INVALID_PARAMETER");
-                isValid = false;
-            }
-            else if (isTemporary && fileType == FileType.DirectoryFile)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "Parameter InputBuffer.FileAttributes is invalid.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
-                    "If InputBuffer.FileAttributes.FILE_ATTRIBUTE_TEMPORARY is TRUE and Open.File.FileType is DirectoryFile, the operation MUST be failed with STATUS_INVALID_PARAMETER");
-                isValid = false;
-            }
-            return isValid;
-        }
-
-        private bool VerifyTimeParameter(string timeType, FILETIME fileTime, MessageStatus status)
-        {
-            bool isValid = true;
-            long inputBufferTime = (((long)fileTime.dwHighDateTime) << 32) + fileTime.dwLowDateTime;
-            if(inputBufferTime < -2)
-            {
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "Parameter " + timeType + " is invalid.");
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
-                    "If " + timeType + " is less than -2, the operation MUST be failed with STATUS_INVALID_PARAMETER");
-                isValid = false;
-            }
-            return isValid;
-        }
-
-        private FileBasicInformation SetFileBasicInformationTimes(long changeTime, long creationTime, long lastAccessTime, long lastWriteTime)
+        private void SetFileBasicInformationLastWriteTime(long lastWriteTime)
         {
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
-
-            fileBasicInformation.ChangeTime.dwHighDateTime = (uint)(changeTime >> 32);
-            fileBasicInformation.ChangeTime.dwLowDateTime = (uint)(changeTime & 0xFFFFFFFF);
-            fileBasicInformation.CreationTime.dwHighDateTime = (uint)(creationTime >> 32);
-            fileBasicInformation.CreationTime.dwLowDateTime = (uint)(creationTime & 0xFFFFFFFF);
-            fileBasicInformation.LastAccessTime.dwLowDateTime = (uint)(lastAccessTime & 0xFFFFFFFF);
-            fileBasicInformation.LastAccessTime.dwHighDateTime = (uint)(lastAccessTime >> 32);
-            fileBasicInformation.LastWriteTime.dwLowDateTime = (uint)(lastWriteTime & 0xFFFFFFFF);
             fileBasicInformation.LastWriteTime.dwHighDateTime = (uint)(lastWriteTime >> 32);
+            fileBasicInformation.LastWriteTime.dwLowDateTime = (uint)(lastWriteTime & 0xFFFFFFFF);
+            fileBasicInformation.Reserved = 0;
+            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation);
+            MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
 
-            return fileBasicInformation;
+            if (lastWriteTime < -2)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
+                        "If LastWriteTime is less than -2, the operation MUST be failed with STATUS_INVALID_PARAMETER");
+            }
+            else
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
+                        "Set file information must succeed");
+            }
         }
 
-        private FileBasicInformation SetFileBasicInformationAttributeTemporary(FileBasicInformation fileBasicInformation)
+        private void SetFileBasicInformationLastAccessTime(long lastAccessTime)
         {
-            fileBasicInformation.FileAttributes = (uint)(FileAttribute.TEMPORARY | FileAttribute.NORMAL);
-            return fileBasicInformation;
+            FileBasicInformation fileBasicInformation = new FileBasicInformation();
+            fileBasicInformation.LastAccessTime.dwHighDateTime = (uint)(lastAccessTime >> 32);
+            fileBasicInformation.LastAccessTime.dwLowDateTime = (uint)(lastAccessTime & 0xFFFFFFFF);
+            fileBasicInformation.Reserved = 0;
+            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation);
+            MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
+
+            if (lastAccessTime < -2)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
+                        "If LastAccessTime is less than -2, the operation MUST be failed with STATUS_INVALID_PARAMETER");
+            }
+            else
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
+                        "Set file information must succeed");
+            }
         }
 
-        private FileBasicInformation SetFileBasicInformationAttributeDirectory(FileBasicInformation fileBasicInformation)
+        private void WriteToFile()
         {
-            fileBasicInformation.FileAttributes = (uint)(FileAttribute.DIRECTORY | FileAttribute.NORMAL);
-            return fileBasicInformation;
+            //write data to file with 1 second time interval
+            Thread.Sleep(1000);
+            MessageStatus status = this.fsaAdapter.WriteFile(0, 4, out _);
+            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
+                    "Write data to file must succeed");
+        }
+
+        private void QueryFileBasicInformation(out long changeTime, out long creationTime
+            , out long lastAccessTime, out long lastWriteTime)
+        {
+            FileBasicInformation fileBasicInformation = new FileBasicInformation();
+            byte[] outputBuffer;
+            uint outputBufferSize = (uint)TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation).Length;
+            this.fsaAdapter.QueryFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, outputBufferSize, out _, out outputBuffer);
+            
+            fileBasicInformation = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
+            changeTime = (((long)fileBasicInformation.ChangeTime.dwHighDateTime) << 32) + fileBasicInformation.ChangeTime.dwLowDateTime;
+            creationTime = (((long)fileBasicInformation.CreationTime.dwHighDateTime) << 32) + fileBasicInformation.CreationTime.dwLowDateTime;
+            lastAccessTime = (((long)fileBasicInformation.LastAccessTime.dwHighDateTime) << 32) + fileBasicInformation.LastAccessTime.dwLowDateTime;
+            lastWriteTime = (((long)fileBasicInformation.LastWriteTime.dwHighDateTime) << 32) + fileBasicInformation.LastWriteTime.dwLowDateTime;
         }
 
         #endregion
