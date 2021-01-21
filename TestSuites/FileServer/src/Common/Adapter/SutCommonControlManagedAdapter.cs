@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Get group members from domain or local computer.
         /// </summary>
         /// <param name="target">Name of the domain or local compuer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
+        /// <param name="adminUserName">Name of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="adminPassword">Password of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="groupName">Name of the queried group.</param>
         /// <returns>All group members returned.</returns>
@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Get groups from domain or local computer.
         /// </summary>
         /// <param name="target">Name of the domain or local compuer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
+        /// <param name="adminUserName">Name of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="adminPassword">Password of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <returns>All groups returned.</returns>
         public List<Group> GetGroups(string target, string adminUserName, string adminPassword)
@@ -65,7 +65,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Get users from domain or local computer.
         /// </summary>
         /// <param name="target">Name of the domain or local compuer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
+        /// <param name="adminUserName">Name of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="adminPassword">Password of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <returns>All users returned.</returns>
         public List<User> GetUsers(string target, string adminUserName, string adminPassword)
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Get the SID of a user from domain or local computer.
         /// </summary>
         /// <param name="target">Name of the domain or local compuer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
+        /// <param name="adminUserName">Name of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="adminPassword">Password of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="userName">Name of the queried user.</param>
         /// <returns>SID of the user returned.</returns>
@@ -96,7 +96,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Get a _WindowsIdentity instance from domain or local computer by the user name.
         /// </summary>
         /// <param name="target">Name of the domain or local compuer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
+        /// <param name="adminUserName">Name of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="adminPassword">Password of the user who has administrative privileges. This value can be omitted for local computer.</param>
         /// <param name="userName">Name of the queried user.</param>
         /// <returns>A _WindowsIdentity instance represents the user.</returns>
