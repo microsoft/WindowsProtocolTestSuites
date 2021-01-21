@@ -130,7 +130,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                         membershipSids.Add(groupToSearch.Name, groupToSearch.Sid);
                     }
 
-                    foreach (var memberGroup in groupMembers.Where(m => m.ObjectClass == "group"))
+                    // Add lower level groups to the search queue and exclude special objects. 
+                    foreach (var memberGroup in groupMembers.Where(m => m.ObjectClass == "group" && !m.Name.ToUpper().StartsWith("NT AUTHORITY")))
                     {
                         groupsToSearch.Enqueue(memberGroup.ToGroup());
                     }
