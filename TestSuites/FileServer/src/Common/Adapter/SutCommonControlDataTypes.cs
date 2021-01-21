@@ -54,6 +54,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public string ObjectClass { get; set; }
 
         /// <summary>
+        /// The group member principal source.
+        /// </summary>
+        public string PrincipalSource { get; set; }
+
+        /// <summary>
         /// The group _SID.
         /// </summary>
         public _SID Sid { get; set; }

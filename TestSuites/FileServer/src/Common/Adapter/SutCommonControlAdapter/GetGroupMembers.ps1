@@ -37,9 +37,10 @@ $commandForDomain = {
     [array]$domainMembers = Get-ADGroupMember -Credential $cred -Identity $domainGroup
     [array]$results = $domainMembers | ForEach-Object {
         @{
-            Name        = $_.Name
-            ObjectClass = $_.ObjectClass
-            Sid         = $_.SID.Value
+            Name            = $_.Name
+            ObjectClass     = $_.ObjectClass
+            PrincipalSource = $_.PrincipalSource
+            Sid             = $_.SID.Value
         }
     }
 
@@ -54,9 +55,10 @@ $commandForLocalComputer = {
     $localMembers = @(Get-LocalGroupMember -Name $groupName)
     [array]$results = $localMembers | ForEach-Object {
         @{
-            Name        = $_.Name
-            ObjectClass = $_.ObjectClass
-            Sid         = $_.SID.Value
+            Name            = $_.Name
+            ObjectClass     = $_.ObjectClass
+            PrincipalSource = $_.PrincipalSource
+            Sid             = $_.SID.Value
         }
     }
 

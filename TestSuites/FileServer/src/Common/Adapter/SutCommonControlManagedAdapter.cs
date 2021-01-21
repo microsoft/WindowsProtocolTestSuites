@@ -124,14 +124,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 {
                     var groupMembers = GetGroupMembers(target, adminUserName, adminPassword, groupToSearch.Name);
 
-                    var hasMembership = groupMembers.Where(m => m.ObjectClass == "user").Any(u => u.Sid.GetSddlForm() == userSid.GetSddlForm());
+                    var hasMembership = groupMembers.Where(m => m.ObjectClass.ToUpper() == "USER").Any(u => u.Sid.GetSddlForm() == userSid.GetSddlForm());
                     if (hasMembership)
                     {
                         membershipSids.Add(groupToSearch.Name, groupToSearch.Sid);
                     }
 
                     // Add lower level groups to the search queue and exclude special objects. 
-                    foreach (var memberGroup in groupMembers.Where(m => m.ObjectClass == "group" && !m.Name.ToUpper().StartsWith("NT AUTHORITY")))
+                    foreach (var memberGroup in groupMembers.Where(m => m.ObjectClass.ToUpper() == "GROUP" && m.PrincipalSource.ToUpper() != "UNKNOWN"))
                     {
                         groupsToSearch.Enqueue(memberGroup.ToGroup());
                     }
