@@ -2,48 +2,79 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 [string]$target
-[string]$domain = $PtfProp_Common_DomainName
-[string]$userName = $PtfProp_Common_AdminUserName
-[string]$password = $PtfProp_Common_PasswordForAllUsers
+[string]$adminUserName
+[string]$adminPassword 
 
-try
-{
-    Get-PSSession|Remove-PSSession
-    $psSession=New-PSSession -HostName $nodeName -UserName "$domain\$userName"
+$domainName = $PtfProp_Common_Domain
+$sutComputerName = $PtfProp_Common_SutComputerName
+$dcName = $PtfProp_Common_DCServerComputerName
+
+$sessionUserName = $PtfProp_Common_AdminUserName
+
+$isDomainEnv = $domainName -ne $sutComputerName
+$remoteComputerName = if ($isDomainEnv) {
+    $dcName
 }
-catch
-{
-    Get-Error
+else {
+    $target
 }
 
-$myScriptBlock = {
+$commandForDomain = {
     param(
-    [string] $className,
-    [string] $filter
+        [string]$target,
+        [string]$adminUserName,
+        [string]$adminPassword
     )
-    $result = Get-CimInstance -ClassName $className -Filter $filter
-    if($result -eq $null)
-    {
-        return $FALSE
+
+    $passwordConverted = $adminPassword | ConvertTo-SecureString -AsPlainText -Force
+    $cred = New-Object PSCredential -ArgumentList @("$target\$adminUserName", $passwordConverted)
+
+    $target
+
+    [array]$domainUsers = Get-ADUser -Filter "*" -SearchBase 
+    
+
+}
+
+$commandForLocalComputer = {
+    param (
+        [string]$target,
+        [string]$adminUserName,
+        [string]$adminPassword
+    )
+
+    $passwordConverted = $adminPassword | ConvertTo-SecureString -AsPlainText -Force
+    $cred = New-Object PSCredential -ArgumentList @($adminUserName, $passwordConverted)
+
+    $localUsers = Invoke-Command -ComputerName "." -Credential $cred -ScriptBlock { return @(Get-LocalUser) }
+    [array]$results = $localUsers | ForEach-Object {
+        @{
+            Name = $_.Name
+            Sid  = $_.SID.Value
+        }
     }
 
-    return $result | Invoke-CimMethod -Name StopService
+    return $results
 }
 
-$ret = $FALSE
-try
-{
-    $className="Win32_Service"
-    $filter="Name = '$clusterServiceName'"
-    $result = Invoke-Command -Session $psSession -ScriptBlock $myScriptBlock -ArgumentList $className,$filter
-    $ret = $TRUE
+$users = @()
+try {
+    $commmand = if ($isDomainEnv) {
+        $commandForDomain
+    }
+    else {
+        $commandForLocalComputer
+    }
+
+    $users = if ($isDomainEnv) {
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $adminUserName, $adminPassword)
+    }
+    else {
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForLocalComputer 
+    }
 }
-catch
-{
+catch {
     Get-Error
 }
-finally
-{
-    Get-PSSession|Remove-PSSession
-}
-return $ret
+
+return ($users | ConvertTo-Json)
