@@ -115,31 +115,55 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             // Get _SIDs of Groups.
             var groups = GetGroups(target, adminUserName, adminPassword);
-            var groupsToSearch = new Queue<Group>(groups);
-            var membershipSids = new Dictionary<string, _SID>();
-            while (groupsToSearch.Count > 0)
+            var searchResults = new Dictionary<Group, List<GroupMember>>(new GroupEqualityComparer());
+            foreach (var group in groups)
             {
-                var groupToSearch = groupsToSearch.Dequeue();
-                if (!membershipSids.ContainsKey(groupToSearch.Name))
+                searchResults.Add(group, GetGroupMembers(target, adminUserName, adminPassword, group.Name));
+            }
+
+            var membershipSids = new List<_SID>();
+            foreach (var group in groups)
+            {
+                // Validate direct membership.
+                if (searchResults[group].Any(m => m.Sid.GetSddlForm() == userSid.GetSddlForm()))
                 {
-                    var groupMembers = GetGroupMembers(target, adminUserName, adminPassword, groupToSearch.Name);
+                    membershipSids.Add(group.Sid);
+                    continue;
+                }
 
-                    var hasMembership = groupMembers.Where(m => m.ObjectClass.ToUpper() == "USER").Any(u => u.Sid.GetSddlForm() == userSid.GetSddlForm());
-                    if (hasMembership)
+                // Validate indirect membership.
+                var lowerGroups = GetLowerGroups(searchResults[group]);
+                if (lowerGroups.Any())
+                {
+                    var searchQueue = new Queue<Group>(lowerGroups);
+                    while (searchQueue.Count > 0)
                     {
-                        membershipSids.Add(groupToSearch.Name, groupToSearch.Sid);
-                    }
+                        var lowerGroup = searchQueue.Dequeue();
+                        if (searchResults[lowerGroup].Any(m => m.Sid.GetSddlForm() == userSid.GetSddlForm()))
+                        {
+                            membershipSids.Add(group.Sid);
+                            break;
+                        }
 
-                    // Add lower level groups to the search queue and exclude special objects. 
-                    foreach (var memberGroup in groupMembers.Where(m => m.ObjectClass.ToUpper() == "GROUP" && m.PrincipalSource.ToUpper() != "UNKNOWN"))
-                    {
-                        groupsToSearch.Enqueue(memberGroup.ToGroup());
+                        var nextLowerGroups = GetLowerGroups(searchResults[lowerGroup]);
+                        if (nextLowerGroups.Any())
+                        {
+                            foreach (var nextLowerGroup in nextLowerGroups)
+                            {
+                                searchQueue.Enqueue(nextLowerGroup);
+                            }
+                        }
                     }
                 }
             }
-            identity.Groups = membershipSids.Values.ToList();
+            identity.Groups = membershipSids;
 
             return identity;
+        }
+
+        private IEnumerable<Group> GetLowerGroups(IEnumerable<GroupMember> members)
+        {
+            return members.Where(m => m.ObjectClass.ToUpper() == "GROUP" && m.PrincipalSource.ToUpper() != "UNKNOWN").Select(m => m.ToGroup());
         }
     }
 }

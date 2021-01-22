@@ -38,6 +38,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public _SID Sid { get; set; }
     }
 
+    public class GroupEqualityComparer : IEqualityComparer<Group>
+    {
+        public bool Equals(Group x, Group y)
+        {
+            return x.Name == y.Name;
+        }
+
+        public int GetHashCode(Group obj)
+        {
+            return obj.Name.GetHashCode();
+        }
+    }
+
     /// <summary>
     /// Represent a local or domain group member.
     /// </summary>
