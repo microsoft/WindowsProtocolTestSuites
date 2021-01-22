@@ -59,8 +59,14 @@
 
       <Property name="DCServerComputerName" value="DC01.contoso.com">
         <Description>
-          Computer name of DC
+          Computer ip or name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="KDCPort" value="88">
+        <Description>
+          Port of KDC, By default KDC port is 88
         </Description>
       </Property>
 
