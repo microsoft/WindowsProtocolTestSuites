@@ -504,6 +504,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether DC and File Server can handle users name with special characters.")]
         public void KerbAuth_UserName_With_Special_Characters()
         {

@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.FileAccess)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Create a read only file and then write to it.")]
         public void FileAccess_WriteReadOnlyFile()
         {
