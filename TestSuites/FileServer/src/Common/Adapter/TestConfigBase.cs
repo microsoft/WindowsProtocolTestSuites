@@ -324,7 +324,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 }
                 catch
                 {
-                    return Consts.KDCPort;
+                    return TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort;
                 }
             }
         }

@@ -48,15 +48,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
         /// SPNG OID Int Array
         /// </summary>
         public static int[] SpngOidInt = { 1, 3, 6, 1, 5, 5, 2 };
-
-        /// <summary>
-        /// KDC Ip or computer name
-        /// </summary>
-        public static string KDCComputerName { get; set; }
-
-        /// <summary>
-        /// KDC default port
-        /// </summary>
-        public static int KDCPort = 88;
     }
 }

@@ -123,6 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="logonName">Logon name.</param>
         /// <param name="serviceName">Service name.</param>
         /// <param name="kdcIpAddress">KDC IP address</param>
+        /// <param name="kdcPort">KDC Port</param>
         /// <param name="attributes">Client security attributes.</param>
         /// <param name="connectionType">Connection type.</param>
         public KerberosClientSecurityConfig(
