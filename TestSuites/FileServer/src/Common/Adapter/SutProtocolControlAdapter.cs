@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             base.Initialize(testSite);
             testConfig = new TestConfigBase(Site);
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
         }
 
         public bool CreateDirectory(string uncSharePath, string directoryName)
