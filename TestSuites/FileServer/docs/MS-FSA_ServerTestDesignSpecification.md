@@ -1589,7 +1589,18 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if set values for FileBasicInformation attributes supported by different file systems.|
+| Description| To test if set values for FileBasicInformation attributes on file supported by different file systems.|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
+| | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir"/>FileInfo_Set_FileBasicInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes on directory is supported by different file systems.|
+| File information class: FileBasicInformation|
 | Message Sequence| CreateFile.|
 | | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
