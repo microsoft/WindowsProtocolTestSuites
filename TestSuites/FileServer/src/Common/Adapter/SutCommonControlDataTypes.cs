@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Convert to a Group instance.
         /// </summary>
         /// <returns>The Group instance converted.</returns>
-        public Group ToGroup() => ObjectClass == "group" ? new Group { Name = Name, Sid = Sid } : throw new InvalidOperationException($"Group member with a object class \"{ObjectClass}\" cannot be converted to a Group instance.");
+        public Group ToGroup() => ObjectClass.ToUpper() == "GROUP" ? new Group { Name = Name, Sid = Sid } : throw new InvalidOperationException($"Group member with a object class \"{ObjectClass}\" cannot be converted to a Group instance.");
     }
 
     /// <summary>
