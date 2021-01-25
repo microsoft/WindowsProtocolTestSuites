@@ -13,12 +13,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// <summary>
     /// This class defines the filter rule.
     /// </summary>
-    public class Rule :List<Rule>, INotifyPropertyChanged
+    public class Rule : List<Rule>, INotifyPropertyChanged
     {
         /// <summary>
         /// The name of this rule.
         /// </summary>
         public string Name { set; get; }
+
+        /// <summary>
+        /// The display name of this rule.
+        /// </summary>
+        public string DisplayName { get; set; }
 
         /// <summary>
         /// The description of this rule.
@@ -28,7 +33,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// A list of categories.
         /// </summary>
-        public List<string> CategoryList{get;set;}
+        public List<string> CategoryList { get; set; }
 
         private RuleSupportStatus _status;
 
@@ -74,7 +79,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public bool? IsSelected
         {
-            get {
+            get
+            {
                 switch (SelectStatus)
                 {
                     case RuleSelectStatus.UnSelected: return false;
@@ -123,7 +129,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
             }
         }
- 
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -189,7 +195,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             Rule rule = new Rule()
             {
                 // Normalize rule name by removing dot since FindRuleByName will use dot as split delimiter
-                Name = node.Attributes["name"].Value.Replace(".", string.Empty)
+                Name = node.Attributes["name"].Value.Replace(".", string.Empty),
+                DisplayName = node.Attributes["name"].Value,
             };
             foreach (XmlNode n in node.SelectNodes("Category"))
             {

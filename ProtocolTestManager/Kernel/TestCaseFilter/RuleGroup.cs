@@ -22,6 +22,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string Name { set; get; }
 
         /// <summary>
+        /// The display name of rule group.
+        /// </summary>
+        public string DisplayName { get; set; }
+
+        /// <summary>
         /// RuleGroup Description.
         /// </summary>
         public string Description { set; get; }

@@ -19,11 +19,11 @@ namespace Microsoft.Protocols.TestManager.UI
     /// </summary>
     public partial class RulePage : Page
     {
-		public RulePage()
-		{
-			InitializeComponent();
-           
-		}
+        public RulePage()
+        {
+            InitializeComponent();
+
+        }
 
         public void SetFilter(TestCaseFilter filter)
         {
@@ -59,7 +59,7 @@ namespace Microsoft.Protocols.TestManager.UI
                 AddItems(ruleTree.Items, group);
                 Expander expander = new Expander()
                 {
-                    Header = group.Name,
+                    Header = group.DisplayName,
                     Content = ruleTree,
                     IsExpanded = true
                 };
@@ -153,11 +153,11 @@ namespace Microsoft.Protocols.TestManager.UI
             };
             panel.Children.Add(checkbox);
             Label label = new Label()
-                {
-                    Content = rule.Name,
-                    Focusable = false,
-                    VerticalAlignment = System.Windows.VerticalAlignment.Center
-                };
+            {
+                Content = rule.DisplayName,
+                Focusable = false,
+                VerticalAlignment = System.Windows.VerticalAlignment.Center
+            };
             if (rule.Status == RuleSupportStatus.NotSupported)
             {
                 label.FontStyle = FontStyles.Italic;
@@ -173,5 +173,5 @@ namespace Microsoft.Protocols.TestManager.UI
             e.Handled = true;
         }
 
-	}
+    }
 }
