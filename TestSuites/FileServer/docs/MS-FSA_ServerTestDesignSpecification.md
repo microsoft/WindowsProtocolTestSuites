@@ -21,6 +21,7 @@
         * [FileInfo_IsShortNameSupported](#FileInfo_IsShortNameSupported)
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
+        * [FileInfo_Set_FileBasicInformation](#FileInfo_Set_FileBasicInformation)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -93,6 +94,9 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileBasicInformation](#FileBasicInformation)
+            * [FileInfo_Set_FileBasicInformation_File](#FileInfo_Set_FileBasicInformation_File)
+            * [FileInfo_Set_FileBasicInformation_Dir](#FileInfo_Set_FileBasicInformation_Dir)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -291,7 +295,7 @@ There are 139 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 26 (5) |
+| Scenarios for FileInformation | 7 | 28 (6) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -454,6 +458,21 @@ There are 343 test cases in total:
 | | If supported, The operation returns **STATUS_SUCCESS**.|
 | Message Sequence| CreateFile.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
+
+#### <a name="FileInfo_FileBasicInformationSupported"/>FileInfo_FileBasicInformationSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes supported by different file systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If the file system supports the attribute values, The system responds according to [MS-FSA] 2.1.5.14.2 FileBasicInformation. |
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
@@ -1562,6 +1581,17 @@ There are 343 test cases in total:
 | Description| To test if FileAccessInformation is supported for a file with ::$DATA as suffix.|
 | Message Sequence| CreateFile with ::$Data as file name suffix.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
+
+#### <a name="FileBasicInformation"/>FileBasicInformation
+
+##### <a name="FileInfo_Set_FileBasicInformation_File"/>FileInfo_Set_FileBasicInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes supported by different file systems.|
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
