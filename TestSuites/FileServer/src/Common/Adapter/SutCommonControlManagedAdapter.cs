@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Get a _WindowsIdentity instance from domain or local computer by the user name.
         /// </summary>
         /// <param name="target">Name of the domain or local compuer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges. This value can be omitted for local computer.</param>
+        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="userName">Name of the queried user.</param>
         /// <returns>A _WindowsIdentity instance represents the user.</returns>
         public _WindowsIdentity GetWindowsIdentity(string target, string adminUserName, string userName)
