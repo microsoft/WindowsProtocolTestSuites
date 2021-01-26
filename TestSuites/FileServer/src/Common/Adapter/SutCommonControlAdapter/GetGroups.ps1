@@ -48,7 +48,7 @@ $groups = @()
 foreach ($result in $results) {
     $group = @{
         Name = $result.Name
-        Sid  = $result.SID.Value
+        Sid  = $result.SID
     }
     $groups += $group
 }
@@ -57,5 +57,5 @@ if ($groups.Length -eq 0) {
     return "[]"
 }
 else {
-    return ($groups | ConvertTo-Json)
+    return ($groups | ConvertTo-Json -AsArray)
 }

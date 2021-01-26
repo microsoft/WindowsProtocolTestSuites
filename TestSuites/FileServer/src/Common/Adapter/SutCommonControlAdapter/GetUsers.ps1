@@ -49,7 +49,7 @@ $users = @()
 foreach ($result in $results) {
     $user = @{
         Name = $result.Name
-        Sid  = $result.SID.Value
+        Sid  = $result.SID
     }
     $users += $user
 }
@@ -58,5 +58,5 @@ if ($users.Length -eq 0) {
     return "[]"
 }
 else {
-    return ($users | ConvertTo-Json)
+    return ($users | ConvertTo-Json -AsArray)
 }

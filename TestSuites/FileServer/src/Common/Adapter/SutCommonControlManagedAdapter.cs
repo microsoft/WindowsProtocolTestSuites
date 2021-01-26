@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <returns>All users returned.</returns>
         public List<User> GetUsers(string target, string adminUserName)
         {
-            var usersStr = sutCommonControlAdapter.GetGroups(target, adminUserName);
+            var usersStr = sutCommonControlAdapter.GetUsers(target, adminUserName);
 
             var users = JsonSerializer.Deserialize<List<User>>(usersStr, serializerOptions);
 

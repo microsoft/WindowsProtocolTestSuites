@@ -56,8 +56,8 @@ foreach ($result in $results) {
     $member = @{
         Name            = $result.Name
         ObjectClass     = $result.ObjectClass
-        PrincipalSource = if ($isDomainEnv) { "ActiveDirectory" } else { $result.PrincipalSource.ToString() }
-        Sid             = $result.SID.Value
+        PrincipalSource = if ($isDomainEnv) { "ActiveDirectory" } else { $result.PrincipalSource }
+        Sid             = $result.SID
     }
     $members += $member
 }
@@ -66,5 +66,5 @@ if ($member.Length -eq 0) {
     return "[]"
 }
 else {
-    return ($members | ConvertTo-Json)
+    return ($members | ConvertTo-Json -AsArray)
 }

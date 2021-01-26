@@ -70,7 +70,7 @@ $memberships = @()
 foreach ($result in $results) {
     $membership = @{
         Name = $result.Name
-        Sid  = $result.SID.Value
+        Sid  = $result.SID
     }
     $memberships += $membership
 }
@@ -79,5 +79,5 @@ if ($memberships.Length -eq 0) {
     return "[]"
 }
 else {
-    return ($memberships | ConvertTo-Json)
+    return ($memberships | ConvertTo-Json -AsArray)
 }
