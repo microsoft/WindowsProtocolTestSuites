@@ -362,6 +362,9 @@
           <Rule name = "HVRS (Hyper-V Remote Storage)">
             <Category name = "HVRS-FSA"/>
           </Rule>
+          <Rule name = "FileAccess">
+            <Category name = "FileAccess"/>
+          </Rule>
         </Rule>
       </Rule>
     </Group>
