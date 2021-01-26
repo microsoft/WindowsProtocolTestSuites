@@ -70,11 +70,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             SetCreationTime(-3);
 
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
-            fileBasicInformation.FileAttributes = (uint)(FileAttribute.DIRECTORY | FileAttribute.NORMAL);
-
-            TestFileAttributes(fileType, fileBasicInformation);
-
-            fileBasicInformation.FileAttributes = (uint)(FileAttribute.TEMPORARY | FileAttribute.NORMAL);
+            fileBasicInformation.FileAttributes = fileType == FileType.DataFile ? (uint)(FileAttribute.DIRECTORY | FileAttribute.NORMAL)
+                : (uint)(FileAttribute.TEMPORARY | FileAttribute.NORMAL);
 
             TestFileAttributes(fileType, fileBasicInformation);
 
