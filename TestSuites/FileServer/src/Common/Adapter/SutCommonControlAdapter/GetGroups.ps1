@@ -8,8 +8,6 @@ $domainName = $PtfProp_Common_DomainName
 $sutComputerName = $PtfProp_Common_SutComputerName
 $dcName = $PtfProp_Common_DCServerComputerName
 
-$sessionUserName = $PtfProp_Common_AdminUserName
-
 $isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
 $remoteComputerName = if ($isDomainEnv) {
     $dcName
@@ -20,46 +18,44 @@ else {
 
 $commandForDomain = {
     param(
-        [string]$target,
-        [string]$adminUserName
+        [string]$target
     )
 
     $domainFqn = "DC=" + $target.Replace(".", ",DC=")
 
     [array]$domainGroups = Get-ADGroup -Filter "*" -SearchBase $domainFqn 
-    [array]$results = $domainGroups | ForEach-Object {
-        @{
-            Name = $_.Name
-            Sid  = $_.SID.Value
-        }
-    }
 
-    return $results
+    return $domainGroups
 }
 
 $commandForLocalComputer = {
-    $localGroups = @(Get-LocalGroup)
-    [array]$results = $localGroups | ForEach-Object {
-        @{
-            Name = $_.Name
-            Sid  = $_.SID.Value
-        }
-    }
-
-    return $results
+    return @(Get-LocalGroup)
 }
 
-$users = @()
 try {
-    $users = if ($isDomainEnv) {
-        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $adminUserName)
+    [array]$results = if ($isDomainEnv) {
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($target)
     }
     else {
-        Invoke-Command -HostName $remoteComputerName -UserName "$sessionUserName" -ScriptBlock $commandForLocalComputer
+        Invoke-Command -HostName $remoteComputerName -UserName "$adminUserName" -ScriptBlock $commandForLocalComputer
     }
 }
 catch {
     Get-Error
 }
 
-return ($users | ConvertTo-Json)
+$groups = @()
+foreach ($result in $results) {
+    $group = @{
+        Name = $result.Name
+        Sid  = $result.SID.Value
+    }
+    $groups += $group
+}
+
+if ($groups.Length -eq 0) {
+    return "[]"
+}
+else {
+    return ($groups | ConvertTo-Json)
+}

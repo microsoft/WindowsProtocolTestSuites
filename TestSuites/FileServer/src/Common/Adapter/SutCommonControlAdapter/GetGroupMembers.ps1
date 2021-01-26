@@ -9,8 +9,6 @@ $domainName = $PtfProp_Common_DomainName
 $sutComputerName = $PtfProp_Common_SutComputerName
 $dcName = $PtfProp_Common_DCServerComputerName
 
-$sessionUserName = $PtfProp_Common_AdminUserName
-
 $isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
 $remoteComputerName = if ($isDomainEnv) {
     $dcName
@@ -22,7 +20,6 @@ else {
 $commandForDomain = {
     param(
         [string]$target,
-        [string]$adminUserName,
         [string]$groupName
     )
 
@@ -30,16 +27,8 @@ $commandForDomain = {
 
     $domainGroup = Get-ADGroup -Filter "Name -eq '$groupName'" -SearchBase $domainFqn | Select-Object -First 1
     [array]$domainMembers = Get-ADGroupMember -Identity $domainGroup
-    [array]$results = $domainMembers | ForEach-Object {
-        @{
-            Name            = $_.Name
-            ObjectClass     = $_.ObjectClass
-            PrincipalSource = "ActiveDirectory"
-            Sid             = $_.SID.Value
-        }
-    }
 
-    return $results
+    return $domainMembers
 }
 
 $commandForLocalComputer = {
@@ -47,30 +36,35 @@ $commandForLocalComputer = {
         [string]$groupName
     )
 
-    $localMembers = @(Get-LocalGroupMember -Name $groupName)
-    [array]$results = $localMembers | ForEach-Object {
-        @{
-            Name            = $_.Name
-            ObjectClass     = $_.ObjectClass
-            PrincipalSource = $_.PrincipalSource.ToString()
-            Sid             = $_.SID.Value
-        }
-    }
-
-    return $results
+    return @(Get-LocalGroupMember -Name $groupName)    
 }
 
-$members = @()
 try {
-    $members = if ($isDomainEnv) {
-        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $adminUserName, $groupName)
+    [array]$results = if ($isDomainEnv) {
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $groupName)
     }
     else {
-        Invoke-Command -HostName $remoteComputerName -UserName "$sessionUserName" -ScriptBlock $commandForLocalComputer -ArgumentList @($groupName)
+        Invoke-Command -HostName $remoteComputerName -UserName "$adminUserName" -ScriptBlock $commandForLocalComputer -ArgumentList @($groupName)
     }
 }
 catch {
     Get-Error
 }
 
-return ($members | ConvertTo-Json)
+$members = @()
+foreach ($result in $results) {
+    $member = @{
+        Name            = $result.Name
+        ObjectClass     = $result.ObjectClass
+        PrincipalSource = if ($isDomainEnv) { "ActiveDirectory" } else { $result.PrincipalSource.ToString() }
+        Sid             = $result.SID.Value
+    }
+    $members += $member
+}
+
+if ($member.Length -eq 0) {
+    return "[]"
+}
+else {
+    return ($members | ConvertTo-Json)
+}

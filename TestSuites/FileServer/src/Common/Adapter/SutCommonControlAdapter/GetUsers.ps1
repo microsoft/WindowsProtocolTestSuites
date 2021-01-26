@@ -8,8 +8,6 @@ $domainName = $PtfProp_Common_DomainName
 $sutComputerName = $PtfProp_Common_SutComputerName
 $dcName = $PtfProp_Common_DCServerComputerName
 
-$sessionUserName = $PtfProp_Common_AdminUserName
-
 $isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
 $remoteComputerName = if ($isDomainEnv) {
     $dcName
@@ -20,47 +18,45 @@ else {
 
 $commandForDomain = {
     param(
-        [string]$target,
-        [string]$adminUserName
+        [string]$target
     )
 
     $domainFqn = "DC=" + $target.Replace(".", ",DC=")
     $usersFqn = "CN=Users,$domainFqn"
 
     [array]$domainUsers = Get-ADUser -Filter "*" -SearchBase $usersFqn 
-    [array]$results = $domainUsers | ForEach-Object {
-        @{
-            Name = $_.Name
-            Sid  = $_.SID.Value
-        }
-    }
 
-    return $results
+    return $domainUsers
 }
 
 $commandForLocalComputer = {
-    $localUsers = @(Get-LocalGroup)
-    [array]$results = $localUsers | ForEach-Object {
-        @{
-            Name = $_.Name
-            Sid  = $_.SID.Value
-        }
-    }
-
-    return $results
+    return @(Get-LocalUser)
 }
 
-$users = @()
 try {
-    $users = if ($isDomainEnv) {
-        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $adminUserName)
+    [array]$results = if ($isDomainEnv) {
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($target)
     }
     else {
-        Invoke-Command -HostName $remoteComputerName -UserName "$sessionUserName" -ScriptBlock $commandForLocalComputer
+        Invoke-Command -HostName $remoteComputerName -UserName "$adminUserName" -ScriptBlock $commandForLocalComputer
     }
 }
 catch {
     Get-Error
 }
 
-return ($users | ConvertTo-Json)
+$users = @()
+foreach ($result in $results) {
+    $user = @{
+        Name = $result.Name
+        Sid  = $result.SID.Value
+    }
+    $users += $user
+}
+
+if ($users.Length -eq 0) {
+    return "[]"
+}
+else {
+    return ($users | ConvertTo-Json)
+}

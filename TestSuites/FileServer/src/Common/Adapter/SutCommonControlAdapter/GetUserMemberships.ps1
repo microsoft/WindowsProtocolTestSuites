@@ -3,13 +3,11 @@
 
 [string]$target
 [string]$adminUserName
-[string]$groupName
+[string]$userName
 
 $domainName = $PtfProp_Common_DomainName
 $sutComputerName = $PtfProp_Common_SutComputerName
 $dcName = $PtfProp_Common_DCServerComputerName
-
-$sessionUserName = $PtfProp_Common_AdminUserName
 
 $isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
 $remoteComputerName = if ($isDomainEnv) {
@@ -22,55 +20,64 @@ else {
 $commandForDomain = {
     param(
         [string]$target,
-        [string]$adminUserName,
-        [string]$groupName
+        [string]$userName
     )
 
     $domainFqn = "DC=" + $target.Replace(".", ",DC=")
+    $userFqn = "CN=$userName,CN=Users,$domainFqn"
 
-    $domainGroup = Get-ADGroup -Filter "Name -eq '$groupName'" -SearchBase $domainFqn | Select-Object -First 1
-    [array]$domainMembers = Get-ADGroupMember -Identity $domainGroup
-    [array]$results = $domainMembers | ForEach-Object {
-        @{
-            Name            = $_.Name
-            ObjectClass     = $_.ObjectClass
-            PrincipalSource = "ActiveDirectory"
-            Sid             = $_.SID.Value
-        }
-    }
+    [array]$domainMemberships = Get-ADGroup -LDAPFilter "(member=$userFqn)" -SearchBase $domainFqn
 
-    return $results
+    return $domainMemberships
 }
 
 $commandForLocalComputer = {
     param(
-        [string]$groupName
+        [string]$userName
     )
 
-    $localMembers = @(Get-LocalGroupMember -Name $groupName)
-    [array]$results = $localMembers | ForEach-Object {
-        @{
-            Name            = $_.Name
-            ObjectClass     = $_.ObjectClass
-            PrincipalSource = $_.PrincipalSource.ToString()
-            Sid             = $_.SID.Value
+    $localUser = Get-LocalUser -Name $userName
+    $localUserSid = $localUser.SID.Value
+
+    $localGroups = @(Get-LocalGroup)
+    $localMemberships = @()
+    foreach ($localGroup in $localGroups) {
+        $localGroupMembers = @(Get-LocalGroupMember -Name $localGroup.Name)
+        foreach ($localGroupMember in $localGroupMembers) {
+            if ($localGroupMember.SID.Value -eq $localUserSid) {
+                $localMemberships += $localGroup
+                break
+            }
         }
     }
 
-    return $results
+    return $localMemberships
 }
 
-$members = @()
 try {
-    $members = if ($isDomainEnv) {
-        Invoke-Command -HostName $remoteComputerName -UserName "$target\$sessionUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $adminUserName, $groupName)
+    [array]$results = if ($isDomainEnv) {
+        Invoke-Command -HostName $remoteComputerName -UserName "$target\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $userName)
     }
     else {
-        Invoke-Command -HostName $remoteComputerName -UserName "$sessionUserName" -ScriptBlock $commandForLocalComputer -ArgumentList @($groupName)
+        Invoke-Command -HostName $remoteComputerName -UserName "$adminUserName" -ScriptBlock $commandForLocalComputer -ArgumentList @($userName)
     }
 }
 catch {
     Get-Error
 }
 
-return ($members | ConvertTo-Json)
+$memberships = @()
+foreach ($result in $results) {
+    $membership = @{
+        Name = $result.Name
+        Sid  = $result.SID.Value
+    }
+    $memberships += $membership
+}
+
+if ($memberships.Length -eq 0) {
+    return "[]"
+}
+else {
+    return ($memberships | ConvertTo-Json)
+}
