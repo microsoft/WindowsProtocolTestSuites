@@ -8,7 +8,6 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -75,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             TestFileAttributes(fileType, fileBasicInformation);
 
-            //Set FileBasicInformation with 0, -1 then -2 and verify system response
+            //Step 4: Set FileBasicInformation with 0, -1 then -2 and verify system response
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having values 0, -1, then -2 and verify system response");
             if (fileType == FileType.DataFile 
                 && (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS))
@@ -138,7 +137,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             string underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
 
             this.fsaAdapter.AssertAreEqual(this.Manager, creationTime, underTestTimestamp,
-                "If " + timestampType + " is 0, MUST NOT change this attribute");
+                "If " + timestampType + " is 0, MUST NOT change " + timestampType + " attribute");
 
             //SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp equals -1
             SetTimestampUnderTest(timestampType, -1);
@@ -157,7 +156,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
             this.fsaAdapter.AssertAreEqual(this.Manager, creationTime, underTestTimestamp,
-                    "If " + timestampType + " is -1, MUST NOT change this attribute for all subsequent operations");
+                    "If " + timestampType + " is -1, MUST NOT change " + timestampType + " attribute for all subsequent operations");
 
             //SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp equals to -2
             SetTimestampUnderTest(timestampType, -2);
@@ -176,7 +175,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
             BaseTestSite.Assert.AreNotEqual(creationTime, underTestTimestamp,
-                "If " + timestampType + " is -2, MUST change this attribute for all subsequent operations");
+                "If " + timestampType + " is -2, MUST change " + timestampType + " attribute for all subsequent operations");
         }
 
         private void SetTimestampUnderTest(string timestampType, long value)
@@ -305,8 +304,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void WriteToFile()
         {
-            //write data to file after 1 second time interval
-            Thread.Sleep(1000);
+            //write data to file after a time interval
+            DateTime currentTime = DateTime.Now;
+            DateTime nextTime = DateTime.Now;
+
+            while (currentTime.ToString().Equals(nextTime.ToString()))
+            {
+                nextTime = DateTime.Now;
+            }
 
             long byteSize = (uint) 2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
             MessageStatus status = this.fsaAdapter.WriteFile(0, byteSize, out _);
