@@ -9,7 +9,7 @@ $domainName = $PtfProp_Common_DomainName
 $sutComputerName = $PtfProp_Common_SutComputerName
 $dcName = $PtfProp_Common_DCServerComputerName
 
-$isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
+$isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName) -and ($target -eq $domainName)
 $remoteComputerName = if ($isDomainEnv) {
     $dcName
 }

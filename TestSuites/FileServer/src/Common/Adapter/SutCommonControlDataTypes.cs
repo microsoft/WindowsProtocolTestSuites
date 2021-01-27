@@ -38,19 +38,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public _SID Sid { get; set; }
     }
 
-    public class GroupEqualityComparer : IEqualityComparer<Group>
-    {
-        public bool Equals(Group x, Group y)
-        {
-            return x.Name == y.Name;
-        }
-
-        public int GetHashCode(Group obj)
-        {
-            return obj.Name.GetHashCode();
-        }
-    }
-
     /// <summary>
     /// Represent a local or domain group member.
     /// </summary>
@@ -75,12 +62,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// The group _SID.
         /// </summary>
         public _SID Sid { get; set; }
-
-        /// <summary>
-        /// Convert to a Group instance.
-        /// </summary>
-        /// <returns>The Group instance converted.</returns>
-        public Group ToGroup() => ObjectClass.ToUpper() == "GROUP" ? new Group { Name = Name, Sid = Sid } : throw new InvalidOperationException($"Group member with a object class \"{ObjectClass}\" cannot be converted to a Group instance.");
     }
 
     /// <summary>
