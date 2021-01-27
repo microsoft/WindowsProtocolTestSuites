@@ -42,7 +42,7 @@ $commandForLocalComputer = {
 }
 
 try {
-	[array]$userSid = if ($isDomainEnv) {
+	$userSid = if ($isDomainEnv) {
 		Invoke-Command -HostName $remoteComputerName -UserName "$target\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $userName)
 	}
 	else {
