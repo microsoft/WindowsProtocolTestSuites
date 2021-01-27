@@ -1167,7 +1167,7 @@ To set NTFS permissions on the shared **AzShare** folder that you created by fol
 
   ![](./image/FileServerUserGuide/image8.png)
 
-  Figure 12. Specifying advanced security settings for the **AzShare** share
+  Figure 12. Specifying advanced security settings for the **AzShare** folder
 
 #### <a name="5.3.3"/> 5.3.3 Set Share Permissions
 
