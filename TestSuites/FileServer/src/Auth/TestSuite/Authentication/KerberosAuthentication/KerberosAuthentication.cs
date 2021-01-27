@@ -320,7 +320,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 TestConfig.UserName,
                 TestConfig.UserPassword,
                 KerberosAccountType.User,
-                KDCIP,
+                KDCIP.ParseIPAddress(),
                 KDCPort,
                 TransportType.TCP,
                 OidPkt,
@@ -504,6 +504,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         [TestCategory(TestCategories.Auth)]
         [TestCategory(TestCategories.KerberosAuthentication)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether DC and File Server can handle users name with special characters.")]
         public void KerbAuth_UserName_With_Special_Characters()
         {
@@ -568,7 +569,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 username,
                 password,
                 KerberosAccountType.User,
-                KDCIP,
+                KDCIP.ParseIPAddress(),
                 KDCPort,
                 TransportType.TCP,
                 OidPkt,
