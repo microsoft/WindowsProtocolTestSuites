@@ -45,7 +45,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         private void FileInfo_Set_FileBasicInformation(FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
-            MessageStatus status;
 
             //Step 1: Create File
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
@@ -56,7 +55,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having invalid inputBuffer and verify NTSTATUS");
 
             byte[] inputBuffer = new byte[1];
-            status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
+            MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
 
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INFO_LENGTH_MISMATCH, status,
                     "If InputBufferSize is less than sizeof(FILE_BASIC_INFORMATION), the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
@@ -79,9 +78,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             if (fileType == FileType.DataFile 
                 && (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS))
             {
-                TestMinusTwoTimestamp("ChangeTime");
-                TestMinusTwoTimestamp("LastAccessTime");
-                TestMinusTwoTimestamp("LastWriteTime");
+                TestMinusTwoTimestamp(TimestampType.ChangeTime);
+                TestMinusTwoTimestamp(TimestampType.LastAccessTime);
+                TestMinusTwoTimestamp(TimestampType.LastWriteTime);
             }
             else if(fileType != FileType.DirectoryFile)
             {
@@ -106,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
         }
 
-        private void TestMinusTwoTimestamp(string timestampType)
+        private void TestMinusTwoTimestamp(TimestampType timestampType)
         {
             //Create new file
             CreateFile(FileType.DataFile);
@@ -128,11 +127,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             long timestampUnderTest = timestampType switch
             {
-                "ChangeTime" => changeTime,
-                "LastAccessTime" => lastAccessTime,
-                "LastWriteTime" => lastWriteTime,
+                TimestampType.ChangeTime => changeTime,
+                TimestampType.LastAccessTime => lastAccessTime,
+                TimestampType.LastWriteTime => lastWriteTime,
             };
-
             string creationTime = DateTime.FromFileTime(initialCreationTime).ToString();
             string underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
 
@@ -149,12 +147,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             timestampUnderTest = timestampType switch
             {
-                "ChangeTime" => changeTime,
-                "LastAccessTime" => lastAccessTime,
-                "LastWriteTime" => lastWriteTime
+                TimestampType.ChangeTime => changeTime,
+                TimestampType.LastAccessTime => lastAccessTime,
+                TimestampType.LastWriteTime => lastWriteTime,
             };
-
             underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
+
             this.fsaAdapter.AssertAreEqual(this.Manager, creationTime, underTestTimestamp,
                     "If " + timestampType + " is -1, MUST NOT change " + timestampType + " attribute for all subsequent operations");
 
@@ -168,30 +166,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             timestampUnderTest = timestampType switch
             {
-                "ChangeTime" => changeTime,
-                "LastAccessTime" => lastAccessTime,
-                "LastWriteTime" => lastWriteTime
+                TimestampType.ChangeTime => changeTime,
+                TimestampType.LastAccessTime => lastAccessTime,
+                TimestampType.LastWriteTime => lastWriteTime,
             };
-
             underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
+
             BaseTestSite.Assert.AreNotEqual(creationTime, underTestTimestamp,
                 "If " + timestampType + " is -2, MUST change " + timestampType + " attribute for all subsequent operations");
         }
 
-        private void SetTimestampUnderTest(string timestampType, long value)
+        private void SetTimestampUnderTest(TimestampType timestampType, long value)
         {
             switch (timestampType)
             {
-                case "ChangeTime":
+                case TimestampType.ChangeTime:
                     SetChangeTime(value);
                     break;
-                case "LastAccessTime":
+                case TimestampType.LastAccessTime:
                     SetLastAccessTime(value);
                     break;
-                case "LastWriteTime":
+                case TimestampType.LastWriteTime:
                     SetLastWriteTime(value);
                     break;
             }
+        }
+
+        private enum TimestampType
+        {
+            ChangeTime,
+            CreationTime,
+            LastAccessTime,
+            LastWriteTime
         }
 
         private void SetChangeTime(long changeTime)
@@ -286,7 +292,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             byte[] inputBuffer = TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation);
             MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
-
             bool isDirectory = (fileBasicInformation.FileAttributes & (uint)FileAttribute.DIRECTORY) == (uint)FileAttribute.DIRECTORY;
             bool isTemporary = (fileBasicInformation.FileAttributes & (uint)FileAttribute.TEMPORARY) == (uint)FileAttribute.TEMPORARY;
             
@@ -315,6 +320,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             long byteSize = (uint) 2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
             MessageStatus status = this.fsaAdapter.WriteFile(0, byteSize, out _);
+
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
                     "Write data to file should succeed");
         }
@@ -323,8 +329,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             , out long lastAccessTime, out long lastWriteTime)
         {
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
-            byte[] outputBuffer;
             uint outputBufferSize = (uint)TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation).Length;
+            byte[] outputBuffer;
             this.fsaAdapter.QueryFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, outputBufferSize, out _, out outputBuffer);
             
             fileBasicInformation = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
