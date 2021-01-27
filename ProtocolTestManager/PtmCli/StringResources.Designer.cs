@@ -124,6 +124,15 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Report file is generate under {1}.
+        /// </summary>
+        internal static string ReportFilePath {
+            get {
+                return ResourceManager.GetString("ReportFilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can find the test results under {0}.
         /// </summary>
         internal static string TestResultPath {

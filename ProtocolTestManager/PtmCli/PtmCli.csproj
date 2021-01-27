@@ -17,7 +17,6 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\Kernel\Kernel.csproj" />
-	  <ProjectReference Include="..\ptmtestlogger\PTMTestLogger.csproj" />
   </ItemGroup>
   
   <ItemGroup>

@@ -72,6 +72,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
 
         /// <summary>
+        /// Test suite result output folder
+        /// </summary>
+        public string TestResultOutputFolder
+        {
+            get
+            {
+                if(testEngine == null)
+                {
+                    return string.Empty;
+                }
+                return Path.Combine(testEngine.WorkingDirectory, testEngine.ResultOutputFolder);
+            }
+        }
+
+        /// <summary>
         /// Loads test suite configuration.
         /// </summary>
         /// <param name="testSuiteInfo">The information of a test suite</param>
@@ -852,7 +867,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
                 TestSetting = appConfig.TestSetting,
-                ResultOutputFolder = Path.Combine("HtmlTestResults", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}"),
+                ResultOutputFolder = "HtmlTestResults",
                 PtfConfigDirectory = ptfconfigDirectory,
                 RunSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}.runsettings"),
                 PipeName = appConfig.PipeName,

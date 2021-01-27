@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             args.AppendFormat("--results-directory {0} ", ResultOutputFolder);
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
-            args.AppendFormat("--logger ptm ");
+            args.AppendFormat("--logger html ");
 
             ConstructRunSettings(RunSettingsPath);
             args.AppendFormat("--settings {0} ", RunSettingsPath);
@@ -247,7 +247,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 message.IndexOf(StringResource.FailedTag) != -1 ||
                 message.IndexOf(StringResource.InconclusiveTag) != -1)
             {
-                string[] strings = message.Split('.');
+                string[] strings = message.Split(' ');
                 string testCaseName = strings[strings.Length - 1];
 
                 if (String.IsNullOrEmpty(testCaseName))
