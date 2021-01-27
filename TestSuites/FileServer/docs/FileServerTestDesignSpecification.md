@@ -221,7 +221,7 @@ Test scenarios are categorized as below table and will be described in following
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
 | RSVD Test                | 29         | Test for MS-RSVD                                                                                                  |
-| DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
+| DFSC Test                | 42         | Test for MS-DFSC                                                                                                  |
 | HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
 ### <a name="3.1">SMB2 BVT
@@ -9148,7 +9148,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 | **DC\_referral\_to\_DC**                     | 6              |
 | **Sysvol\_referral\_to\_DC**                 | 7              |
 | **Root\_referral\_to\_DC**                   | 5              |
-| **Link\_referral\_to\_DC**                   | 7              |
+| **Link\_referral\_to\_DC**                   | 6              |
 | **Root\_and\_Link\_referral\_to\_DFSServer** | 11             |
 | **Path\_Normalization\_to\_DFSServer**       | 2              |
 
@@ -9600,18 +9600,6 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v2 REQ_GET_DFS_REFERRAL message with invalid domain name (RequestFileName is "\Invalid\DomainBased\DFSLink", MaxReferralLevel is 2) to DC.|
-||3. Client expects STATUS == STATUS_NOT_FOUND.|
-||4. Disconnect and logoff.|
-|**Cleanup**|N/A|
-
-
-|||
-|---|---|
-|**Test ID**|InvalidLinkNameLinkReferralToDC|
-|**Description**|Client sends a v3 Link referral request with invalid link name to DC, expect negative response|
-|**Prerequisites**|Common prerequisites|
-|**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
-||2. Client sends a Link referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\Invalid", MaxReferralLevel is 3) to DC.|
 ||3. Client expects STATUS == STATUS_NOT_FOUND.|
 ||4. Disconnect and logoff.|
 |**Cleanup**|N/A|

@@ -325,6 +325,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle NEGOTIATE with " +
             "Smb 3.11 dialect and with all the three Negotiate Contexts.")]
         public void Negotiate_SMB311_WithAllContexts()

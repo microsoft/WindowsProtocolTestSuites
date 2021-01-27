@@ -444,7 +444,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Spng
                     kileConfig.ServiceName,
                     kileConfig.ClientCredential,
                     KerberosAccountType.User,
-                    kileConfig.ClientCredential.DomainName,
+                    kileConfig.KdcIpAddress,
                     kileConfig.KdcPort,
                     kileConfig.TransportType,
                     kileConfig.SecurityAttributes);
