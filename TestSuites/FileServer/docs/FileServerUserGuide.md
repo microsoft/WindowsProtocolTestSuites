@@ -1176,7 +1176,7 @@ To set NTFS permissions on the shared **AzShare** folder that you created by fol
 
     <a name="fig.13"></a>
 
-    ![](./image/FileServerUserGuide/image8.png)
+    ![](./image/FileServerUserGuide/image10.png)
 
     Figure 13. Editing the permissions of selected sceurity principal for the **AzShare** folder
 
