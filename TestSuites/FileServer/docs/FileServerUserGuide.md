@@ -34,6 +34,7 @@
   * [5.3 General Setup Details for Windows Platforms](#5.3)
     * [5.3.1 Create a share](#5.3.1)
     * [5.3.2 Set NTFS Permissions](#5.3.2)
+    * [5.3.3 Set NTFS Permissions with an ACL File](#5.3.3)
     * [5.3.3 Set Share Permissions](#5.3.3)
     * [5.3.4 Add a share SameWithSMBBasic with the same Path of Share SMBBasic](#5.3.4)
     * [5.3.5 Create symbolic links](#5.3.5)
@@ -1034,16 +1035,16 @@ Authorization testing is not applicable to the **WORKGROUP** environment on Wind
     | --------------- | ---------------- |
     | Allow Everyone  | Allow Everyone   |
 
-5. If the Server Service Remote Protocol (**MS-SRVS**) is not supported, create shares **AzShare01** through AzShare06 on the SUT computer. Permissions for each share should be set as specified in the following table:
+5. If the Server Service Remote Protocol (**MS-SRVS**) is not supported, create shares **AzShare01** through **AzShare06** on the SUT computer. Permissions for each share should be set as specified in the following table:
 
-    | Share Name | Permissions                                                 |
-    | ---------- | ----------------------------------------------------------- |
-    | AzShare01  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)  |
-    | AzShare02  | O:SYG:SYD:(A;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA) |
-    | AzShare03  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzUser01\])(A;;FA;;;BA)  |
-    | AzShare04  | O:SYG:SYD:(D;;0x1fffff;;; \[SID of AzGroup01\])(A;;FA;;;BA) |
-    | AzShare05  | O:SYG:SYD:(A;;FA;;;BA)                                      |
-    | AzShare06  | O:SYG:SYD:(D;;;;; \[SID of AzUser01\])(A;;FA;;;BA)          |
+    | Share Name | Permissions                                                |
+    | ---------- | ---------------------------------------------------------- |
+    | AzShare01  | O:SYG:SYD:(A;;0x1fffff;;;\[SID of AzUser01\])(A;;FA;;;BA)  |
+    | AzShare02  | O:SYG:SYD:(A;;0x1fffff;;;\[SID of AzGroup01\])(A;;FA;;;BA) |
+    | AzShare03  | O:SYG:SYD:(D;;0x1fffff;;;\[SID of AzUser01\])(A;;FA;;;BA)  |
+    | AzShare04  | O:SYG:SYD:(D;;0x1fffff;;;\[SID of AzGroup01\])(A;;FA;;;BA) |
+    | AzShare05  | O:SYG:SYD:(A;;FA;;;BA)                                     |
+    | AzShare06  | O:SYG:SYD:(D;;;;;\[SID of AzUser01\])(A;;FA;;;BA)          |
 
 ![](./image/FileServerUserGuide/image1.png)**Note**
 
@@ -1054,6 +1055,8 @@ For Windows platforms, see the following sections to facilitate creating shares 
 * [5.3.1 Create a share](#5.3.1)
 
 * [5.3.2 Set NTFS Permissions](#5.3.2)
+  
+* [5.3.3 Set NTFS Permissions with an ACL file](#5.3.3)
 
 * [5.3.3 Set Share Permissions](#5.3.3)
 
@@ -1143,31 +1146,80 @@ To set NTFS permissions on the shared **AzShare** folder that you created by fol
 
 1. Right-click the shared folder and select **Properties**.
 
-  <a name="fig.10"></a>
+    <a name="fig.10"></a>
 
-  ![](./image/FileServerUserGuide/image210.png)
+    ![](./image/FileServerUserGuide/image210.png)
 
-  Figure 10. Opening the **AzShare** properties to set NTFS permissions
+    Figure 10. Opening the **AzShare** properties to set NTFS permissions
 
 2. On the **Security** tab of the **AzShare** **Properties** dialog, click **Advanced**.
 
-  <a name="fig.11"></a>
+    <a name="fig.11"></a>
 
-  ![](./image/FileServerUserGuide/image211.png)
+    ![](./image/FileServerUserGuide/image211.png)
 
-  Figure 11. **Security** tab of the **AzShare** **Properties** dialog
+    Figure 11. **Security** tab of the **AzShare** **Properties** dialog
 
 3. On the **Permissions** tab of the **Advanced Security Settings** for **AzShare** dialog, edit NTFS Permissions by selecting security principal **Administrator** (**Node01\\Administrator**) and clicking the **Edit** button.
 
-  ![](./image/FileServerUserGuide/image1.png)**Note**
+    ![](./image/FileServerUserGuide/image1.png)**Note**
 
-  If you want to add or remove a security principal, click Add or Remove as required.
+    If you want to add or remove a security principal, click Add or Remove as required.
 
-  <a name="fig.12"></a>
+    <a name="fig.12"></a>
 
-  ![](./image/FileServerUserGuide/image8.png)
+    ![](./image/FileServerUserGuide/image8.png)
 
-  Figure 12. Specifying advanced security settings for the **AzShare** folder
+    Figure 12. Specifying advanced security settings for the **AzShare** folder
+
+4. On the **Permission Entry** for **AzShare** dialog, check the permissions you want to assign to **Administrator** (**Node01\\Administrator**) and click the **OK** button to confirm your changes.
+
+    <a name="fig.13"></a>
+
+    ![](./image/FileServerUserGuide/image8.png)
+
+    Figure 13. Editing the permissions of selected sceurity principal for the **AzShare** folder
+
+#### <a name="5.3.3"/> 5.3.3 Set NTFS Permissions with an ACL file
+
+To set NTFS permissions on the shared folders **AzShare01** through **AzShare06** that you created by following the steps in section [5.3.1](#5.3.1) whose permissions are provided as ACL strings, perform the steps that follow.
+
+1. Create an empty txt file named **aclfile** in the parent folder where the shared folders locate.
+
+2. Insert the following lines to **aclfile** with **CRLF** line endings, please replace SID placeholders with the correct corresponding SIDs.
+
+    ```txt
+      AzShare01
+      O:SYG:SYD:(A;;0x1fffff;;;[SID of AzUser01])(A;;FA;;;BA)
+      AzShare02
+      O:SYG:SYD:(A;;0x1fffff;;;[SID of AzGroup01])(A;;FA;;;BA)
+      AzShare03
+      O:SYG:SYD:(D;;0x1fffff;;;[SID of AzUser01])(A;;FA;;;BA)
+      AzShare04
+      O:SYG:SYD:(D;;0x1fffff;;;[SID of AzGroup01])(A;;FA;;;BA)
+      AzShare05
+      O:SYG:SYD:(A;;FA;;;BA)
+      AzShare06
+      O:SYG:SYD:(D;;;;;[SID of AzUser01])(A;;FA;;;BA)
+    ```
+
+3. Save **aclfile** in **UTF-16 LE** encoding.
+
+4. Start the console window with Administrator privileges.
+
+    For further details, see section [5.3.24 How to start the console with Administrator privilege](#5.3.24).
+
+5. Change the current directory to the parent folder where the shared folders locate.
+
+6. Execute the following command to set the corresponding NTFS permissions written in **aclfile** on the shared folders **AzShare01** through **AzShare06**.
+
+    ```batch
+      icacls .\ /restore .\aclfile
+    ```
+
+![](./image/FileServerUserGuide/image1.png)**Note**
+
+If you want to learn more about ACL strings, see [Security Descriptor String Format](https://docs.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format).
 
 #### <a name="5.3.3"/> 5.3.3 Set Share Permissions
 
@@ -1185,11 +1237,11 @@ To set permissions on a specified share, perform the steps that follow.
 
 5. Click the **Share Permissions** tab in the **Properties** dialog and set the permissions specified in section [5.2.4.7](#5.2.4.7).
 
-  <a name="fig.13"></a>
+    <a name="fig.13"></a>
 
-  ![](./image/FileServerUserGuide/image9.png)
+    ![](./image/FileServerUserGuide/image9.png)
 
-  Figure 13. Setting permissions for a specified share
+    Figure 13. Setting permissions for a specified share
 
 #### <a name="5.3.4"/> 5.3.4 Add a share SameWithSMBBasic with the same path of Share SMBBasic
 
