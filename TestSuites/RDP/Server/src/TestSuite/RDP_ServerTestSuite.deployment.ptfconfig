@@ -36,7 +36,7 @@
     <!--The user name of local host (RDP server). -->
     <Property name="RDP.ServerUserName" value="Administrator"/>
     <!--The logon password of "RDP.ServerUserName". -->
-    <Property name="RDP.ServerUserPassword" value="Password01!"/>
+    <Property name="RDP.ServerUserPassword" value="Password02!"/>
     <!-- Computer name or IP of the driver computer-->
     <Property name="RDP.ClientName" value="192.168.172.101"/>
 
