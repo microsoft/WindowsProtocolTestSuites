@@ -830,7 +830,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private void FetchPlatformInfo(ref DetectionInfo info)
         {
-            ManagementObjectCollection resultCollection = QueryWmiObject(SUTName, "SELECT * FROM Win32_OperatingSystem");
+            ManagementObjectCollection resultCollection = QueryWmiObject(SUTName, "SELECT * FROM Win32_OperatingSystem", info.userName, info.password);
             foreach (ManagementObject result in resultCollection)
             {
                 info.platform = ConvertPlatform(result["Version"].ToString(), result["BuildNumber"].ToString());
@@ -882,7 +882,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         {
             // If SUT is in Domain, get the Domain nonadmin useraccounts
             // If SUT is in WORKGROUP, get the SUT nonadmin useraccounts
-            ManagementObjectCollection resultCollection = QueryWmiObject(info.domainName, "SELECT * FROM Win32_UserAccount");
+            ManagementObjectCollection resultCollection = QueryWmiObject(info.domainName, "SELECT * FROM Win32_UserAccount", info.userName, info.password);
             foreach (ManagementObject result in resultCollection)
             {
                 #region Filter out administrator accounts according to SID
@@ -937,9 +937,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
         }
 
-        private ManagementObjectCollection QueryWmiObject(string machineName, string queryString)
+        private ManagementObjectCollection QueryWmiObject(string machineName, string queryString, string userName, string password)
         {
-            ConnectionOptions options = new ConnectionOptions() { Timeout = new TimeSpan(0, 0, 5) };
+            ConnectionOptions options = new ConnectionOptions() { Timeout = new TimeSpan(0, 0, 5), Username = userName, Password = password };
             ManagementScope ms = new ManagementScope("\\\\" + machineName + "\\root\\cimv2", options);
             ms.Connect();
             ObjectQuery query = new ObjectQuery(queryString);
