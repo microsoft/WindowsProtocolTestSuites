@@ -54,6 +54,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
 
         /// <summary>
+        /// This method is to determine whether there are pending packets to be waited or not.
+        /// </summary>
+        /// <returns>There are pending packets to be waited or not.</returns>
+        public bool IsWaitingForPackets()
+        {
+            return packetReceived.Count > 0;
+        }
+
+        /// <summary>
         /// This method must be called before sending a request packet to the server.
         /// Prepare to wait response packet.
         /// </summary>
@@ -580,16 +589,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             return;
                     }
                 }
+                catch (TimeoutException exception)
+                {
+                    if (receivedPackets.IsWaitingForPackets())
+                    {
+                        HandleException(exception);
+                        return;
+                    }
+
+                    // The timeout should not be counted if there is no pending packets to be waited.
+                    continue;
+                }
                 catch (Exception exception)
                 {
                     // If throw the exception from this receive thread, QTAgent will crash.
                     // So save the exception to a member variable, and throw it when the case calls ExpectPacket.
                     // End the current thread.
-                    exceptionWhenReceivingPacket = exception;
-                    receivedPackets.Release();
-                    notificationReceivedEvent.Set();
+                    HandleException(exception);
                     return;
                 }
+            }
+
+            void HandleException(Exception exception)
+            {
+                exceptionWhenReceivingPacket = exception;
+                receivedPackets.Release();
+                notificationReceivedEvent.Set();
             }
         }
 
