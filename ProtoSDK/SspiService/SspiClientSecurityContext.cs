@@ -240,7 +240,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                         if (accountCredential is AccountCredential)
                         {
                             var credential = accountCredential as AccountCredential;
-                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(this.serverPrincipalName, credential, this.securityContextAttributes);
+                            IPAddress kdcIpAddress = (string.IsNullOrEmpty(KerberosContext.KDCComputerName) ? credential.DomainName : KerberosContext.KDCComputerName).ParseIPAddress();
+                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(
+                                this.serverPrincipalName,
+                                credential,
+                                KerberosAccountType.User,
+                                kdcIpAddress,
+                                KerberosContext.KDCPort,
+                                TransportType.TCP,
+                                this.securityContextAttributes
+                            );
                         }
                         else
                         {
@@ -259,7 +268,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
 
                             var credential = accountCredential as AccountCredential;
                             NlmpClientSecurityConfig nlmpSecurityConfig = new NlmpClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
-                            KerberosClientSecurityConfig kerberosSecurityConfig = new KerberosClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
+
+                            IPAddress kdcIpAddress = (string.IsNullOrEmpty(KerberosContext.KDCComputerName) ? credential.DomainName : KerberosContext.KDCComputerName).ParseIPAddress();
+                            KerberosClientSecurityConfig kerberosSecurityConfig = new KerberosClientSecurityConfig(
+                                credential, 
+                                credential.AccountName, 
+                                this.serverPrincipalName,
+                                kdcIpAddress,
+                                KerberosContext.KDCPort, 
+                                this.securityContextAttributes, 
+                                TransportType.TCP
+                            );
 
                             this.Context = new SpngClientSecurityContext(this.securityContextAttributes, nlmpSecurityConfig, kerberosSecurityConfig);
                         }

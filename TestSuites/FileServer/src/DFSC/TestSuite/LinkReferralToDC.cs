@@ -113,24 +113,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                 "Expected Link Referral v4 to DC Response is STATUS_NOT_FOUND, actual status is {0}", Smb2Status.GetStatusCode(status));
         }
 
-        [TestMethod]
-        [TestCategory(TestCategories.Dfsc)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.UnexpectedFields)]
-        [Description("Client sends a v3 Link referral request with invalid link name to DC, and expects negative response.")]
-        public void InvalidLinkNameLinkReferralToDC()
-        {
-            uint status;
-            string invalidLinkName = string.Format(@"\{0}\{1}\{2}", TestConfig.DomainFQDNName, TestConfig.DomainNamespace, DFSCTestUtility.Consts.InvalidComponent);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v3 Link referral request with invalid link name to DC.");
-            utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V3, invalidLinkName, true);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server response.");
-            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_NOT_FOUND, status,
-                "Expected Link Referral v3 to DC Response is STATUS_NOT_FOUND, actual status is {0}", Smb2Status.GetStatusCode(status));
-        }
-
         /// <summary>
         /// Send valid link referral request and verify response.
         /// </summary>

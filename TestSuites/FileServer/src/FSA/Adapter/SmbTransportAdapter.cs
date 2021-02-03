@@ -211,6 +211,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             base.Initialize(testSite);
             this.site = testSite;
             this.smbClient = null;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
         }
 
         /// <summary>
