@@ -54,15 +54,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
 
         /// <summary>
-        /// This method is to determine whether there are pending packets to be waited or not.
-        /// </summary>
-        /// <returns>There are pending packets to be waited or not.</returns>
-        public bool IsWaitingForPackets()
-        {
-            return packetReceived.Count > 0;
-        }
-
-        /// <summary>
         /// This method must be called before sending a request packet to the server.
         /// Prepare to wait response packet.
         /// </summary>
@@ -589,15 +580,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             return;
                     }
                 }
-                catch (TimeoutException exception)
+                catch (TimeoutException)
                 {
-                    if (receivedPackets.IsWaitingForPackets())
-                    {
-                        HandleException(exception);
-                        return;
-                    }
-
-                    // The timeout should not be counted if there is no pending packets to be waited.
+                    // Ignore timeout exceptions.
                     continue;
                 }
                 catch (Exception exception)

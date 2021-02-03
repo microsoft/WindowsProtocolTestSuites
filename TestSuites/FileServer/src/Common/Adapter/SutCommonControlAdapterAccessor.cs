@@ -12,17 +12,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
     /// <summary>
     /// This class is to query common info from domain or local computer.
     /// </summary>
-    public class SutCommonControlManagedAdapter : ManagedAdapterBase, ISutCommonControlManagedAdapter
+    public class SutCommonControlAdapterAccessor
     {
         private ISutCommonControlAdapter sutCommonControlAdapter;
 
         private JsonSerializerOptions serializerOptions;
 
-        public override void Initialize(ITestSite testSite)
+        public SutCommonControlAdapterAccessor(ITestSite testSite)
         {
-            base.Initialize(testSite);
-
-            sutCommonControlAdapter = Site.GetAdapter<ISutCommonControlAdapter>();
+            sutCommonControlAdapter = testSite.GetAdapter<ISutCommonControlAdapter>();
 
             serializerOptions = new JsonSerializerOptions();
             serializerOptions.Converters.Add(new _SIDConverter());

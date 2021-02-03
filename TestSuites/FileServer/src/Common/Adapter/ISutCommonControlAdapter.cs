@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
         /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="userName">Name of the queried user.</param>
-        /// <returns>SID of the user returned.</returns>
+        /// <returns>The SDDL form of the user SID returned.</returns>
         [MethodHelp("Get SID of a user from domain or local computer.")]
         string GetUserSid(string target, string adminUserName, string userName);
 
@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
         /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="userName">Name of the queried user.</param>
-        /// <returns>Memberships of the user.</returns>
+        /// <returns>JSON string of all user memberships returned.</returns>
         [MethodHelp("Get the memberships of a user from domain or local computer.")]
         string GetUserMemberships(string target, string adminUserName, string userName);
     }

@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
         #region Variables
         private Smb2FunctionalClient client;
         private string sharePath;
-        private ISutCommonControlManagedAdapter sutCommonControlManagedAdapter;
+        private SutCommonControlAdapterAccessor sutCommonControlAdapterAccessor;
         #endregion
 
         #region Test Initialize and Cleanup
@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            sutCommonControlManagedAdapter = BaseTestSite.GetAdapter<ISutCommonControlManagedAdapter>();
+            sutCommonControlAdapterAccessor = new SutCommonControlAdapterAccessor(BaseTestSite);
         }
 
         protected override void TestCleanup()
@@ -205,7 +205,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             string domainAdmin = TestConfig.UserName;
             string anotherUserName = TestConfig.NonAdminUserName;
 
-            _WindowsIdentity identity = sutCommonControlManagedAdapter.GetWindowsIdentity(domainName, domainAdmin, anotherUserName);
+            _WindowsIdentity identity = sutCommonControlAdapterAccessor.GetWindowsIdentity(domainName, domainAdmin, anotherUserName);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with extension context and expects success");
             //Use another domain account(e.g. contoso\nonadmin) as an idenity passed in tree connect extension
