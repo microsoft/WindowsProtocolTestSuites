@@ -201,11 +201,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             string infraSharePath = string.Format(@"\\{0}\{1}", TestConfig.ClusteredInfrastructureFileServerName, TestConfig.InfrastructureRootShare);
             uint treeId;
 
-            string domainName = TestConfig.DomainName;
-            string domainAdmin = TestConfig.UserName;
             string anotherUserName = TestConfig.NonAdminUserName;
-
-            _WindowsIdentity identity = sutCommonControlAdapterAccessor.GetWindowsIdentity(domainName, domainAdmin, anotherUserName);
+            _WindowsIdentity identity = sutCommonControlAdapterAccessor.GetWindowsIdentity(anotherUserName);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with extension context and expects success");
             //Use another domain account(e.g. contoso\nonadmin) as an idenity passed in tree connect extension

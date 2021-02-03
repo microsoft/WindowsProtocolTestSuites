@@ -18,9 +18,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         private JsonSerializerOptions serializerOptions;
 
+        private string domainName;
+
+        private string sutComputerName;
+
         public SutCommonControlAdapterAccessor(ITestSite testSite)
         {
             sutCommonControlAdapter = testSite.GetAdapter<ISutCommonControlAdapter>();
+
+            var testConfig = new TestConfigBase(testSite);
+            domainName = testConfig.DomainName;
+            sutComputerName = testConfig.SutComputerName;
 
             serializerOptions = new JsonSerializerOptions();
             serializerOptions.Converters.Add(new _SIDConverter());
@@ -29,13 +37,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary>
         /// Get group members from domain or local computer.
         /// </summary>
-        /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="groupName">Name of the queried group.</param>
         /// <returns>All group members returned.</returns>
-        public List<GroupMember> GetGroupMembers(string target, string adminUserName, string groupName)
+        public List<GroupMember> GetGroupMembers(string groupName)
         {
-            var membersStr = sutCommonControlAdapter.GetGroupMembers(target, adminUserName, groupName);
+            var membersStr = sutCommonControlAdapter.GetGroupMembers(groupName);
 
             var members = JsonSerializer.Deserialize<List<GroupMember>>(membersStr, serializerOptions);
 
@@ -45,12 +51,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary>
         /// Get groups from domain or local computer.
         /// </summary>
-        /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <returns>All groups returned.</returns>
-        public List<Group> GetGroups(string target, string adminUserName)
+        public List<Group> GetGroups()
         {
-            var groupsStr = sutCommonControlAdapter.GetGroups(target, adminUserName);
+            var groupsStr = sutCommonControlAdapter.GetGroups();
 
             var groups = JsonSerializer.Deserialize<List<Group>>(groupsStr, serializerOptions);
 
@@ -60,12 +64,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary>
         /// Get users from domain or local computer.
         /// </summary>
-        /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <returns>All users returned.</returns>
-        public List<User> GetUsers(string target, string adminUserName)
+        public List<User> GetUsers()
         {
-            var usersStr = sutCommonControlAdapter.GetUsers(target, adminUserName);
+            var usersStr = sutCommonControlAdapter.GetUsers();
 
             var users = JsonSerializer.Deserialize<List<User>>(usersStr, serializerOptions);
 
@@ -75,13 +77,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary> 
         /// Get the SID of a user from domain or local computer.
         /// </summary>
-        /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="userName">Name of the queried user.</param>
         /// <returns>SID of the user returned.</returns>
-        public _SID GetUserSid(string target, string adminUserName, string userName)
+        public _SID GetUserSid(string userName)
         {
-            var sidStr = sutCommonControlAdapter.GetUserSid(target, adminUserName, userName);
+            var sidStr = sutCommonControlAdapter.GetUserSid(userName);
 
             return new _SID(sidStr);
         }
@@ -89,13 +89,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary> 
         /// Get the Memberships of a user from domain or local computer.
         /// </summary>
-        /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="userName">Name of the queried user.</param>
         /// <returns>Memberships of the user.</returns>
-        public List<Group> GetUserMemberships(string target, string adminUserName, string userName)
+        public List<Group> GetUserMemberships(string userName)
         {
-            var membershipsStr = sutCommonControlAdapter.GetUserMemberships(target, adminUserName, userName);
+            var membershipsStr = sutCommonControlAdapter.GetUserMemberships(userName);
 
             return JsonSerializer.Deserialize<List<Group>>(membershipsStr, serializerOptions);
         }
@@ -103,25 +101,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary>
         /// Get a _WindowsIdentity instance from domain or local computer by the user name.
         /// </summary>
-        /// <param name="target">Name of the domain or local computer. Use FQDN for domain.</param>
-        /// <param name="adminUserName">Name of the user who has administrative privileges.</param>
         /// <param name="userName">Name of the queried user.</param>
         /// <returns>A _WindowsIdentity instance represents the user.</returns>
-        public _WindowsIdentity GetWindowsIdentity(string target, string adminUserName, string userName)
+        public _WindowsIdentity GetWindowsIdentity(string userName)
         {
             var identity = new _WindowsIdentity();
 
             // Get identity name.
+            var target = !string.IsNullOrEmpty(domainName) ? domainName : sutComputerName;
             var targetNetbios = target.Split('.')[0];
             identity.Name = $"{targetNetbios}\\{userName}";
 
             // Get User _SID and Owner _SID.
-            var userSid = GetUserSid(target, adminUserName, userName);
+            var userSid = GetUserSid(userName);
             identity.User = userSid;
             identity.Owner = userSid;
 
             // Get _SIDs of Groups.
-            var userMemberships = GetUserMemberships(target, adminUserName, userName);
+            var userMemberships = GetUserMemberships(userName);
             identity.Groups = userMemberships.Select(g => g.Sid).ToList();
 
             return identity;

@@ -1,29 +1,29 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-[string]$target
-[string]$adminUserName
 [string]$userName
 
 $domainName = $PtfProp_Common_DomainName
 $sutComputerName = $PtfProp_Common_SutComputerName
 $dcName = $PtfProp_Common_DCServerComputerName
 
-$isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName) -and ($target -eq $domainName)
+$adminUserName = $PtfProp_Common_AdminUserName
+
+$isDomainEnv = (-not [string]::IsNullOrEmpty($domainName)) -and ($domainName -ne $sutComputerName)
 $remoteComputerName = if ($isDomainEnv) {
     $dcName
 }
 else {
-    $target
+    $sutComputerName
 }
 
 $commandForDomain = {
 	param(
-		[string]$target,
+		[string]$domainName,
 		[string]$userName
 	)
 
-	$domainFqn = "DC=" + $target.Replace(".", ",DC=")
+	$domainFqn = "DC=" + $domainName.Replace(".", ",DC=")
 	$userFqn = "CN=$userName,CN=Users,$domainFqn"
 
 	$domainUser = Get-ADUser -Filter "*" -SearchBase $userFqn | Select-Object -First 1
@@ -43,7 +43,7 @@ $commandForLocalComputer = {
 
 try {
 	$userSid = if ($isDomainEnv) {
-		Invoke-Command -HostName $remoteComputerName -UserName "$target\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($target, $userName)
+		Invoke-Command -HostName $remoteComputerName -UserName "$domainName\$adminUserName" -ScriptBlock $commandForDomain -ArgumentList @($domainName, $userName)
 	}
 	else {
 		Invoke-Command -HostName $remoteComputerName -UserName "$adminUserName" -ScriptBlock $commandForLocalComputer -ArgumentList @($userName)
