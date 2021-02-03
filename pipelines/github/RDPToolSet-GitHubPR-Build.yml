@@ -31,11 +31,20 @@ pr:
 jobs:
   - job:
     displayName: Build RDPToolSet
+    pool:
+      vmImage: windows-2019
     workspace:
       clean: true
     timeoutInMinutes: 0
     steps:
       - checkout: self
+
+      - task: PowerShell@2
+        displayName: 'Check License Header'
+        inputs:
+          filePath: 'CommonScripts/CheckLicenseHeader.ps1'
+          arguments: '-TestSuitePath $(Build.Repository.LocalPath) -IsCheckAll $false -targetBranch "$(system.pullRequest.targetBranch)" -sourceBranch "$(system.pullRequest.sourceBranch)" '
+        condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
       - task: DotNetCoreCLI@2
         displayName: Restore RDPToolSet
