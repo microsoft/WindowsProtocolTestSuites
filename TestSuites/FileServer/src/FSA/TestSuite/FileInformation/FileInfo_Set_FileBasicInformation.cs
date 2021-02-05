@@ -60,24 +60,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INFO_LENGTH_MISMATCH, status,
                     "If InputBufferSize is less than sizeof(FILE_BASIC_INFORMATION), the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
 
-            //Step 3: Set file basic information time stamp values less than -2
+            //Step 3: Set file basic information to invalid values
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having invalid attribute values and verify NTSTATUS");
-            SetChangeTime(-3);
-            SetLastAccessTime(-3);
-            SetLastWriteTime(-3);
-            SetCreationTime(-3);
-
+            
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             fileBasicInformation.FileAttributes = fileType == FileType.DataFile ? (uint)(FileAttribute.DIRECTORY | FileAttribute.NORMAL)
                 : (uint)(FileAttribute.TEMPORARY | FileAttribute.NORMAL);
 
             TestFileAttributes(fileType, fileBasicInformation);
 
-            //Step 4: Set FileBasicInformation with 0, -1 then -2 and verify system response
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having values 0, -1, then -2 and verify system response");
             if (fileType == FileType.DataFile 
-                && (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS))
+                && (this.fsaAdapter.FileSystem == FileSystem.NTFS))
             {
+                SetChangeTime(-3);
+                SetLastAccessTime(-3);
+                SetLastWriteTime(-3);
+                SetCreationTime(-3);
+
+                //Step 4: Set FileBasicInformation with 0, -1 then -2 and verify system response
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having values 0, -1, then -2 and verify system response");
+
                 TestMinusTwoTimestamp(TimestampType.ChangeTime);
                 TestMinusTwoTimestamp(TimestampType.LastAccessTime);
                 TestMinusTwoTimestamp(TimestampType.LastWriteTime);
@@ -90,17 +92,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void CreateFile(FileType fileType)
         {
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
             MessageStatus status = this.fsaAdapter.CreateFile(
-                        FileAttribute.NORMAL,
-                        fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
-                        fileType == FileType.DataFile ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.INDEX_ALLOCATION,
-                        FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
-                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                        CreateDisposition.OPEN_IF,
-                        StreamFoundType.StreamIsFound,
-                        SymbolicLinkType.IsNotSymbolicLink,
-                        fileType,
-                        FileNameStatus.PathNameValid);
+                fileName,
+                FileAttribute.NORMAL,
+                fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
+                FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
+                ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.OPEN_IF);
 
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
         }
