@@ -54,6 +54,10 @@ ipch/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
+
 # Compiled files of Test Suites
 drop/
 
