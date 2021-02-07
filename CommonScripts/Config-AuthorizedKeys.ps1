@@ -92,12 +92,12 @@ if ($sshPath -eq $null) {
     $sshPath = "$systemDrive\OpenSSH-Win64"
 }
 
-$userSshPath = "$systemDrive\Users\$userFolderName\.ssh"
-if (-not (Test-Path $userSshPath)) {
-    New-Item -ItemType Directory $userSshPath
+$keysPath = "$systemDrive\Users\$userFolderName\.ssh"
+if (-not (Test-Path $keysPath)) {
+    New-Item -ItemType Directory $keysPath
 }
 
-Copy-Item "$sshPath\authorized_keys" "$userSshPath\authorized_keys" -Force
+Copy-Item "$sshPath\authorized_keys" "$keysPath\authorized_keys" -Force
 
 # restart sshd service to take affect
 Restart-Service sshd

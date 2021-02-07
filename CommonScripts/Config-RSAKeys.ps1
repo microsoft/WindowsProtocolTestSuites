@@ -97,7 +97,7 @@ if ($certsPath -eq $null) {
     $certsPath = "$systemDrive\id_rsa\.ssh"
 }
 
-Copy-Item "$certsPath" "$systemDrive\Users\$userFoldername" -Recurse -Force
+Copy-Item "$certsPath" "$systemDrive\Users\$userFolderName" -Recurse -Force
 
 # restart sshd service to take affect
 Restart-Service sshd
