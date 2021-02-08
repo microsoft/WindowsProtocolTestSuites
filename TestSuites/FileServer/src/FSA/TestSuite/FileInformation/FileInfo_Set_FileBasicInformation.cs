@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
                 FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
                 ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                CreateDisposition.OPEN_IF);
+                CreateDisposition.CREATE);
 
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
         }
