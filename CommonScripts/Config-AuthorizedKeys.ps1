@@ -16,7 +16,7 @@ param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
 $systemDrive = $env:SystemDrive
 
