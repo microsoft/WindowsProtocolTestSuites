@@ -16,7 +16,7 @@
 #
 ##############################################################################
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml", [ValidateSet("CreateTask", "StartTask")]$action = "CreateTask")
 
 #----------------------------------------------------------------------------
 # Global variables
@@ -97,10 +97,22 @@ if ($certsPath -eq $null) {
     $certsPath = "$systemDrive\id_rsa\.ssh"
 }
 
-Copy-Item "$certsPath" "$systemDrive\Users\$userFolderName" -Recurse -Force
+$userFolderPath = "$systemDrive\Users\$userFolderName"
+if (Test-Path $userFolderPath) {
+    Copy-Item "$certsPath" "$userFolderPath" -Recurse -Force
+}
 
 # restart sshd service to take affect
 Restart-Service sshd
+
+if ($action -eq "CreateTask") {
+    $taskAction = New-ScheduledTaskAction -Execute "PowerShell" -Argument "$($MyInvocation.MyCommand.Path) -action StartTask"
+    $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+    $taskPrincipal = New-ScheduledTaskPrincipal "SYSTEM"
+    $taskSettings = New-ScheduledTaskSettingsSet
+    $task = New-ScheduledTask -Action $taskAction -Trigger $taskTrigger -Principal $taskPrincipal -Settings $taskSettings
+    Register-ScheduledTask "Config-RSAKeys" -InputObject $task
+}
 
 #----------------------------------------------------------------------------
 # Ending

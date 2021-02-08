@@ -11,7 +11,7 @@
 #
 ##############################################################################
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml", [ValidateSet("CreateTask", "StartTask")]$action = "CreateTask")
 
 #----------------------------------------------------------------------------
 # Global variables
@@ -92,15 +92,27 @@ if ($sshPath -eq $null) {
     $sshPath = "$systemDrive\OpenSSH-Win64"
 }
 
-$keysPath = "$systemDrive\Users\$userFolderName\.ssh"
-if (-not (Test-Path $keysPath)) {
-    New-Item -ItemType Directory $keysPath
+$userFolderPath = "$systemDrive\Users\$userFolderName"
+if (Test-Path $userFolderPath) {
+    $keysPath = "$userFolderPath\.ssh"
+    if (-not (Test-Path $keysPath)) {
+        New-Item -ItemType Directory $keysPath
+    }
+
+    Copy-Item "$sshPath\authorized_keys" "$keysPath\authorized_keys" -Force
 }
 
-Copy-Item "$sshPath\authorized_keys" "$keysPath\authorized_keys" -Force
-
-# restart sshd service to take affect
+# Restart sshd service to take effect
 Restart-Service sshd
+
+if ($action -eq "CreateTask") {
+    $taskAction = New-ScheduledTaskAction -Execute "PowerShell" -Argument "$($MyInvocation.MyCommand.Path) -action StartTask"
+    $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+    $taskPrincipal = New-ScheduledTaskPrincipal "SYSTEM"
+    $taskSettings = New-ScheduledTaskSettingsSet
+    $task = New-ScheduledTask -Action $taskAction -Trigger $taskTrigger -Principal $taskPrincipal -Settings $taskSettings
+    Register-ScheduledTask "Config-AuthorizedKeys" -InputObject $task
+}
 
 #----------------------------------------------------------------------------
 # Ending
