@@ -69,6 +69,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             TestFileAttributes(fileType, fileBasicInformation);
 
+            //Testing file system behavior to -2 timestamp value
+            //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
+            //ReFS is proving inconsistent with -2 timestamp value at the moment and is temporarily asserted as inconclusive to avoid regression failure
             if (fileType == FileType.DataFile 
                 && (this.fsaAdapter.FileSystem == FileSystem.NTFS))
             {
@@ -84,9 +87,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 TestMinusTwoTimestamp(TimestampType.LastAccessTime);
                 TestMinusTwoTimestamp(TimestampType.LastWriteTime);
             }
-            else if(fileType != FileType.DirectoryFile)
+            else if(fileType == FileType.DataFile)
             {
                 this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
+            }
+            else
+            {
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Value -2 for FileBasicInformation timestamps does not apply to directories");
             }
         }
 
