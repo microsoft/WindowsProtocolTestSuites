@@ -5,18 +5,18 @@
 #
 # Microsoft Windows Powershell Scripting
 # File:           Config-AuthorizedKeys.ps1
-# Purpose:        This script will copy authorized_keys to .ssh folder for all users,
-#                 and it is required for Windows Server to configure PowerShell Core remoting over SSH.
-# Version:        2.0 (26 Jan, 2021)
+# Purpose:        This script will copy authorized_keys to domain or local administrator's .ssh folder,
+#                 and it is required for Windows Server which want to be remoted for configuring PowerShell Core remoting over ssh.
+# Version:        2.0 (7 Feb, 2021)
 #
 ##############################################################################
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml", [ValidateSet("CreateTask", "StartTask")]$action = "CreateTask")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
 $systemDrive = $env:SystemDrive
 
@@ -36,7 +36,7 @@ if (-not (Test-Path "$workingDir")) {
 
 if (-not (Test-Path "$protocolConfigFile")) {
     $protocolConfigFile = "$workingDir\Protocol.xml"
-    if (!(Test-Path "$protocolConfigFile")) {
+    if (-not (Test-Path "$protocolConfigFile")) {
         Write-Error.ps1 "No Protocol.xml found."
         exit ExitCode
     }
@@ -62,9 +62,28 @@ if ($config -eq $null) {
 # Define common variables
 #----------------------------------------------------------------------------
 $hostName = [System.Net.Dns]::GetHostName()
-$hostSettings = $config.lab.servers.vm | Where-Object { $_.name -eq $hostName } | Select-Object -First 1
-$certsNode = $hostSettings.tools | Where-Object { $_.name -match "Win32-OpenSSH-Certs" }
-$sshPath = $certsNode.targetFolder
+$vm = $config.lab.servers.vm | Where-Object { $_.name -match $hostName }
+$sshPath = ($vm.tools.tool | Where-Object { $_.name -match "Win32-OpenSSH-Certs" } | Select-Object -First 1).targetFolder
+
+$dc = $config.lab.servers.vm | Where-Object { $_.role -match "DC" }
+$adminUserName = $config.lab.core.username
+if ($dc -eq $null) {
+    # for non-domain environments, just get admin user name
+    $userFolderName = $adminUserName
+}
+else {
+    $dcName = $dc.name
+    if ($dcName -match $hostName) {
+        # for DC, just get admin user name
+        $userFolderName = $adminUserName
+    }
+    else {
+        $domainName = $dc.domain
+        $domainNetBios = $domainName.Split(".")[0].ToUpper()
+
+        $userFolderName = "$adminUserName.$domainNetBios"
+    }
+}
 
 #----------------------------------------------------------------------------
 # Copy authorized_keys
@@ -73,10 +92,11 @@ if ($sshPath -eq $null) {
     $sshPath = "$systemDrive\OpenSSH-Win64"
 }
 
-Get-ChildItem "$systemDrive\Users" | Where-Object { $_.PSIsContainer } | ForEach-Object {
-    $keysPath = "$($_.FullName)\.ssh"
+$userFolderPath = "$systemDrive\Users\$userFolderName"
+if (Test-Path $userFolderPath) {
+    $keysPath = "$userFolderPath\.ssh"
     if (-not (Test-Path $keysPath)) {
-        New-Item  $keysPath -ItemType Directory
+        New-Item -ItemType Directory $keysPath
     }
 
     Copy-Item "$sshPath\authorized_keys" "$keysPath\authorized_keys" -Force
@@ -84,6 +104,15 @@ Get-ChildItem "$systemDrive\Users" | Where-Object { $_.PSIsContainer } | ForEach
 
 # Restart sshd service to take effect
 Restart-Service sshd
+
+if ($action -eq "CreateTask") {
+    $taskAction = New-ScheduledTaskAction -Execute "PowerShell" -Argument "$($MyInvocation.MyCommand.Path) -action StartTask"
+    $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+    $taskPrincipal = New-ScheduledTaskPrincipal "SYSTEM"
+    $taskSettings = New-ScheduledTaskSettingsSet
+    $task = New-ScheduledTask -Action $taskAction -Trigger $taskTrigger -Principal $taskPrincipal -Settings $taskSettings
+    Register-ScheduledTask "Config-AuthorizedKeys" -InputObject $task
+}
 
 #----------------------------------------------------------------------------
 # Ending

@@ -151,7 +151,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             #endregion
 
             // Create a task to invoke CheckBreakNotification
-            var checkBreakNotificationTask = Task.Run(() => CheckBreakNotification(client1TreeId));
+            var checkFirstBreakNotificationTask = Task.Run(() => CheckBreakNotification(client1TreeId));
 
             #region Lease Break RWH => RH
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
@@ -164,15 +164,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             client2.Create(client2TreeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out client2FileId, out createContextResponse);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends LEASE_BREAK_ACKNOWLEDGEMENT request to break lease state to RH after receiving LEASE_BREAK_NOTIFICATION response from server.");
+            checkFirstBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
             #endregion
 
-            #region Lease BreakRH => NONE
+            #region Lease BreakRH => NONE           
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The second client sends WRITE request.");
             expectedNewLeaseState = LeaseStateValues.SMB2_LEASE_NONE;
             byte[] data = { 0 };
             client2.Write(client2TreeId, client2FileId, data);
+            var checkSecondBreakNotificationTask = Task.Run(() => CheckBreakNotification(client1TreeId));
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends LEASE_BREAK_ACKNOWLEDGEMENT request to break lease state to NONE after receiving LEASE_BREAK_NOTIFICATION response from server.");
+            checkSecondBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
             #endregion
 
             #region Tear Down Clients
@@ -185,9 +188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             client2.Close(client2TreeId, client2FileId);
             client2.TreeDisconnect(client2TreeId);
             client2.LogOff();
-            #endregion
-
-            checkBreakNotificationTask.Wait(TestConfig.WaitTimeoutInMilliseconds);
+            #endregion           
         }
         #endregion
     }
