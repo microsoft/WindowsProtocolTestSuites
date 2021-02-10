@@ -1,17 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Diagnostics;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -20,7 +15,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
-        [TestCategory("DeviceNeeded")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
         [Description("This test case is used to verify the client support H264 bitmap codec via RDPEGFX.")]
@@ -29,14 +23,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Do capability exchange.");
             RDPEGFX_CapabilityExchange();
             bool h264Supported = IsH264Supported();
-            this.TestSite.Assert.IsTrue(h264Supported, "To test H264 codec, client must indicates support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
+            this.TestSite.Assume.IsTrue(h264Supported, "To test H264 codec, client must indicates support for H264 codec in RDPGFX_CAPS_ADVERTISE_PDU");
         }
 
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
-        [TestCategory("DeviceNeeded")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Base profile.")]
@@ -49,7 +42,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
-        [TestCategory("DeviceNeeded")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and High profile.")]
@@ -63,7 +55,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("BVT")]
         [TestCategory("Positive")]
-        [TestCategory("DeviceNeeded")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Main profile.")]
@@ -76,7 +67,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("Positive")]
-        [TestCategory("DeviceNeeded")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode, Main profile and CABAC entropy coding mode.")]
@@ -323,7 +313,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 Site.Assert.Fail("Cannot get its test data path");
             }
 
-            return h264TestDataPath + @"\" + testCaseName + ".xml";
+            string testDataFilePath = Path.Combine(h264TestDataPath, $"{testCaseName}.xml");
+
+            return testDataFilePath;
         }
 
         #endregion private methods

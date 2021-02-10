@@ -314,6 +314,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public int KDCPort
+        {
+            get
+            {
+                try
+                {
+                    return int.Parse(GetProperty("KDCPort", false));
+                }
+                catch
+                {
+                    return TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort;
+                }
+            }
+        }
+
         public string UserName
         {
             get

@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
@@ -37,6 +38,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         {
             base.TestInitialize();
             testConfig = new AuthTestConfig(BaseTestSite);
+
+            // valid domain name matching, for example: contoso.com, local.contoso.com
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
+            {
+                BaseTestSite.Assert.Inconclusive("Authentication test cases are not applicable in non-domain environment");
+            }
         }
 
         protected bool AccessShare(AccountCredential user, string sharePath)
@@ -479,7 +486,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 null,
                 sacl,
                 null);
-            SetSecurityDescriptor(sharePath, null, sd, SET_INFO_Request_AdditionalInformation_Values.SCOPE_SECURITY_INFORMATION);
+            if (sharePath != null)
+            {
+                SetSecurityDescriptor(sharePath, null, sd, SET_INFO_Request_AdditionalInformation_Values.SCOPE_SECURITY_INFORMATION);
+            }
         }
 
         protected class CentralAccessPolicy
