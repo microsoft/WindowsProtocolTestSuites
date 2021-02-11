@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Set file basic information on data file and check if file system supports -2 timestamp")]
         public void FileInfo_Set_FileBasicInformation_File_MinusTwoSupported()
         {
-            FileInfo_Set_FileBasicInformation_MinusTwoSupported(FileType.DataFile);
+            FileInfo_Set_FileBasicInformation_MinusTwoSupported();
         }
 
         [TestMethod()]
