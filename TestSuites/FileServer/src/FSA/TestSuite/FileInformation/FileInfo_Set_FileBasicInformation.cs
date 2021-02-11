@@ -82,40 +82,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             TestFileAttributes(fileType, fileBasicInformation);
         }
 
-        private void FileInfo_Set_FileBasicInformation_MinusTwoSupported(FileType fileType)
+        private void FileInfo_Set_FileBasicInformation_MinusTwoSupported()
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+
+            FileType fileType = FileType.DataFile;
 
             //Step 1: Create File
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
 
             CreateFile(fileType);
 
-            //Step 2: Set file basic information with invalid inputBuffer
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having invalid inputBuffer and verify NTSTATUS");
-
-            byte[] inputBuffer = new byte[1];
-            MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
-
-            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INFO_LENGTH_MISMATCH, status,
-                    "If InputBufferSize is less than sizeof(FILE_BASIC_INFORMATION), the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
-
-            //Step 3: Set file basic information to invalid values
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp less than -2 and verify NTSTATUS");
+            //Step 2: Set file basic information to timestamp values less than -2
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp less than -2 and verify NTSTATUS");
 
             //Testing file system behavior to -2 timestamp value
             //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
             //ReFS is proving inconsistent with -2 timestamp value at the moment and is temporarily asserted as inconclusive to avoid regression failure
-            if (fileType == FileType.DataFile
-                && (this.fsaAdapter.FileSystem == FileSystem.NTFS))
+            string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
+                        
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS 
+                && !Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_NTFS), operatingSystem))
             {
                 SetChangeTime(-3);
                 SetLastAccessTime(-3);
                 SetLastWriteTime(-3);
                 SetCreationTime(-3);
 
-                //Step 4: Set FileBasicInformation with 0, -1 then -2 and verify system response
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having values 0, -1, then -2 and verify system response");
+                //Step 3: Set FileBasicInformation with 0, -1 then -2 and verify system response
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having values 0, -1, then -2 and verify system response");
 
                 TestMinusTwoTimestamp(TimestampType.ChangeTime);
                 TestMinusTwoTimestamp(TimestampType.LastAccessTime);
@@ -234,6 +229,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             CreationTime,
             LastAccessTime,
             LastWriteTime
+        }
+
+        private enum OS_MinusTwo_NotSupported_NTFS
+        {
+            WindowsNT4,
+            Windows98,
+            Windows98SecondEdition,
+            Windows2000,
+            WindowsXP,
+            WindowsServer2003,
+            WindowsVista,
+            WindowsServer2008,
+            Windows7,
+            WindowsServer2008R2,
+            Windows8,
+            WindowsServer2012
         }
 
         private void SetChangeTime(long changeTime)
