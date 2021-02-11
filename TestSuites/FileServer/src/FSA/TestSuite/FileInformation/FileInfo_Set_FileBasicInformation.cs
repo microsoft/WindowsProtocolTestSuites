@@ -32,6 +32,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on data file and check if file system supports -2 timestamp")]
+        public void FileInfo_Set_FileBasicInformation_File_MinusTwoSupported()
+        {
+            FileInfo_Set_FileBasicInformation_MinusTwoSupported(FileType.DataFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
         public void FileInfo_Set_FileBasicInformation_Dir()
         {
@@ -62,17 +74,39 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 3: Set file basic information to invalid values
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having invalid attribute values and verify NTSTATUS");
-            
+
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             fileBasicInformation.FileAttributes = fileType == FileType.DataFile ? (uint)(FileAttribute.DIRECTORY | FileAttribute.NORMAL)
                 : (uint)(FileAttribute.TEMPORARY | FileAttribute.NORMAL);
 
             TestFileAttributes(fileType, fileBasicInformation);
+        }
+
+        private void FileInfo_Set_FileBasicInformation_MinusTwoSupported(FileType fileType)
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+
+            //Step 1: Create File
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
+
+            CreateFile(fileType);
+
+            //Step 2: Set file basic information with invalid inputBuffer
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having invalid inputBuffer and verify NTSTATUS");
+
+            byte[] inputBuffer = new byte[1];
+            MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
+
+            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INFO_LENGTH_MISMATCH, status,
+                    "If InputBufferSize is less than sizeof(FILE_BASIC_INFORMATION), the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
+
+            //Step 3: Set file basic information to invalid values
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp less than -2 and verify NTSTATUS");
 
             //Testing file system behavior to -2 timestamp value
             //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
             //ReFS is proving inconsistent with -2 timestamp value at the moment and is temporarily asserted as inconclusive to avoid regression failure
-            if (fileType == FileType.DataFile 
+            if (fileType == FileType.DataFile
                 && (this.fsaAdapter.FileSystem == FileSystem.NTFS))
             {
                 SetChangeTime(-3);
@@ -87,13 +121,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 TestMinusTwoTimestamp(TimestampType.LastAccessTime);
                 TestMinusTwoTimestamp(TimestampType.LastWriteTime);
             }
-            else if(fileType == FileType.DataFile)
-            {
-                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
-            }
             else
             {
-                this.TestSite.Log.Add(LogEntryKind.Comment, "Value -2 for FileBasicInformation timestamps does not apply to directories");
+                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
             }
         }
 
