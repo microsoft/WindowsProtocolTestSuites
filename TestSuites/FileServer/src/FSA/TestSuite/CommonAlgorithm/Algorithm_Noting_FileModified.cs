@@ -29,6 +29,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         #endregion
 
+
         #region Test Case Utility
 
         private void Algorithm_Noting_FileModified(FileType fileType)
