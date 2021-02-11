@@ -14,10 +14,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Try to set FileFullEaInformation to a file and check if ExtendedAttributes is supported.")]
-        public void FileInfo_Set_FileFullEaInformation_File_IsEASupported()
+        [Description("Try to set ")]
+        public void Algorithm_Noting_FIleModified_Positive()
         {
-            FileInfo_Set_FileFullEaInformation_IsEASupported(FileType.DataFile);
+            Algorithm_Noting_FIleModified(FileType.DataFile);
         }
 
         #endregion
@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         #region Test Case Utility
 
-        private void FileInfo_Set_FileFullEaInformation_IsEASupported(FileType fileType)
+        private void Algorithm_Noting_FIleModified(FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
