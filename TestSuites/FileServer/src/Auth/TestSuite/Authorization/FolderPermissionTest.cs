@@ -60,11 +60,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
         protected override void TestCleanup()
         {
-            SetSecurityDescriptor(FolderPermissionTestShareUncPath, null, originalSD,
+            if (FolderPermissionTestShareUncPath != null)
+            {
+                SetSecurityDescriptor(FolderPermissionTestShareUncPath, null, originalSD,
                 SET_INFO_Request_AdditionalInformation_Values.DACL_SECURITY_INFORMATION |
                 SET_INFO_Request_AdditionalInformation_Values.GROUP_SECURITY_INFORMATION |
                 SET_INFO_Request_AdditionalInformation_Values.OWNER_SECURITY_INFORMATION);
-
+            }
             base.TestCleanup();
         }
         #endregion
