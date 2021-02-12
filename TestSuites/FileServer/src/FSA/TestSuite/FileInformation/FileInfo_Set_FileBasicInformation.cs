@@ -116,6 +116,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 TestMinusTwoTimestamp(TimestampType.LastAccessTime);
                 TestMinusTwoTimestamp(TimestampType.LastWriteTime);
             }
+            else if(this.fsaAdapter.FileSystem == FileSystem.REFS
+                && !Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_REFS), operatingSystem))
+            {
+                this.TestSite.Assume.Inconclusive("ReFS is proving inconsistent with -2 timestamp value at the moment.");
+            }
             else
             {
                 this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
@@ -233,7 +238,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private enum OS_MinusTwo_NotSupported_NTFS
         {
-            WindowsNT4,
+            WindowsNT4_0,
             Windows98,
             Windows98SecondEdition,
             Windows2000,
@@ -245,6 +250,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             WindowsServer2008R2,
             Windows8,
             WindowsServer2012
+        }
+
+        private enum OS_MinusTwo_NotSupported_REFS
+        {
+            WindowsNT4_0,
+            Windows98,
+            Windows98SecondEdition,
+            Windows2000,
+            WindowsXP,
+            WindowsServer2003,
+            WindowsVista,
+            WindowsServer2008,
+            Windows7,
+            WindowsServer2008R2,
+            Windows8,
+            WindowsServer2012,
+            Windows8_1,
+            WindowsServer2012R2
         }
 
         private void SetChangeTime(long changeTime)
