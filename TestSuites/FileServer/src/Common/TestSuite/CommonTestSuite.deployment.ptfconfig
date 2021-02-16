@@ -7,7 +7,7 @@
     <!--
         Tag named Choice is used for the ComboBox in UI design
         Tag named Description is used for the comment
-    -->    
+    -->
 
     <Group name="Common">
 
@@ -36,20 +36,20 @@
         </Description>
       </Property>
 
-      <Property name="SutComputerName" value="node01.contoso.com">
+      <Property name="SutComputerName" value="pet-vmh-52">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
       </Property>
 
-      <Property name="SutIPAddress" value="192.168.1.11" >
+      <Property name="SutIPAddress" value="10.156.81.125" >
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
       </Property>
 
-      <Property name="DomainName" value="contoso.com" >
+      <Property name="DomainName" value="pet-vmh-52" >
         <Description>
           Domain name where the SUT locates
           If SUT is in WORKGROUP, set it to the value of SutComputerName
@@ -57,10 +57,16 @@
         </Description>
       </Property>
 
-      <Property name="DCServerComputerName" value="DC01.contoso.com">
+      <Property name="DCServerComputerName" value="pet-vmh-52">
         <Description>
-          Computer name of DC
+          Computer ip or name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="KDCPort" value="88">
+        <Description>
+          Port of KDC, By default KDC port is 88
         </Description>
       </Property>
 
@@ -82,7 +88,7 @@
         </Description>
       </Property>
 
-      <Property name="PasswordForAllUsers" value="Password01!">
+      <Property name="PasswordForAllUsers" value="User@123">
         <Description>
           Password for all the users listed as above: AdminUserName, NonAdminUserName, GuestUserName.
           (To simplify the config, the 3 accounts use the same password.)

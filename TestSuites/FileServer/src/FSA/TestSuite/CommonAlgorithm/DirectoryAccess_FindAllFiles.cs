@@ -28,59 +28,58 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             MessageStatus status = CreateDirectory(dirName);
 
             List<string> foundFiles = new List<string>();
-
-            /*  
-             *  Insert RootDirectory into FoundFiles.
-
-                For each Link in RootDirectory.DirectoryList:
-			    If Link.File.FileType is DirectoryFile:
-				    Set FilesToMerge to FindAllFiles(Link.File).
-			    Else:
-                Set FilesToMerge to a list containing the single entry Link.File.
-
-                EndIf
-
-                For each File in FilesToMerge:
-                If File is not an element of FoundFiles, insert File into FoundFiles.
-
-                EndFor
-                EndFor
-
-                Return FoundFiles.
-            */
-
-
-            // Create a list called foundfiles, initialize to 0 and the add newly created directory
-            // confirm that foundfiles size is 1 and name is correct
-            //BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Open the existing file with write access");
-
-            //MessageStatus status = this.fsaAdapter.CreateFile(
-            //            fileName,
-            //            FileAttribute.NORMAL,
-            //            CreateOptions.NON_DIRECTORY_FILE,
-            //            FileAccess.GENERIC_WRITE,
-            //            ShareAccess.FILE_SHARE_WRITE,
-            //            CreateDisposition.OPEN);
-
-            //Step 2: Verify test result
-            //BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify returned NTSTATUS code.");
-            //this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.ACCESS_DENIED, status,
-            //        "If file type is DataFile, file attributes is read only and desired access is write data or append data, " +
-            //        "server will return STATUS_ACCESS_DENIED");
         }
 
-        // Test case 1
-        // Create a directory, create three files in it and confirm that the "Foundfiles" size is 4, 
-        // also confirm that the names of the directory and files are correct
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.FileAccess)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create a directory file, a sub directory and 2 file and confirm that FoundFiles size is 4")]
+        public void CommonAlgorithm_CreateDirectory_SubFile()
+        {
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus directoryStatus = CreateDirectory(dirName);
 
-        // Test case 2
-        // Create a directory, create a child directory and write two files in the child 
-        // directory, confirm the size of foundfiles is 4
-        // confirm their names are correct
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus fileStatus = CreateFile(fileName);
 
-        // Test case 3 
-        // Write a directory, confirm that the size of foundfiles is 1 and the name is correct
+            List<string> foundFiles = new List<string>();
+        }
 
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.FileAccess)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create a directory file, sub dir and 2 files and confirm that FoundFiles size is 4")]
+        public void CommonAlgorithm_CreateDirectory_SubDirectory_SubFiles()
+        {
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus directoryStatus = CreateDirectory(dirName);
+
+            string subDirName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus subDirStatus = CreateDirectory(subDirName);
+
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus fileStatus = CreateFile(fileName);
+
+            List<string> foundFiles = new List<string>();
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.FileAccess)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create a directory file and 2 files and confirm that FoundFiles size is 3")]
+        public void CommonAlgorithm_CreateDirectory_SubFiles()
+        {
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus directoryStatus = CreateDirectory(dirName);
+
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            MessageStatus fileStatus = CreateFile(fileName);
+
+            List<string> foundFiles = new List<string>();
+        }
 
         #endregion
 
@@ -107,27 +106,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         // Create a file
-        private void FileAccess_CreateFile(string fileName, FileType fileType)
+        private MessageStatus CreateFile(string fileName)
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
-            MessageStatus status;
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"1. Create a file with name: {fileName}");
 
-            //Step 1: Create read only file
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create a read only data file");
+            MessageStatus status = MessageStatus.SUCCESS;
 
-            CreateOptions createFileType = (fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE);
             status = this.fsaAdapter.CreateFile(
                         fileName,
-                        FileAttribute.READONLY,
-                        createFileType,
-                        FileAccess.GENERIC_ALL,
-                        ShareAccess.FILE_SHARE_WRITE,
+                        FileAttribute.DIRECTORY,
+                        CreateOptions.NON_DIRECTORY_FILE,
+                        (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
                         CreateDisposition.CREATE);
 
-            //Step 2: Verify test result
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Verify returned NTSTATUS code.");
-            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
-                    "Create a read only file should succeed.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"2. Create file and return with status {status}");
+
+            return status;
         }
 
         #endregion
