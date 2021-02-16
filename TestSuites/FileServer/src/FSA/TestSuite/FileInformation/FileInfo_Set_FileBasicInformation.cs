@@ -22,9 +22,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
-        public void FileInfo_Set_FileBasicInformation_File()
+        public void FileInfo_Set_FileBasicInformation_File_Negative()
         {
-            FileInfo_Set_FileBasicInformation(FileType.DataFile);
+            FileInfo_Set_FileBasicInformation_Negative(FileType.DataFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_File_Positive()
+        {
+            FileInfo_Set_FileBasicInformation_Positive(FileType.DataFile);
         }
 
         [TestMethod()]
@@ -45,16 +57,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
-        public void FileInfo_Set_FileBasicInformation_Dir()
+        public void FileInfo_Set_FileBasicInformation_Dir_Negative()
         {
-            FileInfo_Set_FileBasicInformation(FileType.DirectoryFile);
+            FileInfo_Set_FileBasicInformation_Negative(FileType.DirectoryFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_Dir_Positive()
+        {
+            FileInfo_Set_FileBasicInformation_Positive(FileType.DirectoryFile);
         }
 
         #endregion
 
         #region Test Case Utility
 
-        private void FileInfo_Set_FileBasicInformation(FileType fileType)
+        private void FileInfo_Set_FileBasicInformation_Negative(FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
 
@@ -80,6 +104,65 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 : (uint)(FileAttribute.TEMPORARY | FileAttribute.NORMAL);
 
             TestFileAttributes(fileType, fileBasicInformation);
+        }
+
+        private void FileInfo_Set_FileBasicInformation_Positive(FileType fileType)
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+
+            //Step 1: SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION and verify that file timestamp is updated
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having valid timestamp and verify that file timestamp is updated");
+
+            TestSetTimestamp(fileType, TimestampType.CreationTime);
+            TestSetTimestamp(fileType, TimestampType.LastWriteTime);
+            TestSetTimestamp(fileType, TimestampType.LastAccessTime);
+            TestSetTimestamp(fileType, TimestampType.ChangeTime);
+        }
+
+        private void TestSetTimestamp(FileType fileType, TimestampType timestampType)
+        {
+            if (timestampType.Equals(TimestampType.ChangeTime) && (this.fsaAdapter.FileSystem == FileSystem.FAT32 || this.fsaAdapter.FileSystem == FileSystem.OTHERFS))
+            {
+                this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
+            }
+            else if(timestampType.Equals(TimestampType.LastAccessTime) && this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                this.TestSite.Assume.Inconclusive("The FAT32 file system proving inconsistent with [MS-FSA] Section 2.1.5.14.2 for setting Open.File.LastAccessTime.");
+            }
+            else
+            {
+                //Create File
+                CreateFile(fileType);
+
+                //Set FileBasicInformation with tested timestamp equal to 01/05/2008 8:30:52
+                DateTime date = new DateTime(2008, 5, 1, 8, 30, 52); ;
+                long fileTime = date.ToFileTime();
+                string inputDate = date.ToString();
+
+                SetTimestampUnderTest(timestampType, fileTime);
+
+                //Query FileBasicInformation 
+                long creationTime;
+                long changeTime;
+                long lastAccessTime;
+                long lastWriteTime;
+
+                QueryFileBasicInformation(out changeTime, out creationTime, out lastAccessTime, out lastWriteTime);
+
+                //Verify file timestamp was updated
+                long timestampUnderTest = timestampType switch
+                {
+                    TimestampType.CreationTime => creationTime,
+                    TimestampType.ChangeTime => changeTime,
+                    TimestampType.LastAccessTime => lastAccessTime,
+                    TimestampType.LastWriteTime => lastWriteTime,
+                };
+                string underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
+                string openFileParameter = timestampType.Equals(TimestampType.ChangeTime) ? "LastChangeTime" : timestampType.ToString();
+
+                this.fsaAdapter.AssertAreEqual(this.Manager, inputDate, underTestTimestamp,
+                    "The object store MUST set Open.File." + openFileParameter + " to InputBuffer." + timestampType + ".");
+            }            
         }
 
         private void FileInfo_Set_FileBasicInformation_MinusTwoSupported()
@@ -216,6 +299,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             switch (timestampType)
             {
+                case TimestampType.CreationTime:
+                    SetCreationTime(value);
+                    break;
                 case TimestampType.ChangeTime:
                     SetChangeTime(value);
                     break;
