@@ -2,13 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Xml;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Text.Json;
+using System.Text;
+using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -125,31 +124,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             LastRuleSelectionFilename = testSuiteInfo.LastProfile;
         }
 
-        private Assembly UnitTestFrameworkResolveHandler(object sender, ResolveEventArgs args)
-        {
-            if (args.Name.Contains("Microsoft.VisualStudio.QualityTools.UnitTestFramework"))
-            {
-                string vstestPath = Path.GetDirectoryName(appConfig.VSTestPath);
-                string publicAssembliesPath = Path.Combine(vstestPath, @"..\..\..\PublicAssemblies");
-                var possiblePaths = new string[]
-                {
-                    vstestPath,
-                    publicAssembliesPath
-                };
-                string assemblyPath = possiblePaths
-                                        .Select(path => Path.Combine(path, "Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll"))
-                                        .Where(path => File.Exists(path))
-                                        .FirstOrDefault(path => path != null);
-                if (assemblyPath == null)
-                {
-                    return null;
-                }
-                var assembly = Assembly.LoadFrom(assemblyPath);
-                return assembly;
-            }
-            return null;
-        }
-
         /// <summary>
         /// Loads test suite assembly.
         /// </summary>
@@ -186,9 +160,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             testSuite = new TestSuite();
             try
             {
-                AppDomain.CurrentDomain.AssemblyResolve += UnitTestFrameworkResolveHandler;
-                testSuite.LoadFrom(appConfig.TestSuiteAssembly);
-                AppDomain.CurrentDomain.AssemblyResolve -= UnitTestFrameworkResolveHandler;
+                testSuite.LoadFrom(appConfig.VSTestPath, appConfig.TestSuiteDirectory, appConfig.TestSuiteAssembly);
             }
             catch (Exception e)
             {
@@ -397,7 +369,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             // Parse Config section
             var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
             Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
-            if(!configTable.ContainsKey("targetFilterIndex") || !configTable.ContainsKey("mappingFilterIndex"))
+            if (!configTable.ContainsKey("targetFilterIndex") || !configTable.ContainsKey("mappingFilterIndex"))
             {
                 throw new Exception(StringResource.ConfigNotRight);
             }
