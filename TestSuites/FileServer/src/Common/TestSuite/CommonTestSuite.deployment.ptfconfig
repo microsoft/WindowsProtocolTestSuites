@@ -43,7 +43,7 @@
         </Description>
       </Property>
 
-      <Property name="SutIPAddress" value="172.26.198.120" >
+      <Property name="SutIPAddress" value="172.20.10.5" >
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
@@ -233,7 +233,7 @@
         </Description>
       </Property>
 
-      <Property name="ClientNic1IPAddress" value="172.26.192.1">
+      <Property name="ClientNic1IPAddress" value="172.20.10.2">
         <Description>
           One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
