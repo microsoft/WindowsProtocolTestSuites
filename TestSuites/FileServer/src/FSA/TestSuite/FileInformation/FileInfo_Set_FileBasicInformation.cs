@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
+        [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
         public void FileInfo_Set_FileBasicInformation_File_Negative()
         {
@@ -55,7 +55,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
+        [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
         public void FileInfo_Set_FileBasicInformation_Dir_Negative()
         {
@@ -181,7 +181,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Testing file system behavior to -2 timestamp value
             //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
-            //ReFS is proving inconsistent with -2 timestamp value at the moment and is temporarily asserted as inconclusive to avoid regression failure
             string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
                         
             if (this.fsaAdapter.FileSystem == FileSystem.NTFS 
