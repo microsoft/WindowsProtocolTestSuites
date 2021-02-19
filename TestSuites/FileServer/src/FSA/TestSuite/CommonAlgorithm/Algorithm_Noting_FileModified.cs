@@ -18,11 +18,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void Algorithm_Noting_FileModified()
+        public void CommonAlgorithm_Noting_FileModified()
         {
             Algorithm_Noting_FileModified(FileType.DataFile);
         }
