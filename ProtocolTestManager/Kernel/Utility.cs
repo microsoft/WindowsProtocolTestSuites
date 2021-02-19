@@ -485,7 +485,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 // Create a temp folder to save ptfconfig files
                 string tmpDir = Path.Combine(Path.GetTempPath(), $"PTM-{Guid.NewGuid()}");
                 Directory.CreateDirectory(tmpDir);
-                oldProfile.SavePtfCfgTo(tmpDir, testSuiteFolderBin);
+                oldProfile.SavePtfCfgTo(tmpDir, testSuiteFolderBin, appConfig.PipeName);
 
                 MergeWithDefaultPtfConfig(tmpDir);
                 foreach (string ptfconfig in Directory.GetFiles(tmpDir))
@@ -801,7 +801,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 ptfconfigDirectory = Path.Combine("PtfConfigDirectory", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}");
                 string desCfgDir = ptfconfigDirectory;
-                profile.SavePtfCfgTo(desCfgDir, testSuiteFolderBin);
+                profile.SavePtfCfgTo(desCfgDir, testSuiteFolderBin, appConfig.PipeName);
                 filter.LoadProfile(profile.ProfileStream);
                 ImportPlaylist(profile.PlaylistStream);
                 GetSelectedCaseList();
