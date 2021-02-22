@@ -127,7 +127,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
             else if(timestampType.Equals(TimestampType.LastAccessTime) && this.fsaAdapter.FileSystem == FileSystem.FAT32)
             {
-                this.TestSite.Assume.Inconclusive("The FAT32 file system proving inconsistent with [MS-FSA] Section 2.1.5.14.2 for setting Open.File.LastAccessTime.");
+                this.TestSite.Assume.Inconclusive("The FAT32 file system is inconclusive for Open.File.LastAccessTime.");
             }
             else
             {
@@ -201,7 +201,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             else if(this.fsaAdapter.FileSystem == FileSystem.REFS
                 && !Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_REFS), operatingSystem))
             {
-                this.TestSite.Assume.Inconclusive("ReFS is proving inconsistent with -2 timestamp value at the moment.");
+                this.TestSite.Assume.Inconclusive("ReFS is inconclusive with -2 timestamp value.");
             }
             else
             {
@@ -323,38 +323,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private enum OS_MinusTwo_NotSupported_NTFS
         {
-            WindowsNT4_0,
-            Windows98,
-            Windows98SecondEdition,
-            Windows2000,
-            WindowsXP,
-            WindowsServer2003,
-            WindowsVista,
             WindowsServer2008,
-            Windows7,
             WindowsServer2008R2,
-            Windows8,
             WindowsServer2012
         }
 
         private enum OS_MinusTwo_NotSupported_REFS
         {
-            WindowsNT4_0,
-            Windows98,
-            Windows98SecondEdition,
-            Windows2000,
-            WindowsXP,
-            WindowsServer2003,
-            WindowsVista,
             WindowsServer2008,
-            Windows7,
             WindowsServer2008R2,
-            Windows8,
             WindowsServer2012,
-            Windows8_1,
             WindowsServer2012R2
         }
-
         private void SetChangeTime(long changeTime)
         {
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
