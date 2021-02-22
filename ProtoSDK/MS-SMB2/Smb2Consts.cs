@@ -238,6 +238,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public const int AES128GCM_Nonce_Length = 12;
 
         /// <summary>
+        /// Length of the AES256CCM_Nonce field in SMB2 Transform_Header
+        /// </summary>
+        public const int AES256CCM_Nonce_Length = 11;
+
+        /// <summary>
+        /// Length of the AES256GCM_Nonce field in SMB2 Transform_Header
+        /// </summary>
+        public const int AES256GCM_Nonce_Length = 12;
+
+        /// <summary>
         /// The ProtocolId used in SMB2 Transform_Header
         /// </summary>
         public const uint ProtocolIdInTransformHeader = 0x424d53FD;

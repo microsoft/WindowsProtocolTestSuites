@@ -24,7 +24,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         internal bool EnableSessionSigning;
         internal bool EnableSessionEncryption;
         internal List<uint> EnableTreeEncryption = new List<uint>();
-        
+
+        internal int LValue;
         /// <summary>
         /// Generate encrypt/decrypt and signing keys according to the smb2 dialect, cryptographicKey(session key), PreauthIntegrityHashValue and existing cryptInfo
         /// If the param cryptoInfo is not null, then the param cipherId will be ignored. 
@@ -102,6 +103,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     // for pre SMB 3.11 dialects, use AES-128-CCM for encryption
                     CipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
                 }
+
+                /**
+                    If Connection.CipherId is AES-128-CCM or AES-128-GCM, 'L' is initialized to 128. 
+                    If Connection.CipherId is AES-256-CCM or AES256-GCM, 'L' value is initialized to 256. 
+                **/
+
+                if (CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM || 
+                    CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_GCM)
+                {
+                    LValue = 128;
+                }
+                else
+                {
+                    LValue = 256;
+                }
+
                 ServerInKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
                                 SessionKey,
                                 // If Connection.Dialect is "3.1.1", the case-sensitive ASCII string "SMBC2SCipherKey" as the label; 
@@ -110,7 +127,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                                 // If Connection.Dialect is "3.1.1", Session.PreauthIntegrityHashValue as the context; 
                                 // otherwise, the case-sensitive ASCII string "ServerIn " as context for the algorithm (note the blank space at the end).
                                 Dialect == DialectRevision.Smb311 ? preauthIntegrityHashValue : Encoding.ASCII.GetBytes("ServerIn \0"),
-                                128);
+                                LValue);
 
                 ServerOutKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
                                 SessionKey,
@@ -120,7 +137,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                                 // If Connection.Dialect is "3.100", Session.PreauthIntegrityHashValue as the context; 
                                 // otherwise, the case-sensitive ASCII string "ServerOut" as context for the algorithm.
                                 Dialect == DialectRevision.Smb311 ? preauthIntegrityHashValue : Encoding.ASCII.GetBytes("ServerOut\0"),
-                                128);
+                                LValue);
 
                 ApplicationKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
                                 SessionKey,
