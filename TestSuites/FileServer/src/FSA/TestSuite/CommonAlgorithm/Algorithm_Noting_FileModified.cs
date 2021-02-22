@@ -97,6 +97,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             TestLastWriteTime(oldLastWriteTimeDate, lastWriteTimeDate);
             TestLastAccessTime(oldLastAccessTimeDate, lastAccessTimeDate);
             TestChangeTime(oldChangeTimeDate, changeTimeDate);
+            TestArchive(isArchive);
         }
 
         private void TestLastWriteTime(DateTime oldLastWriteTimeDate, DateTime lastWriteTimeDate)
