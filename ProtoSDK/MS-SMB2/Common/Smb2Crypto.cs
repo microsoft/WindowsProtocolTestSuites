@@ -178,6 +178,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                         authData);
                 }
             }
+            else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM)
+            {
+                int nonceLength = Smb2Consts.AES256CCM_Nonce_Length;
+                using (var cipher = new AesCcm(key))
+                {
+                    cipher.Decrypt(
+                        transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
+                        encryptedPacket.EncryptdData,
+                        transformHeader.Signature,
+                        decrypted,
+                        authData);
+                }
+            }
+            else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM)
+            {
+                int nonceLength = Smb2Consts.AES256GCM_Nonce_Length;
+                using (var cipher = new AesGcm(key))
+                {
+                    cipher.Decrypt(
+                        transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
+                        encryptedPacket.EncryptdData,
+                        transformHeader.Signature,
+                        decrypted,
+                        authData);
+                }
+            }
             else
             {
                 throw new InvalidOperationException(String.Format(
@@ -274,6 +300,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_GCM)
                 {
                     int nonceLength = Smb2Consts.AES128GCM_Nonce_Length;
+                    Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
+                    transformHeader.Nonce = new Guid(nonce);
+
+                    using (var cipher = new AesGcm(key))
+                    {
+                        cipher.Encrypt(
+                            transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
+                            originalBinary,
+                            encrypted,
+                            tag,
+                            // Use the fields including and after Nonce field as auth data
+                            Smb2Utility.MarshalStructure(transformHeader).Skip(20).ToArray());
+                    }
+                }
+                else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM)
+                {
+                    int nonceLength = Smb2Consts.AES256CCM_Nonce_Length;
+                    Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
+                    transformHeader.Nonce = new Guid(nonce);
+
+                    using (var cipher = new AesCcm(key))
+                    {
+                        cipher.Encrypt(
+                            transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
+                            originalBinary,
+                            encrypted,
+                            tag,
+                            // Use the fields including and after Nonce field as auth data
+                            Smb2Utility.MarshalStructure(transformHeader).Skip(20).ToArray());
+                    }
+                }
+                else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM)
+                {
+                    int nonceLength = Smb2Consts.AES256GCM_Nonce_Length;
                     Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
                     transformHeader.Nonce = new Guid(nonce);
 
