@@ -499,7 +499,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.SWN (Service Witness)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.DFSC (Distributed File System Referral)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.Auth (Authentication and Authorization)", Status = RuleStatus.Unknown });
-
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.FSA (File System Algorithms)", Status = RuleStatus.Selected });
+            
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Negotiate"));
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Credit", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_LARGE_MTU)));
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Signing"));
