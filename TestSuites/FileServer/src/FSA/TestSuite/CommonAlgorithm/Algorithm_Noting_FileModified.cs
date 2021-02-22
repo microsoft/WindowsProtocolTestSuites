@@ -94,42 +94,63 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             DateTime oldLastAccessTimeDate = DateTime.FromFileTime(oldLastAccessTime);
             DateTime lastAccessTimeDate = DateTime.FromFileTime(lastAccessTime);
 
+            TestLastWriteTime(oldLastWriteTimeDate, lastWriteTimeDate);
+            TestLastAccessTime(oldLastAccessTimeDate, lastAccessTimeDate);
+            TestChangeTime(oldChangeTimeDate, changeTimeDate);
+        }
+
+        private void TestLastWriteTime(DateTime oldLastWriteTimeDate, DateTime lastWriteTimeDate)
+        {
             if (oldLastWriteTimeDate.CompareTo(lastWriteTimeDate) >= 0)
             {
-                BaseTestSite.Assert.Inconclusive("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
-            }
-            else if (oldLastAccessTimeDate.CompareTo(lastAccessTimeDate) >= 0)
-            {
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
-                BaseTestSite.Assert.Inconclusive("The object store SHOULD set Open.File.LastAccessTime to the current system time.");
-            }
-            else if (oldChangeTimeDate.CompareTo(changeTimeDate) >= 0)
-            {
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastAccessTime to the current system time.");
-                BaseTestSite.Assert.Inconclusive("The object store SHOULD set Open.File.LastChangeTime to the current system time.");
-            }
-            else if (isArchive == false)
-            {
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastAccessTime to the current system time.");
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastChangeTime to the current system time.");
-
-                //Verify FILE_ATTRIBUTE_ARCHIVE is set to TRUE
-                BaseTestSite.Assert.Inconclusive("The object store SHOULD set Open.File.FileAttributes.FILE_ATTRIBUTE_ARCHIVE to TRUE.");
+                BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
             }
             else
             {
                 BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
-                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastChangeTime to the current system time.");
+            }
+        }
+
+        private void TestLastAccessTime(DateTime oldLastAccessTimeDate, DateTime lastAccessTimeDate)
+        {
+            if (oldLastAccessTimeDate.CompareTo(lastAccessTimeDate) >= 0)
+            {
+                BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastAccessTime to the current system time.");
+            }
+            else
+            {
                 BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastAccessTime to the current system time.");
+            }
+        }
+
+        private void TestChangeTime(DateTime oldChangeTimeDate, DateTime changeTimeDate)
+        {
+            if (oldChangeTimeDate.CompareTo(changeTimeDate) >= 0)
+            {
+                BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastChangeTime to the current system time.");
+            }
+            else
+            {
+                BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.LastChangeTime to the current system time.");
+            }
+        }
+
+        private void TestArchive(bool isArchive)
+        {
+            //Verify FILE_ATTRIBUTE_ARCHIVE is set to TRUE
+            if (isArchive == false)
+            {
+                BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.FileAttributes.FILE_ATTRIBUTE_ARCHIVE to TRUE.");
+            }
+            else
+            {
                 BaseTestSite.Assert.Pass("The object store SHOULD set Open.File.FileAttributes.FILE_ATTRIBUTE_ARCHIVE to TRUE.");
             }
         }
 
         private void OpenFile(string fileName)
         {
-            //open file after a time interval
+            //delay open file until minimum recognizable time change
             DateTime currentTime = DateTime.Now;
             DateTime nextTime = DateTime.Now;
 
@@ -181,7 +202,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void WriteToFile()
         {
-            //write data to file after a time interval
+            //delay write data to file until after minimum recognizable time change
             DateTime currentTime = DateTime.Now;
             DateTime nextTime = DateTime.Now;
 
