@@ -2,16 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
@@ -20,14 +15,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
     public class CompareLeaseKeys : SMB2TestBase
     {
         #region Variables
+
         private Smb2FunctionalClient client1;
         private Smb2FunctionalClient client2;
-        private string fileName;
-        private string directoryName;
         private string sharePath;
+        
         #endregion
 
         #region Test Initialize and Cleanup
+
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext)
         {
@@ -39,9 +35,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
         {
             TestClassBase.Cleanup();
         }
+
         #endregion
 
         #region Test Case Initialize and Clean up
+
         protected override void TestInitialize()
         {
             base.TestInitialize();
@@ -64,15 +62,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             }
             base.TestCleanup();
         }
+
         #endregion
 
         #region Test Cases
+
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.LeaseV2)]
         [Description("Compare the server returned lease keys of two opens of the same file using the same lease key")]
         public void Comparing_Same_LeaseKeys()
         {
+            CheckLeaseApplicability(FileType.DataFile);
+
             Smb2CreateRequestLeaseV2 leaseRequest = new Smb2CreateRequestLeaseV2
             {
                 LeaseKey = Guid.NewGuid(),
@@ -88,6 +90,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
         [Description("Compare the returned lease keys of two opens of a parent directory file and a child file")]
         public void DirectoryComparing_ParentLeaseKey_ChildLeaseKey()
         {
+            CheckLeaseApplicability(FileType.DirectoryFile);
+
             Guid leaseKey = Guid.NewGuid();
             Smb2CreateRequestLeaseV2 client1LeaseRequest = new Smb2CreateRequestLeaseV2
             {
@@ -105,25 +109,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
 
             Compare_LeaseKeys(client1LeaseRequest, client2LeaseRequest, FileType.DirectoryFile);
         }
+
         #endregion
 
         #region Utility
+
         public void Compare_LeaseKeys(Smb2CreateRequestLeaseV2 client1LeaseRequest, Smb2CreateRequestLeaseV2 client2LeaseRequest, FileType client1FileType = FileType.DataFile)
         {
-            // Check Applicability
-            CheckLeaseApplicability(client1FileType);
-
-            
             string client1FileName;
             string client2FileName;
             GenerateFileNames(client1FileType, out client1FileName, out client2FileName);
             
             #region Add Event Handler
+
             client1.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(base.OnLeaseBreakNotificationReceived);
             clientToAckLeaseBreak = client1;
+            
             #endregion
 
-            #region Client1 (LeaseOpen) Open a File with Lease RWH or or Directory with RH
+            #region Client1 (LeaseOpen) Open a File with Lease RWH or Directory with RH
+            
             BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE (with LeaseV2 context)");
             uint client1TreeId;
@@ -137,16 +142,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
                     client1LeaseRequest
                 }
                 );
+            
             #endregion
 
             // Get response lease of Client1 (LeaseOpen)
-            Smb2CreateResponseLeaseV2 client1LeaseResponse = (Smb2CreateResponseLeaseV2)createContextResponse.First();
+            Smb2CreateResponseLeaseV2 client1LeaseResponse = (Smb2CreateResponseLeaseV2) createContextResponse.First();
             
 
             // Create a task to invoke CheckBreakNotification to check whether server will send out lease break notification or not, no acknowledgement required
             var checkFirstBreakNotificationTask = Task.Run(() => CheckBreakNotification(client1TreeId, false));
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
+            
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             uint client2TreeId;
             SetupClientConnection(client2, out client2TreeId);
@@ -157,12 +164,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
                     client2LeaseRequest
                 }
                 );
+            
             #endregion
 
             // Get response lease of Client2 (OperationOpen)
             Smb2CreateResponseLeaseV2 client2LeaseResponse = (Smb2CreateResponseLeaseV2) createContextResponse.First();
 
             #region Lease Keys Comparison
+            
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing the lease keys responses of client1 (LeaseOpen) and client2 (OperationOpen)");
 
             BaseTestSite.Assert.IsTrue(client1LeaseResponse.LeaseKey != Guid.Empty || client1LeaseResponse.ParentLeaseKey != Guid.Empty,
@@ -184,14 +193,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
                 BaseTestSite.Assert.AreEqual(client1LeaseResponse.LeaseKey, client2LeaseResponse.LeaseKey,
                    "LeaseOpen.LeaseKey and OperationOpen.LeaseKey MUST be the same");
             }
+
             #endregion
 
             #region Tear Down Clients
+            
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the first client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF");
             TearDownClient(client1, client1TreeId, client1FileId);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the second client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF");
             TearDownClient(client2, client2TreeId, client2FileId);
+            
             #endregion
         }
 
@@ -237,6 +249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
                 client2FileName = client1FileName;
             }
         }
+
         #endregion
     }
 }
