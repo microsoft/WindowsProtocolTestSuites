@@ -28,6 +28,13 @@ namespace Microsoft.Protocols.TestManager.CLI
             HelpText = "Specifies the categories of test cases to run.\nThis parameter overrides the test cases in profile.\nValue should be separated by comma or space.")]
         public IEnumerable<string> Categories { get; set; }
 
+        [Option("config",
+            Required = false,
+            HelpText = "Specifies the configuration items which will override the values in profile.\n" + "" +
+                "Each configuration should be in format {property_name}={property_value}, and multiple items should be separated by whitespace.\n" +
+                "For example: --config \"RDP.ServerPort=3389\" \"RDP.Security.Protocol=TLS\"")]
+        public IEnumerable<string> Configuration { get; set; }
+
         [Option('r', "report",
             Required = false,
             HelpText = "Specifies the result file which will be written to.\nIf not specified, test results will be written to stdout.")]
@@ -42,7 +49,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         [Option("outcome",
             Separator = ',',
             Required = false,
-            Default = new [] {
+            Default = new[] {
                 CLI.Outcome.Pass,
                 CLI.Outcome.Fail,
                 CLI.Outcome.Inconclusive,
@@ -58,8 +65,10 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         public override string ToString()
         {
-            return "Input Options:" + Environment.NewLine + 
-                $"Profile: {Profile}; TestSuite: {TestSuite}; SelectedOnly: {SelectedOnly}; Categories: {string.Join(", ", Categories)}; ReportFile: {ReportFile}; " +
+            return "Input Options:" + Environment.NewLine +
+                $"Profile: {Profile}; TestSuite: {TestSuite}; SelectedOnly: {SelectedOnly}; Categories: {string.Join(", ", Categories)}; " +
+                $"{nameof(Configuration)}: {String.Join(" ", Configuration)}; " +
+                $"ReportFile: {ReportFile}; " +
                 $"ReportFormat: {ReportFormat}; Outcome: {string.Join(", ", Outcome)}; Debug: {EnableDebugging}";
         }
     }

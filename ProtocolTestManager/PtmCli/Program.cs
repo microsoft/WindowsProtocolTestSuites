@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestManager.CLI
 {
@@ -51,7 +52,9 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 Logger.AddLog(LogLevel.Information, options.ToString());
 
-                p.LoadTestSuite(options.Profile, options.TestSuite);
+                var config = p.ParseConfigItems(options.Configuration);
+
+                p.LoadTestSuite(options.Profile, options.TestSuite, config);
 
                 List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
 
@@ -85,7 +88,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         static void HandleArgumentError(IEnumerable<Error> errors)
         {
-            foreach(var error in errors)
+            foreach (var error in errors)
             {
                 Logger.AddLog(LogLevel.Error, error.ToString());
             }
@@ -169,12 +172,38 @@ namespace Microsoft.Protocols.TestManager.CLI
             testSuites = util.TestSuiteIntroduction.SelectMany(tsFamily => tsFamily).ToList();
         }
 
+        private IDictionary<string, string> ParseConfigItems(IEnumerable<string> config)
+        {
+            // {property_name}={property_value}
+            var exp = new Regex(@"^(?<property_name>[^=]+)=(?<property_value>.*)$");
+
+            var result = config
+                            .Select(s =>
+                            {
+                                var match = exp.Match(s);
+
+                                if (!match.Success)
+                                {
+                                    throw new ArgumentException($"The configuration item format is invalid: \"{s}\". Expected format: {{property_name}}={{property_value}}.");
+                                }
+
+                                return match;
+                            })
+                            .ToDictionary(
+                                match => match.Groups["property_name"].Value,
+                                match => match.Groups["property_value"].Value
+                            );
+
+            return result;
+        }
+
         /// <summary>
         /// Load test suite.
         /// </summary>
         /// <param name="filename">Filename of the profile</param>
         /// <param name="testSuiteFolder">Path of the specified test suite</param>
-        public void LoadTestSuite(string filename, string testSuiteFolder)
+        /// <param name="config">Configuration items which will override values in profile.</param>
+        public void LoadTestSuite(string filename, string testSuiteFolder, IDictionary<string, string> config)
         {
             Logger.AddLog(LogLevel.Information, "Load Test Suite");
             string testSuiteFolderBin = Path.Combine(testSuiteFolder, "Bin");
@@ -186,7 +215,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     throw new ArgumentException(String.Format(StringResources.UnknownTestSuiteMessage, profile.Info.TestSuiteName));
                 }
-                
+
                 tsinfo.TestSuiteFolder = testSuiteFolder;
                 tsinfo.TestSuiteVersion = LoadTestsuiteVersion(testSuiteFolderBin);
             }
@@ -201,6 +230,8 @@ namespace Microsoft.Protocols.TestManager.CLI
                 filename = newProfile;
             }
             util.LoadProfileSettings(filename, testSuiteFolderBin);
+
+            util.UpdatePtfConfig(config);
         }
 
         /// <summary>

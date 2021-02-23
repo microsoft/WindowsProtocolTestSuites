@@ -811,6 +811,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
             SaveProfileSettings(LastRuleSelectionFilename);
         }
 
+        /// <summary>
+        /// Update the ptfconfig files by configuration items.
+        /// </summary>
+        /// <param name="config">The configuration items which will override the values in ptfconfigDirectory.</param>
+        public void UpdatePtfConfig(IDictionary<string, string> config)
+        {
+            var files = Directory.GetFiles(ptfconfigDirectory, "*.ptfconfig", SearchOption.TopDirectoryOnly);
+
+            var ptfConfig = new PtfConfig(files.ToList());
+
+            foreach (var kvp in config)
+            {
+                ptfConfig.SetPropertyValue(kvp.Key, kvp.Value);
+            }
+
+            ptfConfig.Save();
+        }
+
         #endregion
 
         #region Run test cases
