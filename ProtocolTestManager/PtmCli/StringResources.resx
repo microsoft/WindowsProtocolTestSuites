@@ -138,6 +138,9 @@
   <data name="PtmProfileUpgraded" xml:space="preserve">
     <value>The PTM profile has been upgraded. New profile is saved as {0}.</value>
   </data>
+  <data name="ReportFilePath" xml:space="preserve">
+    <value>Report file is generate under {1}</value>
+  </data>
   <data name="TestResultPath" xml:space="preserve">
     <value>You can find the test results under {0}</value>
   </data>
