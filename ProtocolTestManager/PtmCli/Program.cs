@@ -56,7 +56,16 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 p.LoadTestSuite(options.Profile, options.TestSuite, config);
 
-                List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
+                List<TestCase> testCases;
+
+                if (String.IsNullOrEmpty(options.FilterExpression))
+                {
+                    testCases = p.GetTestCases(options.SelectedOnly);
+                }
+                else
+                {
+                    testCases = p.GetTestCases(options.FilterExpression);
+                }
 
                 Console.CancelKeyPress += (sender, args) =>
                 {
@@ -249,6 +258,18 @@ namespace Microsoft.Protocols.TestManager.CLI
         }
 
         /// <summary>
+        /// Get test cases using filter expression.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression.</param>
+        /// <returns>The test case list.</returns>
+        public List<TestCase> GetTestCases(string filterExpression)
+        {
+            var result = util.GetTestCasesByFilter(filterExpression);
+
+            return result;
+        }
+
+        /// <summary>
         /// Get test cases using category paramter
         /// </summary>
         /// <param name="category">The specific category of test cases to run</param>
@@ -273,6 +294,8 @@ namespace Microsoft.Protocols.TestManager.CLI
             Logger.AddLog(LogLevel.Information, "Run Test Suite");
             using (ProgressBar progress = new ProgressBar())
             {
+                util.SetSelectedCaseList(testCases);
+
                 util.InitializeTestEngine();
 
                 int total = testCases.Count;

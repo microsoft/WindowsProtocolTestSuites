@@ -221,8 +221,34 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>Test case list</returns>
         public List<TestCase> GetSelectedCaseList()
         {
-            selectedCases = filter.FilterTestCaseList(testSuite.TestCaseList);
             return selectedCases;
+        }
+
+        /// <summary>
+        /// Set selected case list.
+        /// </summary>
+        /// <param name="list">The list to set.</param>
+        public void SetSelectedCaseList(List<TestCase> list)
+        {
+            selectedCases = list;
+        }
+
+        /// <summary>
+        /// Get test case list by filter.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression.</param>
+        /// <returns>The test case list.</returns>
+        public List<TestCase> GetTestCasesByFilter(string filterExpression)
+        {
+            var testEngine = new TestEngine(appConfig.VSTestPath)
+            {
+                TestAssemblies = appConfig.TestSuiteAssembly,
+                WorkingDirectory = appConfig.TestSuiteDirectory,
+            };
+
+            var result = testEngine.LoadTestCases(filterExpression);
+
+            return result;
         }
 
         /// <summary>
@@ -776,7 +802,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 profile.SavePtfCfgTo(desCfgDir, testSuiteFolderBin, appConfig.PipeName);
                 filter.LoadProfile(profile.ProfileStream);
                 ImportPlaylist(profile.PlaylistStream);
-                GetSelectedCaseList();
+
+                SetSelectedCaseList(filter.FilterTestCaseList(testSuite.TestCaseList));
 
                 int sel, notfound;
                 ApplyPlaylist(out sel, out notfound);
@@ -887,6 +914,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             else
             {
+                SetSelectedCaseList(filter.FilterTestCaseList(testSuite.TestCaseList));
+
                 RunByCases(GetSelectedCaseList());
             }
         }
