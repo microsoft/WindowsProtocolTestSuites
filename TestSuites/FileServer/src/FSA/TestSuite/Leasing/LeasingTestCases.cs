@@ -28,11 +28,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         protected ManualResetEvent notificationReceived = new ManualResetEvent(false);
 
         /// <summary>
-        /// Expected new lease state in LEASE_BREAK_Notification
-        /// </summary>
-        protected LeaseStateValues expectedNewLeaseState;
-
-        /// <summary>
         /// The client from which to send LeaseBreakAcknowledgment
         /// </summary>
         protected Smb2FunctionalClient clientToAckLeaseBreak;
@@ -128,10 +123,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                 0,
                 respHeader.TreeId,
                 "Expect that the field TreeId is set to 0.");
-            BaseTestSite.Assert.AreEqual(
-                expectedNewLeaseState,
-                leaseBreakNotify.NewLeaseState,
-                "NewLeaseState in LeaseBreakNotification from server should be {0}", expectedNewLeaseState);
             BaseTestSite.Assert.AreEqual<uint>(
                 0,
                 leaseBreakNotify.BreakReason,
@@ -149,57 +140,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         }
 
         /// <summary>
-        /// Acknowledge LeaseBreakNotification received from server
-        /// </summary>
-        /// <param name="client">Client to send the acknowledgement</param>
-        /// <param name="treeId">TreeId associated to send the acknowledgement</param>
-        /// <param name="leaseBreakNotify">LeaseBreakNotification received from server</param>
-        protected virtual void AcknowledgeLeaseBreak(Smb2FunctionalClient client, uint treeId, LEASE_BREAK_Notification_Packet leaseBreakNotify)
-        {
-            if (receivedLeaseBreakNotify.Flags == LEASE_BREAK_Notification_Packet_Flags_Values.SMB2_NOTIFY_BREAK_LEASE_FLAG_ACK_REQUIRED)
-            {
-                BaseTestSite.Log.Add(
-                    LogEntryKind.Debug,
-                    "Server requires an LEASE_BREAK_ACK on this LEASE_BREAK_NOTIFY");
-                // Will add verification for response after SDK change
-                uint status = client.LeaseBreakAcknowledgment(treeId, leaseBreakNotify.LeaseKey, leaseBreakNotify.NewLeaseState);
-                BaseTestSite.Assert.AreEqual(
-                    Smb2Status.STATUS_SUCCESS,
-                    status,
-                    "LeaseBreakAcknowledgement should succeed, actual status is {0}", Smb2Status.GetStatusCode(status));
-            }
-            else
-            {
-                BaseTestSite.Log.Add(
-                    LogEntryKind.Debug,
-                    "Server does not require an LEASE_BREAK_ACK on this LEASE_BREAK_NOTIFY");
-            }
-        }
-
-        /// <summary>
         /// TimerCallback to be executed to acknowledge LeaseBreakNotification
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="isNotificationExpected"></param>
-        protected virtual void CheckBreakNotification(object obj, bool isNotificationExpected = true)
+        protected virtual void CheckBreakNotification(bool isNotificationExpected = true)
         {
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,
                 "Check if client received lease break notification");
             // Wait for notification arrival
-            var isNotificationReceived = notificationReceived.WaitOne(testConfig.Timeout);
+            bool isNotificationReceived = notificationReceived.WaitOne(testConfig.LeaseBreakNotificationWaitTimeout);
 
             if (isNotificationExpected)
             {
                 BaseTestSite.Assert.IsTrue(
                 isNotificationReceived,
                 "LeaseBreakNotification should be raised.");
-
-                uint treeId = (uint)obj;
-                BaseTestSite.Log.Add(
-                    LogEntryKind.Debug,
-                    "Client attempts to acknowledge the lease break");
-                AcknowledgeLeaseBreak(clientToAckLeaseBreak, treeId, receivedLeaseBreakNotify);
             }
             else
             {

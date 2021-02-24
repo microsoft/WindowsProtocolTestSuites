@@ -189,7 +189,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV2)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Compare the returned lease keys of two opens of a parent directory file and a child file")]
+        [Description("Compare the returned lease keys of two opens to the same directory file")]
         public void DirectoryComparing_LeaseKeysV2()
         {
             CheckLeaseApplicability(checkDirectoryTypeSupport: true);
@@ -241,37 +241,64 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             #endregion
         }
 
+        [TestMethod]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.LeaseV2)]
+        [Description("Compare lease keys of parent directory file and a child file with an invalid parent lease key")]
+        public void DirectoryComparing_Child_Invalid_ParentLeaseKeys()
+        {
+            CheckLeaseApplicability(checkDirectoryTypeSupport: true);
+
+            Guid leaseKey = Guid.NewGuid();
+            Smb2CreateRequestLeaseV2 client1RequestLease = createLeaseV2RequestContext(leaseKey, leaseState: LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING);
+
+            Smb2CreateRequestLeaseV2 client2RequestLease = createLeaseV2RequestContext();
+            client2RequestLease.ParentLeaseKey = new Guid(); // Invalid Key
+
+            Smb2CreateResponseLeaseV2 client1ResponseLease;
+            Smb2CreateResponseLeaseV2 client2ResponseLease;
+
+            InitializeClientsConnections(client1RequestLease, client2RequestLease, out client1ResponseLease, out client2ResponseLease, isClient1ParentDirectory: true, expectServerBreakNotification: true);
+
+            #region Test Cases
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
+            BaseTestSite.Assert.AreEqual(client2RequestLease.ParentLeaseKey, Guid.Empty, "request.ParentLeaseKey should be empty");
+            BaseTestSite.Assert.AreEqual(client2ResponseLease.ParentLeaseKey, Guid.Empty, "open.ParentLeaseKey should be empty");
+ 
+            #endregion
+        }
+
         #endregion
 
         #region Utility
 
         private void InitializeClientsConnections(Smb2CreateRequestLease client1RequestLease, Smb2CreateRequestLease client2RequestLease, out Smb2CreateResponseLease client1ResponseLease, 
-            out Smb2CreateResponseLease client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false)
+            out Smb2CreateResponseLease client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
             Smb2CreateContextResponse client1ResponseContext;
             Smb2CreateContextResponse client2ResponseContext;
 
-            SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory);
+            SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory, expectServerBreakNotification);
 
             client1ResponseLease = client1ResponseContext as Smb2CreateResponseLease;
             client2ResponseLease = client2ResponseContext as Smb2CreateResponseLease;
         }
 
         private void InitializeClientsConnections(Smb2CreateRequestLeaseV2 client1RequestLease, Smb2CreateRequestLeaseV2 client2RequestLease, out Smb2CreateResponseLeaseV2 client1ResponseLease, 
-            out Smb2CreateResponseLeaseV2 client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false)
+            out Smb2CreateResponseLeaseV2 client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
             Smb2CreateContextResponse client1ResponseContext;
             Smb2CreateContextResponse client2ResponseContext;
 
-            SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory);
+            SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory, expectServerBreakNotification);
 
             client1ResponseLease = client1ResponseContext as Smb2CreateResponseLeaseV2;
             client2ResponseLease = client2ResponseContext as Smb2CreateResponseLeaseV2;
         }
 
-
         public void SendRequestContext(Smb2CreateContextRequest client1RequestLease, Smb2CreateContextRequest client2RequestLease, out Smb2CreateContextResponse client1ResponseLease, 
-            out Smb2CreateContextResponse client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false)
+            out Smb2CreateContextResponse client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
             string client1FileName;
             string client2FileName;
@@ -303,9 +330,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             // Get response lease for Client1 (LeaseOpen)
             client1ResponseLease = createContextResponse.First();
 
-            // Create a task to invoke CheckBreakNotification to check whether server will send out lease break notification or not, no acknowledgement required
-            var checkFirstBreakNotificationTask = Task.Run(() => CheckBreakNotification(client1TreeId, false));
-
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
@@ -318,6 +342,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                 );
 
             #endregion
+
+            // Check whether server will send out lease break notification or not
+            CheckBreakNotification(expectServerBreakNotification);
 
             // Get response lease for Client2 (OperationOpen)
             client2ResponseLease = createContextResponse.First();   
