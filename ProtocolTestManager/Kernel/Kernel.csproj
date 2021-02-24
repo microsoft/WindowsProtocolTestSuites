@@ -18,6 +18,10 @@
   <ItemGroup>
     <Content Include="etc\**\*" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <Content Update="etc\\**\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

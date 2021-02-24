@@ -2,13 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Xml;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Text.Json;
+using System.Text;
+using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -140,31 +139,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             LastRuleSelectionFilename = testSuiteInfo.LastProfile;
         }
 
-        private Assembly UnitTestFrameworkResolveHandler(object sender, ResolveEventArgs args)
-        {
-            if (args.Name.Contains("Microsoft.VisualStudio.QualityTools.UnitTestFramework"))
-            {
-                string vstestPath = Path.GetDirectoryName(appConfig.VSTestPath);
-                string publicAssembliesPath = Path.Combine(vstestPath, @"..\..\..\PublicAssemblies");
-                var possiblePaths = new string[]
-                {
-                    vstestPath,
-                    publicAssembliesPath
-                };
-                string assemblyPath = possiblePaths
-                                        .Select(path => Path.Combine(path, "Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll"))
-                                        .Where(path => File.Exists(path))
-                                        .FirstOrDefault(path => path != null);
-                if (assemblyPath == null)
-                {
-                    return null;
-                }
-                var assembly = Assembly.LoadFrom(assemblyPath);
-                return assembly;
-            }
-            return null;
-        }
-
         /// <summary>
         /// Loads test suite assembly.
         /// </summary>
@@ -201,9 +175,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             testSuite = new TestSuite();
             try
             {
-                AppDomain.CurrentDomain.AssemblyResolve += UnitTestFrameworkResolveHandler;
-                testSuite.LoadFrom(appConfig.TestSuiteAssembly);
-                AppDomain.CurrentDomain.AssemblyResolve -= UnitTestFrameworkResolveHandler;
+                testSuite.LoadFrom(appConfig.VSTestPath, appConfig.TestSuiteDirectory, appConfig.TestSuiteAssembly);
             }
             catch (Exception e)
             {
@@ -412,7 +384,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             // Parse Config section
             var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
             Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
-            if(!configTable.ContainsKey("targetFilterIndex") || !configTable.ContainsKey("mappingFilterIndex"))
+            if (!configTable.ContainsKey("targetFilterIndex") || !configTable.ContainsKey("mappingFilterIndex"))
             {
                 throw new Exception(StringResource.ConfigNotRight);
             }
@@ -500,7 +472,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 // Create a temp folder to save ptfconfig files
                 string tmpDir = Path.Combine(Path.GetTempPath(), $"PTM-{Guid.NewGuid()}");
                 Directory.CreateDirectory(tmpDir);
-                oldProfile.SavePtfCfgTo(tmpDir, testSuiteFolderBin);
+                oldProfile.SavePtfCfgTo(tmpDir, testSuiteFolderBin, appConfig.PipeName);
 
                 MergeWithDefaultPtfConfig(tmpDir);
                 foreach (string ptfconfig in Directory.GetFiles(tmpDir))
@@ -816,7 +788,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 ptfconfigDirectory = Path.Combine("PtfConfigDirectory", $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}");
                 string desCfgDir = ptfconfigDirectory;
-                profile.SavePtfCfgTo(desCfgDir, testSuiteFolderBin);
+                profile.SavePtfCfgTo(desCfgDir, testSuiteFolderBin, appConfig.PipeName);
                 filter.LoadProfile(profile.ProfileStream);
                 ImportPlaylist(profile.PlaylistStream);
                 GetSelectedCaseList();
@@ -852,6 +824,24 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public void SaveLastProfile()
         {
             SaveProfileSettings(LastRuleSelectionFilename);
+        }
+
+        /// <summary>
+        /// Update the ptfconfig files by configuration items.
+        /// </summary>
+        /// <param name="config">The configuration items which will override the values in ptfconfigDirectory.</param>
+        public void UpdatePtfConfig(IDictionary<string, string> config)
+        {
+            var files = Directory.GetFiles(ptfconfigDirectory, "*.ptfconfig", SearchOption.TopDirectoryOnly);
+
+            var ptfConfig = new PtfConfig(files.ToList());
+
+            foreach (var kvp in config)
+            {
+                ptfConfig.SetPropertyValue(kvp.Key, kvp.Value);
+            }
+
+            ptfConfig.Save();
         }
 
         #endregion

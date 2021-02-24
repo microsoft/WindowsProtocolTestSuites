@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <ProjectReference Include="..\DiscoveryTestLogger\DiscoveryTestLogger.csproj" />
 	  <ProjectReference Include="..\Kernel\Kernel.csproj" />
   </ItemGroup>
   
