@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 message.IndexOf(StringResource.FailedTag) != -1 ||
                 message.IndexOf(StringResource.InconclusiveTag) != -1)
             {
-                string[] strings = message.Split('.');
+                string[] strings = message.Split(' ');
                 string testCaseName = strings[strings.Length - 1];
 
                 if (String.IsNullOrEmpty(testCaseName))

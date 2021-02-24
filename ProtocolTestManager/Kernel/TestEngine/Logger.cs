@@ -122,7 +122,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void UpdateCaseFromHtmlLog(TestCaseStatus status, string testCaseName, TestCaseDetail detail, string testCaseLogPath)
         {
-            RunningTestCase = AllTestCases.FirstOrDefault(c => c.Name == testCaseName);
+            RunningTestCase = AllTestCases.FirstOrDefault(c => c.FullName == testCaseName);
             if (RunningTestCase == null) return;
             GroupByOutcome.ChangeStatus(testCaseName, status);
             RunningTestCase.LogUri = new Uri(testCaseLogPath);

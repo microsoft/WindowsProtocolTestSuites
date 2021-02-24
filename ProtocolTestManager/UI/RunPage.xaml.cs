@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestManager.UI
 
             foreach (var test in testCaseList)
             {
-                if (test.IsChecked && currentPageList != null && currentPageList.Contains(test.Name))
+                if (test.IsChecked && currentPageList != null && currentPageList.Contains(test.FullName))
                 {
                     testcaselist.Add(test);
                 }

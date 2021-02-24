@@ -44,28 +44,28 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         NotRunTestCases.AddTestCase(testcase);
                         lock (locker)
                         {
-                            testcasemap.Add(testcase.Name, NotRunTestCases);
+                            testcasemap.Add(testcase.FullName, NotRunTestCases);
                         }
                         break;
                     case TestCaseStatus.Passed:
                         PassedTestCases.AddTestCase(testcase);
                         lock (locker)
                         {
-                            testcasemap.Add(testcase.Name, PassedTestCases);
+                            testcasemap.Add(testcase.FullName, PassedTestCases);
                         }
                         break;
                     case TestCaseStatus.Failed:
                         FailedTestCases.AddTestCase(testcase);
                         lock (locker)
                         {
-                            testcasemap.Add(testcase.Name, FailedTestCases);
+                            testcasemap.Add(testcase.FullName, FailedTestCases);
                         }
                         break;
                     case TestCaseStatus.Other:
                         OtherTestCases.AddTestCase(testcase);
                         lock (locker)
                         {
-                            testcasemap.Add(testcase.Name, OtherTestCases);
+                            testcasemap.Add(testcase.FullName, OtherTestCases);
                         }
                         break;
                     case TestCaseStatus.Running:
@@ -104,7 +104,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 TestCaseGroup from = testcasemap[testCaseName];
                 TestCaseGroup to = OtherTestCases;
                 if (from == null) return;
-                TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.Name == testCaseName);
+                TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.FullName == testCaseName);
                 // If changed to Running/Waiting status, no need to change group.
 
                 if (status == TestCaseStatus.Running)

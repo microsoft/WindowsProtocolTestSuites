@@ -211,6 +211,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string Name;
 
         /// <summary>
+        /// The fully qualified name of the test case
+        /// </summary>
+        public string FullyQualifiedName { get; set; }
+
+        /// <summary>
         /// The start time of the test case
         /// </summary>
         public DateTimeOffset StartTime;
@@ -267,6 +272,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string Name;
 
         /// <summary>
+        /// The fully qualified name of the test case
+        /// </summary>
+        public string FullyQualifiedName { get; set; }
+
+        /// <summary>
         /// The start time of the test case
         /// </summary>
         public string StartTime;
@@ -320,6 +330,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             var result = new TestCaseDetail
             {
                 Name = Name,
+                FullyQualifiedName = FullyQualifiedName,
                 StartTime = ParseToDateTimeOffset(StartTime),
                 EndTime = ParseToDateTimeOffset(EndTime),
                 Result = Result,

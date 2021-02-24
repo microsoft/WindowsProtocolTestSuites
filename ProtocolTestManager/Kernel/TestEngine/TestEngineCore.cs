@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
             args.AppendFormat("--results-directory {0} ", "HtmlTestResults");
-            args.AppendFormat("--logger PTM ", ResultOutputFolder);
+            args.AppendFormat("--logger HTML ", ResultOutputFolder);
             args.AppendFormat("--test-adapter-path \"{0}\" ", Utility.GetPTMPath());
         }
 
