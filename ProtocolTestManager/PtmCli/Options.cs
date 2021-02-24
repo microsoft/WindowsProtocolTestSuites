@@ -22,11 +22,10 @@ namespace Microsoft.Protocols.TestManager.CLI
             HelpText = "When specified, only the selected test cases will be executed.\nOtherwise, all the test cases in the profile will be executed.")]
         public bool SelectedOnly { get; set; }
 
-        [Option("categories",
-            Separator = ',',
+        [Option("filter",
             Required = false,
-            HelpText = "Specifies the categories of test cases to run.\nThis parameter overrides the test cases in profile.\nValue should be separated by comma or space.")]
-        public IEnumerable<string> Categories { get; set; }
+            HelpText = "Specifies the filter expression of test cases to run.\nThis parameter overrides the test cases in profile.")]
+        public string FilterExpression { get; set; }
 
         [Option("config",
             Required = false,
@@ -66,7 +65,8 @@ namespace Microsoft.Protocols.TestManager.CLI
         public override string ToString()
         {
             return "Input Options:" + Environment.NewLine +
-                $"Profile: {Profile}; TestSuite: {TestSuite}; SelectedOnly: {SelectedOnly}; Categories: {string.Join(", ", Categories)}; " +
+                $"Profile: {Profile}; TestSuite: {TestSuite}; SelectedOnly: {SelectedOnly}; " +
+                $"{nameof(FilterExpression)}: {FilterExpression} " +
                 $"{nameof(Configuration)}: {String.Join(" ", Configuration)}; " +
                 $"ReportFile: {ReportFile}; " +
                 $"ReportFormat: {ReportFormat}; Outcome: {string.Join(", ", Outcome)}; Debug: {EnableDebugging}";

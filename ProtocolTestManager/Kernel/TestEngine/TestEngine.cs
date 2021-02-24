@@ -175,15 +175,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Construct vstest args for discovery.
         /// </summary>
+        /// <param name="filterExpression">The filter expression.</param>
         /// <param name="outputDirectory">The output directory.</param>
         /// <returns>The args.</returns>
-        private StringBuilder ConstructVstestArgsForDiscovery(string outputDirectory)
+        private StringBuilder ConstructVstestArgsForDiscovery(string filterExpression, string outputDirectory)
         {
             StringBuilder args = new StringBuilder();
             Uri wd = new Uri(WorkingDirectory);
             foreach (string file in TestAssemblies)
             {
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
+            }
+
+            if (!String.IsNullOrEmpty(filterExpression))
+            {
+                args.AppendFormat("--filter {0} ", filterExpression);
             }
 
             args.AppendFormat("--results-directory {0} ", outputDirectory);
@@ -383,8 +389,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Load test cases.
         /// </summary>
+        /// <param name="filterExpression">The filter expression. If it is null, no filter will be used.</param>
         /// <returns>The test case list.</returns>
-        public List<TestCase> LoadTestCases()
+        public List<TestCase> LoadTestCases(string filterExpression = null)
         {
             try
             {
@@ -394,7 +401,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 Directory.CreateDirectory(tempPath);
 
-                StringBuilder args = ConstructVstestArgsForDiscovery(tempPath);
+                StringBuilder args = ConstructVstestArgsForDiscovery(filterExpression, tempPath);
 
                 vstestProcess = new Process()
                 {
