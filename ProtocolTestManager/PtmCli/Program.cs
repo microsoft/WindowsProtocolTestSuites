@@ -81,7 +81,12 @@ namespace Microsoft.Protocols.TestManager.CLI
                 }
                 else
                 {
+                    if (!Path.IsPathRooted(options.ReportFile))
+                    {
+                        options.ReportFile = Path.Combine(p.util.TestResultOutputFolder, options.ReportFile);
+                    }
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
+                    Console.WriteLine(String.Format(StringResources.ReportFilePath, options.ReportFile));
                 }
 
                 Console.WriteLine(String.Format(StringResources.TestResultPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
