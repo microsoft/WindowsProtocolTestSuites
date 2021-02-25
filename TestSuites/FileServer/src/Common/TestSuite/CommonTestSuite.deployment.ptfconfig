@@ -36,14 +36,14 @@
         </Description>
       </Property>
 
-      <Property name="SutComputerName" value="node01">
+      <Property name="SutComputerName" value="node02">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
       </Property>
 
-      <Property name="SutIPAddress" value="169.254.1.56" >
+      <Property name="SutIPAddress" value="169.254.189.70" >
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
@@ -70,7 +70,7 @@
         </Description>
       </Property>
 
-      <Property name="AdminUserName" value="Administrator">
+      <Property name="AdminUserName" value="Grace">
         <Description>
           Administrator user account name of the SUT
         </Description>
@@ -233,7 +233,7 @@
         </Description>
       </Property>
 
-      <Property name="ClientNic1IPAddress" value="169.254.11.57">
+      <Property name="ClientNic1IPAddress" value="169.254.189.69">
         <Description>
           One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
