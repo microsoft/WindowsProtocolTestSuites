@@ -70,17 +70,7 @@
         </Description>
       </Property>
 
-      <Property name="KDCPort" value="88">
-        <Description>
-          Port of KDC, By default KDC port is 88
-        </Description>
-      </Property>
-
-<<<<<<< HEAD
-      <Property name="AdminUserName" value="Grace">
-=======
       <Property name="AdminUserName" value="Administrator">
->>>>>>> origin/main
         <Description>
           Administrator user account name of the SUT
         </Description>
