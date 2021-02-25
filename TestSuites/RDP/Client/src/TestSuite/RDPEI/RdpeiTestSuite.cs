@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
@@ -47,6 +49,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
         protected override void TestInitialize()
         {
+            VerifyInteractiveOrDeviceNeededRdpeiTestCase();
+
             base.TestInitialize();
 
             this.rdpeiSUTControlAdapter = this.TestSite.GetAdapter<IRdpeiSUTControlAdapter>();
@@ -139,6 +143,46 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
             this.rdpbcgrAdapter.Reset();
             this.rdpeiServer.Reset();
+        }
+
+        /// <summary>
+        /// Inconclude the interactive test cases.
+        /// </summary>
+        private void VerifyInteractiveOrDeviceNeededRdpeiTestCase()
+        {
+            var isInteractiveTestCase = IsInteractiveRdpeiTestCase();
+            var isDeviceNeededTestCase = IsDeviceNeededRdpeiTestCase();
+            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpSutControlAdapter").GetType().Name == "InteractiveAdapterConfig";
+            if (isInteractiveTestCase && !isInteractiveAdapter)
+            {
+                Site.Assume.Inconclusive("The RDPEI case requires interactive operation.");
+            }
+            if (isDeviceNeededTestCase && !isInteractiveAdapter)
+            {
+                Site.Assume.Inconclusive("The RDPEI case requires device operation.");
+            }
+        }
+        /// <summary>
+        /// Determine whether the executing Rdpei test case is interactive or not
+        /// </summary>
+        /// <returns>The executing Rdpei test case is interactive or not</returns>
+        private bool IsInteractiveRdpeiTestCase()
+        {
+            var testName = this.TestContext.TestName;
+            var method = GetType().GetMethod(testName);
+            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
+            return attrs.Any(attr => attr.TestCategories.Contains("Interactive"));
+        }
+        /// <summary>
+        /// Determine whether the executing Rdpei test case needs device
+        /// </summary>
+        /// <returns>The executing Rdpei test case needs device or not</returns>
+        private bool IsDeviceNeededRdpeiTestCase()
+        {
+            var testName = this.TestContext.TestName;
+            var method = GetType().GetMethod(testName);
+            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
+            return attrs.Any(attr => attr.TestCategories.Contains("DeviceNeeded"));
         }
 
         #endregion

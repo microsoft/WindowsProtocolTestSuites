@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Packaging;
+using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
@@ -149,7 +150,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Saves the PTFConfig files in the profile to the specified path.
         /// </summary>
         /// <param name="path">Path</param>
-        public void SavePtfCfgTo(string path)
+        /// <param name="testSuiteFolderBin">test Suite Bin Folder</param>
+        /// <param name="pipeName">Pipe Name</param>
+        public void SavePtfCfgTo(string path, string testSuiteFolderBin, string pipeName)
         {
             CheckIfClosed();
             if (!Directory.Exists(path))
@@ -166,7 +169,45 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     string name = uri.Substring(uri.LastIndexOf("/") + 1);
                     using (var fs = new FileStream(Path.Combine(path, name), FileMode.Create))
                     {
-                        CopyStream(part.GetStream(), fs);
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(part.GetStream());
+                        var adapters = doc.DocumentElement.GetElementsByTagName("Adapter");
+                        foreach(XmlNode subnode in adapters)
+                        {
+                            string type = subnode.Attributes["xsi:type"].Value;
+                            if (string.Equals(type, "powershell") || string.Equals(type, "shell"))
+                            {
+                                string scriptDir = subnode.Attributes["scriptdir"].Value;
+                                // update
+                                if (!Path.IsPathRooted(scriptDir) && !string.IsNullOrEmpty(testSuiteFolderBin))
+                                {
+                                    Uri wScriptDir = new Uri(System.IO.Path.Combine(testSuiteFolderBin, scriptDir));                                    
+                                    subnode.Attributes["scriptdir"].Value = wScriptDir.LocalPath;
+                                }
+                            }
+                        }
+
+                        var namedPipes = doc.SelectNodes("//*[local-name()='TestLog']/*[local-name()='Sinks']/*[local-name()='Sink']");
+                        //Change the identity of the NamedPipe sink.
+                        foreach (XmlNode node in namedPipes)
+                        {
+                            if (node.Attributes["type"] != null && node.Attributes["type"].Value == "Microsoft.Protocols.TestTools.Logging.PipeSink")
+                            {
+                                var identityAttr = node.Attributes["identity"];
+                                if (identityAttr == null)
+                                {
+                                    identityAttr = doc.CreateAttribute("identity");
+                                    identityAttr.Value = pipeName;
+                                    node.Attributes.Append(identityAttr);
+                                }
+                                else
+                                {
+                                    identityAttr.Value = pipeName;
+                                }
+                            }
+                        }
+
+                        doc.Save(fs);                        
                         fs.Flush();
                         fs.Close();
                     }

@@ -1,21 +1,18 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdp.Rdpefs;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs;
-using Microsoft.Protocols.TestSuites.Rdp.Rdpefs;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Protocols.TestSuites.Rdpemt
 {
@@ -749,5 +746,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         }
 
         #endregion
+
+        /// <summary>
+        /// Check platform compatibility.
+        /// </summary>
+        private void CheckPlatformCompatibility(TransportMode transportMode)
+        {
+            // Check lossy transport mode, which is currently only supported on Windows.
+            if (transportMode == TransportMode.Lossy)
+            {
+                if (!OperatingSystem.IsWindows())
+                {
+                    BaseTestSite.Assume.Inconclusive("The lossy transport mode is only supported on Windows.");
+                }
+            }
+        }
     }
 }

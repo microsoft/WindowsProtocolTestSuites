@@ -35,6 +35,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
             testConfig = new SMB2ModelTestConfig(Site);
 
             sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
         }
 
         public override void Reset()

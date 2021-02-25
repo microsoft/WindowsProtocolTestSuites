@@ -340,6 +340,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
             this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
 
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
+
             sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
 
             this.Reset();
@@ -5551,7 +5554,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="opt">Directory will be added to test directory list, else, will be added to test file list for cleanup</param>
         /// <param name="addtoList">True for add to the testfiles.</param>        /// 
         /// <returns>A file name with a random string of the given length.</returns>
-        public string ComposeRandomFileName(int fileNameLength,  string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE,  bool addToList = true)
+        public string ComposeRandomFileName(int fileNameLength,  string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE,  bool addToList = true, string parentDirectoryName = "")
         {
             int randomNumber = 0;
             char fileNameLetter = ' ';
@@ -5569,6 +5572,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
 
             randomFileName = randomFileName + extension;
+
+            if (parentDirectoryName != "")
+            {
+                randomFileName = parentDirectoryName + "\\" + randomFileName;
+            }
 
             if (addToList)
             {

@@ -20,6 +20,7 @@
       <!-- File location should be relative path -->
       <File id="XMLLog" directory="..\..\Log" file="RDP-Log.xml" format="xml"/>
       <File id="Debug" directory="..\..\DebugLog" file="DEBUG_log.txt" format="text"/>
+      <Sink id="PipeSink" type="Microsoft.Protocols.TestTools.Logging.PipeSink"/>
     </Sinks>
     <Profiles>
       <Profile name="Verbose" extends="Error">
@@ -66,6 +67,20 @@
         <Rule kind="TestFailed" sink="Debug"/>
         <Rule kind="TestInconclusive" sink="Debug"/>
         <Rule kind="TestPassed" sink="Debug"/>
+
+        <!--Shown for Protocol Test Manager-->
+        <Rule kind="Checkpoint" sink="PipeSink" delete="false" />
+        <Rule kind="CheckFailed" sink="PipeSink" delete="false" />
+        <Rule kind="CheckSucceeded" sink="PipeSink" delete="false" />
+        <Rule kind="CheckInconclusive" sink="PipeSink" delete="false"/>
+        <Rule kind="TestInProgress" sink="PipeSink" delete="false" />
+        <Rule kind="TestFailed" sink="PipeSink" delete="false" />
+        <Rule kind="TestInconclusive" sink="PipeSink" delete="false" />
+        <Rule kind="TestPassed" sink="PipeSink" delete="false" />
+        <Rule kind="TestError" sink="PipeSink" delete="false" />
+        <Rule kind="TestTimeout" sink="PipeSink" delete="false" />
+        <Rule kind="TestAborted" sink="PipeSink" delete="false" />
+        <Rule kind="Comment" sink="PipeSink" delete="false" />
       </Profile>
     </Profiles>
   </TestLog>

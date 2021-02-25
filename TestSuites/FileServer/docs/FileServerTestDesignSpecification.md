@@ -216,12 +216,12 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 90         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2620       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2622       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
 | RSVD Test                | 29         | Test for MS-RSVD                                                                                                  |
-| DFSC Test                | 43         | Test for MS-DFSC                                                                                                  |
+| DFSC Test                | 42         | Test for MS-DFSC                                                                                                  |
 | HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
 ### <a name="3.1">SMB2 BVT
@@ -1498,6 +1498,97 @@ This is used to test SMB2 common user scenarios.
 ||Server sends LOGOFF response|
 |**Cleanup**||
 
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_FileLeasingV1_SameLeaseKey|
+|**Description**|This test case is designed to test whether server can handle LeaseV1 context with the same lease key.|
+|**Prerequisites**||
+|**Test Execution Steps**|Via NIC1|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request with LeaseV1|
+||Server sends CREATE response|
+||Via NIC2|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request with LeaseV1 including the same lease key on the same file|
+||Via NIC1|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Via NIC2|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Via NIC1|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+||Via NIC2|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_FileLeasingV2_SameLeaseKey|
+|**Description**|This test case is designed to test whether server can handle LeaseV2 context with the same lease key.|
+|**Prerequisites**||
+|**Test Execution Steps**|Via NIC1|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request with LeaseV2|
+||Server sends CREATE response|
+||Via NIC2|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request with LeaseV2 including the same lease key on the same file|
+||Via NIC1|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Via NIC2|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Via NIC1|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+||Via NIC2|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
 
 #### <a name="3.1.18">Replay
 
@@ -9148,7 +9239,7 @@ In dialect 3.02, a new flag SMB2\_SHARE\_CAP\_ASYMMETRIC 0x00000080 is introduce
 | **DC\_referral\_to\_DC**                     | 6              |
 | **Sysvol\_referral\_to\_DC**                 | 7              |
 | **Root\_referral\_to\_DC**                   | 5              |
-| **Link\_referral\_to\_DC**                   | 7              |
+| **Link\_referral\_to\_DC**                   | 6              |
 | **Root\_and\_Link\_referral\_to\_DFSServer** | 11             |
 | **Path\_Normalization\_to\_DFSServer**       | 2              |
 
@@ -9600,18 +9691,6 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Prerequisites**|Common prerequisites|
 |**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
 ||2. Client sends a Link referral v2 REQ_GET_DFS_REFERRAL message with invalid domain name (RequestFileName is "\Invalid\DomainBased\DFSLink", MaxReferralLevel is 2) to DC.|
-||3. Client expects STATUS == STATUS_NOT_FOUND.|
-||4. Disconnect and logoff.|
-|**Cleanup**|N/A|
-
-
-|||
-|---|---|
-|**Test ID**|InvalidLinkNameLinkReferralToDC|
-|**Description**|Client sends a v3 Link referral request with invalid link name to DC, expect negative response|
-|**Prerequisites**|Common prerequisites|
-|**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
-||2. Client sends a Link referral v3 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\DomainBased\Invalid", MaxReferralLevel is 3) to DC.|
 ||3. Client expects STATUS == STATUS_NOT_FOUND.|
 ||4. Disconnect and logoff.|
 |**Cleanup**|N/A|

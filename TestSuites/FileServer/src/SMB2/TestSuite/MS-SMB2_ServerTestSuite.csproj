@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
   </ItemGroup>
 
@@ -25,6 +25,15 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
     <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
     <ProjectReference Include="..\Adapter\MS-SMB2_ServerAdapter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="MS-SMB2_ServerTestSuite.deployment.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-SMB2_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
