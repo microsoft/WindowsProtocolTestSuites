@@ -30,8 +30,6 @@
     <ProjectReference Include="..\Adapter\MS-SMB2Model_ServerAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig"></Content>
-    <Content Include="MS-SMB2Model_ServerTestSuite.ptfconfig"></Content>
     <Content Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
       <Link>CommonTestSuite.ptfconfig</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -49,8 +47,16 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-SMB2Model_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

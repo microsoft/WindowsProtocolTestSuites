@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [Priority(0)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPEUSB")]
+        [TestCategory("Interactive")]
+        [TestCategory("DeviceNeeded")]
         [Description("Verify behaviors of canceling an IO control request.")]
         public void BVT_EUSB_CancelRequest_IoControl()
         {
@@ -68,6 +70,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [Priority(0)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPEUSB")]
+        [TestCategory("Interactive")]
+        [TestCategory("DeviceNeeded")]
         [Description("Verify behaviors of canceling an internal IO control request.")]
         public void BVT_EUSB_CancelRequest_InternalIoControl()
         {
@@ -119,6 +123,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [Priority(0)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPEUSB")]
+        [TestCategory("Interactive")]
+        [TestCategory("DeviceNeeded")]
         [Description("Verify behaviors of canceling a transfer in request.")]
         public void BVT_EUSB_CancelRequest_TransferInRequest()
         {

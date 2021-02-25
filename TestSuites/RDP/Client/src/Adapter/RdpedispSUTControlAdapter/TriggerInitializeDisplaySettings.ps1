@@ -5,8 +5,6 @@
 # Return Value: 0 indicates task is started successfully; -1 indicates failed to run the specified task
 
 # Run Task to change remote screen orientation
-$pwdConverted = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential $ptfprop_SUTUserName, $pwdConverted -ErrorAction Stop
 $path = "/RDP-TestSuite-ClientEP/Scripts"
 $scriptblock = {
 	param([int]$width, [int]$height, [int]$orientation, [string]$path)

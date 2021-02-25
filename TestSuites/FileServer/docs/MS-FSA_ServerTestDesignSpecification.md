@@ -21,6 +21,7 @@
         * [FileInfo_IsShortNameSupported](#FileInfo_IsShortNameSupported)
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
+        * [FileInfo_Set_FileBasicInformation](#FileInfo_Set_FileBasicInformation)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -55,6 +56,8 @@
         * [Query Directory](#Scenario-QueryDirectory)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
+        * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
+        * [CreateFile_BackSlash](#Scenario-CreateFile_BackSlash)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
     * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#IsEASupported)
@@ -93,6 +96,9 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileBasicInformation](#FileBasicInformation)
+            * [FileInfo_Set_FileBasicInformation_File](#FileInfo_Set_FileBasicInformation_File)
+            * [FileInfo_Set_FileBasicInformation_Dir](#FileInfo_Set_FileBasicInformation_Dir)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -287,17 +293,17 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 139 test cases in total:
+There are 144 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 26 (5) |
+| Scenarios for FileInformation | 7 | 28 (6) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
-| Other Scenarios | 1 | 1 (0) |
+| Other Scenarios | 3 | 6 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
 
@@ -454,6 +460,21 @@ There are 343 test cases in total:
 | | If supported, The operation returns **STATUS_SUCCESS**.|
 | Message Sequence| CreateFile.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
+
+#### <a name="FileInfo_FileBasicInformationSupported"/>FileInfo_FileBasicInformationSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes supported by different file systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If the file system supports the attribute values, The system responds according to [MS-FSA] 2.1.5.14.2 FileBasicInformation. |
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
@@ -1022,6 +1043,26 @@ There are 343 test cases in total:
 | Message Sequence| Create a directory file with a invalid stream name.|
 | | Verify server return with **STATUS_INVALID_PARAMETER** for NTFS and ReFS, and **STATUS_OBJECT_NAME_INVALID** for other file systems.|
 
+#### <a name="Scenario-CreateFile_InvalidColon"/>CreateFile_InvalidColon
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test create a directory or data file with invalid colon.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile, DataFile|
+| Message Sequence| Create a directory or data file with a invalid colon contained in file name.|
+| | Verify server return with **STATUS_OBJECT_NAME_INVALID** for supported file systems.|
+
+#### <a name="Scenario-CreateFile_BackSlash"/>CreateFile_BackSlash
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test create a directory or data file with a invalid back slash.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile, DataFile|
+| Message Sequence| Create a directory or data file with back slash contained in file name.|
+| | Verify server response for supported file systems.|
+
 ## <a name="Traditional-Test-Case-Design"/>Traditional Test Case Design
 
 ### <a name="Test-cases-for-FileInformation"/>Test cases for FileInformation
@@ -1562,6 +1603,28 @@ There are 343 test cases in total:
 | Description| To test if FileAccessInformation is supported for a file with ::$DATA as suffix.|
 | Message Sequence| CreateFile with ::$Data as file name suffix.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
+
+#### <a name="FileBasicInformation"/>FileBasicInformation
+
+##### <a name="FileInfo_Set_FileBasicInformation_File"/>FileInfo_Set_FileBasicInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes on file supported by different file systems.|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
+| | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir"/>FileInfo_Set_FileBasicInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes on directory is supported by different file systems.|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
@@ -3405,6 +3468,50 @@ There are 343 test cases in total:
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_OBJECT_NAME_INVALID**, ActualResult);|
 | | }|
+
+#### <a name="CreateFile_InvalidColon"/>CreateFile_InvalidColon
+
+##### <a name="CreateDirectory_InvalidColon"/>CreateDirectory_InvalidColon
+
+| &#32;| &#32; |
+| Description| Try to create a directory with invalid colon and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory file with invalid colon|
+| | Verify server returns with **STATUS_OBJECT_NAME_INVALID** for supported file system|
+
+##### <a name="CreateFile_InvalidColon"/>CreateFile_InvalidColon
+
+| &#32;| &#32; |
+| Description| Try to create a data with invalid colon and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a data file with invalid colon|
+| | Verify server returns with **STATUS_OBJECT_NAME_INVALID** for supported file system|
+
+#### <a name="CreateFile_BackSlash"/>CreateFile_BackSlash
+
+##### <a name="CreateDirectory_EndWithBackSlash"/>CreateDirectory_EndWithBackSlash
+
+| &#32;| &#32; |
+| Description| Try to create a directory end with backslash and expect success.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory end with with backslash.|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+
+##### <a name="CreateFile_EndWithInvalidBackSlash"/>CreateFile_EndWithInvalidBackSlash
+
+| &#32;| &#32; |
+| Description| Try to create a file end with invalid backslash and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a data file end with invalid backslash.|
+| | Verify server returns with **STATUS_OBJECT_NAME_INVALID** for supported file system|
+
+##### <a name="CreateFile_WithDoubleBackSlashInMiddle"/>CreateFile_WithDoubleBackSlashInMiddle
+
+| &#32;| &#32; |
+| Description| Try to create a file with double backslash in the middle and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a file with double backslash in the middle.|
+| | Verify server returns with **STATUS_OBJECT_PATH_NOT_FOUND** for supported file system|
 
 ## <a name="MBT-Test-Design"/>MBT Test Design
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestManager.CLI
 {
@@ -51,9 +52,20 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 Logger.AddLog(LogLevel.Information, options.ToString());
 
-                p.LoadTestSuite(options.Profile, options.TestSuite);
+                var config = p.ParseConfigItems(options.Configuration);
 
-                List<TestCase> testCases = (options.Categories.Count() > 0) ? p.GetTestCases(options.Categories.ToList()) : p.GetTestCases(options.SelectedOnly);
+                p.LoadTestSuite(options.Profile, options.TestSuite, config);
+
+                List<TestCase> testCases;
+
+                if (String.IsNullOrEmpty(options.FilterExpression))
+                {
+                    testCases = p.GetTestCases(options.SelectedOnly);
+                }
+                else
+                {
+                    testCases = p.GetTestCases(options.FilterExpression);
+                }
 
                 Console.CancelKeyPress += (sender, args) =>
                 {
@@ -69,7 +81,12 @@ namespace Microsoft.Protocols.TestManager.CLI
                 }
                 else
                 {
+                    if (!Path.IsPathRooted(options.ReportFile))
+                    {
+                        options.ReportFile = Path.Combine(p.util.TestResultOutputFolder, options.ReportFile);
+                    }
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
+                    Console.WriteLine(String.Format(StringResources.ReportFilePath, options.ReportFile));
                 }
 
                 Console.WriteLine(String.Format(StringResources.TestResultPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
@@ -85,7 +102,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         static void HandleArgumentError(IEnumerable<Error> errors)
         {
-            foreach(var error in errors)
+            foreach (var error in errors)
             {
                 Logger.AddLog(LogLevel.Error, error.ToString());
             }
@@ -169,15 +186,41 @@ namespace Microsoft.Protocols.TestManager.CLI
             testSuites = util.TestSuiteIntroduction.SelectMany(tsFamily => tsFamily).ToList();
         }
 
+        private IDictionary<string, string> ParseConfigItems(IEnumerable<string> config)
+        {
+            // {property_name}={property_value}
+            var exp = new Regex(@"^(?<property_name>[^=]+)=(?<property_value>.*)$");
+
+            var result = config
+                            .Select(s =>
+                            {
+                                var match = exp.Match(s);
+
+                                if (!match.Success)
+                                {
+                                    throw new ArgumentException($"The configuration item format is invalid: \"{s}\". Expected format: {{property_name}}={{property_value}}.");
+                                }
+
+                                return match;
+                            })
+                            .ToDictionary(
+                                match => match.Groups["property_name"].Value,
+                                match => match.Groups["property_value"].Value
+                            );
+
+            return result;
+        }
+
         /// <summary>
         /// Load test suite.
         /// </summary>
         /// <param name="filename">Filename of the profile</param>
         /// <param name="testSuiteFolder">Path of the specified test suite</param>
-        public void LoadTestSuite(string filename, string testSuiteFolder)
+        /// <param name="config">Configuration items which will override values in profile.</param>
+        public void LoadTestSuite(string filename, string testSuiteFolder, IDictionary<string, string> config)
         {
             Logger.AddLog(LogLevel.Information, "Load Test Suite");
-
+            string testSuiteFolderBin = Path.Combine(testSuiteFolder, "Bin");
             TestSuiteInfo tsinfo;
             using (ProfileUtil profile = ProfileUtil.LoadProfile(filename))
             {
@@ -186,7 +229,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 {
                     throw new ArgumentException(String.Format(StringResources.UnknownTestSuiteMessage, profile.Info.TestSuiteName));
                 }
-                string testSuiteFolderBin = Path.Combine(testSuiteFolder, "Bin");
+
                 tsinfo.TestSuiteFolder = testSuiteFolder;
                 tsinfo.TestSuiteVersion = LoadTestsuiteVersion(testSuiteFolderBin);
             }
@@ -195,12 +238,14 @@ namespace Microsoft.Protocols.TestManager.CLI
             util.LoadTestSuiteAssembly();
 
             string newProfile;
-            if (util.TryUpgradeProfileSettings(filename, out newProfile))
+            if (util.TryUpgradeProfileSettings(filename, testSuiteFolderBin, out newProfile))
             {
                 Console.WriteLine(String.Format(StringResources.PtmProfileUpgraded, newProfile));
                 filename = newProfile;
             }
-            util.LoadProfileSettings(filename);
+            util.LoadProfileSettings(filename, testSuiteFolderBin);
+
+            util.UpdatePtfConfig(config);
         }
 
         /// <summary>
@@ -215,6 +260,18 @@ namespace Microsoft.Protocols.TestManager.CLI
                 if (!selectedOnly || testcase.IsChecked) testCaseList.Add(testcase);
             }
             return testCaseList;
+        }
+
+        /// <summary>
+        /// Get test cases using filter expression.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression.</param>
+        /// <returns>The test case list.</returns>
+        public List<TestCase> GetTestCases(string filterExpression)
+        {
+            var result = util.GetTestCasesByFilter(filterExpression);
+
+            return result;
         }
 
         /// <summary>
@@ -242,6 +299,8 @@ namespace Microsoft.Protocols.TestManager.CLI
             Logger.AddLog(LogLevel.Information, "Run Test Suite");
             using (ProgressBar progress = new ProgressBar())
             {
+                util.SetSelectedCaseList(testCases);
+
                 util.InitializeTestEngine();
 
                 int total = testCases.Count;

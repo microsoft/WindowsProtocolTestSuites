@@ -20,17 +20,21 @@
     <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MS-RSVD_ServerTestSuite.deployment.ptfconfig" />
-    <Content Include="MS-RSVD_ServerTestSuite.ptfconfig" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="MS-RSVD_ServerTestSuite.deployment.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="MS-RSVD_ServerTestSuite.ptfconfig">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

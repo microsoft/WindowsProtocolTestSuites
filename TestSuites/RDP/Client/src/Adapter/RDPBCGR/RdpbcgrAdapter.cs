@@ -40,6 +40,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         //private RDPBCGRCapSet m_serverCapSet = null; 
         private string certFile;
         private string certPwd;
+        private string proxyIP = null;
         private int port = ConstValue.TEST_PORT;
         private IpVersion ipVersion = IpVersion.Ipv4;
         private string rdpVersionString = "7.0";
@@ -356,6 +357,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
             serverConfig.selectedProtocol = protocol;
             serverConfig.isExtendedClientDataSupported = bSupportExtClientData;
+            bool isSendTLSHandshakeAfterX224ConnectionConfirmPdu = true;
 
             Server_X_224_Connection_Confirm_Pdu confirmPdu
                 = rdpbcgrServerStack.CreateX224ConnectionConfirmPdu(sessionContext, protocol);
@@ -384,19 +386,21 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 case NegativeType.InvalidTPKTHeader:
                     confirmPdu.tpktHeader.version = 0;
+                    isSendTLSHandshakeAfterX224ConnectionConfirmPdu = false;
                     break;
                 case NegativeType.InvalidX224:
                     confirmPdu.x224Ccf.lengthIndicator--;
                     break;
                 case NegativeType.InvalidRdpNegData:
                     confirmPdu.rdpNegData.type = RDP_NEG_RSP_type_Values.Invalid;
+                    isSendTLSHandshakeAfterX224ConnectionConfirmPdu = false;
                     break;
             }
             if (!setRdpNegData)
             {
                 confirmPdu.rdpNegData = null;
             }
-            SendPdu(confirmPdu);
+            SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
             sessionState = ServerSessionState.X224ConnectionResponseSent;
         }
 
@@ -1673,7 +1677,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="presentRoutingToken">Indicates if present routing token (LoadBalanceInfo).</param>
         public void SendServerRedirectionPdu(bool presentRoutingToken)
         {
-            UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
             redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
@@ -1687,8 +1690,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             else
             {
-                string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
-                redirectPacket.TargetNetAddress = serverIP;
+                redirectPacket.TargetNetAddress = this.GetRedirectIpAddress();
                 redirectPacket.RedirFlags = RedirectionFlags.LB_TARGET_NET_ADDRESS;
             }
 
@@ -1699,7 +1701,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             redirectPacket.Domain = RdpbcgrTestData.Test_Domain;
             redirectPacket.RedirFlags |= RedirectionFlags.LB_DOMAIN;
 
-            redirectPacket.Password = encoder.GetBytes(RdpbcgrTestData.Test_Password);
+            redirectPacket.Password = RdpbcgrUtility.EncodeUnicodeStringToBytes(RdpbcgrTestData.Test_Password);
             redirectPacket.RedirFlags |= RedirectionFlags.LB_PASSWORD;
 
             redirectPacket.Pad = new byte[8];
@@ -1720,13 +1722,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         public void SendServerRedirectionPduRDSTLS()
         {
-            UnicodeEncoding encoder = new UnicodeEncoding();
             RDP_SERVER_REDIRECTION_PACKET redirectPacket = new RDP_SERVER_REDIRECTION_PACKET();
 
             redirectPacket.Flags = RDP_SERVER_REDIRECTION_PACKET_FlagsEnum.SEC_REDIRECTION_PKT;
             redirectPacket.SessionID = RdpbcgrTestData.Test_Redirection_SessionId;
 
-            string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
+            var serverIP = this.GetRedirectIpAddress();
             redirectPacket.TargetNetAddress = serverIP;
             redirectPacket.RedirFlags = RedirectionFlags.LB_TARGET_NET_ADDRESS;
 
@@ -2787,9 +2788,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// This method is used to send packet to SUT.
         /// </summary>
         /// <param name="packet">The packet to be sent.</param>
-        private void SendPdu(RdpbcgrServerPdu packet)
+        private void SendPdu(RdpbcgrServerPdu packet, bool isSendTLSHandshakeAfterX224ConnectionConfirmPdu = true)
         {
-            rdpbcgrServerStack.SendPdu(sessionContext, packet);
+            rdpbcgrServerStack.SendPdu(sessionContext, packet, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
             System.Threading.Thread.Sleep(100);//To avoid the combination with other sending request.
         }
         #endregion "PDU transport"
@@ -3125,6 +3126,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
         #region Private mothods
 
+        private string GetRedirectIpAddress()
+        {
+            string serverIP = ((System.Net.IPEndPoint)(sessionContext.LocalIdentity)).Address.ToString();
+            return string.IsNullOrEmpty(proxyIP) ? serverIP : proxyIP;
+        }
+
         private void LoadServerConfiguation()
         {
             serverConfig = new RdpbcgrServerConfig();
@@ -3137,6 +3144,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 ipVersion = IpVersion.Ipv4;
             }
+            proxyIP = site.Properties["RDP.ProxyIP"];
             certFile = site.Properties["CertificatePath"];
             certPwd = site.Properties["CertificatePassword"];
             rdpVersionString = site.Properties["RDP.Version"];

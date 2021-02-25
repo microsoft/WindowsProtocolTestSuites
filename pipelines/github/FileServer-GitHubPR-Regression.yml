@@ -1,0 +1,45 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - ProtoSDK/Asn1Base/*
+      - ProtoSDK/Claim/*
+      - ProtoSDK/Common/*
+      - ProtoSDK/CryptoLib/*
+      - ProtoSDK/FileAccessService/*
+      - ProtoSDK/KerberosLib/*
+      - ProtoSDK/Messages/*
+      - ProtoSDK/MS-CIFS/*
+      - ProtoSDK/MS-DFSC/*
+      - ProtoSDK/MS-FSCC/*
+      - ProtoSDK/MS-FSRVP/*
+      - ProtoSDK/MS-NLMP/*
+      - ProtoSDK/MS-PAC/*
+      - ProtoSDK/MS-RPCE/*
+      - ProtoSDK/MS-RSVD/*
+      - ProtoSDK/MS-SMB/*
+      - ProtoSDK/MS-SMB2/*
+      - ProtoSDK/MS-SPNG/*
+      - ProtoSDK/MS-SQOS/*
+      - ProtoSDK/MS-SRVS/*
+      - ProtoSDK/MS-SWN/*
+      - ProtoSDK/MS-XCA/*
+      - ProtoSDK/Sspi/*
+      - ProtoSDK/SspiLib/*
+      - ProtoSDK/SspiService/*
+      - ProtoSDK/TransportStack/*
+      - TestSuites/FileServer/*
+    exclude:
+      - TestSuites/FileServer/docs/*
+
+variables:
+  - group: Access Tokens
+  - group: Build Variables
+  - group: External Repo Variables
+
+stages:
+  - template: GitHubPR-Regression.yml

@@ -123,6 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="logonName">Logon name.</param>
         /// <param name="serviceName">Service name.</param>
         /// <param name="kdcIpAddress">KDC IP address</param>
+        /// <param name="kdcPort">KDC Port</param>
         /// <param name="attributes">Client security attributes.</param>
         /// <param name="connectionType">Connection type.</param>
         public KerberosClientSecurityConfig(
@@ -130,6 +131,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 string logonName,
                 string serviceName,
                 IPAddress kdcIpAddress,
+                int kdcPort,
                 ClientSecurityContextAttribute attributes,
                 TransportType transportType)
             : base(SecurityPackageType.Kerberos)
@@ -138,6 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             this.logonName = logonName;
             this.serviceName = serviceName;
             this.kdcIpAddress = kdcIpAddress;
+            this.kdcPort = kdcPort;
             this.securityAttributes = attributes;
             this.transportType = transportType;
         }
