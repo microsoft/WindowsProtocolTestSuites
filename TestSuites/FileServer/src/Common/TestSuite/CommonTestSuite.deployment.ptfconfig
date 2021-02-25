@@ -29,6 +29,12 @@
         </Description>
       </Property>
 
+      <Property name="LeaseBreakNotificationWaitTimeout" value="5">
+        <Description>
+          Timeout in seconds to wait for a notification during a lease break
+        </Description>
+      </Property>
+
       <Property name="UnderlyingTransport" value="Tcp">
         <Choice>Tcp, NetBios</Choice>
         <Description>
