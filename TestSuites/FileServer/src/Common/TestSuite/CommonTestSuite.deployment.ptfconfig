@@ -63,14 +63,14 @@
         </Description>
       </Property>
 
-      <Property name="DCServerComputerName" value="">
+      <Property name="DCServerComputerName" value="ng-esgrace">
         <Description>
           Computer ip or name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
         </Description>
       </Property>
 
-      <Property name="AdminUserName" value="Administrator">
+      <Property name="AdminUserName" value="Grace">
         <Description>
           Administrator user account name of the SUT
         </Description>

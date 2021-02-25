@@ -10,6 +10,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using System.IO;
 using FileAccess = Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -21,18 +23,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.FileAccess)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create a directory file and confirm that FoundFiles count is 1")]
+        [Description("Create a directory, write a file to the directory and confirm the foundFiles count")]
         public void CommonAlgorithm_CreateSingleDirectory()
         {
+            // Create root directory
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus status = CreateDirectory(dirName);
+            CreateDirectory(dirName);
 
-            // Go to path and confirm the size of found files 
-            string dirPath = this.fsaAdapter.UncSharePath + "\\" + $"{dirName}";
             this.fsaAdapter.CloseOpen();
-            int foundFiles = FoundFilesCount(dirName, dirPath);
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, 1, foundFiles, $"Create directory with name {dirName} is expected to succeed.");
+            // Create sub file in the root directory
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8, opt: CreateOptions.NON_DIRECTORY_FILE, parentDirectoryName: dirName);
+            
+            CreateFile(fileName);
+            FileBothDirectoryInformation[] result = Query_Directory_Information(dirName);
+            int foundFiles = result.Length;
+
+            // Confirm the size of the directory files
+            // Resullt includes "fileName", "." and ".."
+            this.fsaAdapter.AssertAreEqual(this.Manager, 3, foundFiles, $"Create directory with name {dirName} is expected to succeed.");
         }
 
 
@@ -40,52 +49,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.FileAccess)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create a directory file, a sub directory and confirm that FoundFiles count is 2")]
+        [Description("Create a directory file, a sub directory and a file and confirm foundFiles count")]
         public void CommonAlgorithm_CreateDirectory_SubFile()
         {
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus directoryStatus = CreateDirectory(dirName);
-
-            // Go to path and confirm the count of found files 
-            string dirPath = this.fsaAdapter.UncSharePath + "\\" + $"{dirName}";
+            CreateDirectory(dirName);
+            this.fsaAdapter.CloseOpen();
 
             // Create a subdirectory in the root directory
-            string subDirName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus subDirectory = CreateDirectory($"{dirPath}\\{subDirName}");
+            string subDirName = this.fsaAdapter.ComposeRandomFileName(8, opt: CreateOptions.DIRECTORY_FILE, parentDirectoryName: dirName);
+            CreateDirectory(subDirName);
 
-            this.fsaAdapter.CloseOpen();
-            int foundFiles = FoundFilesCount(dirName, dirPath);
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8, opt: CreateOptions.NON_DIRECTORY_FILE, parentDirectoryName: dirName);
+            CreateFile(fileName);
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, 2, foundFiles, $"Create directory with name {dirName}");
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.FileAccess)]
-        [TestCategory(TestCategories.NonSmb)]
-        [Description("Create a directory file, sub dir and 2 files and confirm that FoundFiles size is 4")]
-        public void CommonAlgorithm_CreateDirectory_SubDirectory_SubFiles()
-        {
-            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus directoryStatus = CreateDirectory(dirName);
-
-            
-            // Go to path and confirm the size of found files 
-            string dirPath = this.fsaAdapter.UncSharePath + "\\" + $"{dirName}";
-
-            // Create a subdirectory in the root directory
-            string subDirName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus subDirectory = CreateDirectory($"{dirPath}\\{subDirName}");
-
-            // Create two files in the root directory folder
-            string fileOneName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus fileOne = CreateFile($"{dirPath}\\{fileOneName}");
-
-            string fileTwoName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus fileTwo = CreateFile($"{dirPath}\\{fileTwoName}");
-
-            this.fsaAdapter.CloseOpen();
-            int foundFiles = FoundFilesCount(dirName, dirPath);
+            FileBothDirectoryInformation[] result = Query_Directory_Information(dirName);
+            int foundFiles = result.Length;
 
             this.fsaAdapter.AssertAreEqual(this.Manager, 4, foundFiles, $"Create directory with name {dirName}");
         }
@@ -94,45 +73,62 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.FileAccess)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Create a directory file and 2 files and confirm that FoundFiles size is 3")]
+        [Description("Create a directory file , write files and confirm the FoundFiles size")]
         public void CommonAlgorithm_CreateDirectory_SubFiles()
         {
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus directoryStatus = CreateDirectory(dirName);
+            CreateDirectory(dirName);
 
-            // Go to path and confirm the size of found files 
-            string dirPath = this.fsaAdapter.UncSharePath + "\\" + $"{dirName}";
+            this.fsaAdapter.CloseOpen();
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8, opt: CreateOptions.NON_DIRECTORY_FILE, parentDirectoryName: dirName);
 
-            // Create 2 files in the root directory
-            string fileOneName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus fileStatus = CreateFile($"{dirPath}\\{fileOneName}");
+            CreateFile(fileName);
 
-            string fileTwoName = this.fsaAdapter.ComposeRandomFileName(8);
-            MessageStatus fileStatus2 = CreateFile($"{dirPath}\\{fileTwoName}");
+            // Create a subdirectory in the root directory
+            string subDirName = this.fsaAdapter.ComposeRandomFileName(8, opt: CreateOptions.DIRECTORY_FILE, parentDirectoryName: dirName);
+            CreateDirectory(subDirName);
 
-            int foundFiles = FoundFilesCount(dirName, dirPath);
+            string subDirFileName = this.fsaAdapter.ComposeRandomFileName(8, opt: CreateOptions.NON_DIRECTORY_FILE, parentDirectoryName: subDirName);
 
-            this.fsaAdapter.AssertAreEqual(this.Manager, 3, foundFiles, $"Create directory with name {dirName}");
+            CreateFile(subDirFileName);
+
+            FileBothDirectoryInformation[] subDirResult = Query_Directory_Information(subDirName);
+            FileBothDirectoryInformation[] rootDirResult = Query_Directory_Information(dirName);
+            int foundFiles = rootDirResult.Length;
+            int subDirFoundFiles = subDirResult.Length;
+                
+
+            this.fsaAdapter.AssertAreEqual(this.Manager, 4, foundFiles, $"Create directory with name {dirName}");
+            this.fsaAdapter.AssertAreEqual(this.Manager, 3, subDirFoundFiles, $"Create directory with name {dirName}");
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.FileAccess)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Create a directory file and 2 files and confirm that FoundFiles size is 3")]
+        public void CommonAlgorithm_CreateDirectory_SubFiles_Test()
+        {
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            CreateDirectory(dirName);
+
+            FileBothDirectoryInformation[] result = Query_Directory_Information(dirName);
+            int foundFiles = result.Length;
+
+            // Query result contains "." and ".."
+            this.fsaAdapter.AssertAreEqual(this.Manager, 2, foundFiles, $"Create directory with name {dirName}");
         }
 
         #endregion
 
         #region Test Case Utility Methods
 
-        // Include root directory in found files array
-        public int FoundFilesCount(string dirName, string dirPath)
-        {
-            List<string> foundFiles = Directory.GetFiles(dirPath).ToList();
-            foundFiles.Add(dirName);
-            return foundFiles.Count;
-        }
-
         // Create a directory
         private MessageStatus CreateDirectory(string dirName)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"1. Create a directory with name: {dirName}");
 
-            MessageStatus status = MessageStatus.SUCCESS;
+            MessageStatus status;
 
             status = this.fsaAdapter.CreateFile(
                         dirName,
@@ -147,12 +143,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             return status;
         }
 
+        // Query a directory and get output buffer information
+        private FileBothDirectoryInformation[] Query_Directory_Information(string dirName)
+        {
+            MessageStatus status;
+            uint treeId = 0;
+            FILEID fileId;
+            ulong sessionId = 0;
+            byte[] outputBuffer;
+
+            status = this.fsaAdapter.CreateFile(
+                        dirName,
+                        FileAttribute.DIRECTORY,
+                        CreateOptions.DIRECTORY_FILE,
+                        (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                        (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE),
+                        CreateDisposition.OPEN_IF,
+                        out fileId,
+                        out treeId,
+                        out sessionId);
+
+            this.fsaAdapter.QueryDirectory(fileId, treeId, sessionId, "*", FileInfoClass.FILE_BOTH_DIR_INFORMATION, 
+                false, true, out outputBuffer);
+            FileBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileBothDirectoryInformation>(outputBuffer);
+            return directoryInformation;
+        }
+
         // Create a file
         private MessageStatus CreateFile(string fileName)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"1. Create a file with name: {fileName}");
 
-            MessageStatus status = MessageStatus.SUCCESS;
+            MessageStatus status;
 
             status = this.fsaAdapter.CreateFile(
                         fileName,
@@ -163,30 +185,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         CreateDisposition.CREATE);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"2. Create file and return with status {status}");
-
-            return status;
-        }
-
-        private MessageStatus QueryDirectory(
-            string dirName,
-            string searchPattern = "*",
-            FileInfoClass fileinfoClass = FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
-            bool returnSingleEntry = false,
-            bool restartScan = false,
-            bool isDirectoryNotRight = false,
-            bool isOutPutBufferNotEnough = false
-            )
-        {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query a directory information: {dirName}");
-
-            MessageStatus status = this.fsaAdapter.QueryDirectoryInfo(
-              searchPattern,
-              FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION,
-              returnSingleEntry,
-              restartScan,
-              isOutPutBufferNotEnough);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with search pattern {searchPattern} and return with status {status}. ");
 
             return status;
         }
