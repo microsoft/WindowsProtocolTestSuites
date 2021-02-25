@@ -55,7 +55,7 @@
         </Description>
       </Property>
 
-      <Property name="DomainName" value="" >
+      <Property name="DomainName" value="contoso.com" >
         <Description>
           Domain name where the SUT locates
           If SUT is in WORKGROUP, set it to the value of SutComputerName
@@ -75,7 +75,13 @@
           Port of KDC, By default KDC port is 88
         </Description>
       </Property>
-
+      
+      <Property name="AdminUserName" value="Administrator">
+        <Description>
+          Administrator user account name for the SUT
+        </Description>
+      </Property>
+      
       <Property name="NonAdminUserName" value="nonadmin" >
         <Description>
           Non administrator user account name of the SUT. If no such user, leave it blank
@@ -88,7 +94,7 @@
         </Description>
       </Property>
 
-      <Property name="PasswordForAllUsers" value="Passwor01!">
+      <Property name="PasswordForAllUsers" value="Password01!">
         <Description>
           Password for all the users listed as above: AdminUserName, NonAdminUserName, GuestUserName.
           (To simplify the config, the 3 accounts use the same password.)
