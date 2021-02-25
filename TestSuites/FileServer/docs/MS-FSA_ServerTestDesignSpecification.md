@@ -99,8 +99,11 @@
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
         * [FileBasicInformation](#FileBasicInformation)
-            * [FileInfo_Set_FileBasicInformation_File](#FileInfo_Set_FileBasicInformation_File)
-            * [FileInfo_Set_FileBasicInformation_Dir](#FileInfo_Set_FileBasicInformation_Dir)
+            * [FileInfo_Set_FileBasicInformation_File_Negative](#FileInfo_Set_FileBasicInformation_File_Negative)
+            * [FileInfo_Set_FileBasicInformation_File_Positive](#FileInfo_Set_FileBasicInformation_File_Positive)
+            * [FileInfo_Set_FileBasicInformation_File_MinusTwoSupported](#FileInfo_Set_FileBasicInformation_File_MinusTwoSupported)
+            * [FileInfo_Set_FileBasicInformation_Dir_Negative](#FileInfo_Set_FileBasicInformation_Dir_Negative)
+            * [FileInfo_Set_FileBasicInformation_Dir_Positive](#FileInfo_Set_FileBasicInformation_Dir_Positive)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -308,7 +311,7 @@ There are 151 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 28 (6) |
+| Scenarios for FileInformation | 7 | 31 (9) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -474,7 +477,7 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileAccessInformation|
 | | Verify server responses accordingly.|
 
-#### <a name="FileInfo_FileBasicInformationSupported"/>FileInfo_FileBasicInformationSupported
+#### <a name="FileInfo_SetFileBasicInformationSupported"/>FileInfo_SetFileBasicInformationSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1619,24 +1622,56 @@ There are 343 test cases in total:
 
 #### <a name="FileBasicInformation"/>FileBasicInformation
 
-##### <a name="FileInfo_Set_FileBasicInformation_File"/>FileInfo_Set_FileBasicInformation_File
+##### <a name="FileInfo_Set_FileBasicInformation_File_Negative"/>FileInfo_Set_FileBasicInformation_File_Negative
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if set values for FileBasicInformation attributes on file supported by different file systems.|
+| Description| To test if setting invalid values for file basic information attributes are handled by different file systems for data file|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation|
+| | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Set_FileBasicInformation_File_Positive"/>FileInfo_Set_FileBasicInformation_File_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting file basic information timestamps are supported by different file systems for data file|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation|
+| | QueryInfo with FileInfoClass.FileBasicInformation|
+| | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Set_FileBasicInformation_File_MinusTwoSupported"/>FileInfo_Set_FileBasicInformation_File_MinusTwoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if -2 timestamp value for file basic information attributes is supported by different file systems|
 | File information class: FileBasicInformation|
 | Message Sequence| CreateFile.|
 | | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
-##### <a name="FileInfo_Set_FileBasicInformation_Dir"/>FileInfo_Set_FileBasicInformation_Dir
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_Negative"/>FileInfo_Set_FileBasicInformation_Dir_Negative
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if set values for FileBasicInformation attributes on directory is supported by different file systems.|
+| Description|  To test if setting invalid values for file basic information attributes are handled by different file systems for directory |
 | File information class: FileBasicInformation|
-| Message Sequence| CreateFile.|
+| Message Sequence| CreateFile (DirectoryFile).|
 | | SetInfo with FileInfoClass.FileBasicInformation|
+| | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_Positive"/>FileInfo_Set_FileBasicInformation_Dir_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting file basic information timestamp is supported by different file systems |
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation|
+| | QueryInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
