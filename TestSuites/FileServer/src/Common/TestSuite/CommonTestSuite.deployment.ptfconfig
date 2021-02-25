@@ -42,14 +42,14 @@
         </Description>
       </Property>
 
-      <Property name="SutComputerName" value="node02">
+      <Property name="SutComputerName" value="node01.contoso.com">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
       </Property>
 
-      <Property name="SutIPAddress" value="169.254.189.70" >
+      <Property name="SutIPAddress" value="192.168.1.11" >
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
@@ -63,32 +63,32 @@
         </Description>
       </Property>
 
-      <Property name="DCServerComputerName" value="ng-esgrace">
+      <Property name="DCServerComputerName" value="DC01.contoso.com">
         <Description>
           Computer ip or name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
         </Description>
       </Property>
 
-      <Property name="AdminUserName" value="Grace">
+      <Property name="KDCPort" value="88">
         <Description>
-          Administrator user account name of the SUT
+          Port of KDC, By default KDC port is 88
         </Description>
       </Property>
 
-      <Property name="NonAdminUserName" value="" >
+      <Property name="NonAdminUserName" value="nonadmin" >
         <Description>
           Non administrator user account name of the SUT. If no such user, leave it blank
         </Description>
       </Property>
 
-      <Property name="GuestUserName" value="">
+      <Property name="GuestUserName" value="Guest">
         <Description>
           Domain guest account name. If no such user, leave it blank
         </Description>
       </Property>
 
-      <Property name="PasswordForAllUsers" value="User@123">
+      <Property name="PasswordForAllUsers" value="Passwor01!">
         <Description>
           Password for all the users listed as above: AdminUserName, NonAdminUserName, GuestUserName.
           (To simplify the config, the 3 accounts use the same password.)
@@ -233,20 +233,20 @@
         </Description>
       </Property>
 
-      <Property name="ClientNic1IPAddress" value="169.254.189.69">
+      <Property name="ClientNic1IPAddress" value="192.168.1.111">
         <Description>
           One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
       </Property>
 
-      <Property name="ClientNic2IPAddress" value="">
+      <Property name="ClientNic2IPAddress" value="192.168.2.111">
         <Description>
           Another IP address or host name on local test drive computer to establish connections to SUT
           If test drive computer only has one IP address, leave it blank
         </Description>
       </Property>
 
-      <Property name="Platform" value="WindowsServer2019">
+      <Property name="Platform" value="WindowsServer2016">
         <Choice>
           NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019,WindowsServerV1903,WindowsServerV1909,WindowsServerV2004
         </Choice>
