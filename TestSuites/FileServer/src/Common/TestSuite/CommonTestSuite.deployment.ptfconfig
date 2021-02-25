@@ -78,7 +78,7 @@
       
       <Property name="AdminUserName" value="Administrator">
         <Description>
-          Administrator user account name for the SUT
+          Administrator user account name of the SUT
         </Description>
       </Property>
       
