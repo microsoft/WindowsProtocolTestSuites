@@ -269,6 +269,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        /// <summary>
+        /// Timeout in seconds to wait for a notification during a lease break
+        /// </summary>
+        public TimeSpan LeaseBreakNotificationWaitTimeout
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(int.Parse(GetProperty("LeaseBreakNotificationWaitTimeout")));
+            }
+        }
+
         public Platform Platform
         {
             get
