@@ -84,21 +84,23 @@ Create-SMBShare.ps1 -name "SMBEncrypted" -Path "$systemDrive\SMBEncrypted" -Full
 
 Write-Info.ps1 "Create Volume for SMBReFSShare"
 
-$volume = gwmi -Class Win32_volume | where {$_.FileSystem -eq "REFS" -and $_.Label -eq "REFS"}
+$volume = Get-WmiObject -Class Win32_Volume | Where-Object {$_.FileSystem -eq "REFS" -and $_.Label -eq "REFS"}
 if($volume -eq $null)
 {
-	Write-Info.ps1 "Create Volume for SMBReFSShare"
+    Write-Info.ps1 "Create Volume for SMBReFSShare"
     # Get disk and partition
-	$disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
-	$diskNum = $disk.Index
-    For ($i = 1; $i -le 20; $i++) {
-        $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i
-        if ($partition -eq $null) {
-            $partitionId = $i - 1
+    $disk = Get-WmiObject -Class Win32_DiskDrive | Sort-Object DeviceID | Select-Object -First 1
+    $diskNum = $disk.Index
+    for ($i = 1; $i -le 20; $i++) {
+        $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i -ErrorAction SilentlyContinue
+        if (($partition -ne $null) -and ($env:SystemDrive -match $partition.DriveLetter)) {
+            $partitionId = $i
+        }
+        elseif ($partition -eq $null) {
+            $newPartitionId = $i
             break
         }
     }
-	$newPartitionId = $partitionId + 1
 
     Write-Info.ps1 "Create partition using diskpart.exe"
 	$diskPartCmd = @()
