@@ -54,6 +54,8 @@
         * [AlternateDataStream_FsControl](#AlternateDataStream_FsControl)
     * [Scenarios for Create and Query Directory](#Scenarios-for-Create-And-Query-Directory)
         * [Query Directory](#Scenario-QueryDirectory)
+    * [Scenarios for File and Directory Leasing](#Scenarios-for-File-And-Directory-Leasing)
+        * [CompareLeaseKeys](#CompareLeaseKeys)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
         * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
@@ -233,6 +235,15 @@
             * [BVT_QueryDirectory_FileIdFullDirectoryInformation](#BVT_QueryDirectory_FileIdFullDirectoryInformation)
             * [BVT_QueryDirectory_FileBothDirectoryInformation](#BVT_QueryDirectory_FileBothDirectoryInformation)
             * [BVT_QueryDirectory_FileIdBothDirectoryInformation](#BVT_QueryDirectory_FileIdBothDirectoryInformation)
+    * [Test cases for File and Directory Leasing](#Test-cases-for-File-And-Directory-Leasing)
+        * [Compare Lease Keys](#CompareLeaseKeys)
+            * [Comparing_Same_File_LeaseKeysV1](#Comparing_Same_File_LeaseKeysV1)
+            * [Comparing_Same_Directory_LeaseKeysV1](#Comparing_Same_Directory_LeaseKeysV1)
+            * [Comparing_Same_LeaseKeysV2](#Comparing_Same_LeaseKeysV2)
+            * [Compare_Zero_LeaseFlag_ParentLeaseKey](#Compare_Zero_LeaseFlag_ParentLeaseKey)
+            * [DirectoryComparing_LeaseKeysV2](#DirectoryComparing_LeaseKeysV2)
+            * [DirectoryComparing_ParentLeaseKey_ChildLeaseKey](#DirectoryComparing_ParentLeaseKey_ChildLeaseKey)
+            * [DirectoryComparing_Child_Invalid_ParentLeaseKeys](#DirectoryComparing_Child_Invalid_ParentLeaseKeys)
     * [Test cases for Other Scenarios](#Test-cases-for-Other-Scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#CreateFile_InvalidStreamName)
@@ -293,7 +304,7 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 144 test cases in total:
+There are 151 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
@@ -302,6 +313,7 @@ There are 144 test cases in total:
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
+| Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
 | Other Scenarios | 3 | 6 (0) |
 
@@ -3450,6 +3462,94 @@ There are 343 test cases in total:
 | | Verify server returns with **STATUS_SUCCESS** for supported file system|
 | | Query the created directory with FileIdBothDirectoryInformation|
 | | Verify each entry of the response|
+
+### <a name="Test-cases-for-File-And-Directory-Leasing"/>Test cases for File and Directory Leasing
+
+#### <a name="CompareLeaseKeys"/>Compare Lease Keys
+
+##### <a name="Comparing_Same_File_LeaseKeysV1"/>Comparing_Same_File_LeaseKeysV1
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the server returned lease keys of two opens of the same file using the same lease key.|
+| | This value is not valid for the SMB 2.0.2 dialect |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a file in share|
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+
+##### <a name="Comparing_Same_Directory_LeaseKeysV1"/>Comparing_Same_Directory_LeaseKeysV1
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the server returned lease keys of two opens of the same directory file using the same lease key.|
+| | This value is not valid for the SMB 2.0.2 dialect |
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory file in share|
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+
+##### <a name="Comparing_Same_LeaseKeysV2"/>Comparing_Same_LeaseKeysV2
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the server returned lease keys of two opens of the same file using the same lease key.|
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a file in share |
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+| | Verify LeaseOpen.ParentLeaseKey == OperationOpen.ParentLeaseKey |
+
+##### <a name="Compare_Zero_LeaseFlag_ParentLeaseKey"/>Compare_Zero_LeaseFlag_ParentLeaseKey
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The server should return an empty parentLeaseKey when leaseFlag is set to zero. |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a file in share |
+| | Verify LeaseRequest.ParentLeaseKey should not be empty |
+| | Verify LeaseOpen.ParentLeaseKey MUST be empty if LeaseFlag is set to Zero |
+
+##### <a name="DirectoryComparing_LeaseKeysV2"/>DirectoryComparing_LeaseKeysV2
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the returned lease keys of two opens to the same directory file. |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a directory file in share |
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+| | Verify LeaseOpen.ParentLeaseKey == OperationOpen.ParentLeaseKey |
+
+##### <a name="DirectoryComparing_ParentLeaseKey_ChildLeaseKey"/>DirectoryComparing_ParentLeaseKey_ChildLeaseKey
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the returned lease keys of two opens of a parent directory file and a child file. |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a directory file in share and a file in that directory |
+| | Verify LeaseOpen.LeaseKey MUST be equal to OperationOpen.ParentLeasekey |
+| | Verify LeaseBreakNotification not received |
+
+##### <a name="DirectoryComparing_Child_Invalid_ParentLeaseKeys"/>DirectoryComparing_Child_Invalid_ParentLeaseKeys
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare lease keys of parent directory file and a child file with an invalid parent lease key |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a directory file in share and a file in that directory |
+| | If request.ParentLeaseKey is empty
+| |   Verify response.ParentLeaseKey MUST be empty
+| | Verify LeaseBreakNotification is received |
 
 ### <a name="Test-cases-for-Other-Scenarios"/>Test cases for Other Scenarios
 
