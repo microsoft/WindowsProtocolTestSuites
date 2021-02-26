@@ -428,8 +428,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             smb2Client = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
             smb2Client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             byte[] repToken;
+            bool isResponseEncryptedSessionFlag;
 
-            uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken);
+            uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken, out isResponseEncryptedSessionFlag);
 
             KerberosApResponse apRep = kerberosClient.GetApResponseFromToken(repToken, GssToken);
             // Get subkey from AP response, which used for signing in smb2
@@ -445,14 +446,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                even if it is present in the Authentication.)");
             apRep.Decrypt(kerberosClient.Context.Ticket.SessionKey.keyvalue.ByteArrayValue);
 
-            smb2Client.SetSessionSigningAndEncryption(true, false, apRep.ApEncPart.subkey.keyvalue.ByteArrayValue);
+            smb2Client.SetSessionSigningAndEncryption(true, isResponseEncryptedSessionFlag, apRep.ApEncPart.subkey.keyvalue.ByteArrayValue);
             #endregion
 
             #region Second client
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Replay the request from another client");
             smb2Client2 = new Smb2FunctionalClientForKerbAuth(TestConfig.Timeout, TestConfig, BaseTestSite);
             smb2Client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
-            status = DoSessionSetupWithGssToken(smb2Client2, token, out repToken);
+            status = DoSessionSetupWithGssToken(smb2Client2, token, out repToken, out isResponseEncryptedSessionFlag);
 
             BaseTestSite.Log.Add(LogEntryKind.Debug,
             @" [RFC 4120] 3.2.2.  Generation of a KRB_AP_REQ Message
@@ -771,7 +772,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             #region Check the result
 
             byte[] repToken;
-            uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken);
+            bool isResponseEncryptedSessionFlag;
+            uint status = DoSessionSetupWithGssToken(smb2Client, token, out repToken, out isResponseEncryptedSessionFlag);
 
             if (variant.HasFlag(CaseVariant.AUTHENTICATOR_CNAME_NOT_MATCH) || variant.HasFlag(CaseVariant.AUTHENTICATOR_CREALM_NOT_MATCH))
             {
@@ -929,7 +931,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                encrypting the KRB_AP_REP message, the sub - session key is not used,
                even if it is present in the Authentication.)");
             apRep.Decrypt(kerberosClient.Context.Ticket.SessionKey.keyvalue.ByteArrayValue);
-            smb2Client.SetSessionSigningAndEncryption(true, false, apRep.ApEncPart.subkey.keyvalue.ByteArrayValue);
+            smb2Client.SetSessionSigningAndEncryption(true, isResponseEncryptedSessionFlag, apRep.ApEncPart.subkey.keyvalue.ByteArrayValue);
 
             string path = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             TreeConnect(smb2Client, path);
@@ -1031,7 +1033,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 
         private uint DoSessionSetupWithGssToken(Smb2FunctionalClientForKerbAuth smb2Client,
             byte[] gssTokenByte,
-            out byte[] repToken)
+            out byte[] repToken,
+            out bool isResponseEncryptedSessionFlag)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Negotiate and SessionSetup using created gssToken");
             smb2Client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
@@ -1042,7 +1045,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 SESSION_SETUP_Request_SecurityMode_Values.NONE,
                 SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
                 gssTokenByte,
-                out repToken);
+                out repToken,
+                out isResponseEncryptedSessionFlag);
 
             return status;
         }

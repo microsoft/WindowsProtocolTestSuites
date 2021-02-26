@@ -30,6 +30,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [Description("Operate files with encryption before server failover but without encryption after failover")]
         public void FileServerFailover_Negative_EncryptionBeforeFailover_NoEncryptionAfterFailover()
         {
+            if (testConfig.IsGlobalEncryptDataEnabled)
+            {
+                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True.");
+            }
             FileServerFailoverWithEncryption(true, false);
         }
 
@@ -40,6 +44,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         [Description("Operate files without encryption before failover but with encryption after failover.")]
         public void FileServerFailover_Negative_NoEncryptionBeforeFailover_EncryptionAfterFailover()
         {
+            if (testConfig.IsGlobalEncryptDataEnabled)
+            {
+                Site.Assert.Inconclusive("This test case is not applicable due to IsGlobalEncryptDataEnabled is True.");
+            }
             FileServerFailoverWithEncryption(false, true);
         }
         #endregion

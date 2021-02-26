@@ -259,9 +259,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             } while (status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED);
 
             client.GenerateCryptoKeys(
-                sessionId, 
-                sspiClientGss.SessionKey, 
-                session_SigningRequired, 
+                sessionId,
+                sspiClientGss.SessionKey,
+                session_SigningRequired,
                 sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA)); // Encrypt the session if server required.
 
             TREE_CONNECT_Response treeConnectResponse;
@@ -888,15 +888,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="status">Status of the response packet</param>
         /// <param name="contextResponse">Create contexts to be received in the create response</param>
         public void Create(
-            string fileName, 
-            FsFileDesiredAccess desiredAccess, 
+            string fileName,
+            FsFileDesiredAccess desiredAccess,
             ShareAccess_Values shareAccess,
             FsImpersonationLevel impersonationLevel,
-            FsFileAttribute fileAttribute, 
-            FsCreateDisposition createDisposition, 
+            FsFileAttribute fileAttribute,
+            FsCreateDisposition createDisposition,
             FsCreateOption createOption,
-            Smb2CreateContextRequest[] contextRequest, 
-            out uint status, 
+            Smb2CreateContextRequest[] contextRequest,
+            out uint status,
             out CREATE_Response contextResponse)
         {
             if (createOption.HasFlag(FsCreateOption.FILE_DIRECTORY_FILE))
@@ -1309,7 +1309,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             // 3.2.4.1.1 If Connection.Dialect is "3.1.1" and the message being sent is a TREE_CONNECT Request and the session identified by SessionId has Session.EncryptData equal to FALSE
             bool treeconnect_SigningRequired = session_SigningRequired || (selectedDialect >= DialectRevision.Smb311);
-            client.GenerateCryptoKeys(sessionId, sspiClientGss.SessionKey, treeconnect_SigningRequired, false);
+            client.GenerateCryptoKeys(sessionId, sspiClientGss.SessionKey, treeconnect_SigningRequired, sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA));
 
             this.sessionId = header.SessionId;
 
@@ -1342,7 +1342,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             this.treeId = header.TreeId;
 
             // For the messages followed by TREE_CONNECT, set them as signed/not signed following the normal proces
-            client.EnableSessionSigningAndEncryption(sessionId, session_SigningRequired, false);
+            client.EnableSessionSigningAndEncryption(sessionId, session_SigningRequired, sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA));
         }
 
 

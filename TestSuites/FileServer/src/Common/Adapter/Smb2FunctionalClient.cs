@@ -3146,6 +3146,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 {
                     EnableSessionSigningAndEncryption(testConfig.SendSignedRequest, true);
                 }
+                else if (testConfig.IsGlobalEncryptDataEnabled && sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA))
+                {
+                    EnableSessionSigningAndEncryption(testConfig.SendSignedRequest, true);
+                }
             }
 
             // The signature of Session Setup Response can only be verified after the crypto key is generated.
