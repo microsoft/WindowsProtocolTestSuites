@@ -5,110 +5,114 @@
 #
 # Microsoft Windows Powershell Scripting
 # File:           Config-AuthorizedKeys.ps1
-# Purpose:        This script will copy authorized_keys to domain administrator's .ssh folder,
+# Purpose:        This script will copy authorized_keys to domain or local administrator's .ssh folder,
 #                 and it is required for Windows Server which want to be remoted for configuring PowerShell Core remoting over ssh.
-# Version:        1.0 (27 Nov, 2020)
+# Version:        2.0 (7 Feb, 2021)
 #
 ##############################################################################
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml", [ValidateSet("CreateTask", "StartTask")]$action = "CreateTask")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
 $env:Path += ";$scriptPath;$scriptPath\Scripts"
 $systemDrive = $env:SystemDrive
 
 #----------------------------------------------------------------------------
-# if working dir is not exists. it will use scripts path as working path
+# Define common functions
 #----------------------------------------------------------------------------
-if(!(Test-Path "$workingDir"))
-{
+function ExitCode() { 
+    return $MyInvocation.ScriptLineNumber
+}
+
+#----------------------------------------------------------------------------
+# If working dir is not exists, it will use scripts path as working path
+#----------------------------------------------------------------------------
+if (-not (Test-Path "$workingDir")) {
     $workingDir = $scriptPath
 }
 
-if(!(Test-Path "$protocolConfigFile"))
-{
+if (-not (Test-Path "$protocolConfigFile")) {
     $protocolConfigFile = "$workingDir\Protocol.xml"
-    if(!(Test-Path "$protocolConfigFile")) 
-    {
-        Write-Error.ps1 "No protocol.xml found."
+    if (-not (Test-Path "$protocolConfigFile")) {
+        Write-Error.ps1 "No Protocol.xml found."
         exit ExitCode
     }
 }
 
 #----------------------------------------------------------------------------
-# Start logging using start-transcript cmdlet
+# Start logging using Start-Transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
 Start-Transcript -Path "$logFile" -Append -Force
-
-#----------------------------------------------------------------------------
-# Define common functions
-#----------------------------------------------------------------------------
-function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber
-}
 
 #----------------------------------------------------------------------------
 # Get content from protocol config file
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Get content from protocol config file"
 [xml]$config = Get-Content "$protocolConfigFile"
-if($config -eq $null)
-{
-    Write-Error.ps1 "protocolConfigFile $protocolConfigFile is not a valid XML file."
+if ($config -eq $null) {
+    Write-Error.ps1 "ProtocolConfigFile $protocolConfigFile is not a valid XML file."
     exit ExitCode
 }
 
 #----------------------------------------------------------------------------
 # Define common variables
 #----------------------------------------------------------------------------
-$node01 = $config.lab.servers.vm | Where {$_.role -match "ClusterNode01"}
-$tool = $node01.tools| Where {$_.name -match "Win32-OpenSSH-Certs"}
-$OpenSSHPath = $tool.targetFolder
+$hostName = [System.Net.Dns]::GetHostName()
+$vm = $config.lab.servers.vm | Where-Object { $_.name -match $hostName }
+$sshPath = ($vm.tools.tool | Where-Object { $_.name -match "Win32-OpenSSH-Certs" } | Select-Object -First 1).targetFolder
 
-$dc = $config.lab.servers.vm | Where {$_.role -match "DC"}
-if($dc -eq $null)
-{
-    # for non-domain environments, just get username
-    $userFoldername = $config.lab.core.username
+$dc = $config.lab.servers.vm | Where-Object { $_.role -match "DC" }
+$adminUserName = $config.lab.core.username
+if ($dc -eq $null) {
+    # for non-domain environments, just get admin user name
+    $userFolderName = $adminUserName
 }
-else
-{
-    $dcUserName = $dc.username
-    if($dcUserName -eq $null)
-    {
-	    $dcUserName = "Administrator"
+else {
+    $dcName = $dc.name
+    if ($dcName -match $hostName) {
+        # for DC, just get admin user name
+        $userFolderName = $adminUserName
     }
+    else {
+        $domainName = $dc.domain
+        $domainNetBios = $domainName.Split(".")[0].ToUpper()
 
-    $domainName  = $dc.domain
-    if($domainName -match "\.")
-    {
-	    $domainName = $domainName.Split(".")[0].ToUpper()
+        $userFolderName = "$adminUserName.$domainNetBios"
     }
-
-    $userFoldername = "$dcUserName.$domainName"
 }
 
 #----------------------------------------------------------------------------
 # Copy authorized_keys
 #----------------------------------------------------------------------------
-if($OpenSSHPath -eq $null)
-{
-    $OpenSSHPath = "$systemDrive\OpenSSH-Win64"
+if ($sshPath -eq $null) {
+    $sshPath = "$systemDrive\OpenSSH-Win64"
 }
 
-if (!(Test-Path "$systemDrive\Users\$userFoldername\.ssh")) {
-        New-Item -ItemType Directory "$systemDrive\Users\$userFoldername\.ssh"
+$userFolderPath = "$systemDrive\Users\$userFolderName"
+if (Test-Path $userFolderPath) {
+    $keysPath = "$userFolderPath\.ssh"
+    if (-not (Test-Path $keysPath)) {
+        New-Item -ItemType Directory $keysPath
+    }
+
+    Copy-Item "$sshPath\authorized_keys" "$keysPath\authorized_keys" -Force
 }
 
-Copy "$OpenSSHPath\authorized_keys" "$systemDrive\Users\$userFoldername\.ssh\authorized_keys" -Force
-
-# restart sshd service to take affect
+# Restart sshd service to take effect
 Restart-Service sshd
+
+if ($action -eq "CreateTask") {
+    $taskAction = New-ScheduledTaskAction -Execute "PowerShell" -Argument "$($MyInvocation.MyCommand.Path) -action StartTask"
+    $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+    $taskPrincipal = New-ScheduledTaskPrincipal "SYSTEM"
+    $taskSettings = New-ScheduledTaskSettingsSet
+    $task = New-ScheduledTask -Action $taskAction -Trigger $taskTrigger -Principal $taskPrincipal -Settings $taskSettings
+    Register-ScheduledTask "Config-AuthorizedKeys" -InputObject $task
+}
 
 #----------------------------------------------------------------------------
 # Ending
