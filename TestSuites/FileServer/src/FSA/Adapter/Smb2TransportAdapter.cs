@@ -424,6 +424,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 {
                     this.smb2Client.EnableSessionSigningAndEncryption(sessionId, testConfig.SendSignedRequest, true);
                 }
+                else if (testConfig.IsGlobalEncryptDataEnabled && sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA))
+                {
+                    this.smb2Client.EnableSessionSigningAndEncryption(sessionId, testConfig.SendSignedRequest, true);
+                }
             }
 
             return (MessageStatus)status;

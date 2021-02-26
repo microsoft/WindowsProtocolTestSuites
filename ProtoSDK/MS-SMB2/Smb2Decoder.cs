@@ -331,9 +331,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             var cryptoInfo = cryptoInfoTable.ContainsKey(realSessionId) ? cryptoInfoTable[realSessionId] : null;
             if (cryptoInfo != null)
             {
-                if (cryptoInfo.EnableSessionEncryption || (cryptoInfo.EnableTreeEncryption.Contains(packet.Header.TreeId) && packet.Header.Command != Smb2Command.TREE_CONNECT))
+                if (cryptoInfo.EnableSessionEncryption)
                 {
-                    throw new Exception($"The packet should be encrypted: \"{packet.ToString()}\"");
+                    // MS-SMB2 3.3.4.1.4 Encrypting the Message
+                    // If Connection.Dialect belongs to the SMB 3.x dialect family and Connection.ClientCapabilities includes the SMB2_GLOBAL_CAP_ENCRYPTION bit, the server MUST encrypt the message before sending, if IsEncryptionSupported is TRUE and any of the following conditions are satisfied:
+                    // If the message being sent is any response to a client request for which Request.IsEncrypted is TRUE.
+                    // If Session.EncryptData is TRUE and the response being sent is not SMB2_NEGOTIATE or SMB2 SESSION_SETUP.
+                    // If Session.EncryptData is FALSE, the response being sent is not SMB2_NEGOTIATE or SMB2 SESSION_SETUP or SMB2 TREE_CONNECT, and Share.EncryptData for the share associated with the TreeId in the SMB2 header of the response is TRUE.
+                    // The server MUST encrypt the message as specified in section 3.1.4.3, before sending it to the client.
+                    // above description means SMB2_NEGOTIATE or SMB2 SESSION_SETUP never encrypts the message.
+                    if (packet.Header.Command == Smb2Command.SESSION_SETUP && (packet is Smb2SessionSetupResponsePacket))
+                        return;
+                }
+
+                if (cryptoInfo.EnableSessionEncryption)
+                {
+                    throw new Exception($"The packet should be encrypted for session: \"{packet.ToString()}\"");
+                }
+
+                if ((cryptoInfo.EnableTreeEncryption.Contains(packet.Header.TreeId) && packet.Header.Command != Smb2Command.TREE_CONNECT))
+                {
+                    throw new Exception($"The packet should be encrypted for tree: \"{packet.ToString()}\"");
                 }
             }
         }
@@ -501,14 +519,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 if (transformHeader != null)
                 {
-                    // For client: If the NextCommand field in the first SMB2 header of the message is equal to 0 
-                    // and SessionId of the first SMB2 header is not equal to the SessionId field in SMB2 TRANSFORM_HEADER of response, the client MUST discard the message.
-                    //
-                    // For server: For a singleton request if the SessionId field in the SMB2 header of the request is not equal to Request.TransformSessionId, 
-                    // the server MUST disconnect the connection.
                     if (smb2Header.SessionId != transformHeader.Value.SessionId)
                     {
-                        throw new InvalidOperationException("SessionId is inconsistent for encrypted response.");
+                        // 3.3.4.6 Object Store Indicates an Oplock Break
+                        // The server MUST construct an Oplock Break Notification following the syntax specified in section 2.2.23.1 to send back to the client.
+                        // The server MUST set the Command in the SMB2 header to SMB2 OPLOCK_BREAK, and the MessageId to 0xFFFFFFFFFFFFFFFF.
+                        // The server SHOULD <209> set the SessionId in the SMB2 header to Open.Session.SessionId.The server MUST set the TreeId in the SMB2 header to zero.
+                        // 
+                        // <209> Section 3.3.4.6: Windows Vista SP1, Windows Server 2008, Windows 7, Windows Server 2008 R2, Windows 8, Windows Server 2012 operating system, Windows 8.1, and Windows Server 2012 R2 set the SessionId in the SMB2 header to zero.
+                        //
+                        // 3.2.5.19 Receiving an SMB2 OPLOCK_BREAK Notification
+                        // If the MessageId field of the SMB2 header of the response is 0xFFFFFFFFFFFFFFFF, this MUST be processed as an oplock break indication.Otherwise, the client MUST process it as a response to an oplock break acknowledgment.
+                        bool isIgnoreFor12R2 = smb2Header.Command == Smb2Command.OPLOCK_BREAK && smb2Header.MessageId == ulong.MaxValue && smb2Header.SessionId == 0;
+                        if(!isIgnoreFor12R2)
+                        {
+                            // For client: If the NextCommand field in the first SMB2 header of the message is equal to 0 
+                            // and SessionId of the first SMB2 header is not equal to the SessionId field in SMB2 TRANSFORM_HEADER of response, the client MUST discard the message.
+                            //
+                            // For server: For a singleton request if the SessionId field in the SMB2 header of the request is not equal to Request.TransformSessionId, 
+                            // the server MUST disconnect the connection.
+                            throw new InvalidOperationException("SessionId is inconsistent for encrypted response.");
+                        }
                     }
                 }
                 return DecodeSinglePacket(
