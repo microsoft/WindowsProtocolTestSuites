@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTMService", "PTMService\PTMService.csproj", "{D7B8E7E9-835E-4C05-BB42-13589204D251}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMService", "PTMService\PTMService.csproj", "{D7B8E7E9-835E-4C05-BB42-13589204D251}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abstractions", "..\Abstractions\Abstractions.csproj", "{35484293-F82C-42E8-8E17-5F20A0EFD903}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{77429074-C25F-499E-B907-794C276BFCCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{36D1AACA-DEAB-4301-88A2-B74FD087BD93}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigration", "DatabaseMigration\DatabaseMigration.csproj", "{D73B8C08-8DA5-48C7-A009-8C45E6A08251}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{FE251FCD-5825-4472-8A0B-1ECC550F3019}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,26 @@ Global
 		{D7B8E7E9-835E-4C05-BB42-13589204D251}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7B8E7E9-835E-4C05-BB42-13589204D251}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7B8E7E9-835E-4C05-BB42-13589204D251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35484293-F82C-42E8-8E17-5F20A0EFD903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35484293-F82C-42E8-8E17-5F20A0EFD903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35484293-F82C-42E8-8E17-5F20A0EFD903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35484293-F82C-42E8-8E17-5F20A0EFD903}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77429074-C25F-499E-B907-794C276BFCCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77429074-C25F-499E-B907-794C276BFCCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77429074-C25F-499E-B907-794C276BFCCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77429074-C25F-499E-B907-794C276BFCCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D1AACA-DEAB-4301-88A2-B74FD087BD93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D1AACA-DEAB-4301-88A2-B74FD087BD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D1AACA-DEAB-4301-88A2-B74FD087BD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D1AACA-DEAB-4301-88A2-B74FD087BD93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D73B8C08-8DA5-48C7-A009-8C45E6A08251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D73B8C08-8DA5-48C7-A009-8C45E6A08251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D73B8C08-8DA5-48C7-A009-8C45E6A08251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D73B8C08-8DA5-48C7-A009-8C45E6A08251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE251FCD-5825-4472-8A0B-1ECC550F3019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE251FCD-5825-4472-8A0B-1ECC550F3019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE251FCD-5825-4472-8A0B-1ECC550F3019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE251FCD-5825-4472-8A0B-1ECC550F3019}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
