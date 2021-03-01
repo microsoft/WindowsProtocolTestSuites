@@ -131,6 +131,8 @@
       <Property name="WhichFileSystemSupport_ObjectIdIoCtlRequest" value="NTFS" />
       <Property name="WhichFileSystemSupport_OpenHasManageVolumeAccess" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_StreamRename" value="NTFS;" />
+      <Property name="WhichFileSystemSupport_MarkHandle" value="NTFS,REFS;" />
+      <Property name="WhichFileSystemSupport_RedundantStorage" value="REFS;" />
 
 
       <Property name="NTFS_ClusterSizeInKB" value="4">
@@ -288,6 +290,12 @@
       <Property name="FSCC_UnSupportedFSCTL" value="">
         <Description>
           To specify the FSCTL (defined in [MS-FSCC] section 2.3) that the SUT does not support.
+        </Description>
+      </Property>
+
+      <Property name="NumberOfDataCopies" value="2">
+        <Description>
+          Indicates the number of copies for each file stored in the redundant storage volume.
         </Description>
       </Property>
     </Group>
