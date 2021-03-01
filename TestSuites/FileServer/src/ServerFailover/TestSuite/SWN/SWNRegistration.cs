@@ -64,6 +64,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             swnClientForInterface = null;
             swnClientForWitness = null;
             pContext = IntPtr.Zero;
+
+            // To make sure cluster service started on both node01 and node02.
+            RestoreClusterNodes(TestConfig.ClusterNode01, TestConfig.ClusterNode02);
         }
 
         // Use TestCleanup to run code after every test in a class have run
