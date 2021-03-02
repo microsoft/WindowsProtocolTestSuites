@@ -28,14 +28,22 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// Check if the server supports RSVD.
         /// </summary>
         public DetectResult CheckRsvdSupport(ref DetectionInfo info)
-        {
+        {          
             DetectResult result = DetectResult.DetectFail;
             logWriter.AddLog(LogLevel.Information, "Share path: " + info.targetShareFullPath);
 
             #region Copy test VHD file to the target share to begin detecting RSVD
 
             string vhdOnSharePath = Path.Combine(info.targetShareFullPath, vhdName);
-            CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
+            try
+            {
+                CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
+            }
+            catch(Exception e)
+            {
+                logWriter.AddLog(LogLevel.Information, @"Detect RSVD failed with exception: " + e.Message);
+                return result;               
+            }
             #endregion
 
             try

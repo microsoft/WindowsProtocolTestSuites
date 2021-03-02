@@ -24,17 +24,32 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// </summary>
         public DetectResult CheckSqosSupport(ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "Share name: " + info.targetShareFullPath);
-
             DetectResult result = DetectResult.UnSupported;
+            logWriter.AddLog(LogLevel.Information, "Check SMB2 dialect. The MaxSupportedDialectRevision is: " + info.smb2Info.MaxSupportedDialectRevision);
             if (info.smb2Info.MaxSupportedDialectRevision < DialectRevision.Smb311)
             {
                 return result;
             }
 
+            logWriter.AddLog(LogLevel.Information, "Check share existence: " + info.BasicShareName);
+            if (DetectShareExistence(info, info.BasicShareName) != DetectResult.Supported)
+            {
+                return DetectResult.DetectFail;
+            }
+
             #region copy test VHD file to share
             string vhdOnSharePath = Path.Combine(info.targetShareFullPath, vhdName);
-            CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
+            
+            try
+            {
+                CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
+            }
+            catch (Exception e)
+            {
+                logWriter.AddLog(LogLevel.Information, @"Detect RSVD failed with exception: " + e.Message);
+                return DetectResult.DetectFail;
+
+            }
             #endregion
 
             #region SQOS dialect 1.1

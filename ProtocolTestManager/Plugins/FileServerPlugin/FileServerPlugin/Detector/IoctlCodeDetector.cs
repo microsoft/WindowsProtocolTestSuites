@@ -1268,6 +1268,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     LogFailedStatus("CREATE", header.Status);
                     throw new Exception("CREATE failed with with " + Smb2Status.GetStatusCode(header.Status));
                 }
+                else
+                {
+                    logWriter.AddLog(LogLevel.Information, "Client successfully opens a file before checking FSCTL_SRV_ENUMERATE_SNAPSHOTS IOCTL.");
+                }
 
                 #endregion
 

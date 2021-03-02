@@ -232,8 +232,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (!DetectShareInfo(detector))
                 return false;
 
-            DetermineSymboliclink();
-
+            DetermineSymboliclink(detector);
+            
             detectionInfo.detectExceptions = new Dictionary<string, string>();
 
             // Detect IoctlCodes and Create Contexts
@@ -635,7 +635,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                         }
                     }
                 }
-                else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)") && rule.Status == RuleStatus.Selected)
+                else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)"))
                 {
                     isFsaSelected = true;
                     if (ruleName.Contains("HVRS"))
@@ -1032,8 +1032,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             return true;
         }
 
-        private void DetermineSymboliclink()
+        private void DetermineSymboliclink(FSDetector detector)
         {
+            if(detector.DetectShareExistence(detectionInfo,detectionInfo.BasicShareName) != DetectResult.Supported)
+            {
+                logWriter.AddLog(LogLevel.Information, string.Format("The share {0} does not exist.",detectionInfo.BasicShareName));
+                logWriter.AddLog(LogLevel.Information, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);
+                return;
+            }
+
             string symboliclink = DetectorUtil.GetPropertyValue("SMB2.Symboliclink");
             if (string.IsNullOrEmpty(symboliclink))
             {
@@ -1058,7 +1066,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     detectionInfo.SymboliclinkInSubFolder = symboliclinkInSubFolder;
                 }
-            }
+            }            
         }
 
         private bool DetectIoctlCodes(FSDetector detector)
@@ -1067,10 +1075,54 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.unsupportedIoctlCodes = new List<string>();
             detectionInfo.ResetDetectResult();
 
-            #region Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS
+            logWriter.AddLog(LogLevel.Information, string.Format("Check share existence {0} for IOCtl Codes detection.", detectionInfo.BasicShareName));
+            try
+            {
+                if (detector.DetectShareExistence(detectionInfo, detectionInfo.BasicShareName) != DetectResult.Supported)
+                {
+                    detectionInfo.F_EnumerateSnapShots = DetectResult.DetectFail;
+                    detectionInfo.F_CopyOffload = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
+                    detectionInfo.F_FileLevelTrim = DetectResult.DetectFail;
+                    detectionInfo.F_ValidateNegotiateInfo = DetectResult.DetectFail;
+                    detectionInfo.F_ResilientHandle = DetectResult.DetectFail;
+                    detectionInfo.F_IntegrityInfo = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
+                    logWriter.AddLog(LogLevel.Information, string.Format("Share {0} does not exist. All IOCTL will be marked as detect failed. Will exit the IOCtl Codes detection.", detectionInfo.BasicShareName));
+                    logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                    logWriter.AddLineToLog(LogLevel.Information);
+                    return false;
+                }
+                else
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Share {0} exists. Will continue the IOCtl Codes detection.", detectionInfo.BasicShareName));
+                }
+            }
+            catch (Exception e)
+            {
+                detectionInfo.F_EnumerateSnapShots = DetectResult.DetectFail;
+                detectionInfo.F_CopyOffload = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
+                detectionInfo.F_FileLevelTrim = DetectResult.DetectFail;
+                detectionInfo.F_ValidateNegotiateInfo = DetectResult.DetectFail;
+                detectionInfo.F_ResilientHandle = DetectResult.DetectFail;
+                detectionInfo.F_IntegrityInfo = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
+                logWriter.AddLog(LogLevel.Information, string.Format("Exception was thrown out when check share {0} exsitence. All IOCTL will be marked as detect failed. Will exit IOCTL detection and return with all IOCTL unsupported.", detectionInfo.BasicShareName));
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);                
+                return false;
+            }
+
+            #region Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS            
             try
             {
                 detectionInfo.F_EnumerateSnapShots = detector.CheckIOCTL_EnumerateSnapShots(detectionInfo.BasicShareName, ref detectionInfo);
+                if (detectionInfo.F_EnumerateSnapShots == DetectResult.DetectFail)
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS failed since the share {0} does not exist.", detectionInfo.BasicShareName));
+                    return false;
+                }
+                else
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS passed against the share {0}.", detectionInfo.BasicShareName));
+                }
             }
             catch (Exception ex)
             {
@@ -1204,8 +1256,19 @@ namespace Microsoft.Protocols.TestManager.Detector
         private void DetectCreateContexts(FSDetector detector)
         {
             logWriter.AddLog(LogLevel.Information, "===== Detect Create Contexts =====");
-
             detectionInfo.unsupportedCreateContexts = new List<string>();
+
+            if (detector.DetectShareExistence(detectionInfo, detectionInfo.BasicShareName) != DetectResult.Supported)
+            {
+                logWriter.AddLog(LogLevel.Information, string.Format("The share {0} does not exist.", detectionInfo.BasicShareName));
+                foreach (var context in Enum.GetNames(typeof(CreateContextTypeValue)))
+                {
+                    detectionInfo.unsupportedCreateContexts.Add(context.ToString());
+                }
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(LogLevel.Information);
+                return; 
+            }            
 
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
             {
@@ -1359,7 +1422,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             logWriter.AddLineToLog(LogLevel.Information);
         }
 
-        private bool DetectRSVD(FSDetector detector)
+        private void DetectRSVD(FSDetector detector)
         {
             logWriter.AddLog(LogLevel.Information, "===== Detect RSVD =====");
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
@@ -1376,12 +1439,21 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLog(LogLevel.Information, string.Format("Detect RSVD finished"));
+
+            if (detectionInfo.RsvdSupport == DetectResult.DetectFail)
+            {
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+            }
+            else
+            {
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            }            
             logWriter.AddLineToLog(LogLevel.Information);
-            return true;
+            return;
         }
 
-        private bool DetectSQOS(FSDetector detector)
+        private void DetectSQOS(FSDetector detector)
         {
             logWriter.AddLog(LogLevel.Information, "===== Detect SQOS =====");
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
@@ -1397,9 +1469,20 @@ namespace Microsoft.Protocols.TestManager.Detector
                     detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_STORAGE_QOS_CONTROL.ToString(), string.Format("Detect SQOS failed: {0}", e.Message));
                 }
             }
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            else
+            {
+                logWriter.AddLog(LogLevel.Information, "Detect SQOS failed since dialect is less than SMB311.");
+                detectionInfo.SqosSupport = DetectResult.UnSupported;
+            }
+            if (detectionInfo.SqosSupport == DetectResult.DetectFail)
+            {
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+            }          
+            else 
+            {
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);                
+            }
             logWriter.AddLineToLog(LogLevel.Information);
-            return true;
         }
 
         private void ParseShareFullPath()

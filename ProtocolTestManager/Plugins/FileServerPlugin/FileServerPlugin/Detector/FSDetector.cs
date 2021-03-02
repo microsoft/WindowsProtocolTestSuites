@@ -645,9 +645,35 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 }
             }
         }
-
-        public ShareInfo[] FetchShareInfo(DetectionInfo info)
+        /// <summary>
+        /// Detect the existence of a share with the detection info client
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public DetectResult DetectShareExistence(DetectionInfo info, string shareName)
         {
+            using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+            {
+                ulong messageId;
+                ulong sessionId;
+                uint treeId;
+                try
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", shareName));
+                    ConnectToShare(shareName, info, client, out messageId, out sessionId, out treeId);
+                    logWriter.AddLog(LogLevel.Information, string.Format("Succeed to connect share {0}.", shareName));
+                }
+                catch (Exception e)
+                {
+                    // Show error to user.
+                    logWriter.AddLog(LogLevel.Information, string.Format("Connect to share {0} failed with error message: {1}.", shareName, e.Message));
+                    return DetectResult.DetectFail;
+                }
+            }
+            return DetectResult.Supported;
+        }
+        public ShareInfo[] FetchShareInfo(DetectionInfo info)
+        {        
             string[] shareList = null;
 
             try
@@ -772,8 +798,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private void LogFailedStatus(string operation, uint status)
         {
             logWriter.AddLog(LogLevel.Information, string.Format(operation + " failed, status: {0}", Smb2Status.GetStatusCode(status)));
-        }
-
+        }        
+      
         /// <summary>
         /// Negotiate, SessionSetup, TreeConnect
         /// </summary>
@@ -825,6 +851,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 LogFailedStatus("TREECONNECT", header.Status);
                 throw new Exception("TREECONNECT failed with " + Smb2Status.GetStatusCode(header.Status));
             }
+           
             #endregion
         }
 
