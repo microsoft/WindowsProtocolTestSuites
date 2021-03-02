@@ -1,0 +1,129 @@
+/**************************************************************************************************
+Copyright (c) Microsoft. All rights reserved.
+Licensed under the MIT license. See LICENSE file in the project root for full license information. 
+**************************************************************************************************/
+
+.home {
+    text-align: center;
+}
+
+.home .center {
+    display: flex;
+    justify-content: space-around;
+}
+
+.home .title {
+    font-size: 4rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.home .subTitle {
+    font-size: 1.3rem;
+}
+
+.home .buttons {
+    float: "left";
+    width: 1280px;
+    min-width: 1280px;
+    height: 270px;
+    overflow-x: "auto";
+}
+
+.home .panel {
+    display: flex;
+    overflow: auto;
+    width: 600px;
+    height: 270px;
+    margin-top: 30px;
+}
+
+#run-panel {
+    background: #609fa9;
+    margin-right: 15px;
+    float: left;
+}
+
+#record-panel {
+    background: #d48165;
+    float: left;
+    margin-left: 15px;
+}
+
+#record-panel ::after {
+    clear: both;
+}
+
+.home .panel{
+    border-radius: 1rem;
+}
+
+.home .panel .content {
+    display: block;
+    text-align: start;
+    font-size: small;
+}
+
+#run-panel .content {
+    margin-left: 30px;
+    margin-right: -10px;
+    z-index: 10;
+}
+
+.home .panel .content p {
+    font-size: 1.2rem;
+    color: #d6d6d6;
+    margin-bottom: 15px;
+}
+
+.home .contact {
+    font-size: 1rem;
+    margin-top: 30px;
+}
+
+.home .panel .content .ms-Link {
+    font-size: 1.3125rem;
+    color: #ffffff;
+}
+
+.home .panel .run-button {
+    margin-top: 20px;
+    background-color: #2f4454;
+    width: 12rem;
+    height: 3rem;
+    border-radius: 3rem;
+    border-color: transparent;
+    font-size: 1.2rem;
+}
+
+.home .panel .record-button {
+    margin-top: 20px;
+    background-color: #ffffff;
+    width: 12rem;
+    height: 3rem;
+    border-radius: 3rem;
+    border-color: transparent;
+    font-size: 1.2rem;
+    color: #d48165;
+}
+
+.home .panel .robot-image {
+    width: 270px;
+    height: 270px;
+    margin: 0px;
+}
+
+.home .content {
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.home .content .text-block .contact {
+    margin-top: 100px;
+    font-size: 1.125rem;
+}
+
+.home .content a {
+    color: #337ab7;
+}

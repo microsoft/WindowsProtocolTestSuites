@@ -1,19 +1,27 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { History } from 'history';
-import { ApplicationState, reducers } from './';
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export default function configureStore(history: History, initialState?: ApplicationState) {
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { appReducers } from '../reducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { createBrowserHistory } from 'history';
+
+export const history = createBrowserHistory();
+
+const rootReducer = combineReducers({
+    ...appReducers,
+    router: connectRouter(history)
+});
+
+export type AppState = ReturnType<typeof rootReducer>;
+
+export function configureStore(initialState?: AppState) {
     const middleware = [
-        thunk,
+        thunkMiddleware,
         routerMiddleware(history)
     ];
-
-    const rootReducer = combineReducers({
-        ...reducers,
-        router: connectRouter(history)
-    });
 
     const enhancers = [];
     const windowIfDefined = typeof window === 'undefined' ? null : window as any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -24,6 +32,12 @@ export default function configureStore(history: History, initialState?: Applicat
     return createStore(
         rootReducer,
         initialState,
-        compose(applyMiddleware(...middleware), ...enhancers)
+        composeWithDevTools(applyMiddleware(...middleware), ...enhancers)
     );
+}
+
+// This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
+// correctly typed to match your store.
+export interface AppThunkAction<TAction> {
+    (dispatch: (action: TAction) => void, getState: () => AppState): void;
 }

@@ -1,4 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-/// <reference types="react-scripts" />
+import React from 'react';
+
+export function TaskHistory() {
+    return (
+        <div>TaskHistory</div>
+    )
+};

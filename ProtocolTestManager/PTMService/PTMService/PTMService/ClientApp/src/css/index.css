@@ -1,0 +1,76 @@
+/**************************************************************************************************
+Copyright (c) Microsoft. All rights reserved.
+Licensed under the MIT license. See LICENSE file in the project root for full license information. 
+**************************************************************************************************/
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #F2F6F9;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+.header {
+    background-color: #000 !important;
+}
+
+.header .title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #FFF !important;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    margin-left: 10px;
+}
+
+.header .title a {
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    color: #FFF !important;
+    text-decoration: none;
+}
+
+.header .menu {
+    margin: 0 60px;
+    flex: 1;
+}
+
+.header .menu a {
+    position: relative;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    color: #E7E7E7;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+.header .rightIcon {
+    margin-right: 10px;
+}
+
+.header .rightIcon a {
+    color: #FFF !important;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    cursor: pointer;
+}
+
+.header .rightIcon:hover {
+    background-color: #666;
+}
