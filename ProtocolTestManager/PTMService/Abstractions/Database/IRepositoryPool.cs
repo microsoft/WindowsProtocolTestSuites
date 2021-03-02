@@ -4,7 +4,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
+namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Database
 {
     /// <summary>
     /// The interface of repository pool.

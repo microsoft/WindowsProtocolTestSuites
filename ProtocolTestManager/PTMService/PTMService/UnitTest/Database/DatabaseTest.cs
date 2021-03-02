@@ -3,7 +3,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,6 +53,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest
             pool2 = serviceScope.ServiceProvider.GetService<IRepositoryPool>();
         }
 
+        [TestCleanup]
         public void TestCleanup()
         {
             serviceScope.Dispose();

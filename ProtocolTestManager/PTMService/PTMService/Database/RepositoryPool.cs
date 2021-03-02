@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions;
-using System;
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -3,7 +3,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Database
 {

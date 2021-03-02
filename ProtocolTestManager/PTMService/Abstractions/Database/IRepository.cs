@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
+namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Database
 {
     /// <summary>
     /// Interface of repository.
