@@ -178,7 +178,9 @@ if (Test-Path -Path "$env:HOMEDRIVE/$certFileName.pfx")
     Remove-Item "$env:HOMEDRIVE/$certFileName.pfx" -Force
 }
 
-.$PSScriptRoot/$createSelfSignedCertificate $certFileName $certCN $certPwd "/"
+.$PSScriptRoot/$createSelfSignedCertificate $certFileName $certCN $certPwd ~
+
+$certificatePath = (Resolve-Path "~/$certFileName.pfx")
 
 #-----------------------------------------------------
 # Modify PTF Config File
@@ -197,7 +199,7 @@ Write-Host "Begin to update RDP_ClientTestSuite.deployment.ptfconfig..."
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.IpVersion"             $ipVersion
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol"     $securityProtocol
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Negotiation"  $negotiationBased
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePath"           "$env:HOMEDRIVE/$certFileName.pfx"
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePath"           $certificatePath
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePassword"       $certPwd
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTName"                   $tcComputerName
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTUserPassword"           $userPwdInTC
