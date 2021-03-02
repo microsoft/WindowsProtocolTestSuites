@@ -28,21 +28,19 @@ function ExitCode()
 function CreateFAT32VolumeForFSA()
 {
     Write-Info.ps1 "Create Volume for SMBFAT32Share"
-    $volume = gwmi -Class Win32_volume | where {$_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32"}
-    if ($volume -eq $null)
-    {
+    $volume = Get-WmiObject -Class Win32_Volume | Where-Object { $_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32" }
+    if ($volume -eq $null) {
         Write-Info.ps1 "Create Volume for SMBFAT32Share"
         # Get disk and partition
-        $disk = Get-WmiObject -Class Win32_DiskDrive | sort DeviceID | Select-Object -first 1
+        $disk = Get-WmiObject -Class Win32_DiskDrive | Sort-Object DeviceID | Select-Object -First 1
         $diskNum = $disk.Index
-        For ($i = 1; $i -le 20; $i++) {
-            $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i
+        for ($i = 1; $i -le 20; $i++) {
+            $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i -ErrorAction SilentlyContinue
             if ($partition -eq $null) {
-                $partitionId = $i - 1
+                $newPartitionId = $i
                 break
             }
         }
-        $newPartitionId = $partitionId + 1
 
         Write-Info.ps1 "Create partition using diskpart.exe"
         $diskPartCmd = @()

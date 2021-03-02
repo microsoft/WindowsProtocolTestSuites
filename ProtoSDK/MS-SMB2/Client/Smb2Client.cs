@@ -580,16 +580,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             return;
                     }
                 }
+                catch (TimeoutException)
+                {
+                    // Ignore timeout exceptions.
+                    continue;
+                }
                 catch (Exception exception)
                 {
                     // If throw the exception from this receive thread, QTAgent will crash.
                     // So save the exception to a member variable, and throw it when the case calls ExpectPacket.
                     // End the current thread.
-                    exceptionWhenReceivingPacket = exception;
-                    receivedPackets.Release();
-                    notificationReceivedEvent.Set();
+                    HandleException(exception);
                     return;
                 }
+            }
+
+            void HandleException(Exception exception)
+            {
+                exceptionWhenReceivingPacket = exception;
+                receivedPackets.Release();
+                notificationReceivedEvent.Set();
             }
         }
 

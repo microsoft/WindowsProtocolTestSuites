@@ -7,7 +7,7 @@
     <!--
         Tag named Choice is used for the ComboBox in UI design
         Tag named Description is used for the comment
-    -->    
+    -->
 
     <Group name="Common">
 
@@ -26,6 +26,12 @@
       <Property name="RetryInterval" value="10">
         <Description>
           The time interval to retry the SMB2 connection, in seconds
+        </Description>
+      </Property>
+
+      <Property name="LeaseBreakNotificationWaitTimeout" value="5">
+        <Description>
+          Timeout in seconds to wait for a notification during a lease break
         </Description>
       </Property>
 

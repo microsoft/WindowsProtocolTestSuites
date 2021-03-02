@@ -7,10 +7,8 @@ using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
-using Novell.Directory.Ldap;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -3146,6 +3144,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 {
                     EnableSessionSigningAndEncryption(testConfig.SendSignedRequest, true);
                 }
+                else if (testConfig.IsGlobalEncryptDataEnabled && sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA))
+                {
+                    EnableSessionSigningAndEncryption(testConfig.SendSignedRequest, true);
+                }
             }
 
             // The signature of Session Setup Response can only be verified after the crypto key is generated.
@@ -3353,105 +3355,5 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         #endregion
 
         #endregion
-    }
-
-    /// <summary>
-    /// _WindowsIdentity class contains the necessary information to form an SMB2 TREE_CONNECT Request Extension.
-    /// </summary>
-    public class _WindowsIdentity
-    {
-        /// <summary>
-        /// The down-level logon name of the domain user.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// The user _SID.
-        /// </summary>
-        public _SID User { get; set; }
-
-        /// <summary>
-        /// An _SID collection of groups.
-        /// The user is a member of the groups.
-        /// </summary>
-        public List<_SID> Groups { get; set; }
-
-        /// <summary>
-        /// The owner _SID.
-        /// </summary>
-        public _SID Owner { get; set; }
-
-        /// <summary>
-        /// Get a _WindowsIdentity instance from the DC by the user name.
-        /// </summary>
-        /// <param name="domainName">The domain name.</param>
-        /// <param name="domainAdmin">The user name of the domain administrator.</param>
-        /// <param name="domainAdminPassword">The password of the domain administrator.</param>
-        /// <param name="userName">The user name for searching the directory.</param>
-        /// <returns>A _WindowsIdentity instance represents the user.</returns>
-        public static _WindowsIdentity GetFromDomain(string domainName, string domainAdmin, string domainAdminPassword, string userName)
-        {
-            var identity = new _WindowsIdentity();
-
-            var domainNetbios = domainName.Split('.')[0];
-            identity.Name = $"{domainNetbios}\\{userName}";
-
-            // Connect to LDAP server.
-            var ldapPort = 389;
-            var domainAdminLogonName = $"{domainNetbios}\\{domainAdmin}";
-            using var conn = new LdapConnection();
-            conn.Connect(domainName, ldapPort);
-            conn.Bind(domainAdminLogonName, domainAdminPassword);
-
-            // Construct fully qualified names for LDAP search requests.
-            var domainFqn = "DC=" + domainName.Replace(".", ",DC=");
-            var userFqn = $"CN={userName},CN=Users,{domainFqn}";
-
-            // Get User _SID and Owner _SID.
-            var userSearchBase = userFqn;
-            var userSearchFilter = "(objectClass=user)";
-            var userSearchQueue = conn.Search(userSearchBase, LdapConnection.ScopeSub, userSearchFilter, null, false, null, null);
-
-            LdapMessage userSearchMessage = null;
-            LdapEntry userEntry = null;
-            while ((userSearchMessage = userSearchQueue.GetResponse()) != null)
-            {
-                if (userSearchMessage is LdapSearchResult userSearchResult)
-                {
-                    userEntry = userSearchResult.Entry;
-                    byte[] userSidBinary = userEntry.GetAttribute("objectSid").ByteValue;
-                    _SID userSid = TypeMarshal.ToStruct<_SID>(userSidBinary);
-                    identity.User = userSid;
-                    identity.Owner = userSid;
-                    break;
-                }
-            }
-
-            if (userEntry is null)
-            {
-                throw new ActiveDirectoryObjectNotFoundException($"The user \"{userName}\" does not exist in domain \"{domainName}\".");
-            }
-
-            // Get _SIDs of Groups.
-            identity.Groups = new List<_SID>();
-
-            var groupSearchBase = domainFqn;
-            var groupSearchFilter = $"(member={userFqn})";
-            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
-
-            LdapMessage groupSearchMessage = null;
-            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
-            {
-                if (groupSearchMessage is LdapSearchResult groupSearchResult)
-                {
-                    LdapEntry groupEntry = groupSearchResult.Entry;
-                    byte[] groupSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
-                    _SID groupSid = TypeMarshal.ToStruct<_SID>(groupSidBinary);
-                    identity.Groups.Add(groupSid);
-                }
-            }
-
-            return identity;
-        }
     }
 }
