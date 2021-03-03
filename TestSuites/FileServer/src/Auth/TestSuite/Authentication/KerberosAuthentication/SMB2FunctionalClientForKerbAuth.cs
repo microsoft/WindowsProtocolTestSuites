@@ -35,6 +35,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         /// <param name="capabilities">Specifies protocol capabilities for the client.</param>
         /// <param name="token">Gss token to send</param>
         /// <param name="serverToken">GssToken returned from server</param>
+        /// <param name="isResponseEncryptedSessionFlag">check if SESSION_FLAG_ENCRYPT_DATA returned from server</param>
         /// <param name="creditRequest">The number of credits the client is requesting. Default value is 64.</param>
         /// <param name="previousSessionId">For reconnect, set it to previous sessionId, otherwise set it to 0. Default value is 0.</param>
         /// <returns>The status code for SESSION_SETUP Response.</returns>
@@ -45,6 +46,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             SESSION_SETUP_Request_Capabilities_Values capabilities,
             byte[] token,
             out byte[] serverToken,
+            out bool isResponseEncryptedSessionFlag,
             ushort creditRequest = 64,
             ulong previousSessionId = 0)
         {
@@ -72,6 +74,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 out serverToken,
                 out header,
                 out sessionSetupResponse);
+
+            isResponseEncryptedSessionFlag = sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA);
 
             ProduceCredit(messageId, header);
             
