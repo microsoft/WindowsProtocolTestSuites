@@ -2468,6 +2468,58 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         /// <summary>
+        /// Query File Normalized Name Information of the file/directory specified by fileId
+        /// </summary>
+        /// <param name="treeId">Tree id used in QueryInfo request</param>
+        /// <param name="queryInfoFlags">Flags used in QueryInfo request</param>
+        /// <param name="fileId">File id associate with the file to query</param>
+        /// <param name="inputBuffer">A buffer containing the input buffer for QueryInfo request</param>
+        /// <param name="outputBuffer">A buffer containing the information returned in the response</param>
+        /// <param name="checker">An optional checker to check the QueryInfo response</param>
+        /// <returns>The status code of querying file normalized name information</returns>
+        public uint QueryFileNormalizedNameInformation(
+            uint treeId,
+            QUERY_INFO_Request_Flags_Values queryInfoFlags,
+            FILEID fileId,
+            byte[] inputBuffer,
+            out byte[] outputBuffer,
+            ResponseChecker<QUERY_INFO_Response> checker = null)
+        {
+            uint maxOutputBufferLength = 1024;
+            Packet_Header header;
+            QUERY_INFO_Response queryInfoResponse;
+
+            ulong messageId = generateMessageId(sequenceWindow);
+            ushort creditCharge = generateCreditCharge(1);
+
+            // Need to consume credit from sequence window first according to TD
+            ConsumeCredit(messageId, creditCharge);
+
+            uint status = client.QueryInfo(
+                creditCharge,
+                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId,
+                sessionId,
+                treeId,
+                InfoType_Values.SMB2_0_INFO_FILE,
+                (byte)FileInformationClasses.FileNormalizedNameInformation,
+                maxOutputBufferLength,
+                AdditionalInformation_Values.NONE,
+                queryInfoFlags,
+                fileId,
+                inputBuffer,
+                out outputBuffer,
+                out header,
+                out queryInfoResponse,
+                sessionChannelSequence);
+
+            ProduceCredit(messageId, header);
+            InnerResponseChecker(checker, header, queryInfoResponse);
+            return status;
+        }
+
+        /// <summary>
         /// Query the Security Descriptor of the file/directory specified by fileId.
         /// </summary>
         /// <param name="treeId">tree id used in SetInfo request.</param>
