@@ -269,6 +269,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        /// <summary>
+        /// Timeout in seconds to wait for a notification during a lease break
+        /// </summary>
+        public TimeSpan LeaseBreakNotificationWaitTimeout
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(int.Parse(GetProperty("LeaseBreakNotificationWaitTimeout")));
+            }
+        }
+
         public Platform Platform
         {
             get
@@ -311,6 +322,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             get
             {
                 return GetProperty("DCServerComputerName");
+            }
+        }
+
+        public int KDCPort
+        {
+            get
+            {
+                try
+                {
+                    return int.Parse(GetProperty("KDCPort", false));
+                }
+                catch
+                {
+                    return TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort;
+                }
             }
         }
 

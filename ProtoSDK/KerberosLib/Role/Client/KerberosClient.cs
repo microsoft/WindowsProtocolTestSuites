@@ -29,7 +29,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         private Type expectedPduType;
 
-        protected string kdcAddress;
+        protected IPAddress kdcAddress;
         protected int kdcPort;
         protected TransportType transportType;
         protected KerberosConstValue.OidPkt oidPkt;
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="kdcPort">The port of the KDC.</param>
         /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
-        public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
+        public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, IPAddress kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
             this.Context = new KerberosContext(domain, cName, password, accountType, KerberosContextType.Client, salt);
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="kdcPort">The port of the KDC.</param>
         /// <param name="transportType">Whether the transport is TCP or UDP transport.</param>
         /// <exception cref="System.ArgumentNullException">Thrown when the input parameter is null.</exception>
-        public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, string kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
+        public KerberosClient(string domain, string cName, string password, KerberosAccountType accountType, KerberosTicket armorTicket, EncryptionKey armorSessionKey, IPAddress kdcAddress, int kdcPort, TransportType transportType, KerberosConstValue.OidPkt oidPkt = KerberosConstValue.OidPkt.KerberosToken, string salt = null)
         {
             TransportBufferSize = KerberosConstValue.TRANSPORT_BUFFER_SIZE;
             this.Context = new KerberosContext(domain, cName, password, accountType, salt, armorTicket, armorSessionKey, KerberosContextType.Client);
@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             transportConfig.MaxConnections = 1;
             transportConfig.BufferSize = TransportBufferSize;
             transportConfig.RemoteIpPort = kdcPort;
-            transportConfig.RemoteIpAddress = kdcAddress.ParseIPAddress();
+            transportConfig.RemoteIpAddress = kdcAddress;
 
             // For UDP bind
             if (transportConfig.RemoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
@@ -680,7 +680,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
         }
 
-        public void ChangeRealm(string realm, string kdcAddress, int kdcPort, TransportType transportType)
+        public void ChangeRealm(string realm, IPAddress kdcAddress, int kdcPort, TransportType transportType)
         {
             this.Context.Realm = new Realm(realm);
             this.kdcAddress = kdcAddress;

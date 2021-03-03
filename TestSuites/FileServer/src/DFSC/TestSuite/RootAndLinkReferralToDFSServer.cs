@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -102,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a DFS root referral request v2 to DFS Server first, and then link referral request v2.")]
         public void RootAndLinkReferralStandaloneV2ToDFSServer()
         {
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a DFS root referral request v2 to DFS Server, the request path is stand-alone, and expects success.");            
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a DFS root referral request v2 to DFS Server, the request path is stand-alone, and expects success.");
             ValidRootOrLinkReferralToDFSServer(ReferralEntryType_Values.DFS_REFERRAL_V2, false, true);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a DFS link referral request v2 to DFS Server, the request path is stand-alone, and expects success.");
@@ -228,6 +229,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a v4 invalid Root referral request to DFS server and expects negative response.")]
         public void InvalidRootReferralDomainToDFSServer()
         {
+            bool dfsServerIsDC = TestConfig.SutComputerName.ParseIPAddress().Equals(TestConfig.DCServerName.ParseIPAddress());
+
+            if (dfsServerIsDC)
+            {
+                BaseTestSite.Assume.Inconclusive("This test case is only applicable when the DFS server does not also act as domain controller.");
+            }
+
             string invalidRootPathDomain = string.Format(@"\{0}\{1}", TestConfig.DomainFQDNName, DFSCTestUtility.Consts.InvalidComponent);
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a DFS root referral request v4 to DFS Server, the request path is domain-based and invalid, expects negative response.");

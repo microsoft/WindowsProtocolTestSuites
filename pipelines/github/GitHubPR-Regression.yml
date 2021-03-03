@@ -12,6 +12,13 @@ stages:
           - checkout: self
 
           - task: PowerShell@2
+            displayName: 'Check License Header'
+            inputs:
+              filePath: 'CommonScripts/CheckLicenseHeader.ps1'
+              arguments: '-TestSuitePath $(Build.Repository.LocalPath) -IsCheckAll $false -targetBranch "$(system.pullRequest.targetBranch)" -sourceBranch "$(system.pullRequest.sourceBranch)" '
+            condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+          - task: PowerShell@2
             displayName: Run Build Script
             inputs:
               targetType: filePath
@@ -37,7 +44,7 @@ stages:
               PathtoPublish: CommonScripts
               ArtifactName: CommonScripts
             condition: succeededOrFailed()
-
+         
       - job:
         displayName: Build RDP SUT Control Agents
         workspace:
@@ -100,7 +107,7 @@ stages:
 
   - stage: Run_Regression
     dependsOn: Build_Test_Suite
-    condition: succeeded()
+    condition: and(succeeded(), eq(variables['test.runRegression'], true))
     pool:
       name: Azure Agents
     jobs:

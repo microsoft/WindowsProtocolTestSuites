@@ -85,12 +85,6 @@ Write-Host "Turn off firewall"
 cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 
 #-----------------------------------------------------
-# Install JinJa2 for python agent
-#-----------------------------------------------------
-pip install Jinja2
-Get-NetAdapter -physical | where name -match 'External' | Disable-NetAdapter -Confirm:$false
-
-#-----------------------------------------------------
 # Get IP address of the SUT computer
 #-----------------------------------------------------
 $tcComputerIP = (Test-Connection $tcComputerName -Count 1 | Select -ExpandProperty IPV4Address).IPAddressToString

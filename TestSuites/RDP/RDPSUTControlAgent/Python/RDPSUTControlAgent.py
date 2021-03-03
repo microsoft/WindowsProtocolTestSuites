@@ -7,7 +7,6 @@ import socket
 import subprocess
 import sys
 import threading
-from jinja2 import Environment
 from struct import Struct, unpack
 
 try:
@@ -185,14 +184,14 @@ class Message:
 
 
 def build_client_cmd(cmd, ip_address=None, ip_port=None):
-    if cmd == "StopRDP":
-        return Environment().from_string(cmd).render()
+    if ip_address == None:
+        return cmd
 
     if ip_port == 0:
         address = ip_address
     else:
         address = "%s:%s" % (ip_address, ip_port)
-    return Environment().from_string(cmd).render(address=address)
+    return cmd.replace('{{ address }}', address)
 
 
 def handle_connection(client_socket, config):

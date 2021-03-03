@@ -17,7 +17,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
     public class ModelManagedAdapterBase : ManagedAdapterBase
     {
         protected SMB2ModelTestConfig testConfig;
-        protected ISutProtocolControlAdapter sutProtocolController;
         protected List<string> testFiles = new List<string>();
         protected List<string> testDirectories = new List<string>();
 
@@ -34,7 +33,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 
             testConfig = new SMB2ModelTestConfig(Site);
 
-            sutProtocolController = Site.GetAdapter<ISutProtocolControlAdapter>();
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
         }
 
         public override void Reset()

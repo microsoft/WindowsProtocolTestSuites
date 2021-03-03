@@ -110,21 +110,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         /// TimerCallback to be executed to acknowledge LeaseBreakNotification
         /// </summary>
         /// <param name="obj"></param>
-        protected virtual void CheckBreakNotification(object obj)
+        /// <param name="isNotificationExpected"></param>
+        protected virtual void CheckBreakNotification(object obj, bool isNotificationExpected = true)
         {
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,
                 "Check if client received lease break notification");
-            BaseTestSite.Assert.IsTrue(
-                // Wait for notification arrival
-                notificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+            // Wait for notification arrival
+            var isNotificationReceived = notificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds);
+
+            if (isNotificationExpected)
+            {
+                BaseTestSite.Assert.IsTrue(
+                isNotificationReceived,
                 "LeaseBreakNotification should be raised.");
 
-            uint treeId = (uint)obj;
-            BaseTestSite.Log.Add(
-                LogEntryKind.Debug,
-                "Client attempts to acknowledge the lease break");
-            AcknowledgeLeaseBreak(clientToAckLeaseBreak, treeId, receivedLeaseBreakNotify);
+                uint treeId = (uint)obj;
+                BaseTestSite.Log.Add(
+                    LogEntryKind.Debug,
+                    "Client attempts to acknowledge the lease break");
+                AcknowledgeLeaseBreak(clientToAckLeaseBreak, treeId, receivedLeaseBreakNotify);
+            }
+            else
+            {
+                BaseTestSite.Assert.IsFalse(
+                    isNotificationReceived,
+                    "Server should not send lease break notification");
+            }
         }
         #endregion
     }

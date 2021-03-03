@@ -387,5 +387,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 currentRemoteSequenceNumber++;
             }
         }
+
+        #region KDC Settings from ptfconfig file
+        /// <summary>
+        /// KDC Ip or computer name, default set to empty and use domain name as KDC address.
+        /// </summary>
+        public static string KDCComputerName { get; set; }
+
+        /// <summary>
+        /// KDC default port
+        /// </summary>
+        public static int KDCPort = 88;
+        #endregion
     }
 }

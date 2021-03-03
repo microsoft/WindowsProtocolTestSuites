@@ -150,5 +150,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Unexpected create context, negotiate context and etc. according to technical document.
         /// </summary>
         public const string UnexpectedContext = "UnexpectedContext";
+
+        /// <summary>
+        /// The volume is a redundant media e.g RAID or mirrored
+        /// </summary>
+        public const string IsRedundantMedia = "IsRedundantMedia";
     }
 }

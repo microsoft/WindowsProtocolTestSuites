@@ -7,7 +7,7 @@
     <!--
         Tag named Choice is used for the ComboBox in UI design
         Tag named Description is used for the comment
-    -->    
+    -->
 
     <Group name="Common">
 
@@ -26,6 +26,12 @@
       <Property name="RetryInterval" value="10">
         <Description>
           The time interval to retry the SMB2 connection, in seconds
+        </Description>
+      </Property>
+
+      <Property name="LeaseBreakNotificationWaitTimeout" value="5">
+        <Description>
+          Timeout in seconds to wait for a notification during a lease break
         </Description>
       </Property>
 
@@ -59,8 +65,14 @@
 
       <Property name="DCServerComputerName" value="DC01.contoso.com">
         <Description>
-          Computer name of DC
+          Computer ip or name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
+        </Description>
+      </Property>
+
+      <Property name="KDCPort" value="88">
+        <Description>
+          Port of KDC, By default KDC port is 88
         </Description>
       </Property>
 

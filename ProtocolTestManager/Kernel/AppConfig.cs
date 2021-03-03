@@ -204,7 +204,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSuiteName = testSuiteName;
             config.TestSuiteVersion = testSuiteVersion;
             config.InitFolders(testSuiteDir, installDir);
-            config.PipeName = StringResource.PipeName;           
+            config.PipeName = string.Format("{0}_{1}", StringResource.PipeName, Guid.NewGuid());
 
             XmlDocument doc = new XmlDocument();
             doc.XmlResolver = null;

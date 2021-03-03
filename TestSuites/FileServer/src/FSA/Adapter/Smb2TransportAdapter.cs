@@ -234,6 +234,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             base.Initialize(testSite);
             this.site = testSite;
             this.smb2Client = null;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
+            TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
         }
 
         /// <summary>
@@ -419,6 +421,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 sessionKey = sspiClientGss.SessionKey;
                 this.smb2Client.GenerateCryptoKeys(sessionId, sessionKey, testConfig.SendSignedRequest, false);
                 if (testConfig.IsGlobalEncryptDataEnabled && selectedDialect >= DialectRevision.Smb30 && selectedDialect != DialectRevision.Smb2Unknown)
+                {
+                    this.smb2Client.EnableSessionSigningAndEncryption(sessionId, testConfig.SendSignedRequest, true);
+                }
+                else if (testConfig.IsGlobalEncryptDataEnabled && sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA))
                 {
                     this.smb2Client.EnableSessionSigningAndEncryption(sessionId, testConfig.SendSignedRequest, true);
                 }
