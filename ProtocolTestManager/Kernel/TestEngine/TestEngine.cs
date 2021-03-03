@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestManager.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -110,7 +112,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             args.AppendFormat("--results-directory {0} ", ResultOutputFolder);
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
-            args.AppendFormat("--logger ptm ");
+            args.AppendFormat("--logger html ");
 
             ConstructRunSettings(RunSettingsPath);
             args.AppendFormat("--settings {0} ", RunSettingsPath);
@@ -168,6 +170,35 @@ namespace Microsoft.Protocols.TestManager.Kernel
             doc.AppendChild(runSettingsNode);
 
             doc.Save(runsettingsPath);
+        }
+
+        /// <summary>
+        /// Construct vstest args for discovery.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression.</param>
+        /// <param name="outputDirectory">The output directory.</param>
+        /// <returns>The args.</returns>
+        private StringBuilder ConstructVstestArgsForDiscovery(string filterExpression, string outputDirectory)
+        {
+            StringBuilder args = new StringBuilder();
+            Uri wd = new Uri(WorkingDirectory);
+            foreach (string file in TestAssemblies)
+            {
+                args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
+            }
+
+            if (!String.IsNullOrEmpty(filterExpression))
+            {
+                args.AppendFormat("--filter {0} ", filterExpression);
+            }
+
+            args.AppendFormat("--results-directory {0} ", outputDirectory);
+            args.AppendFormat("--test-adapter-path {0} ", AppDomain.CurrentDomain.BaseDirectory);
+            args.AppendFormat("--logger Discovery ");
+            args.AppendFormat("--list-tests");
+
+            Logger.AddLog(LogLevel.Debug, $"vstest arguments: {args}");
+            return args;
         }
 
         private delegate void RunByCaseDelegate(Stack<TestCase> caseStack);
@@ -247,7 +278,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 message.IndexOf(StringResource.FailedTag) != -1 ||
                 message.IndexOf(StringResource.InconclusiveTag) != -1)
             {
-                string[] strings = message.Split('.');
+                string[] strings = message.Split(' ');
                 string testCaseName = strings[strings.Length - 1];
 
                 if (String.IsNullOrEmpty(testCaseName))
@@ -352,6 +383,65 @@ namespace Microsoft.Protocols.TestManager.Kernel
             catch (Exception ex)
             {
                 Utility.LogException(new List<Exception> { ex });
+            }
+        }
+
+        /// <summary>
+        /// Load test cases.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression. If it is null, no filter will be used.</param>
+        /// <returns>The test case list.</returns>
+        public List<TestCase> LoadTestCases(string filterExpression = null)
+        {
+            try
+            {
+                string tempPath = Path.GetTempFileName();
+
+                File.Delete(tempPath);
+
+                Directory.CreateDirectory(tempPath);
+
+                StringBuilder args = ConstructVstestArgsForDiscovery(filterExpression, tempPath);
+
+                vstestProcess = new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = WorkingDirectory,
+                        FileName = EnginePath,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Arguments = "test " + args,
+                    }
+                };
+
+                vstestProcess.Start();
+                vstestProcess.WaitForExit();
+
+                string infoPath = Path.Combine(tempPath, "TestCaseInfo.json");
+
+                var content = File.ReadAllText(infoPath);
+
+                var infos = System.Text.Json.JsonSerializer.Deserialize<TestCaseInfo[]>(content);
+
+                var result = infos.Select(info => new TestCase
+                {
+                    FullName = info.FullName,
+                    Name = info.Name,
+                    Category = info.Category.ToList(),
+                    ToolTipOnUI = info.ToolTipOnUI,
+                    Description = info.Description,
+                }).ToList();
+
+                Directory.Delete(tempPath, true);
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                Utility.LogException(new List<Exception> { e });
+
+                throw;
             }
         }
     }

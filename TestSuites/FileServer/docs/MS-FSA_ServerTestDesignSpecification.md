@@ -21,6 +21,7 @@
         * [FileInfo_IsShortNameSupported](#FileInfo_IsShortNameSupported)
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
+        * [FileInfo_Set_FileBasicInformation](#FileInfo_Set_FileBasicInformation)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -53,8 +54,12 @@
         * [AlternateDataStream_FsControl](#AlternateDataStream_FsControl)
     * [Scenarios for Create and Query Directory](#Scenarios-for-Create-And-Query-Directory)
         * [Query Directory](#Scenario-QueryDirectory)
+    * [Scenarios for File and Directory Leasing](#Scenarios-for-File-And-Directory-Leasing)
+        * [CompareLeaseKeys](#CompareLeaseKeys)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
+        * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
+        * [CreateFile_BackSlash](#Scenario-CreateFile_BackSlash)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
     * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#IsEASupported)
@@ -93,6 +98,9 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileBasicInformation](#FileBasicInformation)
+            * [FileInfo_Set_FileBasicInformation_File](#FileInfo_Set_FileBasicInformation_File)
+            * [FileInfo_Set_FileBasicInformation_Dir](#FileInfo_Set_FileBasicInformation_Dir)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -227,6 +235,15 @@
             * [BVT_QueryDirectory_FileIdFullDirectoryInformation](#BVT_QueryDirectory_FileIdFullDirectoryInformation)
             * [BVT_QueryDirectory_FileBothDirectoryInformation](#BVT_QueryDirectory_FileBothDirectoryInformation)
             * [BVT_QueryDirectory_FileIdBothDirectoryInformation](#BVT_QueryDirectory_FileIdBothDirectoryInformation)
+    * [Test cases for File and Directory Leasing](#Test-cases-for-File-And-Directory-Leasing)
+        * [Compare Lease Keys](#CompareLeaseKeys)
+            * [Comparing_Same_File_LeaseKeysV1](#Comparing_Same_File_LeaseKeysV1)
+            * [Comparing_Same_Directory_LeaseKeysV1](#Comparing_Same_Directory_LeaseKeysV1)
+            * [Comparing_Same_LeaseKeysV2](#Comparing_Same_LeaseKeysV2)
+            * [Compare_Zero_LeaseFlag_ParentLeaseKey](#Compare_Zero_LeaseFlag_ParentLeaseKey)
+            * [DirectoryComparing_LeaseKeysV2](#DirectoryComparing_LeaseKeysV2)
+            * [DirectoryComparing_ParentLeaseKey_ChildLeaseKey](#DirectoryComparing_ParentLeaseKey_ChildLeaseKey)
+            * [DirectoryComparing_Child_Invalid_ParentLeaseKeys](#DirectoryComparing_Child_Invalid_ParentLeaseKeys)
     * [Test cases for Other Scenarios](#Test-cases-for-Other-Scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#CreateFile_InvalidStreamName)
@@ -287,17 +304,18 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 139 test cases in total:
+There are 151 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 26 (5) |
+| Scenarios for FileInformation | 7 | 28 (6) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
+| Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
-| Other Scenarios | 1 | 1 (0) |
+| Other Scenarios | 3 | 6 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
 
@@ -454,6 +472,21 @@ There are 343 test cases in total:
 | | If supported, The operation returns **STATUS_SUCCESS**.|
 | Message Sequence| CreateFile.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
+
+#### <a name="FileInfo_FileBasicInformationSupported"/>FileInfo_FileBasicInformationSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes supported by different file systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If the file system supports the attribute values, The system responds according to [MS-FSA] 2.1.5.14.2 FileBasicInformation. |
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
@@ -1022,6 +1055,26 @@ There are 343 test cases in total:
 | Message Sequence| Create a directory file with a invalid stream name.|
 | | Verify server return with **STATUS_INVALID_PARAMETER** for NTFS and ReFS, and **STATUS_OBJECT_NAME_INVALID** for other file systems.|
 
+#### <a name="Scenario-CreateFile_InvalidColon"/>CreateFile_InvalidColon
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test create a directory or data file with invalid colon.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile, DataFile|
+| Message Sequence| Create a directory or data file with a invalid colon contained in file name.|
+| | Verify server return with **STATUS_OBJECT_NAME_INVALID** for supported file systems.|
+
+#### <a name="Scenario-CreateFile_BackSlash"/>CreateFile_BackSlash
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test create a directory or data file with a invalid back slash.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile, DataFile|
+| Message Sequence| Create a directory or data file with back slash contained in file name.|
+| | Verify server response for supported file systems.|
+
 ## <a name="Traditional-Test-Case-Design"/>Traditional Test Case Design
 
 ### <a name="Test-cases-for-FileInformation"/>Test cases for FileInformation
@@ -1562,6 +1615,28 @@ There are 343 test cases in total:
 | Description| To test if FileAccessInformation is supported for a file with ::$DATA as suffix.|
 | Message Sequence| CreateFile with ::$Data as file name suffix.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
+| | Verify server responses accordingly.|
+
+#### <a name="FileBasicInformation"/>FileBasicInformation
+
+##### <a name="FileInfo_Set_FileBasicInformation_File"/>FileInfo_Set_FileBasicInformation_File
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes on file supported by different file systems.|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
+| | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir"/>FileInfo_Set_FileBasicInformation_Dir
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if set values for FileBasicInformation attributes on directory is supported by different file systems.|
+| File information class: FileBasicInformation|
+| Message Sequence| CreateFile.|
+| | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
@@ -3388,6 +3463,94 @@ There are 343 test cases in total:
 | | Query the created directory with FileIdBothDirectoryInformation|
 | | Verify each entry of the response|
 
+### <a name="Test-cases-for-File-And-Directory-Leasing"/>Test cases for File and Directory Leasing
+
+#### <a name="CompareLeaseKeys"/>Compare Lease Keys
+
+##### <a name="Comparing_Same_File_LeaseKeysV1"/>Comparing_Same_File_LeaseKeysV1
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the server returned lease keys of two opens of the same file using the same lease key.|
+| | This value is not valid for the SMB 2.0.2 dialect |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a file in share|
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+
+##### <a name="Comparing_Same_Directory_LeaseKeysV1"/>Comparing_Same_Directory_LeaseKeysV1
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the server returned lease keys of two opens of the same directory file using the same lease key.|
+| | This value is not valid for the SMB 2.0.2 dialect |
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory file in share|
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+
+##### <a name="Comparing_Same_LeaseKeysV2"/>Comparing_Same_LeaseKeysV2
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the server returned lease keys of two opens of the same file using the same lease key.|
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a file in share |
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+| | Verify LeaseOpen.ParentLeaseKey == OperationOpen.ParentLeaseKey |
+
+##### <a name="Compare_Zero_LeaseFlag_ParentLeaseKey"/>Compare_Zero_LeaseFlag_ParentLeaseKey
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The server should return an empty parentLeaseKey when leaseFlag is set to zero. |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a file in share |
+| | Verify LeaseRequest.ParentLeaseKey should not be empty |
+| | Verify LeaseOpen.ParentLeaseKey MUST be empty if LeaseFlag is set to Zero |
+
+##### <a name="DirectoryComparing_LeaseKeysV2"/>DirectoryComparing_LeaseKeysV2
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the returned lease keys of two opens to the same directory file. |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a directory file in share |
+| | Verify LeaseOpen equals OperationOpen |
+| | Verify LeaseBreakNotification not received |
+| | Verify LeaseOpen.LeaseKey == OperationOpen.LeaseKey |
+| | Verify LeaseOpen.ParentLeaseKey == OperationOpen.ParentLeaseKey |
+
+##### <a name="DirectoryComparing_ParentLeaseKey_ChildLeaseKey"/>DirectoryComparing_ParentLeaseKey_ChildLeaseKey
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare the returned lease keys of two opens of a parent directory file and a child file. |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a directory file in share and a file in that directory |
+| | Verify LeaseOpen.LeaseKey MUST be equal to OperationOpen.ParentLeasekey |
+| | Verify LeaseBreakNotification not received |
+
+##### <a name="DirectoryComparing_Child_Invalid_ParentLeaseKeys"/>DirectoryComparing_Child_Invalid_ParentLeaseKeys
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Compare lease keys of parent directory file and a child file with an invalid parent lease key |
+| | This is valid only for the SMB 3.x dialect family. |
+| | Test environment: NTFS, ReFS, FAT32 |
+| Message Sequence| Create a directory file in share and a file in that directory |
+| | If request.ParentLeaseKey is empty
+| |   Verify response.ParentLeaseKey MUST be empty
+| | Verify LeaseBreakNotification is received |
+
 ### <a name="Test-cases-for-Other-Scenarios"/>Test cases for Other Scenarios
 
 #### <a name="IsCreateFileSupported"/>IsCreateFileSupported
@@ -3405,6 +3568,50 @@ There are 343 test cases in total:
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_OBJECT_NAME_INVALID**, ActualResult);|
 | | }|
+
+#### <a name="CreateFile_InvalidColon"/>CreateFile_InvalidColon
+
+##### <a name="CreateDirectory_InvalidColon"/>CreateDirectory_InvalidColon
+
+| &#32;| &#32; |
+| Description| Try to create a directory with invalid colon and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory file with invalid colon|
+| | Verify server returns with **STATUS_OBJECT_NAME_INVALID** for supported file system|
+
+##### <a name="CreateFile_InvalidColon"/>CreateFile_InvalidColon
+
+| &#32;| &#32; |
+| Description| Try to create a data with invalid colon and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a data file with invalid colon|
+| | Verify server returns with **STATUS_OBJECT_NAME_INVALID** for supported file system|
+
+#### <a name="CreateFile_BackSlash"/>CreateFile_BackSlash
+
+##### <a name="CreateDirectory_EndWithBackSlash"/>CreateDirectory_EndWithBackSlash
+
+| &#32;| &#32; |
+| Description| Try to create a directory end with backslash and expect success.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory end with with backslash.|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+
+##### <a name="CreateFile_EndWithInvalidBackSlash"/>CreateFile_EndWithInvalidBackSlash
+
+| &#32;| &#32; |
+| Description| Try to create a file end with invalid backslash and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a data file end with invalid backslash.|
+| | Verify server returns with **STATUS_OBJECT_NAME_INVALID** for supported file system|
+
+##### <a name="CreateFile_WithDoubleBackSlashInMiddle"/>CreateFile_WithDoubleBackSlashInMiddle
+
+| &#32;| &#32; |
+| Description| Try to create a file with double backslash in the middle and expect failure.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a file with double backslash in the middle.|
+| | Verify server returns with **STATUS_OBJECT_PATH_NOT_FOUND** for supported file system|
 
 ## <a name="MBT-Test-Design"/>MBT Test Design
 

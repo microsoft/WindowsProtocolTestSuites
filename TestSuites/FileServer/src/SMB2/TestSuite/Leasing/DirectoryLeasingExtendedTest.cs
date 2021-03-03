@@ -827,7 +827,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         /// Callback invoked by timer to check if LeaseBreakNotification received
         /// </summary>
         /// <param name="obj">Dictionary stores clientGuid and treeId KeyValuePairs</param>
-        protected override void CheckBreakNotification(object obj)
+        /// <param name="isAcknowledgementRequired">whether to send acknowledgement or not</param>
+        protected override void CheckBreakNotification(object obj, bool isAcknowledgementRequired = true)
         {
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,
@@ -845,13 +846,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 breakNotifications.Count,
                 "Number of received lease break notifications should be {0})", notificationsReceived.Count);
 
-            Dictionary<Guid, uint> treeIds = (Dictionary<Guid, uint>)obj;
-            foreach (KeyValuePair<Guid, uint> pair in treeIds)
+            if (isAcknowledgementRequired)
             {
-                BaseTestSite.Log.Add(
-                    LogEntryKind.Comment,
-                    "Client with clientGuid {0} attempts to acknowledge the lease break", pair.Key);
-                base.AcknowledgeLeaseBreak(testClients[pair.Key], pair.Value, breakNotifications[pair.Key]);
+                Dictionary<Guid, uint> treeIds = (Dictionary<Guid, uint>)obj;
+                foreach (KeyValuePair<Guid, uint> pair in treeIds)
+                {
+                    BaseTestSite.Log.Add(
+                        LogEntryKind.Comment,
+                        "Client with clientGuid {0} attempts to acknowledge the lease break", pair.Key);
+                    base.AcknowledgeLeaseBreak(testClients[pair.Key], pair.Value, breakNotifications[pair.Key]);
+                }
             }
         }
 

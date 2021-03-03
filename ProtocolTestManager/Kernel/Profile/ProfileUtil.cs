@@ -151,7 +151,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         /// <param name="path">Path</param>
         /// <param name="testSuiteFolderBin">test Suite Bin Folder</param>
-        public void SavePtfCfgTo(string path, string testSuiteFolderBin)
+        /// <param name="pipeName">Pipe Name</param>
+        public void SavePtfCfgTo(string path, string testSuiteFolderBin, string pipeName)
         {
             CheckIfClosed();
             if (!Directory.Exists(path))
@@ -182,6 +183,26 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                 {
                                     Uri wScriptDir = new Uri(System.IO.Path.Combine(testSuiteFolderBin, scriptDir));                                    
                                     subnode.Attributes["scriptdir"].Value = wScriptDir.LocalPath;
+                                }
+                            }
+                        }
+
+                        var namedPipes = doc.SelectNodes("//*[local-name()='TestLog']/*[local-name()='Sinks']/*[local-name()='Sink']");
+                        //Change the identity of the NamedPipe sink.
+                        foreach (XmlNode node in namedPipes)
+                        {
+                            if (node.Attributes["type"] != null && node.Attributes["type"].Value == "Microsoft.Protocols.TestTools.Logging.PipeSink")
+                            {
+                                var identityAttr = node.Attributes["identity"];
+                                if (identityAttr == null)
+                                {
+                                    identityAttr = doc.CreateAttribute("identity");
+                                    identityAttr.Value = pipeName;
+                                    node.Attributes.Append(identityAttr);
+                                }
+                                else
+                                {
+                                    identityAttr.Value = pipeName;
                                 }
                             }
                         }

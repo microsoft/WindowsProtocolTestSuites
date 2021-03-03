@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
 
 
         [TestMethod]
-        [TestCategory(TestCategories.FsrvpNonClusterRequired)]
+        [TestCategory(TestCategories.Fsrvp)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("Check if the server returns correctly when adding different sharePath on multi nodes to a shadow copy set.")]
