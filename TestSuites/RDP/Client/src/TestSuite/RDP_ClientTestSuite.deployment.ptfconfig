@@ -3,344 +3,360 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
 
-  <Properties>   
-    <!--Block Begin: Properties that required to be set ***-->
-    <!--The RDP listening port number.-->
-    <Property name="RDP.ServerPort" value="3389">
-      <Description>The RDP listening port number.</Description>
-    </Property>
-    <!--The version of IP address to use. Ipv4 or Ipv6.-->
-    <Property name="RDP.IpVersion" value="Ipv4">
-      <Choice>Ipv4, Ipv6</Choice>
-      <Description>The version of IP address to use. Ipv4 or Ipv6.</Description>
-    </Property>
-    <!--Negotiation-Base: True; Direct Approach: False.-->
-    <Property name="RDP.Security.Negotiation" value="True">
-      <Choice>True, False</Choice>
-      <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
-    </Property>
-    <!--One of the TLS, CredSSP, or RDP.-->
-    <Property name="RDP.Security.Protocol" value="TLS">
-      <Choice>TLS, CredSSP, RDP</Choice>
-      <Description>One of the TLS, CredSSP, or RDP.</Description>
-    </Property>
-    <!--One of the None, Low, Client, High.-->
-    <Property name="RDP.Security.Encryption.Level" value="None">
-      <Choice>None, Low, Client, High</Choice>
-      <Description>One of the None, Low, Client, High.</Description>
-    </Property>
-    <!--One of the None, 40bit, 56bit, 128bit.-->
-    <Property name="RDP.Security.Encryption.Method" value="None">
-      <Choice>None, 40bit, 56bit, 128bit</Choice>
-      <Description>One of the None, 40bit, 56bit, 128bit.</Description>
-    </Property>
-    <!--Indicates if the client-to-server traffic is encrypted, true or false.-->
-    <Property name="RDP.Security.IsClientToServerEncrypted" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if the client-to-server traffic is encrypted, true or false.</Description>
-    </Property>
-    <!--Indicates if SUT is Windows Implementation.-->
-    <Property name="IsWindowsImplementation" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if SUT is Windows Implementation.</Description>
-    </Property>
-    <!--Indicates if SUT drops the connection when an invalid request received.-->
-    <Property name="DropConnectionForInvalidRequest" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
-    </Property>
-    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8-->
-    <!--The seperator between the RDP.Version is required to be ".".-->
-    <Property name="RDP.Version" value="10.6">
-      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Choice>
-      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Description>
-    </Property>
-    <!-- Block End -->
+  <Properties>
 
-    <!--Block Begin: Properties that required to be set when TLS or CredSSP security protocol is in effect ***-->
-    <!--The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host. -->
-    <Property name="RDP.ServerDomain" value="RDPServer">
-      <Description>The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host.</Description>
-    </Property>
-    <!--The user name of local host (RDP server). -->
-    <Property name="RDP.ServerUserName" value="Administrator">
-      <Description>The user name of local host (RDP server).</Description>
-    </Property>
-    <!--The logon password of "RDP.ServerUserName". -->
-    <Property name="RDP.ServerUserPassword" value="Password01!">
-      <Description>The logon password of "RDP.ServerUserName".</Description>
-    </Property>
-    <!--The pfx format certificate with private key, which used to secure TLS or CredSSP transport.  -->
-    <Property name="CertificatePath" value="C:\RDPServer.pfx">
-      <Description>The pfx format certificate with private key, which used to secure TLS or CredSSP transport.</Description>
-    </Property>
-    <!--The password of the pfx certificate-->
-    <Property name="CertificatePassword" value="Password01!">
-      <Description>The password of the pfx certificate.</Description>
-    </Property>
-    <!-- Block End -->
+      <!--Block Begin: Properties that required to be set ***-->
+      <!--The RDP listening port number.-->
+      <Property name="ServerPort" value="3389">
+        <Description>The RDP listening port number.</Description>
+      </Property>
+      <!--The version of IP address to use. Ipv4 or Ipv6.-->
+      <Property name="IpVersion" value="Ipv4">
+        <Choice>Ipv4, Ipv6</Choice>
+        <Description>The version of IP address to use. Ipv4 or Ipv6.</Description>
+      </Property>
 
-    <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
-    <!-- The host name or IP address of SUT machine (RDP Client). -->
-    <Property name="SUTName" value="RDPClient">
-      <Description>The host name or IP address of SUT machine (RDP Client).</Description>
-    </Property>
-    <!-- The User Id of SUT which should have administrator privileges. -->
-    <Property name="SUTUserName" value="administrator">
-      <Description>The User Id of SUT which should have administrator privileges.</Description>
-    </Property>
-    <!-- The logon password of SUTUserName. -->
-    <Property name="SUTUserPassword" value="Password01!">
-      <Description>The logon password of SUTUserName.</Description>
-    </Property>
-    <!-- The redirection GUID for RDSTLS. -->
-    <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
-      <Description>The redirection GUID for RDSTLS.</Description>
-    </Property>
-    <!-- The full qualified domain name of driver computer for RDSTLS redirection test. If not in a domain environment, this value can be set arbitrarily.  -->
-    <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
-      <Description>The full qualified domain name of driver computer for RDSTLS redirection test.</Description>
-    </Property>
-    <!-- The NetBios name of driver computer for RDSTLS redirection test. -->
-    <Property name="DriverComputerNetBiosName" value="RDPServer">
-      <Description>The NetBios name of driver computer for RDSTLS redirection test.</Description>
-    </Property>
-    <!-- The system drive letter of SUT machine. -->
-    <Property name="SUTSystemDrive" value="C">
-      <Description>The system drive letter of SUT machine.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach. -->
-    <Property name="RDPConnectWithNegotiationApproach_Task" value="Negotiate_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP. -->
-    <Property name="RDPConnectWithDirectCredSSP_Task" value="DirectCredSSP_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen. -->
-    <Property name="RDPConnectWithNegotiationApproachFullScreen_Task" value="Negotiate_FullScreen_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen. -->
-    <Property name="RDPConnectWithDirectCredSSPFullScreen_Task" value="DirectCredSSP_FullScreen_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: TriggerClientAutoReconnect. -->
-    <Property name="TriggerClientAutoReconnect_Task" value="TriggerNetworkFailure">
-      <Description>The Windows task name for SUT Control interface: TriggerClientAutoReconnect.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface:TriggerInputEvents. -->
-    <Property name="TriggerInputEvents_Task" value="TriggerInputEvents">
-      <Description>The Windows task name for SUT Control interface:TriggerInputEvents.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: TriggerClientDisconnectAll. -->
-    <Property name="TriggerClientDisconnectAll_Task" value="DisconnectAll">
-      <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
-    </Property>
-    <!-- The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient. -->
-    <Property name="TriggerOneTouchEvent_Task" value="TriggerOneTouchEvent" >
-      <Description>The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient.</Description>
-    </Property>
-    <!-- The Windows task name for RDPEI SUT Control interface: TriggerMuiltiTouchEventOnClient. -->
-    <Property name="TriggerMultiTouchEvent_Task" value="TriggerMultiTouchEvent" >
-      <Description>The Windows task name for RDPEI SUT Control interface: TriggerMuiltiTouchEventOnClient.</Description>
-    </Property>
-    <!-- The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient. -->
-    <Property name="TriggerSingleTouchPositionEvent_Task" value="TriggerSingleTouchPositionEvent" >
-      <Description>The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient.</Description>
-    </Property>
-    <!-- The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient. -->
-    <Property name="TriggerContinuousTouchEvent_Task" value="TriggerContinuousTouchEvent" >
-      <Description>The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient</Description>
-    </Property>
-    <!-- The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient. -->
-    <Property name="TriggerTouchHoverEvent_Task" value="TriggerTouchHoverEvent" >
-      <Description>The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient.</Description>
-    </Property>
-    <!-- The Windows task name for RDPEDISP SUT Control interface: MaximizeRDPClientWindow. -->
-    <Property name="MaximizeRDPClientWindow_Task" value="MaximizeMstsc" >
-      <Description>The Windows task name for RDPEDISP SUT Control interface: MaximizeRDPClientWindow.</Description>
-    </Property>
-    <!-- Block End -->
+      <Group name="Security">
+        <!--Negotiation-Base: True; Direct Approach: False.-->
+        <Property name="Negotiation" value="True">
+          <Choice>True, False</Choice>
+          <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
+        </Property>
+        <!--One of the TLS, CredSSP, or RDP.-->
+        <Property name="Protocol" value="TLS">
+          <Choice>TLS, CredSSP, RDP</Choice>
+          <Description>One of the TLS, CredSSP, or RDP.</Description>
+        </Property>
+        
+        <!--One of the None, Low, Client, High.-->
+        <Group name ="Encryption" >
+          <Property name="Level" value="None">
+            <Choice>None, Low, Client, High</Choice>
+            <Description>One of the None, Low, Client, High.</Description>
+          </Property>
+          <!--One of the None, 40bit, 56bit, 128bit.-->
+          <Property name="Method" value="None">
+            <Choice>None, 40bit, 56bit, 128bit</Choice>
+            <Description>One of the None, 40bit, 56bit, 128bit.</Description>
+          </Property>
+        </Group>
+        
+        <!--Indicates if the client-to-server traffic is encrypted, true or false.-->
+        <Property name="IsClientToServerEncrypted" value="true">
+          <Choice>true, false</Choice>
+          <Description>Indicates if the client-to-server traffic is encrypted, true or false.</Description>
+        </Property>
+      </Group>
+    
+      <!--Indicates if SUT is Windows Implementation.-->
+      <Property name="IsWindowsImplementation" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if SUT is Windows Implementation.</Description>
+      </Property>
+      <!--Indicates if SUT drops the connection when an invalid request received.-->
+      <Property name="DropConnectionForInvalidRequest" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
+      </Property>
+      <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8-->
+      <!--The seperator between the Version is required to be ".".-->
+      <Property name="Version" value="10.6">
+        <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Choice>
+        <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Description>
+      </Property>
+      <!-- Block End -->
 
-    <!--Block Begin: Properties that should to be set-->
-    <!--Indicates if RDP client (SUT) support Fast-Path Input.-->
-    <Property name="RDP.Client.SupportFastPathInput" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if RDP client (SUT) support Fast-Path Input.</Description>
-    </Property>
-    <!--Indicates if RDP client (SUT) support Auto-Reconnect.-->
-    <Property name="RDP.Client.SupportAutoReconnect" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if RDP client (SUT) support Auto-Reconnect.</Description>
-    </Property>
-    <!--Indicates if RDP client (SUT) support [MS-RDPEFS]: Remote Desktop Protocol: File System Virtual Channel Extension.-->
-    <Property name="RDP.Client.SupportRDPEFS" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if RDP client (SUT) support [MS-RDPEFS]: Remote Desktop Protocol: File System Virtual Channel Extension.</Description>
-    </Property>
-    <!--Indicates if RDP client (SUT) support Server Redirection.-->
-    <Property name="RDP.Client.SupportServerRedirection" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if RDP client (SUT) support Server Redirection.</Description>
-    </Property>
-    <!--The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP. -->
-    <Property name="WaitTime" value="40">
-      <Description>The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP.</Description>
-    </Property>
-    <!-- Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
-    <Property name="RDPRFX.Image" value="../TestData/Rdprfx.bmp">
-      <Description>Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.</Description>
-    </Property>
-    <!-- Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
-    <Property name="RDPRFXVideoMode.Image" value="../TestData/RdprfxVideoMode.bmp">
-      <Description>Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.</Description>
-    </Property>
-    <!-- Enable or disable the verification of Display on RDP Client(SUT)-->
-    <Property name="VerifySUTDisplay.Enable" value="false">
-      <Choice>true, false</Choice>
-      <Description>Enable or disable the verification of Display on RDP Client(SUT).</Description>
-    </Property>
-    <!-- Turn off the RDPBCGR requirements verification for BCGR-->
-    <Property name="TurnOffRDPBCGRVerification" value="false">
-      <Choice>true, false</Choice>
-      <Description>Turn off the RDPBCGR requirements verification for BCGR</Description>
-    </Property>
-    <!-- Turn off the RDPBCGR requirements verification for EGFX-->
-    <Property name="TurnOffRDPEGFXVerification" value="false">
-      <Choice>true, false</Choice>
-      <Description>Turn off the RDPBCGR requirements verification for EGFX</Description>
-    </Property>
-    <!-- Turn off the RDPBCGR requirements verification for EI-->
-    <Property name="TurnOffRDPEIVerification" value="false">
-      <Choice>true, false</Choice>
-      <Description>Turn off the RDPBCGR requirements verification for EI</Description>
-    </Property>
-    <!-- Turn off the RDPBCGR requirements verification for EUSB-->
-    <Property name="TurnOffRDPEUSBVerification" value="false">
-      <Choice>true, false</Choice>
-      <Description>Turn off the RDPBCGR requirements verification for EUSB</Description>
-    </Property>
-    <!-- Turn off the RDPBCGR requirements verification for RFX-->
-    <Property name="TurnOffRDPRFXVerification" value="false">
-      <Choice>true, false</Choice>
-      <Description>Turn off the RDPBCGR requirements verification for RFX</Description>
-    </Property>
-    <!-- Path used to save screenshot on SUT-->
-    <Property name="VerifySUTDisplay.BitmapSavePath" value="../../ScreenShot/">
-      <Description>Path used to save screenshot on SUT.</Description>
-    </Property>
-    <!-- Set the algorithm used to assess whether two images are similar, the algorithm should be one of SSIM, MS-SSIM, G-SSIM -->
-    <Property name="VerifySUTDisplay.IQA.Algorithm" value="MS-SSIM">
-      <Choice>SSIM, MS-SSIM, G-SSIM</Choice>
-      <Description>Set the algorithm used to assess whether two images are similar, the algorithm should be one of SSIM, MS-SSIM, G-SSIM.</Description>
-    </Property>
-    <!-- Set threshold value for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar -->
-    <Property name="VerifySUTDisplay.IQA.AssessValueThreshold" value="0.98">
-      <Description>Set threshold value for expected assess value, which should be a float number satisfying 0 ≤ VerifySUTDisplay.IQA.AssessValueThreshold ≤ 1. It is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar.</Description>
-    </Property>
-    <!-- Shift for the window of RDP client (SUT), set them to zero if the RDP client uses full screen mode-->
-    <Property name="VerifySUTDisplay.Shift.X" value="0">
-      <Description>Shift for the window of RDP client (SUT), set it to zero if the RDP client uses full screen mode.</Description>
-    </Property>
-    <Property name="VerifySUTDisplay.Shift.Y" value="0">
-      <Description>Shift for the window of RDP client (SUT), set it to zero if the RDP client uses full screen mode.</Description>
-    </Property>
-    <!-- The original width of screen resolution-->
-    <Property name="originalDesktopWidth" value="1024">
-      <Description>The original width of screen resolution.</Description>
-    </Property>
-    <!-- The original height of screen resolution-->
-    <Property name="originalDesktopHeight" value="768">
-      <Description>The original height of screen resolution.</Description>
-    </Property>
-    <!-- The changed width of screen resolution-->
-    <Property name="changedDesktopWidth" value="1152">
-      <Description>The changed width of screen resolution.</Description>
-    </Property>
-    <!-- The changed height of screen resolution-->
-    <Property name="changedDesktopHeight" value="864">
-      <Description>The changed height of screen resolution.</Description>
-    </Property>
-    <!-- The original number of screens-->
-    <Property name="originalMonitorNumber" value="1">
-      <Description>The original number of screens.</Description>
-    </Property>
-    <!-- The changed number of screens-->
-    <Property name="changedMonitorNumber" value="2">
-      <Description>The changed number of screens.</Description>
-    </Property>
-    <!-- Block End -->
+      <!--Block Begin: Properties that required to be set when TLS or CredSSP security protocol is in effect ***-->
+      <!--The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host. -->
+      <Property name="ServerDomain" value="RDPServer">
+        <Description>The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host.</Description>
+      </Property>
+      <!--The user name of local host (RDP server). -->
+      <Property name="ServerUserName" value="Administrator">
+        <Description>The user name of local host (RDP server).</Description>
+      </Property>
+      <!--The logon password of "ServerUserName". -->
+      <Property name="ServerUserPassword" value="Password01!">
+        <Description>The logon password of "ServerUserName".</Description>
+      </Property>
+      <!--The pfx format certificate with private key, which used to secure TLS or CredSSP transport.  -->
+      <Property name="CertificatePath" value="C:\RDPServer.pfx">
+        <Description>The pfx format certificate with private key, which used to secure TLS or CredSSP transport.</Description>
+      </Property>
+      <!--The password of the pfx certificate-->
+      <Property name="CertificatePassword" value="Password01!">
+        <Description>The password of the pfx certificate.</Description>
+      </Property>
+      <!-- Block End -->
 
-    <!--Block Begin: Properties that need to be set in specific situations-->
-    <!--The RDP proxy IP, which should be set when a proxy is used.-->
-    <Property name="RDP.ProxyIP" value="">
-      <Description>The RDP proxy IP, which should be set when a proxy is used.</Description>
-    </Property>
-    <!-- Block End -->
+      <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
+      <!-- The host name or IP address of SUT machine (RDP Client). -->
+      <Property name="SUTName" value="RDPClient">
+        <Description>The host name or IP address of SUT machine (RDP Client).</Description>
+      </Property>
+      <!-- The User Id of SUT which should have administrator privileges. -->
+      <Property name="SUTUserName" value="administrator">
+        <Description>The User Id of SUT which should have administrator privileges.</Description>
+      </Property>
+      <!-- The logon password of SUTUserName. -->
+      <Property name="SUTUserPassword" value="Password01!">
+        <Description>The logon password of SUTUserName.</Description>
+      </Property>
+      <!-- The redirection GUID for RDSTLS. -->
+      <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
+        <Description>The redirection GUID for RDSTLS.</Description>
+      </Property>
+      <!-- The full qualified domain name of driver computer for RDSTLS redirection test. If not in a domain environment, this value can be set arbitrarily.  -->
+      <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
+        <Description>The full qualified domain name of driver computer for RDSTLS redirection test.</Description>
+      </Property>
+      <!-- The NetBios name of driver computer for RDSTLS redirection test. -->
+      <Property name="DriverComputerNetBiosName" value="RDPServer">
+        <Description>The NetBios name of driver computer for RDSTLS redirection test.</Description>
+      </Property>
+      <!-- The system drive letter of SUT machine. -->
+      <Property name="SUTSystemDrive" value="C">
+        <Description>The system drive letter of SUT machine.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach. -->
+      <Property name="RDPConnectWithNegotiationApproach_Task" value="Negotiate_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP. -->
+      <Property name="RDPConnectWithDirectCredSSP_Task" value="DirectCredSSP_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen. -->
+      <Property name="RDPConnectWithNegotiationApproachFullScreen_Task" value="Negotiate_FullScreen_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen. -->
+      <Property name="RDPConnectWithDirectCredSSPFullScreen_Task" value="DirectCredSSP_FullScreen_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: TriggerClientAutoReconnect. -->
+      <Property name="TriggerClientAutoReconnect_Task" value="TriggerNetworkFailure">
+        <Description>The Windows task name for SUT Control interface: TriggerClientAutoReconnect.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface:TriggerInputEvents. -->
+      <Property name="TriggerInputEvents_Task" value="TriggerInputEvents">
+        <Description>The Windows task name for SUT Control interface:TriggerInputEvents.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: TriggerClientDisconnectAll. -->
+      <Property name="TriggerClientDisconnectAll_Task" value="DisconnectAll">
+        <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
+      </Property>
+      <!-- The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient. -->
+      <Property name="TriggerOneTouchEvent_Task" value="TriggerOneTouchEvent" >
+        <Description>The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient.</Description>
+      </Property>
+      <!-- The Windows task name for RDPEI SUT Control interface: TriggerMuiltiTouchEventOnClient. -->
+      <Property name="TriggerMultiTouchEvent_Task" value="TriggerMultiTouchEvent" >
+        <Description>The Windows task name for RDPEI SUT Control interface: TriggerMuiltiTouchEventOnClient.</Description>
+      </Property>
+      <!-- The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient. -->
+      <Property name="TriggerSingleTouchPositionEvent_Task" value="TriggerSingleTouchPositionEvent" >
+        <Description>The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient.</Description>
+      </Property>
+      <!-- The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient. -->
+      <Property name="TriggerContinuousTouchEvent_Task" value="TriggerContinuousTouchEvent" >
+        <Description>The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient</Description>
+      </Property>
+      <!-- The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient. -->
+      <Property name="TriggerTouchHoverEvent_Task" value="TriggerTouchHoverEvent" >
+        <Description>The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient.</Description>
+      </Property>
+      <!-- The Windows task name for RDPEDISP SUT Control interface: MaximizeRDPClientWindow. -->
+      <Property name="MaximizeRDPClientWindow_Task" value="MaximizeMstsc" >
+        <Description>The Windows task name for RDPEDISP SUT Control interface: MaximizeRDPClientWindow.</Description>
+      </Property>
+      <!-- Block End -->
 
-    <!--Block Begin: Properties that should only be taken care of by Test Suite Development Team-->
-    <!-- RDPEVOR test data file, which contains H.264 video data -->
-    <Property name="RdpevorTestDataPath" value="../TestData/RdpevorTestData.xml">
-      <Description>RDPEVOR test data file, which contains H.264 video data.</Description>
-    </Property>
-    <!-- Block End -->
+      <!--Block Begin: Properties that should to be set-->
+      <!--Indicates if RDP client (SUT) support Fast-Path Input.-->
+      <Property name="SupportFastPathInput" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if RDP client (SUT) support Fast-Path Input.</Description>
+      </Property>
+      <!--Indicates if RDP client (SUT) support Auto-Reconnect.-->
+      <Property name="SupportAutoReconnect" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if RDP client (SUT) support Auto-Reconnect.</Description>
+      </Property>
+      <!--Indicates if RDP client (SUT) support [MS-RDPEFS]: Remote Desktop Protocol: File System Virtual Channel Extension.-->
+      <Property name="SupportRDPEFS" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if RDP client (SUT) support [MS-RDPEFS]: Remote Desktop Protocol: File System Virtual Channel Extension.</Description>
+      </Property>
+      <!--Indicates if RDP client (SUT) support Server Redirection.-->
+      <Property name="SupportServerRedirection" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if RDP client (SUT) support Server Redirection.</Description>
+      </Property>
+      <!--The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP. -->
+      <Property name="WaitTime" value="40">
+        <Description>The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP.</Description>
+      </Property>
+      <!-- Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
+      <Property name="RDPRFXImage" value="../TestData/Rdprfx.bmp">
+        <Description>Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.</Description>
+      </Property>
+      <!-- Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
+      <Property name="RDPRFXVideoModeImage" value="../TestData/RdprfxVideoMode.bmp">
+        <Description>Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.</Description>
+      </Property>
+      <!-- Turn off the RDPBCGR requirements verification for BCGR-->
+      <Property name="TurnOffRDPBCGRVerification" value="false">
+        <Choice>true, false</Choice>
+        <Description>Turn off the RDPBCGR requirements verification for BCGR</Description>
+      </Property>
+      <!-- Turn off the RDPBCGR requirements verification for EGFX-->
+      <Property name="TurnOffRDPEGFXVerification" value="false">
+        <Choice>true, false</Choice>
+        <Description>Turn off the RDPBCGR requirements verification for EGFX</Description>
+      </Property>
+      <!-- Turn off the RDPBCGR requirements verification for EI-->
+      <Property name="TurnOffRDPEIVerification" value="false">
+        <Choice>true, false</Choice>
+        <Description>Turn off the RDPBCGR requirements verification for EI</Description>
+      </Property>
+      <!-- Turn off the RDPBCGR requirements verification for EUSB-->
+      <Property name="TurnOffRDPEUSBVerification" value="false">
+        <Choice>true, false</Choice>
+        <Description>Turn off the RDPBCGR requirements verification for EUSB</Description>
+      </Property>
+      <!-- Turn off the RDPBCGR requirements verification for RFX-->
+      <Property name="TurnOffRDPRFXVerification" value="false">
+        <Choice>true, false</Choice>
+        <Description>Turn off the RDPBCGR requirements verification for RFX</Description>
+      </Property>
 
-    <!--Block Begin: Properties that should only be taken care of by RDPEGFX Test Suite Development Team-->
-    <!-- RDPEGFX ClearCodec test Image file -->
-    <Property name="ClearCodecImage" value="../TestData/RdpegfxClearCodecTestImage.bmp">
-      <Description>RDPEGFX ClearCodec test Image file.</Description>
-    </Property>
-    <!-- RDPEGFX RFX Progressive test Image file -->
-    <Property name="RfxProgressiveCodecImage" value="../TestData/RdpegfxRfxProgressiveCodecTestImage.bmp">
-      <Description>RDPEGFX RFX Progressive test Image file.</Description>
-    </Property>
-    <!-- RDPEGFX H264 codec test data -->
-    <Property name="RdpegfxH264TestDataPath" value="../TestData/">
-      <Description>RDPEGFX H264 codec test data</Description>
-    </Property>
-    <!-- RDPEDISP Test Image file -->
-    <Property name="RdpedispTestImage" value="../TestData/RdpedispTestImage.bmp">
-      <Description>RDPEDISP Test Image file.</Description>
-    </Property>
-    <!-- RDPEDISP Advanced Adapter Image file -->
-    <Property name="RdpedispEndImage" value="../TestData/End.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <Property name="RdpedispOrientationChange1Image" value="../TestData/OrientationChange1.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <Property name="RdpedispOrientationChange2Image" value="../TestData/OrientationChange2.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <Property name="RdpedispOrientationChange3Image" value="../TestData/OrientationChange3.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <Property name="RdpedispOrientationChange4Image" value="../TestData/OrientationChange4.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <Property name="RdpedispMonitorAddImage" value="../TestData/MonitorAdd.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <Property name="RdpedispMonitorRemoveImage" value="../TestData/MonitorRemove.png">
-      <Description>RDPEDISP Advanced Adapter Image file.</Description>
-    </Property>
-    <!-- Block End -->
-    <!--RDP Client supports Soft Sync-->
-    <Property name="RDP.Client.SupportSoftSync" value="true">
-      <Choice>true, false</Choice>
-      <Description>Soft-Sync is an optional feature used to defer the user the multitransport tunnels as a transport for dynamic virtual channels until after these tunnels have been successfully created.</Description>
-    </Property>
-    <!--RDP Client supports Tunneling Static VC Traffic-->
-    <Property name="RDP.Client.SupportTunnelingStaticVCTraffic" value="true">
-      <Choice>true, false</Choice>
-      <Description>Static virtual channel traffic can optionally be tunneled over a reliable multitransport tunnel, using dynamic virtual channels, if this capability is supported by the server and client.</Description>
-    </Property>
+      <Group name ="VerifySUTDisplay">
+        <!-- Enable or disable the verification of Display on RDP Client(SUT)-->
+        <Property name="Enable" value="false">
+          <Choice>true, false</Choice>
+          <Description>Enable or disable the verification of Display on RDP Client(SUT).</Description>
+        </Property>
+        
+        <!-- Path used to save screenshot on SUT-->
+        <Property name="BitmapSavePath" value="../../ScreenShot/">
+          <Description>Path used to save screenshot on SUT.</Description>
+        </Property>
+        <Group name="IQA">
+          <!-- Set the algorithm used to assess whether two images are similar, the algorithm should be one of SSIM, MS-SSIM, G-SSIM -->
+          <Property name="Algorithm" value="MS-SSIM">
+            <Choice>SSIM, MS-SSIM, G-SSIM</Choice>
+            <Description>Set the algorithm used to assess whether two images are similar, the algorithm should be one of SSIM, MS-SSIM, G-SSIM.</Description>
+          </Property>
+          <!-- Set threshold value for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar -->
+          <Property name="AssessValueThreshold" value="0.98">
+            <Description>Set threshold value for expected assess value, which should be a float number satisfying 0 ≤ AssessValueThreshold ≤ 1. It is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value not smaller than this bar.</Description>
+          </Property>
+        </Group>
+        <!-- Shift for the window of RDP client (SUT), set them to zero if the RDP client uses full screen mode-->
+        <Property name="ShiftX" value="0">
+          <Description>Shift for the window of RDP client (SUT), set it to zero if the RDP client uses full screen mode.</Description>
+        </Property>
+        <Property name="ShiftY" value="0">
+          <Description>Shift for the window of RDP client (SUT), set it to zero if the RDP client uses full screen mode.</Description>
+        </Property>
+      </Group>
+      <!-- The original width of screen resolution-->
+      <Property name="OriginalDesktopWidth" value="1024">
+        <Description>The original width of screen resolution.</Description>
+      </Property>
+      <!-- The original height of screen resolution-->
+      <Property name="OriginalDesktopHeight" value="768">
+        <Description>The original height of screen resolution.</Description>
+      </Property>
+      <!-- The changed width of screen resolution-->
+      <Property name="ChangedDesktopWidth" value="1152">
+        <Description>The changed width of screen resolution.</Description>
+      </Property>
+      <!-- The changed height of screen resolution-->
+      <Property name="ChangedDesktopHeight" value="864">
+        <Description>The changed height of screen resolution.</Description>
+      </Property>
+      <!-- The original number of screens-->
+      <Property name="OriginalMonitorNumber" value="1">
+        <Description>The original number of screens.</Description>
+      </Property>
+      <!-- The changed number of screens-->
+      <Property name="ChangedMonitorNumber" value="2">
+        <Description>The changed number of screens.</Description>
+      </Property>
+      <!-- Block End -->
 
-    <Property name="RDP.Client.SupportCompression" value="false">
-      <Choice>true, false</Choice>
-      <Description>Determines whether bulk compression is enabled when it is transmitted by RDP to the local computer.</Description>
-    </Property>
+      <!--Block Begin: Properties that need to be set in specific situations-->
+      <!--The RDP proxy IP, which should be set when a proxy is used.-->
+      <Property name="ProxyIP" value="">
+        <Description>The RDP proxy IP, which should be set when a proxy is used.</Description>
+      </Property>
+      <!-- Block End -->
+
+      <!--Block Begin: Properties that should only be taken care of by Test Suite Development Team-->
+      <!-- RDPEVOR test data file, which contains H.264 video data -->
+      <Property name="RdpevorTestDataPath" value="../TestData/RdpevorTestData.xml">
+        <Description>RDPEVOR test data file, which contains H.264 video data.</Description>
+      </Property>
+      <!-- Block End -->
+
+      <!--Block Begin: Properties that should only be taken care of by RDPEGFX Test Suite Development Team-->
+      <!-- RDPEGFX ClearCodec test Image file -->
+      <Property name="ClearCodecImage" value="../TestData/RdpegfxClearCodecTestImage.bmp">
+        <Description>RDPEGFX ClearCodec test Image file.</Description>
+      </Property>
+      <!-- RDPEGFX RFX Progressive test Image file -->
+      <Property name="RfxProgressiveCodecImage" value="../TestData/RdpegfxRfxProgressiveCodecTestImage.bmp">
+        <Description>RDPEGFX RFX Progressive test Image file.</Description>
+      </Property>
+      <!-- RDPEGFX H264 codec test data -->
+      <Property name="RdpegfxH264TestDataPath" value="../TestData/">
+        <Description>RDPEGFX H264 codec test data</Description>
+      </Property>
+      <!-- RDPEDISP Test Image file -->
+      <Property name="RdpedispTestImage" value="../TestData/RdpedispTestImage.bmp">
+        <Description>RDPEDISP Test Image file.</Description>
+      </Property>
+      <!-- RDPEDISP Advanced Adapter Image file -->
+      <Property name="RdpedispEndImage" value="../TestData/End.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <Property name="RdpedispOrientationChange1Image" value="../TestData/OrientationChange1.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <Property name="RdpedispOrientationChange2Image" value="../TestData/OrientationChange2.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <Property name="RdpedispOrientationChange3Image" value="../TestData/OrientationChange3.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <Property name="RdpedispOrientationChange4Image" value="../TestData/OrientationChange4.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <Property name="RdpedispMonitorAddImage" value="../TestData/MonitorAdd.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <Property name="RdpedispMonitorRemoveImage" value="../TestData/MonitorRemove.png">
+        <Description>RDPEDISP Advanced Adapter Image file.</Description>
+      </Property>
+      <!-- Block End -->
+      <!--RDP Client supports Soft Sync-->
+      <Property name="SupportSoftSync" value="true">
+        <Choice>true, false</Choice>
+        <Description>Soft-Sync is an optional feature used to defer the user the multitransport tunnels as a transport for dynamic virtual channels until after these tunnels have been successfully created.</Description>
+      </Property>
+      <!--RDP Client supports Tunneling Static VC Traffic-->
+      <Property name="SupportTunnelingStaticVCTraffic" value="true">
+        <Choice>true, false</Choice>
+        <Description>Static virtual channel traffic can optionally be tunneled over a reliable multitransport tunnel, using dynamic virtual channels, if this capability is supported by the server and client.</Description>
+      </Property>
+
+      <Property name="SupportCompression" value="false">
+        <Choice>true, false</Choice>
+        <Description>Determines whether bulk compression is enabled when it is transmitted by RDP to the local computer.</Description>
+      </Property>
+      
   </Properties>
   <Adapters>
   </Adapters>

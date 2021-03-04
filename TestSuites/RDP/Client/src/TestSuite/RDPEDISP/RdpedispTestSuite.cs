@@ -79,12 +79,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             try
             {
-                originalDesktopWidth = Convert.ToUInt16(Site.Properties["originalDesktopWidth"]);
-                originalDesktopHeight = Convert.ToUInt16(Site.Properties["originalDesktopHeight"]);
-                changedDesktopWidth = Convert.ToUInt16(Site.Properties["changedDesktopWidth"]);
-                changedDesktopHeight = Convert.ToUInt16(Site.Properties["changedDesktopHeight"]);
-                originalMonitorNumber = Convert.ToUInt16(Site.Properties["originalMonitorNumber"]);
-                changedMonitorNumber = Convert.ToUInt16(Site.Properties["changedMonitorNumber"]);
+                bool isValid = PtfPropUtility.GetPtfPropertyValue(Site, "OriginalDesktopWidth", out originalDesktopWidth)
+                               && PtfPropUtility.GetPtfPropertyValue(Site, "OriginalDesktopHeight", out originalDesktopHeight)
+                               && PtfPropUtility.GetPtfPropertyValue(Site, "ChangedDesktopWidth", out changedDesktopWidth)
+                               && PtfPropUtility.GetPtfPropertyValue(Site, "ChangedDesktopHeight", out changedDesktopHeight)
+                               && PtfPropUtility.GetPtfPropertyValue(Site, "OriginalMonitorNumber", out originalMonitorNumber)
+                               && PtfPropUtility.GetPtfPropertyValue(Site, "ChangedMonitorNumber", out changedMonitorNumber);
+                if (!isValid) {
+                    throw new InvalidCastException("Invalid configured parameters");
+                }
             }
             catch (Exception)
             {
@@ -163,7 +166,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// </summary>
         private void VerifyRDPVersion()
         {
-            this.Site.Assert.AreEqual<String>(this.Site.Properties["RDP.Version"], "8.1", "MS-RDPEDISP only support RDP 8.1 and above.");
+            string RDPClientVersion;
+            PtfPropUtility.GetPtfPropertyValue(Site, "Version", out RDPClientVersion);
+
+            this.Site.Assert.AreEqual<String>(RDPClientVersion, "8.1", "MS-RDPEDISP only support RDP 8.1 and above.");
         }
 
         /// <summary>
@@ -282,7 +288,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             // Load Rdpedisp test image
             String RdpedispTestImagePath;
             Bitmap testImage = null;
-            if (!PtfPropUtility.GetStringPtfProperty(this.TestSite, "RdpedispTestImage", out RdpedispTestImagePath))
+            if (!PtfPropUtility.GetPtfPropertyValue(this.TestSite, "RdpedispTestImage", out RdpedispTestImagePath))
             {
                 RdpedispTestImagePath = "";
                 return null;

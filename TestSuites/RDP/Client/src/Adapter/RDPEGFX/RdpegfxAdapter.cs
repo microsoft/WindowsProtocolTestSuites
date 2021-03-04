@@ -1,18 +1,16 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Linq;
-using System.Threading;
-using System.Collections.Generic;
+using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdprfx;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -416,8 +414,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             syncLocker = new object();
 
             #region WaitTime
-            string strWaitTime = Site.Properties["WaitTime"];
-            if (strWaitTime != null)
+            string strWaitTime;
+            PtfPropUtility.GetPtfPropertyValue(Site, "WaitTime", out strWaitTime);
+            if (!string.IsNullOrEmpty(strWaitTime))
             {
                 int waitSeconds = Int32.Parse(strWaitTime);
                 waitTime = new TimeSpan(0, 0, waitSeconds);

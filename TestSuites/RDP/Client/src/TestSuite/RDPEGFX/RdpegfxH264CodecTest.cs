@@ -308,7 +308,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             string testCaseName = sf.GetMethod().Name;
 
             String h264TestDataPath;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, "RdpegfxH264TestDataPath", out h264TestDataPath))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "RdpegfxH264TestDataPath", out h264TestDataPath))
             {
                 Site.Assert.Fail("Cannot get its test data path");
             }

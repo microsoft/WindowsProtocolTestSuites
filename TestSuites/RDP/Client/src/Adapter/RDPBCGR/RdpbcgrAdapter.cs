@@ -3135,8 +3135,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         private void LoadServerConfiguation()
         {
             serverConfig = new RdpbcgrServerConfig();
-            port = int.Parse(site.Properties["RDP.ServerPort"]);
-            if (site.Properties["RDP.IpVersion"] == "Ipv6")
+            PtfPropUtility.GetPtfPropertyValue(site, "ServerPort", out port);
+
+            string ipVersionString;
+            PtfPropUtility.GetPtfPropertyValue(site, "IpVersion", out ipVersionString);
+            if (ipVersionString == "Ipv6")
             {
                 ipVersion = IpVersion.Ipv6;
             }
@@ -3144,39 +3147,50 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 ipVersion = IpVersion.Ipv4;
             }
-            proxyIP = site.Properties["RDP.ProxyIP"];
-            certFile = site.Properties["CertificatePath"];
-            certPwd = site.Properties["CertificatePassword"];
-            rdpVersionString = site.Properties["RDP.Version"];
+
+            PtfPropUtility.GetPtfPropertyValue(site, "ProxyIP", out proxyIP);
+
+            PtfPropUtility.GetPtfPropertyValue(site, "CertificatePath", out certFile);
+
+            PtfPropUtility.GetPtfPropertyValue(site, "CertificatePassword", out certPwd);
+
+            string rdpVersionString;
+            PtfPropUtility.GetPtfPropertyValue(site, "Version", out rdpVersionString);
 
             #region WaitTime
-            string strWaitTime = site.Properties["WaitTime"];
-            if (strWaitTime != null)
+            string strWaitTime;
+            PtfPropUtility.GetPtfPropertyValue(site, "WaitTime", out strWaitTime);
+            if (!String.IsNullOrEmpty(strWaitTime))
             {
                 int waitSeconds = Int32.Parse(strWaitTime);
                 pduWaitTimeSpan = new TimeSpan(0, 0, waitSeconds);
             }
             #endregion
 
-            string strIsClientToServerEncrypted = site.Properties["RDP.Security.IsClientToServerEncrypted"];
-            if (strIsClientToServerEncrypted != null)
+            string strIsClientToServerEncrypted;
+            PtfPropUtility.GetPtfPropertyValue(site, "IsClientToServerEncrypted", out strIsClientToServerEncrypted, new string[] { RdpPtfGroupNames.Security});
+
+            if (!String.IsNullOrEmpty(strIsClientToServerEncrypted))
             {
                 isClientToServerEncrypted = Boolean.Parse(strIsClientToServerEncrypted);
             }
 
-            string strIsWindows = site.Properties["IsWindowsImplementation"];
-            if (strIsWindows != null)
+            string strIsWindows;
+            PtfPropUtility.GetPtfPropertyValue(site, "IsWindowsImplementation", out strIsWindows);
+            if (!String.IsNullOrEmpty(strIsWindows))
             {
                 isWindowsImplementation = Boolean.Parse(strIsWindows);
             }
 
-            string strVerifySUTDisplay = site.Properties["VerifySUTDisplay.Enable"];
-            if (strVerifySUTDisplay != null)
+            string strVerifySUTDisplay;
+            PtfPropUtility.GetPtfPropertyValue(site, "Enable", out strVerifySUTDisplay, new string[] { RdpPtfGroupNames.VerifySUTDisplay});
+            if (!String.IsNullOrEmpty(strVerifySUTDisplay))
             {
                 verifySUTDisplay = Boolean.Parse(strVerifySUTDisplay);
             }
 
-            string strVerifySUTDisplayAssessValueThreshold = site.Properties["VerifySUTDisplay.IQA.AssessValueThreshold"];
+            string strVerifySUTDisplayAssessValueThreshold;
+            PtfPropUtility.GetPtfPropertyValue(site, "AssessValueThreshold", out strVerifySUTDisplayAssessValueThreshold, new string[] { RdpPtfGroupNames.VerifySUTDisplay, RdpPtfGroupNames.IQA, });
 
             if (Double.TryParse(strVerifySUTDisplayAssessValueThreshold, out this.IQAAssessValueThreshold))
             {
@@ -3190,7 +3204,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 this.Site.Assert.Fail("VerifySUTDisplay.IQA.AssessValueThreshold is not in digital format.");
             }
 
-            string strVerifySUTDisplayIQAAlgorithm = site.Properties["VerifySUTDisplay.IQA.Algorithm"];
+            string strVerifySUTDisplayIQAAlgorithm;
+            PtfPropUtility.GetPtfPropertyValue(site, "Algorithm", out strVerifySUTDisplayIQAAlgorithm, new string[] { RdpPtfGroupNames.VerifySUTDisplay, RdpPtfGroupNames.IQA });
             if (strVerifySUTDisplayIQAAlgorithm != null && strVerifySUTDisplayIQAAlgorithm.Equals("MS-SSIM"))
             {
                 this.IQAAlgorithm = IQA_Algorithm.MSSSIM;
@@ -3206,27 +3221,27 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Update test data
             string tempStr;
-            if (PtfPropUtility.GetStringPtfProperty(site, "RDP.ServerDomain", out tempStr))
+            if (PtfPropUtility.GetPtfPropertyValue(site, "ServerDomain", out tempStr))
             {
                 RdpbcgrTestData.Test_Domain = tempStr;
             }
-            if (PtfPropUtility.GetStringPtfProperty(site, "RDP.ServerUserName", out tempStr))
+            if (PtfPropUtility.GetPtfPropertyValue(site, "ServerUserName", out tempStr))
             {
                 RdpbcgrTestData.Test_UserName = tempStr;
             }
-            if (PtfPropUtility.GetStringPtfProperty(site, "RDP.ServerUserPassword", out tempStr))
+            if (PtfPropUtility.GetPtfPropertyValue(site, "ServerUserPassword", out tempStr))
             {
                 RdpbcgrTestData.Test_Password = tempStr;
             }
-            if (PtfPropUtility.GetStringPtfProperty(site, "SUTRedirectionGuid", out tempStr))
+            if (PtfPropUtility.GetPtfPropertyValue(site, "SUTRedirectionGuid", out tempStr))
             {
                 RdpbcgrTestData.Test_RedirectionGuid = tempStr;
             }
-            if (PtfPropUtility.GetStringPtfProperty(site, "SUTFullQualifiedDomainName", out tempStr))
+            if (PtfPropUtility.GetPtfPropertyValue(site, "SUTFullQualifiedDomainName", out tempStr))
             {
                 RdpbcgrTestData.Test_FullQualifiedDomainName = tempStr;
             }
-            if (PtfPropUtility.GetStringPtfProperty(site, "SUTNetBiosName", out tempStr))
+            if (PtfPropUtility.GetPtfPropertyValue(site, "SUTNetBiosName", out tempStr))
             {
                 RdpbcgrTestData.Test_NetBiosName = tempStr;
             }

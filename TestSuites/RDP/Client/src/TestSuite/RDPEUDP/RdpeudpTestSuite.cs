@@ -343,8 +343,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 rdpeudpSocket.AutoHandle = true;
             }
 
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
+
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
 
 
@@ -424,8 +428,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         {
             byte[] dataToSent = null;
             RdpeudpPacket firstPacket = null;
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
+
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
 
             if (udpTransportMode == TransportMode.Reliable)
