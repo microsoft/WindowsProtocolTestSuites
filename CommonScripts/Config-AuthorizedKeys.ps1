@@ -102,6 +102,12 @@ if (Test-Path $userFolderPath) {
     Copy-Item "$sshPath\authorized_keys" "$keysPath\authorized_keys" -Force
 }
 
+if (!(Test-Path "$systemDrive\Users\$adminUserName\.ssh")) {
+        New-Item -ItemType Directory "$systemDrive\Users\$adminUserName\.ssh"
+}
+
+Copy-Item "$sshPath\authorized_keys" "$systemDrive\Users\$adminUserName\.ssh\authorized_keys" -Force
+
 # Restart sshd service to take effect
 Restart-Service sshd
 
