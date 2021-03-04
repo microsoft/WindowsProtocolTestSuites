@@ -12,6 +12,10 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="4.7.0" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\SspiLib\SspiLib.csproj" />
