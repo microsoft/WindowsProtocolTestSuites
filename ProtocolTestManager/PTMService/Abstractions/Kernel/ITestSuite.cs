@@ -1,0 +1,50 @@
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using System.Collections.Generic;
+
+namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
+{
+    /// <summary>
+    /// Interface of test suite.
+    /// </summary>
+    public interface ITestSuite
+    {
+        /// <summary>
+        /// The Id of test suite.
+        /// </summary>
+        int Id { get; }
+
+        /// <summary>
+        /// The name of test suite.
+        /// </summary>
+        string Name { get; set; }
+
+        /// <summary>
+        /// The version of test suite.
+        /// </summary>
+        string Version { get; }
+
+        /// <summary>
+        /// The description of test suite.
+        /// </summary>
+        string Description { get; set; }
+
+        /// <summary>
+        /// The install method of test suite.
+        /// </summary>
+        TestSuiteInstallMethod InstallMethod { get; }
+
+        /// <summary>
+        /// The storage root of test suite.
+        /// </summary>
+        IStorageNode StorageRoot { get; }
+
+        /// <summary>
+        /// Get configuration files.
+        /// </summary>
+        /// <returns>The path of all configuration files.</returns>
+        IEnumerable<string> GetConfigurationFiles();
+    }
+}

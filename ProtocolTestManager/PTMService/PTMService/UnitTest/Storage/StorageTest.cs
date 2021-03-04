@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
 
             var services = new ServiceCollection();
 
-            services.ConfigureStoragePoolOptions(options =>
+            services.Configure<StoragePoolOptions>(options =>
             {
                 options.Nodes = new Dictionary<string, string>
                 {

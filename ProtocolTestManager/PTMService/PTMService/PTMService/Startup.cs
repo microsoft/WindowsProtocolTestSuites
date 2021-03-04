@@ -3,16 +3,25 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
+using Microsoft.Protocols.TestManager.PTMService.Database;
+using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
+using Microsoft.Protocols.TestManager.PTMService.PTMService.Configurations;
+using Microsoft.Protocols.TestManager.PTMService.Storage;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace PTMService
+namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 {
     public class Startup
     {
@@ -48,6 +57,35 @@ namespace PTMService
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
+            });
+
+            services.AddPTMServiceDbContext(Configuration.GetConnectionString("Database"));
+
+            services.AddRepositoryPool();
+
+            services.AddSingleton<IScopedServiceFactory<IRepositoryPool>, ScopedServiceFactory>();
+
+            services.Configure<StoragePoolOptions>(options =>
+            {
+                var items = Configuration.GetSection("KnownStorageNodes").Get<KnownStorageNodeItem[]>();
+
+                options.Nodes = items.ToDictionary(item => item.Name, item => item.Path);
+            });
+
+            services.AddStoragePool();
+
+            services.AddPTMKernelService();
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = int.MaxValue;
+            });
+
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartHeadersLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue;
             });
         }
 

@@ -16,18 +16,4 @@ namespace Microsoft.Protocols.TestManager.PTMService.Storage
             return services;
         }
     }
-
-    public static class StoragePoolOptionsExtensions
-    {
-        public static IServiceCollection ConfigureStoragePoolOptions(this IServiceCollection services, Action<StoragePoolOptions> action)
-        {
-            var options = new StoragePoolOptions();
-
-            action(options);
-
-            services.AddSingleton(options);
-
-            return services;
-        }
-    }
 }
