@@ -1,9 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestTools;
-using System;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using System.Collections.Specialized;
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.Rdpeusb
@@ -12,10 +11,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
     {
         public const string Timeout = "WaitTime";
         public const string IsWindowsImplementation = "IsWindowsImplementation";
-        public const string RdpSecurityNegotiation = "RDP.Security.Negotiation";
-        public const string RdpSecurityProtocol = "RDP.Security.Protocol";
-        public const string RdpSecurityEncryptionLevel = "RDP.Security.Encryption.Level";
-        public const string RdpSecurityEncryptionMethod = "RDP.Security.Encryption.Method";
+        public const string RdpSecurityNegotiation = "Security.Negotiation";
+        public const string RdpSecurityProtocol = "Security.Protocol";
+        public const string RdpSecurityEncryptionLevel = "Security.Encryption.Level";
+        public const string RdpSecurityEncryptionMethod = "Security.Encryption.Method";
     }
 
     public static class Config

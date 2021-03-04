@@ -13,27 +13,29 @@
     <Property name="Version" value="2.0" >
       <Description>The version of test suite.</Description>
     </Property>
-  
+
     <!--Property used for protocol-based SUT control adapter-->
-    <!--IP addresses or host name of SUT control Agent, seperated by ";"-->    
-    <Property name="SUTControl.AgentAddress" value="192.168.0.1:4488;192.168.0.1:4489" >
-      <Description>Address for SUT control Agent.</Description>
-    </Property>
-    <!-- Transport type of SUT control protocol, TCP or UDP-->
-    <Property name="SUTControl.TransportType" value="TCP" >
-      <Choice>TCP, UDP</Choice>
-      <Description>Transport type of SUT control protocol, TCP or UDP.</Description>
-    </Property>
-    <!--Whether RDP client can use .rdp file to establish RDP connection-->
-    <Property name="SUTControl.ClientSupportRDPFile" value="true" >
-      <Choice>true, false</Choice>
-      <Description>Whether RDP client can use .rdp file to establish RDP connection.</Description>
-    </Property>
-    <!-- Whether all the request need a response, if false, only response is only needed when some data need to be transfered from agent-->
-    <Property name="SUTControl.AlwaysNeedResponse" value="true" >
-      <Choice>true, false</Choice>
-      <Description>Whether all the request need a response, if false, only response is only needed when some data need to be transfered from agent.</Description>
-    </Property>
+    <Group name ="SUTControl">
+      <!--IP addresses or host name of SUT control Agent, seperated by ";"-->    
+      <Property name="AgentAddress" value="192.168.0.1:4488;192.168.0.1:4489" >
+        <Description>Address for SUT control Agent.</Description>
+      </Property>
+      <!-- Transport type of SUT control protocol, TCP or UDP-->
+      <Property name="TransportType" value="TCP" >
+        <Choice>TCP, UDP</Choice>
+        <Description>Transport type of SUT control protocol, TCP or UDP.</Description>
+      </Property>
+      <!--Whether RDP client can use .rdp file to establish RDP connection-->
+      <Property name="ClientSupportRDPFile" value="true" >
+        <Choice>true, false</Choice>
+        <Description>Whether RDP client can use .rdp file to establish RDP connection.</Description>
+      </Property>
+      <!-- Whether all the request need a response, if false, only response is only needed when some data need to be transfered from agent-->
+      <Property name="AlwaysNeedResponse" value="true" >
+        <Choice>true, false</Choice>
+        <Description>Whether all the request need a response, if false, only response is only needed when some data need to be transfered from agent.</Description>
+      </Property>
+    </Group>
  </Properties>
 
   <Adapters>

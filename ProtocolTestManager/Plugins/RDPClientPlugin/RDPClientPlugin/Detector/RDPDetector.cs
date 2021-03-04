@@ -270,7 +270,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private void SetRdpVersion()
         {
-            detectInfo.RdpVersion = DetectorUtil.GetPropertyValue("RDP.Version");
+            detectInfo.RdpVersion = DetectorUtil.GetPropertyValue("Version");
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null)
             {
                 var rdpVersion = mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.version;

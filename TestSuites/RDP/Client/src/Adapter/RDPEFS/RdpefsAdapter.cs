@@ -6,8 +6,6 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpefs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.Rdp.Rdpefs
 {
@@ -30,8 +28,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp.Rdpefs
             waitTime = new TimeSpan(0, 0, 40);
 
             #region WaitTime
-            string strWaitTime = Site.Properties["WaitTime"];
-            if (strWaitTime != null)
+            string strWaitTime;
+            PtfPropUtility.GetPtfPropertyValue(Site, "WaitTime", out strWaitTime);
+            if (!string.IsNullOrEmpty(strWaitTime))
             {
                 int waitSeconds = Int32.Parse(strWaitTime);
                 waitTime = new TimeSpan(0, 0, waitSeconds);

@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
+using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.Rdpevor
 {
@@ -28,10 +26,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
-           
+
             #region WaitTime
-            string strWaitTime = Site.Properties["WaitTime"];
-            if (strWaitTime != null)
+            string strWaitTime;
+            PtfPropUtility.GetPtfPropertyValue(Site, "WaitTime", out strWaitTime);
+            if (!string.IsNullOrEmpty(strWaitTime))
             {
                 int waitSeconds = Int32.Parse(strWaitTime);
                 waitTime = new TimeSpan(0, 0, waitSeconds);
