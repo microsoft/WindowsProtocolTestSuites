@@ -109,7 +109,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
         [MethodHelp("This SUT control adapter interface is only available when using protocol-based SUT control adapter.\r\n\r\n" +
                     "If you have implemented an Agent for protocol based SUT control adapter, please use protocol-based SUT control adapter.\r\n\r\n" +
-                    "Otherwise, please change the configuration in RDP_ClientTestSuite.deployment.ptfconfig, set VerifySUTDisplay.Enable entry to false to disable SUT display verification.\r\n\r\n" +
+                    "Otherwise, please change the configuration in RDP_ClientTestSuite.deployment.ptfconfig, set Enable entry in VerifySUTDisplay group to false to disable SUT display verification.\r\n\r\n" +
                     "For more details, please refer to the user guide.")]
         [DefaultValue("0")]
         int CaptureScreenShot(string caseName, string filePath);

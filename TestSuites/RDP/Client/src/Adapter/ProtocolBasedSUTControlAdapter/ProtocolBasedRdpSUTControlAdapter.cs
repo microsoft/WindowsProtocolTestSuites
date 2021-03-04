@@ -1,18 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestSuites;
 using Microsoft.Protocols.TestTools;
-using System.Net;
-using System.Collections;
-using System.Reflection;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Diagnostics;
+using System.Net;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -235,7 +227,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             controlHandler = SUTControlProtocolHandler.GetInstance(testSite);
             // Initiate local IP
-            string proxyIP = testSite.Properties["RDP.ProxyIP"];
+            string proxyIP;
+            PtfPropUtility.GetPtfPropertyValue(testSite, "ProxyIP", out proxyIP);
             if (string.IsNullOrEmpty(proxyIP))
             {
                 rdpServerIP = GetLocalIP();
@@ -248,7 +241,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             // Initiate local port
             try
             {
-                localPort = ushort.Parse(testSite.Properties["RDP.ServerPort"]);
+                string localPortString;
+                PtfPropUtility.GetPtfPropertyValue(testSite, "ServerPort", out localPortString);
+                localPort = ushort.Parse(localPortString);
             }
             catch
             {
@@ -256,14 +251,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
                         
             // Initiate Connect payload type
-            bool clientSupportRDPFile = false;
-            try
-            {
-                clientSupportRDPFile = bool.Parse(testSite.Properties["SUTControl.ClientSupportRDPFile"]);
-            }
-            catch
-            {                
-            }
+            bool clientSupportRDPFile;
+            PtfPropUtility.GetPtfPropertyValue(testSite, "ClientSupportRDPFile", out clientSupportRDPFile,new string[] { RdpPtfGroupNames.SUTControl});
+            
             if (clientSupportRDPFile)
             {
                 connectPayloadType = RDP_Connect_Payload_Type.RDP_FILE;
@@ -273,11 +263,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 connectPayloadType = RDP_Connect_Payload_Type.PARAMETERS_STRUCT;
             }
 
-            string strIsClientSupportCompression = Site.Properties["RDP.Client.SupportCompression"];
-            if (strIsClientSupportCompression != null)
-            {
-                isClientSupportCompression = Boolean.Parse(strIsClientSupportCompression);
-            }
+            PtfPropUtility.GetPtfPropertyValue(testSite, "SupportCompression", out isClientSupportCompression);
         }
 
 

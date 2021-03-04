@@ -706,55 +706,53 @@ The following table describes the required properties for all the test cases.
 
 |  **Property**|  **Description**|
 | -------------| ------------- |
-|  **RDP.ServerPort**| The port number used to listen for RDP connection requests.|
+|  **ServerPort**| The port number used to listen for RDP connection requests.|
 | | The default value used in this test suite: **3389**|
-|  **RDP.IPVersion**| The IP version used in test environment.|
+|  **IPVersion**| The IP version used in test environment.|
 | | Default value: **Ipv4**|
-|  **RDP.Version**| The RDP version of the SUT.|
-| | Default value: **7.0**|
-|  **RDP.Security.Negotiation**| Indicates if the test suite uses the "Negotiation Approach" to select the security mechanism.|
-| | The possible values are **True** and **False.** If the value is set to **False**, it indicates that the "Direct Approach" will be used.|
+|  **Negotiation**| The **Negotiation** is in **Security** group and indicates if the test suite uses the "Negotiation Approach" to select the security mechanism.|
+| | The possible values are **True** and **False**. If the value is set to **False**, it indicates that the "Direct Approach" will be used.|
 | | Default value: **True**|
-|  **RDP.Security.Protocol**| The security protocol used to secure the RDP session. The possible values are **TLS**, **CredSSP** and **RDP**.|
+|  **Protocol**| The **Protocol** is in **Security** group and this security protocol used to secure the RDP session. The possible values are **TLS**, **CredSSP** and **RDP**.|
 | | Default value: **TLS**|
-|  **RDP.Security.Encryption.Level**| The encryption level of the RDP session. The possible values are **None**, **Low**, **Client**, **High**, and **FIPS**.|
-| | If the RDP.Security.Protocol value is set to **TLS** or **CredSSP**, this property must be set to **None**. Otherwise, the property must not be set to **None**.|
+|  **Level**| The **Level** is in **Security** group and **Encryption** subgroup. It is the encryption level of the RDP session. The possible values are **None**, **Low**, **Client**, **High**, and **FIPS**.|
+| | If the Protocol value is set to **TLS** or **CredSSP**, this property must be set to **None**. Otherwise, the property must not be set to **None**.|
 | | Default value: **None**|
-|  **RDP.Security.Encryption.Method**| The encryption method of the RDP session. |
+|  **Method**| The **Method** is in **Security** group and **Encryption** subgroup. It is the encryption method of the RDP session. |
 | | The possible values are **None**, **40bit**, **56bit**, **128bit**, **FIPS**.|
-| | If the **RDP.Security.Protocol** value is set to **TLS** or **CredSSP**, this property must be set to **None**. If the **RDP.Security.Encryption.Level** value is set to **FIPS**, this property must be set to **FIPS**.|
+| | If the **Protocol** value is set to **TLS** or **CredSSP**, this property must be set to **None**. If the **Level** value is set to **FIPS**, this property must be set to **FIPS**.|
 | | Default value: **None**|
-|  **RDP.Security.IsClientToServerEncrypted**| Indicates if the client-to-server traffic is encrypted. The possible values are **True** and **False**.|
+|  **IsClientToServerEncrypted**| The **IsClientToServerEncrypted** is in **Security** group and indicates if the client-to-server traffic is encrypted. The possible values are **True** and **False**.|
 | | Default value: **True**|
 |  **IsWindowsImplementation**| Indicates if the SUT is a Windows implementation. The possible values are **True** and **False**.|
 | | Default value: **True**|
-|  **DropConnectionForInvalidRequest**| Indicates if SUT drops the connection when an invalid request received. The possible values are **True** and **False**.|
+|  **DropConnectionForInvalidRequest**| The **DropConnectionForInvalidRequest** is in **Security** group and indicates if SUT drops the connection when an invalid request received. The possible values are **True** and **False**.|
 | | Default value: **True**|
-|  **RDP.Version**| The version of the RDP intends to test, it should be one of **7.0**, **7.1**, **8.0**, **8.1**, **10.0**, **10.1**, **10.2**, **10.3 or later**.|
-| | Default value: **8.1**|
-|  **CertificatePath**| The Personal Information Exchange (.pfx) certificate used to secure TLS or CrepSSP transports. If the **RDP.Security.Protocol** value is set to **TLS** or **CrepSSP**, this property must be set.|
+|  **Version**| The version of the RDP intends to test, it should be one of **7.0**, **7.1**, **8.0**, **8.1**, **10.0**, **10.1**, **10.2**, **10.3 or later**.|
+| | Default value: **10.6**|
+|  **CertificatePath**| The Personal Information Exchange (.pfx) certificate used to secure TLS or CrepSSP transports. If the **Protocol** value is set to **TLS** or **CrepSSP**, this property must be set.|
 | | Default value: **C:\DriverComputer.pfx**|
 |  **CertificatePassword**| The password of the certificate identified in the **CertificatePath** value**.**|
 | | Default value: **Password01**!|
 |  **VerifyRdpbcgrMessage**| Enables or disables message verification as defined in MS-RDPBCGR. Set to **True** to enable, otherwise set to **False**. |
 | | Default value: **True**|
-|  **VerifySUTDisplay.Enable**| Enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
+|  **Enable**| The **Enable** is in **VerifySUTDisplay** group and it indicates enable or disable the verification of display on RDP Client (SUT). This function is only available when running test suite under protocol-based mode. For more details, Please refer to [Configure the Test Suite Mode](#configure-the-test-suite-mode).|
 | | Default value: **False**|
-|  **VerifySUTDisplay.BitmapSavePath**| Path used to save screenshot on SUT. If VerifySUTDisplay.Enable is false, this property should be ignored.|
+|  **BitmapSavePath**| The **BitmapSavePath** is in **VerifySUTDisplay** group and this path used to save screenshot on SUT. If Enable is false, this property should be ignored.|
 | | Default value: **../../ScreenShot/**|
-|  **VerifySUTDisplay.IQA.Algorithm**| The algorithm used to assess whether two images are similar, the algorithm should be one of:|
+|  **Algorithm**| The **Algorithm** is in **VerifySUTDisplay** group and **IQA** subgroup. The algorithm used to assess whether two images are similar, the algorithm should be one of:|
 | | **SSIM**: Structural Similarity Index|
 | | **MS-SSIM**: Multiscale-SSIM|
 | | **G-SSIM**: Gradient-Based-SSIM|
-| | These algorithms are used to verify the image encoded by using RemoteFX codec. If VerifySUTDisplay.Enable is false, this property should be ignored.|
+| | These algorithms are used to verify the image encoded by using RemoteFX codec. If Enable is false, this property should be ignored.|
 | | Default value: **MS-SSIM**|
-|  **VerifySUTDisplay.IQA.AssessValueThreshold**| Threshold for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value is not smaller than this threshold. The value should be a float number satisfying 0 ≤ VerifySUTDisplay.IQA.AssessValueThreshold ≤ 1. If VerifySUTDisplay.Enable is false, this property should be ignored.|
+|  **AssessValueThreshold**| The **AssessValueThreshold** is in **VerifySUTDisplay** group and **IQA** subgroup. Threshold for expected assess value, which is used for IQA algorithm when verifying RemoteFX codec, the test suite concludes two images similar if the IQA value is not smaller than this threshold. The value should be a float number satisfying 0 ≤ AssessValueThreshold ≤ 1. If Enable is false, this property should be ignored.|
 | | Default value: **0.98**|
-|  **VerifySUTDisplay.Shift.X**| Horizontal position of the RDP client window relative to left-top of the screen.|
-| | If VerifySUTDisplay.Enable is false, this property should be ignored.|
+|  **ShiftX**| The **ShiftX** is in **VerifySUTDisplay** group and it indicates horizontal position of the RDP client window relative to left-top of the screen.|
+| | If Enable is false, this property should be ignored.|
 | | Default value: **0**|
-|  **VerifySUTDisplay.Shift.Y**| Vertical position of the RDP client window relative to left-top of the screen.|
-| | If VerifySUTDisplay.Enable is false, this property should be ignored.|
+|  **ShiftY**| The **ShiftY** is in **VerifySUTDisplay** group and it indicates vertical position of the RDP client window relative to left-top of the screen.|
+| | If Enable is false, this property should be ignored.|
 | | Default value: **0**|
 
 ##### Required Properties for RDPBCGR
@@ -762,14 +760,14 @@ The following table describes the properties which are only required for test ca
 
 |  **Property**|  **Description**|
 | -------------| ------------- |
-|  **RDP.Client.SupportFastPathInput**| Indicates if the remote desktop client (SUT) supports Fast-Path Input.|
+|  **SupportFastPathInput**| Indicates if the remote desktop client (SUT) supports Fast-Path Input.|
 | | The possible values are **True** and **False**.|
 | | Default value: **True**|
-|  **RDP.Client.SupportAutoReconnect**| Indicates if the remote desktop client (SUT) supports Auto-Reconnect. The possible values are **True** and **False**.|
+|  **SupportAutoReconnect**| Indicates if the remote desktop client (SUT) supports Auto-Reconnect. The possible values are **True** and **False**.|
 | | Default value: **True**|
-|  **RDP.Client.SupportRDPEFS**| Indicates if the remote desktop client (SUT) supports File System Virtual Channel Extension (MS-RDPEFS). The possible values are **True** and **False**.|
+|  **SupportRDPEFS**| Indicates if the remote desktop client (SUT) supports File System Virtual Channel Extension (MS-RDPEFS). The possible values are **True** and **False**.|
 | | Default value: **True**|
-|  **RDP.Client.SupportServerRedirection**| Indicates if the remote desktop client (SUT) supports Server Redirection. The possible values are **True** and **False**.|
+|  **SupportServerRedirection**| Indicates if the remote desktop client (SUT) supports Server Redirection. The possible values are **True** and **False**.|
 | | Default value: **True**|
 
 ##### Required Properties for RDPEUSB
@@ -783,9 +781,9 @@ The following table describes the properties which are only required for test ca
 
 |  **Property**|  **Description**|
 | -------------| ------------- |
-|  **RDPRFX.Image**| Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be Screen, or the path of an image file.|
+|  **RDPRFXImage**| Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be Screen, or the path of an image file.|
 | | Default value: **../TestData/Rdprfx.bmp**|
-|  **RDPRFXVideoMode.Image**| Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.|
+|  **RDPRFXVideoModeImage**| Determine how test suite get the image data for video mode, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file.|
 | | Default value: **../TestData/RdprfxVideoMode.bmp**|
 
 ##### Required Properties for RDPEUDP
@@ -832,17 +830,17 @@ The following table describes the properties which are only required for test ca
 |  **RdpedispTestImage**| The path of an image file, which is used to do RDPEDISP test.|
 | | There are no specific requirements for the image.|
 | | Default value: **../TestData/RdpedispTestImage.bmp**. This image is included in the RDP test suite.|
-|  **originalDesktopWidth**| The original width of screen resolution.|
+|  **OriginalDesktopWidth**| The original width of screen resolution.|
 | | Default value: **1024**|
-|  **originalDesktopHeight**| The original height of screen resolution|
+|  **OriginalDesktopHeight**| The original height of screen resolution|
 | | Default value: **768**|
-|  **changedDesktopWidth**| The changed width of screen resolution|
+|  **ChangedDesktopWidth**| The changed width of screen resolution|
 | | Default value: **1152**|
-|  **changedDesktopHeight**| The changed height of screen resolution|
+|  **ChangedDesktopHeight**| The changed height of screen resolution|
 | | Default value: **864**|
-|  **originalMonitorNumber**| The original number of screens|
+|  **OriginalMonitorNumber**| The original number of screens|
 | | Default value: **1**|
-|  **changedMonitorNumber**| The changed number of screens|
+|  **ChangedMonitorNumber**| The changed number of screens|
 | | Default value: **2**|
 
 #### Optional Configuration Settings
@@ -851,11 +849,11 @@ The following table describes the optional configuration properties and provides
 
 |  **Property**|  **Description**|
 | -------------| ------------- |
-|  **RDP.ServerDomain**| If using CredSSP security, use this setting to define the domain name of the driver computer. If the computer is not in a domain, then use the IP or computer name.|
+|  **ServerDomain**| If using CredSSP security, use this setting to define the domain name of the driver computer. If the computer is not in a domain, then use the IP or computer name.|
 | | Default value: **contoso.com**|
-|  **RDP.ServerUserName**| If using CredSSP security, use this setting to define the security account user name. |
+|  **ServerUserName**| If using CredSSP security, use this setting to define the security account user name. |
 | | Default value: **Administrator**|
-|  **RDP.ServerUserPassword**| The password for the RDP.ServerUserName account.|
+|  **ServerUserPassword**| The password for the ServerUserName account.|
 | | Default value: **Password01!**|
 |  **SUTName**| Specify the computer name or IP address of the SUT.|
 | | Default value: **SUT01**|
@@ -1366,7 +1364,7 @@ This section describes how to troubleshoot common test suite issues.
 | -------------| -------------|
 | **PROBLEM**| Most MS-RDPEUDP/MS-RDPEMT test cases are failed.|
 | **CAUSE**| Some MS-RDPEUDP and MS-RDPEMT test cases create RDP-UDP connection, which need to use TLS or CredSSP security protocol. |
-| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **RDP.Security.Protocol** to TLS or CredSSP. For more details, please refer to [Configure the Test Suite](#configure-the-test-suite)|
+| **RESOLUTION**| In **RDP_ClientTestSuite.deployment.ptfconfig,** configure **Protocol** to TLS or CredSSP. For more details, please refer to [Configure the Test Suite](#configure-the-test-suite)|
 
 ### 3 RDPEGFX Test Cases Require H264 Enabled on SUT
 

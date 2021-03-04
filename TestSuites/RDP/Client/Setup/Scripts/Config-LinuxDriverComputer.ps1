@@ -192,26 +192,26 @@ $PtfConfig       = "$binPath/RDP_ClientTestSuite.ptfconfig"
 
 $agentAddress    = "$tcComputerName" + ":" + $agentPort
 Write-Host "Begin to update RDP_ClientTestSuite.ptfconfig..."
-./Modify-ConfigFileNode.ps1 $PtfConfig "SUTControl.AgentAddress"     $agentAddress
+./Modify-ConfigFileNode.ps1 $PtfConfig "AgentAddress"     $agentAddress
 
 Write-Host "Begin to update RDP_ClientTestSuite.deployment.ptfconfig..."
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerPort"            $listeningPort
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.IpVersion"             $ipVersion
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol"     $securityProtocol
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Negotiation"  $negotiationBased
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "ServerPort"                $listeningPort
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "IpVersion"                 $ipVersion
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "Protocol"                  $securityProtocol
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "Negotiation"               $negotiationBased
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePath"           $certificatePath
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "CertificatePassword"       $certPwd
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTName"                   $tcComputerName
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTUserPassword"           $userPwdInTC
 ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTSystemDrive"            $tcSystemDrive
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerDomain"          $domainName
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserName"        $CredSSPUser
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerUserPassword"    $CredSSPPwd
-./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Version"               $RDPVersion
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "ServerDomain"          $domainName
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "ServerUserName"        $CredSSPUser
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "ServerUserPassword"    $CredSSPPwd
+./Modify-ConfigFileNode.ps1 $DepPtfConfig "Version"               $RDPVersion
 
 if ($compressionInTC.ToUpper() -eq "YES")
 {
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Client.SupportCompression"  "true"
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SupportCompression"  "true"
 }
 
 if ($osVersion.ToUpper() -eq "NONWINDOWS")
@@ -219,7 +219,7 @@ if ($osVersion.ToUpper() -eq "NONWINDOWS")
     ./Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "false"
 	
     # Update default RDP security protocol as RDP/Low/128bit for NonWindows AutoTest
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Protocol" "RDP"    
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "Protocol" "RDP"    
     ./Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" "true"
 }
 else
@@ -230,13 +230,13 @@ else
 
 if ($securityProtocol.ToUpper() -eq "RDP")
 {
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "Low" 
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "128bit" 
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "Level" "Low" 
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "Method" "128bit" 
 }
 else
 {
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Level" "None" 
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.Security.Encryption.Method" "None" 
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "Level" "None" 
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "Method" "None" 
 }
 
 if ($workgroupDomain.ToUpper() -eq "DOMAIN")
@@ -246,7 +246,7 @@ if ($workgroupDomain.ToUpper() -eq "DOMAIN")
 else
 {
     ./Modify-ConfigFileNode.ps1 $DepPtfConfig "SUTUserName"      "$userNameInTC"
-    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "RDP.ServerDomain" "$driverComputerName"
+    ./Modify-ConfigFileNode.ps1 $DepPtfConfig "ServerDomain" "$driverComputerName"
 }
 
 #-----------------------------------------------------

@@ -68,8 +68,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             this.EstablishUDPConnection(TransportMode.Reliable, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start TLS handshake.");
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
+
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
             RdpeudpTLSChannel sChannel = new RdpeudpTLSChannel(rdpeudpSocketR);
             sChannel.AuthenticateAsServer(cert);
@@ -98,9 +103,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
             this.EstablishUDPConnection(TransportMode.Lossy, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start DTLS handshake.");
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
+
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
+
             RdpeudpDTLSChannel sChannel = new RdpeudpDTLSChannel(rdpeudpSocketL);
             sChannel.AuthenticateAsServer(cert);
 

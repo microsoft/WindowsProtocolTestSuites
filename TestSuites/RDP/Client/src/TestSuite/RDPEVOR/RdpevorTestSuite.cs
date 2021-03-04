@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.Protocols.TestSuites.Rdpegt;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpevor;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdpegt;
-using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.Rdpevor
 {
@@ -146,7 +145,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
             testData = new RdpevorTestData();
             try
             {
-                String RdpevorTestDataPath = this.Site.Properties["RdpevorTestDataPath"];
+                String RdpevorTestDataPath;
+                PtfPropUtility.GetPtfPropertyValue(Site, "RdpevorTestDataPath", out RdpevorTestDataPath);
                 testData.LoadXMLFile(RdpevorTestDataPath);
             }
             catch (System.Xml.XmlException ex)

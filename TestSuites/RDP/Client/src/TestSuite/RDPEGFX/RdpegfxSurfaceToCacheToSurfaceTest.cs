@@ -65,7 +65,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             ushort maxCacheSlot = RdpegfxTestUtility.maxCacheSlot;
 
-            string RDPClientVersion = this.TestSite.Properties["RDP.Version"].ToString();
+            string RDPClientVersion;
+            PtfPropUtility.GetPtfPropertyValue(Site, "Version", out RDPClientVersion);
             if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // RDP 10.3 maxCacheSlot is 4096.
             {
                 maxCacheSlot = 4096;
@@ -114,7 +115,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         {
             int maxCacheSize = RdpegfxTestUtility.maxCacheSize;
 
-            string RDPClientVersion = this.TestSite.Properties["RDP.Version"].ToString();
+            string RDPClientVersion;
+            PtfPropUtility.GetPtfPropertyValue(Site, "Version", out RDPClientVersion);
             if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // RDP 10.3 client maxCacheSize is 16M.
             {
                 maxCacheSize = 16;
