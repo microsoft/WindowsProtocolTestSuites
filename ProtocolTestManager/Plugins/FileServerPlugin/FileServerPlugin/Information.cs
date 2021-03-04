@@ -97,6 +97,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         #region Properties
 
         public string targetShareFullPath;
+        public string clusterShareFullPath;
         public string targetSUT;
         public string domainName;
         public string userName;
@@ -118,6 +119,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         public DetectResult F_Leasing_V2;
         public DetectResult F_EnumerateSnapShots;
 
+        public DetectResult ClusterSupport;
         public DetectResult SqosSupport;
         public DetectResult RsvdSupport;
         public SQOS_PROTOCOL_VERSION SqosVersion;

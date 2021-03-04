@@ -36,7 +36,8 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private Logger logWriter = new Logger();
 
-        private const string targetShareTitle = @"Target Share";
+        private const string targetShareTitle = @"Target Basic Share";
+        private const string clusterShareTitle = @"Target Cluster Share";
         private const string domainTitle = "Domain Name";
         private const string userTitle = "User Name";
         private const string passwordTitle = "Password";
@@ -75,11 +76,13 @@ namespace Microsoft.Protocols.TestManager.Detector
             string domain = DetectorUtil.GetPropertyValue("Common.DomainName");
             string user = DetectorUtil.GetPropertyValue("Common.AdminUserName");
             string password = DetectorUtil.GetPropertyValue("Common.PasswordForAllUsers");
+            string clusterShare = string.Format(@"\\{0}\{1}",DetectorUtil.GetPropertyValue("Common.CAShareServerName"), DetectorUtil.GetPropertyValue("Common.CAShareName"));
 
             List<string> domainList = new List<string>();
             List<string> SUTList = new List<string>();
             List<string> userList = new List<string>();
             List<string> passwordList = new List<string>();
+            List<string> clusterShareList = new List<string>();
 
             if (string.IsNullOrWhiteSpace(SUT)
                 || string.IsNullOrWhiteSpace(domain)
@@ -99,7 +102,10 @@ namespace Microsoft.Protocols.TestManager.Detector
                 passwordList.Add(password);
             }
 
-            propertiesDic.Add(targetShareTitle, SUTList);
+            clusterShareList.Add(clusterShare);
+
+            propertiesDic.Add(targetShareTitle, SUTList);          
+            propertiesDic.Add(clusterShareTitle, clusterShareList);
             propertiesDic.Add(domainTitle, domainList);
             propertiesDic.Add(userTitle, userList);
             propertiesDic.Add(passwordTitle, passwordList);
@@ -134,7 +140,10 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             // Save the prerequisites set by user
             detectionInfo.targetShareFullPath = properties[targetShareTitle];
-            ParseShareFullPath();
+            ParseBasicShareFullPath(detectionInfo.targetShareFullPath);
+
+            detectionInfo.clusterShareFullPath = properties[clusterShareTitle];
+            ParseClusterShareFullPath(detectionInfo.clusterShareFullPath);
 
             detectionInfo.domainName = properties[domainTitle];
             detectionInfo.userName = properties[userTitle];
@@ -190,6 +199,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetectingItems.Add(new DetectingItem("Check the Credential", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Platform and User Account", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Fetch Share Info", DetectingStatus.Pending, LogStyle.Default));
+            DetectingItems.Add(new DetectingItem("Detect Cluster support", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Ioctl Codes", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect Create Contexts", DetectingStatus.Pending, LogStyle.Default));
             DetectingItems.Add(new DetectingItem("Detect RSVD support", DetectingStatus.Pending, LogStyle.Default));
@@ -235,6 +245,8 @@ namespace Microsoft.Protocols.TestManager.Detector
             DetermineSymboliclink(detector);
             
             detectionInfo.detectExceptions = new Dictionary<string, string>();
+
+            DetectClusterShare(detector);
 
             // Detect IoctlCodes and Create Contexts
             // If any exceptions, just ignore
@@ -494,13 +506,13 @@ namespace Microsoft.Protocols.TestManager.Detector
                     }
                 }
             }
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.File Server Failover", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.FSRVP (File Server Remote VSS)", Status = RuleStatus.Unknown });
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.SWN (Service Witness)", Status = RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.File Server Failover", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported)? RuleStatus.Selected: RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.FSRVP (File Server Remote VSS)", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported) ? RuleStatus.Selected : RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.SWN (Service Witness)", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported) ? RuleStatus.Selected : RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.DFSC (Distributed File System Referral)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.Auth (Authentication and Authorization)", Status = RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.FSA (File System Algorithms)", Status = RuleStatus.Selected });
-            
+
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Negotiate"));
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Credit", detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_LARGE_MTU)));
             selectedRuleList.Add(CreateRule("Feature.Others.SMB2&3.Signing"));
@@ -607,7 +619,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             bool isSMB2Selected = false;
             List<CaseSelectRule> smb2Rules = new List<CaseSelectRule>();
-            bool isFsaSelected = false;
+            bool isFsaSelected = true; //FSA is always be selected.
             bool isClusterSwnFsrvpSelected = false;
             bool isDfscSelected = false;
             bool isRsvdSelected = false;
@@ -637,7 +649,6 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
                 else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)"))
                 {
-                    isFsaSelected = true;
                     if (ruleName.Contains("HVRS"))
                     {
                         if (rule.Status == RuleStatus.Selected)
@@ -1485,10 +1496,38 @@ namespace Microsoft.Protocols.TestManager.Detector
             logWriter.AddLineToLog(LogLevel.Information);
         }
 
-        private void ParseShareFullPath()
+        private void DetectClusterShare(FSDetector detector)
         {
-            // Parse full path to separate properties.
-            string fullPath = detectionInfo.targetShareFullPath;
+            logWriter.AddLog(LogLevel.Information, "===== Detect Cluster Share Existence =====");
+            
+            try
+            {
+                if (detector.FetchClusterShareInfo(detectionInfo))
+                    detectionInfo.ClusterSupport = DetectResult.Supported;
+                else
+                    detectionInfo.ClusterSupport = DetectResult.UnSupported;
+            }
+            catch (Exception e)
+            {
+                logWriter.AddLog(LogLevel.Information, string.Format("Detect Cluster Share failed: {0}", e.Message));
+                detectionInfo.ClusterSupport = DetectResult.DetectFail;                
+            }
+            
+            if (detectionInfo.ClusterSupport == DetectResult.DetectFail)
+            {
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+            }
+            else
+            {
+                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            }
+            logWriter.AddLineToLog(LogLevel.Information);
+        }
+
+
+        private void ParseBasicShareFullPath(string fullPath)
+        {
+            // Parse full path to separate properties.            
             if (!fullPath.StartsWith(@"\\"))
             {
                 throw new Exception(@"The format of Target Share should be \\[ServerNameOrIp]\[ShareName]");
@@ -1504,6 +1543,23 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             detectionInfo.targetSUT = fullPath.Substring(0, posBackSlash);
             detectionInfo.BasicShareName = fullPath.Substring(detectionInfo.targetSUT.Length + 1);
+        }
+
+        private void ParseClusterShareFullPath(string fullPath)
+        {
+            // Parse full path to separate properties.            
+            if (!fullPath.StartsWith(@"\\"))
+            {
+                throw new Exception(@"The format of Target Share should be \\[ServerNameOrIp]\[ShareName]");
+            }
+
+            fullPath = fullPath.Substring(2);
+
+            int posBackSlash = fullPath.IndexOf(@"\");
+            if (posBackSlash == -1)
+            {
+                throw new Exception(@"The format of Target Share should be \\[ServerNameOrIp]\[ShareName]");
+            }
         }
 
         // Construct key salt for SMB2 service principal according to [MS-KILE] 3.1.1.2

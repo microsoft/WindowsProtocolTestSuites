@@ -712,6 +712,29 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             return RetrieveShareProperties(shareList, info);
         }
 
+        public bool FetchClusterShareInfo(DetectionInfo info)
+        {            
+            // Try to connect the share which is input by the user in the "Cluster Share" field of Auto-Detection page.
+            using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+            {
+                ulong messageId;
+                ulong sessionId;
+                uint treeId;
+                try
+                {
+                    logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.clusterShareFullPath));
+                    ConnectToClusterShare( info, client, out messageId, out sessionId, out treeId);
+                }
+                catch
+                {
+                    // Show error to user.
+                    logWriter.AddLog(LogLevel.Error, string.Format("Cannot connect to cluster share {0}. Please check share setting and SUT password.", info.clusterShareFullPath));
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private ShareInfo[] RetrieveShareProperties(string[] shareList, DetectionInfo info)
         {
             List<ShareInfo> shareInfoList = new List<ShareInfo>();
@@ -852,6 +875,59 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 throw new Exception("TREECONNECT failed with " + Smb2Status.GetStatusCode(header.Status));
             }
            
+            #endregion
+        }
+        /// <summary>
+        /// Negotiate, SessionSetup, TreeConnect
+        /// </summary>
+        /// <returns>Return true for success, false for failure</returns>
+        private void ConnectToClusterShare(            
+            DetectionInfo info,
+            Smb2Client client,
+            out ulong messageId,
+            out ulong sessionId,
+            out uint treeId)
+        {
+            Packet_Header header;
+            Guid clientGuid;
+            NEGOTIATE_Response negotiateResp;
+            bool encryptionRequired = false;
+            UserLogon(info, client, out messageId, out sessionId, out clientGuid, out negotiateResp, out encryptionRequired);
+
+            #region TreeConnect
+
+            TREE_CONNECT_Response treeConnectResp;
+            string uncSharePath = info.clusterShareFullPath;
+            logWriter.AddLog(LogLevel.Information, "Client sends TreeConnect to server");
+            if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) // When dialect is 3.11, TreeConnect must be signed or encrypted.
+            {
+                client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
+            }
+
+            client.TreeConnect(
+                1,
+                1,
+                (info.smb2Info.IsRequireMessageSigning || info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                messageId++,
+                sessionId,
+                uncSharePath,
+                out treeId,
+                out header,
+                out treeConnectResp);
+
+            // When dialect is 3.11, for the messages other than TreeConnect, signing is not required.
+            // Set it back to the configuration of the SUT.
+            if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311)
+            {
+                client.EnableSessionSigningAndEncryption(sessionId, info.smb2Info.IsRequireMessageSigning, encryptionRequired);
+            }
+
+            if (header.Status != Smb2Status.STATUS_SUCCESS)
+            {
+                LogFailedStatus("TREECONNECT", header.Status);
+                throw new Exception("TREECONNECT failed with " + Smb2Status.GetStatusCode(header.Status));
+            }
+
             #endregion
         }
 

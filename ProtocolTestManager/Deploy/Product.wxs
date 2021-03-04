@@ -219,11 +219,7 @@
       <Component Id="Microsoft.Protocols.TestManager.Detector.pdb" Guid="*" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Detector.pdb"
              Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.pdb" />
-      </Component>
-      <Component Id="Microsoft.Protocols.TestTools.PTM.TestLogger.pdb" Guid="*" Feature="PTM_Feature">
-        <File Id="Microsoft.Protocols.TestTools.PTM.TestLogger.pdb"
-             Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestTools.PTM.TestLogger.pdb" />
-      </Component>
+      </Component>     
       <Component Id="Microsoft.Protocols.TestManager.Common.pdb" Guid="*" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Common.pdb"
              Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Common.pdb" />
@@ -248,11 +244,7 @@
       <Component Id="Microsoft.Protocols.TestManager.Detector.dll" Guid="{FF3C5836-7D7F-4DA2-B7AF-8B91DBFBEB1F}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Detector.dll"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Detector.dll" />
-      </Component>
-      <Component Id="Microsoft.Protocols.TestTools.PTM.TestLogger.dll" Guid="{284C95C8-EA9B-4C28-93EC-42FBF89CAACD}" Feature="PTM_Feature">
-        <File Id="Microsoft.Protocols.TestTools.PTM.TestLogger.dll"
-              Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestTools.PTM.TestLogger.dll" />
-      </Component>
+      </Component>      
       <Component Id="Microsoft.Protocols.TestManager.Common.dll" Guid="{27DB08B9-B991-4193-A7F3-874E22D9BB7C}" Feature="PTM_Feature">
         <File Id="Microsoft.Protocols.TestManager.Common.dll"
               Source="$(var.SRCDIR)\bin\Microsoft.Protocols.TestManager.Common.dll" />
