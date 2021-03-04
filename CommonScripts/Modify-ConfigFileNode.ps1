@@ -83,7 +83,7 @@ if($ifFileExist -eq $true)
     
     if($IsFindNode)
     {
-        $configContent.save($sourceFileName)
+        $configContent.save((Resolve-Path $sourceFileName))
     }
     else
     {
