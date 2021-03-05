@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     LValue = 256;
                 }
 
-                if (dialect >= DialectRevision.Smb311 &&
+                if (dialect == DialectRevision.Smb311 &&
                     (CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM ||
                     CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM))
                 {
