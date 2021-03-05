@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import StepWizard from "react-step-wizard";
-import React, { useState } from 'react';
+import React from 'react';
 import { SelectTestSuite } from "./SelectTestSuite";
-import { TestSuiteInstruction } from "./TestSuiteInstruction";
+import { SelectConfiguration } from "./SelectConfiguration";
 import { ConfigureMethod } from "./ConfigureMethod";
 import { AutoDetection } from "./AutoDetection";
 import { DetectionResult } from "./DetectionResult";
@@ -20,7 +20,7 @@ export function TestSuiteRunWizard() {
                 isLazyMount
             >
                 <SelectTestSuite hashKey={'SelectTestSuite'} />
-                <TestSuiteInstruction hashKey={'TestSuiteInstruction'} />
+                <SelectConfiguration hashKey={'SelectConfiguration'} />
                 <ConfigureMethod hashKey={'ConfigureMethod'}/>
                 <AutoDetection hashKey={'AutoDetection'}/>
                 <DetectionResult hashKey={'DetectionResult'}/>

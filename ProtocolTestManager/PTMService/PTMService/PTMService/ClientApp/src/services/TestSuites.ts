@@ -6,19 +6,16 @@ import { TestSuiteActions, TestSuitesActionTypes } from "../actions/TestSuitesAc
 import { AppThunkAction } from "../store/configureStore";
 
 
-export const TestSuitesActionCreators = {
+export const TestSuitesDataSrv = {
     getTestSuiteList: (): AppThunkAction<TestSuitesActionTypes> => async (dispatch, getState) => {
-        await FetchService('api/testsuite',
-            RequestMethod.GET,
-            () => {
-                dispatch(TestSuiteActions.getTestSuitesAction_Request())
-            },
-            (data: any) => {
-                dispatch(TestSuiteActions.getTestSuitesAction_Success(data))
-            },
-            (error: any) => {
-                dispatch(TestSuiteActions.getTestSuitesAction_Failure(error))
-            })
+        // const state = getState();
+        await FetchService({
+            url: 'api/testsuite',
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: TestSuiteActions.getTestSuitesAction_Request,
+            onComplete: TestSuiteActions.getTestSuitesAction_Success,
+            onError: TestSuiteActions.getTestSuitesAction_Failure
+        });
     }
 };
-

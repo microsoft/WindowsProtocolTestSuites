@@ -7,25 +7,37 @@ export enum RequestMethod {
     PUT = 'PUT',
     DELETE = 'DELETE'
 }
-export async function FetchService(url: string, requestMethod: RequestMethod, request?: any, complete?: any, error?: any) {
+
+export interface FetchOption<T> {
+    url: string;
+    method: RequestMethod;
+    body?: BodyInit;
+    dispatch: (action: T) => void;
+    onRequest?: Function;
+    onComplete?: Function;
+    onError?: Function;
+}
+
+export async function FetchService<T>(requestOption: FetchOption<T>) {
     try {
-        if (request !== undefined) {
-            request();
+        if (requestOption.onRequest !== undefined) {
+            requestOption.dispatch(requestOption.onRequest());
         }
 
-        if (complete !== undefined) {
-            const response = await fetch(url, { method: requestMethod });
+        if (requestOption.onComplete !== undefined) {
+            const response = await fetch(requestOption.url, { method: requestOption.method, body: requestOption.body });
             if (response.status >= 400 && response.status < 600) {
                 throw new Error("Bad response from server");
             }
 
             const data = await response.json();
-            complete(data);
+            requestOption.dispatch(requestOption.onComplete(data));
         }
 
     } catch (errorMsg) {
-        if (errorMsg !== undefined) {
-            error(errorMsg)
+        console.error(errorMsg);
+        if ((errorMsg !== undefined) && requestOption.onError !== undefined) {
+            requestOption.dispatch(requestOption.onError(errorMsg.message));
         }
     }
 }

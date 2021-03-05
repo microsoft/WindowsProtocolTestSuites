@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 import { MessageBar, MessageBarButton, MessageBarType } from "@fluentui/react"
 import React, { FunctionComponent, useState } from "react"
 import { LoadingPanel } from "./LoadingPanel"
@@ -13,7 +16,6 @@ type StepPanelProps = {
 
 export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
     const [showMsg, setShowMsg] = useState(true);
-    const resetShow = React.useCallback(() => setShowMsg(false), []);
 
     let infoMessageBar = undefined;
     let warningMessageBar = undefined;

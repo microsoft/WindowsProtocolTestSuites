@@ -14,13 +14,16 @@ namespace PTMService.Controllers
         /// </summary>
         /// <returns>The configurations.</returns>
         [HttpGet]
-        public Configuration[] GetConfigurations()
+        public Configuration[] GetConfigurations(int? testsuiteId)
         {
             return new Configuration[]
             {
                 new Configuration
                 {
-                    Id = 1123,
+                    Id = 1,
+                    TestSuiteId = 1,
+                    Name = "Run All BVT Test Cases",
+                    Description = "BVT Test Cases"
                 }
             };
         }

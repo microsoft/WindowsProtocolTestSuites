@@ -1,0 +1,24 @@
+.card {
+  box-shadow: 0 4px 8px 0 rgba(8, 8, 8, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 #bae7ff;
+}
+
+.card .container {
+  padding: 10px 16px;
+}
+
+.card .container .subject {
+  font-size: large;
+  font-weight: bold;
+}
+
+.card .container .description {
+    font-size: medium;
+    font-weight: normal;
+    margin-top: 5px;
+}

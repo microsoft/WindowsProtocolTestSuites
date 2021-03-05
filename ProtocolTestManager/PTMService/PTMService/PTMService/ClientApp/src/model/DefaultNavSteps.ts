@@ -1,14 +1,15 @@
+import { StepWizardChildProps } from "react-step-wizard";
 import { StepNavItemInfo } from "./StepNavItemInfo";
 
-export const DefaultNavSteps: StepNavItemInfo[] = [
+const DefaultNavSteps: StepNavItemInfo[] = [
     {
         Caption: 'Select Test Suite',
         TargetStep: 1,
-        IsEnabled: true, 
+        IsEnabled: true,
         IsActive: true
     },
     {
-        Caption: 'Test Suite Introduction',
+        Caption: 'Select Configuration',
         TargetStep: 2,
         IsEnabled: false,
     },
@@ -48,3 +49,26 @@ export const DefaultNavSteps: StepNavItemInfo[] = [
         IsEnabled: false,
     },
 ];
+
+export function getNavSteps(wizardProps: StepWizardChildProps) {
+    return DefaultNavSteps.map(item => {
+        if (item.TargetStep <= wizardProps.currentStep) {
+            return {
+                ...item,
+                IsEnabled: true
+            }
+        } else if (item.TargetStep === wizardProps.currentStep) {
+            return {
+                ...item,
+                IsEnabled: true,
+                IsActive: true
+            }
+        } else {
+            return {
+                ...item,
+                IsActive: false,
+                IsEnabled: false
+            }
+        }
+    });
+}

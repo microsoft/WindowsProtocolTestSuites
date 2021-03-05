@@ -6,6 +6,7 @@ import { IStackTokens, Link, Stack } from '@fluentui/react';
 import React from 'react';
 import { StepWizardChildProps } from "react-step-wizard";
 import { StepNavItemInfo } from '../model/StepNavItemInfo';
+import { useWindowSize } from './UseWindowSize';
 
 export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
     const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
@@ -20,7 +21,10 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
         childrenGap: 10,
     };
 
-    return (<LeftPanel>
+    const winSize = useWindowSize();
+
+
+    return (<LeftPanel style={{ height: winSize.height -10 }}>
         <Stack verticalFill verticalAlign="start" tokens={verticalGapStackTokens} >
             {navStepItems}
         </Stack>
@@ -33,9 +37,8 @@ export const LeftPanel = styled.div`
     width: ${leftPanelWidth}px;
     margin-top:auto;
     margin-bottom:auto;
-    height: 100%;
     z-index:999;
-    border-right-color: blue;
+    border-right-color: #bae7ff;
     border-style: none solid none  none ;
     border-width: 2px;
     padding-left: 10px;

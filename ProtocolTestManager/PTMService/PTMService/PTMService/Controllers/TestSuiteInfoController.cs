@@ -16,11 +16,11 @@ namespace PTMService.Controllers
         [HttpGet]
         public TestSuite[] GetTestSuites()
         {
-            System.Threading.Thread.Sleep(1000 * 5);
             return new TestSuite[]
             {
                 new TestSuite
                 {
+                    Id = 1,
                     Name = "File Server Test Suite",
                     Description="It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-FSCC], [MS-RSVD] and [MS-SQOS]",
                     Version = "4.21.1.0"

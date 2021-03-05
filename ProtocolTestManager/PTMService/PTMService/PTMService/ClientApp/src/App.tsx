@@ -9,10 +9,26 @@ import { Header } from './components/Header';
 import { TestSuiteRunWizard } from './pages/TestSuiteRunWizard';
 import { TaskHistory } from './pages/TaskHistory';
 import './css/index.css';
+import { IStackStyles, IStackTokens, Stack } from '@fluentui/react';
+import { useWindowSize } from './components/UseWindowSize';
 
 export default function App() {
+    const winSize = useWindowSize();
+
+    const stackStyles: IStackStyles = {
+        root: {
+            overflow: 'hidden',
+            width: winSize.width,
+            height: winSize.height,
+        },
+    };
+
+    const innerStackTokens: IStackTokens = {
+        childrenGap: 5,
+    };
+
     return (
-        <div>
+        <Stack verticalFill styles={stackStyles} tokens={innerStackTokens}>
             <Header />
             <Switch>
                 <Route exact path='/' component={HomePage} />
@@ -20,6 +36,6 @@ export default function App() {
                 <Route exact path='/Tasks/History' component={TaskHistory} />
                 <Redirect from="*" to="/" />
             </Switch>
-        </div>
+        </Stack>
     )
 }
