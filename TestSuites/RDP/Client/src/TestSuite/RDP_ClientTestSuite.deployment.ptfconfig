@@ -87,6 +87,12 @@
       <Property name="CertificatePassword" value="Password01!">
         <Description>The password of the pfx certificate.</Description>
       </Property>
+
+      <!--The indication of enables or disables message verification-->
+      <Property name="VerifyRdpbcgrMessage" value="true">
+        <Choice>true, false</Choice>
+        <Description>Enables or disables message verification as defined in MS-RDPBCGR. Set to True to enable, otherwise set to False.</Description>
+      </Property>
       <!-- Block End -->
 
       <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
