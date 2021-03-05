@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     If Connection.CipherId is AES-128-CCM or AES-128-GCM, 'L' is initialized to 128. 
                     If Connection.CipherId is AES-256-CCM or AES256-GCM, 'L' value is initialized to 256.
                 
-                    If Connection.Dialect is “3.1.1” and Connection.CipherId is AES-256(CCM or GCM), 
+                    If Connection.Dialect is â€œ3.1.1â€ and Connection.CipherId is AES-256(CCM or GCM), 
                     Session.FullSessionKey as the key derivation key. Otherwise, Session.SessionKey as the key 
                     derivation key
                 **/
@@ -120,14 +120,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_GCM)
                 {
                     LValue = 128;
-                    EncryptionKey = SessionKey;
                 }
                 else
                 {
                     LValue = 256;
-                    EncryptionKey = FullSessionKey;
                 }
 
+                if (dialect >= DialectRevision.Smb311 &&
+                    (CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM ||
+                    CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM))
+                {
+                    EncryptionKey = FullSessionKey;
+                }
+                else
+                {
+                    EncryptionKey = SessionKey;
+                }
+                
                 ServerInKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
                                 EncryptionKey,
                                 // If Connection.Dialect is "3.1.1", the case-sensitive ASCII string "SMBC2SCipherKey" as the label; 
