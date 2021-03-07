@@ -54,7 +54,7 @@ You should install the software listed below based on your testing purpose, incl
 
    Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.1.0).
 
-1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=26645)
+1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=36043)
 
    From `NetworkDirect_DDK.zip` extract `ndspi.h` and `ndstatus.h` into project path `ProtoSDK\RDMA\include`. This is to build SMBD test suite.
 
