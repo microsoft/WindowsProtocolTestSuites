@@ -245,7 +245,7 @@
         </Description>
       </Property>
 
-      <Property name="ClientNic2IPAddress" value="192.168.2.11">
+      <Property name="ClientNic2IPAddress" value="192.168.2.111">
         <Description>
           Another IP address or host name on local test drive computer to establish connections to SUT
           If test drive computer only has one IP address, leave it blank
