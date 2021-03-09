@@ -134,12 +134,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FSCTL_LMR_SET_LINK_TRACKING_INFORMATION = 0x1400ec,
 
         /// <summary>
-        /// The FSCTL_MARK_HANDLE request is used to set specific operational state on the given file handle.
-        /// This state is lost once the handle is closed
-        /// </summary>
-        FSCTL_MARK_HANDLE = 0x900fc,
-
-        /// <summary>
         /// FSCTL function number for FSCTL_OFFLOAD_READ.
         /// </summary>
         FSCTL_OFFLOAD_READ = 0x94264,
@@ -1518,59 +1512,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// </summary>
         [StaticSize(504)]
         public byte[] TokenId;
-    }
-    #endregion
-
-    #region FSCTL_MARK_HANDLE_INPUT
-    public enum FSCTL_MARK_HANDLE_INPUT_HANDLE_INFO_FLAGS : uint
-    {
-        /// <summary>
-        /// When a file resides on redundant media (ex: mirrored or RAID) this tells the file
-        /// system that read operations on this handle should only come from the specified copy
-        /// of data.
-        /// When this state is not set a file system will return data from any copy available
-        /// as it sees fit.
-        /// </summary>
-        MARK_HANDLE_READ_COPY = 0x00000080,
-
-        /// <summary>
-        /// When a file resides on redundant media (ex: mirrored or RAID) this tells the file
-        /// system that read operations on this handle may come from any copy of the data as
-        /// the file system sees fit. This turns off reading from a specific copy.
-        /// </summary>
-        MARK_HANDLE_NOT_READ_COPY = 0x00000100
-    }
-
-    public partial struct FSCTL_MARK_HANDLE_INPUT
-    {
-        /// <summary>
-        /// A 32-bit unsigned integer that identifies, when reading from a file which resides on
-        /// redundant media, which copy to read.
-        /// </summary>
-        public uint CopyNumber;
-
-        /// <summary>
-        /// Reserved for alignment. This field can contain any value and MUST be ignored.
-        /// </summary>
-        [StaticSize(4, StaticSizeMode.Elements)]
-        public byte[] Unused;
-
-        /// <summary>
-        /// A 64-bit HANDLE that is not used and MUST be set to zero.
-        /// </summary>
-        [StaticSize(8, StaticSizeMode.Elements)]
-        public byte[] VolumeHandle;
-
-        /// <summary>
-        /// A 32-bit unsigned integer containing flags to identify the request.
-        /// </summary>
-        public FSCTL_MARK_HANDLE_INPUT_HANDLE_INFO_FLAGS HandleInfo;
-
-        /// <summary>
-        /// A 32-bit unsigned integer field that is reserved. 
-        /// This field SHOULD be set to 0x00000000 and MUST be ignored.
-        /// </summary>
-        public uint Reserved;
     }
     #endregion
 
