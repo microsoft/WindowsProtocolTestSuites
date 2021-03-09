@@ -422,6 +422,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.QueryInfo)]
+        [Description("This test case is designed to test whether server can handle QUERY requests to a data file for FileNormalizedNameInformation correctly.")]
+        public void BVT_SMB2Basic_Query_FileNormalizedNameInformation_DataFile()
+        {
+            QueryFileNormalizedNameInfo(FileType.DataFile);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.QueryInfo)]
+        [Description("This test case is designed to test whether server can handle QUERY requests to a directory file for FileNormalizedNameInformation correctly.")]
+        public void BVT_SMB2Basic_Query_FileNormalizedNameInformation_DirectoryFile()
+        {
+            QueryFileNormalizedNameInfo(FileType.DirectoryFile);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.LockUnlock)]
         [Description("This test case is designed to test whether server can handle WRITE of locking content correctly.")]
@@ -2409,6 +2429,60 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF.");
             client1.Close(treeId, fileId);
             client1.TreeDisconnect(treeId);
+            client1.LogOff();
+        }
+
+        private void QueryFileNormalizedNameInfo(FileType fileType)
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb30);
+            TestConfig.CheckPlatform(Platform.WindowsServerV1709);
+            #endregion
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Starts a client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.");
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+            uint treeId1;
+            client1.TreeConnect(uncSharePath, out treeId1);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends CREATE request with desired access set to GENERIC_READ and GENERIC_WRITE to create a file.");
+            Smb2CreateContextResponse[] serverCreateContexts;
+            string fileName = GetTestFileName(uncSharePath);
+            FILEID fileId1;
+            client1.Create(
+                treeId1,
+                fileName,
+                fileType == FileType.DataFile? CreateOptions_Values.FILE_NON_DIRECTORY_FILE: CreateOptions_Values.FILE_DIRECTORY_FILE,
+                out fileId1,
+                out serverCreateContexts,
+                accessMask: AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends QUERY_INFO request to query file normalized name information.");
+            // FileNameInformation([MS-FSCC] 2.1.7): length + 64 Unicode characters which is long enough to hold file name
+            uint outputBufferSize = 4 + 64 * 2;
+            byte[] outputBuffer = new byte[outputBufferSize];
+            uint status = client1.QueryFileNormalizedNameInformation(
+                treeId1,
+                QUERY_INFO_Request_Flags_Values.V1,
+                fileId1,
+                null,
+                out outputBuffer
+            );
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify outputBuffer as FileNameInformation.");
+            var fileNormalizedNameInfo = TypeMarshal.ToStruct<FileNameInformation>(outputBuffer);
+            string filePath = Encoding.Unicode.GetString(fileNormalizedNameInfo.FileName);
+            BaseTestSite.Assert.AreEqual(fileName, filePath, "If the information class is FileNormalizedNameInformation, the server MUST convert the information returned from the underlying object store to a normalized path name.");
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeId1, fileId1);
+            client1.TreeDisconnect(treeId1);
             client1.LogOff();
         }
 

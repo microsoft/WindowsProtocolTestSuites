@@ -70,7 +70,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public static void BaseInitialize(TestContext context)
         {
             TestClassBase.Initialize(context);
-            BaseTestSite.DefaultProtocolDocShortName = BaseTestSite.Properties["ProtocolName"];
+            string defaultProtocolDocShortName;
+            PtfPropUtility.GetPtfPropertyValue(BaseTestSite, "ProtocolName", out defaultProtocolDocShortName);
+            BaseTestSite.DefaultProtocolDocShortName = defaultProtocolDocShortName;
         }
 
         public static void BaseCleanup()
@@ -106,7 +108,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             if (isWindowsImplementation)
             {
-                string RDPClientVersion = this.Site.Properties["RDP.Version"].ToString();
+                string RDPClientVersion;
+                PtfPropUtility.GetPtfPropertyValue(Site, "Version", out RDPClientVersion);
+
                 if (string.CompareOrdinal(RDPClientVersion, "10.3") == 0) // Windows client will not interrupt the connection for RDPClient 10.3.
                 {
                     DropConnectionForInvalidRequest = true; //A switch to avoid waiting till timeout. 
@@ -145,16 +149,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         {
             try
             {
-                string currentRDPVersion = this.Site.Properties["RDP.Version"];
+                string currentRDPVersion;
+                PtfPropUtility.GetPtfPropertyValue(Site, "Version", out currentRDPVersion);
 
-                //Validate the format of RDP.version in ptfconfig. The format of the version is required to be x.x
+                //Validate the format of version in ptfconfig. The format of the version is required to be x.x
                 Version currentRDPVer = null;
                 if (!Version.TryParse(currentRDPVersion, out currentRDPVer))
                 {
-                    this.Site.Assert.Fail("Invalid format of RDP.Version {0} in config file. The valid format is required to be x.x. Please check the ptf config file.", currentRDPVersion);
+                    this.Site.Assert.Fail("Invalid format of Version {0} in config file. The valid format is required to be x.x. Please check the ptf config file.", currentRDPVersion);
                 }
 
-                //Validate the RDP version required by the test case against the RDP.version in ptfconfig
+                //Validate the RDP version required by the test case against the version in ptfconfig
                 Version testcaseRdpVer = null;
                 if (Version.TryParse(version, out testcaseRdpVer))
                 {
@@ -173,7 +178,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 if (ex is ArgumentNullException || ex is FormatException || ex is OverflowException)
                 {
                     this.Site.Log.Add(LogEntryKind.Comment, ex.Message);
-                    this.Site.Assert.Fail("RDP.Version in PTF config, or the RDP version in TestCategory attribute is not configured correctly.");
+                    this.Site.Assert.Fail("Version in PTF config, or the RDP version in TestCategory attribute is not configured correctly.");
                 }
                 else
                 {
@@ -254,13 +259,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             #region Security Approach and Protocol
             string strRDPSecurityProtocol;
             bool isNegotiationBased = true;
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RdpSecurityNegotiation, out isNegotiationBased))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityNegotiation, out isNegotiationBased, new string[] { RdpPtfGroupNames.Security}))
             {
                 assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityNegotiation);
             }
 
             selectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.RdpSecurityProtocol, out strRDPSecurityProtocol))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityProtocol, out strRDPSecurityProtocol, new string[] { RdpPtfGroupNames.Security}))
             {
                 assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
             }
@@ -302,7 +307,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             #region Encryption Level
             string strRDPSecurityEncryptionLevel;
             enLevel = EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.RdpSecurityEncryptionLevel, out strRDPSecurityEncryptionLevel))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityEncryptionLevel, out strRDPSecurityEncryptionLevel, new string[] { RdpPtfGroupNames.Security, RdpPtfGroupNames.Encryption}))
             {
                 assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionLevel);
             }
@@ -350,7 +355,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             #region Encryption Method
             string strRDPSecurityEncryptionMethod;
             enMethod = EncryptionMethods.ENCRYPTION_METHOD_128BIT;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.RdpSecurityEncryptionMethod, out strRDPSecurityEncryptionMethod))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityEncryptionMethod, out strRDPSecurityEncryptionMethod, new string[] { RdpPtfGroupNames.Security, RdpPtfGroupNames.Encryption }))
             {
                 assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionMethod);
             }
@@ -399,7 +404,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             #region WaitTime
             int waitSeconds;
-            if (!PtfPropUtility.GetIntPtfProperty(TestSite, RdpPtfPropNames.Timeout, out waitSeconds))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.Timeout, out waitSeconds))
             {
                 assumeFailForInvalidPtfProp(RdpPtfPropNames.Timeout);
             }
@@ -412,25 +417,25 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             #region SUT Display Verification
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "VerifySUTDisplay.Enable", out verifySUTDisplay))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "Enable", out verifySUTDisplay, new string[] { RdpPtfGroupNames.VerifySUTDisplay }))
             {
                 verifySUTDisplay = false;
             }
 
             int shiftX, shiftY;
-            if (!PtfPropUtility.GetIntPtfProperty(TestSite, "VerifySUTDisplay.Shift.X", out shiftX))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "ShiftX", out shiftX, new string[] { RdpPtfGroupNames.VerifySUTDisplay }))
             {
                 shiftX = 0;
             }
 
-            if (!PtfPropUtility.GetIntPtfProperty(TestSite, "VerifySUTDisplay.Shift.Y", out shiftY))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "ShiftY", out shiftY, new string[] { RdpPtfGroupNames.VerifySUTDisplay }))
             {
                 shiftY = 0;
             }
 
             sutDisplayShift = new Point(shiftX, shiftY);
 
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, "VerifySUTDisplay.BitmapSavePath", out bitmapSavePath))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "BitmapSavePath", out bitmapSavePath, new string[] { RdpPtfGroupNames.VerifySUTDisplay }))
             {
                 bitmapSavePath = @".\";
             }
@@ -445,77 +450,77 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             #region Other configrations
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportFastPathInput, out isClientSupportFastPathInput))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportFastPathInput, out isClientSupportFastPathInput))
             {
                 isClientSupportFastPathInput = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportAutoReconnect, out isClientSuportAutoReconnect))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportAutoReconnect, out isClientSuportAutoReconnect))
             {
                 isClientSuportAutoReconnect = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportRDPEFS, out isClientSupportRDPEFS))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportRDPEFS, out isClientSupportRDPEFS))
             {
                 isClientSupportRDPEFS = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportServerRedirection, out isClientSupportServerRedirection))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportServerRedirection, out isClientSupportServerRedirection))
             {
                 isClientSupportServerRedirection = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportSoftSync, out isClientSupportSoftSync))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportSoftSync, out isClientSupportSoftSync))
             {
                 isClientSupportSoftSync = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportTunnelingStaticVCTraffic, out isClientSupportTunnelingStaticVCTraffic))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportTunnelingStaticVCTraffic, out isClientSupportTunnelingStaticVCTraffic))
             {
                 isClientSupportTunnelingStaticVCTraffic = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.RDPClientSupportRdpNegDataEmpty, out isClientSupportEmptyRdpNegData))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportRdpNegDataEmpty, out isClientSupportEmptyRdpNegData))
             {
                 isClientSupportEmptyRdpNegData = false; //if property not found, set to false as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.IsWindowsImplementation, out isWindowsImplementation))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.IsWindowsImplementation, out isWindowsImplementation))
             {
                 isWindowsImplementation = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, RdpPtfPropNames.DropConnectionForInvalidRequest, out DropConnectionForInvalidRequest))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.DropConnectionForInvalidRequest, out DropConnectionForInvalidRequest))
             {
                 DropConnectionForInvalidRequest = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "VerifyRdpbcgrMessage", out bVerifyRdpbcgrMessage))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "VerifyRdpbcgrMessage", out bVerifyRdpbcgrMessage))
             {
                 bVerifyRdpbcgrMessage = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPBCGRVerification", out TurnOffRDPBCGRVerification))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "TurnOffRDPBCGRVerification", out TurnOffRDPBCGRVerification))
             {
                 TurnOffRDPBCGRVerification = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPEGFXVerification", out TurnOffRDPEGFXVerification))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "TurnOffRDPEGFXVerification", out TurnOffRDPEGFXVerification))
             {
                 TurnOffRDPEGFXVerification = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPEIVerification", out TurnOffRDPEIVerification))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "TurnOffRDPEIVerification", out TurnOffRDPEIVerification))
             {
                 TurnOffRDPEIVerification = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPEUSBVerification", out TurnOffRDPEUSBVerification))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "TurnOffRDPEUSBVerification", out TurnOffRDPEUSBVerification))
             {
                 TurnOffRDPEUSBVerification = true; //if property not found, set to true as default value
             }
 
-            if (!PtfPropUtility.GetBoolPtfProperty(TestSite, "TurnOffRDPRFXVerification", out TurnOffRDPRFXVerification))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "TurnOffRDPRFXVerification", out TurnOffRDPRFXVerification))
             {
                 TurnOffRDPRFXVerification = true; //if property not found, set to true as default value
             }
@@ -523,7 +528,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (image_64X64 == null)
             {
                 String rdprfxImageFile;
-                if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.MSRDPRFX_Image, out rdprfxImageFile))
+                if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.MSRDPRFX_Image, out rdprfxImageFile))
                 {
                     assumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_Image);
                 }
@@ -534,7 +539,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (imageForVideoMode == null)
             {
                 String rdprfxVideoModeImageFile;
-                if (!PtfPropUtility.GetStringPtfProperty(TestSite, RdpPtfPropNames.MSRDPRFX_VideoModeImage, out rdprfxVideoModeImageFile))
+                if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.MSRDPRFX_VideoModeImage, out rdprfxVideoModeImageFile))
                 {
                     assumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_VideoModeImage);
                 }

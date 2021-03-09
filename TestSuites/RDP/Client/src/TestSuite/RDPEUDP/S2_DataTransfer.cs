@@ -235,8 +235,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             // Set the autoHandle to true, then can be used for create security channel.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start TLS handshake.");
 
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
+
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
             rdpemtServerR = new RdpemtServer(rdpeudpSocketR, cert, false);
 
@@ -272,8 +276,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.TestSite.Log.Add(LogEntryKind.Comment, "Start DTLS handshake.");
             this.rdpeudpSocketL.AutoHandle = true;
 
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
+
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
             rdpemtServerL = new RdpemtServer(rdpeudpSocketL, cert, false);
 

@@ -627,7 +627,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public void CheckPlatform(Platform platform)
         {
-            if (Platform < platform)
+            if (IsWindowsPlatform && Platform < platform) //Only windows platform could be compared with version
             {
                 Site.Assert.Inconclusive("The case is applicable in {0}.", platform);
             }

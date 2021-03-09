@@ -164,7 +164,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Load clearcodec image
             String RdpegfxClearCodecImagePath;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, "ClearCodecImage", out RdpegfxClearCodecImagePath))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "ClearCodecImage", out RdpegfxClearCodecImagePath))
             {
                 RdpegfxClearCodecImagePath = "";
             }
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Load RfxProgressiveCodec image
             String RdpegfxRfxProgCodecImagePath;
-            if (!PtfPropUtility.GetStringPtfProperty(TestSite, "RfxProgressiveCodecImage", out RdpegfxRfxProgCodecImagePath))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "RfxProgressiveCodecImage", out RdpegfxRfxProgCodecImagePath))
             {
                 RdpegfxRfxProgCodecImagePath = "";
             }

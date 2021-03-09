@@ -254,9 +254,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
                 rdpeudpSocket = rdpeudpSocketL;
             }
 
+            String certFile;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePath", out certFile);
 
-            String certFile = this.Site.Properties["CertificatePath"];
-            String certPwd = this.Site.Properties["CertificatePassword"];
+            String certPwd;
+            PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
+
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
             RdpemtServer rdpemtServer = new RdpemtServer(rdpeudpSocket, cert, false);
 
