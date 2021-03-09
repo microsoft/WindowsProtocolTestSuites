@@ -1615,52 +1615,62 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if setting invalid values for file basic information attributes are handled by different file systems for data file|
-| File information class: FileBasicInformation|
+| | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DataFile).|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| | SetInfo with FileInfoClass.FileBasicInformation where InputBufferSize less than sizeOf(FILE_BASIC_INFORMATION) |
+| | Verify status returned is **STATUS_INFO_LENGTH_MISMATCH** |
+| | SetInfo with FileInfoClass.FileBasicInformation where **InputBuffer.FileAttributes.FILE_ATTRIBUTE_DIRECTORY** is TRUE |
+| | Verify status returned is **STATUS_INVALID_PARAMETER** |
 
 ##### <a name="FileInfo_Set_FileBasicInformation_File_Positive"/>FileInfo_Set_FileBasicInformation_File_Positive
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description|  To test if setting file basic information timestamps are supported by different file systems for data file|
-| File information class: FileBasicInformation|
+| | Note: FAT32 doest not process ChangeTime|
+| | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DataFile).|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | QueryInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
+| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
+| | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
 
 ##### <a name="FileInfo_Set_FileBasicInformation_File_MinusTwoSupported"/>FileInfo_Set_FileBasicInformation_File_MinusTwoSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if -2 timestamp value for file basic information attributes is supported by different file systems|
-| File information class: FileBasicInformation|
+| | Note: Only NTFS and ReFS support -2 timestamp|
+| | File information class: FileBasicInformation|
 | Message Sequence| CreateFile.|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| | SetInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime using input timestamp values -3, 0, -1, then -2|
+| | Verify status returned is **STATUS_INVALID_PARAMETER** when input timestamp less than -2|
+| | Verify timestamp does not change when input timestamp equals 0|
+| | Verify timestamp does not change for subsequent I/O operation when input timestamp equals -1|
+| | Verify timestamp is updated for subsequent I/O operation when input timestamp equals -2|
 
 ##### <a name="FileInfo_Set_FileBasicInformation_Dir_Negative"/>FileInfo_Set_FileBasicInformation_Dir_Negative
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description|  To test if setting invalid values for file basic information attributes are handled by different file systems for directory |
-| File information class: FileBasicInformation|
+| | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| | SetInfo with FileInfoClass.FileBasicInformation where InputBufferSize less than sizeOf(FILE_BASIC_INFORMATION) |
+| | Verify status returned should be **STATUS_INFO_LENGTH_MISMATCH** |
+| | SetInfo with FileInfoClass.FileBasicInformation where **InputBuffer.FileAttributes.FILE_ATTRIBUTE_TEMPORARY** is TRUE |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
 
 ##### <a name="FileInfo_Set_FileBasicInformation_Dir_Positive"/>FileInfo_Set_FileBasicInformation_Dir_Positive
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if setting file basic information timestamp is supported by different file systems |
-| File information class: FileBasicInformation|
+| | Note: FAT32 doest not process ChangeTime|
+| | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | QueryInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
+| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
+| | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
