@@ -166,7 +166,7 @@
       </Property>
       <!-- The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient. -->
       <Property name="TriggerContinuousTouchEvent_Task" value="TriggerContinuousTouchEvent" >
-        <Description>The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient</Description>
+        <Description>The Windows task name for RDPEI SUT Control interface: TriggerContinuousTouchEventOnClient.</Description>
       </Property>
       <!-- The Windows task name for RDPEI SUT Control interface: TriggerPositionSpecifiedTouchEventOnClient. -->
       <Property name="TriggerTouchHoverEvent_Task" value="TriggerTouchHoverEvent" >
@@ -214,22 +214,22 @@
       <!-- Turn off the RDPBCGR requirements verification for BCGR-->
       <Property name="TurnOffRDPBCGRVerification" value="false">
         <Choice>true, false</Choice>
-        <Description>Turn off the RDPBCGR requirements verification for BCGR</Description>
+        <Description>Turn off the RDPBCGR requirements verification for BCGR.</Description>
       </Property>
       <!-- Turn off the RDPBCGR requirements verification for EGFX-->
       <Property name="TurnOffRDPEGFXVerification" value="false">
         <Choice>true, false</Choice>
-        <Description>Turn off the RDPBCGR requirements verification for EGFX</Description>
+        <Description>Turn off the RDPBCGR requirements verification for EGFX.</Description>
       </Property>
       <!-- Turn off the RDPBCGR requirements verification for EI-->
       <Property name="TurnOffRDPEIVerification" value="false">
         <Choice>true, false</Choice>
-        <Description>Turn off the RDPBCGR requirements verification for EI</Description>
+        <Description>Turn off the RDPBCGR requirements verification for EI.</Description>
       </Property>
       <!-- Turn off the RDPBCGR requirements verification for EUSB-->
       <Property name="TurnOffRDPEUSBVerification" value="false">
         <Choice>true, false</Choice>
-        <Description>Turn off the RDPBCGR requirements verification for EUSB</Description>
+        <Description>Turn off the RDPBCGR requirements verification for EUSB.</Description>
       </Property>
       <!-- Turn off the RDPBCGR requirements verification for RFX-->
       <Property name="TurnOffRDPRFXVerification" value="false">
@@ -318,7 +318,7 @@
       </Property>
       <!-- RDPEGFX H264 codec test data -->
       <Property name="RdpegfxH264TestDataPath" value="../TestData/">
-        <Description>RDPEGFX H264 codec test data</Description>
+        <Description>RDPEGFX H264 codec test data.</Description>
       </Property>
       <!-- RDPEDISP Test Image file -->
       <Property name="RdpedispTestImage" value="../TestData/RdpedispTestImage.bmp">
