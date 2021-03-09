@@ -75,13 +75,13 @@
           Port of KDC, By default KDC port is 88
         </Description>
       </Property>
-      
+
       <Property name="AdminUserName" value="Administrator">
         <Description>
           Administrator user account name of the SUT
         </Description>
       </Property>
-      
+
       <Property name="NonAdminUserName" value="nonadmin" >
         <Description>
           Non administrator user account name of the SUT. If no such user, leave it blank

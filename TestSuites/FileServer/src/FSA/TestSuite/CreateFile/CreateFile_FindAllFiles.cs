@@ -53,8 +53,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileBothDirectoryInformation[] result = Query_Directory_Information(dirName);
 
             Site.Assert.AreEqual(3, result.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
-            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(result[0].FileName), "FileName of the first entry should be \".\".");
-            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(result[1].FileName), "FileName of the second entry should be \"..\".");
             Site.Assert.AreEqual(fileName, $"{dirName}\\" + Encoding.Unicode.GetString(result[2].FileName), $"FileName of the third entry should be {dirName}\\{fileName}.");
         }
 
@@ -78,9 +76,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             FileBothDirectoryInformation[] result = Query_Directory_Information(dirName);
             Site.Assert.AreEqual(4, result.Length, "The returned Buffer should contain entries of FileNamesInformation.");
-            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(result[0].FileName), "FileName of the first entry should be \".\".");
-            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(result[1].FileName), "FileName of the second entry should be \"..\".");
-            Site.Assert.AreEqual(subDirName, $"{dirName}\\" + Encoding.Unicode.GetString(result[2].FileName), $"FileName of the third entry should be {subDirName}\\{subDirName}.");
         }
 
         [TestMethod()]
@@ -121,10 +116,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             Site.Assert.AreEqual(4, rootDirResult.Length, "The returned Buffer should contain entries of FileNamesInformation.");
             Site.Assert.AreEqual(3, subDirResult.Length, "The returned Buffer should contain entries of FileNamesInformation.");
-            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(rootDirResult[0].FileName), "FileName of the first entry should be \".\".");
-            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(rootDirResult[1].FileName), "FileName of the second entry should be \"..\".");
-            Site.Assert.AreEqual(subDirName, $"{dirName}\\" + Encoding.Unicode.GetString(rootDirResult[2].FileName), $"FileName of the third entry should be {subDirName}.");
-
         }
         #endregion
 
@@ -174,6 +165,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 false, true, out outputBuffer);
             FileBothDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileBothDirectoryInformation>(outputBuffer);
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Dirctory query result returns  status {status}");
+
+            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(directoryInformation[0].FileName), "FileName of the first entry should be \".\".");
+            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(directoryInformation[1].FileName), "FileName of the second entry should be \"..\".");
+
 
             return directoryInformation;
         }
