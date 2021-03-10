@@ -23,6 +23,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         private FSAAdapter fsaAdapter;
         private const uint BytesToWrite = 1024;
         private const int FileNameLength = 20;
+        /// DOS_STAR can be transmogrify to *.
+        /// DOS_DOT can be transmogrify to .* or .?
+        /// DOS_QM can be transmogrify to ?
+        private const string DOS_STAR = "*.";
+        private const string DOS_DOT_I = ".*";
+        private const string DOS_DOT_II = ".?";
+        
         #endregion
 
         #region Class Initialization and Cleanup
@@ -805,6 +812,197 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Array.Copy(shortName, 0, newShortNameBytes, 0, shortNameLength);
 
             return Encoding.Unicode.GetString(newShortNameBytes);
+        }
+
+        /// <summary>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="fileNames">The File Names to be added to the directory. </param>
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="outputBuffer">The buffer containing the directory enumeration being returned. </param>
+        /// <param name="dirFileId">The fileid for the directory. </param>
+        /// Prepare before testing, including:
+        /// 1. creating a new directory
+        /// 2. creating a new file under the directory
+        /// 3. writing some content to the file
+        /// 4. closing the file to flush the data to the disk
+        /// Then send QueryDirectory with specified FileInfoClass to the server and return the outputBuffer.
+        /// </summary>
+        private void PrepareAndQueryDirectory(
+            FileInfoClass fileInfoClass,
+            List<string> fileNames,
+            string searchPattern,
+            out byte[] outputBuffer,
+            out FILEID dirFileId)
+        {
+            outputBuffer = null;
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            uint treeId = 0;
+            ulong sessionId = 0;
+
+            MessageStatus status = CreateDirectory(dirName, out dirFileId, out treeId, out sessionId);
+
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Create should succeed.");
+
+            foreach (string fileName in fileNames)
+            {
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName} under the directory {dirName}");
+                status = this.fsaAdapter.CreateFile(
+                    $"{dirName}\\{fileName}",
+                    (FileAttribute)0,
+                    CreateOptions.NON_DIRECTORY_FILE,
+                    (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                    (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
+                    CreateDisposition.OPEN_IF);
+                Site.Assert.AreEqual(
+                    MessageStatus.SUCCESS,
+                    status,
+                    $"Create should succeed.");
+            }
+
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with {fileInfoClass}");
+            status = this.fsaAdapter.QueryDirectory(dirFileId, treeId, sessionId, searchPattern, fileInfoClass, false, true, out outputBuffer);
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Query directory should succeed.");
+        }
+
+        /// <summary>
+        /// <param name="count">The number of files to be created. </param>
+        /// Create n number of file names.
+        /// </summary>
+        private List<string> CreateRandomFileNames(
+            int count)
+        {
+            List<string> fileNames = new List<string>();
+
+            for (int i = 1; i <= count; i++)
+            {
+                fileNames.Add(this.fsaAdapter.ComposeRandomFileName(FileNameLength, ".txt", opt: CreateOptions.NON_DIRECTORY_FILE));
+            }
+
+            return fileNames;
+        }
+
+        /// <summary>
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="fileNames">The File Names to be added to the directory. </param>
+        /// Then send QueryDirectory with specified FileInfoClass to the server and return the outputBuffer.
+        /// </summary>
+        private byte[] QueryByWidldCardAndFileInfoClass(
+            string searchPattern,
+            FileInfoClass fileInfoClass,
+            List<string> fileNames)
+        {
+            byte[] outputBuffer;
+            FILEID dirFileId;
+
+            PrepareAndQueryDirectory(fileInfoClass, fileNames, searchPattern, out outputBuffer, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+
+            return outputBuffer;
+        }
+
+        /// <summary>
+        /// <param name="fileInformation">The file information array containing file name(s). </param>
+        /// Load FileInformation into List of string.
+        /// </summary>
+        private List<string> GetListFileInformation(FileNamesInformation[] fileInformation)
+        {
+            List<string> fileInformationList = new List<string>();
+
+            foreach (FileNamesInformation information in fileInformation)
+            {
+                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+            }
+
+            return fileInformationList;
+        }
+
+        /// <summary>
+        /// <param name="fileInformation">The file information array containing file name(s). </param>
+        /// Load FileInformation into List of string.
+        /// </summary>
+        private List<string> GetListFileInformation(FileFullDirectoryInformation[] fileInformation)
+        {
+            List<string> fileInformationList = new List<string>();
+
+            foreach (FileFullDirectoryInformation information in fileInformation)
+            {
+                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+            }
+
+            return fileInformationList;
+        }
+
+        /// <summary>
+        /// <param name="fileInformation">The file information array containing file name(s). </param>
+        /// Load FileInformation into List of string.
+        /// </summary>
+        private List<string> GetListFileInformation(FileIdFullDirectoryInformation[] fileInformation)
+        {
+            List<string> fileInformationList = new List<string>();
+
+            foreach (FileIdFullDirectoryInformation information in fileInformation)
+            {
+                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+            }
+
+            return fileInformationList;
+        }
+
+        /// <summary>
+        /// <param name="fileInformation">The file information array containing file name(s). </param>
+        /// Load FileInformation into List of string.
+        /// </summary>
+        private List<string> GetListFileInformation(FileBothDirectoryInformation[] fileInformation)
+        {
+            List<string> fileInformationList = new List<string>();
+
+            foreach (FileBothDirectoryInformation information in fileInformation)
+            {
+                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+            }
+
+            return fileInformationList;
+        }
+
+        /// <summary>
+        /// <param name="fileInformation">The file information array containing file name(s). </param>
+        /// Load FileInformation into List of string.
+        /// </summary>
+        private List<string> GetListFileInformation(FileIdBothDirectoryInformation[] fileInformation)
+        {
+            List<string> fileInformationList = new List<string>();
+
+            foreach (FileIdBothDirectoryInformation information in fileInformation)
+            {
+                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+            }
+
+            return fileInformationList;
+        }
+
+        /// <summary>
+        /// <param name="fileInformation">The file information array containing file name(s). </param>
+        /// Load FileInformation into List of string.
+        /// </summary>
+        private List<string> GetListFileInformation(FileDirectoryInformation[] fileInformation)
+        {
+            List<string> fileInformationList = new List<string>();
+
+            foreach (FileDirectoryInformation information in fileInformation)
+            {
+                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+            }
+
+            return fileInformationList;
         }
         #endregion
     }
