@@ -11,11 +11,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
     public interface IStoragePool
     {
         /// <summary>
-        /// Get the storage node.
+        /// Get known storage node.
         /// </summary>
-        /// <param name="name">The name of storage node.</param>
+        /// <param name="name">The name of known storage node.</param>
         /// <returns>The storage node.</returns>
-        IStorageNode GetNode(string name);
+        IStorageNode GetKnownNode(string name);
+
+        /// <summary>
+        /// Open a storage node.
+        /// </summary>
+        /// <param name="path">The path of storage path.</param>
+        /// <returns>The storage node.</returns>
+        IStorageNode OpenNode(string path);
 
         /// <summary>
         /// Enumerate all storage nodes.

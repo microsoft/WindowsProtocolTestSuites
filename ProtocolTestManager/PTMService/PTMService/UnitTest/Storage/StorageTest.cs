@@ -53,9 +53,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
         }
 
         [TestMethod]
-        public void GetNode()
+        public void GetKnownNode()
         {
-            var node = pool.GetNode(testNodeName);
+            var node = pool.GetKnownNode(testNodeName);
 
             Assert.IsNotNull(node);
 
@@ -63,9 +63,29 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
         }
 
         [TestMethod]
+        public void OpenNode()
+        {
+            string subNodeName = "456";
+
+            string subNodePath = Path.Combine(testPath, subNodeName);
+
+            Directory.CreateDirectory(subNodePath);
+
+            var node = pool.OpenNode(subNodePath);
+
+            Assert.IsNotNull(node);
+
+            Assert.AreEqual(subNodePath, node.AbsolutePath);
+
+            Assert.AreEqual(subNodeName, node.Name);
+
+            Assert.AreEqual(testNodeName, node.Parent.Name);
+        }
+
+        [TestMethod]
         public void CreateNode()
         {
-            var node = pool.GetNode(testNodeName);
+            var node = pool.GetKnownNode(testNodeName);
 
             Assert.IsNotNull(node);
 
@@ -85,7 +105,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
         [TestMethod]
         public void RemoveNode()
         {
-            var node = pool.GetNode(testNodeName);
+            var node = pool.GetKnownNode(testNodeName);
 
             Assert.IsNotNull(node);
 
@@ -109,7 +129,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
         [TestMethod]
         public void CreateFile()
         {
-            var node = pool.GetNode(testNodeName);
+            var node = pool.GetKnownNode(testNodeName);
 
             Assert.IsNotNull(node);
 
@@ -141,7 +161,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
         [TestMethod]
         public void ReadFile()
         {
-            var node = pool.GetNode(testNodeName);
+            var node = pool.GetKnownNode(testNodeName);
 
             Assert.IsNotNull(node);
 
@@ -167,7 +187,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Storage
         [TestMethod]
         public void RemoveFile()
         {
-            var node = pool.GetNode(testNodeName);
+            var node = pool.GetKnownNode(testNodeName);
 
             Assert.IsNotNull(node);
 

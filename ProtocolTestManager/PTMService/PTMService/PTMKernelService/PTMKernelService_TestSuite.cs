@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -18,7 +19,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public ITestSuite GetTestSuite(int id)
         {
-            throw new NotImplementedException();
+            if (!TestSuitePool.ContainsKey(id))
+            {
+                using var instance = ScopedServiceFactory.GetInstance();
+
+                var pool = instance.ScopedServiceInstance;
+
+                var repo = pool.Get<TestSuiteInstallation>();
+
+                var testSuite = repo.Get(q => q.Where(item => item.Id == id)).First();
+
+                TestSuitePool.Add(id, TestSuite.Open(testSuite, StoragePool));
+            }
+
+            return TestSuitePool[id];
         }
 
         public int InstallTestSuite(string name, string packageName, Stream package, string description)

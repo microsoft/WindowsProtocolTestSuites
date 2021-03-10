@@ -8,11 +8,27 @@ using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal class TestSuite : ITestSuite
     {
+        private TestSuite(TestSuiteInstallation testSuiteInstallation, IStorageNode storageRoot)
+        {
+            Id = testSuiteInstallation.Id;
+
+            Name = testSuiteInstallation.Name;
+
+            Description = testSuiteInstallation.Description;
+
+            InstallMethod = testSuiteInstallation.InstallMethod;
+
+            Version = testSuiteInstallation.Version;
+
+            StorageRoot = storageRoot;
+        }
+
         public int Id { get; private init; }
 
         public string Version { get; set; }
@@ -27,14 +43,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public IEnumerable<string> GetConfigurationFiles()
         {
-            throw new NotImplementedException();
+            var binNode = StorageRoot.GetNode(TestSuiteConsts.Bin);
+
+            var result = binNode.GetFiles().Where(name => Path.GetExtension(name) == ".ptfconfig");
+
+            return result;
         }
 
         public static ITestSuite Create(TestSuiteInstallation testSuiteInstallation, string packageName, Stream package, IStoragePool storagePool)
         {
             int id = testSuiteInstallation.Id;
 
-            var node = storagePool.GetNode(KnownStorageNodeNames.TestSuite).CreateNode(id.ToString());
+            var node = storagePool.GetKnownNode(KnownStorageNodeNames.TestSuite).CreateNode(id.ToString());
 
             testSuiteInstallation.Path = node.AbsolutePath;
 
@@ -66,15 +86,16 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             testSuiteInstallation.Version = rs.ReadLine();
 
-            var result = new TestSuite()
-            {
-                Id = testSuiteInstallation.Id,
-                Name = testSuiteInstallation.Name,
-                Description = testSuiteInstallation.Description,
-                InstallMethod = testSuiteInstallation.InstallMethod,
-                Version = testSuiteInstallation.Version,
-                StorageRoot = node,
-            };
+            var result = new TestSuite(testSuiteInstallation, node);
+
+            return result;
+        }
+
+        public static TestSuite Open(TestSuiteInstallation testSuiteInstallation, IStoragePool storagePool)
+        {
+            var node = storagePool.OpenNode(testSuiteInstallation.Path);
+
+            var result = new TestSuite(testSuiteInstallation, node);
 
             return result;
         }

@@ -36,5 +36,32 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         int InstallTestSuite(string name, string packageName, Stream package, string description);
 
         #endregion
+
+        #region Configuration related members.
+
+        /// <summary>
+        /// Query configurations by filter.
+        /// </summary>
+        /// <param name="testSuiteId">The optional test suite Id of configuration.</param>
+        /// <returns>The configurations queried out.</returns>
+        IConfiguration[] QueryConfigurations(int? testSuiteId);
+
+        /// <summary>
+        /// Create a configuration.
+        /// </summary>
+        /// <param name="name">The name of configuration.</param>
+        /// <param name="testSuiteId">The test suite Id.</param>
+        /// <param name="description">The description of configuration.</param>
+        /// <returns>The configuration Id.</returns>
+        int CreateConfiguration(string name, int testSuiteId, string description);
+
+        /// <summary>
+        /// Get a configuration.
+        /// </summary>
+        /// <param name="id">The configuration Id.</param>
+        /// <returns>The configuration.</returns>
+        IConfiguration GetConfiguration(int id);
+
+        #endregion
     }
 }

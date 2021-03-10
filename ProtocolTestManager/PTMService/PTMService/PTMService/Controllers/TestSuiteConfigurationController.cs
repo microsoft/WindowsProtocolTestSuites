@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers;
+using System.Linq;
 
 namespace PTMService.Controllers
 {
@@ -7,25 +14,36 @@ namespace PTMService.Controllers
     /// </summary>
     [Route("api/configuration")]
     [ApiController]
-    public class TestSuiteConfigurationController : ControllerBase
+    public class TestSuiteConfigurationController : PTMServiceControllerBase
     {
+        /// <summary>
+        /// Constructor of test suite configuration controller.
+        /// </summary>
+        /// <param name="ptmKernelService">The PTM kernel service.</param>
+        public TestSuiteConfigurationController(IPTMKernelService ptmKernelService)
+            : base(ptmKernelService)
+        {
+        }
+
         /// <summary>
         /// Get configurations.
         /// </summary>
+        /// <param name="testSuiteId">The optional test suite Id.</param>
         /// <returns>The configurations.</returns>
         [HttpGet]
-        public Configuration[] GetConfigurations(int? testsuiteId)
+        public Configuration[] GetConfigurations(int? testSuiteId)
         {
-            return new Configuration[]
+            var configurations = PTMKernelService.QueryConfigurations(testSuiteId);
+
+            var result = configurations.Select(configuration => new Configuration
             {
-                new Configuration
-                {
-                    Id = 1,
-                    TestSuiteId = 1,
-                    Name = "Run All BVT Test Cases",
-                    Description = "BVT Test Cases"
-                }
-            };
+                Id = configuration.Id,
+                Name = configuration.Name,
+                TestSuiteId = configuration.TestSuite.Id,
+                Description = configuration.Description,
+            });
+
+            return result.ToArray();
         }
 
         /// <summary>
@@ -36,7 +54,9 @@ namespace PTMService.Controllers
         [HttpPost]
         public int CreateConfiguration(Configuration request)
         {
-            return 123;
+            int result = PTMKernelService.CreateConfiguration(request.Name, request.TestSuiteId, request.Description);
+
+            return result;
         }
 
         /// <summary>
@@ -52,7 +72,18 @@ namespace PTMService.Controllers
             {
                 new RuleGroup
                 {
-                    Name = "Kind",
+                    Name = "All",
+                    DisplayName ="All",
+                    Rules = new Rule[]
+                    {
+                        new Rule
+                        {
+                            Type = RuleType.Selector,
+                            Name = "All",
+                            DisplayName = "All",
+                            Categories = new string [] { "All", },
+                        },
+                    },
                 },
             };
         }
@@ -77,22 +108,24 @@ namespace PTMService.Controllers
         /// <returns>The properties.</returns>
         [Route("{id}/property")]
         [HttpGet]
-        public PropertyGroup[] GetProperties(int id)
+        public PropertyGetItemGroup[] GetProperties(int id)
         {
-            return new PropertyGroup[]
+            var configuration = PTMKernelService.GetConfiguration(id);
+
+            var result = configuration.Properties.Select(group => new PropertyGetItemGroup
             {
-                new PropertyGroup
+                Name = group.Name,
+                Items = group.Items.Select(property => new PropertyGetItem
                 {
-                    Name = "SMB2",
-                    Items = new Property[]
-                    {
-                        new Property
-                        {
-                            Name = "SUTAddress",
-                        },
-                    },
-                },
-            };
+                    Key = property.Key,
+                    Name = property.Name,
+                    Description = property.Description,
+                    Choices = property.Choices?.ToArray(),
+                    Value = property.Value,
+                }).ToArray(),
+            }).ToArray();
+
+            return result;
         }
 
         /// <summary>
@@ -103,8 +136,20 @@ namespace PTMService.Controllers
         /// <returns>The action result.</returns>
         [Route("{id}/property")]
         [HttpPut]
-        public IActionResult SetProperties(int id, PropertyGroup[] properties)
+        public IActionResult SetProperties(int id, PropertySetItemGroup[] properties)
         {
+            var configuration = PTMKernelService.GetConfiguration(id);
+
+            configuration.Properties = properties.Select(group => new PropertyGroup
+            {
+                Name = group.Name,
+                Items = group.Items.Select(item => new Property
+                {
+                    Key = item.Key,
+                    Value = item.Value,
+                }),
+            });
+
             return Ok();
         }
 
@@ -117,14 +162,11 @@ namespace PTMService.Controllers
         [HttpGet]
         public Adapter[] GetAdapters(int id)
         {
-            return new Adapter[]
-            {
-                new Adapter
-                {
-                    Name = "SUTControlAdapter",
-                    Kind = AdapterKind.PowerShell,
-                },
-            };
+            var configuration = PTMKernelService.GetConfiguration(id);
+
+            var result = configuration.Adapters.ToArray();
+
+            return result;
         }
 
         /// <summary>
@@ -137,6 +179,10 @@ namespace PTMService.Controllers
         [HttpPut]
         public IActionResult SetAdapters(int id, Adapter[] adapters)
         {
+            var configuration = PTMKernelService.GetConfiguration(id);
+
+            configuration.Adapters = adapters;
+
             return Ok();
         }
     }

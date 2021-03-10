@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using System;
 
 namespace PTMService.Controllers
 {
@@ -33,12 +37,6 @@ namespace PTMService.Controllers
         public string Description { get; set; }
     }
 
-    public enum RuleType
-    {
-        Remover,
-        Selector,
-    }
-
     public class Rule
     {
         public RuleType Type { get; set; }
@@ -59,8 +57,10 @@ namespace PTMService.Controllers
         public Rule[] Rules { get; set; }
     }
 
-    public class Property
+    public class PropertyGetItem
     {
+        public string Key { get; set; }
+
         public string Name { get; set; }
 
         public string Value { get; set; }
@@ -70,30 +70,25 @@ namespace PTMService.Controllers
         public string Description { get; set; }
     }
 
-    public class PropertyGroup
+    public class PropertyGetItemGroup
     {
         public string Name { get; set; }
 
-        public Property[] Items { get; set; }
+        public PropertyGetItem[] Items { get; set; }
     }
 
-    public enum AdapterKind
+    public class PropertySetItem
     {
-        Managed,
-        PowerShell,
-        Shell,
-        Interactive,
+        public string Key { get; set; }
+
+        public string Value { get; set; }
     }
 
-    public class Adapter
+    public class PropertySetItemGroup
     {
         public string Name { get; set; }
 
-        public string AdapterType { get; set; }
-
-        public AdapterKind Kind { get; set; }
-
-        public string ScriptDirectory { get; set; }
+        public PropertySetItem[] Items { get; set; }
     }
 
     public enum TestCaseState

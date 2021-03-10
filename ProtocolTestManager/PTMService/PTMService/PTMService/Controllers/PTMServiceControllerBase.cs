@@ -10,6 +10,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
     /// Base controller of PTM service.
     /// </summary>
     [ApiController]
+    [PTMServiceExceptionFilter]
     public class PTMServiceControllerBase : ControllerBase
     {
         /// <summary>
