@@ -1,11 +1,12 @@
-﻿using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using System.Linq;
-using System;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System.Text;
@@ -13,7 +14,7 @@ using System.Text;
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.QueryDirectory
 {
     [TestClassAttribute()]
-    public partial class QuerySearchPatternTestCases : PtfTestClassBase
+    public partial class QueryDirectory_FileNameInExperssion_TestCases : PtfTestClassBase
     {
         #region Variables
         private FSAAdapter fsaAdapter;
