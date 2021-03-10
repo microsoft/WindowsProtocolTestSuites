@@ -7,7 +7,7 @@ import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
 import { getNavSteps } from '../model/DefaultNavSteps';
 
-export function ConfigureTestCase(props: StepWizardProps) {
+export function ConfigureAdapter(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
     const navSteps = getNavSteps(wizardProps);
     const wizard = WizardNavBar(wizardProps, navSteps);
@@ -15,7 +15,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={false} errorMsg={''} >
-                <div>ConfigureTestCase</div>
+                <div>ConfigureAdapter</div>
             </StepPanel>
         </div>
     )

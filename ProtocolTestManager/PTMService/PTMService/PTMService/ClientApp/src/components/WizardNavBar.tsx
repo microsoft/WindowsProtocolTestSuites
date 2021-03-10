@@ -24,7 +24,7 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
     const winSize = useWindowSize();
 
 
-    return (<LeftPanel style={{ height: winSize.height -10 }}>
+    return (<LeftPanel style={{ height: winSize.height - headerHeight }}>
         <Stack verticalFill verticalAlign="start" tokens={verticalGapStackTokens} >
             {navStepItems}
         </Stack>
@@ -32,6 +32,9 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
 }
 
 const leftPanelWidth = 200;
+// header height 50 + 10 padding
+const headerHeight = 60;
+
 export const LeftPanel = styled.div`
     float: left;
     width: ${leftPanelWidth}px;
@@ -45,8 +48,13 @@ export const LeftPanel = styled.div`
 `;
 
 export const RightPanel = styled.div`
-    margin-Left: ${leftPanelWidth + 10}px;
-    height: 100%;
-    z-index:999;
-    padding-left: 10px;
+    & {
+        margin-Left: ${leftPanelWidth + 10}px;
+        height: 100%;
+        z-index:999;
+        padding-left: 10px;
+    }
+    &::after {
+        clear: "both";
+    }
 `;

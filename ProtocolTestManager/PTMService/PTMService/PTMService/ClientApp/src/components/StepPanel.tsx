@@ -7,7 +7,7 @@ import { LoadingPanel } from "./LoadingPanel"
 import { RightPanel } from "./WizardNavBar"
 
 type StepPanelProps = {
-    isLoading: boolean,
+    isLoading?: boolean,
     leftNav: JSX.Element,
     infoMsg?: string,
     warningMsg?: string,
@@ -62,15 +62,17 @@ export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
         <div>
             {props.leftNav}
             <RightPanel>
-                {
-                    (((errorMessageBar || warningMessageBar || infoMessageBar) !== undefined) && showMsg) ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div> : <div>
-                        {
-                            props.isLoading ? <LoadingPanel /> : <div>
-                                {props.children}
-                            </div>
-                        }
-                    </div>
-                }
+                <div>
+                    {
+                        (((errorMessageBar || warningMessageBar || infoMessageBar) !== undefined) && showMsg) ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div> : <div>
+                            {
+                                props.isLoading ? <LoadingPanel /> : <div>
+                                    {props.children}
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
             </RightPanel>
         </div >
 

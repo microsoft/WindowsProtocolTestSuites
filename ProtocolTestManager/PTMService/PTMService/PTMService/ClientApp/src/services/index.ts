@@ -12,6 +12,7 @@ export interface FetchOption<T> {
     url: string;
     method: RequestMethod;
     body?: BodyInit;
+    headers?: HeadersInit;
     dispatch: (action: T) => void;
     onRequest?: Function;
     onComplete?: Function;
@@ -25,7 +26,14 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
         }
 
         if (requestOption.onComplete !== undefined) {
-            const response = await fetch(requestOption.url, { method: requestOption.method, body: requestOption.body });
+            const response = await fetch(requestOption.url, {
+                method: requestOption.method, body: requestOption.body, headers: requestOption.headers ?
+                    requestOption.headers :
+                    {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+            });
             if (response.status >= 400 && response.status < 600) {
                 throw new Error("Bad response from server");
             }

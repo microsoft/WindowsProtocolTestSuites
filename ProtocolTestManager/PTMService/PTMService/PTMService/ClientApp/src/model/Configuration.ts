@@ -1,5 +1,5 @@
 export interface Configuration {
-    Id: number;
+    Id?: number;
 
     Name: string;
 

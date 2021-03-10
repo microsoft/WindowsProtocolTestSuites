@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { GET_TESTSUITE_CONFIGURATIONS_FAILURE, GET_TESTSUITE_CONFIGURATIONS_REQUEST, GET_TESTSUITE_CONFIGURATIONS_SUCCESS, SET_SEARCHTEXT, TestSuiteConfigurationActionTypes } from "../actions/TestSuiteConfigurationAction";
+import { CREATE_TESTSUITE_CONFIGURATION_FAILURE, CREATE_TESTSUITE_CONFIGURATION_REQUEST, CREATE_TESTSUITE_CONFIGURATION_SUCCESS, GET_TESTSUITE_CONFIGURATIONS_FAILURE, GET_TESTSUITE_CONFIGURATIONS_REQUEST, GET_TESTSUITE_CONFIGURATIONS_SUCCESS, SET_SEARCHTEXT, TestSuiteConfigurationActionTypes } from "../actions/TestSuiteConfigurationAction";
 import { Configuration } from "../model/Configuration";
 
 export interface ConfigurationState {
@@ -11,6 +11,7 @@ export interface ConfigurationState {
     configurationList: Configuration[];
     displayList: Configuration[];
     selectedConfiguration?: Configuration;
+    lastCreateId?: number;
 }
 
 const initialConfigurationState: ConfigurationState = {
@@ -52,7 +53,20 @@ export const getConfigurationReducer = (state = initialConfigurationState, actio
                 isLoading: false,
                 displayList: filterConfiguration(state.configurationList, action.searchText)
             }
-
+        case CREATE_TESTSUITE_CONFIGURATION_REQUEST:
+            return {
+                ...state,
+            }
+        case CREATE_TESTSUITE_CONFIGURATION_SUCCESS:
+            return {
+                ...state,
+                lastCreateId: action.payload
+            }
+        case CREATE_TESTSUITE_CONFIGURATION_FAILURE:
+            return {
+                ...state,
+                errorMsg: action.errorMsg
+            }
         default:
             return state;
     }
