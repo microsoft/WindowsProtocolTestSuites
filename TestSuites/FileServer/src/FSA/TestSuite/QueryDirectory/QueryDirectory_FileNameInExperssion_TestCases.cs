@@ -28,20 +28,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.QueryDirector
         // DOS_QM can be transmogrify to ?
         #endregion
 
-        #region Class Initialization and Cleanup
-        [ClassInitializeAttribute()]
-        public static void ClassInitialize(TestContext context)
-        {
-            PtfTestClassBase.Initialize(context);
-        }
-
-        [ClassCleanupAttribute()]
-        public static void ClassCleanup()
-        {
-            PtfTestClassBase.Cleanup();
-        }
-        #endregion
-
         protected string CurrentTestCaseName
         {
             get
@@ -50,29 +36,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.QueryDirector
                 return fullName.Split('.').LastOrDefault();
             }
         }
-
-        #region Test Initialization and Cleanup
-        protected override void TestInitialize()
-        {
-            this.InitializeTestManager();
-            this.fsaAdapter = new FSAAdapter();
-            this.fsaAdapter.Initialize(BaseTestSite);
-            this.fsaAdapter.LogTestCaseDescription(BaseTestSite);
-
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "Test environment:");
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 1. File System: " + this.fsaAdapter.FileSystem.ToString());
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 2. Transport: " + this.fsaAdapter.Transport.ToString());
-            BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 3. Share Path: " + this.fsaAdapter.UncSharePath);
-            this.fsaAdapter.FsaInitial();
-        }
-
-        protected override void TestCleanup()
-        {
-            this.fsaAdapter.Dispose();
-            base.TestCleanup();
-            this.CleanupTestManager();
-        }
-        #endregion
 
         #region Test cases
         [TestMethod()]
@@ -1183,7 +1146,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.QueryDirector
         }
 
         #endregion
-
 
         #region Utility
 
