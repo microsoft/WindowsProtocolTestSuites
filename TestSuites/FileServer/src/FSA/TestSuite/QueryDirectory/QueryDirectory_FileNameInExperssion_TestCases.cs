@@ -14,7 +14,7 @@ using System.Text;
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.QueryDirectory
 {
     [TestClassAttribute()]
-    public partial class QueryDirectory_FileNameInExperssion_TestCases : PtfTestClassBase
+    public partial class QueryDirectoryTestCases : PtfTestClassBase
     {
         #region Variables
         private FSAAdapter fsaAdapter;
