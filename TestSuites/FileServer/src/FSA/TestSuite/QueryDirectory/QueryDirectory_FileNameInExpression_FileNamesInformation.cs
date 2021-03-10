@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileNamesInformation from the server for search pattern * described in [MS-FSA] 2.1.4.")]
-        public void BVT_QueryDirectoryBySearchPattern_FileNamesInformation_StarWildCard()
+        public void BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskWildCard()
         {
             byte[] outputBuffer;
             List<string> fileNames;
@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileNamesInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
-        public void BVT_QueryDirectoryBySearchPattern_FileNamesInformation_SpecialCase_StarWildCard()
+        public void BVT_QueryDirectoryBySearchPattern_FileNamesInformation_SpecialCase_AsteriskWildCard()
         {
             byte[] outputBuffer;
             List<string> fileNames;
@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Verify the Query Directory response with FileNamesInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
-        public void BVT_QueryDirectoryBySearchPattern_FileNamesInformation_KleeneStarWildCard()
+        public void BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskInStringWildCard()
         {
             byte[] outputBuffer;
             List<string> fileNames;

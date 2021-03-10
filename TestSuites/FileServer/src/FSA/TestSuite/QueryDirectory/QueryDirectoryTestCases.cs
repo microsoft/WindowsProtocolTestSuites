@@ -839,6 +839,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             uint treeId = 0;
             ulong sessionId = 0;
 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Step 1. Create a directory with file with name: {dirName} ");
             MessageStatus status = CreateDirectory(dirName, out dirFileId, out treeId, out sessionId);
 
             Site.Assert.AreEqual(
@@ -846,6 +847,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 status,
                 $"Create should succeed.");
 
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Step 2. Create a Files in the {dirName} directory");
             foreach (string fileName in fileNames)
             {
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName} under the directory {dirName}");
@@ -862,8 +865,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                     $"Create should succeed.");
             }
 
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Query directory with {fileInfoClass}");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Step 3. Query directory with {fileInfoClass} with wildcard ( {searchPattern} ) ");
             status = this.fsaAdapter.QueryDirectory(dirFileId, treeId, sessionId, searchPattern, fileInfoClass, false, true, out outputBuffer);
             Site.Assert.AreEqual(
                 MessageStatus.SUCCESS,
@@ -904,7 +906,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             PrepareAndQueryDirectory(fileInfoClass, fileNames, searchPattern, out outputBuffer, out dirFileId);
 
-            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4. Start to verify the from the Query Directory response.");
 
             return outputBuffer;
         }
@@ -915,6 +917,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// </summary>
         private List<string> GetListFileInformation(FileNamesInformation[] fileInformation)
         {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
             List<string> fileInformationList = new List<string>();
 
             foreach (FileNamesInformation information in fileInformation)
@@ -931,6 +935,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// </summary>
         private List<string> GetListFileInformation(FileFullDirectoryInformation[] fileInformation)
         {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
             List<string> fileInformationList = new List<string>();
 
             foreach (FileFullDirectoryInformation information in fileInformation)
@@ -947,6 +953,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// </summary>
         private List<string> GetListFileInformation(FileIdFullDirectoryInformation[] fileInformation)
         {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
             List<string> fileInformationList = new List<string>();
 
             foreach (FileIdFullDirectoryInformation information in fileInformation)
@@ -963,6 +971,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// </summary>
         private List<string> GetListFileInformation(FileBothDirectoryInformation[] fileInformation)
         {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
             List<string> fileInformationList = new List<string>();
 
             foreach (FileBothDirectoryInformation information in fileInformation)
@@ -979,6 +989,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// </summary>
         private List<string> GetListFileInformation(FileIdBothDirectoryInformation[] fileInformation)
         {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
             List<string> fileInformationList = new List<string>();
 
             foreach (FileIdBothDirectoryInformation information in fileInformation)
@@ -995,6 +1007,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// </summary>
         private List<string> GetListFileInformation(FileDirectoryInformation[] fileInformation)
         {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
             List<string> fileInformationList = new List<string>();
 
             foreach (FileDirectoryInformation information in fileInformation)
