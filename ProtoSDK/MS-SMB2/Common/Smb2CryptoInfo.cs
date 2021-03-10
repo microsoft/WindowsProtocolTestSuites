@@ -13,6 +13,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
         internal DialectRevision Dialect;
         internal byte[] SessionKey;
+        internal byte[] FullSessionKey;
+        internal byte[] EncryptionKey;
         internal byte[] SigningKey;
         internal byte[] ServerInKey;
         internal byte[] ServerOutKey;
@@ -24,7 +26,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         internal bool EnableSessionSigning;
         internal bool EnableSessionEncryption;
         internal List<uint> EnableTreeEncryption = new List<uint>();
-        
+
+        internal int LValue;
         /// <summary>
         /// Generate encrypt/decrypt and signing keys according to the smb2 dialect, cryptographicKey(session key), PreauthIntegrityHashValue and existing cryptInfo
         /// If the param cryptoInfo is not null, then the param cipherId will be ignored. 
@@ -64,6 +67,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Dialect = dialect;
 
             SessionKey = cryptographicKey;
+            FullSessionKey = cryptographicKey;
 
             // TD indicates that when signing the message the protocol uses
             // the first 16 bytes of the cryptographic key for this authenticated context. 
@@ -102,25 +106,56 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     // for pre SMB 3.11 dialects, use AES-128-CCM for encryption
                     CipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
                 }
+
+                /**
+                    If Connection.CipherId is AES-128-CCM or AES-128-GCM, 'L' is initialized to 128. 
+                    If Connection.CipherId is AES-256-CCM or AES256-GCM, 'L' value is initialized to 256.
+                
+                    If Connection.Dialect is “3.1.1” and Connection.CipherId is AES-256(CCM or GCM), 
+                    Session.FullSessionKey as the key derivation key. Otherwise, Session.SessionKey as the key 
+                    derivation key
+                **/
+
+                if (CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM || 
+                    CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_GCM)
+                {
+                    LValue = 128;
+                }
+                else
+                {
+                    LValue = 256;
+                }
+
+                if (dialect == DialectRevision.Smb311 &&
+                    (CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM ||
+                    CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM))
+                {
+                    EncryptionKey = FullSessionKey;
+                }
+                else
+                {
+                    EncryptionKey = SessionKey;
+                }
+                
                 ServerInKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
-                                SessionKey,
+                                EncryptionKey,
                                 // If Connection.Dialect is "3.1.1", the case-sensitive ASCII string "SMBC2SCipherKey" as the label; 
                                 // otherwise, the case-sensitive ASCII string "SMB2AESCCM" as the label.
                                 Dialect == DialectRevision.Smb311 ? Encoding.ASCII.GetBytes("SMBC2SCipherKey\0") : Encoding.ASCII.GetBytes("SMB2AESCCM\0"),
                                 // If Connection.Dialect is "3.1.1", Session.PreauthIntegrityHashValue as the context; 
                                 // otherwise, the case-sensitive ASCII string "ServerIn " as context for the algorithm (note the blank space at the end).
                                 Dialect == DialectRevision.Smb311 ? preauthIntegrityHashValue : Encoding.ASCII.GetBytes("ServerIn \0"),
-                                128);
+                                LValue);
 
                 ServerOutKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
-                                SessionKey,
+                                EncryptionKey,
                                 // If Connection.Dialect is "3.100", the case-sensitive ASCII string "SMBS2CCipherKey" as the label; 
                                 // otherwise, the case-sensitive ASCII string "SMB2AESCCM" as the label.
                                 Dialect == DialectRevision.Smb311 ? Encoding.ASCII.GetBytes("SMBS2CCipherKey\0") : Encoding.ASCII.GetBytes("SMB2AESCCM\0"),
                                 // If Connection.Dialect is "3.100", Session.PreauthIntegrityHashValue as the context; 
                                 // otherwise, the case-sensitive ASCII string "ServerOut" as context for the algorithm.
                                 Dialect == DialectRevision.Smb311 ? preauthIntegrityHashValue : Encoding.ASCII.GetBytes("ServerOut\0"),
-                                128);
+                                LValue);
 
                 ApplicationKey = SP8001008KeyDerivation.CounterModeHmacSha256KeyDerive(
                                 SessionKey,
