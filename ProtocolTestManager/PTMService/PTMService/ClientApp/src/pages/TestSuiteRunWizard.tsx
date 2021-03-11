@@ -11,6 +11,7 @@ import { DetectionResult } from "./DetectionResult";
 import { FilterTestCase } from "./FilterTestCase";
 import { ConfigureTestCase } from "./ConfigureTestCase";
 import { RunSelectedCase } from "./RunSelectedCase";
+import { ConfigureAdapter } from "./ConfigureAdapter";
 
 export function TestSuiteRunWizard() {
     return (
@@ -21,12 +22,13 @@ export function TestSuiteRunWizard() {
             >
                 <SelectTestSuite hashKey={'SelectTestSuite'} />
                 <SelectConfiguration hashKey={'SelectConfiguration'} />
-                <ConfigureMethod hashKey={'ConfigureMethod'}/>
-                <AutoDetection hashKey={'AutoDetection'}/>
-                <DetectionResult hashKey={'DetectionResult'}/>
-                <FilterTestCase hashKey={'FilterTestCase'}/>
-                <ConfigureTestCase hashKey={'ConfigureTestCase'}/>
-                <RunSelectedCase hashKey={'RunSelectedCase'}/>
+                <ConfigureMethod hashKey={'ConfigureMethod'} />
+                <AutoDetection hashKey={'AutoDetection'} />
+                <DetectionResult hashKey={'DetectionResult'} />
+                <FilterTestCase hashKey={'FilterTestCase'} />
+                <ConfigureTestCase hashKey={'ConfigureTestCase'} />
+                <ConfigureAdapter hashKey={'ConfigureAdapter'} />
+                <RunSelectedCase hashKey={'RunSelectedCase'} />
             </StepWizard>
         </div>
     )

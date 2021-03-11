@@ -3,6 +3,7 @@
 
 import { RequestMethod, FetchService } from ".";
 import { ConfigurationActions, TestSuiteConfigurationActionTypes } from "../actions/TestSuiteConfigurationAction";
+import { Configuration } from "../model/Configuration";
 import { AppThunkAction } from "../store/configureStore";
 
 
@@ -17,5 +18,17 @@ export const ConfigurationsDataSrv = {
             onComplete: ConfigurationActions.getConfigurationAction_Success,
             onError: ConfigurationActions.getConfigurationAction_Failure
         });
-    }
+    },
+    createConfiguration: (configuration: Configuration): AppThunkAction<TestSuiteConfigurationActionTypes> => async (dispatch) => {
+        // const state = getState();
+        await FetchService({
+            url: `api/configuration`,
+            method: RequestMethod.POST,
+            body: JSON.stringify(configuration),
+            dispatch,
+            onRequest: ConfigurationActions.createConfiguration_Request,
+            onComplete: ConfigurationActions.createConfiguration_Success,
+            onError: ConfigurationActions.createConfiguration_Failure
+        });
+    },
 };
