@@ -22,9 +22,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_Noting_FileModified()
+        public void CommonAlgorithm_Noting_FileModified_File()
         {
             Algorithm_Noting_FileModified(FileType.DataFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_Noting_FileModified_Dir()
+        {
+            Algorithm_Noting_FileModified(FileType.DirectoryFile);
         }
 
         #endregion
@@ -34,12 +46,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         private void Algorithm_Noting_FileModified(FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
-
+            
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
 
-            string fileName;
-            CreateFile(fileType, out fileName);
+
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            CreateFile(fileType, fileName);
 
             //Step 2: Query file basic information
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FILE_BASIC_INFORMATION for timestamps");
@@ -51,11 +64,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             QueryFileBasicInformation(out oldChangeTime, out oldCreationTime, out oldLastAccessTime, out oldLastWriteTime, out _);
 
-            //Step 3: Write to file
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Write to file");
+            if(fileType == FileType.DataFile)
+            {
+                //Step 3: Write to file
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Write to file");
 
-            //Write to file
-            WriteToFile();
+                //Write to file
+                WriteToFile();
+            }
+            else
+            {
+                //Step 3: Create file in the directory
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Create file in the directory");
+
+                string innerFileName = this.fsaAdapter.ComposeRandomFileName(8);
+
+                CreateFile(fileType, fileName + "\\" + innerFileName);
+            }
 
             //Step 4: Close and open file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Close and open file to give significant time a file system can defer processing Section 2.1.4.17");
@@ -63,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //<42> Section 2.1.4.17: File systems may choose to defer processing for a file that has been modified 
             // to a later time, favoring performance over accuracy.
             this.fsaAdapter.CloseOpen();
-            OpenFile(fileName);
+            OpenFile(fileType ,fileName);
 
             //Step 5: Query FileBasicInformation
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Query FILE_BASIC_INFORMATION for file attributes");
@@ -149,7 +174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
         }
 
-        private void OpenFile(string fileName)
+        private void OpenFile(FileType fileType, string fileName)
         {
             //delay open file until minimum recognizable time change
             DateTime currentTime = DateTime.Now;
@@ -163,7 +188,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             MessageStatus status = this.fsaAdapter.CreateFile(
                 fileName,
                 FileAttribute.NORMAL,
-                CreateOptions.NON_DIRECTORY_FILE,
+                fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
                 FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
                 ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
                 CreateDisposition.OPEN);
@@ -171,9 +196,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Open should succeed.");
         }
 
-        private void CreateFile(FileType fileType, out string fileName)
+        private void CreateFile(FileType fileType, string fileName)
         {
-            fileName = this.fsaAdapter.ComposeRandomFileName(8);
             MessageStatus status = this.fsaAdapter.CreateFile(
                 fileName,
                 FileAttribute.NORMAL,
