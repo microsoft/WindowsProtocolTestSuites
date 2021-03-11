@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMService", "PTMService\PTMService.csproj", "{D7B8E7E9-835E-4C05-BB42-13589204D251}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abstractions", "..\Abstractions\Abstractions.csproj", "{35484293-F82C-42E8-8E17-5F20A0EFD903}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abstractions", "Abstractions\Abstractions.csproj", "{35484293-F82C-42E8-8E17-5F20A0EFD903}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{77429074-C25F-499E-B907-794C276BFCCF}"
 EndProject
@@ -19,11 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Storage", "Storage\Storage.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PTMKernelService", "PTMKernelService\PTMKernelService.csproj", "{2244AD7A-C841-438C-AC7A-BD7CDC9B2988}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "..\..\Kernel\Kernel.csproj", "{93622E53-E8CC-41AA-86FA-5185C1CABA1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kernel", "..\Kernel\Kernel.csproj", "{93622E53-E8CC-41AA-86FA-5185C1CABA1B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{360AD1ED-FA9E-466B-B0AA-7ED8F879E7A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\..\Common\Common.csproj", "{EF226903-D3F4-4AA0-B2CC-74155BF589AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\Common\Common.csproj", "{EF226903-D3F4-4AA0-B2CC-74155BF589AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
