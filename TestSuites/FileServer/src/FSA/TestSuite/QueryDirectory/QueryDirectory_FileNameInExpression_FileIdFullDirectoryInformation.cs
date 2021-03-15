@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             fileInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
 
-            Site.Assert.AreEqual(12, fileInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(12, fileInformation.Length, "The returned Buffer should contain twelve entries of FileIdBothDirectoryInformation.");
             Site.Assert.AreEqual(".", Encoding.Unicode.GetString(fileInformation[0].FileName), "FileName of the first entry should be \".\".");
             Site.Assert.AreEqual("..", Encoding.Unicode.GetString(fileInformation[1].FileName), "FileName of the second entry should be \"..\".");
             filesCount = fileNames.Intersect(GetListFileInformation(fileInformation)).ToList().Count();
@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             fileInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
 
-            Site.Assert.AreEqual(12, fileInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(12, fileInformation.Length, "The returned Buffer should contain twelve entries of FileIdBothDirectoryInformation.");
             Site.Assert.AreEqual(".", Encoding.Unicode.GetString(fileInformation[0].FileName), "FileName of the first entry should be \".\".");
             Site.Assert.AreEqual("..", Encoding.Unicode.GetString(fileInformation[1].FileName), "FileName of the second entry should be \"..\".");
             filesCount = fileNames.Intersect(GetListFileInformation(fileInformation)).ToList().Count();
@@ -94,7 +94,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             fileInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
 
-            Site.Assert.AreEqual(4, fileInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(4, fileInformation.Length, "The returned Buffer should contain four entries of FileIdBothDirectoryInformation.");
             filesCount = fileNames.Intersect(GetListFileInformation(fileInformation)).ToList().Count();
             Site.Assert.AreEqual(4, filesCount, $"Number of files created should be equal to the number of files returned: {numberOfFiles}.");
         }
@@ -145,7 +145,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             fileInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
 
-            Site.Assert.AreEqual(4, fileInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(4, fileInformation.Length, "The returned Buffer should contain four entries of FileIdBothDirectoryInformation.");
             filesCount = fileNames.Intersect(GetListFileInformation(fileInformation)).ToList().Count();
             Site.Assert.AreEqual(4, filesCount, $"Number of files created should be equal to the number of files returned: {4}.");
         }
@@ -170,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             fileInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
 
-            Site.Assert.AreEqual(2, fileInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(2, fileInformation.Length, "The returned Buffer should contain two entries of FileIdBothDirectoryInformation.");
             filesCount = fileNames.Intersect(GetListFileInformation(fileInformation)).ToList().Count();
             Site.Assert.AreEqual(2, filesCount, $"Number of files created should be equal to the number of files returned: {2}.");
         }
@@ -195,7 +195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             fileInformation = FsaUtility.UnmarshalFileInformationArray<FileIdFullDirectoryInformation>(outputBuffer);
 
-            Site.Assert.AreEqual(3, fileInformation.Length, "The returned Buffer should contain two entries of FileNamesInformation.");
+            Site.Assert.AreEqual(3, fileInformation.Length, "The returned Buffer should contain three entries of FileIdBothDirectoryInformation.");
             filesCount = fileNames.Intersect(GetListFileInformation(fileInformation)).ToList().Count();
             Site.Assert.AreEqual(3, filesCount, $"Number of files created should be equal to the number of files returned: {3}.");
         }
