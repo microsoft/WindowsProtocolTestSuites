@@ -81,24 +81,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [TestCategory(TestCategories.Dfsc)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
-        [Description("Client sends a v2 Link referral request with invalid Domain name to DC, and expects negative response.")]
-        public void InvalidDomainNameLinkReferralToDC()
-        {
-            uint status;
-            string invalidDomainLinkPath = string.Format(@"\{0}\{1}\{2}", DFSCTestUtility.Consts.InvalidComponent, TestConfig.DomainNamespace, TestConfig.DFSLink);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v2 Link referral request with invalid Domain name to DC.");
-            utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V2, invalidDomainLinkPath, true);
-
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server response.");
-            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_NOT_FOUND, status,
-                "Expected Link Referral v2 to DC Response is STATUS_NOT_FOUND, actual status is {0}", Smb2Status.GetStatusCode(status));
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.Dfsc)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Client sends a v4 Link referral request to DC with invalid namespace, and expects negative response.")]
         public void InvalidNamespaceLinkReferralToDC()
         {

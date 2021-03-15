@@ -58,7 +58,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             requestId = 1;
 
             // Initiate transport
-            string transportType = testSite.Properties["SUTControl.TransportType"];
+            string transportType;
+
+            PtfPropUtility.GetPtfPropertyValue(testSite, "TransportType", out transportType, new string[] { RdpPtfGroupNames.SUTControl });
             if (transportType == null)
             {
                 transportType = "TCP";
@@ -77,26 +79,15 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             
             // Initiate Connect payload type
             bool clientSupportRDPFile = false;
-            try
-            {
-                clientSupportRDPFile = bool.Parse(testSite.Properties["SUTControl.ClientSupportRDPFile"]);
-            }
-            catch
-            {
-            }
+            PtfPropUtility.GetPtfPropertyValue(testSite, "ClientSupportRDPFile", out clientSupportRDPFile, new string[] { RdpPtfGroupNames.SUTControl });
             
             // Initiate alwaysNeedResponse
-            alwaysNeedResponse = true;
-            try
-            {
-                alwaysNeedResponse = bool.Parse(testSite.Properties["SUTControl.AlwaysNeedResponse"]);
-            }
-            catch
-            {
-            }
+            PtfPropUtility.GetPtfPropertyValue(testSite, "AlwaysNeedResponse", out alwaysNeedResponse, new string[] { RdpPtfGroupNames.SUTControl });
 
             // Get Agent addresses
-            string addresses = testSite.Properties["SUTControl.AgentAddress"];
+            string addresses;
+            PtfPropUtility.GetPtfPropertyValue(testSite, "AgentAddress", out addresses, new string[] { RdpPtfGroupNames.SUTControl });
+
             string[] addressList = addresses.Split(';');
             AgentList = new List<IPEndPoint>();
             foreach (string address in addressList)
@@ -106,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     if (address != null && address.Trim().Length > 0)
                     {
                         int separator = address.IndexOf(':');
-                        //Consider SUTControl.AgentAddress may be SUT hostname, or IP addresses
+                        //Consider AgentAddress may be SUT hostname, or IP addresses
                         List<IPAddress> addList = CommonUtility.GetHostIPs(this.Site, address.Substring(0, separator)); 
                         string port = address.Substring(separator + 1).Trim();
                         foreach(IPAddress add in addList)

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Protocols.TestTools;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -15,21 +15,28 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public const string Timeout = "WaitTime";
         public const string IsWindowsImplementation = "IsWindowsImplementation";
         public const string DropConnectionForInvalidRequest = "DropConnectionForInvalidRequest";
-        public const string RdpSecurityNegotiation = "RDP.Security.Negotiation";
-        public const string RdpSecurityProtocol = "RDP.Security.Protocol";
-        public const string RdpSecurityEncryptionLevel = "RDP.Security.Encryption.Level";
-        public const string RdpSecurityEncryptionMethod = "RDP.Security.Encryption.Method";
-        public const string RDPClientSupportFastPathInput = "RDP.Client.SupportFastPathInput";
-        public const string RDPClientSupportAutoReconnect = "RDP.Client.SupportAutoReconnect";
-        public const string RDPClientSupportRDPEFS = "RDP.Client.SupportRDPEFS";
-        public const string RDPClientSupportServerRedirection = "RDP.Client.SupportServerRedirection";
-        public const string RDPClientSupportSoftSync = "RDP.Client.SupportSoftSync";
-        public const string RDPClientSupportTunnelingStaticVCTraffic = "RDP.Client.SupportTunnelingStaticVCTraffic";
-        public const string RDPClientSupportRdpNegDataEmpty = "RDP.Client.SupportRdpNegDataEmpty";
-        public const string MSRDPRFX_64X64BitmapFile = "MSRDPRFX_64X64BitmapFile";
-        public const string MSRDPRFX_BitmapFileForVideoMode = "MSRDPRFX_BitmapFileForVideoMode";
-        public const string MSRDPRFX_Image = "RDPRFX.Image";
-        public const string MSRDPRFX_VideoModeImage = "RDPRFXVideoMode.Image";
+        public const string RdpSecurityNegotiation = "Negotiation";
+        public const string RdpSecurityProtocol = "Protocol";
+        public const string RdpSecurityEncryptionLevel = "Level";
+        public const string RdpSecurityEncryptionMethod = "Method";
+        public const string RDPClientSupportFastPathInput = "SupportFastPathInput";
+        public const string RDPClientSupportAutoReconnect = "SupportAutoReconnect";
+        public const string RDPClientSupportRDPEFS = "SupportRDPEFS";
+        public const string RDPClientSupportServerRedirection = "SupportServerRedirection";
+        public const string RDPClientSupportSoftSync = "SupportSoftSync";
+        public const string RDPClientSupportTunnelingStaticVCTraffic = "SupportTunnelingStaticVCTraffic";
+        public const string RDPClientSupportRdpNegDataEmpty = "SupportRdpNegDataEmpty";
+        public const string MSRDPRFX_Image = "RDPRFXImage";
+        public const string MSRDPRFX_VideoModeImage = "RDPRFXVideoModeImage";
+    }
+
+    public class RdpPtfGroupNames
+    {
+        public const string Security = "Security";
+        public const string Encryption = "Encryption";
+        public const string SUTControl = "SUTControl";
+        public const string VerifySUTDisplay = "VerifySUTDisplay";
+        public const string IQA = "IQA";
     }
 
     /// <summary>
@@ -37,102 +44,67 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     /// </summary>
     public class PtfPropUtility
     {
-        /// <summary>
-        /// Get a string type PTF property.
-        /// </summary>
-        /// <param name="testSite">The test site where to get from.</param>
-        /// <param name="propName">The property name.</param>
-        /// <param name="propStrValue">The output property value.</param>
-        /// <returns>true if value was converted successfully; otherwise, false.</returns>
-        public static bool GetStringPtfProperty(ITestSite testSite, string propName, out string propStrValue)
-        {
-            bool bSucceed = false;
-
-            string propValue = testSite.Properties[propName];
-            if (propValue == null)
+        private static string GetGroupPropName(string propName, string [] groupNames = null) {
+            if (groupNames != null && groupNames.Length > 0)
             {
-                propStrValue = string.Empty;
-                return false;
+                string groupNamesString = string.Join(".", groupNames);
+                return $"{groupNamesString}.{propName}";
             }
-            else
-            {
-                propStrValue = propValue;
-                bSucceed = true;
+            else {
+                return $"{propName}";
             }
-
-            return bSucceed;
         }
 
         /// <summary>
-        /// Get a string type PTF property.
+        /// Get a T type PTF property.
         /// </summary>
+        /// <typeparam name="T">The property value type.</typeparam>
         /// <param name="testSite">The test site where to get from.</param>
         /// <param name="propName">The property name.</param>
         /// <param name="propStrValue">The output property value.</param>
+        /// <param name="groupNames">The groups which the property locate.</param>
         /// <returns>true if value was converted successfully; otherwise, false.</returns>
-        public static bool GetIntPtfProperty(ITestSite testSite, string propName, out int propIntValue)
+        public static bool GetPtfPropertyValue<T>(ITestSite testSite, string propName, out T propValue, string[] groupNames = null) 
         {
             bool bSucceed = false;
 
-            string propValue = testSite.Properties[propName];
-            if (propValue == null)
+            propValue = default(T);
+
+            object propObjectValue = testSite.Properties[GetGroupPropName(propName, groupNames)];
+            if (propObjectValue == null)
             {
-                propIntValue = 0;
+                propValue = default(T);
                 return false;
             }
-            else
+            else 
             {
-                bSucceed = int.TryParse(propValue, out propIntValue);
-            }
+                Type t = typeof(T);
+                if (t.FullName.Equals("System.String"))
+                {
+                    propValue = (T)propObjectValue;
 
-            return bSucceed;
-        }
+                    bSucceed = true;
+                }
+                else
+                {
+                    var tryParse = t.GetMethod("TryParse", BindingFlags.Public | BindingFlags.Static, Type.DefaultBinder
+                    , new Type[] { propObjectValue.GetType(), t.MakeByRefType() }
+                    , new ParameterModifier[] { new ParameterModifier(2) });
 
-        /// <summary>
-        /// Get a string type PTF property.
-        /// </summary>
-        /// <param name="testSite">The test site where to get from.</param>
-        /// <param name="propName">The property name.</param>
-        /// <param name="propStrValue">The output property value.</param>
-        /// <returns>true if value was converted successfully; otherwise, false.</returns>
-        public static bool GetUIntPtfProperty(ITestSite testSite, string propName, out uint propIntValue)
-        {
-            bool bSucceed = false;
-
-            string propValue = testSite.Properties[propName];
-            if (propValue == null)
-            {
-                propIntValue = 0;
-                return false;
-            }
-            else
-            {
-                bSucceed = uint.TryParse(propValue, out propIntValue);
-            }
-
-            return bSucceed;
-        }
-
-        /// <summary>
-        /// Get a string type PTF property.
-        /// </summary>
-        /// <param name="testSite">The test site where to get from.</param>
-        /// <param name="propName">The property name.</param>
-        /// <param name="propStrValue">The output property value.</param>
-        /// <returns>true if value was converted successfully; otherwise, false.</returns>
-        public static bool GetBoolPtfProperty(ITestSite testSite, string propName, out bool propBoolValue)
-        {
-            bool bSucceed = false;
-
-            string propValue = testSite.Properties[propName];
-            if (propValue == null)
-            {
-                propBoolValue = false;
-                return false;
-            }
-            else
-            {
-                bSucceed = bool.TryParse(propValue, out propBoolValue);
+                    if (tryParse != null)
+                    {
+                        var parameters = new object[] { propObjectValue, Activator.CreateInstance(t) };
+                        bSucceed = (bool)tryParse.Invoke(null, parameters);
+                        if (bSucceed)
+                        {
+                            propValue = (T)parameters[1];
+                        }
+                        else
+                        {
+                            propValue = default(T);
+                        }
+                    }
+                }
             }
 
             return bSucceed;

@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
-using System.Drawing;
-using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Drawing;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedisp
 {
@@ -233,7 +232,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.SurfaceManagementCommand, false);
 
-            Bitmap instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange1Image"]);
+            string pdpedispOrientationChange1Image;
+            PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange1Image", out pdpedispOrientationChange1Image);
+            Bitmap instructionBitmap = new Bitmap(pdpedispOrientationChange1Image);
+            
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT, true);
@@ -243,7 +245,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             System.Threading.Thread.Sleep(1000);
 
-            instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange2Image"]);
+            string rdpedispOrientationChange2Image;
+            PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange2Image", out rdpedispOrientationChange2Image);
+            instructionBitmap = new Bitmap(rdpedispOrientationChange2Image);
             SendInstruction(screenHeight, screenWidth, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED, true);
@@ -253,7 +257,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             System.Threading.Thread.Sleep(1000);
 
-            instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange3Image"]);
+            string rdpedispOrientationChange3Image;
+            PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange3Image", out rdpedispOrientationChange3Image);
+            instructionBitmap = new Bitmap(rdpedispOrientationChange3Image);
+
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED, true);
@@ -264,7 +271,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             // wait time to display the result and then restore the default configuration
             System.Threading.Thread.Sleep(1000);
 
-            instructionBitmap = new Bitmap(Site.Properties["RdpedispOrientationChange4Image"]);
+            string rdpedispOrientationChange4Image;
+            PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange4Image", out rdpedispOrientationChange4Image);
+            instructionBitmap = new Bitmap(rdpedispOrientationChange4Image);
             SendInstruction(screenHeight, screenWidth, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE, true);
@@ -272,7 +281,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.TestSite.Log.Add(LogEntryKind.Comment, "Send Surface management commands");
             this.rdpegfxAdapter.ResetGraphics(originalDesktopWidth, originalDesktopHeight);
 
-            instructionBitmap = new Bitmap(Site.Properties["RdpedispEndImage"]);
+            string rdpedispEndImage;
+            PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispEndImage", out rdpedispEndImage);
+            instructionBitmap = new Bitmap(rdpedispEndImage);
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
             // wait time to display the result and then restore the default configuration
