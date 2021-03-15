@@ -22,9 +22,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_Noting_FileModified_File()
+        public void CommonAlgorithm_NotingFileModified_File_LastModificationTime()
         {
-            Algorithm_Noting_FileModified(FileType.DataFile);
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestLastWriteTime(attributesBeforeFileModified.lastWriteTime, attributesAfterFileModified.lastWriteTime);
         }
 
         [TestMethod()]
@@ -34,22 +37,134 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_Noting_FileModified_Dir()
+        public void CommonAlgorithm_NotingFileModified_File_LastChangeTime()
         {
-            Algorithm_Noting_FileModified(FileType.DirectoryFile);
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestChangeTime(attributesBeforeFileModified.changeTime, attributesAfterFileModified.changeTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_NotingFileModified_File_LastAccessTime()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+                BaseTestSite.Assert.Inconclusive("REFS is inconclusive for Open.File.LastAccessTime on file");
+            }
+            else
+            {
+                TestLastAccessTime(attributesBeforeFileModified.lastAccessTime, attributesAfterFileModified.lastAccessTime);
+            }
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_NotingFileModified_File_Archive()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestArchive(attributesAfterFileModified.isArchive);            
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_NotingFileModified_Dir_LastModificationTime()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DirectoryFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestLastWriteTime(attributesBeforeFileModified.lastWriteTime, attributesAfterFileModified.lastWriteTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_NotingFileModified_Dir_LastChangeTime()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DirectoryFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestChangeTime(attributesBeforeFileModified.changeTime, attributesAfterFileModified.changeTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_NotingFileModified_Dir_LastAccessTime()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DirectoryFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestLastAccessTime(attributesBeforeFileModified.lastAccessTime, attributesAfterFileModified.lastAccessTime);
+            
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void CommonAlgorithm_NotingFileModified_Dir_Archive()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DirectoryFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS
+                || this.fsaAdapter.FileSystem == FileSystem.REFS
+                || this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                BaseTestSite.Assert.Inconclusive("NTFS, REFS and FAT32 are inconclusive for Open.File.FileAttributes.FILE_ATTRIBUTE_ARCHIVE on dirctory");
+            }
+            else
+            {
+                TestArchive(attributesAfterFileModified.isArchive);
+            }
         }
 
         #endregion
 
         #region Test Case Utility
 
-        private void Algorithm_Noting_FileModified(FileType fileType)
+        private void Algorithm_Noting_FileModified(FileType fileType, out FileAttributes attributesBeforeFileModified, 
+            out FileAttributes attributesAfterFileModified)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
-
 
             string fileName = this.fsaAdapter.ComposeRandomFileName(8);
             CreateFile(fileType, fileName);
@@ -57,12 +172,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 2: Query file basic information
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FILE_BASIC_INFORMATION for timestamps");
 
-            long oldCreationTime;
-            long oldChangeTime;
-            long oldLastAccessTime;
-            long oldLastWriteTime;
-
-            QueryFileBasicInformation(out oldChangeTime, out oldCreationTime, out oldLastAccessTime, out oldLastWriteTime, out _);
+            QueryFileBasicInformation(out attributesBeforeFileModified);
+            DelayNextStep();
 
             if(fileType == FileType.DataFile)
             {
@@ -79,7 +190,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
                 string innerFileName = this.fsaAdapter.ComposeRandomFileName(8);
 
-                CreateFile(fileType, fileName + "\\" + innerFileName);
+                CreateFile(FileType.DataFile, fileName + "\\" + innerFileName);
             }
 
             //Step 4: Close and open file
@@ -93,41 +204,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 5: Query FileBasicInformation
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Query FILE_BASIC_INFORMATION for file attributes");
 
-            long creationTime;
-            long changeTime;
-            long lastAccessTime;
-            long lastWriteTime;
-            bool isArchive;
-
-            QueryFileBasicInformation(out changeTime, out creationTime, out lastAccessTime, out lastWriteTime, out isArchive);
+            QueryFileBasicInformation(out attributesAfterFileModified);
 
             //Step 6: Verify that FileBasicInformation attributes are updated appropriately
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. Verify that FILE_BASIC_INFORMATION attributes are updated appropriately");
 
-            string oldCreationTimeDate = DateTime.FromFileTime(oldCreationTime).ToString();
-            string creationTimeDate = DateTime.FromFileTime(creationTime).ToString();
+            string creationTimeDateBeforeFileModified = attributesBeforeFileModified.creationTime.ToString();
+            string creationTimeDateAfterFileModified = attributesAfterFileModified.creationTime.ToString();
 
-            BaseTestSite.Assert.AreEqual(oldCreationTimeDate, creationTimeDate,
+            BaseTestSite.Assert.AreEqual(creationTimeDateBeforeFileModified, creationTimeDateAfterFileModified,
                 "File creation time is never updated in response to file system calls such as read and write.");
-
-            DateTime oldLastWriteTimeDate = DateTime.FromFileTime(oldLastWriteTime);
-            DateTime lastWriteTimeDate = DateTime.FromFileTime(lastWriteTime);
-
-            DateTime oldChangeTimeDate = DateTime.FromFileTime(oldChangeTime);
-            DateTime changeTimeDate = DateTime.FromFileTime(changeTime);
-
-            DateTime oldLastAccessTimeDate = DateTime.FromFileTime(oldLastAccessTime);
-            DateTime lastAccessTimeDate = DateTime.FromFileTime(lastAccessTime);
-
-            TestLastWriteTime(oldLastWriteTimeDate, lastWriteTimeDate);
-            TestLastAccessTime(oldLastAccessTimeDate, lastAccessTimeDate);
-            TestChangeTime(oldChangeTimeDate, changeTimeDate);
-            TestArchive(isArchive);
         }
 
-        private void TestLastWriteTime(DateTime oldLastWriteTimeDate, DateTime lastWriteTimeDate)
+        private void TestLastWriteTime(DateTime lastWriteTimeDateBeforeFileModified, DateTime lastWriteTimeDateAfterFileModified)
         {
-            if (oldLastWriteTimeDate.CompareTo(lastWriteTimeDate) >= 0)
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                BaseTestSite.Assert.Inconclusive("FAT32 is inconclusive for Open.File.LastWriteTime");
+            }
+            else if (lastWriteTimeDateBeforeFileModified.CompareTo(lastWriteTimeDateAfterFileModified) >= 0)
             {
                 BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
             }
@@ -137,9 +232,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
         }
 
-        private void TestLastAccessTime(DateTime oldLastAccessTimeDate, DateTime lastAccessTimeDate)
+        private void TestLastAccessTime(DateTime lastAccessTimeDateBeforeFileModified, DateTime lastAccessTimeDateAfterFileModified)
         {
-            if (oldLastAccessTimeDate.CompareTo(lastAccessTimeDate) >= 0)
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                BaseTestSite.Assert.Inconclusive("FAT32 is inconclusive for Open.File.LastAccessTime");
+            }
+            else if (lastAccessTimeDateBeforeFileModified.CompareTo(lastAccessTimeDateAfterFileModified) >= 0)
             {
                 BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastAccessTime to the current system time.");
             }
@@ -149,9 +248,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
         }
 
-        private void TestChangeTime(DateTime oldChangeTimeDate, DateTime changeTimeDate)
-        {
-            if (oldChangeTimeDate.CompareTo(changeTimeDate) >= 0)
+        private void TestChangeTime(DateTime changeTimeDateBeforeFileModified, DateTime changeTimeDateAferFileModified)
+        {            
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
+            }
+            else if (changeTimeDateBeforeFileModified.CompareTo(changeTimeDateAferFileModified) >= 0)
             {
                 BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastChangeTime to the current system time.");
             }
@@ -176,15 +279,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void OpenFile(FileType fileType, string fileName)
         {
-            //delay open file until minimum recognizable time change
-            DateTime currentTime = DateTime.Now;
-            DateTime nextTime = DateTime.Now;
-
-            while (currentTime.ToString().Equals(nextTime.ToString()))
-            {
-                nextTime = DateTime.Now;
-            }
-
             MessageStatus status = this.fsaAdapter.CreateFile(
                 fileName,
                 FileAttribute.NORMAL,
@@ -209,8 +303,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
         }
 
-        private void QueryFileBasicInformation(out long changeTime, out long creationTime
-            , out long lastAccessTime, out long lastWriteTime, out bool isArchive)
+        private void QueryFileBasicInformation(out FileAttributes fileAttributes)
         {
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             uint outputBufferSize = (uint)TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation).Length;
@@ -218,29 +311,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             this.fsaAdapter.QueryFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, outputBufferSize, out _, out outputBuffer);
 
             fileBasicInformation = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
-            changeTime = (((long)fileBasicInformation.ChangeTime.dwHighDateTime) << 32) + fileBasicInformation.ChangeTime.dwLowDateTime;
-            creationTime = (((long)fileBasicInformation.CreationTime.dwHighDateTime) << 32) + fileBasicInformation.CreationTime.dwLowDateTime;
-            lastAccessTime = (((long)fileBasicInformation.LastAccessTime.dwHighDateTime) << 32) + fileBasicInformation.LastAccessTime.dwLowDateTime;
-            lastWriteTime = (((long)fileBasicInformation.LastWriteTime.dwHighDateTime) << 32) + fileBasicInformation.LastWriteTime.dwLowDateTime;
-            isArchive = (fileBasicInformation.FileAttributes & (uint)FileAttribute.ARCHIVE) == (uint)FileAttribute.ARCHIVE;
+            fileAttributes.changeTime = DateTime.FromFileTime((((long)fileBasicInformation.ChangeTime.dwHighDateTime) << 32) + fileBasicInformation.ChangeTime.dwLowDateTime);
+            fileAttributes.creationTime = DateTime.FromFileTime((((long)fileBasicInformation.CreationTime.dwHighDateTime) << 32) + fileBasicInformation.CreationTime.dwLowDateTime);
+            fileAttributes.lastAccessTime = DateTime.FromFileTime((((long)fileBasicInformation.LastAccessTime.dwHighDateTime) << 32) + fileBasicInformation.LastAccessTime.dwLowDateTime);
+            fileAttributes.lastWriteTime = DateTime.FromFileTime((((long)fileBasicInformation.LastWriteTime.dwHighDateTime) << 32) + fileBasicInformation.LastWriteTime.dwLowDateTime);
+            fileAttributes.isArchive = (fileBasicInformation.FileAttributes & (uint)FileAttribute.ARCHIVE) == (uint)FileAttribute.ARCHIVE;
+        }
+
+        private struct FileAttributes
+        {
+            public DateTime changeTime;
+            public DateTime creationTime;
+            public DateTime lastAccessTime;
+            public DateTime lastWriteTime;
+            public bool isArchive;
         }
 
         private void WriteToFile()
         {
-            //delay write data to file until after minimum recognizable time change
-            DateTime currentTime = DateTime.Now;
-            DateTime nextTime = DateTime.Now;
-
-            while (currentTime.ToString().Equals(nextTime.ToString()))
-            {
-                nextTime = DateTime.Now;
-            }
-
             long byteSize = (uint)2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
             MessageStatus status = this.fsaAdapter.WriteFile(0, byteSize, out _);
 
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
                     "Write data to file should succeed");
+        }
+
+        private void DelayNextStep()
+        {
+            //delay next step for recognizable milliseconds change
+            DateTime currentTime = GetCurrentSystemTime();
+            DateTime nextTime = GetCurrentSystemTime();
+
+            while (currentTime.ToString().Equals(nextTime.ToString()))
+            {
+                nextTime = GetCurrentSystemTime();
+            }
+        }
+
+        private DateTime GetCurrentSystemTime()
+        {
+            return DateTime.Now;
         }
 
         #endregion
