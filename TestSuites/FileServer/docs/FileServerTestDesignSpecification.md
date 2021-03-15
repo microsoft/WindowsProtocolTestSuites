@@ -221,7 +221,7 @@ Test scenarios are categorized as below table and will be described in following
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
 | RSVD Test                | 29         | Test for MS-RSVD                                                                                                  |
-| DFSC Test                | 42         | Test for MS-DFSC                                                                                                  |
+| DFSC Test                | 41         | Test for MS-DFSC                                                                                                  |
 | HVRS Test                | 8          | Test for MS-HVRS                                                                                                  |
 
 ### <a name="3.1">SMB2 BVT
@@ -9681,18 +9681,6 @@ The test cases are designed with below assumptions, and these terms will be used
 ||3.  If DC is hosting DFS server, then client expects STATUS == STATUS_SUCCESS and RESP GET_DFS_REFERRAL message version is v3. Otherwise, client expects STATUS_NOT_FOUND from DC.|
 ||4. Verify the response.|
 ||5. Disconnect and logoff.|
-|**Cleanup**|N/A|
-
-
-|||
-|---|---|
-|**Test ID**|InvalidDomainNameLinkReferralToDC|
-|**Description**|Client sends a v2 Link referral request with invalid Domain name to DC, expect negative response|
-|**Prerequisites**|Common prerequisites|
-|**Test Execution Steps**|1. Client establishes an SMB connection between client and DC server.|
-||2. Client sends a Link referral v2 REQ_GET_DFS_REFERRAL message with invalid domain name (RequestFileName is "\Invalid\DomainBased\DFSLink", MaxReferralLevel is 2) to DC.|
-||3. Client expects STATUS == STATUS_NOT_FOUND.|
-||4. Disconnect and logoff.|
 |**Cleanup**|N/A|
 
 
