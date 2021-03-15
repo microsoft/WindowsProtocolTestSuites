@@ -27,16 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DiscoveryTestLogger\DiscoveryTestLogger.csproj" />
     <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
     <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\PTMKernelService\PTMKernelService.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="ptmservice.db">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

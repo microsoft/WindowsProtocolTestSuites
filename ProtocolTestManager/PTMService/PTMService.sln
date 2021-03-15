@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{360AD1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\Common\Common.csproj", "{EF226903-D3F4-4AA0-B2CC-74155BF589AD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscoveryTestLogger", "..\DiscoveryTestLogger\DiscoveryTestLogger.csproj", "{36F8B56D-1CD8-4289-A252-46F28D38DB2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{EF226903-D3F4-4AA0-B2CC-74155BF589AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF226903-D3F4-4AA0-B2CC-74155BF589AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF226903-D3F4-4AA0-B2CC-74155BF589AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{93622E53-E8CC-41AA-86FA-5185C1CABA1B} = {360AD1ED-FA9E-466B-B0AA-7ED8F879E7A7}
 		{EF226903-D3F4-4AA0-B2CC-74155BF589AD} = {360AD1ED-FA9E-466B-B0AA-7ED8F879E7A7}
+		{36F8B56D-1CD8-4289-A252-46F28D38DB2C} = {360AD1ED-FA9E-466B-B0AA-7ED8F879E7A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {253BE2CB-3DAB-458D-90CF-CAB4037196C8}

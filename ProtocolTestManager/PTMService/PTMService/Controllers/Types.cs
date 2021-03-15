@@ -1,18 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 
 namespace PTMService.Controllers
 {
-    public class TestCase
-    {
-        public string Name { get; set; }
-
-        public string[] Categories { get; set; }
-    }
-
     public class TestSuite
     {
         public int Id { get; set; }
@@ -23,7 +17,7 @@ namespace PTMService.Controllers
 
         public string Description { get; set; }
 
-        public TestCase[] TestCases { get; set; }
+        public TestCaseInfo[] TestCases { get; set; }
     }
 
     public class Configuration

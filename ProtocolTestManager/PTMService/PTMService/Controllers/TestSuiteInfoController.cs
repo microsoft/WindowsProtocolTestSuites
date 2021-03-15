@@ -1,14 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace PTMService.Controllers
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using PTMService.Controllers;
+using System.Linq;
+
+namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
     /// <summary>
     /// Test suite info controller.
     /// </summary>
     [Route("api/testsuite")]
     [ApiController]
-    public class TestSuiteInfoController : ControllerBase
+    public class TestSuiteInfoController : PTMServiceControllerBase
     {
+        /// <summary>
+        /// Constructor of test suite info controller.
+        /// </summary>
+        /// <param name="ptmKernelService">The PTM kernel service.</param>
+        public TestSuiteInfoController(IPTMKernelService ptmKernelService)
+            : base(ptmKernelService)
+        {
+        }
+
         /// <summary>
         /// Get test suites.
         /// </summary>
@@ -16,16 +31,15 @@ namespace PTMService.Controllers
         [HttpGet]
         public TestSuite[] GetTestSuites()
         {
-            return new TestSuite[]
+            var result = PTMKernelService.QueryTestSuites().Select(item => new TestSuite
             {
-                new TestSuite
-                {
-                    Id = 1,
-                    Name = "File Server Test Suite",
-                    Description="It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-FSCC], [MS-RSVD] and [MS-SQOS]",
-                    Version = "4.21.1.0"
-                },
-            };
+                Id = item.Id,
+                Name = item.Name,
+                Version = item.Version,
+                Description = item.Description,
+            }).ToArray();
+
+            return result;
         }
 
         /// <summary>
@@ -37,21 +51,20 @@ namespace PTMService.Controllers
         [HttpGet]
         public TestSuite GetTestSuiteDetail(int id)
         {
-            return new TestSuite
+            var testSuite = PTMKernelService.GetTestSuite(id);
+
+            var testCases = testSuite.GetTestCases(null);
+
+            var result = new TestSuite
             {
-                Name = "FileServer",
-                TestCases = new TestCase[]
-                {
-                    new TestCase
-                    {
-                        Name= "Test",
-                        Categories = new string[]
-                        {
-                            "BVT",
-                        },
-                    },
-                },
+                Id = testSuite.Id,
+                Name = testSuite.Name,
+                Version = testSuite.Version,
+                Description = testSuite.Description,
+                TestCases = testCases.ToArray(),
             };
+
+            return result;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System.Collections.Generic;
 
@@ -46,5 +47,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// </summary>
         /// <returns>The path of all configuration files.</returns>
         IEnumerable<string> GetConfigurationFiles();
+
+        /// <summary>
+        /// Get test assemblies.
+        /// </summary>
+        /// <returns>The path of test assemblies.</returns>
+        IEnumerable<string> GetTestAssemblies();
+
+        /// <summary>
+        /// Get test cases.
+        /// </summary>
+        /// <param name="filter">The optional filter expression.</param>
+        /// <returns>The test cases filtered out.</returns>
+        IEnumerable<TestCaseInfo> GetTestCases(string filter);
     }
 }

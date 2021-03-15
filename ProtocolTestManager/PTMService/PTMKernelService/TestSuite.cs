@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Common;
+using Microsoft.Protocols.TestManager.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
@@ -14,8 +16,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal class TestSuite : ITestSuite
     {
-        private TestSuite(TestSuiteInstallation testSuiteInstallation, IStorageNode storageRoot)
+        private TestSuite(string testEnginePath, TestSuiteInstallation testSuiteInstallation, IStorageNode storageRoot)
         {
+            TestEnginePath = testEnginePath;
+
             Id = testSuiteInstallation.Id;
 
             Name = testSuiteInstallation.Name;
@@ -28,6 +32,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             StorageRoot = storageRoot;
         }
+
+        private string TestEnginePath { get; init; }
 
         public int Id { get; private init; }
 
@@ -50,7 +56,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return result;
         }
 
-        public static ITestSuite Create(TestSuiteInstallation testSuiteInstallation, string packageName, Stream package, IStoragePool storagePool)
+        public static ITestSuite Create(string testEnginePath, TestSuiteInstallation testSuiteInstallation, string packageName, Stream package, IStoragePool storagePool)
         {
             int id = testSuiteInstallation.Id;
 
@@ -86,16 +92,50 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             testSuiteInstallation.Version = rs.ReadLine();
 
-            var result = new TestSuite(testSuiteInstallation, node);
+            var result = new TestSuite(testEnginePath, testSuiteInstallation, node);
 
             return result;
         }
 
-        public static TestSuite Open(TestSuiteInstallation testSuiteInstallation, IStoragePool storagePool)
+        public static TestSuite Open(string testEnginePath, TestSuiteInstallation testSuiteInstallation, IStoragePool storagePool)
         {
             var node = storagePool.OpenNode(testSuiteInstallation.Path);
 
-            var result = new TestSuite(testSuiteInstallation, node);
+            var result = new TestSuite(testEnginePath, testSuiteInstallation, node);
+
+            return result;
+        }
+
+        public IEnumerable<TestCaseInfo> GetTestCases(string filter)
+        {
+            var testEngine = new TestEngine(TestEnginePath)
+            {
+                TestAssemblies = GetTestAssemblies().ToList(),
+                WorkingDirectory = $"{StorageRoot.AbsolutePath}{Path.DirectorySeparatorChar}",
+            };
+
+            var result = testEngine.LoadTestCases(filter).Select(testCase => new TestCaseInfo
+            {
+                Name = testCase.Name,
+                FullName = testCase.FullName,
+                Category = testCase.Category.ToArray(),
+                Description = testCase.Description,
+                ToolTipOnUI = testCase.ToolTipOnUI,
+            });
+
+            return result;
+        }
+
+        public IEnumerable<string> GetTestAssemblies()
+        {
+            // In order to get the actual test assemblies, support of plugin is needed.
+            // So far, we return hard-coded dll files.
+            var fakeDlls = new List<string>
+            {
+                "MS-SMB2_ServerTestSuite.dll",
+            };
+
+            var result = fakeDlls.Select(name => Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, name));
 
             return result;
         }

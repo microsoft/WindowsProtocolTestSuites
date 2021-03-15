@@ -4,7 +4,6 @@
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using System;
 using System.IO;
 using System.Linq;
 
@@ -14,25 +13,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     {
         public ITestSuite[] QueryTestSuites()
         {
-            throw new NotImplementedException();
+            using var instance = ScopedServiceFactory.GetInstance();
+
+            var pool = instance.ScopedServiceInstance;
+
+            var repo = pool.Get<TestSuiteInstallation>();
+
+            var result = repo.Get(q => q).Select(item => GetTestSuiteInternal(item.Id, item)).ToArray();
+
+            return result;
         }
 
         public ITestSuite GetTestSuite(int id)
         {
-            if (!TestSuitePool.ContainsKey(id))
-            {
-                using var instance = ScopedServiceFactory.GetInstance();
-
-                var pool = instance.ScopedServiceInstance;
-
-                var repo = pool.Get<TestSuiteInstallation>();
-
-                var testSuite = repo.Get(q => q.Where(item => item.Id == id)).First();
-
-                TestSuitePool.Add(id, TestSuite.Open(testSuite, StoragePool));
-            }
-
-            return TestSuitePool[id];
+            return GetTestSuiteInternal(id, null);
         }
 
         public int InstallTestSuite(string name, string packageName, Stream package, string description)
@@ -56,7 +50,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             int id = testSuiteInstallation.Id;
 
-            var testSuite = TestSuite.Create(testSuiteInstallation, packageName, package, StoragePool);
+            var testSuite = TestSuite.Create(Options.TestEnginePath, testSuiteInstallation, packageName, package, StoragePool);
 
             repo.Update(testSuiteInstallation);
 
@@ -65,6 +59,27 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             TestSuitePool.Add(id, testSuite);
 
             return id;
+        }
+
+        private ITestSuite GetTestSuiteInternal(int id, TestSuiteInstallation testSuiteInstallation)
+        {
+            if (!TestSuitePool.ContainsKey(id))
+            {
+                if (testSuiteInstallation == null)
+                {
+                    using var instance = ScopedServiceFactory.GetInstance();
+
+                    var pool = instance.ScopedServiceInstance;
+
+                    var repo = pool.Get<TestSuiteInstallation>();
+
+                    testSuiteInstallation = repo.Get(q => q.Where(item => item.Id == id)).First();
+                }
+
+                TestSuitePool.Add(id, TestSuite.Open(Options.TestEnginePath, testSuiteInstallation, StoragePool));
+            }
+
+            return TestSuitePool[id];
         }
     }
 }

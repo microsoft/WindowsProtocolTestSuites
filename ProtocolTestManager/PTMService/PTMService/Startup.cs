@@ -74,6 +74,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 
             services.AddStoragePool();
 
+            services.Configure<PTMKernelServiceOptions>(options =>
+            {
+                options.TestEnginePath = Configuration.GetSection("TestEnginePath").Value;
+            });
+
             services.AddPTMKernelService();
 
             services.Configure<KestrelServerOptions>(options =>
