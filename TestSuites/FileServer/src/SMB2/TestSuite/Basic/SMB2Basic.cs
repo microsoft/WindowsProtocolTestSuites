@@ -98,7 +98,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         protected override void TestCleanup()
         {
-            if(client1 != null)
+            if (client1 != null)
             {
                 try
                 {
@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
 
-            if(client2 != null)
+            if (client2 != null)
             {
                 try
                 {
@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Log.Add(LogEntryKind.Debug, "Unexpected exception when disconnect client2: {0}", ex.ToString());
                 }
             }
-            
+
             base.TestCleanup();
         }
         #endregion
@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.ChangeNotify)]
         [Description("This test case is designed to verify that CANCEL request cancels CHANGE_NOTIFY request when there's no CHANGE_NOTIFY response from server.")]
         public void BVT_SMB2Basic_CancelRegisteredChangeNotify()
-        {            
+        {
             uint status;
             string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             BaseTestSite.Log.Add(
@@ -142,7 +142,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "Test directory \"{0}\" was created on share \"{1}\"", testDirectory, TestConfig.BasicFileShare);
 
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[],Packet_Header,CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
+            client1.Smb2Client.ChangeNotifyResponseReceived += new Action<FILE_NOTIFY_INFORMATION[], Packet_Header, CHANGE_NOTIFY_Response>(OnChangeNotifyResponseReceived);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
@@ -179,7 +179,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.AreNotEqual(
                 Smb2Status.STATUS_SUCCESS,
-                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is not expected to success after cancel, actually server returns {0}.", 
+                receivedChangeNotifyHeader.Status, "CHANGE_NOTIFY is not expected to success after cancel, actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
             BaseTestSite.CaptureRequirementIfAreEqual(
                 Smb2Status.STATUS_CANCELLED,
@@ -199,7 +199,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.QueryAndSetFileInfo)]
         [Description("This test case is designed to test whether server can handle QUERY and SET requests to a file correctly.")]
         public void BVT_SMB2Basic_QueryAndSet_FileInfo()
-        {            
+        {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Starts a client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.");
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
@@ -366,6 +366,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             FileNameInformation filenameInfo = TypeMarshal.ToStruct<FileNameInformation>(filenameInfoBuffer);
 
             /*
+             * According to [MS-SMB2] section 3.3.5.20.1 Handling SMB2_0_INFO_FILE:
              * If the information class is FileAllInformation,
              * the server SHOULD return an empty FileNameInformation
              * by setting FileNameLength field to zero and FileName field
@@ -384,7 +385,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     Encoding.Unicode.GetString(filenameInfo.FileName));
             }
             /*
-             * <357>
+             * According to [MS-SMB2] section 6	Appendix A: Product Behavior:
              * If the information class is FileAllInformation, Windows Vista SP1,
              * Windows Server 2008, Windows 7, Windows Server 2008 R2, Windows 8,
              * Windows Server 2012, Windows 8.1, and Windows Server 2012 R2
@@ -446,7 +447,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.LockUnlock)]
         [Description("This test case is designed to test whether server can handle WRITE of locking content correctly.")]
         public void BVT_SMB2Basic_LockAndUnLock()
-        {            
+        {
             uint status;
             string content = Smb2Utility.CreateRandomString(TestConfig.WriteBufferLengthInKb);
 
@@ -456,7 +457,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "From client1 locks a byte range and try to write content to the file within the range.");
 
             BaseTestSite.Log.Add(
-                LogEntryKind.TestStep, 
+                LogEntryKind.TestStep,
                 "Start client1 to create a file with sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE.");
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
@@ -2191,7 +2192,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 out outputBuffer);
 
             FileBasicInformation fileBasicInfoToSet = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
-            switch (fileBasicInfoType) {
+            switch (fileBasicInfoType)
+            {
                 case FileBasicInfoType.FileBasicInfoAttribute:
                     fileBasicInfoToSet.FileAttributes = File_Attributes.FILE_ATTRIBUTE_HIDDEN;
                     break;
@@ -2458,7 +2460,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client1.Create(
                 treeId1,
                 fileName,
-                fileType == FileType.DataFile? CreateOptions_Values.FILE_NON_DIRECTORY_FILE: CreateOptions_Values.FILE_DIRECTORY_FILE,
+                fileType == FileType.DataFile ? CreateOptions_Values.FILE_NON_DIRECTORY_FILE : CreateOptions_Values.FILE_DIRECTORY_FILE,
                 out fileId1,
                 out serverCreateContexts,
                 accessMask: AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE);

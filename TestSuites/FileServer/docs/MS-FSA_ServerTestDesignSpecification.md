@@ -99,8 +99,11 @@
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
         * [FileBasicInformation](#FileBasicInformation)
-            * [FileInfo_Set_FileBasicInformation_File](#FileInfo_Set_FileBasicInformation_File)
-            * [FileInfo_Set_FileBasicInformation_Dir](#FileInfo_Set_FileBasicInformation_Dir)
+            * [FileInfo_Set_FileBasicInformation_File_Negative](#FileInfo_Set_FileBasicInformation_File_Negative)
+            * [FileInfo_Set_FileBasicInformation_File_Positive](#FileInfo_Set_FileBasicInformation_File_Positive)
+            * [FileInfo_Set_FileBasicInformation_File_MinusTwoSupported](#FileInfo_Set_FileBasicInformation_File_MinusTwoSupported)
+            * [FileInfo_Set_FileBasicInformation_Dir_Negative](#FileInfo_Set_FileBasicInformation_Dir_Negative)
+            * [FileInfo_Set_FileBasicInformation_Dir_Positive](#FileInfo_Set_FileBasicInformation_Dir_Positive)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -304,11 +307,11 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 151 test cases in total:
+There are 155 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 28 (6) |
+| Scenarios for FileInformation | 7 | 31 (9) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -474,7 +477,7 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileAccessInformation|
 | | Verify server responses accordingly.|
 
-#### <a name="FileInfo_FileBasicInformationSupported"/>FileInfo_FileBasicInformationSupported
+#### <a name="FileInfo_SetFileBasicInformationSupported"/>FileInfo_SetFileBasicInformationSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1619,25 +1622,67 @@ There are 343 test cases in total:
 
 #### <a name="FileBasicInformation"/>FileBasicInformation
 
-##### <a name="FileInfo_Set_FileBasicInformation_File"/>FileInfo_Set_FileBasicInformation_File
+##### <a name="FileInfo_Set_FileBasicInformation_File_Negative"/>FileInfo_Set_FileBasicInformation_File_Negative
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if set values for FileBasicInformation attributes on file supported by different file systems.|
-| File information class: FileBasicInformation|
-| Message Sequence| CreateFile.|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| Description| To test if setting invalid values for file basic information attributes are handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where InputBufferSize less than sizeOf(FILE_BASIC_INFORMATION) |
+| | Verify status returned is **STATUS_INFO_LENGTH_MISMATCH** |
+| | SetInfo with FileInfoClass.FileBasicInformation where **InputBuffer.FileAttributes.FILE_ATTRIBUTE_DIRECTORY** is TRUE |
+| | Verify status returned is **STATUS_INVALID_PARAMETER** |
 
-##### <a name="FileInfo_Set_FileBasicInformation_Dir"/>FileInfo_Set_FileBasicInformation_Dir
+##### <a name="FileInfo_Set_FileBasicInformation_File_Positive"/>FileInfo_Set_FileBasicInformation_File_Positive
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if set values for FileBasicInformation attributes on directory is supported by different file systems.|
-| File information class: FileBasicInformation|
+| Description|  To test if setting file basic information timestamps are supported by different file systems for data file|
+| | Note: FAT32 doest not process ChangeTime|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
+| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
+| | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_File_MinusTwoSupported"/>FileInfo_Set_FileBasicInformation_File_MinusTwoSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if -2 timestamp value for file basic information attributes is supported by different file systems|
+| | Note: Only NTFS and ReFS support -2 timestamp|
+| | File information class: FileBasicInformation|
 | Message Sequence| CreateFile.|
-| | SetInfo with FileInfoClass.FileBasicInformation|
-| | Verify server responses accordingly.|
+| | SetInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime using input timestamp values -3, 0, -1, then -2|
+| | Verify status returned is **STATUS_INVALID_PARAMETER** when input timestamp less than -2|
+| | Verify timestamp does not change when input timestamp equals 0|
+| | Verify timestamp does not change for subsequent I/O operation when input timestamp equals -1|
+| | Verify timestamp is updated for subsequent I/O operation when input timestamp equals -2|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_Negative"/>FileInfo_Set_FileBasicInformation_Dir_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting invalid values for file basic information attributes are handled by different file systems for directory |
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where InputBufferSize less than sizeOf(FILE_BASIC_INFORMATION) |
+| | Verify status returned should be **STATUS_INFO_LENGTH_MISMATCH** |
+| | SetInfo with FileInfoClass.FileBasicInformation where **InputBuffer.FileAttributes.FILE_ATTRIBUTE_TEMPORARY** is TRUE |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_Positive"/>FileInfo_Set_FileBasicInformation_Dir_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting file basic information timestamp is supported by different file systems |
+| | Note: FAT32 doest not process ChangeTime|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
+| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
+| | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
