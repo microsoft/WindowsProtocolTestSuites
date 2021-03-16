@@ -22,29 +22,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern * described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskWildCard()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            int numberOfFiles = 10; //random file name count
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int filesInDirectoryCount = 10;
+            int expectedFilesReturnedLength = 12;
+            var wildCard = "*";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard "*"
-            fileNames = CreateRandomFileNames(numberOfFiles);
-            outputBuffer = QueryByWidldCardAndFileInfoClass("*", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(12, fileDirectoryInformation.Length, "The returned Buffer should contain twelve entries of FileDirectoryInformation.");
-            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(fileDirectoryInformation[0].FileName), "FileName of the first entry should be \".\".");
-            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(fileDirectoryInformation[1].FileName), "FileName of the second entry should be \"..\".");
-
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-
-            Site.Assert.AreEqual(numberOfFiles, filesCount, $"Number of files created should be equal to the number of files returned: {numberOfFiles}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                wildCard,
+                filesInDirectoryCount,
+                expectedFilesReturnedLength);
         }
 
         [TestMethod()]
@@ -52,27 +43,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_SpecialCase_AsteriskWildCard()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            int numberOfFiles = 10; //random file name count
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int filesInDirectoryCount = 10;
+            int expectedFilesReturnedLength = 12;
+            var wildCard = "*.*";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard "*.*"
-            fileNames = CreateRandomFileNames(numberOfFiles);
-            outputBuffer = QueryByWidldCardAndFileInfoClass("*.*", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(12, fileDirectoryInformation.Length, "The returned Buffer should contain twelve entries of FileDirectoryInformation.");
-            Site.Assert.AreEqual(".", Encoding.Unicode.GetString(fileDirectoryInformation[0].FileName), "FileName of the first entry should be \".\".");
-            Site.Assert.AreEqual("..", Encoding.Unicode.GetString(fileDirectoryInformation[1].FileName), "FileName of the second entry should be \"..\".");
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-            Site.Assert.AreEqual(numberOfFiles, filesCount, $"Number of files created should be equal to the number of files returned: {numberOfFiles}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                wildCard,
+                filesInDirectoryCount,
+                expectedFilesReturnedLength);
         }
 
         [TestMethod()]
@@ -80,25 +64,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern ? described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_WildCard_QuestionMark()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            int numberOfFiles = 2; //random file name count
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int expectedFilesReturnedLength = 2;
+            var fileNames = new List<string> { "Fine", "File", "Bile", "Fille", "Nine" };
+            var wildCard = "Fi?e";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard "?" (DOS_QM) within string
-            fileNames = new List<string> { "Fine", "File", "Bile", "Fille", "Nine" };
-            outputBuffer = QueryByWidldCardAndFileInfoClass("Fi?e", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(2, fileDirectoryInformation.Length, "The returned Buffer should contain entries that match the pattern.");
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-            Site.Assert.AreEqual(2, filesCount, $"Number of files created should be equal to the number of files returned: {numberOfFiles}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                fileNames,
+                wildCard,
+                expectedFilesReturnedLength);
         }
 
         [TestMethod()]
@@ -106,25 +85,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskInStringWildCard()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            int numberOfFiles = 4; //random file name count
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int expectedFilesReturnedLength = 2;
+            var fileNames = new List<string> { "Fine", "File", "Bile", "Fille", "Nine" };
+            var wildCard = "*ile";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard "*" within string
-            fileNames = new List<string> { "File", "Pile", "While", "Tile", "Nine" };
-            outputBuffer = QueryByWidldCardAndFileInfoClass("*ile", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(4, fileDirectoryInformation.Length, "The returned Buffer should contain four entries of FileDirectoryInformation.");
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-            Site.Assert.AreEqual(4, filesCount, $"Number of files created should be equal to the number of files returned: {numberOfFiles}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                fileNames,
+                wildCard,
+                expectedFilesReturnedLength);
         }
 
         [TestMethod()]
@@ -132,24 +106,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_STAR_WildCard()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int expectedFilesReturnedLength = 4;
+            var fileNames = new List<string> { "Fine.txt", "FileGrip.txt", "Bile.txt", "Tile.txt", "Nine.jpg" };
+            var wildCard = $"{DOS_STAR}txt";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard DOS_STAR
-            fileNames = new List<string> { "Fine.txt", "FileGrip.txt", "Bile.txt", "Tile.txt", "Nine.jpg" };
-            outputBuffer = QueryByWidldCardAndFileInfoClass($"{DOS_STAR}txt", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(4, fileDirectoryInformation.Length, "The returned Buffer should contain four entries of FileDirectoryInformation.");
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-            Site.Assert.AreEqual(4, filesCount, $"Number of files created should be equal to the number of files returned: {4}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                fileNames,
+                wildCard,
+                expectedFilesReturnedLength);
         }
 
         [TestMethod()]
@@ -157,24 +127,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_DOT_WildCard()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int expectedFilesReturnedLength = 2;
+            var fileNames = new List<string> { "grc.BlankFile.1.txt", "grc.BlankFile.2.txt", "grc_BadFile_1.txt", "grc_BadFile_2.txt", "grc_BadFile_3.txt" };
+            var wildCard = $"grc{DOS_DOT_I}";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard DOS_DOT  ( .* )
-            fileNames = new List<string> { "grc.BlankFile.1.txt", "grc.BlankFile.2.txt", "grc_BadFile_1.txt", "grc_BadFile_2.txt", "grc_BadFile_3.txt" };
-            outputBuffer = QueryByWidldCardAndFileInfoClass($"grc{DOS_DOT_I}", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(2, fileDirectoryInformation.Length, "The returned Buffer should contain two entries of FileDirectoryInformation.");
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-            Site.Assert.AreEqual(2, filesCount, $"Number of files created should be equal to the number of files returned: {2}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                fileNames,
+                wildCard,
+                expectedFilesReturnedLength);
         }
 
         [TestMethod()]
@@ -182,25 +148,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search patterns described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_DOT_QuestionMark_WildCard()
         {
-            byte[] outputBuffer;
-            List<string> fileNames;
-            FileDirectoryInformation[] fileDirectoryInformation;
-            int filesCount; // Count files returned from the query, that exist in the FileNames list
-            FileInfoClass fileInfoClass = FileInfoClass.FILE_DIRECTORY_INFORMATION;
+            var fileInformation = new List<FileDirectoryInformation>();
+            int expectedFilesReturnedLength = 3;
+            var fileNames = new List<string> { "grc.BlankFile.1.txt", "grc.BlankFile.2.txt", "grc.BlankFile.3.txt", "grc.BadFile_1.txt", "grc.BadFile_2.txt" };
+            var wildCard = $"grc.BlankFile{ DOS_DOT_II}.txt";
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard DOS_DOT  ( .? )
-            fileNames = new List<string> { "grc.BlankFile.1.txt", "grc.BlankFile.2.txt", "grc.BlankFile.3.txt", "grc.BadFile_1.txt", "grc.BadFile_2.txt" };
-            outputBuffer = QueryByWidldCardAndFileInfoClass($"grc.BlankFile{ DOS_DOT_II}.txt", fileInfoClass, fileNames);
-
-            fileDirectoryInformation = FsaUtility.UnmarshalFileInformationArray<FileDirectoryInformation>(outputBuffer);
-
-            Site.Assert.AreEqual(3, fileDirectoryInformation.Length, "The returned Buffer should contain three entries of FileDirectoryInformation.");
-            filesCount = fileNames.Intersect(GetListFileInformation(fileDirectoryInformation)).ToList().Count();
-            Site.Assert.AreEqual(3, filesCount, $"Number of files created should be equal to the number of files returned: {3}.");
+            BVT_QueryDirectoryBySearchPattern<FileDirectoryInformation>(
+                fileInformation.ToArray(),
+                FileInfoClass.FILE_DIRECTORY_INFORMATION,
+                fileNames,
+                wildCard,
+                expectedFilesReturnedLength);
         }
+
 
         #endregion
 

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTestCases.QueryDirectory
 {
@@ -896,7 +897,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         /// <param name="fileNames">The File Names to be added to the directory. </param>
         /// Then send QueryDirectory with specified FileInfoClass to the server and return the outputBuffer.
         /// </summary>
-        private byte[] QueryByWidldCardAndFileInfoClass(
+        private byte[] QueryByWildCardAndFileInfoClass(
             string searchPattern,
             FileInfoClass fileInfoClass,
             List<string> fileNames)
@@ -911,113 +912,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             return outputBuffer;
         }
 
-        /// <summary>
-        /// <param name="fileInformation">The file information array containing file name(s). </param>
-        /// Load FileInformation into List of string.
-        /// </summary>
-        private List<string> GetListFileInformation(FileNamesInformation[] fileInformation)
+        private List<string> GetListFileInformation<T>(T[] fileInformation) where T: struct
         {
             Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
 
             List<string> fileInformationList = new List<string>();
 
-            foreach (FileNamesInformation information in fileInformation)
+            foreach (T idata in fileInformation)
             {
-                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
+                dynamic obj = idata;
+                fileInformationList.Add(Encoding.Unicode.GetString(obj.FileName));
             }
-
             return fileInformationList;
         }
 
-        /// <summary>
-        /// <param name="fileInformation">The file information array containing file name(s). </param>
-        /// Load FileInformation into List of string.
-        /// </summary>
-        private List<string> GetListFileInformation(FileFullDirectoryInformation[] fileInformation)
-        {
-            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
-
-            List<string> fileInformationList = new List<string>();
-
-            foreach (FileFullDirectoryInformation information in fileInformation)
-            {
-                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
-            }
-
-            return fileInformationList;
-        }
-
-        /// <summary>
-        /// <param name="fileInformation">The file information array containing file name(s). </param>
-        /// Load FileInformation into List of string.
-        /// </summary>
-        private List<string> GetListFileInformation(FileIdFullDirectoryInformation[] fileInformation)
-        {
-            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
-
-            List<string> fileInformationList = new List<string>();
-
-            foreach (FileIdFullDirectoryInformation information in fileInformation)
-            {
-                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
-            }
-
-            return fileInformationList;
-        }
-
-        /// <summary>
-        /// <param name="fileInformation">The file information array containing file name(s). </param>
-        /// Load FileInformation into List of string.
-        /// </summary>
-        private List<string> GetListFileInformation(FileBothDirectoryInformation[] fileInformation)
-        {
-            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
-
-            List<string> fileInformationList = new List<string>();
-
-            foreach (FileBothDirectoryInformation information in fileInformation)
-            {
-                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
-            }
-
-            return fileInformationList;
-        }
-
-        /// <summary>
-        /// <param name="fileInformation">The file information array containing file name(s). </param>
-        /// Load FileInformation into List of string.
-        /// </summary>
-        private List<string> GetListFileInformation(FileIdBothDirectoryInformation[] fileInformation)
-        {
-            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
-
-            List<string> fileInformationList = new List<string>();
-
-            foreach (FileIdBothDirectoryInformation information in fileInformation)
-            {
-                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
-            }
-
-            return fileInformationList;
-        }
-
-        /// <summary>
-        /// <param name="fileInformation">The file information array containing file name(s). </param>
-        /// Load FileInformation into List of string.
-        /// </summary>
-        private List<string> GetListFileInformation(FileDirectoryInformation[] fileInformation)
-        {
-            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
-
-            List<string> fileInformationList = new List<string>();
-
-            foreach (FileDirectoryInformation information in fileInformation)
-            {
-                fileInformationList.Add(Encoding.Unicode.GetString(information.FileName));
-            }
-
-            return fileInformationList;
-        }
         #endregion
     }
 }
