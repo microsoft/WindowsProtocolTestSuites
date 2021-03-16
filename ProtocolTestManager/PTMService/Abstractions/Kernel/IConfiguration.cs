@@ -50,5 +50,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// The adapters of configuration.
         /// </summary>
         public IEnumerable<Adapter> Adapters { get; set; }
+
+        /// <summary>
+        /// Get applicable test cases of configuration.
+        /// </summary>
+        /// <returns>All the applicable test cases.</returns>
+        public IEnumerable<string> GetApplicableTestCases();
     }
 }

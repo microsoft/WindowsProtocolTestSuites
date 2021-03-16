@@ -185,5 +185,21 @@ namespace PTMService.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Get all applicable test cases of configuration.
+        /// </summary>
+        /// <param name="id">The configuration Id.</param>
+        /// <returns>All the applicable test cases.</returns>
+        [Route("{id}/test")]
+        [HttpGet]
+        public string[] GetTests(int id)
+        {
+            var configuration = PTMKernelService.GetConfiguration(id);
+
+            var result = configuration.GetApplicableTestCases().ToArray();
+
+            return result;
+        }
     }
 }

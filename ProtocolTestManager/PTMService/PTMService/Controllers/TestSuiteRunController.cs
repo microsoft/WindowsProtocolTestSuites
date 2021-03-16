@@ -10,20 +10,6 @@ namespace PTMService.Controllers
     public class TestSuiteRunController : ControllerBase
     {
         /// <summary>
-        /// Get all available test cases of a specific configuration.
-        /// </summary>
-        /// <param name="configurationId">The configuration Id.</param>
-        /// <returns>All the test cases.</returns>
-        [HttpGet]
-        public string[] GetTests(int configurationId)
-        {
-            return new string[]
-            {
-                "CreateFileTestCaseS8",
-            };
-        }
-
-        /// <summary>
         /// Run request.
         /// </summary>
         public class RunRequest

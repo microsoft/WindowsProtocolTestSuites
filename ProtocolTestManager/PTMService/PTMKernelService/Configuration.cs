@@ -253,5 +253,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             return result;
         }
+
+        public IEnumerable<string> GetApplicableTestCases()
+        {
+            // In order to get the actual applicable test cases, support of plugin is needed.
+            // So far, we return all test cases.
+            var result = TestSuite.GetTestCases(null).Select(testCaseInfo => testCaseInfo.FullName);
+
+            return result;
+        }
     }
 }
