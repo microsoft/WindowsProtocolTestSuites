@@ -1,0 +1,24 @@
+trigger: none 
+
+variables:
+  - group: Build Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines-main
+
+
+pool: 
+  vmImage: windows-2019
+
+jobs:
+- job:
+  displayName: DotNetCore Build
+  workspace:
+    clean: false
+  timeoutInMinutes: 0
+  steps:
+  - template: pipelines/build/DotNetCore-PTMCli-Build-steps.yml@template
