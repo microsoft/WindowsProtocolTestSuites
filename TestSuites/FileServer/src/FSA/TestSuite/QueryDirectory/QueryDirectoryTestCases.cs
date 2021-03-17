@@ -855,7 +855,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName} under the directory {dirName}");
                 status = this.fsaAdapter.CreateFile(
                     $"{dirName}\\{fileName}",
-                    (FileAttribute)0,
+                    FileAttribute.NORMAL,
                     CreateOptions.NON_DIRECTORY_FILE,
                     (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                     (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
