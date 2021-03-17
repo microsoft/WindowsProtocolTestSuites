@@ -417,9 +417,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
         private void TearDownClient(Smb2FunctionalClient client, uint clientTreeId, FILEID clientFileId)
         {
-            client.Close(clientTreeId, clientFileId);
-            client.TreeDisconnect(clientTreeId);
-            client.LogOff();
+             if (clientTreeId != 0)
+            {
+                client.Close(clientTreeId, clientFileId);
+                client.TreeDisconnect(clientTreeId);
+                client.LogOff();
+            }
         }
 
         private void GenerateFileNames(bool isBothClientDirectory, bool isClient1ParentDirectory, out string client1FileName, out string client2FileName)
