@@ -131,6 +131,7 @@
       <Property name="WhichFileSystemSupport_ObjectIdIoCtlRequest" value="NTFS" />
       <Property name="WhichFileSystemSupport_OpenHasManageVolumeAccess" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_StreamRename" value="NTFS;" />
+      <Property name="WhichFileSystemSupport_Leasing" value="NTFS;REFS" />
 
 
       <Property name="NTFS_ClusterSizeInKB" value="4">

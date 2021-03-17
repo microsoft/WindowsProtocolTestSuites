@@ -54,6 +54,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isObjectIdIoCtlRequestSupported;
         private bool isOpenHasManageVolumeAccessSupported;
         private bool isStreamRenameSupported;
+        private bool isFileSystemSupportLeasing;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -202,9 +203,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return activeTDIs; }
         }
 
+
         public string RootDirectory
         {
             get { return rootDirectory; }
+        }
+
+        public bool IsFileSystemSupportLeasing
+        {
+            get { return isFileSystemSupportLeasing; }
         }
 
         public string QuotaFile
@@ -322,6 +329,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isObjectIdIoCtlRequestSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectIdIoCtlRequest").Contains(this.fileSystem.ToString());
             this.isOpenHasManageVolumeAccessSupported = testConfig.GetProperty("WhichFileSystemSupport_OpenHasManageVolumeAccess").Contains(this.fileSystem.ToString());
             this.isStreamRenameSupported = testConfig.GetProperty("WhichFileSystemSupport_StreamRename").Contains(this.fileSystem.ToString());
+            this.isFileSystemSupportLeasing = testConfig.GetProperty("WhichFileSystemSupport_Leasing").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));

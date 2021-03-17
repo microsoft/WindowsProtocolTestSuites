@@ -117,8 +117,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             #region Test Cases
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
-            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client1ResponseLease.LeaseKey, "Client 1 Request Lease Key MUST be the same its Response Lease key");
-            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client2ResponseLease.LeaseKey, "Client 2 Request Lease Key MUST be the same its Response Lease key");
+            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client1ResponseLease.LeaseKey, "Client 1 Request Lease Key MUST be the same with its Response Lease key");
+            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client2ResponseLease.LeaseKey, "Client 2 Request Lease Key MUST be the same with its Response Lease key");
             BaseTestSite.Assert.AreEqual(client1ResponseLease.LeaseKey, client2ResponseLease.LeaseKey, "LeaseOpen.leaseKey MUST be the same with OperationOpen.LeaseKey");
 
             #endregion
@@ -276,8 +276,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void InitializeClientsConnections(Smb2CreateRequestLease client1RequestLease, Smb2CreateRequestLease client2RequestLease, out Smb2CreateResponseLease client1ResponseLease, 
             out Smb2CreateResponseLease client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
-            Smb2CreateContextResponse client1ResponseContext;
-            Smb2CreateContextResponse client2ResponseContext;
+            Smb2CreateContextResponse? client1ResponseContext;
+            Smb2CreateContextResponse? client2ResponseContext;
 
             SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory, expectServerBreakNotification);
 
@@ -288,8 +288,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void InitializeClientsConnections(Smb2CreateRequestLeaseV2 client1RequestLease, Smb2CreateRequestLeaseV2 client2RequestLease, out Smb2CreateResponseLeaseV2 client1ResponseLease, 
             out Smb2CreateResponseLeaseV2 client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
-            Smb2CreateContextResponse client1ResponseContext;
-            Smb2CreateContextResponse client2ResponseContext;
+            Smb2CreateContextResponse? client1ResponseContext;
+            Smb2CreateContextResponse? client2ResponseContext;
 
             SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory, expectServerBreakNotification);
 
@@ -316,9 +316,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE (with LeaseV2 context)");
             SetupClientConnection(client1, out client1TreeId);
-            Smb2CreateContextResponse[] createContextResponse;
             client1.Create(client1TreeId, client1FileName, isBothClientDirectory || isClient1ParentDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                 out client1FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                 out client1FileId, out Smb2CreateContextResponse[] createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
                  new Smb2CreateContextRequest[]
                  {
                     client1RequestLease
@@ -328,9 +327,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             #endregion
 
             // Get response lease for Client1 (LeaseOpen)
-            client1ResponseLease = createContextResponse.First();
+            client1ResponseLease = createContextResponse!=null? createContextResponse.First() : new Smb2CreateResponseLease();
+
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
+               client2.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
+                clientToAckLeaseBreak = client2;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
@@ -382,6 +384,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void CheckLeaseApplicability(DialectRevision dialect = DialectRevision.Smb30, bool checkFileTypeSupport = true, bool checkDirectoryTypeSupport = false)
         {
             testConfig.CheckDialect(dialect);
+            CheckFileSystemSupport();
+
             if (checkFileTypeSupport)
             {
                 testConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
@@ -396,6 +400,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             } else
             {
                 testConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE);
+            }
+        }
+
+
+        /// <summary>
+        /// Checks if FileSystem type is neither NTFS or REFS. SMB2 leasing fails currently on FAT32
+        /// </summary>
+        private void CheckFileSystemSupport()
+        {
+            if(this.fsaAdapter.IsFileSystemSupportLeasing==false)
+            {
+                BaseTestSite.Assert.Inconclusive("Leasing is not fully supported for {0}.", fsaAdapter.FileSystem);
             }
         }
 
