@@ -343,7 +343,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
-
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
             client2.Create(client2TreeId, client2FileName, isBothClientDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out client2FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
@@ -402,8 +401,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void CheckLeaseApplicability(DialectRevision dialect = DialectRevision.Smb30, bool checkFileTypeSupport = true, bool checkDirectoryTypeSupport = false)
         {
             testConfig.CheckDialect(dialect);
-           // CheckFileSystemSupport();
-
             if (checkFileTypeSupport)
             {
                 testConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
