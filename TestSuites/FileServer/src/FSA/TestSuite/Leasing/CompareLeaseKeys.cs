@@ -278,8 +278,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void InitializeClientsConnections(Smb2CreateRequestLease client1RequestLease, Smb2CreateRequestLease client2RequestLease, out Smb2CreateResponseLease client1ResponseLease, 
             out Smb2CreateResponseLease client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
-            Smb2CreateContextResponse? client1ResponseContext;
-            Smb2CreateContextResponse? client2ResponseContext;
+            Smb2CreateContextResponse client1ResponseContext;
+            Smb2CreateContextResponse client2ResponseContext;
 
             SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory, expectServerBreakNotification);
 
@@ -290,8 +290,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void InitializeClientsConnections(Smb2CreateRequestLeaseV2 client1RequestLease, Smb2CreateRequestLeaseV2 client2RequestLease, out Smb2CreateResponseLeaseV2 client1ResponseLease, 
             out Smb2CreateResponseLeaseV2 client2ResponseLease, bool isBothClientDirectory = false, bool isClient1ParentDirectory = false, bool expectServerBreakNotification = false)
         {
-            Smb2CreateContextResponse? client1ResponseContext;
-            Smb2CreateContextResponse? client2ResponseContext;
+            Smb2CreateContextResponse client1ResponseContext;
+            Smb2CreateContextResponse client2ResponseContext;
 
             SendRequestContext(client1RequestLease, client2RequestLease, out client1ResponseContext, out client2ResponseContext, isBothClientDirectory, isClient1ParentDirectory, expectServerBreakNotification);
 
@@ -342,6 +342,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
+            
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
             client2.Create(client2TreeId, client2FileName, isBothClientDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out client2FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
@@ -416,7 +417,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                 testConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE);
             }
         }
-
 
         private void TearDownClient(Smb2FunctionalClient client, uint clientTreeId, FILEID clientFileId)
         {
