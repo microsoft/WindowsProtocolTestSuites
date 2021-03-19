@@ -12,6 +12,8 @@
     * [Traditional Test cases](#Traditional-Test-cases)
     * [MBT Test cases](#MBT-Test-cases)
 * [Traditional Test Scenarios Design](#Traditional-Test-Scenarios-Design)
+    * [Scenarios for CommonAlgorithm](#Scenarios-for-CommonAlgorithm)
+        * [Algorithm_Noting_FileModified](#Algorithm_Noting_FileModified)
     * [Scenarios for FileInformation](#Scenarios-for-FileInformation)
         * [FileInfo_IsCompressionSupported](#FileInfo_IsCompressionSupported)
         * [FileInfo_IsEASupported](#FileInfo_IsEASupported)
@@ -61,6 +63,16 @@
         * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
         * [CreateFile_BackSlash](#Scenario-CreateFile_BackSlash)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
+    * [Test cases for CommonAlgorithm](#Test-cases-for-CommonAlgorithm)
+        * [NotingFileModified](#NotingFileModified)
+            * [CommonAlgorithm_NotingFileModified_File_LastModificationTime](#CommonAlgorithm_NotingFileModified_File_LastModificationTime)
+            * [CommonAlgorithm_NotingFileModified_File_LastChangeTime](#CommonAlgorithm_NotingFileModified_File_LastChangeTime)
+            * [CommonAlgorithm_NotingFileModified_File_LastAccessTime](#CommonAlgorithm_NotingFileModified_File_LastAccessTime)
+            * [CommonAlgorithm_NotingFileModified_File_Archive](#CommonAlgorithm_NotingFileModified_File_Archive)
+            * [CommonAlgorithm_NotingFileModified_Dir_LastModificationTime](#CommonAlgorithm_NotingFileModified_Dir_LastModificationTime)
+            * [CommonAlgorithm_NotingFileModified_Dir_LastChangeTime](#CommonAlgorithm_NotingFileModified_Dir_LastChangeTime)
+            * [CommonAlgorithm_NotingFileModified_Dir_LastAccessTime](#CommonAlgorithm_NotingFileModified_Dir_LastAccessTime)
+            * [CommonAlgorithm_NotingFileModified_Dir_Archive](#CommonAlgorithm_NotingFileModified_Dir_Archive)
     * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#IsEASupported)
             * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#FileInfo_Set_FileFullEaInformation_File_IsEASupported)
@@ -311,6 +323,7 @@ There are 155 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
+| Scenarios for CommonAlgorithm | 1 | 8 (8) |
 | Scenarios for FileInformation | 7 | 31 (9) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
@@ -344,6 +357,64 @@ There are 343 test cases in total:
 | Set SecurityInfo | 18 |
 
 ## <a name="Traditional-Test-Scenarios-Design"/>Traditional Test Scenarios Design
+
+### <a name="Scenarios-for-CommaonAlgorithm"/>Scenarios for CommonAlgorithm
+
+#### <a name="CommonAlgorithm_NotingFileModified_LastModificationTime"/>CommonAlgorithm_NotingFileModified_LastModificationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastWriteTime is updated by File System when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, the LastWriteTime is set to current system time.|
+| Message Sequence| CreateFile.|
+| | Write to file|
+| | Verify LastWriteTime is set to current system time|
+
+#### <a name="CommonAlgorithm_NotingFileModified_LastChangeTime"/>CommonAlgorithm_NotingFileModified_LastChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastChangeTime is updated by File System when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, the LastChangeTime is set to current system time.|
+| Message Sequence| CreateFile.|
+| | Write to file|
+| | Verify LastChangeTime is set to current system time|
+
+#### <a name="CommonAlgorithm_NotingFileModified_LastAccessTime"/>CommonAlgorithm_NotingFileModified_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by File System when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, the LastAccessTime is set to current system time.|
+| Message Sequence| CreateFile.|
+| | Write to file|
+| | Verify LastAccessTime is set to current system time|
+
+#### <a name="CommonAlgorithm_NotingFileModified_Archive"/>CommonAlgorithm_NotingFileModified_Archive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Archive is updated by File System when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, the Archive is set to true.|
+| Message Sequence| CreateFile.|
+| | Write to file|
+| | Verify Archive is set to true|
 
 ### <a name="Scenarios-for-FileInformation"/>Scenarios for FileInformation
 
@@ -1079,6 +1150,92 @@ There are 343 test cases in total:
 | | Verify server response for supported file systems.|
 
 ## <a name="Traditional-Test-Case-Design"/>Traditional Test Case Design
+
+### <a name="Test-cases-for-CommonAlgorithm"/>Test cases for CommonAlgorithm
+
+#### <a name="NotingFileModified"/>NotingFileModified
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_LastModificationTime"/>CommonAlgorithm_NotingFileModified_File_LastModificationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastWriteTime is upadate by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastModificationTime"/>CommonAlgorithm_NotingFileModified_Dir_LastModificationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastWriteTime is upadate by different file systems when directory is modified.|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_LastChangeTime"/>CommonAlgorithm_NotingFileModified_File_LastChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastChangeTime is upadate by different file systems when file is modified.|
+| | Note: the **FAT32** file system doesn’t process the ChangeTime field|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastChangeTime"/>CommonAlgorithm_NotingFileModified_Dir_LastChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastChangeTime is upadate by different file systems when directory is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_LastAccessTime"/>CommonAlgorithm_NotingFileModified_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is upadate by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastAccessTime"/>CommonAlgorithm_NotingFileModified_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is upadate by different file systems when directory is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_Archive"/>CommonAlgorithm_NotingFileModified_File_Archive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Archive is upadate by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify Archive is true|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_Archive"/>CommonAlgorithm_NotingFileModified_Dir_Archive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Archive is upadate by different file systems when directory is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify Archive is true|
 
 ### <a name="Test-cases-for-FileInformation"/>Test cases for FileInformation
 
