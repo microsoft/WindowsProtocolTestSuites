@@ -320,7 +320,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             SetupClientConnection(client1, out client1TreeId);
             Smb2CreateContextResponse[] createContextResponse;
             client1.Create(client1TreeId, client1FileName, isBothClientDirectory || isClient1ParentDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                 out client1FileId, out Smb2CreateContextResponse[] createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                 out client1FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
                  new Smb2CreateContextRequest[]
                  {
                     client1RequestLease
