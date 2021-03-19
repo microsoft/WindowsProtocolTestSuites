@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             base.TestCleanup();
 
             fsaAdapter.Dispose();
-            base.TestCleanup();
+          //  base.TestCleanup();
             CleanupTestManager();
         }
 
@@ -111,6 +111,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
             Smb2CreateResponseLease client1ResponseLease;
             Smb2CreateResponseLease client2ResponseLease;
+
+            
 
             InitializeClientsConnections(leaseRequest, leaseRequest, out client1ResponseLease, out client2ResponseLease, isBothClientDirectory: true);
 
@@ -165,24 +167,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [Description("The server should return an empty parentLeaseKey when leaseFlag is set to zero")]
         public void Compare_Zero_LeaseFlag_ParentLeaseKey()
         {
-            CheckLeaseApplicability();
+                CheckLeaseApplicability();
 
-            Smb2CreateRequestLeaseV2 leaseRequest = createLeaseV2RequestContext(leaseFlag: LeaseFlagsValues.NONE);
+                Smb2CreateRequestLeaseV2 leaseRequest = createLeaseV2RequestContext(leaseFlag: LeaseFlagsValues.NONE);
 
-            Smb2CreateResponseLeaseV2 client1ResponseLease;
-            Smb2CreateResponseLeaseV2 client2ResponseLease;
+                Smb2CreateResponseLeaseV2 client1ResponseLease;
+                Smb2CreateResponseLeaseV2 client2ResponseLease;
+
+            
 
             InitializeClientsConnections(leaseRequest, leaseRequest, out client1ResponseLease, out client2ResponseLease);
 
-            #region Test Cases
+                #region Test Cases
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
-            BaseTestSite.Assert.AreNotEqual(leaseRequest.ParentLeaseKey, Guid.Empty,
-                "LeaseRequest.ParentLeaseKey should not be empty");
-            BaseTestSite.Assert.AreEqual(client1ResponseLease.ParentLeaseKey, Guid.Empty,
-                "LeaseOpen.ParentLeaseKey MUST be empty if LeaseFlag is set to Zero");
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
+                BaseTestSite.Assert.AreNotEqual(leaseRequest.ParentLeaseKey, Guid.Empty,
+                    "LeaseRequest.ParentLeaseKey should not be empty");
+                BaseTestSite.Assert.AreEqual(client1ResponseLease.ParentLeaseKey, Guid.Empty,
+                    "LeaseOpen.ParentLeaseKey MUST be empty if LeaseFlag is set to Zero");
 
-            #endregion
+                #endregion
         }
 
         [TestMethod]
@@ -321,6 +325,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                  new Smb2CreateContextRequest[]
                  {
                     client1RequestLease
+                 },
+                 checker: (Packet_Header header, CREATE_Response response) =>
+                 {
+                     if (response.OplockLevel != OplockLevel_Values.OPLOCK_LEVEL_LEASE)
+                     {
+                         BaseTestSite.Assume.Inconclusive("Server OPLOCK Level is: {0}, expected: {1} indicating support for leasing.", response.OplockLevel, OplockLevel_Values.OPLOCK_LEVEL_LEASE);
+                     }
+
                  }
                  );
 
@@ -331,8 +343,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
-               client2.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
-                clientToAckLeaseBreak = client2;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
@@ -340,6 +350,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                 new Smb2CreateContextRequest[]
                 {
                     client2RequestLease
+                },
+                checker: (Packet_Header header, CREATE_Response response) =>
+                {
+                    if (response.OplockLevel != OplockLevel_Values.OPLOCK_LEVEL_LEASE)
+                    {
+                        BaseTestSite.Assume.Inconclusive("Server OPLOCK Level is: {0}, expected: {1} indicating support for leasing.", response.OplockLevel, OplockLevel_Values.OPLOCK_LEVEL_LEASE);
+                    }
+
                 }
                 );
 
@@ -384,7 +402,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void CheckLeaseApplicability(DialectRevision dialect = DialectRevision.Smb30, bool checkFileTypeSupport = true, bool checkDirectoryTypeSupport = false)
         {
             testConfig.CheckDialect(dialect);
-            CheckFileSystemSupport();
+           // CheckFileSystemSupport();
 
             if (checkFileTypeSupport)
             {
@@ -404,22 +422,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         }
 
 
-        /// <summary>
-        /// Checks if FileSystem type is neither NTFS or REFS. SMB2 leasing fails currently on FAT32
-        /// </summary>
-        private void CheckFileSystemSupport()
-        {
-            if(this.fsaAdapter.IsFileSystemSupportLeasing==false)
-            {
-                BaseTestSite.Assert.Inconclusive("Leasing is not fully supported for {0}.", fsaAdapter.FileSystem);
-            }
-        }
-
         private void TearDownClient(Smb2FunctionalClient client, uint clientTreeId, FILEID clientFileId)
         {
-            client.Close(clientTreeId, clientFileId);
-            client.TreeDisconnect(clientTreeId);
-            client.LogOff();
+            if (clientTreeId != 0)
+            {
+                client.Close(clientTreeId, clientFileId);
+                client.TreeDisconnect(clientTreeId);
+                client.LogOff();
+            }
         }
 
         private void GenerateFileNames(bool isBothClientDirectory, bool isClient1ParentDirectory, out string client1FileName, out string client2FileName)

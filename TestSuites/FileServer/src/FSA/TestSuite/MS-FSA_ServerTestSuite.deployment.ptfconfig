@@ -22,13 +22,13 @@
           File System Under Test.
         </Description>
       </Property>
-      
+
       <Property name="ReFSVersion" value="1">
         <Choice>1, 2</Choice>
         <Description>
           The highest version of ReFS supported by the server.
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="NTFS_ShareFolder" value="FileShare">
         <Description>
@@ -47,13 +47,13 @@
           Share folder in the FAT32 system volume.
         </Description>
       </Property>
-        
+
       <Property name="OTHERFS_ShareFolder" value="FileShare">
         <Description>
           Share folder in the volume of other file system (Not any of the FAT32, NTFS or REFS).
         </Description>
       </Property>
-      
+
       <!--RootDirectory where Share folder exist. -->
       <Property name="NTFS_RootDirectory" value="C$">
         <Description>
@@ -72,12 +72,12 @@
           RootDirectory where Share folder existed in the FAT32 system volume.
         </Description>
       </Property>
-        
+
       <Property name="OTHERFS_RootDirectory" value="K$">
         <Description>
           RootDirectory where Share folder existed in the volume of other file system (Neither NTFS or REFS).
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="ExistingFolder" value="ExistingFolder">
         <Description>
@@ -131,7 +131,8 @@
       <Property name="WhichFileSystemSupport_ObjectIdIoCtlRequest" value="NTFS" />
       <Property name="WhichFileSystemSupport_OpenHasManageVolumeAccess" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_StreamRename" value="NTFS;" />
-      <Property name="WhichFileSystemSupport_Leasing" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_MarkHandle" value="NTFS,REFS;" />
+      <Property name="WhichFileSystemSupport_RedundantStorage" value="REFS;" />
 
 
       <Property name="NTFS_ClusterSizeInKB" value="4">
@@ -145,7 +146,7 @@
           ReFS uses a default cluster size of 64 KB, a maximum cluster size of 128k, and a minimum cluster size of 4 KB.
         </Description>
       </Property>
-      
+
       <Property name="FAT32_ClusterSizeInKB" value="4">
         <Description>
           FAT32 uses a default cluster size of 4 KB, a maximum cluster size of 32 KB, and a minimum cluster size of 2 KB.
@@ -156,7 +157,7 @@
         <Description>
           The cluster size of other file system, in KB
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="SystemPageSizeInKB" value="4">
         <Description>
@@ -278,7 +279,7 @@
           To specify whether 64-bit FileId is supported or not.
         </Description>
       </Property>
-      
+
       <Property name="IsChangeTimeSupported" value="true">
         <Choice>true, false</Choice>
         <Description>
@@ -289,6 +290,12 @@
       <Property name="FSCC_UnSupportedFSCTL" value="">
         <Description>
           To specify the FSCTL (defined in [MS-FSCC] section 2.3) that the SUT does not support.
+        </Description>
+      </Property>
+
+      <Property name="NumberOfDataCopies" value="2">
+        <Description>
+          Indicates the number of copies for each file stored in the redundant storage volume.
         </Description>
       </Property>
     </Group>
