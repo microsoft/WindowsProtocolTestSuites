@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             base.TestCleanup();
 
             fsaAdapter.Dispose();
-          //  base.TestCleanup();
+            base.TestCleanup();
             CleanupTestManager();
         }
 
@@ -110,9 +110,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             Smb2CreateRequestLease leaseRequest = createLeaseRequestContext(leaseState: LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING);
 
             Smb2CreateResponseLease client1ResponseLease;
-            Smb2CreateResponseLease client2ResponseLease;
-
-            
+            Smb2CreateResponseLease client2ResponseLease; 
 
             InitializeClientsConnections(leaseRequest, leaseRequest, out client1ResponseLease, out client2ResponseLease, isBothClientDirectory: true);
 
@@ -320,6 +318,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE (with LeaseV2 context)");
             SetupClientConnection(client1, out client1TreeId);
+            Smb2CreateContextResponse[] createContextResponse;
             client1.Create(client1TreeId, client1FileName, isBothClientDirectory || isClient1ParentDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
                  out client1FileId, out Smb2CreateContextResponse[] createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
                  new Smb2CreateContextRequest[]

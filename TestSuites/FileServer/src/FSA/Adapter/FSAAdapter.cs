@@ -202,7 +202,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return activeTDIs; }
         }
 
-
         public string RootDirectory
         {
             get { return rootDirectory; }
