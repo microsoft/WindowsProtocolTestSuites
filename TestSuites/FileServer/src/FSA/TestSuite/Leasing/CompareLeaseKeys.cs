@@ -172,8 +172,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                 Smb2CreateResponseLeaseV2 client1ResponseLease;
                 Smb2CreateResponseLeaseV2 client2ResponseLease;
 
-            
-
             InitializeClientsConnections(leaseRequest, leaseRequest, out client1ResponseLease, out client2ResponseLease);
 
                 #region Test Cases
