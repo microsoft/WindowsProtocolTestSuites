@@ -194,7 +194,7 @@
         <Description>Indicates if RDP client (SUT) support Server Redirection.</Description>
       </Property>
       <!--The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP. -->
-      <Property name="WaitTime" value="50">
+      <Property name="WaitTime" value="40">
         <Description>The maximum time in seconds to wait for specified PDUs. It may need more time when security protocol is TLS or CredSSP.</Description>
       </Property>
       <!-- Determine how test suite get the image data, which is used by RDPRFX test cases to send image to the client. It should be set to Screen, or the path of an image file-->
