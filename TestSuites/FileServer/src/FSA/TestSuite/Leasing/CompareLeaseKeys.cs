@@ -321,7 +321,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                  new Smb2CreateContextRequest[]
                  {
                     client1RequestLease
-                 }
+                 },
+                  checker: (Packet_Header header, CREATE_Response response) =>
+                {
+                    if (response.OplockLevel != OplockLevel_Values.OPLOCK_LEVEL_LEASE)
+                    {
+                        this.TestSite.Assume.Inconclusive("Leasing is only supported for the SMB 2.1 and 3.x dialect family. It is not supported on {0}.", fsaAdapter.FileSystem);
+                    }
+
+                }
                  );
 
             #endregion
@@ -331,15 +339,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
-               client2.Smb2Client.LeaseBreakNotificationReceived += new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(OnLeaseBreakNotificationReceived);
-                clientToAckLeaseBreak = client2;
-
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
             client2.Create(client2TreeId, client2FileName, isBothClientDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out client2FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
                 new Smb2CreateContextRequest[]
                 {
                     client2RequestLease
+                },
+                 checker: (Packet_Header header, CREATE_Response response) =>
+                {
+                    if (response.OplockLevel != OplockLevel_Values.OPLOCK_LEVEL_LEASE)
+                    {
+                        this.TestSite.Assume.Inconclusive("Leasing is only supported for the SMB 2.1 and 3.x dialect family. It is not supported on {0}.", fsaAdapter.FileSystem);
+                    }
+
                 }
                 );
 
@@ -384,8 +397,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         private void CheckLeaseApplicability(DialectRevision dialect = DialectRevision.Smb30, bool checkFileTypeSupport = true, bool checkDirectoryTypeSupport = false)
         {
             testConfig.CheckDialect(dialect);
-            CheckFileSystemSupport();
-
             if (checkFileTypeSupport)
             {
                 testConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
