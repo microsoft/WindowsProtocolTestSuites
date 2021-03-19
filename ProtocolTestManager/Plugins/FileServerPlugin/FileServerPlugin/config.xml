@@ -363,6 +363,9 @@
           <Rule name = "HVRS (Hyper-V Remote Storage)">
             <Category name = "HVRS-FSA"/>
           </Rule>
+          <Rule name = "CommonAlgorithm">
+            <Category name = "CommonAlgorithm"/>
+          </Rule>
         </Rule>
       </Rule>
     </Group>
