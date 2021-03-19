@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
     [TestClassAttribute()]
-    public partial class FsInfoTestCases : PtfTestClassBase
+    public partial class CommonAlgorithmTestCases : PtfTestClassBase
     {
         #region Variables
         private FSAAdapter fsaAdapter;
@@ -49,6 +49,5 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             this.CleanupTestManager();
         }
         #endregion
-
     }
 }
