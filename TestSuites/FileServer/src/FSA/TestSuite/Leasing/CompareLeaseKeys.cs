@@ -428,7 +428,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
 
         // Checks that there's an existing Tree_Connect session 
-        public bool ClientTreeConnectSessionExists(uint clientTreeId)
+        private bool ClientTreeConnectSessionExists(uint clientTreeId)
         {
              return clientTreeId != 0;
         }
