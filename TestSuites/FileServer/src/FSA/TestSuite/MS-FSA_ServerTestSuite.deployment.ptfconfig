@@ -290,12 +290,6 @@
           To specify the FSCTL (defined in [MS-FSCC] section 2.3) that the SUT does not support.
         </Description>
       </Property>
-
-      <Property name="NumberOfDataCopies" value="2">
-        <Description>
-          Indicates the number of copies for each file stored in the redundant storage volume.
-        </Description>
-      </Property>
     </Group>
   </Properties>
 </TestSite>
