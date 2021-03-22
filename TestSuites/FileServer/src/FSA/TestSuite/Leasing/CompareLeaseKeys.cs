@@ -336,7 +336,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             #endregion
 
             // Get response lease for Client1 (LeaseOpen)
-            client1ResponseLease = createContextResponse!=null? createContextResponse.First() : new Smb2CreateResponseLease();
+            client1ResponseLease = (createContextResponse != null) ? createContextResponse.First() : new Smb2CreateResponseLease();
 
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
