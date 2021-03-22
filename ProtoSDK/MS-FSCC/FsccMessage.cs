@@ -4722,12 +4722,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A FILE_MODE_INFORMATION structure specified in section  . 
         /// </summary>
-        public FILE_MODE_INFORMATION ModeInformation;
+        public FileModeInformation ModeInformation;
 
         /// <summary>
         /// A FILE_ALIGNMENT_INFORMATION structure specified in  section . 
         /// </summary>
-        public FILE_ALIGNMENT_INFORMATION AlignmentInformation;
+        public FileAlignmentInformation AlignmentInformation;
 
         /// <summary>
         /// A FILE_NAME_INFORMATION structure specified in section  . 
@@ -4746,7 +4746,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  <remarks>
     //   MS-fscc\9b0b9971-85aa-4651-8438-f1c4298bcb0d.xml
     //  </remarks>
-    public partial struct FILE_ALIGNMENT_INFORMATION
+    public partial struct FileAlignmentInformation
     {
 
         /// <summary>
@@ -5839,7 +5839,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     //  <remarks>
     //   MS-fscc\52df7798-8330-474b-ac31-9afe8075640c.xml
     //  </remarks>
-    public partial struct FILE_MODE_INFORMATION
+    public partial struct FileModeInformation
     {
 
         /// <summary>
