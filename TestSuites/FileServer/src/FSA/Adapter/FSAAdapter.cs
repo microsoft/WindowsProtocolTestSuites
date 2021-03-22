@@ -4778,7 +4778,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             bool isReturnStatus = false;
             List<byte> byteList = new List<byte>();
-            FILE_MODE_INFORMATION fileInfo = new FILE_MODE_INFORMATION();
+            FileModeInformation fileInfo = new FileModeInformation();
 
             fileInfo.Mode = (Mode_Values)inputMode;
             byteList.AddRange(BitConverter.GetBytes((uint)fileInfo.Mode));
