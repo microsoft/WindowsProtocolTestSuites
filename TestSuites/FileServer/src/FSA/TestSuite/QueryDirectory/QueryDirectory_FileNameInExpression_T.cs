@@ -29,7 +29,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             int filesCount; // Count files returned from the query, that exist in the FileNames list
 
-            //[MS-FSA] 2.1.4.4 - Test case for wildcard "*"
             fileNames = CreateRandomFileNames(FilesInDirectoryCount);
             outputBuffer = QueryByWildCardAndFileInfoClass(WildCard, FileInformationClass, fileNames);
 
@@ -63,7 +62,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             filesCount = FileNames.Intersect(GetListFileInformation<T>(FileInformation)).ToList().Count();
 
             Site.Assert.AreEqual(ExpectedFilesReturnedLength, FileInformation.Length, $"The returned Buffer should contain {ExpectedFilesReturnedLength} entries of FileInformation.");
-            Site.Assert.AreEqual(ExpectedFilesReturnedLength, filesCount, $"Number of files created should be equal to the number of files returned: {ExpectedFilesReturnedLength}.");
+            Site.Assert.AreEqual(ExpectedFilesReturnedLength, filesCount, $"Number of files returned should match the number of files that match the pattern: {ExpectedFilesReturnedLength}.");
         }
     }
 }

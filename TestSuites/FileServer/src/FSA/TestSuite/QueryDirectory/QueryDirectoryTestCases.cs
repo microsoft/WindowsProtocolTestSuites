@@ -24,13 +24,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         private FSAAdapter fsaAdapter;
         private const uint BytesToWrite = 1024;
         private const int FileNameLength = 20;
-        /// DOS_STAR can be transmogrify to *.
-        /// DOS_DOT can be transmogrify to .* or .?
-        /// DOS_QM can be transmogrify to ?
-        private const string DOS_STAR = "*.";
-        private const string DOS_DOT_I = ".*";
-        private const string DOS_DOT_II = ".?";
-        
+        private const string DOS_STAR = "<";
+        private const string DOS_QM = ">";
+        private const string DOS_DOT = "\"";
+
         #endregion
 
         #region Class Initialization and Cleanup

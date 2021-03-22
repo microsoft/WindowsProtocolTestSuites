@@ -84,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern * described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskInStringWildCard()
         {
             var fileInformation = new List<FileIdBothDirectoryInformation>();
@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
+        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern DOS_STAR described in [MS-FSA] 2.1.4.")]
         public void BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_STAR_WildCard()
         {
             var fileInformation = new List<FileIdBothDirectoryInformation>();
@@ -126,13 +126,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
-        public void BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_WildCard()
+        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern DOS_QM described in [MS-FSA] 2.1.4.")]
+        public void BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_QM_WildCard()
         {
             var fileInformation = new List<FileIdBothDirectoryInformation>();
             int expectedFilesReturnedLength = 2;
-            var fileNames = new List<string> { "grc.BlankFile.1.txt", "grc.BlankFile.2.txt", "grc_BadFile_1.txt", "grc_BadFile_2.txt", "grc_BadFile_3.txt" };
-            var wildCard = $"grc{DOS_DOT_I}";
+            var fileNames = new List<string> { "Fine", "File", "Bile", "Fille", "Nine" };
+            var wildCard = $"Fi{DOS_QM}e";
 
             BVT_QueryDirectoryBySearchPattern<FileIdBothDirectoryInformation>(
                 fileInformation.ToArray(),
@@ -147,13 +147,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryDirectory)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern *.* described in [MS-FSA] 2.1.4.")]
-        public void BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_QuestionMark_WildCard()
+        [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern DOS_DOT described in [MS-FSA] 2.1.4.")]
+        public void BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_WildCard()
         {
             var fileInformation = new List<FileIdBothDirectoryInformation>();
             int expectedFilesReturnedLength = 3;
-            var fileNames = new List<string> { "grc.BlankFile.1.txt", "grc.BlankFile.2.txt", "grc.BlankFile.3.txt", "grc.BadFile_1.txt", "grc.BadFile_2.txt" };
-            var wildCard = $"grc.BlankFile{ DOS_DOT_II}.txt";
+            var fileNames = new List<string> { "grcBlankFile1.", "grcBlankFile2.", "grcBlankFile3.", "grc.BadFile_1.txt", "grc.BadFile_2.txt" };
+            var wildCard = $"grcBlankFile?{DOS_DOT}";
 
             BVT_QueryDirectoryBySearchPattern<FileIdBothDirectoryInformation>(
                 fileInformation.ToArray(),
