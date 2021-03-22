@@ -63,5 +63,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         IConfiguration GetConfiguration(int id);
 
         #endregion
+
+        #region Test run related members.
+
+        /// <summary>
+        /// Get a test run.
+        /// </summary>
+        /// <param name="id">The test run Id.</param>
+        /// <returns>The test run.</returns>
+        ITestRun GetTestRun(int id);
+
+        /// <summary>
+        /// Create a test run.
+        /// </summary>
+        /// <param name="configurationId">The configuration Id.</param>
+        /// <param name="selectedTestCases">The optional selected test cases.</param>
+        /// <returns>The test run Id.</returns>
+        int CreateTestRun(int configurationId, string[] selectedTestCases);
+
+        #endregion
     }
 }

@@ -8,6 +8,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string TestSuite = "testsuite";
 
         public const string Configuration = "configuration";
+
+        public const string TestResult = "testresult";
     }
 
     public static class TestSuiteConsts

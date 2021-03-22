@@ -25,6 +25,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Entities
 
         public TestResultState State { get; set; }
 
+        public string Path { get; set; }
+
         public int? Total { get; set; }
 
         public int? NotRun { get; set; }

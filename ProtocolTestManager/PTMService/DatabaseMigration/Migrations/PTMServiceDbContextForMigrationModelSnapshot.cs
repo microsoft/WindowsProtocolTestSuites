@@ -37,6 +37,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.DatabaseMigration.Migration
                     b.Property<int?>("Passed")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Path")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");
 

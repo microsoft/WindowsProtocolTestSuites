@@ -1,14 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace PTMService.Controllers
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+
+namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
     /// <summary>
     /// The test suite run controller.
     /// </summary>
     [Route("api/run")]
     [ApiController]
-    public class TestSuiteRunController : ControllerBase
+    public class TestSuiteRunController : PTMServiceControllerBase
     {
+        /// <summary>
+        /// Constructor of test suite run controller.
+        /// </summary>
+        /// <param name="ptmKernelService">The PTM kernel service.</param>
+        public TestSuiteRunController(IPTMKernelService ptmKernelService)
+            : base(ptmKernelService)
+        {
+        }
+
         /// <summary>
         /// Run request.
         /// </summary>
@@ -33,7 +46,9 @@ namespace PTMService.Controllers
         [HttpPost]
         public int Run(RunRequest request)
         {
-            return 1234;
+            var result = PTMKernelService.CreateTestRun(request.ConfigurationId, request.SelectedTestCases);
+
+            return result;
         }
 
         /// <summary>
@@ -45,6 +60,10 @@ namespace PTMService.Controllers
         [HttpPut]
         public IActionResult Abort(int id)
         {
+            var testRun = PTMKernelService.GetTestRun(id);
+
+            testRun.Abort();
+
             return Ok();
         }
     }

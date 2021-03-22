@@ -53,6 +53,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.DatabaseMigration.Migration
                         .Annotation("Sqlite:Autoincrement", true),
                     TestSuiteConfigurationId = table.Column<int>(type: "INTEGER", nullable: false),
                     State = table.Column<int>(type: "INTEGER", nullable: false),
+                    Path = table.Column<string>(type: "TEXT", nullable: true),
                     Total = table.Column<int>(type: "INTEGER", nullable: true),
                     NotRun = table.Column<int>(type: "INTEGER", nullable: true),
                     Passed = table.Column<int>(type: "INTEGER", nullable: true),

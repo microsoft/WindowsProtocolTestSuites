@@ -9,7 +9,7 @@ using Microsoft.Protocols.TestManager.PTMService.DatabaseMigration;
 namespace Microsoft.Protocols.TestManager.PTMService.DatabaseMigration.Migrations
 {
     [DbContext(typeof(PTMServiceDbContextForMigration))]
-    [Migration("20210225085150_InitialCreate")]
+    [Migration("20210316081828_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.DatabaseMigration.Migration
 
                     b.Property<int?>("Passed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("State")
                         .HasColumnType("INTEGER");

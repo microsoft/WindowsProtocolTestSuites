@@ -21,6 +21,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private IDictionary<int, IConfiguration> ConfigurationPool { get; init; }
 
+        private IDictionary<int, ITestRun> TestRunPool { get; init; }
+
         public PTMKernelService(IOptions<PTMKernelServiceOptions> options, IStoragePool storageManager, IScopedServiceFactory<IRepositoryPool> scopedServiceFactory)
         {
             Options = options.Value;
@@ -32,6 +34,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             TestSuitePool = new Dictionary<int, ITestSuite>();
 
             ConfigurationPool = new Dictionary<int, IConfiguration>();
+
+            TestRunPool = new Dictionary<int, ITestRun>();
         }
     }
 }

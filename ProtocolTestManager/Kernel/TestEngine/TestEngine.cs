@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
@@ -28,6 +29,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private List<TestCase> testcases;
 
         private List<TestCase> filteredTestcases;
+
+        private const int ProcessWaitInterval = 100;
 
         public TestEngine(string enginePath)
         {
@@ -210,6 +213,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="caseStack">Test Cases</param>
         public void RunByCase(Stack<TestCase> caseStack)
         {
+            using var cancellationTokenSource = new CancellationTokenSource();
+
+            RunByCase(caseStack, cancellationTokenSource.Token);
+        }
+
+        /// <summary>
+        /// Runs the specified test cases in the test suite.
+        /// </summary>
+        /// <param name="caseStack">The test cases.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public void RunByCase(Stack<TestCase> caseStack, CancellationToken cancellationToken)
+        {
             runningCaseStack = caseStack;
 
             var exception = new List<Exception>();
@@ -217,8 +232,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 while (caseStack != null && caseStack.Count > 0)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     StringBuilder args = ConstructVstestArgs(caseStack);
-                    var innerException = Run(args.ToString());
+                    var innerException = Run(args.ToString(), cancellationToken);
                     if (innerException != null)
                     {
                         exception.Add(innerException);
@@ -234,8 +251,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private Exception Run(string runArgs)
         {
+            using var cancellationTokenSource = new CancellationTokenSource();
+
+            return Run(runArgs, cancellationTokenSource.Token);
+        }
+
+        private Exception Run(string runArgs, CancellationToken cancellationToken)
+        {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 vstestProcess = new Process()
                 {
                     StartInfo = new ProcessStartInfo()
@@ -252,7 +278,22 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 PipeSinkServer.Start(PipeName);
 
                 vstestProcess.Start();
-                vstestProcess.WaitForExit();
+
+                while (true)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        TerminateProcessTree(vstestProcess.Id);
+
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+
+                    if (vstestProcess.WaitForExit(ProcessWaitInterval))
+                    {
+                        break;
+                    }
+                }
+
                 int err = vstestProcess.ExitCode;
                 if (err != 0)
                 {
