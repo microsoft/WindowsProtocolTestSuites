@@ -418,6 +418,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
         private void TearDownClient(Smb2FunctionalClient client, uint clientTreeId, FILEID clientFileId)
         {
+            // if clientTreeId is not 0, it means there is an existing Tree_Connect Session and the below commands can be carried out according to TD [MS-SMB2]2.2.1.2
             if (clientTreeId != 0)
             {
                 client.Close(clientTreeId, clientFileId);
