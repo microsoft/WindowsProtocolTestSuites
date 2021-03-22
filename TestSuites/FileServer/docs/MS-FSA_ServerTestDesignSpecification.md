@@ -323,7 +323,6 @@ There are 155 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for CommonAlgorithm | 1 | 8 (8) |
 | Scenarios for FileInformation | 7 | 31 (9) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
@@ -331,6 +330,7 @@ There are 155 test cases in total:
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
+| Scenarios for CommonAlgorithm | 1 | 8 (8) |
 | Other Scenarios | 3 | 6 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
