@@ -365,6 +365,9 @@
           <Rule name = "FileAccess">
             <Category name = "FileAccess"/>
           </Rule>
+          <Rule name = "CommonAlgorithm">
+            <Category name = "CommonAlgorithm"/>
+          </Rule>
         </Rule>
       </Rule>
     </Group>
