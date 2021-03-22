@@ -98,6 +98,16 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileAlternateNameInformation](#FileAlternateNameInformation)
+            * [FileInfo_Query_FileAlternateNameInformation](#FileInfo_Query_FileAlternateNameInformation)
+        * [FileInternalInformation](#FileInternalInformation)
+            * [FileInfo_Query_FileInternalInformation](#FileInfo_Query_FileInternalInformation)
+        * [FilePositionInformation](#FilePositionInformation)
+            * [FileInfo_Query_FilePositionInformation](#FileInfo_Query_FilePositionInformation)
+        * [FileModeInformation](#FileModeInformation)
+            * [FileInfo_Query_FileModeInformation](#FileInfo_Query_FileModeInformation)
+        * [FileAlignmentInformation](#FileAlignmentInformation)
+            * [FileInfo_Query_FileAlignmentInformation](#FileInfo_Query_FileAlignmentInformation)
         * [FileBasicInformation](#FileBasicInformation)
             * [FileInfo_Set_FileBasicInformation_File_Negative](#FileInfo_Set_FileBasicInformation_File_Negative)
             * [FileInfo_Set_FileBasicInformation_File_Positive](#FileInfo_Set_FileBasicInformation_File_Positive)
@@ -311,7 +321,7 @@ There are 155 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 31 (9) |
+| Scenarios for FileInformation | 7 | 36 (16) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -1619,6 +1629,52 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile with ::$Data as file name suffix.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
 | | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Query_FileAlignmentInformation"/>FileInfo_Query_FileAlignmentInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The test case is used to query the buffer alignment required by the underlying device.|
+| Message Sequence| CreateFile with normal file name.|
+| | QueryInfo with FileInfoClass.FileAlignmentInformation|
+| | Verify server returned status and returned AlignmentRequirement and bytecount accordingly.|
+
+##### <a name="FileInfo_Query_FileAlternateNameInformation"/>FileInfo_Query_FileAlternateNameInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if SUT (NTFS) supports the alternate name and then query file alternate name info.|
+| Message Sequence| CreateFile with file name not compliant with restrictions for file names under MS-DOS and 16-bit Window (logger than 8).|
+| | QueryInfo with FileInfoClass.FileAlternateNameInformation|
+| | Verify server returned status and altername accordingly.|
+
+##### <a name="FileInfo_Query_FileInternalInformation"/>FileInfo_Query_FileInternalInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test is used to query the file system's 8-byte file reference number for a file.|
+| Message Sequence| CreateFile with normal file name.|
+| | QueryInfo with FileInfoClass.FileInternalInformation|
+| | Verify server returned status accordingly.|
+
+##### <a name="FileInfo_Query_FileModeInformation"/>FileInfo_Query_FileModeInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The case is used to query the mode of the file.|
+| Message Sequence| CreateFile with normal file name and mode NO_INTERMEDIATE_BUFFERING, WRITE_THROUGH.|
+| | QueryInfo with FileInfoClass.FileModeInformation|
+| | Verify server returned status and verify the mode of FileModeInformation accordingly.|
+
+##### <a name="FileInfo_Query_FilePositionInformation"/>FileInfo_Query_FilePositionInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The case is used to query the position of the file pointer within a file.|
+| Message Sequence| CreateFile with normal file name.|
+| | SetFilePositionInfo to file on server and verify the return value. |
+| | QueryInfo with FileInfoClass.FilePositionInformation|
+| |  Verify server returned satus.|
 
 #### <a name="FileBasicInformation"/>FileBasicInformation
 

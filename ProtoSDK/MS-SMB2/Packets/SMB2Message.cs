@@ -9476,88 +9476,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     }
 
     /// <summary>
-    ///  The buffer alignment required by the underlying device.The
-    ///  FILE_ATTRIBUTE_INFORMATION data element is as follows.
-    /// </summary>
-    public partial struct FileAlignmentInformation
-    {
-
-        /// <summary>
-        ///A 32-bit unsigned integer that MUST contain one
-        ///  of the following values.
-        /// </summary>
-        [StaticSize(4)]
-        public AlignmentRequirement_Values AlignmentRequirement;
-    }
-
-    /// <summary>
-    /// AlignmentRequirement_Values
-    /// </summary>
-    public enum AlignmentRequirement_Values : uint
-    {
-
-        /// <summary>
-        ///  If this value is specified, there are no alignment requirements
-        ///  for the device.
-        /// </summary>
-        FILE_BYTE_ALIGNMENT = 0x00000000,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 2-byte boundary.
-        /// </summary>
-        FILE_WORD_ALIGNMENT = 0x00000001,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 4-byte boundary.
-        /// </summary>
-        FILE_LONG_ALIGNMENT = 0x00000003,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  an 8-byte boundary.
-        /// </summary>
-        FILE_QUAD_ALIGNMENT = 0x00000007,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 16-byte boundary.
-        /// </summary>
-        FILE_OCTA_ALIGNMENT = 0x0000000f,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 32-byte boundary.
-        /// </summary>
-        FILE_32_BYTE_ALIGNMENT = 0x0000001f,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 64-byte boundary.
-        /// </summary>
-        FILE_64_BYTE_ALIGNMENT = 0x0000003f,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 128-byte boundary.
-        /// </summary>
-        FILE_128_BYTE_ALIGNMENT = 0x0000007f,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 256-byte boundary.
-        /// </summary>
-        FILE_256_BYTE_ALIGNMENT = 0x000000ff,
-
-        /// <summary>
-        ///  If this value is specified, data MUST be aligned on
-        ///  a 512-byte boundary.
-        /// </summary>
-        FILE_512_BYTE_ALIGNMENT = 0x000001ff,
-    }
-
-    /// <summary>
     ///  This information class is used to query for the size
     ///  of the extended attributes (EA) for a file. An extended
     ///  attribute is a piece of application-specific metadata
@@ -9674,29 +9592,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  extended attributes.
         /// </summary>
         FILE_NEED_EA = 0x00000080,
-    }
-
-    /// <summary>
-    ///  This information class is used to query for the file
-    ///  system's 8-byte file reference number for a file.The
-    ///  FILE_INTERNAL_INFORMATION data element is as follows.
-    /// </summary>
-    public partial struct FileInternalInformation
-    {
-
-        /// <summary>
-        ///  A 64-bit signed integer that contains the 8-byte
-        ///  file reference number for the file. This number MUST
-        ///  be assigned by the file system and is unique to the
-        ///  volume on which the file or directory is located. This
-        ///  file reference number is the same as the file reference
-        ///  number that is stored in the FileId field of the FILE_ID_BOTH_DIR_INFORMATION
-        ///  and FILE_ID_FULL_DIR_INFORMATION data elements. The
-        ///  value of this field MUST be greater than or equal to
-        ///  0.
-        /// </summary>
-        [StaticSize(8)]
-        public long IndexNumber;
     }
 
     /// <summary>
@@ -10025,31 +9920,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         [StaticSize(48)]
         public byte[] ExtendedInfo;
-    }
-
-    /// <summary>
-    ///  This information class is used to query or set information
-    ///  on a named pipe that is not specific to one end of
-    ///  the pipe or another.The FILE_PIPE_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FilePipeInformation
-    {
-
-        /// <summary>
-        ///A 32-bit unsigned integer that MUST contain one
-        ///  of the following values.
-        /// </summary>
-        [StaticSize(4)]
-        public ReadMode_Values ReadMode;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that MUST contain one
-        ///  of the following values.
-        /// </summary>
-        [StaticSize(4)]
-        public CompletionMode_Values CompletionMode;
-    }
+    }   
 
     /// <summary>
     /// ReadMode_Values
@@ -10092,91 +9963,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  or written from, the operation completes immediately.
         /// </summary>
         FILE_PIPE_COMPLETE_OPERATION = 0x00000001,
-    }
-
-    /// <summary>
-    ///  This information class is used to query information
-    ///  on a named pipe that is associated with the end of
-    ///  the pipe that is being queried.The FILE_PIPE_LOCAL_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FilePipeLocalInformation
-    {
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the named
-        ///  pipe type. MUST be one of the following.
-        /// </summary>
-        [StaticSize(4)]
-        public NamedPipeType_Values NamedPipeType;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the named
-        ///  pipe configuration. MUST be one of the following. 
-        /// 
-        /// </summary>
-        [StaticSize(4)]
-        public NamedPipeConfiguration_Values NamedPipeConfiguration;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the maximum
-        ///  number of instances that can be created for this pipe.
-        ///  The first instance of the pipe MUST specify this value.
-        /// </summary>
-        [StaticSize(4)]
-        public uint MaximumInstances;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the number
-        ///  of current named pipe instances.
-        /// </summary>
-        [StaticSize(4)]
-        public uint CurrentInstances;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the inbound
-        ///  quota in bytes for the named pipe.
-        /// </summary>
-        [StaticSize(4)]
-        public uint InboundQuota;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the bytes
-        ///  of data available to be read from the named pipe.
-        /// </summary>
-        [StaticSize(4)]
-        public uint ReadDataAvailable;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains outbound
-        ///  quota in bytes for the named pipe.
-        /// </summary>
-        [StaticSize(4)]
-        public uint OutboundQuota;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the write
-        ///  quota in bytes for the named pipe.
-        /// </summary>
-        [StaticSize(4)]
-        public uint WriteQuotaAvailable;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the named
-        ///  pipe state that specifies the connection status for
-        ///  the named pipe. MUST be one of the following.
-        /// </summary>
-        [StaticSize(4)]
-        public NamedPipeState_Values NamedPipeState;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the type
-        ///  of the named pipe end, which specifies whether this
-        ///  is the client or the server side of a named pipe. MUST
-        ///  be one of the following.
-        /// </summary>
-        [StaticSize(4)]
-        public NamedPipeEnd_Values NamedPipeEnd;
     }
 
     /// <summary>
@@ -10514,122 +10300,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public byte Directory;
     }
 
-    /// <summary>
-    ///  This information class is used to query alternate name
-    ///  information for a file. The alternate name for a file
-    ///  is its 8.3 format name (8 characters that appear before
-    ///  the "." and 3 characters that appear after). This name
-    ///  exists for compatibility with MS-DOS and 16-bit versions
-    ///  of , which did not support longer file names or spaces
-    ///  within file names. A file MAY have an alternate name
-    ///  if its full name is not compliant with the restrictions
-    ///  for file names under MS-DOS and 16-bit .NTFS assigns
-    ///  an alternate name to a file whose full name is not
-    ///  compliant with restrictions for file names under MS-DOS
-    ///  and 16-bit  unless the system has been configured through
-    ///  a registry entry to not generate these names to improve
-    ///  performance.The FILE_NAME_INFORMATION data element
-    ///  is as follows.
-    /// </summary>
-    public partial struct FileAlternateNameInformation
-    {
+   
 
-        /// <summary>
-        ///  A 32-bit unsigned integer that contains the length in
-        ///  bytes of the FileName member.
-        /// </summary>
-        [StaticSize(4)]
-        public uint FileNameLength;
-
-        /// <summary>
-        ///  A sequence of Unicode characters containing the file
-        ///  name. This field might not be NULL-terminated, and
-        ///  MUST be handled as a sequence of FileNameLength bytes.
-        /// </summary>
-        [Size("FileNameLength")]
-        public byte[] FileName;
-    }
-
-    /// <summary>
-    ///  This information class is used to enumerate the streams
-    ///  for a file. The FILE_STREAM_INFORMATION data element
-    ///  is as follows.
-    /// </summary>
-    public partial struct FileStreamInformation
-    {
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the byte
-        ///  offset from the beginning of this entry, at which the
-        ///  next FILE_ STREAM _INFORMATION entry is located, if
-        ///  multiple entries are present in a buffer. This member
-        ///  is zero if no other entries follow this one. An implementation
-        ///  MUST use this value to determine the location of the
-        ///  next entry (if multiple entries are present in a buffer),
-        ///  and MUST NOT assume that the value of NextEntryOffset
-        ///  is the same as the size of the current entry.
-        /// </summary>
-        [StaticSize(4)]
-        public uint NextEntryOffset;
-
-        /// <summary>
-        ///A 32-bit unsigned integer that contains the length
-        ///  in bytes of the stream name string.
-        /// </summary>
-        [StaticSize(4)]
-        public uint StreamNameLength;
-
-        /// <summary>
-        ///A 64-bit unsigned integer that contains the size
-        ///  in bytes of the stream.
-        /// </summary>
-        [StaticSize(8)]
-        public ulong StreamSize;
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the file
-        ///  stream allocation size in bytes. Usually, this value
-        ///  is a multiple of the sector or cluster size of the
-        ///  underlying physical device. The value of this field
-        ///  MUST be greater than or equal to 0.
-        /// </summary>
-        [StaticSize(8)]
-        public long StreamAllocationSize;
-
-        /// <summary>
-        ///A sequence of Unicode characters containing the
-        ///  name of the stream. This field might not be NULL-terminated,
-        ///  and MUST be handled as a sequence of StreamNameLength
-        ///  bytes.
-        /// </summary>
-        [Size("StreamNameLength")]
-        public byte[] StreamName;
-    }
-
-    /// <summary>
-    ///  This information class is used to set the valid data
-    ///  length information for a file. The FILE_VALID_DATA_LENGTH_INFORMATION
-    ///  data element is as follows.
-    /// </summary>
-    public partial struct FileValidDataLengthInformation
-    {
-
-        /// <summary>
-        ///A 64-bit signed integer that contains the new
-        ///  valid data length for the file. This parameter MUST
-        ///  be a positive value that is greater than the current
-        ///  valid data length, but less than or equal to the current
-        ///  file size.The FILE_VALID_DATA_LENGTH_INFORMATION structure
-        ///  is used to set a new valid data length for a file on
-        ///  an NTFS volume. A file's valid data length is the length
-        ///  in bytes of the data that has been written to the file.
-        ///  This valid data extends from the beginning of the file
-        ///  to the last byte in the file that has not been zeroed
-        ///  or left uninitialized.
-        /// </summary>
-        [StaticSize(8)]
-        public long FileNameLength;
-    }
 
     /// <summary>
     ///  The information class is used to provide the list of
