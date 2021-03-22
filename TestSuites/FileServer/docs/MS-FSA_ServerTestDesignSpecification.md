@@ -358,63 +358,24 @@ There are 343 test cases in total:
 
 ## <a name="Traditional-Test-Scenarios-Design"/>Traditional Test Scenarios Design
 
-### <a name="Scenarios-for-CommaonAlgorithm"/>Scenarios for CommonAlgorithm
+### <a name="Scenarios-for-CommonAlgorithm"/>Scenarios for CommonAlgorithm
 
-#### <a name="CommonAlgorithm_NotingFileModified_LastModificationTime"/>CommonAlgorithm_NotingFileModified_LastModificationTime
+#### <a name="Algorithm_Noting_FileModified"/>Algorithm_Noting_FileModified
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastWriteTime is updated by File System when file is modified.|
+| Description| To test if LastWriteTime, LastChangeTime, LastAccessTime and Archive is updated by File System when file is modified.|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field |
 | | Test environment: FAT32, NTFS, ReFS|
 | | Test object: DataFile, DirectoryFile|
 | | Test coverage:|
 | | FileInfoClass: FileBasicInformation|
-| | If supported, the LastWriteTime is set to current system time.|
+| | If supported, the LastWriteTime, LastChangeTime and LastAccessTime is set to current system time.|
+| | If supported, the Archive attribute is set to true.|
 | Message Sequence| CreateFile.|
-| | Write to file|
-| | Verify LastWriteTime is set to current system time|
-
-#### <a name="CommonAlgorithm_NotingFileModified_LastChangeTime"/>CommonAlgorithm_NotingFileModified_LastChangeTime
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if LastChangeTime is updated by File System when file is modified.|
-| | Test environment: FAT32, NTFS, ReFS|
-| | Test object: DataFile, DirectoryFile|
-| | Test coverage:|
-| | FileInfoClass: FileBasicInformation|
-| | If supported, the LastChangeTime is set to current system time.|
-| Message Sequence| CreateFile.|
-| | Write to file|
-| | Verify LastChangeTime is set to current system time|
-
-#### <a name="CommonAlgorithm_NotingFileModified_LastAccessTime"/>CommonAlgorithm_NotingFileModified_LastAccessTime
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if LastAccessTime is updated by File System when file is modified.|
-| | Test environment: FAT32, NTFS, ReFS|
-| | Test object: DataFile, DirectoryFile|
-| | Test coverage:|
-| | FileInfoClass: FileBasicInformation|
-| | If supported, the LastAccessTime is set to current system time.|
-| Message Sequence| CreateFile.|
-| | Write to file|
-| | Verify LastAccessTime is set to current system time|
-
-#### <a name="CommonAlgorithm_NotingFileModified_Archive"/>CommonAlgorithm_NotingFileModified_Archive
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if Archive is updated by File System when file is modified.|
-| | Test environment: FAT32, NTFS, ReFS|
-| | Test object: DataFile, DirectoryFile|
-| | Test coverage:|
-| | FileInfoClass: FileBasicInformation|
-| | If supported, the Archive is set to true.|
-| Message Sequence| CreateFile.|
-| | Write to file|
-| | Verify Archive is set to true|
+| | Modify file|
+| | Verify LastWriteTime, LastChangeTime and LastAccessTime is set to current system time|
+| | Verify Archive attribute is set to true|
 
 ### <a name="Scenarios-for-FileInformation"/>Scenarios for FileInformation
 
@@ -1159,28 +1120,27 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastWriteTime is upadate by different file systems when file is modified.|
+| Description| To test if LastWriteTime is updated by different file systems when file is modified.|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DataFile)|
 | | Write to file|
-| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+| | Verify LastWriteTimeBeforeFileModified is less than LastWriteTimeAfterFileModified|
 
 ##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastModificationTime"/>CommonAlgorithm_NotingFileModified_Dir_LastModificationTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastWriteTime is upadate by different file systems when directory is modified.|
-| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
+| Description| To test if LastWriteTime is updated by different file systems when directory is modified.|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DirectoryFile)|
 | | Create file into directory|
-| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+| | Verify LastWriteTimeBeforeFileModified is less than LastWriteTimeAfterFileModified|
 
 ##### <a name="CommonAlgorithm_NotingFileModified_File_LastChangeTime"/>CommonAlgorithm_NotingFileModified_File_LastChangeTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastChangeTime is upadate by different file systems when file is modified.|
+| Description| To test if LastChangeTime is updated by different file systems when file is modified.|
 | | Note: the **FAT32** file system doesn’t process the ChangeTime field|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DataFile)|
@@ -1191,7 +1151,8 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastChangeTime is upadate by different file systems when directory is modified.|
+| Description| To test if LastChangeTime is updated by different file systems when directory is modified.|
+| | Note: the **FAT32** file system doesn’t process the ChangeTime field|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DirectoryFile)|
 | | Create file into directory|
@@ -1201,7 +1162,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastAccessTime is upadate by different file systems when file is modified.|
+| Description| To test if LastAccessTime is updated by different file systems when file is modified.|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DataFile)|
 | | Write to file|
@@ -1211,7 +1172,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if LastAccessTime is upadate by different file systems when directory is modified.|
+| Description| To test if LastAccessTime is updated by different file systems when directory is modified.|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DirectoryFile)|
 | | Create file into directory|
@@ -1221,7 +1182,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if Archive is upadate by different file systems when file is modified.|
+| Description| To test if Archive is updated by different file systems when file is modified.|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DataFile)|
 | | Write to file|
@@ -1231,7 +1192,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if Archive is upadate by different file systems when directory is modified.|
+| Description| To test if Archive is updated by different file systems when directory is modified.|
 | | Test environment: FAT32, NTFS, ReFS|
 | Message Sequence| CreateFile (DirectoryFile)|
 | | Create file into directory|
