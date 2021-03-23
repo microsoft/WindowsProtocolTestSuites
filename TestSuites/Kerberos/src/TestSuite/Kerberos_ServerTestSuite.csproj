@@ -53,6 +53,6 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="System.Management" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
   </ItemGroup>
 </Project>
