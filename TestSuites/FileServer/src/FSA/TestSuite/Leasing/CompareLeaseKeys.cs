@@ -165,24 +165,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [Description("The server should return an empty parentLeaseKey when leaseFlag is set to zero")]
         public void Compare_Zero_LeaseFlag_ParentLeaseKey()
         {
-                CheckLeaseApplicability();
+            CheckLeaseApplicability();
 
-                Smb2CreateRequestLeaseV2 leaseRequest = createLeaseV2RequestContext(leaseFlag: LeaseFlagsValues.NONE);
+            Smb2CreateRequestLeaseV2 leaseRequest = createLeaseV2RequestContext(leaseFlag: LeaseFlagsValues.NONE);
 
-                Smb2CreateResponseLeaseV2 client1ResponseLease;
-                Smb2CreateResponseLeaseV2 client2ResponseLease;
+            Smb2CreateResponseLeaseV2 client1ResponseLease;
+            Smb2CreateResponseLeaseV2 client2ResponseLease;
 
             InitializeClientsConnections(leaseRequest, leaseRequest, out client1ResponseLease, out client2ResponseLease);
 
-                #region Test Cases
+            #region Test Cases
 
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
-                BaseTestSite.Assert.AreNotEqual(leaseRequest.ParentLeaseKey, Guid.Empty,
-                    "LeaseRequest.ParentLeaseKey should not be empty");
-                BaseTestSite.Assert.AreEqual(client1ResponseLease.ParentLeaseKey, Guid.Empty,
-                    "LeaseOpen.ParentLeaseKey MUST be empty if LeaseFlag is set to Zero");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
+            BaseTestSite.Assert.AreNotEqual(leaseRequest.ParentLeaseKey, Guid.Empty,
+                "LeaseRequest.ParentLeaseKey should not be empty");
+            BaseTestSite.Assert.AreEqual(client1ResponseLease.ParentLeaseKey, Guid.Empty,
+                "LeaseOpen.ParentLeaseKey MUST be empty if LeaseFlag is set to Zero");
 
-                #endregion
+            #endregion
         }
 
         [TestMethod]
@@ -329,7 +329,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                      {
                          BaseTestSite.Assume.Inconclusive("Server OPLOCK Level is: {0}, expected: {1} indicating support for leasing.", response.OplockLevel, OplockLevel_Values.OPLOCK_LEVEL_LEASE);
                      }
-
                  }
                  );
 
@@ -340,7 +339,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
-            
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
             client2.Create(client2TreeId, client2FileName, isBothClientDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out client2FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
