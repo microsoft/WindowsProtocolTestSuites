@@ -12,6 +12,8 @@
     * [Traditional Test cases](#Traditional-Test-cases)
     * [MBT Test cases](#MBT-Test-cases)
 * [Traditional Test Scenarios Design](#Traditional-Test-Scenarios-Design)
+    * [Scenarios for CommonAlgorithm](#Scenarios-for-CommonAlgorithm)
+        * [Algorithm_Noting_FileModified](#Algorithm_Noting_FileModified)
     * [Scenarios for FileInformation](#Scenarios-for-FileInformation)
         * [FileInfo_IsCompressionSupported](#FileInfo_IsCompressionSupported)
         * [FileInfo_IsEASupported](#FileInfo_IsEASupported)
@@ -61,6 +63,16 @@
         * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
         * [CreateFile_BackSlash](#Scenario-CreateFile_BackSlash)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
+    * [Test cases for CommonAlgorithm](#Test-cases-for-CommonAlgorithm)
+        * [NotingFileModified](#NotingFileModified)
+            * [CommonAlgorithm_NotingFileModified_File_LastModificationTime](#CommonAlgorithm_NotingFileModified_File_LastModificationTime)
+            * [CommonAlgorithm_NotingFileModified_File_LastChangeTime](#CommonAlgorithm_NotingFileModified_File_LastChangeTime)
+            * [CommonAlgorithm_NotingFileModified_File_LastAccessTime](#CommonAlgorithm_NotingFileModified_File_LastAccessTime)
+            * [CommonAlgorithm_NotingFileModified_File_Archive](#CommonAlgorithm_NotingFileModified_File_Archive)
+            * [CommonAlgorithm_NotingFileModified_Dir_LastModificationTime](#CommonAlgorithm_NotingFileModified_Dir_LastModificationTime)
+            * [CommonAlgorithm_NotingFileModified_Dir_LastChangeTime](#CommonAlgorithm_NotingFileModified_Dir_LastChangeTime)
+            * [CommonAlgorithm_NotingFileModified_Dir_LastAccessTime](#CommonAlgorithm_NotingFileModified_Dir_LastAccessTime)
+            * [CommonAlgorithm_NotingFileModified_Dir_Archive](#CommonAlgorithm_NotingFileModified_Dir_Archive)
     * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#IsEASupported)
             * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#FileInfo_Set_FileFullEaInformation_File_IsEASupported)
@@ -98,6 +110,16 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileAlternateNameInformation](#FileAlternateNameInformation)
+            * [FileInfo_Query_FileAlternateNameInformation](#FileInfo_Query_FileAlternateNameInformation)
+        * [FileInternalInformation](#FileInternalInformation)
+            * [FileInfo_Query_FileInternalInformation](#FileInfo_Query_FileInternalInformation)
+        * [FilePositionInformation](#FilePositionInformation)
+            * [FileInfo_Query_FilePositionInformation](#FileInfo_Query_FilePositionInformation)
+        * [FileModeInformation](#FileModeInformation)
+            * [FileInfo_Query_FileModeInformation](#FileInfo_Query_FileModeInformation)
+        * [FileAlignmentInformation](#FileAlignmentInformation)
+            * [FileInfo_Query_FileAlignmentInformation](#FileInfo_Query_FileAlignmentInformation)
         * [FileBasicInformation](#FileBasicInformation)
             * [FileInfo_Set_FileBasicInformation_File_Negative](#FileInfo_Set_FileBasicInformation_File_Negative)
             * [FileInfo_Set_FileBasicInformation_File_Positive](#FileInfo_Set_FileBasicInformation_File_Positive)
@@ -311,13 +333,14 @@ There are 155 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 31 (9) |
+| Scenarios for FileInformation | 7 | 36 (16) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
+| Scenarios for CommonAlgorithm | 1 | 8 (8) |
 | Other Scenarios | 3 | 6 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
@@ -344,6 +367,25 @@ There are 343 test cases in total:
 | Set SecurityInfo | 18 |
 
 ## <a name="Traditional-Test-Scenarios-Design"/>Traditional Test Scenarios Design
+
+### <a name="Scenarios-for-CommonAlgorithm"/>Scenarios for CommonAlgorithm
+
+#### <a name="Algorithm_Noting_FileModified"/>Algorithm_Noting_FileModified
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastWriteTime, LastChangeTime, LastAccessTime and Archive is updated by File System when file is modified.|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field |
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, the LastWriteTime, LastChangeTime and LastAccessTime is set to current system time.|
+| | If supported, the Archive attribute is set to true.|
+| Message Sequence| CreateFile.|
+| | Modify file|
+| | Verify LastWriteTime, LastChangeTime and LastAccessTime is set to current system time|
+| | Verify Archive attribute is set to true|
 
 ### <a name="Scenarios-for-FileInformation"/>Scenarios for FileInformation
 
@@ -1080,6 +1122,92 @@ There are 343 test cases in total:
 
 ## <a name="Traditional-Test-Case-Design"/>Traditional Test Case Design
 
+### <a name="Test-cases-for-CommonAlgorithm"/>Test cases for CommonAlgorithm
+
+#### <a name="NotingFileModified"/>NotingFileModified
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_LastModificationTime"/>CommonAlgorithm_NotingFileModified_File_LastModificationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastWriteTime is updated by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify LastWriteTimeBeforeFileModified is less than LastWriteTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastModificationTime"/>CommonAlgorithm_NotingFileModified_Dir_LastModificationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastWriteTime is updated by different file systems when directory is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify LastWriteTimeBeforeFileModified is less than LastWriteTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_LastChangeTime"/>CommonAlgorithm_NotingFileModified_File_LastChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastChangeTime is updated by different file systems when file is modified.|
+| | Note: the **FAT32** file system doesn’t process the ChangeTime field|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastChangeTime"/>CommonAlgorithm_NotingFileModified_Dir_LastChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastChangeTime is updated by different file systems when directory is modified.|
+| | Note: the **FAT32** file system doesn’t process the ChangeTime field|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_LastAccessTime"/>CommonAlgorithm_NotingFileModified_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastAccessTime"/>CommonAlgorithm_NotingFileModified_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by different file systems when directory is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
+##### <a name="CommonAlgorithm_NotingFileModified_File_Archive"/>CommonAlgorithm_NotingFileModified_File_Archive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Archive is updated by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Verify Archive is true|
+
+##### <a name="CommonAlgorithm_NotingFileModified_Dir_Archive"/>CommonAlgorithm_NotingFileModified_Dir_Archive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if Archive is updated by different file systems when directory is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Create file into directory|
+| | Verify Archive is true|
+
 ### <a name="Test-cases-for-FileInformation"/>Test cases for FileInformation
 
 #### <a name="IsEASupported"/>IsEASupported
@@ -1619,6 +1747,52 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile with ::$Data as file name suffix.|
 | | QueryInfo with FileInfoClass.FileAccessInformation|
 | | Verify server responses accordingly.|
+
+##### <a name="FileInfo_Query_FileAlignmentInformation"/>FileInfo_Query_FileAlignmentInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The test case is used to query the buffer alignment required by the underlying device.|
+| Message Sequence| CreateFile with normal file name.|
+| | QueryInfo with FileInfoClass.FileAlignmentInformation|
+| | Verify server returned status and returned AlignmentRequirement and bytecount accordingly.|
+
+##### <a name="FileInfo_Query_FileAlternateNameInformation"/>FileInfo_Query_FileAlternateNameInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if SUT (NTFS) supports the alternate name and then query file alternate name info.|
+| Message Sequence| CreateFile with file name not compliant with restrictions for file names under MS-DOS and 16-bit Window (logger than 8).|
+| | QueryInfo with FileInfoClass.FileAlternateNameInformation|
+| | Verify server returned status and altername accordingly.|
+
+##### <a name="FileInfo_Query_FileInternalInformation"/>FileInfo_Query_FileInternalInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test is used to query the file system's 8-byte file reference number for a file.|
+| Message Sequence| CreateFile with normal file name.|
+| | QueryInfo with FileInfoClass.FileInternalInformation|
+| | Verify server returned status accordingly.|
+
+##### <a name="FileInfo_Query_FileModeInformation"/>FileInfo_Query_FileModeInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The case is used to query the mode of the file.|
+| Message Sequence| CreateFile with normal file name and mode NO_INTERMEDIATE_BUFFERING, WRITE_THROUGH.|
+| | QueryInfo with FileInfoClass.FileModeInformation|
+| | Verify server returned status and verify the mode of FileModeInformation accordingly.|
+
+##### <a name="FileInfo_Query_FilePositionInformation"/>FileInfo_Query_FilePositionInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| The case is used to query the position of the file pointer within a file.|
+| Message Sequence| CreateFile with normal file name.|
+| | SetFilePositionInfo to file on server and verify the return value. |
+| | QueryInfo with FileInfoClass.FilePositionInformation|
+| |  Verify server returned satus.|
 
 #### <a name="FileBasicInformation"/>FileBasicInformation
 

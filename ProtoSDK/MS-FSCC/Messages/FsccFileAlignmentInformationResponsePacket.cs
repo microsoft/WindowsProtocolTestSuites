@@ -7,7 +7,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the response packet of FileAlignmentInformation 
     /// </summary>
-    public class FsccFileAlignmentInformationResponsePacket : FsccStandardPacket<FILE_ALIGNMENT_INFORMATION>
+    public class FsccFileAlignmentInformationResponsePacket : FsccStandardPacket<FileAlignmentInformation>
     {
         #region Properties
 
