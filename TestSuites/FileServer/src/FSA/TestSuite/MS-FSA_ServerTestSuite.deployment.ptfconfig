@@ -22,13 +22,13 @@
           File System Under Test.
         </Description>
       </Property>
-      
+
       <Property name="ReFSVersion" value="1">
         <Choice>1, 2</Choice>
         <Description>
           The highest version of ReFS supported by the server.
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="NTFS_ShareFolder" value="FileShare">
         <Description>
@@ -47,13 +47,13 @@
           Share folder in the FAT32 system volume.
         </Description>
       </Property>
-        
+
       <Property name="OTHERFS_ShareFolder" value="FileShare">
         <Description>
           Share folder in the volume of other file system (Not any of the FAT32, NTFS or REFS).
         </Description>
       </Property>
-      
+
       <!--RootDirectory where Share folder exist. -->
       <Property name="NTFS_RootDirectory" value="C$">
         <Description>
@@ -72,12 +72,12 @@
           RootDirectory where Share folder existed in the FAT32 system volume.
         </Description>
       </Property>
-        
+
       <Property name="OTHERFS_RootDirectory" value="K$">
         <Description>
           RootDirectory where Share folder existed in the volume of other file system (Neither NTFS or REFS).
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="ExistingFolder" value="ExistingFolder">
         <Description>
@@ -144,7 +144,7 @@
           ReFS uses a default cluster size of 64 KB, a maximum cluster size of 128k, and a minimum cluster size of 4 KB.
         </Description>
       </Property>
-      
+
       <Property name="FAT32_ClusterSizeInKB" value="4">
         <Description>
           FAT32 uses a default cluster size of 4 KB, a maximum cluster size of 32 KB, and a minimum cluster size of 2 KB.
@@ -155,7 +155,7 @@
         <Description>
           The cluster size of other file system, in KB
         </Description>
-      </Property>      
+      </Property>
 
       <Property name="SystemPageSizeInKB" value="4">
         <Description>
@@ -277,7 +277,7 @@
           To specify whether 64-bit FileId is supported or not.
         </Description>
       </Property>
-      
+
       <Property name="IsChangeTimeSupported" value="true">
         <Choice>true, false</Choice>
         <Description>
