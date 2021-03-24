@@ -36,18 +36,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileType fileType = FileType.DirectoryFile;
 
             //Step 1: Create File
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
 
             FILEID dirFileId;
             uint treeId;
             ulong sessionId;
-            byte[] outputBuffer;
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
 
             CreateDirectory(dirName, out dirFileId, out treeId, out sessionId);
 
             //Query FileBothDirectoryInformation 
             long creationTimeBeforeIO;
+            byte[] outputBuffer;
 
             QueryDirectory(dirFileId, treeId, sessionId, FileInfoClass.FILE_BOTH_DIR_INFORMATION, out outputBuffer);
             QueryFileBothDirectoryInformationTimestamp(outputBuffer, 2, out _, out creationTimeBeforeIO, out _, out _);

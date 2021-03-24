@@ -33,7 +33,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Query FileBasicInformation on directory file and check if creation time is valid")]
         public void FileInfo_Query_FileBasicInformation_Dir_CreationTime()
         {
-            FileInfo_Query_FileBasicInformation_CreationTime(FileType.DataFile);
+            FileInfo_Query_FileBasicInformation_CreationTime(FileType.DirectoryFile);
         }
 
         #endregion

@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileType fileType = FileType.DirectoryFile;
 
             //Step 1: Create File
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
 
             FILEID dirFileId;
             uint treeId;
