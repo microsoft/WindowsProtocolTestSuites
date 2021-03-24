@@ -41,6 +41,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 1. File System: " + this.fsaAdapter.FileSystem.ToString());
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 2. Transport: " + this.fsaAdapter.Transport.ToString());
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 3. Share Path: " + this.fsaAdapter.UncSharePath);
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 3. Operating System: " + this.fsaAdapter.TestConfig.Platform.ToString());
             this.fsaAdapter.FsaInitial();
         }
 
