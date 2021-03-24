@@ -110,15 +110,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             Smb2CreateRequestLease leaseRequest = createLeaseRequestContext(leaseState: LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING);
 
             Smb2CreateResponseLease client1ResponseLease;
-            Smb2CreateResponseLease client2ResponseLease;
+            Smb2CreateResponseLease client2ResponseLease; 
 
             InitializeClientsConnections(leaseRequest, leaseRequest, out client1ResponseLease, out client2ResponseLease, isBothClientDirectory: true);
 
             #region Test Cases
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Comparing lease keys");
-            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client1ResponseLease.LeaseKey, "Client 1 Request Lease Key MUST be the same its Response Lease key");
-            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client2ResponseLease.LeaseKey, "Client 2 Request Lease Key MUST be the same its Response Lease key");
+            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client1ResponseLease.LeaseKey, "Client 1 Request Lease Key MUST be the same with its Response Lease key");
+            BaseTestSite.Assert.AreEqual(leaseRequest.LeaseKey, client2ResponseLease.LeaseKey, "Client 2 Request Lease Key MUST be the same with its Response Lease key");
             BaseTestSite.Assert.AreEqual(client1ResponseLease.LeaseKey, client2ResponseLease.LeaseKey, "LeaseOpen.leaseKey MUST be the same with OperationOpen.LeaseKey");
 
             #endregion
@@ -322,22 +322,37 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
                  new Smb2CreateContextRequest[]
                  {
                     client1RequestLease
+                 },
+                 checker: (Packet_Header header, CREATE_Response response) =>
+                 {
+                     if (response.OplockLevel != OplockLevel_Values.OPLOCK_LEVEL_LEASE)
+                     {
+                         BaseTestSite.Assume.Inconclusive("Server OPLOCK Level is: {0}, expected: {1} indicating support for leasing.", response.OplockLevel, OplockLevel_Values.OPLOCK_LEVEL_LEASE);
+                     }
                  }
                  );
 
             #endregion
 
             // Get response lease for Client1 (LeaseOpen)
-            client1ResponseLease = createContextResponse.First();
+            client1ResponseLease = (createContextResponse != null) ? createContextResponse.First() : new Smb2CreateResponseLease();
+
 
             #region Start a second client (OperationOpen) to request lease by using the same lease key with the first client
-
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a second client to create the same file with the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE");
             SetupClientConnection(client2, out client2TreeId);
             client2.Create(client2TreeId, client2FileName, isBothClientDirectory ? CreateOptions_Values.FILE_DIRECTORY_FILE : CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out client2FileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
                 new Smb2CreateContextRequest[]
                 {
                     client2RequestLease
+                },
+                checker: (Packet_Header header, CREATE_Response response) =>
+                {
+                    if (response.OplockLevel != OplockLevel_Values.OPLOCK_LEVEL_LEASE)
+                    {
+                        BaseTestSite.Assume.Inconclusive("Server OPLOCK Level is: {0}, expected: {1} indicating support for leasing.", response.OplockLevel, OplockLevel_Values.OPLOCK_LEVEL_LEASE);
+                    }
+
                 }
                 );
 
@@ -401,9 +416,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
 
         private void TearDownClient(Smb2FunctionalClient client, uint clientTreeId, FILEID clientFileId)
         {
-            client.Close(clientTreeId, clientFileId);
-            client.TreeDisconnect(clientTreeId);
-            client.LogOff();
+            if (ClientTreeConnectSessionExists(clientTreeId))
+            {
+                client.Close(clientTreeId, clientFileId);
+                client.TreeDisconnect(clientTreeId);
+                client.LogOff();
+            }
+        }
+
+        // Checks that there's an existing Tree_Connect session 
+        private bool ClientTreeConnectSessionExists(uint clientTreeId)
+        {
+             return clientTreeId != 0;
         }
 
         private void GenerateFileNames(bool isBothClientDirectory, bool isClient1ParentDirectory, out string client1FileName, out string client2FileName)
