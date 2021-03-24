@@ -321,7 +321,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             get
             {
-                return GetProperty("DCServerComputerName");
+                return GetProperty("DCServerComputerName", false);
             }
         }
 
