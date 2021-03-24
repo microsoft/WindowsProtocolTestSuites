@@ -424,13 +424,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
             }
         }
 
-
         // Checks that there's an existing Tree_Connect session 
         private bool ClientTreeConnectSessionExists(uint clientTreeId)
         {
              return clientTreeId != 0;
         }
-
 
         private void GenerateFileNames(bool isBothClientDirectory, bool isClient1ParentDirectory, out string client1FileName, out string client2FileName)
         {
