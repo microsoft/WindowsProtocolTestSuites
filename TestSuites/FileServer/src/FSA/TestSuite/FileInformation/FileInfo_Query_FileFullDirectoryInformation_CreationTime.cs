@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Fscc)]
+        [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
