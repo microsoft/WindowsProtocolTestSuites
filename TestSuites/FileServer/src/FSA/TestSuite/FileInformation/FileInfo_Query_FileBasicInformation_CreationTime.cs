@@ -75,6 +75,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 string innerFileName = this.fsaAdapter.ComposeRandomFileName(8);
 
                 CreateFile(FileType.DataFile, fileName + "\\" + innerFileName);
+
+                this.fsaAdapter.CloseOpen();
+                OpenFile(fileType, fileName);
             }
 
             //Query FileBasicInformation 
@@ -98,6 +101,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
         }
+
+        private void OpenFile(FileType fileType, string fileName)
+        {
+            MessageStatus status = this.fsaAdapter.CreateFile(
+                fileName,
+                FileAttribute.NORMAL,
+                fileType == FileType.DataFile ? CreateOptions.NON_DIRECTORY_FILE : CreateOptions.DIRECTORY_FILE,
+                FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES,
+                ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.OPEN);
+
+            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Open should succeed.");
+        }
+
         private void WriteDataToFile()
         {
             long byteSize = (uint)2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
