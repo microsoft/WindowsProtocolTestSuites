@@ -609,12 +609,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 {
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
 
-                    bool isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
+                    bool isExpectedCompressionContext = false;
+                    if (TestConfig.Platform == Platform.WindowsServerV1903 || TestConfig.Platform == Platform.WindowsServerV1909)
+                    {
+                        isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
+                    }
+                    else
+                    {
+                        isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Count() == 0;
+                    }
 
                     BaseTestSite.Assert.IsTrue(
                         isExpectedCompressionContext,
-                        "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, " +
-                        "the server MUST build an SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to \"NONE\"."
+                        "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, Connection.CompressionIds MUST be set to an empty list. " +
+                        "Building an SMB2_COMPRESSION_CAPABILITIES negotiate response context: " +
+                        "If Connection.CompressionIds is empty, The server SHOULD<261> set CompressionAlgorithmCount to 0." +
+                        "<261> Windows 10 v1903, Windows 10 v1909, Windows Server v1903, and Windows Server v1909 set CompressionAlgorithmCount to 1 and CompressionAlgorithms to \"NONE\""
                         );
                 });
         }
