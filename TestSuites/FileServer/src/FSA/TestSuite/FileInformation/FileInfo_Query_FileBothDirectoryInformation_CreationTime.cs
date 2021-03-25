@@ -51,6 +51,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             QueryDirectory(dirFileId, treeId, sessionId, FileInfoClass.FILE_BOTH_DIR_INFORMATION, out outputBuffer);
             QueryFileBothDirectoryInformationTimestamp(outputBuffer, 2, out _, out creationTimeBeforeIO, out _, out _);
+            DelayNextStep();
 
             //Perform I/O operation
             //Step 3: Create file in the directory
@@ -92,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 + directoryInformation[0].FileCommonDirectoryInformation.LastWriteTime.dwLowDateTime;
         }
 
-        private MessageStatus CreateDirectory(
+        private void CreateDirectory(
         string dirName,
         out FILEID fileId,
         out uint treeId,
@@ -110,9 +111,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         out sessionId
                         );
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create directory and return with status {status}");
-
-            return status;
+            BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create directory should succeed.");
         }
 
         private void QueryDirectory(

@@ -62,6 +62,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             QueryDirectory(dirFileId, treeId, sessionId, FileInfoClass.FILE_ID_GLOBAL_TX_DIR_INFORMATION, out outputBuffer);
             QueryFileIdGlobalTxDirectoryInformationTimestamp(outputBuffer, 2, out _, out creationTimeBeforeIO, out _, out _);
+            DelayNextStep();
 
             //Perform I/O operation
             //Step 3: Create file in the directory

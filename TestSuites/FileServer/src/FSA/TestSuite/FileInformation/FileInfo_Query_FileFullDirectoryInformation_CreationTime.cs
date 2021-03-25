@@ -51,6 +51,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             QueryDirectory(dirFileId, treeId, sessionId, FileInfoClass.FILE_FULL_DIR_INFORMATION, out outputBuffer);
             QueryFileFullDirectoryInformationTimestamp(outputBuffer, 2, out _, out creationTimeBeforeIO, out _, out _);
+            DelayNextStep();
 
             //Perform I/O operation
             //Step 3: Create file in the directory

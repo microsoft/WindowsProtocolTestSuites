@@ -5,6 +5,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -54,6 +55,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             long creationTimeBeforeIO;
 
             QueryFileBasicInformation(out _, out creationTimeBeforeIO, out _, out _);
+            DelayNextStep();
 
             //Perform I/O operation
 
@@ -63,7 +65,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Write to file");
 
                 //Write to file
-                WriteToFile();
+                WriteDataToFile();
             }
             else
             {
@@ -95,6 +97,31 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 CreateDisposition.CREATE);
 
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
+        }
+        private void WriteDataToFile()
+        {
+            long byteSize = (uint)2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
+            MessageStatus status = this.fsaAdapter.WriteFile(0, byteSize, out _);
+
+            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
+                    "Write data to file should succeed");
+        }
+
+        private void DelayNextStep()
+        {
+            //delay next step for recognizable milliseconds change
+            DateTime currentTime = GetCurrentSystemTime();
+            DateTime nextTime = GetCurrentSystemTime();
+
+            while (currentTime.ToString().Equals(nextTime.ToString()))
+            {
+                nextTime = GetCurrentSystemTime();
+            }
+        }
+
+        private DateTime GetCurrentSystemTime()
+        {
+            return DateTime.Now;
         }
         #endregion
     }
