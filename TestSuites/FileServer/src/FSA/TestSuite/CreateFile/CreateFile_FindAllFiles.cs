@@ -168,9 +168,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             Site.Assert.AreEqual(".", Encoding.Unicode.GetString(directoryInformation[0].FileName), "FileName of the first entry should be \".\".");
             Site.Assert.AreEqual("..", Encoding.Unicode.GetString(directoryInformation[1].FileName), "FileName of the second entry should be \"..\".");
-
+            Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
             return directoryInformation;
+        }
+
+        private bool IsChangeTimeValid(FileBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (((((long)info.FileCommonDirectoryInformation.ChangeTime.dwHighDateTime) << 32) | info.FileCommonDirectoryInformation.ChangeTime.dwLowDateTime) < 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
         #endregion
     }
