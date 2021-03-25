@@ -609,7 +609,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
 
                     bool isExpectedCompressionContext = false;
-                    if (TestConfig.Platform != Platform.WindowsServerV2004)
+                    if (TestConfig.Platform == Platform.WindowsServerV1903 || TestConfig.Platform == Platform.WindowsServerV1909)
                     {
                         isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
                     }
@@ -622,9 +622,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         isExpectedCompressionContext,
                         "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, Connection.CompressionIds MUST be set to an empty list. " +
                         "Building an SMB2_COMPRESSION_CAPABILITIES negotiate response context: " +
-                        "If Connection.CompressionIds is empty, The server SHOULD<261> set CompressionAlgorithmCount to 1. The server SHOULD<262> set CompressionAlgorithms to \"NONE\". " +
-                        "<261> Windows 10 v2004 and Windows Server v2004 set CompressionAlgorithmCount to 0. " +
-                        "<262> Windows 10 v2004 and Windows Server v2004 set CompressionAlgorithms to empty. "
+                        "If Connection.CompressionIds is empty, The server SHOULD<261> set CompressionAlgorithmCount to 0." +
+                        "<261> Windows 10 v1903, Windows 10 v1909, Windows Server v1903, and Windows Server v1909 set CompressionAlgorithmCount to 1 and CompressionAlgorithms to \"NONE\""
                         );
                 });
         }
