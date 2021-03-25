@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void TestSetTimestamp(FileType fileType, TimestampType timestampType)
         {
-            if (timestampType.Equals(TimestampType.ChangeTime) && (this.fsaAdapter.FileSystem == FileSystem.FAT32 || this.fsaAdapter.FileSystem == FileSystem.OTHERFS))
+            if (timestampType.Equals(TimestampType.ChangeTime) && (this.fsaAdapter.FileSystem == FileSystem.FAT32))
             {
                 this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
             }
@@ -205,7 +205,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
             else
             {
-                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
+                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS. For supported platforms, see [MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>");
             }
         }
 
@@ -257,6 +257,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp equals -1
             SetTimestampUnderTest(timestampType, -1);
+            DelayNextOperation();
 
             //Write to file and verify file system response
             WriteToFile();
@@ -276,6 +277,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp equals to -2
             SetTimestampUnderTest(timestampType, -2);
+            DelayNextOperation();
 
             //Write to file and verify file system response
             WriteToFile();
@@ -325,7 +327,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             WindowsServer2008,
             WindowsServer2008R2,
-            WindowsServer2012
+            WindowsServer2012,
+            WindowsServer2012R2
         }
 
         private enum OS_MinusTwo_NotSupported_REFS
@@ -445,19 +448,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         private void WriteToFile()
         {
             //write data to file after a time interval
-            DateTime currentTime = DateTime.Now;
-            DateTime nextTime = DateTime.Now;
-
-            while (currentTime.ToString().Equals(nextTime.ToString()))
-            {
-                nextTime = DateTime.Now;
-            }
-
             long byteSize = (uint) 2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
             MessageStatus status = this.fsaAdapter.WriteFile(0, byteSize, out _);
 
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
                     "Write data to file should succeed");
+        }
+
+        private void DelayNextOperation()
+        {
+            DateTime currentTime = GetSystemTime();
+            DateTime nextTime = GetSystemTime();
+
+            while (currentTime.ToString().Equals(nextTime.ToString()))
+            {
+                nextTime = GetSystemTime();
+            }
+        }
+
+        private DateTime GetSystemTime()
+        {
+            return DateTime.Now;
         }
 
         private void QueryFileBasicInformation(out long changeTime, out long creationTime
