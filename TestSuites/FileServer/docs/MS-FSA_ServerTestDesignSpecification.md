@@ -130,6 +130,10 @@
         * [CreationTime](#CreationTime)        
             * [FileInfo_Query_FileBasicInformation_File_CreationTime](#FileInfo_Query_FileBasicInformation_File_CreationTime)
             * [FileInfo_Query_FileBasicInformation_Dir_CreationTime](#FileInfo_Query_FileBasicInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero)
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime_Zero](#FileInfo_Query_FileBasicInformation_File_CreationTime_Zero)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo)
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo)
             * [FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
@@ -340,7 +344,7 @@ There are 160 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 8 | 41 (21) |
+| Scenarios for FileInformation | 8 | 45 (21) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -546,6 +550,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if CreationTime is handled by different File Systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
 | | Test environment: FAT32, NTFS, ReFS|
 | | Test object: DataFile, DirectoryFile|
 | | Test coverage:|
@@ -1903,6 +1908,64 @@ There are 343 test cases in total:
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
 | | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Zero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for data file when CreationTime is set to 0|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to 0 |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file when CreationTime is set to 0|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Set CreationTime to 0 |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo"/>FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for data file when CreationTime is set to -2|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+| | Set CreationTime to -2 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file when CreationTime is set to -2|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+| | Set CreationTime to -2 |
 | | Create file into directory |
 | | Query CreationTime |
 | | Verify CreationTime was not changed |
