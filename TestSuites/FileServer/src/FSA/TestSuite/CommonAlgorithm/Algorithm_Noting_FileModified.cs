@@ -56,9 +56,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
+            string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
             Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
 
-            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            if (operatingSystem == "WindowsServer2012R2")
+            {
+                BaseTestSite.Assert.Inconclusive("WindowsServer2012R2 is inconclusive for Open.File.LastAccessTime on file");
+            }
+            else if (this.fsaAdapter.FileSystem == FileSystem.REFS)
             {
                 BaseTestSite.Assert.Inconclusive("REFS is inconclusive for Open.File.LastAccessTime on file");
             }
