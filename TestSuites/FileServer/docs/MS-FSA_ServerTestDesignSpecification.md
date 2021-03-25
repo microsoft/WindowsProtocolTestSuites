@@ -24,6 +24,7 @@
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
         * [FileInfo_Set_FileBasicInformation](#FileInfo_Set_FileBasicInformation)
+        * [FileInfo_CreationTime](#FileInfo_CreationTime)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -126,6 +127,12 @@
             * [FileInfo_Set_FileBasicInformation_File_MinusTwoSupported](#FileInfo_Set_FileBasicInformation_File_MinusTwoSupported)
             * [FileInfo_Set_FileBasicInformation_Dir_Negative](#FileInfo_Set_FileBasicInformation_Dir_Negative)
             * [FileInfo_Set_FileBasicInformation_Dir_Positive](#FileInfo_Set_FileBasicInformation_Dir_Positive)
+        * [CreationTime](#CreationTime)        
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime](#FileInfo_Query_FileBasicInformation_File_CreationTime)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime](#FileInfo_Query_FileBasicInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -329,11 +336,11 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 155 test cases in total:
+There are 160 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 36 (16) |
+| Scenarios for FileInformation | 8 | 41 (21) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -533,6 +540,22 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile.|
 | | SetInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
+
+#### <a name="FileInfo_CreationTime"/>FileInfo_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different File Systems.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, FileIdGlobalTxDirectoryInformation|
+| | If supported, the Creation is set to current system time when file is created.|
+| | If supported, the CreationTime is not creation time is never updated in response to file system calls such as read and write.|
+| Message Sequence| CreateFile.|
+| | Verify CreationTime is set to current system time|
+| | Modify file|
+| | Verify CreationTime is not changed|
 
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
 
@@ -1857,6 +1880,68 @@ There are 343 test cases in total:
 | | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
 | | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
 | | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
+
+#### <a name="CreationTime"/>CreationTime
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime"/>FileInfo_Query_FileBasicInformation_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for data file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileBothDirectoryInformation|
+| | File information class: FileBothDirectoryInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileFullDirectoryInformation|
+| | File information class: FileFullDirectoryInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileIdGlobalTxDirectoryInformation|
+| | File information class: FileIdGlobalTxDirectoryInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
