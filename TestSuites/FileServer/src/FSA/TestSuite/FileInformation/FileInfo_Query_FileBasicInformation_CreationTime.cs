@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Query FileBasicInformation on data file and check if creation time is valid")]
         public void FileInfo_Query_FileBasicInformation_File_CreationTime()
         {
-            FileInfo_Query_FileBasicInformation_CreationTime(FileType.DataFile);
+            FileInfo_Query_FileBasicInformation_CreationTime(TestType.IO, FileType.DataFile);
         }
 
         [TestMethod()]
@@ -34,14 +34,58 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Query FileBasicInformation on directory file and check if creation time is valid")]
         public void FileInfo_Query_FileBasicInformation_Dir_CreationTime()
         {
-            FileInfo_Query_FileBasicInformation_CreationTime(FileType.DirectoryFile);
+            FileInfo_Query_FileBasicInformation_CreationTime(TestType.IO, FileType.DirectoryFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Query FileBasicInformation on data file and check if creation time is valid")]
+        public void FileInfo_Query_FileBasicInformation_File_CreationTime_Zero()
+        {
+            FileInfo_Query_FileBasicInformation_CreationTime(TestType.Zero, FileType.DataFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Query FileBasicInformation on directory file and check if creation time is valid")]
+        public void FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero()
+        {
+            FileInfo_Query_FileBasicInformation_CreationTime(TestType.Zero, FileType.DirectoryFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Query FileBasicInformation on data file and check if creation time is valid")]
+        public void FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo()
+        {
+            TestCreationTimeMinusTwo(FileType.DataFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Query FileBasicInformation on directory file and check if creation time is valid")]
+        public void FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo()
+        {
+            TestCreationTimeMinusTwo(FileType.DirectoryFile);
         }
 
         #endregion
 
         #region Test Case Utility
 
-        private void FileInfo_Query_FileBasicInformation_CreationTime(FileType fileType)
+        private void FileInfo_Query_FileBasicInformation_CreationTime(TestType testType, FileType fileType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
 
@@ -52,26 +96,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             CreateFile(fileType, fileName);
 
             //Query FileBasicInformation 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query CreationTime before operation");
             long creationTimeBeforeIO;
 
             QueryFileBasicInformation(out _, out creationTimeBeforeIO, out _, out _);
             DelayNextStep();
 
-            //Perform I/O operation
-
-            if (fileType == FileType.DataFile)
+            if(testType == TestType.Zero)
             {
-                //Step 3: Write to file
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Write to file");
-
-                //Write to file
-                WriteDataToFile();
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Set CreationTime to 0");
+                SetCreationTime(0);
             }
             else
             {
-                //Step 3: Create file in the directory
-                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Create file in the directory");
+                //Perform I/O operation
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Perform I/O operation");
+                PerformIO(fileType, fileName);
+            }
 
+            //Query FileBasicInformation 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Query CreationTime after operation");
+            long creationTimeAfterIO;
+
+            QueryFileBasicInformation(out _, out creationTimeAfterIO, out _, out _);
+
+            //Verify CreationTime has not changed
+            BaseTestSite.Assert.AreEqual(creationTimeBeforeIO, creationTimeAfterIO, "File creation time is never updated in response to file system calls such as read and write.");
+        }
+
+        private void PerformIO(FileType fileType, string fileName)
+        {
+            if (fileType == FileType.DataFile)
+            {
+                //Write to file
+                WriteDataToFile(fileName);
+            }
+            else
+            {
+                //Create file in the directory
                 string innerFileName = this.fsaAdapter.ComposeRandomFileName(8);
 
                 CreateFile(FileType.DataFile, fileName + "\\" + innerFileName);
@@ -79,14 +141,75 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 this.fsaAdapter.CloseOpen();
                 OpenFile(fileType, fileName);
             }
+        }
 
-            //Query FileBasicInformation 
+        enum TestType
+        {
+            IO,
+            Zero
+        }
+
+        private void TestCreationTimeMinusTwo(FileType fileType)
+        {
+            //Testing file system behavior to -2 timestamp value
+            //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
+            string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
+
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+                this.TestSite.Assume.Inconclusive("ReFS is inconclusive with -2 timestamp value.");
+            }
+            else if (this.fsaAdapter.FileSystem != FileSystem.NTFS
+                   || Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_NTFS), operatingSystem))
+            {
+                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+
+            //Step 1: Create File
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
+
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            CreateFile(fileType, fileName);
+
+            long initialCreationTime;
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FileBasicInformation for CreationTime ");
+
+            QueryFileBasicInformation(out _, out initialCreationTime,
+                out _, out _);
+            DelayNextStep();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Set CreationTime to -1");
+            //SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp equals -1
+            SetCreationTime(-1);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Perform I/O operation");
+            //Write to file and verify file system response
+            PerformIO(fileType, fileName);
+
             long creationTimeAfterIO;
 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Query FileBasicInformation for current CreationTime ");
             QueryFileBasicInformation(out _, out creationTimeAfterIO, out _, out _);
 
-            //Verify CreationTime has not changed
-            BaseTestSite.Assert.AreEqual(creationTimeBeforeIO, creationTimeAfterIO, "File creation time is never updated in response to file system calls such as read and write.");
+            this.fsaAdapter.AssertAreEqual(this.Manager, initialCreationTime, creationTimeAfterIO,
+                    "Creation time is never updated in response to file system calls such as read and write.");
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. Set CreationTime to -2");
+            //SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having timestamp equals to -2
+            SetCreationTime(-2);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "7. Perform I/O operation");
+            //Write to file and verify file system response
+            PerformIO(fileType, fileName);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "8. Query FileBasicInformation for current CreationTime ");
+            QueryFileBasicInformation(out _, out creationTimeAfterIO, out _, out _);
+
+            BaseTestSite.Assert.AreEqual(initialCreationTime, creationTimeAfterIO,
+                "Creation time is never updated in response to file system calls such as read and write.");
         }
 
         private void CreateFile(FileType fileType, string fileName)
@@ -115,13 +238,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Open should succeed.");
         }
 
-        private void WriteDataToFile()
+        private void WriteDataToFile(string fileName)
         {
             long byteSize = (uint)2 * 1024 * this.fsaAdapter.ClusterSizeInKB;
             MessageStatus status = this.fsaAdapter.WriteFile(0, byteSize, out _);
 
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
                     "Write data to file should succeed");
+
+            this.fsaAdapter.CloseOpen();
+            OpenFile(FileType.DataFile, fileName);
         }
 
         private void DelayNextStep()
