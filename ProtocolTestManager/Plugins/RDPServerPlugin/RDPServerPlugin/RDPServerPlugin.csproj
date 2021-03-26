@@ -138,7 +138,7 @@
     </Content>
     <Resource Include="Docs\arrow_right.png" />
     <Resource Include="Docs\domain.png" />
-    <Content Include="Docs\configure.html" />
+    <Content Include="Docs\configure_dotnetcore.html" />
     <Content Include="Docs\index.html" />
     <Content Include="Docs\network.html" />
     <Resource Include="Docs\note.png" />

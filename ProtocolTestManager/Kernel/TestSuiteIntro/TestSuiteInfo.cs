@@ -28,7 +28,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string TestSuiteVersion { get; set; }
 
         // The format of the test suite folder. Environment variables are not supported.
-        // C:\MicrosoftProtocolTests\$(TestSuiteName)\$(TestSuiteEndpoint)\$(TestSuiteVersion)
         public string TestSuiteFolderFormat { get; set; }
 
         // Folder of test suite
@@ -42,11 +41,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         // The test suite is configured
         public bool IsConfiged { get; set; }
-
-        /// <summary>
-        /// The test suite target, where true indicates dotnet core.
-        /// </summary>
-        public bool IsCore { get; set; }
 
         // The profile of last run.
         public string LastProfile { get; set; }

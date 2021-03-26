@@ -5,17 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" 
         Title="Customize Test Suite Configuration"
-        Height="350" Width="600"
+        Height="221" Width="600"
         ResizeMode="NoResize"
         >
-    <StackPanel Margin="10">
-        <RadioButton Name="CheckFx" GroupName="Target" Content="I want to use the test suite installed by an MSI installer. (&lt;= v3.20.1.0, .NET Framework)" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top" Checked="OnFxChecked" />
-        <GroupBox Name="MSIStatusGroup" Header="Installed version" Height="50" Margin="20,0,0,0">
-            <Grid Margin="2">
-                <TextBlock Name="InstalledVersion" Margin="10,0,0,0" VerticalAlignment="Center" />
-            </Grid>
-        </GroupBox>
-        <RadioButton Name="CheckCore" GroupName="Target" Content="I want to use the test suite specified by location set below. (>= v4.20.9.0, .NET Core)" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Top" Checked="OnCoreChecked" />
+    <StackPanel Margin="10,10,10,7">
         <GroupBox Name="Configuration" Header="Configuration" Height="125" Margin="20,0,0,0" VerticalAlignment="Top" >
             <StackPanel>
                 <Grid Height="25">

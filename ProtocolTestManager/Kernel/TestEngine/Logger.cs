@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     TestCaseDetail caseDetail;
                     if (testcase.LogUri != null && System.IO.File.Exists(testcase.LogUri.AbsolutePath))
                     {
-                        Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, IsCore, out status, out caseDetail);
+                        Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, out status, out caseDetail);
                     }
                     testcase.Status = status;
                 }

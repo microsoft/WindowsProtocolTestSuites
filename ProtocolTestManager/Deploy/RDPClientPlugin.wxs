@@ -13,11 +13,8 @@
             <Component Id="cmp694BFFB553C04157868A8A65226E5608" Guid="{36860F54-D910-457B-8962-3157ABA4277C}">
                 <File Id="fil7B437B2F60224CD789AD6B491AC3738A" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\note.png" />
             </Component>
-            <Component Id="cmpB3B1B79FA01B4E94AC1F7BE9FAE1A1C9" Guid="{43A86DE2-58B9-428A-9596-36FC9B4CF394}">
-                <File Id="filB6F7DEDC09A2478E80C1D0111A9DF78F" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\configure.html" />
-            </Component>
             <Component Id="cmpB3B1B79FA01B4E94AC1F7BE9FAE1A1D9" Guid="{43A86DE2-58B9-428A-9596-36FC9B4CF395}">
-              <File Id="filB6F7DEDC09A2478E80C1D0111A9DF79F" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\configure_dotnetcore.html" />
+              <File Id="filB6F7DEDC09A2478E80C1D0111A9DF79F" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\configure.html" />
             </Component>
             <Component Id="cmp9EAB68E197FC4BFEBF3AD093D2332544" Guid="{87EC50DA-EC87-469F-98CD-339E310C4953}">
                 <File Id="fil46324261C0064A4BAE47E5432D7E115A" Source="..\Plugins\RDPClientPlugin\RDPClientPlugin\Docs\workgroup.png" />
@@ -76,7 +73,6 @@
             <ComponentRef Id="cmp76C61BFA93CD4C2786C8D2B8B8A7BA8B" />
             <ComponentRef Id="cmpFFFFF21340334D99B993CB6C6C7123B7" />
             <ComponentRef Id="cmp694BFFB553C04157868A8A65226E5608" />
-            <ComponentRef Id="cmpB3B1B79FA01B4E94AC1F7BE9FAE1A1C9" />
             <ComponentRef Id="cmpB3B1B79FA01B4E94AC1F7BE9FAE1A1D9" />
             <ComponentRef Id="cmp9EAB68E197FC4BFEBF3AD093D2332544" />
             <ComponentRef Id="cmp1A0BCE98C274477483E1AA296D0B1CAB" />

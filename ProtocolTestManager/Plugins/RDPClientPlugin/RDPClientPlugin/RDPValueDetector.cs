@@ -44,16 +44,16 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         private const string propSutName = "SUTName";
         private const string propSUTUserName = "SUTUserName";
         private const string propSUTUserPassword = "SUTUserPassword";
-        private const string propProxyIP = "RDP.ProxyIP";
+        private const string propProxyIP = "ProxyIP";
         private const string propIsWindowsImplementation = "IsWindowsImplementation";
         private const string propDropConnectionForInvalidRequest = "DropConnectionForInvalidRequest";
-        private const string propSupportAutoReconnect = "RDP.Client.SupportAutoReconnect";
-        private const string propSupportServerRedirection = "RDP.Client.SupportServerRedirection";
-        private const string propSupportRDPEFS = "RDP.Client.SupportRDPEFS";
-        private const string propRDPVersion = "RDP.Version";
-        private const string propRDPServerPort = "RDP.ServerPort";
-        private const string propAgentAddress = "SUTControl.AgentAddress";
-        private const string propIsClientSupportRDPFile = "SUTControl.ClientSupportRDPFile";
+        private const string propSupportAutoReconnect = "SupportAutoReconnect";
+        private const string propSupportServerRedirection = "SupportServerRedirection";
+        private const string propSupportRDPEFS = "SupportRDPEFS";
+        private const string propRDPVersion = "Version";
+        private const string propRDPServerPort = "ServerPort";
+        private const string propAgentAddress = "AgentAddress";
+        private const string propIsClientSupportRDPFile = "ClientSupportRDPFile";
 
 #endregion Constant
 

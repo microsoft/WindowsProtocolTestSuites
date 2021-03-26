@@ -16,11 +16,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public class HtmlResultChecker
     {
-        private bool IsCore;
-
-        private HtmlResultChecker(bool isCore)
+        private HtmlResultChecker()
         {
-            IsCore = isCore;
         }
 
         private static HtmlResultChecker htmlResultChecker = null;
@@ -58,11 +55,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Gets a singleton instance of HtmlResultChecker.
         /// </summary>
-        /// <param name="isCore">The target of test suites, where true indicates .NET Core.</param>
         /// <returns>An instance of HtmlResultChecker.</returns>
-        public static HtmlResultChecker GetHtmlResultChecker(bool isCore)
+        public static HtmlResultChecker GetHtmlResultChecker()
         {
-            if (htmlResultChecker == null) htmlResultChecker = new HtmlResultChecker(isCore);
+            if (htmlResultChecker == null) htmlResultChecker = new HtmlResultChecker();
             return htmlResultChecker;
         }
 
@@ -154,7 +150,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             TestCaseStatus status;
             TestCaseDetail caseDetail;
-            if (!Utility.ParseFileGetStatus(e.FullPath, IsCore, out status, out caseDetail))
+            if (!Utility.ParseFileGetStatus(e.FullPath, out status, out caseDetail))
             {
                 // The file name format is not correct, ignore it.
                 return;

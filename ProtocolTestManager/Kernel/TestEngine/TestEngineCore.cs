@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>HTML result checker.</returns>
         protected override HtmlResultChecker GetHtmlResultChecker()
         {
-            return HtmlResultChecker.GetHtmlResultChecker(true);
+            return HtmlResultChecker.GetHtmlResultChecker();
         }
 
         /// <summary>

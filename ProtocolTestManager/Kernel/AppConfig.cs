@@ -64,11 +64,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string TestSuiteVersion { get; set; }
 
         /// <summary>
-        /// The test suite target, where true indicates .NET Core.
-        /// </summary>
-        public bool IsCore { get; set; }
-
-        /// <summary>
         /// The installation directory of the test suite
         /// </summary>
         public string TestSuiteDirectory { get; set; }
@@ -206,15 +201,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="testSuiteVersion">The version of test suite</param>
         /// <param name="testSuiteDir">The working directory for the test suite.</param>
         /// <param name="installDir">The install directory of PTM.</param>
-        /// <param name="isCore">Indicating whether the test suite is based on dotnet core.</param>
         /// <returns>An instance of AppConfig class.</returns>
-        public static AppConfig LoadConfig(string testSuiteName, string testSuiteVersion, string testSuiteDir, string installDir, bool isCore = false)
+        public static AppConfig LoadConfig(string testSuiteName, string testSuiteVersion, string testSuiteDir, string installDir)
         {
             AppConfig config = new AppConfig();
             config.TestSuiteName = testSuiteName;
             config.TestSuiteVersion = testSuiteVersion;
-
-            config.IsCore = isCore;
 
             config.InitFolders(testSuiteDir, installDir);
             config.PipeName = StringResource.PipeName;
@@ -276,14 +268,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
-            if (isCore)
-            {
-                config.DotNetPath = LocateDotNetEngine();
-            }
-            else
-            {
-                config.VSTestPath = LocateVSTestEngine();
-            }
+            config.DotNetPath = LocateDotNetEngine();
 
             config.VSTestArguments = "";
             foreach (string singleDllpath in config.TestSuiteAssembly)
@@ -296,7 +281,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             var testCategoryNode = doc.DocumentElement.SelectSingleNode("TestCategories");
             if (testCategoryNode != null)
             {
-                string categoryConfigFile = System.IO.Path.Combine(config.EtcDirectory, testCategoryNode.InnerText.Trim());
+                string categoryConfigFile = Path.Combine(config.EtcDirectory, testCategoryNode.InnerText.Trim());
                 config.TestCategory = GetTestCategoryFromConfig(categoryConfigFile);
             }
             else

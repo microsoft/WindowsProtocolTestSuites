@@ -154,8 +154,8 @@
   <ItemGroup>
     <Content Include="config.xml" />
     <Resource Include="Docs\arrow_right.png" />
-    <Content Include="Docs\configure.html" />
     <Resource Include="Docs\domain.png" />
+    <Content Include="Docs\configure.html" />
     <Content Include="Docs\index.html" />
     <Content Include="Docs\network.html" />
     <Resource Include="Docs\note.png" />

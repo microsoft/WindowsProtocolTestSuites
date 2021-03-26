@@ -41,20 +41,9 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             notCustomizedInfo = notCustomized;
 
-            bool checkCore = info.IsCore ? true : !notCustomized.IsInstalled;
+            CoreVersion.Text = info.TestSuiteVersion;
 
-            CoreVersion.Text = info.IsCore ? info.TestSuiteVersion : NA;
-
-            Location.Text = info.IsCore ? info.TestSuiteFolder : null;
-
-            CheckCore.IsChecked = checkCore;
-
-            CheckFx.IsChecked = !checkCore;
-
-            InstalledVersion.Text = notCustomized.IsInstalled ? notCustomized.TestSuiteVersion : NA;
-
-            // Disable the radio button if no corresponding MSI installed.
-            CheckFx.IsEnabled = notCustomized.IsInstalled;
+            Location.Text = info.TestSuiteFolder;
 
             // Initialize timer for detecting the path user specified.
             isDetecting = false;
@@ -89,31 +78,17 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             IsEnabled = false;
 
-            if (IsCoreCheck())
+            string path = Location.Text;
+
+            string version = await Task.Run(() => Utility.GetCoreTestSuiteVersion(path));
+
+            if (version == null)
             {
-                string path = Location.Text;
+                DialogResult = false;
 
-                string version = await Task.Run(() => Utility.GetCoreTestSuiteVersion(path));
+                System.Windows.MessageBox.Show(StringResources.InvalidLocationSpecified, StringResources.Warning, MessageBoxButton.OK);
 
-                if (version == null)
-                {
-                    DialogResult = false;
-
-                    System.Windows.MessageBox.Show(StringResources.InvalidLocationSpecified, StringResources.Warning, MessageBoxButton.OK);
-
-                    return;
-                }
-                else
-                {
-                    DialogResult = true;
-
-                    result = new CustomizedTestSuiteConfigurationItem
-                    {
-                        Location = Location.Text,
-                        Version = version,
-                        IsCore = true,
-                    };
-                }
+                return;
             }
             else
             {
@@ -121,10 +96,12 @@ namespace Microsoft.Protocols.TestManager.UI
 
                 result = new CustomizedTestSuiteConfigurationItem
                 {
-                    Location = null,
-                    IsCore = false,
+                    Location = Location.Text,
+                    Version = version,
+                    IsCore = true,
                 };
             }
+
 
             Close();
         }
@@ -134,32 +111,6 @@ namespace Microsoft.Protocols.TestManager.UI
             DialogResult = false;
 
             Close();
-        }
-
-        private void OnFxChecked(object sender, RoutedEventArgs e)
-        {
-            OnRadioChanged(false);
-        }
-
-        private void OnCoreChecked(object sender, RoutedEventArgs e)
-        {
-            OnRadioChanged(true);
-        }
-
-        private bool IsCoreCheck()
-        {
-            return CheckCore.IsChecked.HasValue && CheckCore.IsChecked.Value;
-        }
-
-        private void OnRadioChanged(bool isCore)
-        {
-            MSIStatusGroup.IsEnabled = !isCore;
-
-            Configuration.IsEnabled = isCore;
-
-            CheckCore.FontWeight = isCore ? FontWeights.Bold : FontWeights.Normal;
-
-            CheckFx.FontWeight = !isCore ? FontWeights.Bold : FontWeights.Normal;
         }
 
         private void OnBrowseClicked(object sender, RoutedEventArgs e)

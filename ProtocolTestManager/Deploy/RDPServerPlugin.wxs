@@ -19,9 +19,6 @@
       <Component Id="cmp3250E6BCC3094F5DAA62BE62F793FACA" Guid="{752CBE00-ABBD-4A25-A717-3B6F55C3DAC4}">
         <File Id="fil3250E6BCC3094F5DAA62BE62F793FACA" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\network.html" />
       </Component>
-      <Component Id="cmp3250E6BCC3094F5DAA62BE62F793FACB" Guid="{752CBE00-ABBD-4A25-A717-3B6F55C3DAC5}">
-        <File Id="fil3250E6BCC3094F5DAA62BE62F793FACB" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\configure.html" />
-      </Component>
       <Component Id="cmp3250E6BCC3094F5DAA62BE62F793FACC" Guid="{752CBE00-ABBD-4A25-A717-3B6F55C3DAC6}">
         <File Id="fil3250E6BCC3094F5DAA62BE62F793FACC" Source="..\Plugins\RDPServerPlugin\RDPServerPlugin\Docs\configure_dotnetcore.html" />
       </Component>
@@ -70,7 +67,6 @@
       <ComponentRef Id="cmp208A0530927344CD8A458D1DD43DCF74" />
       <ComponentRef Id="cmpDF7980A6E05049B68F3921E4F5D58F63" />
       <ComponentRef Id="cmp3250E6BCC3094F5DAA62BE62F793FACA" />
-      <ComponentRef Id="cmp3250E6BCC3094F5DAA62BE62F793FACB" />
       <ComponentRef Id="cmp3250E6BCC3094F5DAA62BE62F793FACC" />
       <ComponentRef Id="cmp04CADC39902D4FFAB3BC61D62A07F41A" />
       <ComponentRef Id="cmpCB375D5D73A04E6C879196F533BDC87D" />

@@ -135,7 +135,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         configItem = config.Where(item => item.Name == testsuite.TestSuiteName).FirstOrDefault();
                     }
 
-                    if (configItem != null && configItem.IsCore)
+                    if (configItem != null)
                     {
                         // Use configuration from customized.
                         testsuite.IsInstalled = true;
@@ -143,31 +143,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         testsuite.TestSuiteFolder = configItem.Location;
 
                         testsuite.TestSuiteVersion = configItem.Version;
-
-                        testsuite.IsCore = configItem.IsCore;
-                    }
-                    else
-                    {
-                        // Find the registry key of the test suite.
-
-                        testsuite.IsInstalled = FindTestSuiteInformationInRegistry(family, testsuite);
-
-                        if (!testsuite.IsInstalled)
-                        {
-                            continue;
-                        }
-
-                        testsuite.TestSuiteFolder = (testsuite.TestSuiteFolderFormat != null) ?
-                                testsuite.TestSuiteFolderFormat
-                                    .Replace("$(TestSuiteName)", testsuite.TestSuiteName)
-                                    .Replace("$(TestSuiteVersion)", testsuite.TestSuiteVersion)
-                                    .Replace("$(TestSuiteEndpoint)", testsuite.TestSuiteEndPoint)
-                                : string.Format(StringResource.TestSuiteFolder,
-                                    testsuite.TestSuiteName,
-                                    testsuite.TestSuiteEndPoint,
-                                    testsuite.TestSuiteVersion);
-
-                        testsuite.IsCore = false;
                     }
 
                     string lastProfileFile = Path.Combine(
@@ -180,6 +155,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     testsuite.IsConfiged = File.Exists(lastProfileFile);
                 }
             }
+
             return family;
         }
 

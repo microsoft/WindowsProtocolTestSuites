@@ -129,8 +129,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     testSuiteInfo.TestSuiteName,
                     testSuiteInfo.TestSuiteVersion,
                     testSuiteDir,
-                    installDir,
-                    testSuiteInfo.IsCore
+                    installDir
                     );
             }
             catch (Exception e)
@@ -191,46 +190,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void LoadTestSuiteAssembly()
         {
-            try
-            {
-                if (!appConfig.IsCore)
-                {
-                    appConfig.GetAdapterMethods();
-                }
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach (Exception exSub in ex.LoaderExceptions)
-                {
-                    sb.AppendLine(exSub.Message);
-                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
-                    if (exFileNotFound != null)
-                    {
-                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
-                        {
-                            sb.AppendLine("Fusion Log:");
-                            sb.AppendLine(exFileNotFound.FusionLog);
-                        }
-                    }
-                    sb.AppendLine();
-                }
-
-                throw new Exception(string.Format(StringResource.LoadAdapterError, sb.ToString()));
-            }
-            catch (Exception e)
-            {
-                throw new Exception(string.Format(StringResource.LoadAdapterError, e.Message));
-            }
-
-            if (appConfig.IsCore)
-            {
-                testSuite = new TestSuiteFromCore();
-            }
-            else
-            {
-                testSuite = new TestSuiteFromFramework();
-            }
+            testSuite = new TestSuiteFromCore();
 
             try
             {
@@ -242,6 +202,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 throw new Exception(string.Format(StringResource.LoadAssemblyError, e.Message));
             }
+
             if (appConfig.TestCategory != null)
             {
                 try
@@ -1249,28 +1210,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         public void InitializeTestEngine()
         {
-            if (appConfig.IsCore)
+            testEngine = new TestEngineCore(appConfig.DotNetPath)
             {
-                testEngine = new TestEngineCore(appConfig.DotNetPath)
-                {
-                    WorkingDirectory = testSuiteDir,
-                    TestAssemblies = appConfig.TestSuiteAssembly,
-                    TestSetting = appConfig.TestSetting,
-                    PipeName = appConfig.PipeName,
-                    ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
-                };
-            }
-            else
-            {
-                testEngine = new TestEngineFramework(appConfig.VSTestPath)
-                {
-                    WorkingDirectory = testSuiteDir,
-                    TestAssemblies = appConfig.TestSuiteAssembly,
-                    TestSetting = appConfig.TestSetting,
-                    PipeName = appConfig.PipeName,
-                    ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
-                };
-            }
+                WorkingDirectory = testSuiteDir,
+                TestAssemblies = appConfig.TestSuiteAssembly,
+                TestSetting = appConfig.TestSetting,
+                PipeName = appConfig.PipeName,
+                ResultOutputFolder = String.Format("{0}-{1}", appConfig.TestSuiteName, sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")),
+            };
 
             testEngine.InitializeLogger(selectedCases);
         }
@@ -1546,7 +1493,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <summary>
         /// Parse the file content to get the case status and detail
         /// </summary>
-        public static bool ParseFileGetStatus(string filePath, bool isCore, out TestCaseStatus status, out TestCaseDetail detail)
+        public static bool ParseFileGetStatus(string filePath, out TestCaseStatus status, out TestCaseDetail detail)
         {
             status = TestCaseStatus.NotRun;
             detail = null;
@@ -1572,16 +1519,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             JavaScriptSerializer serializer = new JavaScriptSerializer() { MaxJsonLength = 32 * 1024 * 1024 };
 
-            if (isCore)
-            {
-                var detailForPTMTestLogger = serializer.Deserialize<TestCaseDetailForPTMTestLogger>(detailJson);
+            var detailForPTMTestLogger = serializer.Deserialize<TestCaseDetailForPTMTestLogger>(detailJson);
 
-                detail = detailForPTMTestLogger.Parse();
-            }
-            else
-            {
-                detail = serializer.Deserialize<TestCaseDetail>(detailJson);
-            }
+            detail = detailForPTMTestLogger.Parse();
 
             switch (detail.Result)
             {
