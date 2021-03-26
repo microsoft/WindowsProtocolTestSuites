@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -183,7 +184,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
             string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
                         
-            if (this.fsaAdapter.FileSystem == FileSystem.NTFS 
+            if(operatingSystem == Platform.WindowsServer2012R2.ToString())
+            {
+                this.TestSite.Assume.Inconclusive("WindowsServer2012R2 is inconclusive with -2 timestamp value.");
+            }
+            else if (this.fsaAdapter.FileSystem == FileSystem.NTFS 
                 && !Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_NTFS), operatingSystem))
             {
                 SetChangeTime(-3);
@@ -327,8 +332,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             WindowsServer2008,
             WindowsServer2008R2,
-            WindowsServer2012,
-            WindowsServer2012R2
+            WindowsServer2012
         }
 
         private enum OS_MinusTwo_NotSupported_REFS
@@ -338,6 +342,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             WindowsServer2012,
             WindowsServer2012R2
         }
+
+        private int GetDelayTime(FileSystem fileSystem)
+        {
+            switch(fileSystem)
+            {
+                case FileSystem.NTFS:
+                    return 1000;
+                case FileSystem.FAT32:
+                    return 3000;
+                default:
+                    return 3000;
+            }
+        }
+
         private void SetChangeTime(long changeTime)
         {
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
@@ -457,18 +475,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void DelayNextOperation()
         {
-            DateTime currentTime = GetSystemTime();
-            DateTime nextTime = GetSystemTime();
-
-            while (currentTime.ToString().Equals(nextTime.ToString()))
-            {
-                nextTime = GetSystemTime();
-            }
-        }
-
-        private DateTime GetSystemTime()
-        {
-            return DateTime.Now;
+            int delayTime = GetDelayTime(this.fsaAdapter.FileSystem);
+            Thread.Sleep(delayTime);
         }
 
         private void QueryFileBasicInformation(out long changeTime, out long creationTime
@@ -478,12 +486,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             uint outputBufferSize = (uint)TypeMarshal.ToBytes<FileBasicInformation>(fileBasicInformation).Length;
             byte[] outputBuffer;
             this.fsaAdapter.QueryFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, outputBufferSize, out _, out outputBuffer);
-            
+
             fileBasicInformation = TypeMarshal.ToStruct<FileBasicInformation>(outputBuffer);
-            changeTime = (((long)fileBasicInformation.ChangeTime.dwHighDateTime) << 32) + fileBasicInformation.ChangeTime.dwLowDateTime;
-            creationTime = (((long)fileBasicInformation.CreationTime.dwHighDateTime) << 32) + fileBasicInformation.CreationTime.dwLowDateTime;
-            lastAccessTime = (((long)fileBasicInformation.LastAccessTime.dwHighDateTime) << 32) + fileBasicInformation.LastAccessTime.dwLowDateTime;
-            lastWriteTime = (((long)fileBasicInformation.LastWriteTime.dwHighDateTime) << 32) + fileBasicInformation.LastWriteTime.dwLowDateTime;
+            changeTime = FiletimeToLong(fileBasicInformation.ChangeTime);
+            creationTime = FiletimeToLong(fileBasicInformation.CreationTime);
+            lastAccessTime = FiletimeToLong(fileBasicInformation.LastAccessTime);
+            lastWriteTime = FiletimeToLong(fileBasicInformation.LastWriteTime);
+        }
+
+        private long FiletimeToLong(FILETIME time)
+        {
+            //return (((long)time.dwHighDateTime) << 32) + time.dwLowDateTime;
+            return ((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) << 0;
         }
 
         #endregion
