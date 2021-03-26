@@ -2,9 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { MessageBar, MessageBarButton, MessageBarType } from "@fluentui/react"
-import React, { FunctionComponent, useState } from "react"
+import { FunctionComponent, useEffect, useState } from "react"
 import { LoadingPanel } from "./LoadingPanel"
-import { RightPanel } from "./WizardNavBar"
+import { useWindowSize } from "./UseWindowSize"
+import { HeaderMenuHeight, RightPanel } from "./WizardNavBar"
 
 type StepPanelProps = {
     isLoading?: boolean,
@@ -16,6 +17,7 @@ type StepPanelProps = {
 
 export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
     const [showMsg, setShowMsg] = useState(true);
+    const winSize = useWindowSize();
 
     let infoMessageBar = undefined;
     let warningMessageBar = undefined;
@@ -58,15 +60,23 @@ export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
         </MessageBar>
     };
 
+    useEffect(() => {
+        setShowMsg(true);
+    }, [props.errorMsg, props.infoMsg, props.warningMsg])
+
+    const showMessageBar = (((errorMessageBar || warningMessageBar || infoMessageBar) !== undefined) && showMsg);
     return (
         <div>
             {props.leftNav}
             <RightPanel>
                 <div>
                     {
-                        (((errorMessageBar || warningMessageBar || infoMessageBar) !== undefined) && showMsg) ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div> : <div>
+                        showMessageBar ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div> : undefined
+                    }
+                    {
+                        < div >
                             {
-                                props.isLoading ? <LoadingPanel /> : <div>
+                                props.isLoading ? <LoadingPanel /> : <div style={{ height: winSize.height - HeaderMenuHeight - (showMessageBar ? 50 : 0), overflowY: 'auto' }}>
                                     {props.children}
                                 </div>
                             }

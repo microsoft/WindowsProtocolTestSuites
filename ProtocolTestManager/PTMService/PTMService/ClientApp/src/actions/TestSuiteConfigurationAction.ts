@@ -12,7 +12,7 @@ export const CREATE_TESTSUITE_CONFIGURATION_REQUEST = 'CONFIGURATION/CREATE_TEST
 export const CREATE_TESTSUITE_CONFIGURATION_SUCCESS = 'CONFIGURATION/CREATE_TESTSUITE_CONFIGURATION_SUCCESS';
 export const CREATE_TESTSUITE_CONFIGURATION_FAILURE = 'CONFIGURATION/CREATE_TESTSUITE_CONFIGURATION_FAILURE';
 
-export const SET_SELECTED_TESTSUITE = 'CONFIGURATION/SET_SELECTED_TESTSUITE';
+export const SET_SELECTED_TESTSUITE_CONFIGURATION = 'CONFIGURATION/SET_SELECTED_TESTSUITE_CONFIGURATION';
 export const SET_SEARCHTEXT = 'CONFIGURATION/SET_SEARCHTEXT'
 
 // define action types
@@ -24,7 +24,7 @@ interface CreateTSConfigurationActionRequestType { type: typeof CREATE_TESTSUITE
 interface CreateTSConfigurationActionSuccessType { type: typeof CREATE_TESTSUITE_CONFIGURATION_SUCCESS; payload: number; }
 interface CreateTSConfigurationActionFailureType { type: typeof CREATE_TESTSUITE_CONFIGURATION_FAILURE; errorMsg: string; }
 
-interface SetTSConfigurationActionType { type: typeof SET_SELECTED_TESTSUITE; selectedConfiguration: Configuration }
+interface SetTSConfigurationActionType { type: typeof SET_SELECTED_TESTSUITE_CONFIGURATION; selectedConfiguration: Configuration }
 interface SetSearchTextActionType { type: typeof SET_SEARCHTEXT; searchText: string }
 
 export type TestSuiteConfigurationActionTypes = GetTSConfigurationsActionRequestType
@@ -57,7 +57,7 @@ export const ConfigurationActions = {
     },
     setSelectedConfigurationAction: (selectedConfiguration: Configuration): TestSuiteConfigurationActionTypes => {
         return {
-            type: SET_SELECTED_TESTSUITE,
+            type: SET_SELECTED_TESTSUITE_CONFIGURATION,
             selectedConfiguration: selectedConfiguration
         }
     },

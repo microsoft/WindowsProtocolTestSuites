@@ -19,7 +19,7 @@ export const PropertyGroupsDataSrv = {
             onError: PropertyGroupsActions.getPropertyGroupsAction_Failure
         });
     },
-    setPropertyGroups: (): AppThunkAction<PropertyGroupsActionTypes> => async (dispatch, getState) => {
+    setPropertyGroups: (completeCallback: (data: any) => void): AppThunkAction<PropertyGroupsActionTypes> => async (dispatch, getState) => {
         const state = getState();
         if (!state.propertyGroups.updated) {
             return;
@@ -33,7 +33,8 @@ export const PropertyGroupsDataSrv = {
             body: JSON.stringify(state.propertyGroups.propertyGroups),
             onRequest: PropertyGroupsActions.setPropertyGroupsAction_Request,
             onComplete: PropertyGroupsActions.setPropertyGroupsAction_Success,
-            onError: PropertyGroupsActions.setPropertyGroupsAction_Failure
+            onError: PropertyGroupsActions.setPropertyGroupsAction_Failure,
+            onCompleteCallback: completeCallback,
         });
     },
 };

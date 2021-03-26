@@ -18,8 +18,6 @@ export default function App() {
     const stackStyles: IStackStyles = {
         root: {
             overflow: 'hidden',
-            width: winSize.width,
-            height: winSize.height,
         },
     };
 

@@ -2,10 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import styled from '@emotion/styled';
-import { IStackTokens, Link, Stack } from '@fluentui/react';
-import React from 'react';
+import { Link, Stack } from '@fluentui/react';
 import { StepWizardChildProps } from "react-step-wizard";
 import { StepNavItemInfo } from '../model/StepNavItemInfo';
+import { StackGap10 } from './StackStyle';
 import { useWindowSize } from './UseWindowSize';
 
 export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
@@ -17,27 +17,22 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
         }
     });
 
-    const verticalGapStackTokens: IStackTokens = {
-        childrenGap: 10,
-    };
-
     const winSize = useWindowSize();
 
-
-    return (<LeftPanel style={{ height: winSize.height - headerHeight }}>
-        <Stack verticalFill verticalAlign="start" tokens={verticalGapStackTokens} >
+    return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
+        <Stack verticalFill verticalAlign="start" tokens={StackGap10} >
             {navStepItems}
         </Stack>
     </LeftPanel>);
 }
 
-const leftPanelWidth = 200;
+export const LeftPanelWidth = 200;
 // header height 50 + 10 padding
-const headerHeight = 60;
+export const HeaderMenuHeight = 60;
 
 export const LeftPanel = styled.div`
     float: left;
-    width: ${leftPanelWidth}px;
+    width: ${LeftPanelWidth}px;
     margin-top:auto;
     margin-bottom:auto;
     z-index:999;
@@ -49,7 +44,7 @@ export const LeftPanel = styled.div`
 
 export const RightPanel = styled.div`
     & {
-        margin-Left: ${leftPanelWidth + 10}px;
+        margin-Left: ${LeftPanelWidth + 10}px;
         height: 100%;
         z-index:999;
         padding-left: 10px;

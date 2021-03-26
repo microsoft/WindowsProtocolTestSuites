@@ -4,6 +4,7 @@
 import { IStackTokens, PrimaryButton, Stack } from '@fluentui/react';
 import React, { CSSProperties } from 'react';
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
+import { StackGap10 } from '../components/StackStyle';
 import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
 import { getNavSteps, RunSteps } from '../model/DefaultNavSteps';
@@ -49,7 +50,7 @@ export function ConfigureMethod(props: StepWizardProps) {
                             </div>
                         })
                     }
-                    <Stack horizontal horizontalAlign="end" tokens={gapStackTokens} >
+                    <Stack horizontal horizontalAlign="end" tokens={StackGap10} >
                         <PrimaryButton text="Previous" onClick={() => wizardProps.previousStep()} />
                     </Stack>
                 </Stack>
@@ -71,7 +72,7 @@ function MethodItem(props: MethodItemProp) {
     const divOnClicked = props.Disabled ? undefined : props.onClick;
 
     return (<div className="card" style={divStyle}>
-        <Stack className="container" tokens={gapStackTokens} onClick={divOnClicked}>
+        <Stack className="container" tokens={StackGap10} onClick={divOnClicked}>
             <div>
                 <div className="subject">{props.Title}</div>
                 <div className="description">{props.Description}</div>
@@ -79,7 +80,3 @@ function MethodItem(props: MethodItemProp) {
         </Stack>
     </div>);
 }
-
-const gapStackTokens: IStackTokens = {
-    childrenGap: 10,
-};

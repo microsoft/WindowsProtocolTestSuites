@@ -4,72 +4,97 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 **************************************************************************************************/
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .header {
-    background-color: #000 !important;
+  background-color: #000 !important;
 }
 
 .header .title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #FFF !important;
-    display: inline-block;
-    height: 50px;
-    line-height: 50px;
-    margin-left: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff !important;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  margin-left: 10px;
 }
 
 .header .title a {
-    display: inline-block;
-    height: 50px;
-    line-height: 50px;
-    color: #FFF !important;
-    text-decoration: none;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  color: #fff !important;
+  text-decoration: none;
 }
 
 .header .menu {
-    margin: 0 60px;
-    flex: 1;
+  margin: 0 60px;
+  flex: 1;
 }
 
 .header .menu a {
-    position: relative;
-    display: inline-block;
-    height: 50px;
-    line-height: 50px;
-    color: #E7E7E7;
-    margin-right: 20px;
-    text-decoration: none;
+  position: relative;
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  color: #e7e7e7;
+  margin-right: 20px;
+  text-decoration: none;
 }
 
 .header .rightIcon {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .header .rightIcon a {
-    color: #FFF !important;
-    text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    width: 50px;
-    line-height: 50px;
-    cursor: pointer;
+  color: #fff !important;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  cursor: pointer;
 }
 
 .header .rightIcon:hover {
-    background-color: #666;
+  background-color: #666;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(8, 8, 8, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 #bae7ff;
+}
+
+.card .container {
+  padding: 10px 16px;
+}
+
+.card .container .subject {
+  font-size: large;
+  font-weight: bold;
+}
+
+.card .container .description {
+  font-size: medium;
+  font-weight: normal;
+  margin-top: 5px;
 }

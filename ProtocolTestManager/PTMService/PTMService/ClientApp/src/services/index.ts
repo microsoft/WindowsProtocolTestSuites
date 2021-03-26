@@ -17,6 +17,7 @@ export interface FetchOption<T> {
     onRequest?: Function;
     onComplete?: Function;
     onError?: Function;
+    onCompleteCallback?: (data: any) => void;
 }
 
 export async function FetchService<T>(requestOption: FetchOption<T>) {
@@ -38,8 +39,12 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
                 throw new Error("Bad response from server");
             }
 
-            const data = await response.json();
+            const data = await parseJson(response);
             requestOption.dispatch(requestOption.onComplete(data));
+
+            if (requestOption.onCompleteCallback) {
+                requestOption.onCompleteCallback(data);
+            }
         }
 
     } catch (errorMsg) {
@@ -48,4 +53,10 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
             requestOption.dispatch(requestOption.onError(errorMsg.message));
         }
     }
+}
+
+async function parseJson(response: Response) {
+    return await response.text().then(function (text: string) {
+        return text ? JSON.parse(text) : {}
+    })
 }

@@ -1,12 +1,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, IStackTokens, Link, PrimaryButton, SearchBox, SelectionMode, Stack, TextField } from '@fluentui/react';
+import { ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, Link, PrimaryButton, SearchBox, SelectionMode, Stack, TextField } from '@fluentui/react';
 import { useBoolean } from '@uifabric/react-hooks';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StepWizardChildProps } from 'react-step-wizard';
 import { ConfigurationActions } from '../actions/TestSuiteConfigurationAction';
+import { StackGap10 } from '../components/StackStyle';
 import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
 import { Configuration } from '../model/Configuration';
@@ -28,7 +29,7 @@ export function SelectConfiguration(props: any) {
         if (testSuiteInfo.selectedTestSuite) {
             dispatch(ConfigurationsDataSrv.getConfigurations(testSuiteInfo.selectedTestSuite!.Id));
         }
-    }, [configurations.lastCreateId])
+    }, [dispatch, configurations.lastCreateId, testSuiteInfo.selectedTestSuite])
 
     const onFieldChange = useCallback(
         (element: ElementType, newValue?: string) => {
@@ -131,7 +132,7 @@ export function SelectConfiguration(props: any) {
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={configurations.isLoading} errorMsg={configurations.errorMsg} >
-                <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10 }} tokens={gapStackTokens}>
+                <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10 }} tokens={StackGap10}>
                     <SearchBox placeholder="Search" onSearch={onSearchChanged} />
                     <PrimaryButton iconProps={{ iconName: 'Add' }} allowDisabledFocus onClick={() => {
                         toggleHideDialog();
@@ -155,7 +156,7 @@ export function SelectConfiguration(props: any) {
                 dialogContentProps={dialogContentProps}
                 modalProps={modalProps}
             >
-                <Stack tokens={gapStackTokens}>
+                <Stack tokens={StackGap10}>
                     <TextField
                         label="Configuration Name"
                         value={configureName}
@@ -213,7 +214,7 @@ function getConfigurationGridColumns(props: {
             data: 'string',
             isPadded: true,
             onRender: (item: Configuration, index, column) => {
-                return <Stack horizontal tokens={gapStackTokens}>
+                return <Stack horizontal tokens={StackGap10}>
                     <PrimaryButton onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
                     <PrimaryButton onClick={() => { props.onEdit(item.Id!) }}>Edit</PrimaryButton>
                 </Stack>
@@ -221,10 +222,6 @@ function getConfigurationGridColumns(props: {
         }
     ];
 }
-
-const gapStackTokens: IStackTokens = {
-    childrenGap: 10,
-};
 
 enum ElementType {
     Name,

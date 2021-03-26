@@ -1,5 +1,5 @@
 import { PrimaryButton, Stack } from '@fluentui/react';
-import './../css/testsuiteinfo.css';
+import './../css/index.css';
 
 export interface TestSuiteInfoProp {
     TestSuiteName: string;

@@ -20,6 +20,7 @@ export interface PropertyGroupsState {
     isLoading: boolean;
     errorMsg?: string;
     updated: boolean;
+    isPosting: boolean;
     latestPropertyGroups: PropertyGroup[];
     propertyGroups: PropertyGroup[];
     editingPropertyGroupIndex: number;
@@ -30,6 +31,7 @@ const initialPropertyGroupsState: PropertyGroupsState = {
     isLoading: false,
     errorMsg: undefined,
     updated: false,
+    isPosting: false,
     latestPropertyGroups: [],
     propertyGroups: [],
     editingPropertyGroupIndex: 0,
@@ -97,11 +99,16 @@ export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, act
             };
 
         case SET_EDITINGPROPERTYGROUP:
-            return {
+            const newState = {
                 ...state,
+                updated: true,
+                propertyGroups: getUpdatedPropertyGroups(state),
                 editingPropertyGroupIndex: action.payload,
-                editingPropertyGroup: state.propertyGroups[action.payload]
-            }
+            };
+
+            newState.editingPropertyGroup = newState.propertyGroups[action.payload]
+
+            return newState;
 
         case UPDATE_PROPERTYGROUPS:
             return {
@@ -113,20 +120,21 @@ export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, act
         case SET_PROPERTYGROUPS_REQUEST:
             return {
                 ...state,
-                isLoading: true,
-                errorMsg: undefined
+                errorMsg: undefined,
+                updated: true,
+                propertyGroups: getUpdatedPropertyGroups(state)
             };
 
         case SET_PROPERTYGROUPS_SUCCESS:
             return {
                 ...state,
-                isLoading: false
+                isPosting: false
             };
 
         case SET_PROPERTYGROUPS_FAILURE:
             return {
                 ...state,
-                isLoading: false,
+                isPosting: false,
                 errorMsg: action.errorMsg
             };
 

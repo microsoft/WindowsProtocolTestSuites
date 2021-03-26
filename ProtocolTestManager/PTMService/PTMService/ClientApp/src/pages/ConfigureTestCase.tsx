@@ -35,23 +35,20 @@ export function ConfigureTestCase(props: StepWizardProps) {
     };
 
     const onEditingPropertyGroupChange = (index: number) => {
-        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
         dispatch(PropertyGroupsActions.setEditingPropertyGroupAction(index));
     };
 
     const onPreviousButtonClick = () => {
         dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
-
         wizardProps.previousStep();
     };
 
     const onNextButtonClick = () => {
-        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
-        dispatch(PropertyGroupsDataSrv.setPropertyGroups());
-
-        if (propertyGroups.errorMsg === undefined) {
-            wizardProps.nextStep();
-        }
+        dispatch(PropertyGroupsDataSrv.setPropertyGroups((data: any) => {
+            if (propertyGroups.errorMsg === undefined) {
+                wizardProps.nextStep();
+            }
+        }));
     };
 
     return (
@@ -94,8 +91,8 @@ export function ConfigureTestCase(props: StepWizardProps) {
                     </Stack>
                     <div style={{ borderTop: '1px solid #d9d9d9', backgroundColor: '#f5f5f5', paddingTop: 7, paddingRight: 45, height: 40 }}>
                         <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
-                            <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
-                            <PrimaryButton text="Next" onClick={onNextButtonClick} />
+                            <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={propertyGroups.isPosting} />
+                            <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={propertyGroups.isPosting} />
                         </Stack>
                     </div>
                 </Stack>
