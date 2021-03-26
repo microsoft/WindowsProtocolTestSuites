@@ -94,14 +94,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             Site.Assert.AreEqual(expectedEntryCount, directoryInformation.Length, $"The buffer should contain {expectedEntryCount} entries of FileIdGlobalTxDirectoryInformation.");
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(directoryInformation[0].FileName), $"FileName should be {fileName}.");
 
-            changeTime = (((long)directoryInformation[0].FileCommonDirectoryInformation.ChangeTime.dwHighDateTime) << 32)
-                + directoryInformation[0].FileCommonDirectoryInformation.ChangeTime.dwLowDateTime;
-            creationTime = (((long)directoryInformation[0].FileCommonDirectoryInformation.CreationTime.dwHighDateTime) << 32)
-                + directoryInformation[0].FileCommonDirectoryInformation.CreationTime.dwLowDateTime;
-            lastAccessTime = (((long)directoryInformation[0].FileCommonDirectoryInformation.LastAccessTime.dwHighDateTime) << 32)
-                + directoryInformation[0].FileCommonDirectoryInformation.LastAccessTime.dwLowDateTime;
-            lastWriteTime = (((long)directoryInformation[0].FileCommonDirectoryInformation.LastWriteTime.dwHighDateTime) << 32)
-                + directoryInformation[0].FileCommonDirectoryInformation.LastWriteTime.dwLowDateTime;
+            changeTime = FileTimeToLong(directoryInformation[0].FileCommonDirectoryInformation.ChangeTime);
+            creationTime = FileTimeToLong(directoryInformation[0].FileCommonDirectoryInformation.CreationTime);
+            lastAccessTime = FileTimeToLong(directoryInformation[0].FileCommonDirectoryInformation.LastAccessTime);
+            lastWriteTime = FileTimeToLong(directoryInformation[0].FileCommonDirectoryInformation.LastWriteTime);
         }
         #endregion
     }

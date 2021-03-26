@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
@@ -51,6 +52,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
         #endregion
 
+        #region Utility
+
+        private long FileTimeToLong(FILETIME time)
+        {
+            return ((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) << 0;
+        }
+        #endregion
     }
 }
 

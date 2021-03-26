@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -250,21 +251,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             OpenFile(FileType.DataFile, fileName);
         }
 
-        private void DelayNextStep()
+        private int GetDelaTimeByFileSystem(FileSystem fileSystem)
         {
-            //delay next step for recognizable milliseconds change
-            DateTime currentTime = GetCurrentSystemTime();
-            DateTime nextTime = GetCurrentSystemTime();
-
-            while (currentTime.ToString().Equals(nextTime.ToString()))
+            switch (fileSystem)
             {
-                nextTime = GetCurrentSystemTime();
+                case FileSystem.NTFS:
+                    return 1000;
+                case FileSystem.FAT32:
+                    return 3000;
+                default:
+                    return 3000;
             }
         }
 
-        private DateTime GetCurrentSystemTime()
+        private void DelayNextStep()
         {
-            return DateTime.Now;
+            int delayTime = GetDelaTimeByFileSystem(this.fsaAdapter.FileSystem);
+            Thread.Sleep(delayTime);
         }
         #endregion
     }
