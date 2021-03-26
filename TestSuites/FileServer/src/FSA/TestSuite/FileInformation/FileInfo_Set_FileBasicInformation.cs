@@ -345,6 +345,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private int GetDelayTime(FileSystem fileSystem)
         {
+            //Applying delay time considering File System resolution time MS-FSCC 2.1.1 FSBO Section 6            
             switch(fileSystem)
             {
                 case FileSystem.NTFS:
