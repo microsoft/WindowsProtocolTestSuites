@@ -496,7 +496,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private long FiletimeToLong(FILETIME time)
         {
-            //return (((long)time.dwHighDateTime) << 32) + time.dwLowDateTime;
             return ((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) << 0;
         }
 
