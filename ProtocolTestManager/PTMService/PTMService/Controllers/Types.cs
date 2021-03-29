@@ -39,6 +39,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public string Name { get; set; }
 
         public string[] Categories { get; set; }
+        public Rule[]? Rules { get; set; }
     }
 
     public class RuleGroup

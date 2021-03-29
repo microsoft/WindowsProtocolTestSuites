@@ -127,3 +127,20 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 .home .content a {
     color: #337ab7;
 }
+
+@font-face {
+    font-family: 'FabricMDL2Icons-0';
+    src: url('./fabric-icons-0-7bf4f0ea.woff') format('woff');
+  }
+  
+  .ms-Icon {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-family: 'FabricMDL2Icons-0';
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+  }
+  
+  .ms-Icon--CheckboxIndeterminateCombo:before { content: "\F16E"; }

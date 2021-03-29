@@ -5,7 +5,7 @@ import { getAdapterReducer } from "./ConfigureAdapterReducer";
 import { getPropertyGroupsReducer } from "./PropertyGroupsReducer";
 import { getConfigurationReducer } from "./TestSuiteConfigurationReducer";
 import { getTestSuitesReducer } from "./TestSuitesReducer";
-
+import { getFilterTestCaseReducer } from "./TestSuiteFilterTestCaseReducer";
 export const appReducers = {
     testsuites: getTestSuitesReducer,
     configurations: getConfigurationReducer,
@@ -15,4 +15,5 @@ export const appReducers = {
     propertyGroups: getPropertyGroupsReducer,
     configureAdapter: getAdapterReducer,
     // runCase:
+    filterInfo: getFilterTestCaseReducer
 };
