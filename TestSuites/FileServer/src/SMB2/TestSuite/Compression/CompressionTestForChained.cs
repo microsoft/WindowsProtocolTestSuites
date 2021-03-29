@@ -20,6 +20,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can decompress WRITE request and compress READ response correctly using chained compression and PatternV1.")]
         public void BVT_SMB2Compression_Chained_PatternV1()
         {
+            if (testConfig.IsGlobalEncryptDataEnabled)
+            {
+                if (testConfig.IsGlobalRejectUnencryptedAccessEnabled)
+                {
+                    // When both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled are true, the case become encryption scenario and it is covered in test case BVT_SMB2Compression_Chained_PatternV1_Encrypted.
+                    Site.Assert.Inconclusive("This test case is not applicable to IsGlobalEncryptDataEnabled set to true, when the global encryption set to true the scenario with compression is covered in test case BVT_SMB2Compression_Chained_PatternV1_Encrypted.");
+                }
+                else
+                {
+                    BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionClientSupported < DialectRevision.Smb30, "When IsGlobalRejectUnencryptedAccessEnabled is false, it will allow unencrypted access for clients that do not support SMB 3.0.");
+                }
+            }
+
             SMB2ChainedCompression_Variant(CompressionTestVariant.BasicChainedReadWrite, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
@@ -40,6 +53,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can handle chained and compressed WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at front.")]
         public void SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFront()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleWritePatternV1AtFront, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
@@ -50,6 +65,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can handle chained and compressed WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at end.")]
         public void SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtEnd()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleWritePatternV1AtEnd, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
@@ -60,6 +77,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can handle chained and compressed WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at both front and end.")]
         public void SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFrontAndEnd()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleWritePatternV1AtFrontAndEnd, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
@@ -70,6 +89,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can chain and compress read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible.")]
         public void SMB2Compression_Chained_PatternV1_CompressibleReadResponse()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleRead, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
@@ -80,6 +101,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will not chain or compress read request if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is incompressible.")]
         public void SMB2Compression_Chained_PatternV1_IncompressibleReadResponse()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedIncompressibleRead, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
@@ -90,6 +113,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid CompressionAlgorithm in compression payload header.")]
         public void SMB2Compression_Chained_InvalidCompressionAlgorithmInCompressionPayloadHeader()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             Action<Smb2Packet> processedPacketModifier = packet =>
             {
                 BaseTestSite.Assert.IsTrue(packet is Smb2ChainedCompressedPacket, "The message to be sent should be chained compressed.");
@@ -127,6 +152,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid Length in compression payload header.")]
         public void SMB2Compression_Chained_InvalidLengthInCompressionPayloadHeader()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             Action<Smb2Packet> processedPacketModifier = packet =>
             {
                 BaseTestSite.Assert.IsTrue(packet is Smb2ChainedCompressedPacket, "The message to be sent should be chained compressed.");
@@ -164,6 +191,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid Repetitions in compression pattern payload V1.")]
         public void SMB2Compression_Chained_PatternV1_InvalidCompressionPatternPayloadV1Repetitions()
         {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
             Action<Smb2Packet> processedPacketModifier = packet =>
             {
                 BaseTestSite.Assert.IsTrue(packet is Smb2ChainedCompressedPacket, "The message to be sent should be chained compressed.");
