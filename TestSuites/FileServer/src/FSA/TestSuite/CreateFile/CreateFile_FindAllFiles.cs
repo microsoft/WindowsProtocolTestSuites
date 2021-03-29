@@ -169,6 +169,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             Site.Assert.AreEqual(".", Encoding.Unicode.GetString(directoryInformation[0].FileName), "FileName of the first entry should be \".\".");
             Site.Assert.AreEqual("..", Encoding.Unicode.GetString(directoryInformation[1].FileName), "FileName of the second entry should be \"..\".");
             Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
             return directoryInformation;
         }
@@ -179,7 +181,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 foreach (var info in directoryInfo)
                 {
-                    if (((((long)info.FileCommonDirectoryInformation.ChangeTime.dwHighDateTime) << 32) | info.FileCommonDirectoryInformation.ChangeTime.dwLowDateTime) < 0)
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.ChangeTime))
                     {
                         return false;
                     }
@@ -188,6 +190,49 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             return true;
         }
+
+        private bool IsLastAccessTimeValid(FileBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastAccessTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastWriteTimeValid(FileBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastWriteTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IfTimeIsGreaterThanOrEqualToZero(FILETIME time)
+        {
+            if (((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }
