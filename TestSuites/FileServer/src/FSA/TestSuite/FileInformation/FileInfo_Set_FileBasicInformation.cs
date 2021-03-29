@@ -114,6 +114,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
             }
+            else if (timestampType.Equals(TimestampType.LastAccessTime) && this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                this.TestSite.Assume.Inconclusive("The FAT32 file system is inconclusive for Open.File.LastAccessTime.");
+            }
             else
             {
                 //Create File
