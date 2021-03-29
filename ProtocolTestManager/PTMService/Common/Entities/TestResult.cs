@@ -1,19 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Common.Entities
 {
-    public enum TestResultState
-    {
-        Created,
-        Running,
-        Failed,
-        Finished,
-    }
-
     public class TestResult
     {
         [Key]

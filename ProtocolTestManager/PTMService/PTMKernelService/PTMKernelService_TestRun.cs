@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.Linq;
 
@@ -10,17 +11,51 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal partial class PTMKernelService
     {
+        public ITestRun[] QueryTestRuns(int pageSize, int pageIndex, out int totalPage)
+        {
+            using var instance = ScopedServiceFactory.GetInstance();
+
+            var pool = instance.ScopedServiceInstance;
+
+            var repo = pool.Get<TestResult>();
+
+            var all = repo.Get(q => q).Select(item => GetTestRunInternal(item.Id, item));
+
+            int count = all.Count();
+
+            if (count % pageSize == 0)
+            {
+                totalPage = count / pageSize;
+            }
+            else
+            {
+                totalPage = count / pageSize + 1;
+            }
+
+            var result = all.Skip(pageSize * pageIndex).Take(pageSize);
+
+            return result.ToArray();
+        }
+
         public ITestRun GetTestRun(int id)
+        {
+            return GetTestRunInternal(id, null);
+        }
+
+        private ITestRun GetTestRunInternal(int id, TestResult testResult)
         {
             if (!TestRunPool.ContainsKey(id))
             {
-                using var instance = ScopedServiceFactory.GetInstance();
+                if (testResult == null)
+                {
+                    using var instance = ScopedServiceFactory.GetInstance();
 
-                var pool = instance.ScopedServiceInstance;
+                    var pool = instance.ScopedServiceInstance;
 
-                var repo = pool.Get<TestResult>();
+                    var repo = pool.Get<TestResult>();
 
-                var testResult = repo.Get(q => q.Where(item => item.Id == id)).First();
+                    testResult = repo.Get(q => q.Where(item => item.Id == id)).First();
+                }
 
                 var configuration = GetConfiguration(testResult.TestSuiteConfigurationId);
 

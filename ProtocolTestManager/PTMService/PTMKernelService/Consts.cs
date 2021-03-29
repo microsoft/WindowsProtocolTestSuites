@@ -39,4 +39,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public const string AdapterScriptDirectoryAttributeName = "scriptdir";
     }
+
+    public static class TestRunConsts
+    {
+        public const string TestCaseListFile = "list.json";
+    }
 }

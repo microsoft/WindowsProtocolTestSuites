@@ -1,14 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace PTMService.Controllers
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using System;
+using System.Linq;
+
+namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
     /// <summary>
     /// Test result controller.
     /// </summary>
     [Route("api/testresult")]
     [ApiController]
-    public class TestResultController : ControllerBase
+    public class TestResultController : PTMServiceControllerBase
     {
+        /// <summary>
+        /// Constructor of test result controller.
+        /// </summary>
+        /// <param name="ptmKernelService">The PTM kernel service.</param>
+        public TestResultController(IPTMKernelService ptmKernelService)
+            : base(ptmKernelService)
+        {
+        }
+
         /// <summary>
         /// List response.
         /// </summary>
@@ -22,7 +38,7 @@ namespace PTMService.Controllers
             /// <summary>
             /// The test results.
             /// </summary>
-            public TestResult[] TestResults { get; set; }
+            public TestResultOverview[] TestResults { get; set; }
         }
 
         /// <summary>
@@ -34,18 +50,36 @@ namespace PTMService.Controllers
         [HttpGet]
         public ListResponse List(int max, int page)
         {
-            return new ListResponse
+            if (max <= 0)
             {
-                PageCount = 10,
-                TestResults = new TestResult[]
-                {
-                    new TestResult
-                    {
-                        Id = 321,
-                        ConfigurationId = 1234,
-                    },
-                },
+                throw new ArgumentOutOfRangeException(nameof(max));
+            }
+
+            if (page < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(page));
+            }
+
+            var items = PTMKernelService.QueryTestRuns(max, page, out int totalPage).Select(testRun => new TestResultOverview
+            {
+                Id = testRun.Id,
+                ConfigurationId = testRun.Configuration.Id,
+                Status = testRun.State,
+                Total = testRun.Total,
+                NotRun = testRun.NotRun,
+                Running = 0,
+                Passed = testRun.Passed,
+                Failed = testRun.Failed,
+                Inconclusive = testRun.Inconclusive,
+            }).ToArray();
+
+            var result = new ListResponse
+            {
+                PageCount = totalPage,
+                TestResults = items,
             };
+
+            return result;
         }
 
         /// <summary>
@@ -55,32 +89,47 @@ namespace PTMService.Controllers
         /// <returns>The test result.</returns>
         [Route("{id}")]
         [HttpGet]
-        public TestResult Get(int id)
+        public TestResultItem Get(int id)
         {
-            return new TestResult
+            var testRun = PTMKernelService.GetTestRun(id);
+
+            var status = testRun.GetRunningStatus();
+
+            var result = new TestResultItem
             {
-                Id = 321,
-                ConfigurationId = 1234,
-                NotRun = 55,
+                Overview = new TestResultOverview
+                {
+                    Id = id,
+                    ConfigurationId = testRun.Configuration.Id,
+                    Status = testRun.State,
+                    Total = status.Count(),
+                    NotRun = status.Where(i => i.Value.State == TestCaseState.NotRun).Count(),
+                    Running = status.Where(i => i.Value.State == TestCaseState.Running).Count(),
+                    Passed = status.Where(i => i.Value.State == TestCaseState.Passed).Count(),
+                    Failed = status.Where(i => i.Value.State == TestCaseState.Failed).Count(),
+                    Inconclusive = status.Where(i => i.Value.State == TestCaseState.Inconclusive).Count(),
+                },
+                Results = status.Values.ToArray(),
             };
+
+            return result;
         }
 
         /// <summary>
         /// Get result of a specific test case.
         /// </summary>
         /// <param name="id">The Id of test result.</param>
-        /// <param name="testCaseId">The Id of test case.</param>
-        /// <returns>The test case result.</returns>
+        /// <param name="testCaseName">The name of test case.</param>
+        /// <returns>The test case detail.</returns>
         [Route("{id}/testcase")]
         [HttpGet]
-        public TestCaseResult GetTestCaseResult(int id, int testCaseId)
+        public TestCaseResult GetTestCaseResult(int id, string testCaseName)
         {
-            return new TestCaseResult
-            {
-                Id = 12345,
-                Name = "CreateFileTestCaseS8",
-                State = TestCaseState.Passed,
-            };
+            var testRun = PTMKernelService.GetTestRun(id);
+
+            var result = testRun.GetTestCaseDetail(testCaseName);
+
+            return result;
         }
     }
 }

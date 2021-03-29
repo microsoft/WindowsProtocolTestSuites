@@ -1,6 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using System.Collections.Generic;
+
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
     /// <summary>
@@ -24,8 +27,51 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         IStorageNode StorageRoot { get; }
 
         /// <summary>
+        /// The state of test run.
+        /// </summary>
+        TestResultState State { get; }
+
+        /// <summary>
+        /// Number of total test cases.
+        /// </summary>
+        int? Total { get; }
+
+        /// <summary>
+        /// Number of total not run cases.
+        /// </summary>
+        int? NotRun { get; }
+
+        /// <summary>
+        /// Number of passed test cases.
+        /// </summary>
+        int? Passed { get; }
+
+        /// <summary>
+        /// Number of failed test cases.
+        /// </summary>
+        int? Failed { get; }
+
+        /// <summary>
+        /// Number of inconclusive test cases.
+        /// </summary>
+        int? Inconclusive { get; }
+
+        /// <summary>
         /// Abort the test run.
         /// </summary>
         void Abort();
+
+        /// <summary>
+        /// Get running status.
+        /// </summary>
+        /// <returns>The running status.</returns>
+        IDictionary<string, TestCaseOverview> GetRunningStatus();
+
+        /// <summary>
+        /// Get test case detail.
+        /// </summary>
+        /// <param name="name">The name of test case.</param>
+        /// <returns>The test case detail.</returns>
+        TestCaseResult GetTestCaseDetail(string name);
     }
 }

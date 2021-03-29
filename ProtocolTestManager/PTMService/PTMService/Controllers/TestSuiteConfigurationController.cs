@@ -4,10 +4,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers;
 using System.Linq;
 
-namespace PTMService.Controllers
+namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
     /// <summary>
     /// Test suite configuration controller.

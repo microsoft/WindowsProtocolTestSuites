@@ -67,6 +67,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         #region Test run related members.
 
         /// <summary>
+        /// Query test runs.
+        /// </summary>
+        /// <param name="pageSize">The maximum item number per page.</param>
+        /// <param name="pageIndex">The page number.</param>
+        /// <param name="totalPage">Total page number.</param>
+        /// <returns>The test runs.</returns>
+        ITestRun[] QueryTestRuns(int pageSize, int pageIndex, out int totalPage);
+
+        /// <summary>
         /// Get a test run.
         /// </summary>
         /// <param name="id">The test run Id.</param>

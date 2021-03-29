@@ -3,9 +3,8 @@
 
 using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using System;
 
-namespace PTMService.Controllers
+namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
     public class TestSuite
     {
@@ -85,54 +84,10 @@ namespace PTMService.Controllers
         public PropertySetItem[] Items { get; set; }
     }
 
-    public enum TestCaseState
+    public class TestResultItem
     {
-        Passed,
-        Failed,
-        Inconclusive,
-    }
+        public TestResultOverview Overview { get; set; }
 
-    public class TestCaseResult
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public TestCaseState State { get; set; }
-
-        public string Output { get; set; }
-    }
-
-    public enum TestResultState
-    {
-        Created,
-        Running,
-        Failed,
-        Finished,
-    }
-
-    public class TestResult
-    {
-        public int Id { get; set; }
-
-        public TestResultState Status { get; set; }
-
-        public int ConfigurationId { get; set; }
-
-        public DateTime? StartTime { get; set; }
-
-        public DateTime? EndTime { get; set; }
-
-        public int? Total { get; set; }
-
-        public int? NotRun { get; set; }
-
-        public int? Passed { get; set; }
-
-        public int? Failed { get; set; }
-
-        public int? Inconclusive { get; set; }
-
-        public TestCaseResult Results { get; set; }
+        public TestCaseOverview[] Results { get; set; }
     }
 }
