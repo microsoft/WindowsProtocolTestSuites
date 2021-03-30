@@ -55,7 +55,7 @@ export function FilterTestCase(props: any) {
                 <hr style={{ border: "1px solid #d9d9d9" }} />
                 <Stack>
                     <Stack horizontal>
-                        <Stack tokens={{ childrenGap: 10 }}>
+                        <Stack style={{ minWidth: winSize.width * 0.25, }} tokens={{ childrenGap: 10 }}>
                             <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
                         </Stack>
                         <div style={{ width: 25 }} />
