@@ -340,11 +340,11 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 160 test cases in total:
+There are 166 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 8 | 45 (21) |
+| Scenarios for FileInformation | 8 | 47 (21) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -1911,6 +1911,26 @@ There are 343 test cases in total:
 | | Create file into directory |
 | | Query CreationTime |
 | | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime value less than -2 is handled by different file systems for data file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set CreationTime to -2 |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime value less than -2 is handled by different file systems for directory using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set CreationTime to -2 |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
 
 ##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Zero
 
