@@ -17,22 +17,14 @@ type TreePanelProps = {
 const getGroup = (rules: Rule[]): Node[] => {
     return rules.map(rule => {
         if (rule.Rules) {
-            return { value: rule.Name, label: rule.Name, children: getGroup(rule.Rules) }
+            return {className:"treeNode", value: rule.Name, label: rule.DisplayName, children: getGroup(rule.Rules) }
         }
         if (rule.Categories) {
             let nodes = rule.Categories.map(curr => { return { value: curr, label: curr } })
-            return { value: rule.Name, label: rule.Name, children: nodes }
+            return {className:"treeNode", value: rule.Name, label: rule.DisplayName, children: nodes }
         }
-        return { value: rule.Name, label: rule.Name }
+        return {className:"treeNode", value: rule.Name, label: rule.DisplayName }
     })
-}
-const createGroupItems = (rules: Rule[]): Node[] => {
-    let groups: Node[] = getGroup(rules)
-    return [
-        {
-            value: 'all', label: '(Select all)', children: groups
-        }
-    ]
 }
 
 const getItems = (rules: Rule[]): string[] => {
@@ -52,7 +44,7 @@ const getExpanded = (rules: Rule[]): string[] => {
 }
 
 export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
-    let data = createGroupItems(props.rules);
+    let data = getGroup(props.rules);
     let expandedNode = getExpanded(props.rules);
     const [checked, setChecked] = useState<Array<string>>(props.checked);
     const [expanded, setExpanded] = useState<Array<string>>(expandedNode);

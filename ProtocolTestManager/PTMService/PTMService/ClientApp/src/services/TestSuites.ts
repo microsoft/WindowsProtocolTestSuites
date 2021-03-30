@@ -3,6 +3,7 @@
 
 import { RequestMethod, FetchService } from ".";
 import { TestSuiteActions, TestSuitesActionTypes } from "../actions/TestSuitesActions";
+import { FilterTestCaseActions, FilterTestCaseActionTypes } from "../actions/FilterTestCaseAction";
 import { AppThunkAction } from "../store/configureStore";
 
 
@@ -16,6 +17,18 @@ export const TestSuitesDataSrv = {
             onRequest: TestSuiteActions.getTestSuitesAction_Request,
             onComplete: TestSuiteActions.getTestSuitesAction_Success,
             onError: TestSuiteActions.getTestSuitesAction_Failure
+        });
+    },
+    getTestSuiteTestCases: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+        const state = getState();
+        const configurationId = state.configurations.selectedConfiguration?.Id
+        await FetchService({
+            url: `api/testsuite/${configurationId}`,
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: FilterTestCaseActions.getTestSuiteTestCasesAction_Failure,
+            onComplete: FilterTestCaseActions.getTestSuiteTestCasesAction_Success,
+            onError: FilterTestCaseActions.getTestSuiteTestCasesAction_Failure
         });
     }
 };

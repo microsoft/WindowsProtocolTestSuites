@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../store/configureStore';
 import { RuleListPanel } from '../components/RuleListPanel';
 import { ConfigurationsDataSrv } from '../services/Configurations';
+import { FilterTestCaseActions } from "../actions/FilterTestCaseAction";
+import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectedRuleGroup } from "../model/RuleGroup";
 
 import { PrimaryButton, Stack } from '@fluentui/react';
@@ -24,8 +26,10 @@ export function FilterTestCase(props: any) {
 
     const dispatch = useDispatch();
     const filterInfo = useSelector((state: AppState) => state.filterInfo);
+    
     useEffect(() => {
-        dispatch(ConfigurationsDataSrv.getRuleGroups());
+        dispatch(ConfigurationsDataSrv.getRules());
+        dispatch(TestSuitesDataSrv.getTestSuiteTestCases());
     }, [dispatch])
 
     const onPreviousButtonClick = () => {
@@ -33,17 +37,19 @@ export function FilterTestCase(props: any) {
     };
 
     const onNextButtonClick = () => {
-        wizardProps.nextStep();
+        dispatch(ConfigurationsDataSrv.setRules((data: any) => {
+            wizardProps.nextStep();
+        }));
     };
    
-    const checkedAction = (data: SelectedRuleGroup) => {
-        dispatch(ConfigurationsDataSrv.setSelectedRule(data));       
+    const checkedAction = (data: SelectedRuleGroup) => {        
+        dispatch(FilterTestCaseActions.setSelectedRuleAction(data));
     }
     return (
         <StepPanel leftNav={wizard} isLoading={filterInfo.isLoading} errorMsg={filterInfo.errorMsg} >
             <div >
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
-                    <div style={{ width: 350 }}>Filter</div>
+                    <div style={{ width: winSize.width * 0.25, }}>Filter</div>
                     <div>Selected Test Cases {filterInfo.listSelectedCases?.length}</div>
                 </Stack>
                 <hr style={{ border: "1px solid #d9d9d9" }} />
@@ -63,9 +69,9 @@ export function FilterTestCase(props: any) {
             <div className='buttonPanel'>
                 <Stack
                     horizontal
-                    horizontalAlign="end" tokens={StackGap10} style={{ padding: 20 + 'px' }}>
-                    <PrimaryButton onClick={() => onPreviousButtonClick()}>Previous</PrimaryButton>
-                    <PrimaryButton onClick={() => onNextButtonClick()}>Next</PrimaryButton>
+                    horizontalAlign="end" tokens={StackGap10}>
+                    <PrimaryButton onClick={() => onPreviousButtonClick()} disabled={filterInfo.isPosting}>Previous</PrimaryButton>
+                    <PrimaryButton onClick={() => onNextButtonClick()} disabled={filterInfo.isPosting}>Next</PrimaryButton>
                 </Stack>
             </div>
         </StepPanel>
