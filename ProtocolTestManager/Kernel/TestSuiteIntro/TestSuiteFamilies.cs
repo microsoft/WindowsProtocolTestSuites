@@ -145,7 +145,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         testsuite.TestSuiteVersion = configItem.Version;
                     }
 
-                    string lastProfileFile = Path.Combine(
+                    string lastProfileFile = testsuite.TestSuiteVersion == null
+                        ? null
+                        : Path.Combine(
                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                            "Protocol Test Manager",
                            testsuite.TestSuiteName,
