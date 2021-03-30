@@ -17,18 +17,18 @@ import { PropertyGroupsDataSrv } from '../services/PropertyGroups';
 import { AppState } from '../store/configureStore';
 
 export function ConfigureTestCase(props: StepWizardProps) {
-    const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const navSteps = getNavSteps(wizardProps);
-    const wizard = WizardNavBar(wizardProps, navSteps);
-    const winSize = useWindowSize();
-
     const dispatch = useDispatch();
+    const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
 
     useEffect(() => {
         dispatch(PropertyGroupsDataSrv.getPropertyGroups());
     }, [dispatch]);
 
-    const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
+    const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
+    const navSteps = getNavSteps(wizardProps, configureMethod);
+    const wizard = WizardNavBar(wizardProps, navSteps);
+    const winSize = useWindowSize();
 
     const onPropertyValueChange = (updatedProperty: Property) => {
         dispatch(PropertyGroupsActions.updatedEditingPropertyGroupAction(updatedProperty));
@@ -61,12 +61,12 @@ export function ConfigureTestCase(props: StepWizardProps) {
                         <div style={{ paddingLeft: winSize.width * 0.13, fontSize: 'small', fontWeight: 'normal', alignSelf: 'center' }}>*The value is modified compared to the latest run</div>
                     </Stack>
                     <Stack horizontal>
-                        <Stack style={{ paddingTop: 20, width: winSize.width * 0.16, height: winSize.height - 160, overflowY: 'auto' }} tokens={{ childrenGap: 20 }} >
+                        <Stack style={{ paddingTop: 20, width: 220, height: winSize.height - 160, overflowY: 'auto' }} tokens={{ childrenGap: 20 }} >
                             {
                                 propertyGroups.propertyGroups.map((propertyGroup, index) => {
                                     return (
                                         <div style={{ alignSelf: 'start' }}>
-                                            <Link style={{ fontSize: 'x-large', fontWeight: 'bold' }}
+                                            <Link key={index} style={{ fontSize: 'large', fontWeight: 'bold' }}
                                                 disabled={propertyGroups.editingPropertyGroupIndex === index}
                                                 onClick={() => onEditingPropertyGroupChange(index)}>
                                                 {propertyGroup.Name}

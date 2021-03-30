@@ -20,6 +20,7 @@ export function ConfigureAdapter(props: StepWizardProps) {
     const dispatch = useDispatch();
     const configuration = useSelector((state: AppState) => state.configurations);
     const adapters = useSelector((state: AppState) => state.configureAdapter);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
 
     useEffect(() => {
         if (configuration.selectedConfiguration) {
@@ -28,7 +29,7 @@ export function ConfigureAdapter(props: StepWizardProps) {
     }, [dispatch, configuration.selectedConfiguration])
 
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const navSteps = getNavSteps(wizardProps);
+    const navSteps = getNavSteps(wizardProps, configureMethod);
     const wizard = WizardNavBar(wizardProps, navSteps);
     const winSize = useWindowSize();
 

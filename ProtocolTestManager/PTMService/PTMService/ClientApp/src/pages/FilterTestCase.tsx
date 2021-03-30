@@ -18,12 +18,14 @@ import { PrimaryButton, Stack } from '@fluentui/react';
 export function FilterTestCase(props: any) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
 
-    const navSteps = getNavSteps(wizardProps);
+    const dispatch = useDispatch();
+    const filterInfo = useSelector((state: AppState) => state.filterInfo);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
+
+    const navSteps = getNavSteps(wizardProps, configureMethod);
     const wizard = WizardNavBar(wizardProps, navSteps);
     const winSize = useWindowSize();
 
-    const dispatch = useDispatch();
-    const filterInfo = useSelector((state: AppState) => state.filterInfo);
     useEffect(() => {
         dispatch(ConfigurationsDataSrv.getRuleGroups());
     }, [dispatch])
@@ -35,9 +37,9 @@ export function FilterTestCase(props: any) {
     const onNextButtonClick = () => {
         wizardProps.nextStep();
     };
-   
+
     const checkedAction = (data: SelectedRuleGroup) => {
-        dispatch(ConfigurationsDataSrv.setSelectedRule(data));       
+        dispatch(ConfigurationsDataSrv.setSelectedRule(data));
     }
     return (
         <StepPanel leftNav={wizard} isLoading={filterInfo.isLoading} errorMsg={filterInfo.errorMsg} >
