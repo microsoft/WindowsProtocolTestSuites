@@ -27,6 +27,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Query FileBasicInformation on directory file and check if creation time is valid")]
+        public void FileInfo_Query_FileBasicInformation_File_CreationTime_Negative()
+        {
+            TestCreationTimeNegative(FileType.DataFile);
+        }
+
+        [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.QueryFileInformation)]
@@ -80,6 +91,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         public void FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo()
         {
             TestCreationTimeMinusTwo(FileType.DirectoryFile);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Query FileBasicInformation on directory file and check if creation time is valid")]
+        public void FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative()
+        {
+            TestCreationTimeNegative(FileType.DirectoryFile);
         }
 
         #endregion
@@ -155,15 +177,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Testing file system behavior to -2 timestamp value
             //[MS-FSCC] 6 Appendix B: Product Behavior <96>,<97>,<98>,<99>
             string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
-
-            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
-            {
-                this.TestSite.Assume.Inconclusive("ReFS is inconclusive with -2 timestamp value.");
-            }
-            else if (this.fsaAdapter.FileSystem != FileSystem.NTFS
+            if ((this.fsaAdapter.FileSystem != FileSystem.NTFS
                    || Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_NTFS), operatingSystem))
+                && (this.fsaAdapter.FileSystem != FileSystem.REFS
+                   || Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_REFS), operatingSystem)))
             {
-                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
+                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS. See FSCC 96> Section 2.4.7 for supported Operating System");
             }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
@@ -213,7 +232,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 "Creation time is never updated in response to file system calls such as read and write.");
         }
 
-        private void CreateFile(FileType fileType, string fileName)
+        private void TestCreationTimeNegative(FileType fileType)
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+
+            //Step 1: Create File
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString() + " with FileAccess.FILE_WRITE_ATTRIBUTES");
+
+            string fileName = this.fsaAdapter.ComposeRandomFileName(8);
+            CreateFile(fileType, fileName);
+
+            //Set value less than -2
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Set value to -3");
+            SetCreationTime(-3);
+        }
+
+            private void CreateFile(FileType fileType, string fileName)
         {
             MessageStatus status = this.fsaAdapter.CreateFile(
                 fileName,
