@@ -134,6 +134,8 @@
             * [FileInfo_Query_FileBasicInformation_File_CreationTime_Zero](#FileInfo_Query_FileBasicInformation_File_CreationTime_Zero)
             * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo)
             * [FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative)
             * [FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
@@ -556,7 +558,7 @@ There are 343 test cases in total:
 | | Test coverage:|
 | | FileInfoClass: FileBasicInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, FileIdGlobalTxDirectoryInformation|
 | | If supported, the Creation is set to current system time when file is created.|
-| | If supported, the CreationTime is not creation time is never updated in response to file system calls such as read and write.|
+| | If supported, the CreationTime is never updated in response to file system calls such as read and write.|
 | Message Sequence| CreateFile.|
 | | Verify CreationTime is set to current system time|
 | | Modify file|
