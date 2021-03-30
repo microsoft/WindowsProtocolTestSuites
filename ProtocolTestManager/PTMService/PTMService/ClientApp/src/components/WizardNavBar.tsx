@@ -75,7 +75,7 @@ export const CompleteStep = styled.div`
         padding-Top: 20px;
         position: relative;
         cursor: pointer;
-        color: ${props => props.color};
+        color: #389e0d;
         &:before {
             content: '✔';
             color: #092b00;
@@ -93,7 +93,7 @@ export const CompleteStep = styled.div`
 export const RunningStep = styled.div`
     padding-Top: 20px;
     position: relative;
-    color: ${props => props.color};
+    color: #1890ff;
     &:before {
         content: '▶';
         color: #003a8c;
@@ -111,7 +111,7 @@ export const RunningStep = styled.div`
 export const NotStartStep = styled.div`
     padding-Top: 20px;
     position: relative;
-    color: ${props => props.color};
+    color: #bfbfbf;
     &:before {
         content: '';
         display: block;
