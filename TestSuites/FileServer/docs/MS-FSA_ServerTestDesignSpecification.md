@@ -135,7 +135,7 @@
             * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo)
             * [FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo)
             * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative)
-            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative)
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_File_CreationTime_Negative)
             * [FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
@@ -557,8 +557,8 @@ There are 343 test cases in total:
 | | Test object: DataFile, DirectoryFile|
 | | Test coverage:|
 | | FileInfoClass: FileBasicInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, FileIdGlobalTxDirectoryInformation|
-| | If supported, the Creation is set to current system time when file is created.|
-| | If supported, the CreationTime is never updated in response to file system calls such as read and write.|
+| | If supported, CreationTime is set to current system time when file is created.|
+| | If supported, CreationTime is never updated in response to file system calls such as read and write.|
 | Message Sequence| CreateFile.|
 | | Verify CreationTime is set to current system time|
 | | Modify file|
@@ -1921,7 +1921,7 @@ There are 343 test cases in total:
 | Description| To test if CreationTime value less than -2 is handled by different file systems for data file using FileBasicInformation|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DataFile).|
-| | Set CreationTime to -2 |
+| | Set CreationTime to -3 |
 | | Verify status returned should be **STATUS_INVALID_PARAMETER** |
 
 ##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative
@@ -1931,7 +1931,7 @@ There are 343 test cases in total:
 | Description| To test if CreationTime value less than -2 is handled by different file systems for directory using FileBasicInformation|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
-| | Set CreationTime to -2 |
+| | Set CreationTime to -3 |
 | | Verify status returned should be **STATUS_INVALID_PARAMETER** |
 
 ##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Zero
