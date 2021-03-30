@@ -1914,26 +1914,6 @@ There are 343 test cases in total:
 | | Query CreationTime |
 | | Verify CreationTime was not changed |
 
-##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Negative
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if CreationTime value less than -2 is handled by different file systems for data file using FileBasicInformation|
-| | File information class: FileBasicInformation|
-| Message Sequence| CreateFile (DataFile).|
-| | Set CreationTime to -3 |
-| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
-
-##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if CreationTime value less than -2 is handled by different file systems for directory using FileBasicInformation|
-| | File information class: FileBasicInformation|
-| Message Sequence| CreateFile (DirectoryFile).|
-| | Set CreationTime to -3 |
-| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
-
 ##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Zero
 
 | &#32;| &#32; |
@@ -1991,6 +1971,26 @@ There are 343 test cases in total:
 | | Create file into directory |
 | | Query CreationTime |
 | | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime value less than -2 is handled by different file systems for data file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set CreationTime to -3 |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime value less than -2 is handled by different file systems for directory using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set CreationTime to -3 |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
 
 ##### <a name="FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime
 
