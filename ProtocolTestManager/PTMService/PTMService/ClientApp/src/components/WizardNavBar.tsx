@@ -42,6 +42,7 @@ export const LeftPanel = styled.div`
     padding-left: 5px;
     background-color: #f1f1f1;
     font-size:larger;
+    font-weight: 500;
 `;
 
 export const RightPanel = styled.div`
