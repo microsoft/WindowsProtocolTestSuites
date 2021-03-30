@@ -1251,12 +1251,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         private void UpdateNegotiateContext(CompressionAlgorithm[] compressionAlgorithms, Smb2NegotiateResponsePacket response)
         {
-            // If CompressionAlgorithmCount is zero, the client MUST return an error to the calling application.
-            if (response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 0)
-            {
-                throw new InvalidOperationException("CompressionAlgorithmCount should not be zero!");
-            }
-
             // If the length of the negotiate context is greater than DataLength of the negotiate context, the client MUST return an error to the calling application.
             if (response.NegotiateContext_COMPRESSION.Value.GetDataLength() > response.NegotiateContext_COMPRESSION.Value.Header.DataLength)
             {

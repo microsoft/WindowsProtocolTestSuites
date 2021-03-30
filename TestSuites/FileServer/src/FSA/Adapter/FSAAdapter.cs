@@ -54,8 +54,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isObjectIdIoCtlRequestSupported;
         private bool isOpenHasManageVolumeAccessSupported;
         private bool isStreamRenameSupported;
-        private bool isMarkHandleSupported;
-        private bool isRedundantMedia;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -82,7 +80,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private FileAccess gOpenGrantedAccess;
         private StreamType gStreamType;
         private List<string> activeTDIs;
-        private uint numberOfDataCopies;
         public bool Is64bitFileIdSupported;
         public bool IsChangeTimeSupported;
         // Used to generate random file names.
@@ -230,21 +227,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
-        public bool IsMarkHandleSupported
-        {
-            get { return isMarkHandleSupported; }
-        }
-
-        public bool IsRedundantMedia
-        {
-            get { return isRedundantMedia; }
-        }
-
-        public uint NumberOfDataCopies
-        {
-            get { return numberOfDataCopies; }
-        }
-
         public string UncSharePath
         {
             get
@@ -340,8 +322,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isObjectIdIoCtlRequestSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectIdIoCtlRequest").Contains(this.fileSystem.ToString());
             this.isOpenHasManageVolumeAccessSupported = testConfig.GetProperty("WhichFileSystemSupport_OpenHasManageVolumeAccess").Contains(this.fileSystem.ToString());
             this.isStreamRenameSupported = testConfig.GetProperty("WhichFileSystemSupport_StreamRename").Contains(this.fileSystem.ToString());
-            this.isMarkHandleSupported = testConfig.GetProperty("WhichFileSystemSupport_MarkHandle").Contains(this.fileSystem.ToString());
-            this.isRedundantMedia = testConfig.GetProperty("WhichFileSystemSupport_RedundantStorage").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -359,7 +339,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
             this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
             this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
-            this.numberOfDataCopies = uint.Parse(testConfig.GetProperty("NumberOfDataCopies"));
 
             TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCComputerName = testConfig.DCServerName;
             TestTools.StackSdk.Security.KerberosLib.KerberosContext.KDCPort = testConfig.KDCPort;
@@ -963,9 +942,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         /// <param name="fileType">An Open of a DataFile or DirectoryFile.</param>
         /// <param name="openStream">To decide if set to DataStream and DirectoryStream according to fileType. Set to FALSE for using StreamType.NULL.</param>
-        /// <param name="isIntermediateBufferDisabled">To decide if the file is opened for cached IO operations. Works with DataStream files only</param>
         /// <returns></returns>
-        public MessageStatus CreateFile(FileType fileType, bool openStream, bool isIntermediateBufferDisabled = false)
+        public MessageStatus CreateFile(FileType fileType, bool openStream)
         {
             MessageStatus returnedStatus;
             switch (fileType)
@@ -973,7 +951,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 case FileType.DataFile:
                     returnedStatus = CreateFile(
                         FileAttribute.NORMAL,
-                        isIntermediateBufferDisabled ? CreateOptions.NO_INTERMEDIATE_BUFFERING | CreateOptions.NON_DIRECTORY_FILE : CreateOptions.NON_DIRECTORY_FILE,
+                        CreateOptions.NON_DIRECTORY_FILE,
                         openStream ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.NULL,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
@@ -3034,36 +3012,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         #endregion
 
-        #region 2.1.5.9.19 FSCTL_MARK_HANDLE
-        /// <summary>
-        /// Implementation of FSCTL_MARK_HANDLE
-        /// </summary>
-        /// <returns>An NTSTATUS code that specifies the result.</returns>
-        public MessageStatus FsCtlMarkHandle(uint copyNumber = 0, bool shouldReadCopy = false)
-        {
-            FsccFsctlMarkHandleRequestPacket fsccPacket = new FsccFsctlMarkHandleRequestPacket();
-
-            FSCTL_MARK_HANDLE_INPUT markHandleRequest = new FSCTL_MARK_HANDLE_INPUT
-            {
-                CopyNumber = copyNumber,
-                Unused = new byte[4],
-                VolumeHandle = new byte[8],
-                HandleInfo = shouldReadCopy ? FSCTL_MARK_HANDLE_INPUT_HANDLE_INFO_FLAGS.MARK_HANDLE_READ_COPY :
-                    FSCTL_MARK_HANDLE_INPUT_HANDLE_INFO_FLAGS.MARK_HANDLE_NOT_READ_COPY,
-                Reserved = 0x00000000
-            };
-            fsccPacket.Payload = markHandleRequest;
-
-            MessageStatus returnedStatus = this.transAdapter.IOControl(
-                (uint)FsControlCommand.FSCTL_MARK_HANDLE,
-                0,
-                fsccPacket.ToBytes(),
-                out var outputBuffer);
-
-            return returnedStatus;
-        }
-        #endregion
-
         #region 2.1.5.9.24   FSCTL_READ_FILE_USN_DATA
 
         /// <summary>
@@ -4830,7 +4778,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             bool isReturnStatus = false;
             List<byte> byteList = new List<byte>();
-            FILE_MODE_INFORMATION fileInfo = new FILE_MODE_INFORMATION();
+            FileModeInformation fileInfo = new FileModeInformation();
 
             fileInfo.Mode = (Mode_Values)inputMode;
             byteList.AddRange(BitConverter.GetBytes((uint)fileInfo.Mode));

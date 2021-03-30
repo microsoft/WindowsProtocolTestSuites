@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTestCases.QueryDirectory
 {
@@ -23,6 +24,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         private FSAAdapter fsaAdapter;
         private const uint BytesToWrite = 1024;
         private const int FileNameLength = 20;
+        private const string DOS_STAR = "<";
+        private const string DOS_QM = ">";
+        private const string DOS_DOT = "\"";
+
         #endregion
 
         #region Class Initialization and Cleanup
@@ -190,7 +195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
                 status = this.fsaAdapter.CreateFile(
                     $"{dirName}\\{fileName}",
-                    (FileAttribute)0,
+                    FileAttribute.NORMAL,
                     CreateOptions.NON_DIRECTORY_FILE,
                     (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                     (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
@@ -269,6 +274,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0);
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, false);
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024);
+            Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
         }
 
         [TestMethod()]
@@ -290,6 +298,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, false);
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0);
+            Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
         }
 
         [TestMethod()]
@@ -310,6 +321,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileIdFullDirectoryInformation.");
 
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
+            Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+
             if (this.fsaAdapter.Is64bitFileIdSupported)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
@@ -379,6 +394,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
 
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+
             if (this.fsaAdapter.Is64bitFileIdSupported)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
@@ -739,7 +758,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName} under the directory {dirName}");
             status = this.fsaAdapter.CreateFile(
                 $"{dirName}\\{fileName}",
-                (FileAttribute)0,
+                FileAttribute.NORMAL,
                 CreateOptions.NON_DIRECTORY_FILE,
                 (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
                 (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
@@ -806,6 +825,319 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             return Encoding.Unicode.GetString(newShortNameBytes);
         }
+
+        /// <summary>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="fileNames">The File Names to be added to the directory. </param>
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="outputBuffer">The buffer containing the directory enumeration being returned. </param>
+        /// <param name="dirFileId">The fileid for the directory. </param>
+        /// Prepare before testing, including:
+        /// 1. creating a new directory
+        /// 2. creating a new file under the directory
+        /// 3. writing some content to the file
+        /// 4. closing the file to flush the data to the disk
+        /// Then send QueryDirectory with specified FileInfoClass to the server and return the outputBuffer.
+        /// </summary>
+        private void PrepareAndQueryDirectory(
+            FileInfoClass fileInfoClass,
+            List<string> fileNames,
+            string searchPattern,
+            out byte[] outputBuffer,
+            out FILEID dirFileId)
+        {
+            outputBuffer = null;
+            string dirName = this.fsaAdapter.ComposeRandomFileName(8);
+            uint treeId = 0;
+            ulong sessionId = 0;
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Step 1. Create a directory with file with name: {dirName} ");
+            MessageStatus status = CreateDirectory(dirName, out dirFileId, out treeId, out sessionId);
+
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Create should succeed.");
+
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Step 2. Create a Files in the {dirName} directory");
+            foreach (string fileName in fileNames)
+            {
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Create a file with name: {fileName} under the directory {dirName}");
+                status = this.fsaAdapter.CreateFile(
+                    $"{dirName}\\{fileName}",
+                    FileAttribute.NORMAL,
+                    CreateOptions.NON_DIRECTORY_FILE,
+                    (FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE),
+                    (ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE),
+                    CreateDisposition.OPEN_IF);
+                Site.Assert.AreEqual(
+                    MessageStatus.SUCCESS,
+                    status,
+                    $"Create should succeed.");
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Step 3. Query directory with {fileInfoClass} with wildcard ( {searchPattern} ) ");
+            status = this.fsaAdapter.QueryDirectory(dirFileId, treeId, sessionId, searchPattern, fileInfoClass, false, true, out outputBuffer);
+            Site.Assert.AreEqual(
+                MessageStatus.SUCCESS,
+                status,
+                $"Query directory should succeed.");
+        }
+
+        /// <summary>
+        /// <param name="count">The number of files to be created. </param>
+        /// Create n number of file names.
+        /// </summary>
+        private List<string> CreateRandomFileNames(
+            int count)
+        {
+            List<string> fileNames = new List<string>();
+
+            for (int i = 1; i <= count; i++)
+            {
+                fileNames.Add(this.fsaAdapter.ComposeRandomFileName(FileNameLength, ".txt", opt: CreateOptions.NON_DIRECTORY_FILE));
+            }
+
+            return fileNames;
+        }
+
+        /// <summary>
+        /// <param name="searchPattern">A Unicode string containing the file name pattern to match. </param>
+        /// <param name="fileInfoClass">The FileInfoClass to query. </param>
+        /// <param name="fileNames">The File Names to be added to the directory. </param>
+        /// Then send QueryDirectory with specified FileInfoClass to the server and return the outputBuffer.
+        /// </summary>
+        private byte[] QueryByWildCardAndFileInfoClass(
+            string searchPattern,
+            FileInfoClass fileInfoClass,
+            List<string> fileNames)
+        {
+            byte[] outputBuffer;
+            FILEID dirFileId;
+
+            PrepareAndQueryDirectory(fileInfoClass, fileNames, searchPattern, out outputBuffer, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4. Start to verify the from the Query Directory response.");
+
+            return outputBuffer;
+        }
+
+        private List<string> GetListFileInformation<T>(T[] fileInformation) where T: struct
+        {
+            Site.Log.Add(LogEntryKind.TestStep, "Step 4.1. Check if files returned exist in list of files created.");
+
+            List<string> fileInformationList = new List<string>();
+
+            foreach (T idata in fileInformation)
+            {
+                dynamic obj = idata;
+                fileInformationList.Add(Encoding.Unicode.GetString(obj.FileName));
+            }
+            return fileInformationList;
+        }
+
+        private bool IsChangeTimeValid(FileIdFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.ChangeTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastAccessTimeValid(FileIdFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastAccessTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastWriteTimeValid(FileIdFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastWriteTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsChangeTimeValid(FileIdBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.ChangeTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+        private bool IsLastAccessTimeValid(FileIdBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastAccessTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastWriteTimeValid(FileIdBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastWriteTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsChangeTimeValid(FileFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.ChangeTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastAccessTimeValid(FileFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastAccessTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastWriteTimeValid(FileFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastWriteTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsChangeTimeValid(FileDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.ChangeTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastAccessTimeValid(FileDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastAccessTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastWriteTimeValid(FileDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastWriteTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IfTimeIsGreaterThanOrEqualToZero(FILETIME time)
+        {
+            if (((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }

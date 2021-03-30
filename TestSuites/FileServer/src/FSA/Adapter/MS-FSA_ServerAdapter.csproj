@@ -39,7 +39,7 @@
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj" />
@@ -52,8 +52,6 @@
     <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
-    <PackageReference Include="System.Management" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
   </ItemGroup>
 </Project>

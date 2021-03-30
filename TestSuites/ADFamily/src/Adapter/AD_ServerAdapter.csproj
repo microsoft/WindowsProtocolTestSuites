@@ -248,7 +248,7 @@
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.3" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
     <PackageReference Include="System.DirectoryServices" Version="4.7.0" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.7.0" />
