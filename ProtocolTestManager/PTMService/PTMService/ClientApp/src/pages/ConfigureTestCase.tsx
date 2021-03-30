@@ -54,7 +54,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={propertyGroups.isLoading} errorMsg={propertyGroups.errorMsg}>
-                <Stack style={{ padding: 10 }}>
+                <Stack>
                     <Stack horizontal style={{ paddingBottom: 20 }}>
                         <div style={{ fontWeight: 'bold' }}>Groups</div>
                         <div style={{ paddingLeft: winSize.width * 0.10, fontWeight: 'bold' }}>{propertyGroups.editingPropertyGroup?.Name} Properties</div>
@@ -76,7 +76,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                                 })
                             }
                         </Stack>
-                        <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height - 160, overflowY: 'auto' }}>
+                        <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height - 150, overflowY: 'auto' }}>
                             {
                                 propertyGroups.editingPropertyGroup === undefined ?
                                     <LoadingPanel /> :
@@ -89,7 +89,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                             }
                         </div>
                     </Stack>
-                    <div style={{ borderTop: '1px solid #d9d9d9', backgroundColor: '#f5f5f5', paddingTop: 7, paddingRight: 45, height: 40 }}>
+                    <div className='buttonPanel'>
                         <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
                             <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={propertyGroups.isPosting} />
                             <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={propertyGroups.isPosting} />

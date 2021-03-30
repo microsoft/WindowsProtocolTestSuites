@@ -7,7 +7,7 @@ import { StackGap10 } from '../components/StackStyle';
 import { StepPanel } from '../components/StepPanel';
 import { useWindowSize } from '../components/UseWindowSize';
 import { HeaderMenuHeight, WizardNavBar } from '../components/WizardNavBar';
-import { getNavSteps } from '../model/DefaultNavSteps';
+import { getNavSteps, RunSteps } from '../model/DefaultNavSteps';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../store/configureStore';
 import { RuleListPanel } from '../components/RuleListPanel';
@@ -15,6 +15,7 @@ import { ConfigurationsDataSrv } from '../services/Configurations';
 import { SelectedRuleGroup } from "../model/RuleGroup";
 
 import { PrimaryButton, Stack } from '@fluentui/react';
+import { ConfigureMethod_AutoDetection } from './ConfigureMethod';
 export function FilterTestCase(props: any) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
 
@@ -31,7 +32,11 @@ export function FilterTestCase(props: any) {
     }, [dispatch])
 
     const onPreviousButtonClick = () => {
-        wizardProps.previousStep();
+        if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigureMethod_AutoDetection) {
+            wizardProps.previousStep();
+        } else {
+            wizardProps.goToStep(RunSteps.CONFIGURE_METHOD);
+        }
     };
 
     const onNextButtonClick = () => {
@@ -43,7 +48,7 @@ export function FilterTestCase(props: any) {
     }
     return (
         <StepPanel leftNav={wizard} isLoading={filterInfo.isLoading} errorMsg={filterInfo.errorMsg} >
-            <div >
+            <div>
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
                     <div style={{ width: 350 }}>Filter</div>
                     <div>Selected Test Cases {filterInfo.listSelectedCases?.length}</div>
@@ -55,7 +60,7 @@ export function FilterTestCase(props: any) {
                             <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
                         </Stack>
                         <div style={{ width: 25 }} />
-                        <Stack style={{ height: winSize.height - HeaderMenuHeight - 100, width: 100 + '%', overflowY: 'auto' }}>
+                        <Stack style={{ height: winSize.height - HeaderMenuHeight - 80, width: 100 + '%', overflowY: 'auto' }}>
                             {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
                         </Stack>
                     </Stack>
@@ -65,7 +70,7 @@ export function FilterTestCase(props: any) {
             <div className='buttonPanel'>
                 <Stack
                     horizontal
-                    horizontalAlign="end" tokens={StackGap10} style={{ padding: 20 + 'px' }}>
+                    horizontalAlign="end" tokens={StackGap10} >
                     <PrimaryButton onClick={() => onPreviousButtonClick()}>Previous</PrimaryButton>
                     <PrimaryButton onClick={() => onNextButtonClick()}>Next</PrimaryButton>
                 </Stack>

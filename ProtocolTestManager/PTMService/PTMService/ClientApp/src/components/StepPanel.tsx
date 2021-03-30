@@ -69,20 +69,19 @@ export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
         <div>
             {props.leftNav}
             <RightPanel>
-                <div>
-                    {
-                        showMessageBar ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div> : undefined
-                    }
-                    {
-                        < div >
-                            {
-                                props.isLoading ? <LoadingPanel /> : <div style={{ height: winSize.height - HeaderMenuHeight - (showMessageBar ? 50 : 0), overflowY: 'auto' }}>
+                {
+                    showMessageBar ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div> : undefined
+                }
+                {
+                    < div >
+                        {
+                            props.isLoading ? <LoadingPanel /> :
+                                <div style={{ height: winSize.height - HeaderMenuHeight - (showMessageBar ? 50 : 0), overflowY: 'auto' }}>
                                     {props.children}
                                 </div>
-                            }
-                        </div>
-                    }
-                </div>
+                        }
+                    </div>
+                }
             </RightPanel>
         </div >
 
