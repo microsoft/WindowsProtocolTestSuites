@@ -38,6 +38,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         string GetUserSid(string userName);
 
         /// <summary> 
+        /// Get the SID of a group from domain or local computer.
+        /// </summary>
+        /// <param name="groupName">Name of the queried group.</param>
+        /// <returns>The SDDL form of the group SID returned.</returns>
+        [MethodHelp("Get SID of a group from domain or local computer.")]
+        string GetGroupSid(string groupName);
+
+        /// <summary> 
         /// Get the memberships of a user from domain or local computer.
         /// </summary>
         /// <param name="userName">Name of the queried user.</param>

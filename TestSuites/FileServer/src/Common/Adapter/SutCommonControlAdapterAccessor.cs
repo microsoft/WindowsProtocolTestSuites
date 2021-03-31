@@ -93,10 +93,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <returns>SID of the group returned.</returns>
         public _SID GetGroupSid(string groupName)
         {
-            var groups = GetGroups();
-            var group = groups.Where(g => g.Name == groupName).FirstOrDefault();
+            var groupSidStr = sutCommonControlAdapter.GetGroupSid(groupName);
 
-            return group.Sid;
+            return new _SID(groupSidStr);
         }
 
         /// <summary> 

@@ -6,6 +6,10 @@
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SutCommonControlAdapter\GetGroupSid.ps1" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
@@ -22,6 +26,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SutCommonControlAdapter\GetUserMemberships.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SutCommonControlAdapter\GetGroupSid.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SutCommonControlAdapter\GetUserSid.ps1">

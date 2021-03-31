@@ -197,5 +197,39 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             _SID sid = DtypUtility.GetSidFromAccount(domainName, userName, adminName, adminPassword);
             return sid.ToString();
         }
+
+        public string GetGroupSid(string groupName)
+        {
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            string groupFqn = $"CN={groupName},CN=Users,{domainFqn}";
+            var groupSearchBase = domainFqn;
+            var groupSearchFilter = $"(distinguishedName={groupFqn})";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
+
+            _SID? groupSid = null;
+
+            LdapMessage groupSearchMessage = null;
+            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            {
+                if (groupSearchMessage is LdapSearchResult groupSearchResult)
+                {
+                    LdapEntry groupEntry = groupSearchResult.Entry;
+                    string groupMemberName = groupEntry.GetAttribute("name").StringValue;
+                    byte[] groupMemberSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
+                    groupSid = TypeMarshal.ToStruct<_SID>(groupMemberSidBinary);
+                }
+            }
+
+            return groupSid==null ? "sid not found." : groupSid.ToString();
+        }
     }
 }
