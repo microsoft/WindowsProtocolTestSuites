@@ -28,7 +28,7 @@ $commandForDomain = {
 
 	$domainUser = Get-ADUser -Filter "*" -SearchBase $userFqn | Select-Object -First 1
 
-	return $domainUser.SID.Value
+	return $domainUser.SID.Value ?? $domainUser.SID
 }
 
 $commandForLocalComputer = {
@@ -38,7 +38,7 @@ $commandForLocalComputer = {
 
 	$localUser = Get-LocalUser -Name $userName
 
-	return $localUser.SID.Value
+	return $localUser.SID.Value ?? $localUser.SID
 }
 
 try {

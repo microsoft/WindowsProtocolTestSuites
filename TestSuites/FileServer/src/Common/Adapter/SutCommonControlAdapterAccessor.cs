@@ -87,6 +87,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         /// <summary> 
+        /// Get the SID of a group from domain or local computer.
+        /// </summary>
+        /// <param name="groupName">Name of the queried group.</param>
+        /// <returns>SID of the group returned.</returns>
+        public _SID GetGroupSid(string groupName)
+        {
+            var groups = GetGroups();
+            var group = groups.Where(g => g.Name == groupName).FirstOrDefault();
+
+            return group.Sid;
+        }
+
+        /// <summary> 
         /// Get the Memberships of a user from domain or local computer.
         /// </summary>
         /// <param name="userName">Name of the queried user.</param>

@@ -29,6 +29,7 @@
   </Properties>
   <Adapters>
     <Adapter xsi:type="powershell" name="ISutCommonControlAdapter" scriptdir=".\SutCommonControlAdapter" />
+    <!--<Adapter xsi:type="managed" name="ISutCommonControlAdapter" scriptdir="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutCommonControlAdapter" />-->
     <Adapter xsi:type="managed" name="ISutProtocolControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutProtocolControlAdapter" />
   </Adapters>
 

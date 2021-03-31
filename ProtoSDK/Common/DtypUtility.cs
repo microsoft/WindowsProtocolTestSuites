@@ -873,7 +873,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             Match match = regex.Match(sddlString);
             if (!match.Success)
             {
-                throw new ArgumentException("The given sddl string is invalid.", "sddlString");
+                throw new ArgumentException(string.Format("The given sddl string {0} is invalid.", sddlString), "sddlString");
             }
             if (match.Groups["identifierAuthorityDec"].Success)
             {
