@@ -113,6 +113,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Smb21)]
         [TestCategory(TestCategories.LeaseV1)]
+        [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is designed to test whether server can handle LeaseV1 context with the same lease key")]
         public void Leasing_FileLeasingV1_SameLeaseKey()
         {
@@ -134,6 +135,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.LeaseV2)]
+        [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is designed to test whether server can handle LeaseV2 context with the same lease key")]
         public void Leasing_FileLeasingV2_SameLeaseKey()
         {

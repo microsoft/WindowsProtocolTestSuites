@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Try to create a directory end with backslash and expect success.")]
         public void CreateDirectory_EndWithBackSlash()
         {
@@ -75,6 +76,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Try to create a file with double backslash in the middle and expect failure.")]
         public void CreateFile_WithDoubleBackSlashInMiddle()
         {
