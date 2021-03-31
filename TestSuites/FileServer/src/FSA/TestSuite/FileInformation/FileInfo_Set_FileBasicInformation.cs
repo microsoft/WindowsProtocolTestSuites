@@ -34,9 +34,59 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
-        public void FileInfo_Set_FileBasicInformation_File_Positive()
+        public void FileInfo_Set_FileBasicInformation_File_LastWriteTime()
         {
-            FileInfo_Set_FileBasicInformation_Positive(FileType.DataFile);
+            FileInfo_Set_FileBasicInformation_Positive(FileType.DataFile, TimestampType.LastWriteTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_File_CreationTime()
+        {
+            FileInfo_Set_FileBasicInformation_Positive(FileType.DataFile, TimestampType.CreationTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_File_ChangeTime()
+        {
+            if (this.fsaAdapter.FileSystem != FileSystem.NTFS && this.fsaAdapter.FileSystem != FileSystem.REFS)
+            {
+                this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
+            }
+            else
+            {
+                FileInfo_Set_FileBasicInformation_Positive(FileType.DataFile, TimestampType.ChangeTime);
+            }
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on data file and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_File_LastAccessTime()
+        {
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                this.TestSite.Assume.Inconclusive("The FAT32 file system is inconclusive for Open.File.LastAccessTime.");
+            }
+            else
+            {
+                FileInfo_Set_FileBasicInformation_Positive(FileType.DataFile, TimestampType.LastAccessTime);
+            }
         }
 
         [TestMethod()]
@@ -58,9 +108,59 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
-        public void FileInfo_Set_FileBasicInformation_Dir_Positive()
+        public void FileInfo_Set_FileBasicInformation_Dir_LastWriteTime()
         {
-            FileInfo_Set_FileBasicInformation_Positive(FileType.DirectoryFile);
+            FileInfo_Set_FileBasicInformation_Positive(FileType.DirectoryFile, TimestampType.LastWriteTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_Dir_CreationTime()
+        {
+            FileInfo_Set_FileBasicInformation_Positive(FileType.DirectoryFile, TimestampType.CreationTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_Dir_ChangeTime()
+        {
+            if (this.fsaAdapter.FileSystem != FileSystem.NTFS && this.fsaAdapter.FileSystem != FileSystem.REFS)
+            {
+                this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
+            }
+            else
+            {
+                FileInfo_Set_FileBasicInformation_Positive(FileType.DirectoryFile, TimestampType.ChangeTime);
+            }
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on directory and check file system responds according to [MS-FSA] 2.1.5.14.2")]
+        public void FileInfo_Set_FileBasicInformation_Dir_LastAccessTime()
+        {
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                this.TestSite.Assume.Inconclusive("The FAT32 file system is inconclusive for Open.File.LastAccessTime.");
+            }
+            else
+            {
+                FileInfo_Set_FileBasicInformation_Positive(FileType.DirectoryFile, TimestampType.LastAccessTime);
+            }
         }
 
         #endregion
@@ -95,64 +195,51 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             TestFileAttributes(fileType, fileBasicInformation);
         }
 
-        private void FileInfo_Set_FileBasicInformation_Positive(FileType fileType)
+        private void FileInfo_Set_FileBasicInformation_Positive(FileType fileType, TimestampType timestampType)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
 
             //Step 1: SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION and verify that file timestamp is updated
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. SetFileInformation with FileInfoClass.FILE_BASIC_INFORMATION having valid timestamp and verify that file timestamp is updated");
 
-            TestSetTimestamp(fileType, TimestampType.CreationTime);
-            TestSetTimestamp(fileType, TimestampType.LastWriteTime);
-            TestSetTimestamp(fileType, TimestampType.LastAccessTime);
-            TestSetTimestamp(fileType, TimestampType.ChangeTime);
+            TestSetTimestamp(fileType, timestampType);
         }
 
         private void TestSetTimestamp(FileType fileType, TimestampType timestampType)
         {
-            if (timestampType.Equals(TimestampType.ChangeTime) && (this.fsaAdapter.FileSystem == FileSystem.FAT32))
+            //Create File
+            CreateFile(fileType);
+
+            //Set FileBasicInformation with tested timestamp equal to 01/05/2008 8:00:00
+            //FSBO Section 6, FAT32 processess LastAccessTime in 1 day resolution (usually 8:00:00)
+            DateTime date = new DateTime(2009, 4, 1, 8, 0, 0);
+            long fileTime = date.ToFileTime();
+            string inputDate = date.ToString();
+
+            SetTimestampUnderTest(timestampType, fileTime);
+
+            //Query FileBasicInformation 
+            long creationTime;
+            long changeTime;
+            long lastAccessTime;
+            long lastWriteTime;
+
+            QueryFileBasicInformation(out changeTime, out creationTime, out lastAccessTime, out lastWriteTime);
+
+            //Verify file timestamp was updated
+            long timestampUnderTest = timestampType switch
             {
-                this.TestSite.Assume.Inconclusive("<153> Section 2.1.5.14.2: The FAT32 file system doesn’t process the ChangeTime field.");
-            }
-            else if (timestampType.Equals(TimestampType.LastAccessTime) && this.fsaAdapter.FileSystem == FileSystem.FAT32)
-            {
-                this.TestSite.Assume.Inconclusive("The FAT32 file system is inconclusive for Open.File.LastAccessTime.");
-            }
-            else
-            {
-                //Create File
-                CreateFile(fileType);
+                TimestampType.CreationTime => creationTime,
+                TimestampType.ChangeTime => changeTime,
+                TimestampType.LastAccessTime => lastAccessTime,
+                TimestampType.LastWriteTime => lastWriteTime,
+            };
+            string underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
+            string openFileParameter = timestampType.Equals(TimestampType.ChangeTime) ? "LastChangeTime" : timestampType.ToString();
 
-                //Set FileBasicInformation with tested timestamp equal to 01/05/2008 8:00:00
-                //FSBO Section 6, FAT32 processess LastAccessTime in 1 day resolution (usually 8:00:00)
-                DateTime date = new DateTime(2009, 4, 1, 8, 0, 0); ;
-                long fileTime = date.ToFileTime();
-                string inputDate = date.ToString();
-
-                SetTimestampUnderTest(timestampType, fileTime);
-
-                //Query FileBasicInformation 
-                long creationTime;
-                long changeTime;
-                long lastAccessTime;
-                long lastWriteTime;
-
-                QueryFileBasicInformation(out changeTime, out creationTime, out lastAccessTime, out lastWriteTime);
-
-                //Verify file timestamp was updated
-                long timestampUnderTest = timestampType switch
-                {
-                    TimestampType.CreationTime => creationTime,
-                    TimestampType.ChangeTime => changeTime,
-                    TimestampType.LastAccessTime => lastAccessTime,
-                    TimestampType.LastWriteTime => lastWriteTime,
-                };
-                string underTestTimestamp = DateTime.FromFileTime(timestampUnderTest).ToString();
-                string openFileParameter = timestampType.Equals(TimestampType.ChangeTime) ? "LastChangeTime" : timestampType.ToString();
-
-                this.fsaAdapter.AssertAreEqual(this.Manager, inputDate, underTestTimestamp,
-                    "The object store MUST set Open.File." + openFileParameter + " to InputBuffer." + timestampType + ".");
-            }            
+            this.fsaAdapter.AssertAreEqual(this.Manager, inputDate, underTestTimestamp,
+                "The object store MUST set Open.File." + openFileParameter + " to InputBuffer." + timestampType + ".");
+            
         }
 
         private void CreateFile(FileType fileType)
