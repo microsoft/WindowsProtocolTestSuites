@@ -58,6 +58,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             return ((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) << 0;
         }
+
+        private enum OS_MinusTwo_NotSupported_NTFS
+        {
+            WindowsServer2008,
+            WindowsServer2008R2,
+            WindowsServer2012
+        }
+
+        private enum OS_MinusTwo_NotSupported_REFS
+        {
+            WindowsServer2008,
+            WindowsServer2008R2,
+            WindowsServer2012,
+            WindowsServer2012R2
+        }
+
         #endregion
     }
 }
