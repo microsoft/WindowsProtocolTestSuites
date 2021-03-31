@@ -147,4 +147,8 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 
   .treeNode {
     white-space:nowrap;
+    padding-top: 1px;
+  }
+  .react-checkbox-tree {
+      overflow: auto;
   }

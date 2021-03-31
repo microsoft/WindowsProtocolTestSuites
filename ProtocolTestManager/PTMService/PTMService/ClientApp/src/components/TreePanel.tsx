@@ -64,8 +64,7 @@ export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
     }, [props.checked])
 
     return (
-        <div style={{border: '1px solid rgba(0, 0, 0, 0.35)'}}>
-
+        <div style={{border: '1px solid rgba(0, 0, 0, 0.35)', padding:5+'px'}}>
             <CheckboxTree nodes={data}
                 checked={checked}
                 expanded={expanded}
