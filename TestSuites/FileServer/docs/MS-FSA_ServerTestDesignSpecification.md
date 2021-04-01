@@ -351,7 +351,7 @@ There are 170 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 51 (25) |
+| Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -1906,8 +1906,8 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
 | Description|  To test if setting ChangeTime with FileBasicInformation are supported by different file systems for data file|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
 | | SetInfo with FileInfoClass.FileBasicInformation where ChangeTime is set to valid timestamp|
