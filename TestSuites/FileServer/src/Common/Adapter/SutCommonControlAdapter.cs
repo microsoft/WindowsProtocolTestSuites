@@ -195,7 +195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public string GetUserSid(string userName)
         {
             _SID sid = DtypUtility.GetSidFromAccount(domainName, userName, adminName, adminPassword);
-            return sid.ToString();
+            return sid.GetSddlForm();
         }
 
         public string GetGroupSid(string groupName)
@@ -215,8 +215,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
 
-            _SID? groupSid = null;
-
             LdapMessage groupSearchMessage = null;
             while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
             {
@@ -225,11 +223,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     LdapEntry groupEntry = groupSearchResult.Entry;
                     string groupMemberName = groupEntry.GetAttribute("name").StringValue;
                     byte[] groupMemberSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
-                    groupSid = TypeMarshal.ToStruct<_SID>(groupMemberSidBinary);
+                    _SID groupSid = TypeMarshal.ToStruct<_SID>(groupMemberSidBinary);
+                    return groupSid.GetSddlForm();
                 }
             }
 
-            return groupSid==null ? "sid not found." : groupSid.ToString();
+            return "sid not found.";
         }
     }
 }

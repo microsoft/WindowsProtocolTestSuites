@@ -25,7 +25,7 @@ $commandForDomain = {
 
 	$domainFqn = "DC=" + $domainName.Replace(".", ",DC=")
 
-	$domainGroup = Get-ADGroup -Filter "Name -eq '$groupName'" -SearchBase $userFqn | Select-Object -First 1
+	$domainGroup = Get-ADGroup -Filter "Name -eq '$groupName'" -SearchBase $domainFqn | Select-Object -First 1
 
 	return $domainGroup.SID.Value ?? $domainGroup.SID
 }
