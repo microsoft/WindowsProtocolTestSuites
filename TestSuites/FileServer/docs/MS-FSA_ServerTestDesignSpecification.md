@@ -131,7 +131,6 @@
             * [FileInfo_Set_FileBasicInformation_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Dir_ChangeTime)
             * [FileInfo_Set_FileBasicInformation_File_LastAccessTime](#FileInfo_Set_FileBasicInformation_File_LastAccessTime)
             * [FileInfo_Set_FileBasicInformation_Dir_LastAccessTime](#FileInfo_Set_FileBasicInformation_Dir_LastAccessTime)
-            * [FileInfo_Set_FileBasicInformation_Dir_Positive](#FileInfo_Set_FileBasicInformation_Dir_Positive)
         * [CreationTime](#CreationTime)        
             * [FileInfo_Query_FileBasicInformation_File_CreationTime](#FileInfo_Query_FileBasicInformation_File_CreationTime)
             * [FileInfo_Query_FileBasicInformation_Dir_CreationTime](#FileInfo_Query_FileBasicInformation_Dir_CreationTime)
