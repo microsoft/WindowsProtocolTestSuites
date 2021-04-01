@@ -1860,7 +1860,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description|  To test if setting LastWriteTime with FileBasicInformation are supported by different file systems for data file|
+| Description|  To test if setting LastWriteTime with FileBasicInformation are supported by different file systems for directory file|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
 | | SetInfo with FileInfoClass.FileBasicInformation where LastWriteTime is set to valid timestamp|
@@ -1882,7 +1882,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description|  To test if setting CreationTime with FileBasicInformation are supported by different file systems for data file|
+| Description|  To test if setting CreationTime with FileBasicInformation are supported by different file systems for directory file|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
 | | SetInfo with FileInfoClass.FileBasicInformation where CreationTime is set to valid timestamp|
@@ -1905,7 +1905,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description|  To test if setting ChangeTime with FileBasicInformation are supported by different file systems for data file|
+| Description|  To test if setting ChangeTime with FileBasicInformation are supported by different file systems for directory file|
 | | Note: The **FAT32** file system doesn’t process the ChangeTime field|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
@@ -1928,7 +1928,7 @@ There are 343 test cases in total:
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description|  To test if setting LastAccessTime with FileBasicInformation are supported by different file systems for data file|
+| Description|  To test if setting LastAccessTime with FileBasicInformation are supported by different file systems for directory file|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
 | | SetInfo with FileInfoClass.FileBasicInformation where LastAccessTime is set to valid timestamp|
