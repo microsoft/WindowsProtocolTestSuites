@@ -6,6 +6,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
 {
@@ -30,7 +31,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         private object responseLock = new object();
 
         // RPCE thread to receive the response from server
-        private Thread receiveThread;
+        private Task receiveTask;
+        private CancellationTokenSource cancellationToken;
 
         // List of outstanding call id
         private Collection<uint> outstandingCallIds;
@@ -42,7 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         {
             rpceClient = new RpceClient();
             outstandingCallIds = new Collection<uint>();
-            receiveThread = null;
+            receiveTask = null;
         }
 
 
@@ -236,9 +238,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             if (rpceClient.Context.IsAsynchronous)
             {
                 // Start the receiving thread to receive the response from server.
-                receiveThread = new Thread(new ThreadStart(EventLoop));
-                receiveThread.IsBackground = true;
-                receiveThread.Start();
+                cancellationToken = new CancellationTokenSource();
+                receiveTask = new Task(EventLoop, cancellationToken.Token); //new Thread(new ThreadStart(EventLoop));
+                //receiveThread.IsBackground = true;
+                receiveTask.Start();
             }
         }
 
@@ -506,13 +509,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             }
 
             rpceClient.Disconnect(timeout);
-            if (receiveThread != null)
+            if ((receiveTask != null) && receiveTask.Status == TaskStatus.Running)
             {
-                if (!receiveThread.Join(new TimeSpan(0, 0, 10)))
-                {
-                    receiveThread.Abort();
-                }
-                receiveThread = null;
+                cancellationToken.Cancel();
+                receiveTask = null;
             }
         }
 
@@ -709,7 +709,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             {
                 try
                 {
-                    receiveThread.Abort();
+                    if(receiveTask!=null && receiveTask.Status == TaskStatus.Running)
+                    {
+                        cancellationToken.Cancel();
+                    }
+                    receiveTask.Dispose();
                 }
                 catch { }
                 // Release managed resources.
@@ -718,8 +722,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                     rpceClient.Dispose();
                 }
             }
-
-            // Release unmanaged resources.
         }
 
 
