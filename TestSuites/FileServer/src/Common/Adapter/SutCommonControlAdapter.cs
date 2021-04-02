@@ -63,7 +63,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public string GetGroups()
         {
-            List<LdapEntry> ldapGroups = DtypUtility.GetUsers(domainName, adminName, adminPassword);
+            List<LdapEntry> ldapGroups = DtypUtility.GetGroups(domainName, adminName, adminPassword);
             List<Group> groups = new List<Group>();
 
             foreach (LdapEntry groupEntry in ldapGroups)
@@ -82,7 +82,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public string GetUserMemberships(string userName)
         {
-            List<LdapEntry> ldapGroups = DtypUtility.GetUsers(domainName, adminName, adminPassword);
+            List<LdapEntry> ldapGroups = DtypUtility.GetUserMemberships(domainName, userName, adminName, adminPassword);
             List<Group> groups = new List<Group>();
 
             foreach (LdapEntry groupEntry in ldapGroups)
