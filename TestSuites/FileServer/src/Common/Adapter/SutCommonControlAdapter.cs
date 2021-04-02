@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             domainName = testConfig.DomainName;
             adminName = testConfig.UserName;
             adminPassword = testConfig.UserPassword;
-    }
+        }
 
         public string GetGroupMembers(string groupName)
         {
