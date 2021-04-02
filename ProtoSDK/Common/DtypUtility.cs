@@ -3612,6 +3612,202 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
+        /// Get the SID from the group's domain name and group name.
+        /// </summary>
+        /// <param name="domainName">The name of the domain. </param>
+        /// <param name="groupName">The name of the group.</param>
+        /// <param name="adminName">The name of admin.</param>
+        /// <param name="adminPassword">The password of admin.</param>
+        /// <returns>The SID of the group</returns>
+        public static _SID GetGroupSidFromAccount(string domainName, string groupName, string adminName, string adminPassword)
+        {
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            string groupFqn = $"CN={groupName},CN=Users,{domainFqn}";
+            var groupSearchBase = domainFqn;
+            var groupSearchFilter = $"(distinguishedName={groupFqn})";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
+
+            LdapMessage groupSearchMessage = null;
+            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            {
+                if (groupSearchMessage is LdapSearchResult groupSearchResult)
+                {
+                    LdapEntry groupEntry = groupSearchResult.Entry;
+                    byte[] groupMemberSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
+                    _SID groupSid = TypeMarshal.ToStruct<_SID>(groupMemberSidBinary);
+                    return groupSid;
+                }
+            }
+
+            throw new InvalidOperationException($"Group {groupName} is not found on DC.");
+        }
+
+        /// <summary>
+        /// Get all users' LdapEntry from the domain name.
+        /// </summary>
+        /// <param name="domainName">The name of the domain. </param>
+        /// <param name="adminName">The name of admin.</param>
+        /// <param name="adminPassword">The password of admin.</param>
+        /// <returns>The LdapEntry list of all users</returns>
+        public static List<LdapEntry> GetUsers(string domainName, string adminName, string adminPassword)
+        {
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            var userSearchBase = domainFqn;
+            var userSearchFilter = $"(objectClass=user)";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var userSearchQueue = conn.Search(userSearchBase, LdapConnection.ScopeSub, userSearchFilter, null, false, null, null);
+
+            List<LdapEntry> users = new List<LdapEntry>();
+
+            LdapMessage userSearchMessage = null;
+            while ((userSearchMessage = userSearchQueue.GetResponse()) != null)
+            {
+                if (userSearchMessage is LdapSearchResult userSearchResult)
+                {
+                    LdapEntry userEntry = userSearchResult.Entry;
+                    users.Add(userEntry);
+                }
+            }
+
+            return users;
+        }
+
+        /// <summary>
+        /// Get all groups' LdapEntry list from the domain name.
+        /// </summary>
+        /// <param name="domainName">The name of the domain. </param>
+        /// <param name="adminName">The name of admin.</param>
+        /// <param name="adminPassword">The password of admin.</param>
+        /// <returns>The LdapEntry list of all groups</returns>
+        public static List<LdapEntry> GetGroups(string domainName, string adminName, string adminPassword)
+        {
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            var groupSearchBase = domainFqn;
+            var groupSearchFilter = $"(objectClass=group)";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
+
+            List<LdapEntry> groups = new List<LdapEntry>();
+
+            LdapMessage groupSearchMessage = null;
+            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            {
+                if (groupSearchMessage is LdapSearchResult groupSearchResult)
+                {
+                    LdapEntry groupEntry = groupSearchResult.Entry;
+                    groups.Add(groupEntry);
+                }
+            }
+
+            return groups;
+        }
+
+        /// <summary>
+        /// Get the group's group members LdapEntry list from the group's domain name and group name.
+        /// </summary>
+        /// <param name="domainName">The name of the domain. </param>
+        /// <param name="groupName">The name of group.</param>
+        /// <param name="adminName">The name of admin.</param>
+        /// <param name="adminPassword">The password of admin.</param>
+        /// <returns>The group members LdapEntry list of the group</returns>
+        public static List<LdapEntry> GetGroupMembers(string domainName, string groupName, string adminName, string adminPassword)
+        {
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            string groupFqn = $"CN={groupName},CN=Users,{domainFqn}";
+            var groupSearchBase = domainFqn;
+            var groupSearchFilter = $"(member={groupFqn})";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
+
+            List<LdapEntry> groupMembers = new List<LdapEntry>();
+
+            LdapMessage groupSearchMessage = null;
+            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            {
+                if (groupSearchMessage is LdapSearchResult groupSearchResult)
+                {
+                    LdapEntry groupEntry = groupSearchResult.Entry;
+                    groupMembers.Add(groupEntry);
+                }
+            }
+
+            return groupMembers;
+        }
+
+        /// <summary>
+        /// Get the user's memberships LdapEntry list from user's the domain name and user name.
+        /// </summary>
+        /// <param name="domainName">The name of the domain. </param>
+        /// <param name="userName">The name of user.</param>
+        /// <param name="adminName">The name of admin.</param>
+        /// <param name="adminPassword">The password of admin.</param>
+        /// <returns>The memberships LdapEntry list of the user</returns>
+        public static List<LdapEntry> GetUserMemberships(string domainName, string userName, string adminName, string adminPassword)
+        {
+            int ldapPort = 389;
+            string domainNetbios = domainName.Split('.')[0];
+            string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
+            string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
+            string userFqn = $"CN={userName},CN=Users,{domainFqn}";
+            var groupSearchBase = domainFqn;
+            var groupSearchFilter = $"(member={userFqn})";
+
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
+
+            List<LdapEntry> groups = new List<LdapEntry>();
+
+            LdapMessage groupSearchMessage = null;
+            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            {
+                if (groupSearchMessage is LdapSearchResult groupSearchResult)
+                {
+                    LdapEntry groupEntry = groupSearchResult.Entry;
+                    groups.Add(groupEntry);
+                }
+            }
+
+            return groups;
+        }
+
+        /// <summary>
         /// Create an ACCESS_ALLOWED_ACE by using specific SID, access mask and optional ace flags.
         /// </summary>
         /// <param name="sid">The SID of the trustee.</param>
