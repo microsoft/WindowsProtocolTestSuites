@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public string GetGroupSid(string groupName)
         {
-            _SID sid = DtypUtility.GetGroupSidFromAccount(domainName, groupName, adminName, adminPassword);
+            _SID sid = DtypUtility.GetSidFromGroupName(domainName, groupName, adminName, adminPassword);
             return sid.GetSddlForm();
         }
     }

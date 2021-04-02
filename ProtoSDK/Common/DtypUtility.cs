@@ -3619,7 +3619,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         /// <param name="adminName">The name of admin.</param>
         /// <param name="adminPassword">The password of admin.</param>
         /// <returns>The SID of the group</returns>
-        public static _SID GetGroupSidFromAccount(string domainName, string groupName, string adminName, string adminPassword)
+        public static _SID GetSidFromGroupName(string domainName, string groupName, string adminName, string adminPassword)
         {
             int ldapPort = 389;
             string domainNetbios = domainName.Split('.')[0];
