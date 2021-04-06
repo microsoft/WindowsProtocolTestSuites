@@ -75,6 +75,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV1)]
+        [TestCategory(TestCategories.Smb21)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Positive)]
         [Description("Compare the server returned lease keys of two opens of the same file using the same lease key")]
         public void Comparing_Same_File_LeaseKeysV1()
@@ -101,6 +105,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV1)]
+        [TestCategory(TestCategories.Smb21)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Positive)]
         [Description("Compare the server returned lease keys of two opens of the same directory file using the same lease key")]
         public void Comparing_Same_Directory_LeaseKeysV1()
@@ -127,6 +135,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV2)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Positive)]
         [Description("Compare the server returned lease keys of two opens of the same file using the same lease key")]
         public void Comparing_Same_LeaseKeysV2()
@@ -162,6 +173,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV2)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compatibility)]
         [Description("The server should return an empty parentLeaseKey when leaseFlag is set to zero")]
         public void Compare_Zero_LeaseFlag_ParentLeaseKey()
         {
@@ -188,6 +203,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV2)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Positive)]
         [Description("Compare the returned lease keys of two opens to the same directory file")]
         public void DirectoryComparing_LeaseKeysV2()
@@ -216,6 +234,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV2)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Positive)]
         [Description("Compare the returned lease keys of two opens of a parent directory file and a child file")]
         public void DirectoryComparing_ParentLeaseKey_ChildLeaseKey()
@@ -244,6 +265,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.Leasing
         [TestMethod]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.LeaseV2)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.Smb302)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compatibility)]
         [Description("Compare lease keys of parent directory file and a child file with an invalid parent lease key")]
         public void DirectoryComparing_Child_Invalid_ParentLeaseKeys()
         {
