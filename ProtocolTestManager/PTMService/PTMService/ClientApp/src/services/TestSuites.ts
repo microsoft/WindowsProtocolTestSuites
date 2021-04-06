@@ -26,7 +26,7 @@ export const TestSuitesDataSrv = {
             url: `api/testsuite/${configurationId}`,
             method: RequestMethod.GET,
             dispatch,
-            onRequest: FilterTestCaseActions.getTestSuiteTestCasesAction_Failure,
+            onRequest: FilterTestCaseActions.getTestSuiteTestCasesAction_Request,
             onComplete: FilterTestCaseActions.getTestSuiteTestCasesAction_Success,
             onError: FilterTestCaseActions.getTestSuiteTestCasesAction_Failure
         });

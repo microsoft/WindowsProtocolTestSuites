@@ -20,7 +20,7 @@ const getGroup = (rules: Rule[]): Node[] => {
             return {className:"treeNode", value: rule.Name, label: rule.DisplayName, children: getGroup(rule.Rules) }
         }
         if (rule.Categories) {
-            let nodes = rule.Categories.map(curr => { return { value: curr, label: curr } })
+            const nodes = rule.Categories.map(curr => { return { value: curr, label: curr } })
             return {className:"treeNode", value: rule.Name, label: rule.DisplayName, children: nodes }
         }
         return {className:"treeNode", value: rule.Name, label: rule.DisplayName }
@@ -28,7 +28,7 @@ const getGroup = (rules: Rule[]): Node[] => {
 }
 
 const getItems = (rules: Rule[]): string[] => {
-    let results: string[] = []
+    const results: string[] = []
     rules.forEach(rule => {
         if (rule.Rules) {
 
@@ -39,19 +39,19 @@ const getItems = (rules: Rule[]): string[] => {
     return results;
 }
 const getExpanded = (rules: Rule[]): string[] => {
-    let groups: string[] = getItems(rules)
+    const groups: string[] = getItems(rules)
     return groups.concat('all')
 }
 
 export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
-    let data = getGroup(props.rules);
-    let expandedNode = getExpanded(props.rules);
+    const data = getGroup(props.rules);
+    const expandedNode = getExpanded(props.rules);
     const [checked, setChecked] = useState<Array<string>>(props.checked);
     const [expanded, setExpanded] = useState<Array<string>>(expandedNode);
 
     useEffect(() => {
         if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
-            let data = { Name: props.groupName, Selected: checked }
+            const data = { Name: props.groupName, Selected: checked }
             props.selectAction(data);              
         }
     }, [checked]);
