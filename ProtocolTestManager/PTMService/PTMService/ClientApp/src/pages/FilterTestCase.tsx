@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../store/configureStore';
 import { RuleListPanel } from '../components/RuleListPanel';
 import { ConfigurationsDataSrv } from '../services/Configurations';
+import { FilterTestCaseActions } from "../actions/FilterTestCaseAction";
+import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectedRuleGroup } from "../model/RuleGroup";
 
 import { PrimaryButton, Stack } from '@fluentui/react';
@@ -28,7 +30,8 @@ export function FilterTestCase(props: any) {
     const winSize = useWindowSize();
 
     useEffect(() => {
-        dispatch(ConfigurationsDataSrv.getRuleGroups());
+        dispatch(ConfigurationsDataSrv.getRules());
+        dispatch(TestSuitesDataSrv.getTestSuiteTestCases());
     }, [dispatch])
 
     const onPreviousButtonClick = () => {
@@ -40,39 +43,38 @@ export function FilterTestCase(props: any) {
     };
 
     const onNextButtonClick = () => {
-        wizardProps.nextStep();
+        dispatch(ConfigurationsDataSrv.setRules(() => {
+            wizardProps.nextStep();
+        }));
     };
 
     const checkedAction = (data: SelectedRuleGroup) => {
-        dispatch(ConfigurationsDataSrv.setSelectedRule(data));
+        dispatch(FilterTestCaseActions.setSelectedRuleAction(data));
     }
     return (
         <StepPanel leftNav={wizard} isLoading={filterInfo.isLoading} errorMsg={filterInfo.errorMsg} >
             <div>
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
-                    <div style={{ width: 350 }}>Filter</div>
+                    <div style={{ width: winSize.width * 0.25, }}>Filter</div>
                     <div>Selected Test Cases {filterInfo.listSelectedCases?.length}</div>
                 </Stack>
                 <hr style={{ border: "1px solid #d9d9d9" }} />
-                <Stack>
-                    <Stack horizontal>
-                        <Stack tokens={{ childrenGap: 10 }}>
-                            <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
-                        </Stack>
-                        <div style={{ width: 25 }} />
-                        <Stack style={{ height: winSize.height - HeaderMenuHeight - 82, width: 100 + '%', overflowY: 'auto' }}>
-                            {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
-                        </Stack>
+                <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }}>
+                    <Stack style={{ minWidth: winSize.width * 0.25, }} tokens={StackGap10}>
+                        <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
                     </Stack>
-
+                    <div style={{ width: 25 }} />
+                    <Stack style={{ height: winSize.height - HeaderMenuHeight - 82, width: 100 + '%', overflowY: 'auto' }}>
+                        {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
+                    </Stack>
                 </Stack>
             </div>
             <div className='buttonPanel'>
                 <Stack
                     horizontal
-                    horizontalAlign="end" tokens={StackGap10} >
-                    <PrimaryButton onClick={() => onPreviousButtonClick()}>Previous</PrimaryButton>
-                    <PrimaryButton onClick={() => onNextButtonClick()}>Next</PrimaryButton>
+                    horizontalAlign="end" tokens={StackGap10}>
+                    <PrimaryButton onClick={() => onPreviousButtonClick()} disabled={filterInfo.isPosting}>Previous</PrimaryButton>
+                    <PrimaryButton onClick={() => onNextButtonClick()} disabled={filterInfo.isPosting}>Next</PrimaryButton>
                 </Stack>
             </div>
         </StepPanel>

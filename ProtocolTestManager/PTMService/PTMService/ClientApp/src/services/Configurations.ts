@@ -6,8 +6,6 @@ import { ConfigurationActions, TestSuiteConfigurationActionTypes } from "../acti
 import { FilterTestCaseActions, FilterTestCaseActionTypes } from "../actions/FilterTestCaseAction";
 import { Configuration } from "../model/Configuration";
 import { AppThunkAction } from "../store/configureStore";
-import { SelectedRuleGroup } from "../model/RuleGroup";
-
 export const ConfigurationsDataSrv = {
     getConfigurations: (testsuiteId: number): AppThunkAction<TestSuiteConfigurationActionTypes> => async (dispatch) => {
         // const state = getState();
@@ -32,7 +30,7 @@ export const ConfigurationsDataSrv = {
             onError: ConfigurationActions.createConfiguration_Failure
         });
     },
-    getRuleGroups: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+    getRules: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
         const configurationId = state.configurations.selectedConfiguration?.Id
         await FetchService({
@@ -44,31 +42,24 @@ export const ConfigurationsDataSrv = {
             onError: FilterTestCaseActions.getFilterRuleAction_Failure
         });
     },
-    setSelectedRule: (info: SelectedRuleGroup): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
-        dispatch(FilterTestCaseActions.setSelectedRuleAction(info))
-
+    setRules: ( completeCallback: (data: any) => void): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
         const configurationId = state.configurations.selectedConfiguration?.Id
-        // get map
-        if (info.Name != "Priority") {
-            let data = [{ Name: info.Name, rules:info.Selected.map(curr=>{return {Name:curr}}) }]
-
-            await FetchService({
-                url: `api/configuration/${configurationId}/rule`,
-                method: RequestMethod.PUT,
-                body: JSON.stringify(data),
-                dispatch,
-                onComplete: FilterTestCaseActions.setAffectedRules_Success,
-                onError: FilterTestCaseActions.getFilterRuleAction_Failure
-            })
-        }
-
+        const selectedRules = state.filterInfo.selectedRules
+        const data = state.filterInfo.ruleGroup.map(g=>{
+            let curr = selectedRules.find(s=>s.Name==g.Name)            
+            let rules = curr?.Selected.map(r=>{return {Name:r}} )
+            return { Name: g.Name, Rules: rules}
+        })
         await FetchService({
-            url: `api/configuration/${configurationId}/test`,
-            method: RequestMethod.GET,
-            dispatch,
-            onComplete: FilterTestCaseActions.setTestCasesAction_Success,
-            onError: FilterTestCaseActions.getFilterRuleAction_Failure
-        });
+            url: `api/configuration/${configurationId}/rule`,
+            method: RequestMethod.PUT,
+            body: JSON.stringify(data),
+            dispatch,  
+            onRequest: FilterTestCaseActions.setRulesAction_Request,
+            onComplete: FilterTestCaseActions.setRulesAction_Success,
+            onError: FilterTestCaseActions.setRulesAction_Failure,     
+            onCompleteCallback: completeCallback
+        })
     }
 };

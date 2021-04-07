@@ -4,7 +4,7 @@
 import { IStackTokens } from "@fluentui/react";
 
 export const StackGap5: IStackTokens = {
-    childrenGap: 10,
+    childrenGap: 5,
 };
 
 export const StackGap10: IStackTokens = {
