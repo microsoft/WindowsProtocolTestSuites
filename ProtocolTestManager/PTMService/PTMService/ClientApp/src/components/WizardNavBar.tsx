@@ -29,8 +29,8 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
 }
 
 export const LeftPanelWidth = 250;
-// header height 50 + 10 padding
-export const HeaderMenuHeight = 60;
+// header height 50 + 20 padding
+export const HeaderMenuHeight = 72;
 
 export const LeftPanel = styled.div`
     float: left;
@@ -39,7 +39,6 @@ export const LeftPanel = styled.div`
     border-right-color: #7565;
     border-style: none solid none  none ;
     border-width: 2px;
-    margin-Top: -5px;
     padding-left: 5px;
     padding-Top: 20px;
     background-color: #f1f1f1;
@@ -48,11 +47,11 @@ export const LeftPanel = styled.div`
 `;
 
 export const RightPanel = styled.div`
+    padding-Top: 20px;
     & {
         margin-Left: ${LeftPanelWidth + 10}px;
         height: 100%;
         z-index:999;
-        padding-left: 10px;
     }
     &::after {
         clear: "both";
@@ -69,12 +68,11 @@ export const VLine = styled.div`
     background-color: #69c0ff;
     position: absolute;
     margin-left: -21px;
-    margin-top: 5px;
     height: ${props => (props.tabIndex! - 1) * 56}px;
     `;
 
 export const CompleteStep = styled.div`
-        padding-Bottom: 25px;
+        padding-Bottom: 30px;
         position: relative;
         cursor: pointer;
         color: #389e0d;
@@ -93,7 +91,7 @@ export const CompleteStep = styled.div`
     `;
 
 export const RunningStep = styled.div`
-    padding-Bottom: 25px;
+    padding-Bottom: 30px;
     position: relative;
     color: #1890ff;
     &:before {

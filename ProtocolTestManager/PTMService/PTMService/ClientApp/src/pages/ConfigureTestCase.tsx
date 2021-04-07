@@ -54,7 +54,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={propertyGroups.isLoading} errorMsg={propertyGroups.errorMsg}>
-                <Stack>
+                <Stack style={{ paddingLeft: 10 }}>
                     <Stack horizontal style={{ paddingBottom: 20 }}>
                         <div style={{ fontWeight: 'bold' }}>Groups</div>
                         <div style={{ paddingLeft: winSize.width * 0.10, fontWeight: 'bold' }}>{propertyGroups.editingPropertyGroup?.Name} Properties</div>
@@ -65,8 +65,8 @@ export function ConfigureTestCase(props: StepWizardProps) {
                             {
                                 propertyGroups.propertyGroups.map((propertyGroup, index) => {
                                     return (
-                                        <div style={{ alignSelf: 'start' }}>
-                                            <Link key={index} style={{ fontSize: 'large', fontWeight: 'bold' }}
+                                        <div key={index} style={{ alignSelf: 'start' }}>
+                                            <Link style={{ fontSize: 'large', fontWeight: 'bold', color: propertyGroups.editingPropertyGroupIndex === index ? "#0078D4" : "#A19F9D" }}
                                                 disabled={propertyGroups.editingPropertyGroupIndex === index}
                                                 onClick={() => onEditingPropertyGroupChange(index)}>
                                                 {propertyGroup.Name}
@@ -76,7 +76,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                                 })
                             }
                         </Stack>
-                        <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height - 150, overflowY: 'auto' }}>
+                        <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height - 160, overflowY: 'auto' }}>
                             {
                                 propertyGroups.editingPropertyGroup === undefined ?
                                     <LoadingPanel /> :

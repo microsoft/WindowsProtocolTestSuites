@@ -20,13 +20,9 @@ export default function App() {
             overflow: 'hidden',
         },
     };
-
-    const innerStackTokens: IStackTokens = {
-        childrenGap: 5,
-    };
-
+    
     return (
-        <Stack verticalFill styles={stackStyles} tokens={innerStackTokens}>
+        <Stack verticalFill styles={stackStyles}>
             <Header />
             <Switch>
                 <Route exact path='/' component={HomePage} />

@@ -60,7 +60,7 @@ export function FilterTestCase(props: any) {
                             <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
                         </Stack>
                         <div style={{ width: 25 }} />
-                        <Stack style={{ height: winSize.height - HeaderMenuHeight - 80, width: 100 + '%', overflowY: 'auto' }}>
+                        <Stack style={{ height: winSize.height - HeaderMenuHeight - 82, width: 100 + '%', overflowY: 'auto' }}>
                             {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
                         </Stack>
                     </Stack>
