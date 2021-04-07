@@ -3,5 +3,5 @@
 
 export interface TestCase {
     Name: string;
-    Categories: string[];
+    Category: string[];
 }
