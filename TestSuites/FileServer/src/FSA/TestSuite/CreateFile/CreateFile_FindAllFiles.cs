@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Create a directory file and confirm that FoundFiles count")]
         public void CreateFile_CheckNoFilesFound()
         {
@@ -37,6 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Create a directory, write a file to the directory and confirm the foundFiles count")]
         public void CreateFile_CheckSingleFileFound()
         {
@@ -60,6 +62,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Create a directory file, a sub directory and a file and confirm foundFiles count")]
         public void CreateFile_CheckSubDirAndSingleFileFound()
         {
@@ -82,6 +85,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
         [Description("Create a directory file, write files and confirm the FoundFiles size")]
         public void CreateFile_CheckMultipleFilesFound()
         {

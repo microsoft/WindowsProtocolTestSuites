@@ -3,7 +3,6 @@
 
 using Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -41,6 +40,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 1. File System: " + this.fsaAdapter.FileSystem.ToString());
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 2. Transport: " + this.fsaAdapter.Transport.ToString());
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 3. Share Path: " + this.fsaAdapter.UncSharePath);
+            BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 4. Platform: " + this.fsaAdapter.TestConfig.Platform.ToString());
             this.fsaAdapter.FsaInitial();
         }
 
@@ -52,6 +52,29 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
         #endregion
 
+        #region Utility
+
+        private long FileTimeToLong(FILETIME time)
+        {
+            return ((((long)time.dwHighDateTime) << 32) | time.dwLowDateTime) << 0;
+        }
+
+        private enum OS_MinusTwo_NotSupported_NTFS
+        {
+            WindowsServer2008,
+            WindowsServer2008R2,
+            WindowsServer2012
+        }
+
+        private enum OS_MinusTwo_NotSupported_REFS
+        {
+            WindowsServer2008,
+            WindowsServer2008R2,
+            WindowsServer2012,
+            WindowsServer2012R2
+        }
+
+        #endregion
     }
 }
 

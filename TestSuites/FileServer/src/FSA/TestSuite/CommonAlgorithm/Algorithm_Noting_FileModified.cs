@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.Protocols.TestTools.StackSdk;
 using System;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 {
@@ -22,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_File_LastModificationTime()
+        public void Algorithm_NotingFileModified_File_LastModificationTime()
         {
             FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
@@ -37,7 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_File_LastChangeTime()
+        public void Algorithm_NotingFileModified_File_LastChangeTime()
         {
             FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
@@ -52,34 +53,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_File_LastAccessTime()
+        public void Algorithm_NotingFileModified_File_Archive()
         {
-            FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
-            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
-
-            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
-            {
-                BaseTestSite.Assert.Inconclusive("REFS is inconclusive for Open.File.LastAccessTime on file");
-            }
-            else
-            {
-                TestLastAccessTime(attributesBeforeFileModified.lastAccessTime, attributesAfterFileModified.lastAccessTime);
-            }
-        }
-
-        [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
-        [TestCategory(TestCategories.Fsa)]
-        [TestCategory(TestCategories.CommonAlgorithm)]
-        [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
-        [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_File_Archive()
-        {
-            FileAttributes attributesBeforeFileModified;
-            FileAttributes attributesAfterFileModified;
-            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            Algorithm_Noting_FileModified(FileType.DataFile, out _, out attributesAfterFileModified);
             TestArchive(attributesAfterFileModified.isArchive);            
         }
 
@@ -90,12 +67,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_Dir_LastModificationTime()
+        public void Algorithm_NotingFileModified_Dir_LastModificationTime()
         {
             FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
             Algorithm_Noting_FileModified(FileType.DirectoryFile, out attributesBeforeFileModified, out attributesAfterFileModified);
-            TestLastWriteTime(attributesBeforeFileModified.lastWriteTime, attributesAfterFileModified.lastWriteTime);
+
+            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
+            {
+                BaseTestSite.Assert.Inconclusive("FAT32 is inconclusive for Open.File.LastWriteTime with directory");
+            }
+            else
+            {
+                TestLastWriteTime(attributesBeforeFileModified.lastWriteTime, attributesAfterFileModified.lastWriteTime);
+            }
         }
 
         [TestMethod()]
@@ -105,7 +90,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_Dir_LastChangeTime()
+        public void Algorithm_NotingFileModified_Dir_LastChangeTime()
         {
             FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
@@ -120,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_Dir_LastAccessTime()
+        public void Algorithm_NotingFileModified_Dir_LastAccessTime()
         {
             FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
@@ -136,11 +121,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to create file in directory and check if file system consistent with [MS-FSA] section 2.1.4.17")]
-        public void CommonAlgorithm_NotingFileModified_Dir_Archive()
+        public void Algorithm_NotingFileModified_Dir_Archive()
         {
-            FileAttributes attributesBeforeFileModified;
             FileAttributes attributesAfterFileModified;
-            Algorithm_Noting_FileModified(FileType.DirectoryFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            Algorithm_Noting_FileModified(FileType.DirectoryFile, out _, out attributesAfterFileModified);
 
             if (this.fsaAdapter.FileSystem == FileSystem.NTFS
                 || this.fsaAdapter.FileSystem == FileSystem.REFS
@@ -218,11 +202,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void TestLastWriteTime(DateTime lastWriteTimeDateBeforeFileModified, DateTime lastWriteTimeDateAfterFileModified)
         {
-            if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
-            {
-                BaseTestSite.Assert.Inconclusive("FAT32 is inconclusive for Open.File.LastWriteTime");
-            }
-            else if (lastWriteTimeDateBeforeFileModified.CompareTo(lastWriteTimeDateAfterFileModified) >= 0)
+            if (lastWriteTimeDateBeforeFileModified.CompareTo(lastWriteTimeDateAfterFileModified) >= 0)
             {
                 BaseTestSite.Assert.Fail("The object store SHOULD set Open.File.LastModificationTime to the current system time.");
             }
@@ -336,23 +316,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                     "Write data to file should succeed");
         }
 
-        private void DelayNextStep()
+        private int GetDelaTimeByFileSystem(FileSystem fileSystem)
         {
-            //delay next step for recognizable milliseconds change
-            DateTime currentTime = GetCurrentSystemTime();
-            DateTime nextTime = GetCurrentSystemTime();
-
-            while (currentTime.ToString().Equals(nextTime.ToString()))
+            //Applying delay time considering File System resolution time MS-FSCC 2.1.1 FSBO Section 6 
+            switch (fileSystem)
             {
-                nextTime = GetCurrentSystemTime();
+                case FileSystem.NTFS:
+                    return 1000;
+                case FileSystem.FAT32:
+                    return 3000;
+                default:
+                    return 3000;
             }
         }
 
-        private DateTime GetCurrentSystemTime()
+        private void DelayNextStep()
         {
-            return DateTime.Now;
+            int delayTime = GetDelaTimeByFileSystem(this.fsaAdapter.FileSystem);
+            Thread.Sleep(delayTime);
         }
-
         #endregion
     }
 }

@@ -23,7 +23,8 @@
         * [FileInfo_IsShortNameSupported](#FileInfo_IsShortNameSupported)
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
-        * [FileInfo_Set_FileBasicInformation](#FileInfo_Set_FileBasicInformation)
+        * [FileInfo_SetFileBasicInformationSupported](#FileInfo_SetFileBasicInformationSupported)
+        * [FileInfo_CreationTime](#FileInfo_CreationTime)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -56,7 +57,7 @@
         * [AlternateDataStream_FsControl](#AlternateDataStream_FsControl)
     * [Scenarios for Create and Query Directory](#Scenarios-for-Create-And-Query-Directory)
         * [Query Directory](#Scenario-QueryDirectory)
-    * [Scenarios for File and Directory Leasing](#Scenarios-for-File-And-Directory-Leasing)
+    * [Scenarios for File and Directory Leasing](#Test-cases-for-File-And-Directory-Leasing)
         * [CompareLeaseKeys](#CompareLeaseKeys)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
@@ -65,14 +66,13 @@
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
     * [Test cases for CommonAlgorithm](#Test-cases-for-CommonAlgorithm)
         * [NotingFileModified](#NotingFileModified)
-            * [CommonAlgorithm_NotingFileModified_File_LastModificationTime](#CommonAlgorithm_NotingFileModified_File_LastModificationTime)
-            * [CommonAlgorithm_NotingFileModified_File_LastChangeTime](#CommonAlgorithm_NotingFileModified_File_LastChangeTime)
-            * [CommonAlgorithm_NotingFileModified_File_LastAccessTime](#CommonAlgorithm_NotingFileModified_File_LastAccessTime)
-            * [CommonAlgorithm_NotingFileModified_File_Archive](#CommonAlgorithm_NotingFileModified_File_Archive)
-            * [CommonAlgorithm_NotingFileModified_Dir_LastModificationTime](#CommonAlgorithm_NotingFileModified_Dir_LastModificationTime)
-            * [CommonAlgorithm_NotingFileModified_Dir_LastChangeTime](#CommonAlgorithm_NotingFileModified_Dir_LastChangeTime)
-            * [CommonAlgorithm_NotingFileModified_Dir_LastAccessTime](#CommonAlgorithm_NotingFileModified_Dir_LastAccessTime)
-            * [CommonAlgorithm_NotingFileModified_Dir_Archive](#CommonAlgorithm_NotingFileModified_Dir_Archive)
+            * [Algorithm_NotingFileModified_File_LastModificationTime](#Algorithm_NotingFileModified_File_LastModificationTime)
+            * [Algorithm_NotingFileModified_Dir_LastModificationTime](#Algorithm_NotingFileModified_Dir_LastModificationTime)
+            * [Algorithm_NotingFileModified_File_LastChangeTime](#Algorithm_NotingFileModified_File_LastChangeTime)
+            * [Algorithm_NotingFileModified_Dir_LastChangeTime](#Algorithm_NotingFileModified_Dir_LastChangeTime)
+            * [Algorithm_NotingFileModified_Dir_LastAccessTime](#Algorithm_NotingFileModified_Dir_LastAccessTime)
+            * [Algorithm_NotingFileModified_File_Archive](#Algorithm_NotingFileModified_File_Archive)
+            * [Algorithm_NotingFileModified_Dir_Archive](#Algorithm_NotingFileModified_Dir_Archive)
     * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#IsEASupported)
             * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#FileInfo_Set_FileFullEaInformation_File_IsEASupported)
@@ -110,22 +110,39 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileAlignmentInformation](#FileAlignmentInformation)
+            * [FileInfo_Query_FileAlignmentInformation](#FileInfo_Query_FileAlignmentInformation)
         * [FileAlternateNameInformation](#FileAlternateNameInformation)
             * [FileInfo_Query_FileAlternateNameInformation](#FileInfo_Query_FileAlternateNameInformation)
         * [FileInternalInformation](#FileInternalInformation)
             * [FileInfo_Query_FileInternalInformation](#FileInfo_Query_FileInternalInformation)
-        * [FilePositionInformation](#FilePositionInformation)
-            * [FileInfo_Query_FilePositionInformation](#FileInfo_Query_FilePositionInformation)
         * [FileModeInformation](#FileModeInformation)
             * [FileInfo_Query_FileModeInformation](#FileInfo_Query_FileModeInformation)
-        * [FileAlignmentInformation](#FileAlignmentInformation)
-            * [FileInfo_Query_FileAlignmentInformation](#FileInfo_Query_FileAlignmentInformation)
+        * [FilePositionInformation](#FilePositionInformation)
+            * [FileInfo_Query_FilePositionInformation](#FileInfo_Query_FilePositionInformation)
         * [FileBasicInformation](#FileBasicInformation)
             * [FileInfo_Set_FileBasicInformation_File_Negative](#FileInfo_Set_FileBasicInformation_File_Negative)
-            * [FileInfo_Set_FileBasicInformation_File_Positive](#FileInfo_Set_FileBasicInformation_File_Positive)
-            * [FileInfo_Set_FileBasicInformation_File_MinusTwoSupported](#FileInfo_Set_FileBasicInformation_File_MinusTwoSupported)
             * [FileInfo_Set_FileBasicInformation_Dir_Negative](#FileInfo_Set_FileBasicInformation_Dir_Negative)
-            * [FileInfo_Set_FileBasicInformation_Dir_Positive](#FileInfo_Set_FileBasicInformation_Dir_Positive)
+            * [FileInfo_Set_FileBasicInformation_File_LastWriteTime](#FileInfo_Set_FileBasicInformation_File_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Dir_LastWriteTime](#FileInfo_Set_FileBasicInformation_Dir_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_File_CreationTime](#FileInfo_Set_FileBasicInformation_File_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_Dir_CreationTime](#FileInfo_Set_FileBasicInformation_Dir_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_File_ChangeTime](#FileInfo_Set_FileBasicInformation_File_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Dir_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_File_LastAccessTime](#FileInfo_Set_FileBasicInformation_File_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Dir_LastAccessTime](#FileInfo_Set_FileBasicInformation_Dir_LastAccessTime)
+        * [CreationTime](#CreationTime)        
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime](#FileInfo_Query_FileBasicInformation_File_CreationTime)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime](#FileInfo_Query_FileBasicInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime_Zero](#FileInfo_Query_FileBasicInformation_File_CreationTime_Zero)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero)
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo)
+            * [FileInfo_Query_FileBasicInformation_File_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_File_CreationTime_Negative)
+            * [FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative](#FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative)
+            * [FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
+            * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -159,7 +176,7 @@
             * [FsCtl_Set_Sparse_File_IsSparseFileSupported](#FsCtl_Set_Sparse_File_IsSparseFileSupported)
             * [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#FsCtl_Set_Sparse_Dir_IsSparseFileSupported)
         * [IsZeroDataSupported](#IsZeroDataSupported)
-            * [FsCtl_Set_ZeroData_File_IsZeroDataSupported](#FsCtl_Set_ZeroData_File_IsSetZeroDataSupported)
+            * [FsCtl_Set_ZeroData_File_IsZeroDataSupported](#FsCtl_Set_ZeroData_File_IsZeroDataSupported)
             * [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#FsCtl_Set_ZeroData_Dir_IsZeroDataSupported)
         * [IsDuplicateExtentsToFileExSupported](#IsDuplicateExtentsToFileExSupported)
             * [BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported](#BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported)
@@ -329,11 +346,11 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 155 test cases in total:
+There are 170 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 7 | 36 (16) |
+| Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 44 (14) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -524,7 +541,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if set values for FileBasicInformation attributes supported by different file systems.|
-| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
 | | Test environment: FAT32, NTFS, ReFS|
 | | Test object: DataFile, DirectoryFile|
 | | Test coverage:|
@@ -532,7 +549,25 @@ There are 343 test cases in total:
 | | If the file system supports the attribute values, The system responds according to [MS-FSA] 2.1.5.14.2 FileBasicInformation. |
 | Message Sequence| CreateFile.|
 | | SetInfo with FileInfoClass.FileBasicInformation|
+| | QueryInfo with FileInfoClass.FileBasicInformation|
 | | Verify server responses accordingly.|
+
+#### <a name="FileInfo_CreationTime"/>FileInfo_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different File Systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, FileIdGlobalTxDirectoryInformation|
+| | If supported, CreationTime is set to current system time when file is created.|
+| | If supported, CreationTime is never updated in response to file system calls such as read and write.|
+| Message Sequence| CreateFile.|
+| | Verify CreationTime is set to current system time|
+| | Modify file|
+| | Verify CreationTime is not changed|
 
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
 
@@ -1126,7 +1161,7 @@ There are 343 test cases in total:
 
 #### <a name="NotingFileModified"/>NotingFileModified
 
-##### <a name="CommonAlgorithm_NotingFileModified_File_LastModificationTime"/>CommonAlgorithm_NotingFileModified_File_LastModificationTime
+##### <a name="Algorithm_NotingFileModified_File_LastModificationTime"/>Algorithm_NotingFileModified_File_LastModificationTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1136,7 +1171,7 @@ There are 343 test cases in total:
 | | Write to file|
 | | Verify LastWriteTimeBeforeFileModified is less than LastWriteTimeAfterFileModified|
 
-##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastModificationTime"/>CommonAlgorithm_NotingFileModified_Dir_LastModificationTime
+##### <a name="Algorithm_NotingFileModified_Dir_LastModificationTime"/>Algorithm_NotingFileModified_Dir_LastModificationTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1146,7 +1181,7 @@ There are 343 test cases in total:
 | | Create file into directory|
 | | Verify LastWriteTimeBeforeFileModified is less than LastWriteTimeAfterFileModified|
 
-##### <a name="CommonAlgorithm_NotingFileModified_File_LastChangeTime"/>CommonAlgorithm_NotingFileModified_File_LastChangeTime
+##### <a name="Algorithm_NotingFileModified_File_LastChangeTime"/>Algorithm_NotingFileModified_File_LastChangeTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1157,7 +1192,7 @@ There are 343 test cases in total:
 | | Write to file|
 | | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
 
-##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastChangeTime"/>CommonAlgorithm_NotingFileModified_Dir_LastChangeTime
+##### <a name="Algorithm_NotingFileModified_Dir_LastChangeTime"/>Algorithm_NotingFileModified_Dir_LastChangeTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1168,17 +1203,7 @@ There are 343 test cases in total:
 | | Create file into directory|
 | | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
 
-##### <a name="CommonAlgorithm_NotingFileModified_File_LastAccessTime"/>CommonAlgorithm_NotingFileModified_File_LastAccessTime
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if LastAccessTime is updated by different file systems when file is modified.|
-| | Test environment: FAT32, NTFS, ReFS|
-| Message Sequence| CreateFile (DataFile)|
-| | Write to file|
-| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
-
-##### <a name="CommonAlgorithm_NotingFileModified_Dir_LastAccessTime"/>CommonAlgorithm_NotingFileModified_Dir_LastAccessTime
+##### <a name="Algorithm_NotingFileModified_Dir_LastAccessTime"/>Algorithm_NotingFileModified_Dir_LastAccessTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1188,7 +1213,7 @@ There are 343 test cases in total:
 | | Create file into directory|
 | | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
 
-##### <a name="CommonAlgorithm_NotingFileModified_File_Archive"/>CommonAlgorithm_NotingFileModified_File_Archive
+##### <a name="Algorithm_NotingFileModified_File_Archive"/>Algorithm_NotingFileModified_File_Archive
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1198,7 +1223,7 @@ There are 343 test cases in total:
 | | Write to file|
 | | Verify Archive is true|
 
-##### <a name="CommonAlgorithm_NotingFileModified_Dir_Archive"/>CommonAlgorithm_NotingFileModified_Dir_Archive
+##### <a name="Algorithm_NotingFileModified_Dir_Archive"/>Algorithm_NotingFileModified_Dir_Archive
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1748,6 +1773,8 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileAccessInformation|
 | | Verify server responses accordingly.|
 
+#### <a name="FileAlignmentInformation"/>FileAlignmentInformation
+
 ##### <a name="FileInfo_Query_FileAlignmentInformation"/>FileInfo_Query_FileAlignmentInformation
 
 | &#32;| &#32; |
@@ -1756,6 +1783,8 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile with normal file name.|
 | | QueryInfo with FileInfoClass.FileAlignmentInformation|
 | | Verify server returned status and returned AlignmentRequirement and bytecount accordingly.|
+
+#### <a name="FileAlternateNameInformation"/>FileAlternateNameInformation
 
 ##### <a name="FileInfo_Query_FileAlternateNameInformation"/>FileInfo_Query_FileAlternateNameInformation
 
@@ -1766,6 +1795,8 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileAlternateNameInformation|
 | | Verify server returned status and altername accordingly.|
 
+#### <a name="FileInternalInformation"/>FileInternalInformation
+
 ##### <a name="FileInfo_Query_FileInternalInformation"/>FileInfo_Query_FileInternalInformation
 
 | &#32;| &#32; |
@@ -1775,6 +1806,8 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileInternalInformation|
 | | Verify server returned status accordingly.|
 
+#### <a name="FileModeInformation"/>FileModeInformation
+
 ##### <a name="FileInfo_Query_FileModeInformation"/>FileInfo_Query_FileModeInformation
 
 | &#32;| &#32; |
@@ -1783,6 +1816,8 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile with normal file name and mode NO_INTERMEDIATE_BUFFERING, WRITE_THROUGH.|
 | | QueryInfo with FileInfoClass.FileModeInformation|
 | | Verify server returned status and verify the mode of FileModeInformation accordingly.|
+
+#### <a name="FilePositionInformation"/>FilePositionInformation
 
 ##### <a name="FileInfo_Query_FilePositionInformation"/>FileInfo_Query_FilePositionInformation
 
@@ -1808,32 +1843,6 @@ There are 343 test cases in total:
 | | SetInfo with FileInfoClass.FileBasicInformation where **InputBuffer.FileAttributes.FILE_ATTRIBUTE_DIRECTORY** is TRUE |
 | | Verify status returned is **STATUS_INVALID_PARAMETER** |
 
-##### <a name="FileInfo_Set_FileBasicInformation_File_Positive"/>FileInfo_Set_FileBasicInformation_File_Positive
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description|  To test if setting file basic information timestamps are supported by different file systems for data file|
-| | Note: FAT32 doest not process ChangeTime|
-| | File information class: FileBasicInformation|
-| Message Sequence| CreateFile (DataFile).|
-| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
-| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
-| | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
-
-##### <a name="FileInfo_Set_FileBasicInformation_File_MinusTwoSupported"/>FileInfo_Set_FileBasicInformation_File_MinusTwoSupported
-
-| &#32;| &#32; |
-| -------------| ------------- |
-| Description| To test if -2 timestamp value for file basic information attributes is supported by different file systems|
-| | Note: Only NTFS and ReFS support -2 timestamp|
-| | File information class: FileBasicInformation|
-| Message Sequence| CreateFile.|
-| | SetInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime using input timestamp values -3, 0, -1, then -2|
-| | Verify status returned is **STATUS_INVALID_PARAMETER** when input timestamp less than -2|
-| | Verify timestamp does not change when input timestamp equals 0|
-| | Verify timestamp does not change for subsequent I/O operation when input timestamp equals -1|
-| | Verify timestamp is updated for subsequent I/O operation when input timestamp equals -2|
-
 ##### <a name="FileInfo_Set_FileBasicInformation_Dir_Negative"/>FileInfo_Set_FileBasicInformation_Dir_Negative
 
 | &#32;| &#32; |
@@ -1846,17 +1855,235 @@ There are 343 test cases in total:
 | | SetInfo with FileInfoClass.FileBasicInformation where **InputBuffer.FileAttributes.FILE_ATTRIBUTE_TEMPORARY** is TRUE |
 | | Verify status returned should be **STATUS_INVALID_PARAMETER** |
 
-##### <a name="FileInfo_Set_FileBasicInformation_Dir_Positive"/>FileInfo_Set_FileBasicInformation_Dir_Positive
+##### <a name="FileInfo_Set_FileBasicInformation_File_LastWriteTime"/>FileInfo_Set_FileBasicInformation_File_LastWriteTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if setting file basic information timestamp is supported by different file systems |
-| | Note: FAT32 doest not process ChangeTime|
+| Description|  To test if setting LastWriteTime with FileBasicInformation are supported by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where LastWriteTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for LastWriteTime|
+| | Verify returned values for LastWriteTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Dir_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting LastWriteTime with FileBasicInformation are supported by different file systems for directory file|
 | | File information class: FileBasicInformation|
 | Message Sequence| CreateFile (DirectoryFile).|
-| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime, ChangeTime, LastAccessTime and LastWriteTime are set to valid timestamps|
-| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime, ChangeTime, LastAccessTime and LastWriteTime|
-| | Verify returned values for CreationTime, ChangeTime, LastAccessTime and LastWriteTime matches set values|
+| | SetInfo with FileInfoClass.FileBasicInformation where LastWriteTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for LastWriteTime|
+| | Verify returned values for LastWriteTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_File_CreationTime"/>FileInfo_Set_FileBasicInformation_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting CreationTime with FileBasicInformation are supported by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime|
+| | Verify returned values for CreationTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting CreationTime with FileBasicInformation are supported by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where CreationTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for CreationTime|
+| | Verify returned values for CreationTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_File_ChangeTime"/>FileInfo_Set_FileBasicInformation_File_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting ChangeTime with FileBasicInformation are supported by different file systems for data file|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where ChangeTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for ChangeTime|
+| | Verify returned values for ChangeTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_ChangeTime"/>FileInfo_Set_FileBasicInformation_Dir_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting ChangeTime with FileBasicInformation are supported by different file systems for directory file|
+| | Note: The **FAT32** file system doesn’t process the ChangeTime field|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where ChangeTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for ChangeTime|
+| | Verify returned values for ChangeTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_File_LastAccessTime"/>FileInfo_Set_FileBasicInformation_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting LastAccessTime with FileBasicInformation are supported by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where LastAccessTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for LastAccessTime|
+| | Verify returned values for LastAccessTime matches set values|
+
+##### <a name="FileInfo_Set_FileBasicInformation_Dir_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description|  To test if setting LastAccessTime with FileBasicInformation are supported by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | SetInfo with FileInfoClass.FileBasicInformation where LastAccessTime is set to valid timestamp|
+| | QueryInfo with FileInfoClass.FileBasicInformation for LastAccessTime|
+| | Verify returned values for LastAccessTime matches set values|
+
+#### <a name="CreationTime"/>CreationTime
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime"/>FileInfo_Query_FileBasicInformation_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for data file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Zero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for data file when CreationTime is set to 0|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to 0 |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Zero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file when CreationTime is set to 0|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Set CreationTime to 0 |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo"/>FileInfo_Query_FileBasicInformation_File_CreationTime_MinusTwo
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for data file when CreationTime is set to -2|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+| | Set CreationTime to -2 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_MinusTwo
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file when CreationTime is set to -2|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+| | Set CreationTime to -2 |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileBasicInformation_File_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_File_CreationTime_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime value less than -2 is handled by different file systems for data file using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set CreationTime to -3 |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
+
+##### <a name="FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative"/>FileInfo_Query_FileBasicInformation_Dir_CreationTime_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime value less than -2 is handled by different file systems for directory using FileBasicInformation|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set CreationTime to -3 |
+| | Verify status returned should be **STATUS_INVALID_PARAMETER** |
+
+##### <a name="FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileBothDirectoryInformation|
+| | File information class: FileBothDirectoryInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileFullDirectoryInformation|
+| | File information class: FileFullDirectoryInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime"/>FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if CreationTime is handled by different file systems for directory file using FileIdGlobalTxDirectoryInformation|
+| | File information class: FileIdGlobalTxDirectoryInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Create file into directory |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
@@ -3793,6 +4020,7 @@ There are 343 test cases in total:
 ##### <a name="CreateDirectory_InvalidColon"/>CreateDirectory_InvalidColon
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a directory with invalid colon and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory file with invalid colon|
@@ -3801,6 +4029,7 @@ There are 343 test cases in total:
 ##### <a name="CreateFile_InvalidColon"/>CreateFile_InvalidColon
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a data with invalid colon and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a data file with invalid colon|
@@ -3811,6 +4040,7 @@ There are 343 test cases in total:
 ##### <a name="CreateDirectory_EndWithBackSlash"/>CreateDirectory_EndWithBackSlash
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a directory end with backslash and expect success.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory end with with backslash.|
@@ -3819,6 +4049,7 @@ There are 343 test cases in total:
 ##### <a name="CreateFile_EndWithInvalidBackSlash"/>CreateFile_EndWithInvalidBackSlash
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a file end with invalid backslash and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a data file end with invalid backslash.|
@@ -3827,6 +4058,7 @@ There are 343 test cases in total:
 ##### <a name="CreateFile_WithDoubleBackSlashInMiddle"/>CreateFile_WithDoubleBackSlashInMiddle
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a file with double backslash in the middle and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a file with double backslash in the middle.|
