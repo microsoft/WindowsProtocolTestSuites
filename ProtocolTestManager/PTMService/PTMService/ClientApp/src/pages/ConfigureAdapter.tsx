@@ -75,7 +75,7 @@ export function ConfigureAdapter(props: StepWizardProps) {
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={adapters.isLoading} errorMsg={adapters.errorMsg} >
-                <div style={{ height: winSize.height - HeaderMenuHeight - 50, overflowY: 'scroll' }}>
+                <div style={{ height: winSize.height - HeaderMenuHeight - 45, overflowY: 'scroll' }}>
                     {adapterList}
                 </div>
                 <div className='buttonPanel'>

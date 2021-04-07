@@ -30,11 +30,18 @@ export function ConfigureTestCase(props: StepWizardProps) {
     const wizard = WizardNavBar(wizardProps, navSteps);
     const winSize = useWindowSize();
 
+    useEffect(() => {
+        if (!propertyGroups.updated) {
+            dispatch(PropertyGroupsDataSrv.getPropertyGroups());
+        }
+    }, [dispatch, propertyGroups.updated]);
+
     const onPropertyValueChange = (updatedProperty: Property) => {
         dispatch(PropertyGroupsActions.updatedEditingPropertyGroupAction(updatedProperty));
     };
 
     const onEditingPropertyGroupChange = (index: number) => {
+        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
         dispatch(PropertyGroupsActions.setEditingPropertyGroupAction(index));
     };
 
@@ -44,7 +51,8 @@ export function ConfigureTestCase(props: StepWizardProps) {
     };
 
     const onNextButtonClick = () => {
-        dispatch(PropertyGroupsDataSrv.setPropertyGroups((data: any) => {
+        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
+        dispatch(PropertyGroupsDataSrv.setPropertyGroups(() => {
             if (propertyGroups.errorMsg === undefined) {
                 wizardProps.nextStep();
             }
