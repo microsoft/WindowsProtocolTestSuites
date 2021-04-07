@@ -23,7 +23,7 @@
         * [FileInfo_IsShortNameSupported](#FileInfo_IsShortNameSupported)
         * [FileInfo_FileIdInformationSupported](#FileInfo_FileIdInformationSupported)
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
-        * [FileInfo_Set_FileBasicInformation](#FileInfo_Set_FileBasicInformation)
+        * [FileInfo_SetFileBasicInformationSupported](#FileInfo_SetFileBasicInformationSupported)
         * [FileInfo_CreationTime](#FileInfo_CreationTime)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
@@ -57,7 +57,7 @@
         * [AlternateDataStream_FsControl](#AlternateDataStream_FsControl)
     * [Scenarios for Create and Query Directory](#Scenarios-for-Create-And-Query-Directory)
         * [Query Directory](#Scenario-QueryDirectory)
-    * [Scenarios for File and Directory Leasing](#Scenarios-for-File-And-Directory-Leasing)
+    * [Scenarios for File and Directory Leasing](#Test-cases-for-File-And-Directory-Leasing)
         * [CompareLeaseKeys](#CompareLeaseKeys)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
@@ -110,16 +110,16 @@
             * [FileInfo_Query_FileNormalizedNameInfo_Dir](#FileInfo_Query_FileNormalizedNameInfo_Dir)
         * [FileAccessInformation](#FileAccessInformation)
             * [FileInfo_Query_FileAccessInformation_DataSuffix](#FileInfo_Query_FileAccessInformation_DataSuffix)
+        * [FileAlignmentInformation](#FileAlignmentInformation)
+            * [FileInfo_Query_FileAlignmentInformation](#FileInfo_Query_FileAlignmentInformation)
         * [FileAlternateNameInformation](#FileAlternateNameInformation)
             * [FileInfo_Query_FileAlternateNameInformation](#FileInfo_Query_FileAlternateNameInformation)
         * [FileInternalInformation](#FileInternalInformation)
             * [FileInfo_Query_FileInternalInformation](#FileInfo_Query_FileInternalInformation)
-        * [FilePositionInformation](#FilePositionInformation)
-            * [FileInfo_Query_FilePositionInformation](#FileInfo_Query_FilePositionInformation)
         * [FileModeInformation](#FileModeInformation)
             * [FileInfo_Query_FileModeInformation](#FileInfo_Query_FileModeInformation)
-        * [FileAlignmentInformation](#FileAlignmentInformation)
-            * [FileInfo_Query_FileAlignmentInformation](#FileInfo_Query_FileAlignmentInformation)
+        * [FilePositionInformation](#FilePositionInformation)
+            * [FileInfo_Query_FilePositionInformation](#FileInfo_Query_FilePositionInformation)
         * [FileBasicInformation](#FileBasicInformation)
             * [FileInfo_Set_FileBasicInformation_File_Negative](#FileInfo_Set_FileBasicInformation_File_Negative)
             * [FileInfo_Set_FileBasicInformation_Dir_Negative](#FileInfo_Set_FileBasicInformation_Dir_Negative)
@@ -176,7 +176,7 @@
             * [FsCtl_Set_Sparse_File_IsSparseFileSupported](#FsCtl_Set_Sparse_File_IsSparseFileSupported)
             * [FsCtl_Set_Sparse_Dir_IsSparseFileSupported](#FsCtl_Set_Sparse_Dir_IsSparseFileSupported)
         * [IsZeroDataSupported](#IsZeroDataSupported)
-            * [FsCtl_Set_ZeroData_File_IsZeroDataSupported](#FsCtl_Set_ZeroData_File_IsSetZeroDataSupported)
+            * [FsCtl_Set_ZeroData_File_IsZeroDataSupported](#FsCtl_Set_ZeroData_File_IsZeroDataSupported)
             * [FsCtl_Set_ZeroData_Dir_IsZeroDataSupported](#FsCtl_Set_ZeroData_Dir_IsZeroDataSupported)
         * [IsDuplicateExtentsToFileExSupported](#IsDuplicateExtentsToFileExSupported)
             * [BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported](#BVT_FsCtl_DuplicateExtentsToFileEx_IsBasicSupported)
@@ -1773,6 +1773,8 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileAccessInformation|
 | | Verify server responses accordingly.|
 
+#### <a name="FileAlignmentInformation"/>FileAlignmentInformation
+
 ##### <a name="FileInfo_Query_FileAlignmentInformation"/>FileInfo_Query_FileAlignmentInformation
 
 | &#32;| &#32; |
@@ -1781,6 +1783,8 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile with normal file name.|
 | | QueryInfo with FileInfoClass.FileAlignmentInformation|
 | | Verify server returned status and returned AlignmentRequirement and bytecount accordingly.|
+
+#### <a name="FileAlternateNameInformation"/>FileAlternateNameInformation
 
 ##### <a name="FileInfo_Query_FileAlternateNameInformation"/>FileInfo_Query_FileAlternateNameInformation
 
@@ -1791,6 +1795,8 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileAlternateNameInformation|
 | | Verify server returned status and altername accordingly.|
 
+#### <a name="FileInternalInformation"/>FileInternalInformation
+
 ##### <a name="FileInfo_Query_FileInternalInformation"/>FileInfo_Query_FileInternalInformation
 
 | &#32;| &#32; |
@@ -1800,6 +1806,8 @@ There are 343 test cases in total:
 | | QueryInfo with FileInfoClass.FileInternalInformation|
 | | Verify server returned status accordingly.|
 
+#### <a name="FileModeInformation"/>FileModeInformation
+
 ##### <a name="FileInfo_Query_FileModeInformation"/>FileInfo_Query_FileModeInformation
 
 | &#32;| &#32; |
@@ -1808,6 +1816,8 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile with normal file name and mode NO_INTERMEDIATE_BUFFERING, WRITE_THROUGH.|
 | | QueryInfo with FileInfoClass.FileModeInformation|
 | | Verify server returned status and verify the mode of FileModeInformation accordingly.|
+
+#### <a name="FilePositionInformation"/>FilePositionInformation
 
 ##### <a name="FileInfo_Query_FilePositionInformation"/>FileInfo_Query_FilePositionInformation
 
@@ -4010,6 +4020,7 @@ There are 343 test cases in total:
 ##### <a name="CreateDirectory_InvalidColon"/>CreateDirectory_InvalidColon
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a directory with invalid colon and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory file with invalid colon|
@@ -4018,6 +4029,7 @@ There are 343 test cases in total:
 ##### <a name="CreateFile_InvalidColon"/>CreateFile_InvalidColon
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a data with invalid colon and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a data file with invalid colon|
@@ -4028,6 +4040,7 @@ There are 343 test cases in total:
 ##### <a name="CreateDirectory_EndWithBackSlash"/>CreateDirectory_EndWithBackSlash
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a directory end with backslash and expect success.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a directory end with with backslash.|
@@ -4036,6 +4049,7 @@ There are 343 test cases in total:
 ##### <a name="CreateFile_EndWithInvalidBackSlash"/>CreateFile_EndWithInvalidBackSlash
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a file end with invalid backslash and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a data file end with invalid backslash.|
@@ -4044,6 +4058,7 @@ There are 343 test cases in total:
 ##### <a name="CreateFile_WithDoubleBackSlashInMiddle"/>CreateFile_WithDoubleBackSlashInMiddle
 
 | &#32;| &#32; |
+| -------------| ------------- |
 | Description| Try to create a file with double backslash in the middle and expect failure.|
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a file with double backslash in the middle.|

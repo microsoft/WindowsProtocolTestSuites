@@ -1,6 +1,6 @@
 ﻿# AUTH  Protocol Server Test Design Specification 
 
-##Contents
+## Contents
 * [Contents](#_Toc427487690)
 * [Summary](#_Toc427487691)
 * [Test Scope](#_Toc427487692)
@@ -520,7 +520,7 @@ In Share Permission Check scenario, different DACLs will be applied to SMB share
 
 #### <a name="_Toc427487704"/>Preconditions
 
-#####Domain Users
+##### Domain Users
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -532,7 +532,7 @@ In Share Permission Check scenario, different DACLs will be applied to SMB share
 | @0o2^w@w^-t%abwos31| | |  | 
 | | | Domain Users| | 
 
-#####Domain Groups
+##### Domain Groups
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -541,7 +541,7 @@ In Share Permission Check scenario, different DACLs will be applied to SMB share
 
 * SID may be different in your environment.
 
-#####Share(s)
+##### Share(s)
 If MS-SRVS is supported by SUT, test suite can dynamically set Share Permissions using MS-SRVS. One share need to be exposed, named AzShare by default. Folder (NTFS) permission should be set to allow everyone to access it.
 Otherwise, 6 shares (AzShare01, …, AzShare06) are required. Share Permissions should be set respectively according to the Security Descriptor in each of the following tables. Folder (NTFS) permission should be set to allow everyone to access it.
 
@@ -621,7 +621,7 @@ In Folder Permission Check scenario, different DACLs will be applied to a shared
 
 #### <a name="_Toc427487709"/>Preconditions
 
-#####Domain Users
+##### Domain Users
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -629,7 +629,7 @@ In Folder Permission Check scenario, different DACLs will be applied to a shared
 | | | Domain Users| | 
 
 
-#####Domain Groups
+##### Domain Groups
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -639,7 +639,7 @@ In Folder Permission Check scenario, different DACLs will be applied to a shared
 
 * SID may be different in your environment.
 
-#####Share(s)
+##### Share(s)
 One share need to be exposed, named AzFolder by default. Share Permission should be set to allow everyone to access it. Domain Admins should be granted Full Access permission to the folder.
 SMB2 SET_INFO is required to run these cases.
 
@@ -710,14 +710,14 @@ In File Permission Check scenario, files with different DACLs will be created in
 
 
 
-#####Domain Users
+##### Domain Users
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
 | AzUser01| S-1-5-21-465464611-2451339954-1855217765-1106| AzGroup01|  | 
 | | | Domain Users| | 
 
-#####Domain Groups
+##### Domain Groups
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -726,7 +726,7 @@ In File Permission Check scenario, files with different DACLs will be created in
 
 * SID may be different in your environment.
 
-#####Share(s)
+##### Share(s)
 One share need to be exposed, named AzFile by default. Share permission should be set to allow everyone accessing it. Domain Admins should be granted Full Access permission to the folder.
 SMB2 SET_INFO is required to run these cases.
 
@@ -799,7 +799,7 @@ In Claim-Based Access Control scenario, different Central Access Policies (CAPs)
 
 #### <a name="_Toc427487718"/>Preconditions
 
-#####Domain Users
+##### Domain Users
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -824,7 +824,7 @@ In Claim-Based Access Control scenario, different Central Access Policies (CAPs)
 | noclaimuser| S-1-5-21-465464611-2451339954-1855217765-1607| Domain Users|  | 
 
 
-#####Domain Groups
+##### Domain Groups
 
 | User Name| SID| Member Of| Attributes| 
 | -------------| -------------| -------------| ------------- |
@@ -836,7 +836,7 @@ In Claim-Based Access Control scenario, different Central Access Policies (CAPs)
 
 * SID may be different in your environment.
 
-#####Claims
+##### Claims
 
 | Display Name| ID| Value Type| Comments| 
 | -------------| -------------| -------------| ------------- |
@@ -845,9 +845,9 @@ In Claim-Based Access Control scenario, different Central Access Policies (CAPs)
 
 
 
-#####Central Access Rules (CARs)
+##### Central Access Rules (CARs)
 
-######CountryCodeAnyOf156Or840
+###### CountryCodeAnyOf156Or840
 
 
 Target Resources: All Resources
@@ -858,7 +858,7 @@ Current Permissions:
 
 
 
-######CountryCodeEquals156AndITDepartmentRule
+###### CountryCodeEquals156AndITDepartmentRule
 
 
 Target Resources: All Resources
@@ -871,7 +871,7 @@ Current Permissions:
 
 
 
-######CountryCodeEquals156OrITDepartmentRule
+###### CountryCodeEquals156OrITDepartmentRule
 
 
 Target Resources: All Resources
@@ -882,7 +882,7 @@ Current Permissions:
 
 
 
-######CountryCodeEquals156Rule
+###### CountryCodeEquals156Rule
 
 
 Target Resources: All Resources
@@ -893,7 +893,7 @@ Current Permissions:
 
 
 
-######CountryCodeGreaterThan392Rule
+###### CountryCodeGreaterThan392Rule
 
 
 Target Resources: All Resources
@@ -904,7 +904,7 @@ Current Permissions:
 
 
 
-######CountryCodeGreaterThanOrEquals392Rule
+###### CountryCodeGreaterThanOrEquals392Rule
 
 
 Target Resources: All Resources
@@ -915,7 +915,7 @@ Current Permissions:
 
 
 
-######CountryCodeLessThan392Rule
+###### CountryCodeLessThan392Rule
 
 
 Target Resources: All Resources
@@ -926,7 +926,7 @@ Current Permissions:
 
 
 
-######CountryCodeLessThanOrEquals392Rule
+###### CountryCodeLessThanOrEquals392Rule
 
 
 Target Resources: All Resources
@@ -937,7 +937,7 @@ Current Permissions:
 
 
 
-######CountryCodeNotAnyOf156Or840Rule
+###### CountryCodeNotAnyOf156Or840Rule
 
 
 Target Resources: All Resources
@@ -948,7 +948,7 @@ Current Permissions:
 
 
 
-######CountryCodeNotEquals156Rule
+###### CountryCodeNotEquals156Rule
 
 
 Target Resources: All Resources
@@ -958,7 +958,7 @@ Current Permissions:
 ![image16](./image/Auth_ServerTestDesignSpecification/image16.png)
 
 
-#####Central Access Policies (CAPs)
+##### Central Access Policies (CAPs)
 
 
 | Name| Member Central Access Rules| 
@@ -978,11 +978,11 @@ Current Permissions:
 | CountryCodeEquals156OrITGroupPolicy| CountryCodeEquals156OrITGroupRule| 
 
 
-#####Share(s)
+##### Share(s)
 One share need to be exposed, named AzCBAC by default. Share Permission and Folder Permission should all be set to allow everyone to access it.
 SMB2 SET_INFO is required to run these cases.
 
-#####BVT cases
+##### BVT cases
 
 | &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| ------------- |
@@ -994,7 +994,7 @@ SMB2 SET_INFO is required to run these cases.
 
 
 
-#####Other traditional cases
+##### Other traditional cases
 
 | &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| ------------- |
