@@ -243,6 +243,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             RuleGroup gp = new RuleGroup()
             {
                 Name = node.Attributes["name"].Value,
+                DisplayName = node.Attributes["name"].Value,
                 RuleGroupType = ruletype
             };
             var rules = node.SelectNodes("Rule");
