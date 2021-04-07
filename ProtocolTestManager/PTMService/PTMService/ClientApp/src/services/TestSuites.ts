@@ -21,9 +21,9 @@ export const TestSuitesDataSrv = {
     },
     getTestSuiteTestCases: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
-        const configurationId = state.configurations.selectedConfiguration?.Id
+        const testsuiteId = state.testsuites.selectedTestSuite?.Id
         await FetchService({
-            url: `api/testsuite/${configurationId}`,
+            url: `api/testsuite/${testsuiteId}`,
             method: RequestMethod.GET,
             dispatch,
             onRequest: FilterTestCaseActions.getTestSuiteTestCasesAction_Request,
