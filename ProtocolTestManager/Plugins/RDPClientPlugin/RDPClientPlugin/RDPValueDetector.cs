@@ -52,8 +52,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         private const string propSupportRDPEFS = "SupportRDPEFS";
         private const string propRDPVersion = "Version";
         private const string propRDPServerPort = "ServerPort";
-        private const string propAgentAddress = "AgentAddress";
-        private const string propIsClientSupportRDPFile = "ClientSupportRDPFile";
+        private const string propAgentAddress = "SUTControl.AgentAddress";
+        private const string propIsClientSupportRDPFile = "SUTControl.ClientSupportRDPFile";
 
 #endregion Constant
 
