@@ -225,55 +225,47 @@ export function RunSelectedCase(props: StepWizardProps) {
 
     return (
         <StepPanel leftNav={wizard} isLoading={selectedTestCases.isLoading} errorMsg={selectedTestCases.errorMsg}>
-            <div>
-                <div>
-                    <Stack style={{ padding: 10 }}>
-                        <Fabric style={{ paddingBottom: 20 }}>
-                            <Stack horizontal tokens={StackGap10}>
-                                <FilterByDropdown
-                                    options={filterByDropdownOptions}
-                                    onOptionChange={(newValue) => setFilterByDropdownOption(newValue)} />
-                                <SearchBox
-                                    style={{ width: 280 }}
-                                    placeholder={filterByDropdownOption.filterPlaceholder}
-                                    onChange={(_, newValue) => onFilterPhraseChanged(newValue)}
-                                    onReset={onFilterPhraseClear}
-                                />
-                                {
-                                    !isValidFilterPhrase(filterPhrase)
-                                        ? null
-                                        : <Label>{`Number of test cases after filter applied: ${filteredTestCases.length}`}</Label>
-                                }
-                            </Stack>
-                            <hr style={{ border: "1px solid #d9d9d9" }} />
-                            <div style={{ height: winSize.height - 210, overflowY: 'auto' }}>
-                                <MarqueeSelection selection={selection}>
-                                    <DetailsList
-                                        items={filteredTestCases}
-                                        setKey="set"
-                                        columns={listColumns}
-                                        layoutMode={DetailsListLayoutMode.justified}
-                                        selection={selection}
-                                        selectionPreservedOnEmptyClick={true}
-                                        compact
-                                    />
-                                </MarqueeSelection>
-                            </div>
-                        </Fabric>
-                        <div style={{ borderTop: '1px solid #d9d9d9', backgroundColor: '#f5f5f5', paddingTop: 7, paddingLeft: 45, paddingRight: 45, height: 40 }}>
-                            <Stack horizontal>
-                                <Stack horizontalAlign='start' style={{ paddingRight: '61%' }}>
-                                    <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
-                                </Stack>
-                                <Stack horizontal horizontalAlign='end' tokens={{ childrenGap: 25 }}>
-                                    <DefaultButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || selectedTestCases.allTestCases.length === 0} onClick={onRunAllCasesClick} />
-                                    <DefaultButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
-                                </Stack>
-                            </Stack>
-                        </div>
+            <Stack style={{ paddingLeft: 10 }}>
+                <Fabric>
+                    <Stack horizontal tokens={StackGap10}>
+                        <FilterByDropdown
+                            options={filterByDropdownOptions}
+                            onOptionChange={(newValue) => setFilterByDropdownOption(newValue)} />
+                        <SearchBox
+                            style={{ width: 280 }}
+                            placeholder={filterByDropdownOption.filterPlaceholder}
+                            onChange={(_, newValue) => onFilterPhraseChanged(newValue)}
+                            onReset={onFilterPhraseClear}
+                        />
+                        {
+                            !isValidFilterPhrase(filterPhrase)
+                                ? null
+                                : <Label>{`Number of test cases after filter applied: ${filteredTestCases.length}`}</Label>
+                        }
+                    </Stack>
+                    <hr style={{ border: "1px solid #d9d9d9" }} />
+                    <div style={{ height: winSize.height - 170, overflowY: 'auto' }}>
+                        <MarqueeSelection selection={selection}>
+                            <DetailsList
+                                items={filteredTestCases}
+                                setKey="set"
+                                columns={listColumns}
+                                layoutMode={DetailsListLayoutMode.justified}
+                                selection={selection}
+                                selectionPreservedOnEmptyClick={true}
+                                compact
+                            />
+                        </MarqueeSelection>
+                    </div>
+                </Fabric>
+                <div className='buttonPanel'>
+                    <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
+                        <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || selectedTestCases.allTestCases.length === 0} onClick={onRunAllCasesClick} />
+                        <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
+                        <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
                     </Stack>
                 </div>
-            </div>
+            </Stack>
         </StepPanel>
     );
 };

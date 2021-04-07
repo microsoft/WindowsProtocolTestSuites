@@ -39,13 +39,13 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 }
 
 #run-panel {
-    background: #609fa9;
+    background: #5cdbd3;
     margin-right: 15px;
     float: left;
 }
 
 #record-panel {
-    background: #d48165;
+    background: #69c0ff;
     float: left;
     margin-left: 15px;
 }
@@ -88,23 +88,24 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 
 .home .panel .run-button {
     margin-top: 20px;
-    background-color: #2f4454;
+    background-color: white;
     width: 12rem;
     height: 3rem;
     border-radius: 3rem;
     border-color: transparent;
     font-size: 1.2rem;
+    color: black;
 }
 
 .home .panel .record-button {
     margin-top: 20px;
-    background-color: #ffffff;
+    background-color: white;
     width: 12rem;
     height: 3rem;
     border-radius: 3rem;
     border-color: transparent;
     font-size: 1.2rem;
-    color: #d48165;
+    color: black;
 }
 
 .home .panel .robot-image {

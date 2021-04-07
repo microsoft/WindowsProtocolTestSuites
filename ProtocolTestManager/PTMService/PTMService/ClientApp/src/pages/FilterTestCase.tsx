@@ -7,7 +7,7 @@ import { StackGap10 } from '../components/StackStyle';
 import { StepPanel } from '../components/StepPanel';
 import { useWindowSize } from '../components/UseWindowSize';
 import { HeaderMenuHeight, WizardNavBar } from '../components/WizardNavBar';
-import { getNavSteps } from '../model/DefaultNavSteps';
+import { getNavSteps, RunSteps } from '../model/DefaultNavSteps';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../store/configureStore';
 import { RuleListPanel } from '../components/RuleListPanel';
@@ -17,53 +17,56 @@ import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectedRuleGroup } from "../model/RuleGroup";
 
 import { PrimaryButton, Stack } from '@fluentui/react';
+import { ConfigureMethod_AutoDetection } from './ConfigureMethod';
 export function FilterTestCase(props: any) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
 
-    const navSteps = getNavSteps(wizardProps);
+    const dispatch = useDispatch();
+    const filterInfo = useSelector((state: AppState) => state.filterInfo);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
+
+    const navSteps = getNavSteps(wizardProps, configureMethod);
     const wizard = WizardNavBar(wizardProps, navSteps);
     const winSize = useWindowSize();
 
-    const dispatch = useDispatch();
-    const filterInfo = useSelector((state: AppState) => state.filterInfo);
-    
     useEffect(() => {
         dispatch(ConfigurationsDataSrv.getRules());
         dispatch(TestSuitesDataSrv.getTestSuiteTestCases());
     }, [dispatch])
 
     const onPreviousButtonClick = () => {
-        wizardProps.previousStep();
+        if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigureMethod_AutoDetection) {
+            wizardProps.previousStep();
+        } else {
+            wizardProps.goToStep(RunSteps.CONFIGURE_METHOD);
+        }
     };
 
     const onNextButtonClick = () => {
-        dispatch(ConfigurationsDataSrv.setRules((data: any) => {
+        dispatch(ConfigurationsDataSrv.setRules(() => {
             wizardProps.nextStep();
         }));
     };
-   
-    const checkedAction = (data: SelectedRuleGroup) => {        
+
+    const checkedAction = (data: SelectedRuleGroup) => {
         dispatch(FilterTestCaseActions.setSelectedRuleAction(data));
     }
     return (
         <StepPanel leftNav={wizard} isLoading={filterInfo.isLoading} errorMsg={filterInfo.errorMsg} >
-            <div >
+            <div>
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
                     <div style={{ width: winSize.width * 0.25, }}>Filter</div>
                     <div>Selected Test Cases {filterInfo.listSelectedCases?.length}</div>
                 </Stack>
                 <hr style={{ border: "1px solid #d9d9d9" }} />
-                <Stack>
-                    <Stack horizontal>
-                        <Stack style={{ minWidth: winSize.width * 0.25, }} tokens={{ childrenGap: 10 }}>
-                            <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
-                        </Stack>
-                        <div style={{ width: 25 }} />
-                        <Stack style={{ height: winSize.height - HeaderMenuHeight - 100, width: 100 + '%', overflowY: 'auto' }}>
-                            {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
-                        </Stack>
+                <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }}>
+                    <Stack style={{ minWidth: winSize.width * 0.25, }} tokens={StackGap10}>
+                        <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
                     </Stack>
-
+                    <div style={{ width: 25 }} />
+                    <Stack style={{ height: winSize.height - HeaderMenuHeight - 82, width: 100 + '%', overflowY: 'auto' }}>
+                        {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
+                    </Stack>
                 </Stack>
             </div>
             <div className='buttonPanel'>

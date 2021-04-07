@@ -17,14 +17,18 @@ import { PropertyGroupsDataSrv } from '../services/PropertyGroups';
 import { AppState } from '../store/configureStore';
 
 export function ConfigureTestCase(props: StepWizardProps) {
+    const dispatch = useDispatch();
+    const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
+
+    useEffect(() => {
+        dispatch(PropertyGroupsDataSrv.getPropertyGroups());
+    }, [dispatch]);
+
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const navSteps = getNavSteps(wizardProps);
+    const navSteps = getNavSteps(wizardProps, configureMethod);
     const wizard = WizardNavBar(wizardProps, navSteps);
     const winSize = useWindowSize();
-
-    const dispatch = useDispatch();
-
-    const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
 
     useEffect(() => {
         if (!propertyGroups.updated) {
@@ -58,19 +62,19 @@ export function ConfigureTestCase(props: StepWizardProps) {
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={propertyGroups.isLoading} errorMsg={propertyGroups.errorMsg}>
-                <Stack style={{ padding: 10 }}>
+                <Stack style={{ paddingLeft: 10 }}>
                     <Stack horizontal style={{ paddingBottom: 20 }}>
                         <div style={{ fontWeight: 'bold' }}>Groups</div>
                         <div style={{ paddingLeft: winSize.width * 0.10, fontWeight: 'bold' }}>{propertyGroups.editingPropertyGroup?.Name} Properties</div>
                         <div style={{ paddingLeft: winSize.width * 0.13, fontSize: 'small', fontWeight: 'normal', alignSelf: 'center' }}>*The value is modified compared to the latest run</div>
                     </Stack>
                     <Stack horizontal>
-                        <Stack style={{ paddingTop: 20, width: winSize.width * 0.16, height: winSize.height - 160, overflowY: 'auto' }} tokens={{ childrenGap: 20 }} >
+                        <Stack style={{ paddingTop: 20, width: 220, height: winSize.height - 160, overflowY: 'auto' }} tokens={{ childrenGap: 20 }} >
                             {
                                 propertyGroups.propertyGroups.map((propertyGroup, index) => {
                                     return (
                                         <div key={index} style={{ alignSelf: 'start' }}>
-                                            <Link style={{ fontSize: 'x-large', fontWeight: 'bold' }}
+                                            <Link style={{ fontSize: 'large', fontWeight: 'bold', color: propertyGroups.editingPropertyGroupIndex === index ? "#0078D4" : "#A19F9D" }}
                                                 disabled={propertyGroups.editingPropertyGroupIndex === index}
                                                 onClick={() => onEditingPropertyGroupChange(index)}>
                                                 {propertyGroup.Name}
@@ -93,7 +97,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                             }
                         </div>
                     </Stack>
-                    <div style={{ borderTop: '1px solid #d9d9d9', backgroundColor: '#f5f5f5', paddingTop: 7, paddingRight: 45, height: 40 }}>
+                    <div className='buttonPanel'>
                         <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
                             <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={propertyGroups.isPosting} />
                             <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={propertyGroups.isPosting} />

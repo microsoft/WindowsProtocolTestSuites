@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { StepWizardChildProps } from "react-step-wizard";
+import { ConfigureMethod_AutoDetection } from "../pages/ConfigureMethod";
+import { ConfigureMethodState } from "../reducers/ConfigureMethodReducer";
 import { StepNavItemInfo } from "./StepNavItemInfo";
 
 export const RunSteps = {
@@ -65,11 +67,21 @@ const DefaultNavSteps: StepNavItemInfo[] = [
     },
 ];
 
-export function getNavSteps(wizardProps: StepWizardChildProps) {
+export function getNavSteps(wizardProps: StepWizardChildProps, configureMethod?: ConfigureMethodState) {
     return DefaultNavSteps.map(item => {
-        if (item.TargetStep <= wizardProps.currentStep) {
+        if ((configureMethod)
+            && (configureMethod.selectedMethod)
+            && (configureMethod.selectedMethod != ConfigureMethod_AutoDetection)
+            && (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT)) {
             return {
                 ...item,
+                IsActive: false,
+                IsEnabled: false,
+            }
+        } else if (item.TargetStep < wizardProps.currentStep) {
+            return {
+                ...item,
+                IsActive: false,
                 IsEnabled: true
             }
         } else if (item.TargetStep === wizardProps.currentStep) {
