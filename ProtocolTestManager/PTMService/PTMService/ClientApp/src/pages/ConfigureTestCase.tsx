@@ -24,17 +24,20 @@ export function ConfigureTestCase(props: StepWizardProps) {
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(PropertyGroupsDataSrv.getPropertyGroups());
-    }, [dispatch]);
-
     const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
+
+    useEffect(() => {
+        if (!propertyGroups.updated) {
+            dispatch(PropertyGroupsDataSrv.getPropertyGroups());
+        }
+    }, [dispatch, propertyGroups.updated]);
 
     const onPropertyValueChange = (updatedProperty: Property) => {
         dispatch(PropertyGroupsActions.updatedEditingPropertyGroupAction(updatedProperty));
     };
 
     const onEditingPropertyGroupChange = (index: number) => {
+        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
         dispatch(PropertyGroupsActions.setEditingPropertyGroupAction(index));
     };
 
@@ -44,7 +47,8 @@ export function ConfigureTestCase(props: StepWizardProps) {
     };
 
     const onNextButtonClick = () => {
-        dispatch(PropertyGroupsDataSrv.setPropertyGroups((data: any) => {
+        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
+        dispatch(PropertyGroupsDataSrv.setPropertyGroups(() => {
             if (propertyGroups.errorMsg === undefined) {
                 wizardProps.nextStep();
             }
@@ -65,7 +69,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                             {
                                 propertyGroups.propertyGroups.map((propertyGroup, index) => {
                                     return (
-                                        <div style={{ alignSelf: 'start' }}>
+                                        <div key={index} style={{ alignSelf: 'start' }}>
                                             <Link style={{ fontSize: 'x-large', fontWeight: 'bold' }}
                                                 disabled={propertyGroups.editingPropertyGroupIndex === index}
                                                 onClick={() => onEditingPropertyGroupChange(index)}>

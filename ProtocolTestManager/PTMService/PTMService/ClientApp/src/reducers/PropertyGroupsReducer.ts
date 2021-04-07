@@ -99,16 +99,11 @@ export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, act
             };
 
         case SET_EDITINGPROPERTYGROUP:
-            const newState = {
+            return {
                 ...state,
-                updated: true,
-                propertyGroups: getUpdatedPropertyGroups(state),
                 editingPropertyGroupIndex: action.payload,
-            };
-
-            newState.editingPropertyGroup = newState.propertyGroups[action.payload]
-
-            return newState;
+                editingPropertyGroup: state.propertyGroups[action.payload]
+            }
 
         case UPDATE_PROPERTYGROUPS:
             return {
@@ -120,9 +115,8 @@ export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, act
         case SET_PROPERTYGROUPS_REQUEST:
             return {
                 ...state,
-                errorMsg: undefined,
-                updated: true,
-                propertyGroups: getUpdatedPropertyGroups(state)
+                isPosting: true,
+                errorMsg: undefined
             };
 
         case SET_PROPERTYGROUPS_SUCCESS:

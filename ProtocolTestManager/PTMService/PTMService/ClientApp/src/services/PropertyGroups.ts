@@ -19,9 +19,10 @@ export const PropertyGroupsDataSrv = {
             onError: PropertyGroupsActions.getPropertyGroupsAction_Failure
         });
     },
-    setPropertyGroups: (completeCallback: (data: any) => void): AppThunkAction<PropertyGroupsActionTypes> => async (dispatch, getState) => {
+    setPropertyGroups: (completeCallback: () => void): AppThunkAction<PropertyGroupsActionTypes> => async (dispatch, getState) => {
         const state = getState();
         if (!state.propertyGroups.updated) {
+            completeCallback();
             return;
         }
 
@@ -36,6 +37,5 @@ export const PropertyGroupsDataSrv = {
             onError: PropertyGroupsActions.setPropertyGroupsAction_Failure,
             onCompleteCallback: completeCallback,
         });
-    },
+    }
 };
-
