@@ -453,12 +453,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         Arguments = "test " + args,
+                        RedirectStandardError = true,
                     }
                 };
 
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
-
+                if(vstestProcess.HasExited && vstestProcess.ExitCode != 0)
+                {
+                    string errorContent = vstestProcess.StandardError.ReadToEnd();
+                    Directory.Delete(tempPath, true);
+                    throw new Exception(errorContent);
+                }
                 string infoPath = Path.Combine(tempPath, "TestCaseInfo.json");
 
                 var content = File.ReadAllText(infoPath);

@@ -36,8 +36,7 @@ export const SelectedTestCasesDataSrv = {
             onRequest: SelectedTestCasesActions.createRunRequestAction_Request,
             onComplete: SelectedTestCasesActions.createRunRequestAction_Success,
             onError: SelectedTestCasesActions.createRunRequestAction_Failure,
-            onCompleteCallback: completeCallback
-        });
+        }).then(completeCallback);
     },
     abortRunRequest: (testResultId: number): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
         await FetchService({

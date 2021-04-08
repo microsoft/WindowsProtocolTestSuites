@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { Link } from '@fluentui/react';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { StepWizardChildProps } from 'react-step-wizard';
 import { TestSuiteActions } from '../actions/TestSuitesActions';
 import { StepPanel } from '../components/StepPanel';
@@ -20,6 +22,7 @@ export function SelectTestSuite(props: any) {
     const wizard = WizardNavBar(wizardProps, navSteps);
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     useEffect(() => {
         dispatch(TestSuitesDataSrv.getTestSuiteList());
@@ -32,12 +35,21 @@ export function SelectTestSuite(props: any) {
         wizardProps.nextStep();
     }
 
+    const testSuitesList = testSuites.testSuiteList.map((item, index) => {
+        return <TestSuiteInfo
+            key={index}
+            TestSuiteName={item.Name}
+            Description={item.Description}
+            Version={item.Version}
+            OnSelect={() => onSelectTestSuite(item)} />
+    })
+
     return (
         <StepPanel leftNav={wizard} isLoading={testSuites.isLoading} errorMsg={testSuites.errorMsg}>
             {
-                testSuites.testSuiteList.map((item, index) => {
-                    return <TestSuiteInfo key={index} TestSuiteName={item.Name} Description={item.Description} Version={item.Version} OnSelect={() => onSelectTestSuite(item)}></TestSuiteInfo>
-                })
+                (testSuitesList.length === 0) ? <div>
+                    No test suite found, please go to <Link onClick={() => history.push('/Management')}>Management</Link> page to install test suite
+                    </div> : testSuitesList
             }
         </StepPanel>
     )

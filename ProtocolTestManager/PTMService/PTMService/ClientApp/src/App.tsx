@@ -11,6 +11,7 @@ import { TaskHistory } from './pages/TaskHistory';
 import './css/index.css';
 import { IStackStyles, IStackTokens, Stack } from '@fluentui/react';
 import { useWindowSize } from './components/UseWindowSize';
+import { Management } from './pages/Management';
 
 export default function App() {
     const winSize = useWindowSize();
@@ -28,6 +29,7 @@ export default function App() {
                 <Route exact path='/' component={HomePage} />
                 <Route exact path='/Tasks/NewRun' component={TestSuiteRunWizard} />
                 <Route exact path='/Tasks/History' component={TaskHistory} />
+                <Route exact path='/Management' component={Management} />
                 <Redirect from="*" to="/" />
             </Switch>
         </Stack>

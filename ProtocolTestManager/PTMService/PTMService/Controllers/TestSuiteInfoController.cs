@@ -3,7 +3,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
-using PTMService.Controllers;
 using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers

@@ -59,7 +59,6 @@ export const ConfigurationsDataSrv = {
             onRequest: FilterTestCaseActions.setRulesAction_Request,
             onComplete: FilterTestCaseActions.setRulesAction_Success,
             onError: FilterTestCaseActions.setRulesAction_Failure,     
-            onCompleteCallback: completeCallback
-        })
+        }).then(completeCallback);
     }
 };

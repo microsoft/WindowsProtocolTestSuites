@@ -29,7 +29,6 @@ export const AdapterDataSrv = {
             onRequest: AdapterActions.setAdapterAction_Request,
             onComplete: AdapterActions.setAdapterAction_Success,
             onError: AdapterActions.setAdapterAction_Failure,
-            onCompleteCallback: completeCallback
-        });
+        }).then(completeCallback);
     },
 }

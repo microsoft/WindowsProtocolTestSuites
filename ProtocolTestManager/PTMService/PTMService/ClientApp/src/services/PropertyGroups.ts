@@ -35,7 +35,6 @@ export const PropertyGroupsDataSrv = {
             onRequest: PropertyGroupsActions.setPropertyGroupsAction_Request,
             onComplete: PropertyGroupsActions.setPropertyGroupsAction_Success,
             onError: PropertyGroupsActions.setPropertyGroupsAction_Failure,
-            onCompleteCallback: completeCallback,
-        });
-    }
+        }).then(completeCallback);
+    },
 };

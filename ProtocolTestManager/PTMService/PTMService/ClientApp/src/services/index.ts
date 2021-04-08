@@ -17,7 +17,6 @@ export interface FetchOption<T> {
     onRequest?: Function;
     onComplete?: Function;
     onError?: Function;
-    onCompleteCallback?: (data: any) => void;
 }
 
 export async function FetchService<T>(requestOption: FetchOption<T>) {
@@ -41,10 +40,6 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
 
             const data = await parseJson(response);
             requestOption.dispatch(requestOption.onComplete(data));
-
-            if (requestOption.onCompleteCallback) {
-                requestOption.onCompleteCallback(data);
-            }
         }
 
     } catch (errorMsg) {
