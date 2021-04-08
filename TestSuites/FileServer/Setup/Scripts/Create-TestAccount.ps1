@@ -191,10 +191,21 @@ if($isDomainEnv -eq $true)
 }
 else
 {
+    foreach($g in $azgroups)
+    {
+        .\Write-Info.ps1 "Create group: $($g.Group.GroupName)"
+        $azGroupDN = $g.Group.GroupName
+        CMD /C net.exe localgroup $azGroupDN /ADD 2>&1 | .\Write-Info.ps1
+    }
+
     foreach($user in $users.User)
     {        
         .\Write-Info.ps1 "Create user account: $($user.Username)"
-        CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1   
+        CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1
+        if($user.Group -ne $null)
+        {
+            CMD /C net.exe localgroup $user.Group $user.Username /ADD 2>&1 | .\Write-Info.ps1
+        }
     }
 
     .\Write-Info.ps1 "Enable Guest account"
