@@ -713,7 +713,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         }
 
         public bool FetchClusterShareInfo(DetectionInfo info)
-        {            
+        {
+            if (string.IsNullOrEmpty(info.clusterShareFullPath))
+            {
+                return false;
+            }
             // Try to connect the share which is input by the user in the "Cluster Share" field of Auto-Detection page.
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {

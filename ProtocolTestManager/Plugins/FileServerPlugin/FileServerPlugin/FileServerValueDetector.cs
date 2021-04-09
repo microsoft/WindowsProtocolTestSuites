@@ -143,7 +143,10 @@ namespace Microsoft.Protocols.TestManager.Detector
             ParseBasicShareFullPath(detectionInfo.targetShareFullPath);
 
             detectionInfo.clusterShareFullPath = properties[clusterShareTitle];
-            ParseClusterShareFullPath(detectionInfo.clusterShareFullPath);
+            if (!string.IsNullOrEmpty(detectionInfo.clusterShareFullPath))
+            {
+                ParseClusterShareFullPath(detectionInfo.clusterShareFullPath);
+            }
 
             detectionInfo.domainName = properties[domainTitle];
             detectionInfo.userName = properties[userTitle];
