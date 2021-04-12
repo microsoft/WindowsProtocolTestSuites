@@ -1484,6 +1484,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
                 catch (IOException e)
                 {
+                    LogException(new List<Exception> { e });
                 }
             }
 
@@ -1500,7 +1501,16 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             // The file may be opened exclusively by vstest.console.exe. Retry opening here
             // to wait for vstest.console.exe writing logs.
-            string content = ReadFileWithRetry(filePath);
+            string content;
+            try
+            {
+                content = ReadFileWithRetry(filePath);
+            }
+            catch (TimeoutException e)
+            {
+                LogException(new List<Exception> { e });
+                return false;
+            }
 
             var detailLine = content.Split(new char[] { '\r', '\n' }).Where(l => l.StartsWith(AppConfig.DetailKeyword));
             string detailStr;

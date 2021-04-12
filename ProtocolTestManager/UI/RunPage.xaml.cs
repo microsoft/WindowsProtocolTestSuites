@@ -566,7 +566,19 @@ namespace Microsoft.Protocols.TestManager.UI
             // So add check here to avoid null reference exception.
             if (testcase != null)
             {
-                Pages.RunPage.WebBrowserLog.Url = testcase.LogUri;
+                var logUri = testcase.LogUri;
+                if (logUri.AbsolutePath.Length >= 255)
+                {
+                    // The log file path may exceed the default path limit, copy the file to a temp destination
+                    var logFilePath = logUri.AbsolutePath;
+                    var logFileInfo = new FileInfo(logFilePath);
+                    var tempFilePath = System.IO.Path.Combine(logFileInfo.Directory.FullName, "current.html");
+                    File.Copy(logFilePath, tempFilePath, true);
+
+                    logUri = new Uri(tempFilePath);
+                }
+
+                Pages.RunPage.WebBrowserLog.Url = logUri;
             }
         }
 

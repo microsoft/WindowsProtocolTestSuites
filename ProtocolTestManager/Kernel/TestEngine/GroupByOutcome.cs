@@ -101,6 +101,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             lock (locker)
             {
+                if (!testcasemap.ContainsKey(testCaseName))
+                {
+                    Utility.LogException(new List<Exception>
+                    {
+                        new KeyNotFoundException($"The test case name \"{testCaseName}\" was not found as a key of the \"{nameof(testcasemap)}\".")
+                    });
+                    return;
+                }
+
                 TestCaseGroup from = testcasemap[testCaseName];
                 TestCaseGroup to = OtherTestCases;
                 if (from == null) return;
