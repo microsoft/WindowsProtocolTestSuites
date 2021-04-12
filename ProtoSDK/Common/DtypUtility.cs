@@ -3727,10 +3727,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             string admin = string.Format("{0}\\{1}", domainNetbios.ToUpper(), adminName);
             string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
             string groupFqn = $"CN={groupName},CN=Users,{domainFqn}";
-            var groupSearchBase = domainFqn;
-            var groupSearchFilter = $"(member={groupFqn})";
+            var memberSearchBase = domainFqn;
+            var memberSearchFilter = $"(memberOf={groupFqn})";
 
-            return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, groupSearchBase, groupSearchFilter);
+            return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, memberSearchBase, memberSearchFilter);
         }
 
         /// <summary>
@@ -3749,7 +3749,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             string domainFqn = "DC=" + domainName.Replace(".", ",DC=");
             string userFqn = $"CN={userName},CN=Users,{domainFqn}";
             var groupSearchBase = domainFqn;
-            var groupSearchFilter = $"(member={userFqn})";
+            var groupSearchFilter = $"(&(objectClass=group)(member={userFqn}))";
 
             return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, groupSearchBase, groupSearchFilter);
         }
