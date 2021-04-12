@@ -3612,6 +3612,39 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
         }
 
         /// <summary>
+        /// Get LdapEntry list from Ldap query
+        /// </summary>
+        /// <param name="domainName">domain name</param>
+        /// <param name="ldapPort">ldap port</param>
+        /// <param name="admin">admin name with domainn name</param>
+        /// <param name="adminPassword">admin password</param>
+        /// <param name="ldapSearchBase">Ldap search base</param>
+        /// <param name="ldapSearchFilter">Ldap search filter</param>
+        /// <returns></returns>
+        private static List<LdapEntry> GetLdapEntryList(string domainName, int ldapPort, string admin, string adminPassword, string ldapSearchBase, string ldapSearchFilter)
+        {
+            LdapConnection conn = new LdapConnection();
+
+            conn.Connect(domainName, ldapPort);
+            conn.Bind(admin, adminPassword);
+
+            var ldapSearchQueue = conn.Search(ldapSearchBase, LdapConnection.ScopeSub, ldapSearchFilter, null, false, null, null);
+
+            List<LdapEntry> ldapEntryList = new List<LdapEntry>();
+
+            LdapMessage userSearchMessage = null;
+            while ((userSearchMessage = ldapSearchQueue.GetResponse()) != null)
+            {
+                if (userSearchMessage is LdapSearchResult userSearchResult)
+                {
+                    LdapEntry ldapEntry = userSearchResult.Entry;
+                    ldapEntryList.Add(ldapEntry);
+                }
+            }
+            return ldapEntryList;
+        }
+
+        /// <summary>
         /// Get the SID from the group's domain name and group name.
         /// </summary>
         /// <param name="domainName">The name of the domain. </param>
@@ -3629,23 +3662,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             var groupSearchBase = domainFqn;
             var groupSearchFilter = $"(distinguishedName={groupFqn})";
 
-            LdapConnection conn = new LdapConnection();
-
-            conn.Connect(domainName, ldapPort);
-            conn.Bind(admin, adminPassword);
-
-            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
-
-            LdapMessage groupSearchMessage = null;
-            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
+            var groups = GetLdapEntryList(domainName, ldapPort, admin, adminPassword, groupSearchBase, groupSearchFilter);
+            if (groups.Count == 1)
             {
-                if (groupSearchMessage is LdapSearchResult groupSearchResult)
-                {
-                    LdapEntry groupEntry = groupSearchResult.Entry;
-                    byte[] groupMemberSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
-                    _SID groupSid = TypeMarshal.ToStruct<_SID>(groupMemberSidBinary);
-                    return groupSid;
-                }
+                LdapEntry groupEntry = groups[0];
+                byte[] groupMemberSidBinary = groupEntry.GetAttribute("objectSid").ByteValue;
+                _SID groupSid = TypeMarshal.ToStruct<_SID>(groupMemberSidBinary);
+                return groupSid;
             }
 
             throw new InvalidOperationException($"Group {groupName} is not found on DC.");
@@ -3667,26 +3690,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             var userSearchBase = domainFqn;
             var userSearchFilter = $"(objectClass=user)";
 
-            LdapConnection conn = new LdapConnection();
-
-            conn.Connect(domainName, ldapPort);
-            conn.Bind(admin, adminPassword);
-
-            var userSearchQueue = conn.Search(userSearchBase, LdapConnection.ScopeSub, userSearchFilter, null, false, null, null);
-
-            List<LdapEntry> users = new List<LdapEntry>();
-
-            LdapMessage userSearchMessage = null;
-            while ((userSearchMessage = userSearchQueue.GetResponse()) != null)
-            {
-                if (userSearchMessage is LdapSearchResult userSearchResult)
-                {
-                    LdapEntry userEntry = userSearchResult.Entry;
-                    users.Add(userEntry);
-                }
-            }
-
-            return users;
+            return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, userSearchBase, userSearchFilter);
         }
 
         /// <summary>
@@ -3705,26 +3709,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             var groupSearchBase = domainFqn;
             var groupSearchFilter = $"(objectClass=group)";
 
-            LdapConnection conn = new LdapConnection();
-
-            conn.Connect(domainName, ldapPort);
-            conn.Bind(admin, adminPassword);
-
-            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
-
-            List<LdapEntry> groups = new List<LdapEntry>();
-
-            LdapMessage groupSearchMessage = null;
-            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
-            {
-                if (groupSearchMessage is LdapSearchResult groupSearchResult)
-                {
-                    LdapEntry groupEntry = groupSearchResult.Entry;
-                    groups.Add(groupEntry);
-                }
-            }
-
-            return groups;
+            return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, groupSearchBase, groupSearchFilter);
         }
 
         /// <summary>
@@ -3745,26 +3730,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             var groupSearchBase = domainFqn;
             var groupSearchFilter = $"(member={groupFqn})";
 
-            LdapConnection conn = new LdapConnection();
-
-            conn.Connect(domainName, ldapPort);
-            conn.Bind(admin, adminPassword);
-
-            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
-
-            List<LdapEntry> groupMembers = new List<LdapEntry>();
-
-            LdapMessage groupSearchMessage = null;
-            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
-            {
-                if (groupSearchMessage is LdapSearchResult groupSearchResult)
-                {
-                    LdapEntry groupEntry = groupSearchResult.Entry;
-                    groupMembers.Add(groupEntry);
-                }
-            }
-
-            return groupMembers;
+            return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, groupSearchBase, groupSearchFilter);
         }
 
         /// <summary>
@@ -3785,26 +3751,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Dtyp
             var groupSearchBase = domainFqn;
             var groupSearchFilter = $"(member={userFqn})";
 
-            LdapConnection conn = new LdapConnection();
-
-            conn.Connect(domainName, ldapPort);
-            conn.Bind(admin, adminPassword);
-
-            var groupSearchQueue = conn.Search(groupSearchBase, LdapConnection.ScopeSub, groupSearchFilter, null, false, null, null);
-
-            List<LdapEntry> groups = new List<LdapEntry>();
-
-            LdapMessage groupSearchMessage = null;
-            while ((groupSearchMessage = groupSearchQueue.GetResponse()) != null)
-            {
-                if (groupSearchMessage is LdapSearchResult groupSearchResult)
-                {
-                    LdapEntry groupEntry = groupSearchResult.Entry;
-                    groups.Add(groupEntry);
-                }
-            }
-
-            return groups;
+            return GetLdapEntryList(domainName, ldapPort, admin, adminPassword, groupSearchBase, groupSearchFilter);
         }
 
         /// <summary>

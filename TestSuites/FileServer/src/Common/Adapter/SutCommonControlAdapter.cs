@@ -20,6 +20,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
     public class SutCommonControlAdapter : ManagedAdapterBase, ISutCommonControlAdapter
     {
         private TestConfigBase testConfig;
+
+        private JsonSerializerOptions serializerOptions;
+
         // DC domain name
         private string domainName;
         // DC admin name
@@ -36,6 +39,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             domainName = testConfig.DomainName;
             adminName = testConfig.UserName;
             adminPassword = testConfig.UserPassword;
+
+            serializerOptions = new JsonSerializerOptions();
+            serializerOptions.Converters.Add(new _SIDConverter());
         }
 
         public string GetGroupMembers(string groupName)
@@ -58,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 groupMembers.Add(groupMember);
             }
 
-            return JsonSerializer.Serialize(groupMembers);
+            return JsonSerializer.Serialize(groupMembers, serializerOptions);
         }
 
         public string GetGroups()
@@ -77,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 groups.Add(group);
             }
 
-            return JsonSerializer.Serialize(groups);
+            return JsonSerializer.Serialize(groups, serializerOptions);
         }
 
         public string GetUserMemberships(string userName)
@@ -96,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 groups.Add(group);
             }
 
-            return JsonSerializer.Serialize(groups);
+            return JsonSerializer.Serialize(groups, serializerOptions);
         }
 
         public string GetUsers()
@@ -115,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 users.Add(user);
             }
 
-            return JsonSerializer.Serialize(users);
+            return JsonSerializer.Serialize(users, serializerOptions);
         }
 
         public string GetUserSid(string userName)
