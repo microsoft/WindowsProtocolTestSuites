@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import { Header } from './components/Header';
 import { TestSuiteRunWizard } from './pages/TestSuiteRunWizard';
 import { TaskHistory } from './pages/TaskHistory';
+import { TestResultDetail } from './pages/TestResultDetail';
 import './css/index.css';
 import { IStackStyles, IStackTokens, Stack } from '@fluentui/react';
 import { useWindowSize } from './components/UseWindowSize';
@@ -29,6 +30,7 @@ export default function App() {
                 <Route exact path='/' component={HomePage} />
                 <Route exact path='/Tasks/NewRun' component={TestSuiteRunWizard} />
                 <Route exact path='/Tasks/History' component={TaskHistory} />
+                <Route exact path='/Tasks/TestResult' component={TestResultDetail} />
                 <Route exact path='/Management' component={Management} />
                 <Redirect from="*" to="/" />
             </Switch>

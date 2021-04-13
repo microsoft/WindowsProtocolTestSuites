@@ -44,23 +44,23 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <summary>
         /// List test results.
         /// </summary>
-        /// <param name="max">Maximum count per page.</param>
-        /// <param name="page">Page number.</param>
+        /// <param name="pageSize">Maximum count per page.</param>
+        /// <param name="pageNumber">Page number.</param>
         /// <returns>The list response.</returns>
         [HttpGet]
-        public ListResponse List(int max, int page)
+        public ListResponse List(int pageSize, int pageNumber)
         {
-            if (max <= 0)
+            if (pageSize <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(max));
+                throw new ArgumentOutOfRangeException(nameof(pageSize));
             }
 
-            if (page < 0)
+            if (pageNumber < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(page));
+                throw new ArgumentOutOfRangeException(nameof(pageNumber));
             }
 
-            var items = PTMKernelService.QueryTestRuns(max, page, out int totalPage).Select(testRun => new TestResultOverview
+            var items = PTMKernelService.QueryTestRuns(pageSize, pageNumber, out int totalPage).Select(testRun => new TestResultOverview
             {
                 Id = testRun.Id,
                 ConfigurationId = testRun.Configuration.Id,

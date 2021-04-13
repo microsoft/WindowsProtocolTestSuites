@@ -20,7 +20,7 @@ export const SelectedTestCasesDataSrv = {
             onError: SelectedTestCasesActions.getAllTestCasesAction_Failure
         });
     },
-    createRunRequest: (requestedTestCases: string[], completeCallback: (data: any) => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
+    createRunRequest: (requestedTestCases: string[], completeCallback: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
         const state = getState();
 
         let configurationId = state.configurations.selectedConfiguration?.Id;
@@ -38,7 +38,7 @@ export const SelectedTestCasesDataSrv = {
             onError: SelectedTestCasesActions.createRunRequestAction_Failure,
         }).then(completeCallback);
     },
-    abortRunRequest: (testResultId: number): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
+    abortRunRequest: (testResultId: number, completeCallback?: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
         await FetchService({
             url: `api/run/${testResultId}`,
             method: RequestMethod.PUT,
@@ -46,7 +46,7 @@ export const SelectedTestCasesDataSrv = {
             onRequest: SelectedTestCasesActions.abortRunRequestAction_Request,
             onComplete: SelectedTestCasesActions.abortRunRequestAction_Success,
             onError: SelectedTestCasesActions.abortRunRequestAction_Failure
-        });
+        }).then(completeCallback);
     },
 };
 

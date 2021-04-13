@@ -9,6 +9,8 @@ import { getTestSuitesReducer } from "./TestSuitesReducer";
 import { getManagementReducer } from "./Management";
 import { getConfigureMethodReducer } from "./ConfigureMethodReducer";
 import { getFilterTestCaseReducer } from "./FilterTestCaseReducer";
+import { getTestCaseResultReducer } from "./TestCaseResultReducer";
+import { getTestResultsReducer } from "./TestResultsReducer";
 
 export const appReducers = {
     testsuites: getTestSuitesReducer,
@@ -21,6 +23,8 @@ export const appReducers = {
     configureAdapter: getAdapterReducer,
     // runCase:
     filterInfo: getFilterTestCaseReducer,
+    selectedTestCases: getSelectedTestCasesReducer,
+    testResults: getTestResultsReducer,
+    testCaseResult: getTestCaseResultReducer,
     management: getManagementReducer,
-    selectedTestCases: getSelectedTestCasesReducer
 };
