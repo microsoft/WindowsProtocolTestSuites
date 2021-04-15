@@ -17,11 +17,25 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string Bin = "Bin";
 
         public const string VersionFile = ".version";
+
+        public const string ConfigXml = "config.xml";
+
+        public const string DllFileNames = "DllFileNames";
+
+        public const string DllFileName = "DllFileName";
+
+        public const string ConfigCaseRule = "ConfigCaseRule";
     }
 
     public static class ConfigurationConsts
     {
         public const string PtfConfig = "ptfconfig";
+
+        public const string ProfileConfig = "config";
+
+        public const string Profile = "profile.xml";
+
+        public const string PlayList = "playlist.xml";
 
         public const string DefaultGroup = "Default Group";
 
@@ -38,6 +52,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string AdapterTypeAttributeName = "adaptertype";
 
         public const string AdapterScriptDirectoryAttributeName = "scriptdir";
+
+        public const string RuleSelectAllDisplayName = "(Select All)";
+
+        public const string RuleSelectAll = "All";
     }
 
     public static class TestRunConsts

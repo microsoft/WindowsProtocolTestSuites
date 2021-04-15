@@ -42,6 +42,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         public IEnumerable<RuleGroup> Rules { get; set; }
 
         /// <summary>
+        /// Selected rules
+        /// </summary>
+        public IEnumerable<RuleGroup> SelectedRules { get; }
+
+        /// <summary>
         /// The properties of configuration.
         /// </summary>
         public IEnumerable<PropertyGroup> Properties { get; set; }

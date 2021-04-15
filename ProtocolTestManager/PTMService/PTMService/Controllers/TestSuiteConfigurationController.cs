@@ -4,6 +4,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
@@ -65,25 +67,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <returns>The rule groups.</returns>
         [Route("{id}/rule")]
         [HttpGet]
-        public RuleGroup[] GetRules(int id)
+        public TestSuiteRules GetRules(int id)
         {
-            return new RuleGroup[]
+            var configuration = PTMKernelService.GetConfiguration(id);
+            var groups = RuleGroup.FromKernalRuleGroups(configuration.Rules);
+
+            return new TestSuiteRules()
             {
-                new RuleGroup
-                {
-                    Name = "All",
-                    DisplayName ="All",
-                    Rules = new Rule[]
-                    {
-                        new Rule
-                        {
-                            Type = RuleType.Selector,
-                            Name = "All",
-                            DisplayName = "All",
-                            Categories = new string [] { "All", },
-                        },
-                    },
-                },
+                AllRules = groups,
+                SelectedRules = RuleGroup.FromKernalRuleGroups(configuration.SelectedRules)
             };
         }
 
@@ -97,6 +89,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPut]
         public IActionResult SetRules(int id, RuleGroup[] rules)
         {
+            // Generate profile.xml
+            var configuration = PTMKernelService.GetConfiguration(id);
+            configuration.Rules = RuleGroup.ToKernalRuleGroups(rules);
             return Ok();
         }
 

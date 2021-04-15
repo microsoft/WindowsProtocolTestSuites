@@ -3,9 +3,9 @@
 
 namespace Microsoft.Protocols.TestManager.PTMService.Common.Types
 {
-    public enum RuleType
-    {
-        Remover,
-        Selector,
+    public enum RuleSelectStatus { 
+        Selected, 
+        Partial, 
+        UnSelected 
     }
 }

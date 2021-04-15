@@ -79,18 +79,10 @@ function FilterByDropdown(props: FilterByDropdownProps) {
 }
 
 export function RunSelectedCase(props: StepWizardProps) {
-    const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const navSteps = getNavSteps(wizardProps);
-    const wizard = WizardNavBar(wizardProps, navSteps);
-    const winSize = useWindowSize();
-
-    const history = useHistory();
-
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(SelectedTestCasesDataSrv.getAllTestCases());
-    }, [dispatch]);
+    const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
 
     const [filterPhrase, setFilterPhrase] = useState<string | undefined>(undefined);
     const [filterByDropdownOption, setFilterByDropdownOption] = useState<FilterByDropdownOption>(filterByDropdownOptions[0]);
@@ -128,17 +120,25 @@ export function RunSelectedCase(props: StepWizardProps) {
     const [runAllClicked, setRunAllClicked] = useState(false);
     const [runSelectedClicked, setRunSelectedClicked] = useState(false);
 
-    const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases);
-
-    const allListItems = useMemo(() => getListItems(selectedTestCases.allTestCases), [selectedTestCases.allTestCases]);
-
     const listColumnsRef = useRef<IColumn[]>();
     listColumnsRef.current = listColumns;
 
     const filteredTestCasesRef = useRef<ListItem[]>();
     filteredTestCasesRef.current = filteredTestCases;
 
+    const allListItems = useMemo(() => getListItems(selectedTestCases.allTestCases), [selectedTestCases.allTestCases]);
     const forceUpdate = useForceUpdate();
+
+    const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
+    const navSteps = getNavSteps(wizardProps, configureMethod);
+    const wizard = WizardNavBar(wizardProps, navSteps);
+    const winSize = useWindowSize();
+
+    const history = useHistory();
+
+    useEffect(() => {
+        dispatch(SelectedTestCasesDataSrv.getAllTestCases());
+    }, [dispatch]);
 
     useEffect(() => {
         if (!isValidFilterPhrase(filterPhrase)) {

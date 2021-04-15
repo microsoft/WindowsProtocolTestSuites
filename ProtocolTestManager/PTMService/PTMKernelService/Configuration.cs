@@ -10,8 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Text;
+using System.Xml;
 using RuleGroup = Microsoft.Protocols.TestManager.PTMService.Common.Types.RuleGroup;
+using RuleSelectStatus = Microsoft.Protocols.TestManager.PTMService.Common.Types.RuleSelectStatus;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -30,9 +32,67 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             StorageRoot = storageRoot;
         }
 
+        private IEnumerable<RuleGroup> selectedRules;
+
         public int Id { get; private init; }
 
-        public IEnumerable<RuleGroup> Rules { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IEnumerable<RuleGroup> Rules
+        {
+            get
+            {
+                var profileStorage = StorageRoot.GetNode(ConfigurationConsts.ProfileConfig);
+                RuleGroup[] ruleGroups = TestSuite.LoadTestCaseFilter();
+                if (Directory.Exists(profileStorage.AbsolutePath))
+                {
+                    var query = profileStorage.GetFiles().ToList().Where(f => f.EndsWith(Path.Combine(profileStorage.AbsolutePath, ConfigurationConsts.Profile)));
+                    if (query.Any())
+                    {
+                        LoadSelectedRules(ruleGroups, query.First());
+                    }
+                }
+
+                return ruleGroups;
+            }
+            set
+            {
+                var profileStorage = StorageRoot.GetNode(ConfigurationConsts.ProfileConfig);
+                var profileXmlPath = Path.Combine(profileStorage.AbsolutePath, ConfigurationConsts.Profile);
+
+                XmlDocument xmlDoc = new XmlDocument();
+                var rootElement = xmlDoc.CreateElement("RuleGroups");
+                foreach(var group in value)
+                {
+                    var ruleGroupEle = xmlDoc.CreateElement("RuleGroup");
+                    ruleGroupEle.SetAttribute("name", group.Name);
+
+                    if(group.Rules!=null && group.Rules.Count > 0)
+                    {
+                        foreach (var rule in group.Rules)
+                        {
+                            var ruleEle = xmlDoc.CreateElement("Rule");
+                            ruleEle.SetAttribute("name", rule.Name);
+                            ruleGroupEle.AppendChild(ruleEle);
+                        }
+                    }
+                    
+                    rootElement.AppendChild(ruleGroupEle);
+                }
+
+                xmlDoc.AppendChild(rootElement);
+
+                if (!Directory.Exists(profileStorage.AbsolutePath))
+                {
+                    Directory.CreateDirectory(profileStorage.AbsolutePath);
+                }
+                using var xmlTextWriter = new XmlTextWriter(profileXmlPath, Encoding.UTF8);
+                xmlDoc.Save(xmlTextWriter);
+            }
+        }
+
+        public IEnumerable<RuleGroup> SelectedRules
+        {
+            get { return this.selectedRules; }
+        }
 
         public IEnumerable<PropertyGroup> Properties
         {
@@ -261,6 +321,81 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var result = TestSuite.GetTestCases(null).Select(testCaseInfo => testCaseInfo.FullName);
 
             return result;
+        }
+
+        private bool LoadSelectedRules(RuleGroup[] ruleGroups, string profilePath)
+        {
+            XmlDocument ruleGroupFile = new XmlDocument();
+            var selectedRuleGroups = new List<RuleGroup>();
+            try
+            {
+                ruleGroupFile.Load(profilePath);
+
+                foreach (XmlNode ruleGroupNode in ruleGroupFile.DocumentElement.SelectNodes("RuleGroup"))
+                {
+                    var ruleGroup = new RuleGroup()
+                    {
+                        Name = ruleGroupNode.Attributes["name"].Value,
+                        Rules = new List<Common.Types.Rule>(),
+                    };
+
+                    foreach (XmlNode ruleNode in ruleGroupNode.SelectNodes("Rule"))
+                    {
+                        string ruleName = ruleNode.Attributes["name"].Value;
+                        Common.Types.Rule rule = FindRuleByName(ruleGroups, ruleName);
+                        if (rule != null)
+                        {
+                            rule.SelectStatus = RuleSelectStatus.Selected;
+                            ruleGroup.Rules.Add(new Common.Types.Rule() { Name = ruleName });
+                        }
+                    }
+
+                    selectedRuleGroups.Add(ruleGroup);
+                }
+                this.selectedRules = selectedRuleGroups;
+            }
+
+            catch (XmlException e)
+            {
+                throw new XmlException(string.Format("Load profile failed", e.Message));
+            }
+            //Apply rules
+            return true;
+        }
+
+        private Common.Types.Rule FindRuleByName(RuleGroup[] ruleGroups, string RuleName)
+        {
+            string[] ruleParts = RuleName.Split('.');
+            int level = 0;
+            foreach (RuleGroup ruleGroup in ruleGroups)
+            {
+                if (ruleGroup.Name == ruleParts[0])
+                {
+                    level = 1;
+                    Stack<Common.Types.Rule> ruleStack = new Stack<Common.Types.Rule>();
+                    foreach (Common.Types.Rule childRule in ruleGroup.Rules)
+                    {
+                        ruleStack.Push(childRule);
+                    }
+                    while (ruleStack.Count != 0)
+                    {
+                        Common.Types.Rule topRule = ruleStack.Pop();
+                        if (topRule.Name == ruleParts[level])
+                        {
+                            level++;
+                            if (level == ruleParts.Length)
+                            {
+                                return topRule;
+                            }
+                            foreach (Common.Types.Rule childRule in topRule)
+                            {
+                                ruleStack.Push(childRule);
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
     }
 }

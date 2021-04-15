@@ -11,6 +11,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Types
 
         public string Name { get; set; }
 
-        public IEnumerable<Rule> Rules { get; set; }
+        public IList<Rule> Rules { get; set; }
     }
 }
