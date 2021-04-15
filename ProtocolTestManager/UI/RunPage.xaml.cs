@@ -564,7 +564,7 @@ namespace Microsoft.Protocols.TestManager.UI
         {
             // testcase could be null because logger.RunningTestCase could be null.
             // So add check here to avoid null reference exception.
-            if (testcase != null)
+            if (testcase != null && testcase.LogUri != null)
             {
                 var logUri = testcase.LogUri;
                 if (logUri.AbsolutePath.Length >= 255)
