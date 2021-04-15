@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { RuleGroup, SelectedRuleGroup } from "../model/RuleGroup";
+import { RuleData, SelectedRuleGroup } from "../model/RuleGroup";
 import { TestCase } from "../model/TestCase";
 import { TestSuite } from "../model/TestSuite";
 
@@ -18,11 +18,11 @@ export const SET_RULES_REQUEST = 'FILTERTESTCASE/SET_RULES_REQUEST'
 export const SET_RULES_SUCCESS = 'FILTERTESTCASE/SET_RULES_SUCCESS'
 export const SET_RULES_FAILURE = 'FILTERTESTCASE/SET_RULES_FAILURE'
 
-export const SET_SELECTED_RULES = 'FILTERTESTCASE/SET_SELECTED_RULES'; 
+export const SET_SELECTED_RULES = 'FILTERTESTCASE/SET_SELECTED_RULES';
 
 // define action types
 interface GetTSRulesActionRequestType { type: typeof GET_FILTERTESTCASE_RULES_REQUEST; }
-interface GetTSRulesActionSuccessType { type: typeof GET_FILTERTESTCASE_RULES_SUCCESS; payload: RuleGroup[]; }
+interface GetTSRulesActionSuccessType { type: typeof GET_FILTERTESTCASE_RULES_SUCCESS; payload: RuleData; }
 interface GetTSRulesActionFailureType { type: typeof GET_FILTERTESTCASE_RULES_FAILURE; errorMsg: string; }
 
 interface GetTestSuiteTestCasesActionRequestType { type: typeof GET_TESTSUITETESTCASES_REQUEST; }
@@ -37,9 +37,9 @@ interface SetSelectedRulesActionType { type: typeof SET_SELECTED_RULES; payload:
 
 export type FilterTestCaseActionTypes = GetTSRulesActionRequestType
     | GetTSRulesActionSuccessType
-    | GetTSRulesActionFailureType    
-    | GetTestSuiteTestCasesActionRequestType 
-    | GetTestSuiteTestCasesActionSuccessType 
+    | GetTSRulesActionFailureType
+    | GetTestSuiteTestCasesActionRequestType
+    | GetTestSuiteTestCasesActionSuccessType
     | GetTestSuiteTestCasesActionFailureType
     | SetTSRulesActionRequestType
     | SetTSRulesActionSuccessType
@@ -47,8 +47,8 @@ export type FilterTestCaseActionTypes = GetTSRulesActionRequestType
     | SetSelectedRulesActionType;
 
 // define actions
-export const FilterTestCaseActions = {    
-    getFilterRulesAction_Success: (groups: RuleGroup[]): FilterTestCaseActionTypes => {
+export const FilterTestCaseActions = {
+    getFilterRulesAction_Success: (groups: RuleData): FilterTestCaseActionTypes => {
         return {
             type: GET_FILTERTESTCASE_RULES_SUCCESS,
             payload: groups
@@ -73,7 +73,7 @@ export const FilterTestCaseActions = {
     getTestSuiteTestCasesAction_Success: (testSuite: TestSuite): FilterTestCaseActionTypes => {
         return {
             type: GET_TESTSUITETESTCASES_SUCCESS,
-            payload: testSuite.TestCases||[]
+            payload: testSuite.TestCases || []
         }
     },
     getTestSuiteTestCasesAction_Failure: (error: string): FilterTestCaseActionTypes => {
@@ -98,7 +98,7 @@ export const FilterTestCaseActions = {
             errorMsg: error
         }
     },
-    setSelectedRuleAction:(info:SelectedRuleGroup):FilterTestCaseActionTypes=> {
+    setSelectedRuleAction: (info: SelectedRuleGroup): FilterTestCaseActionTypes => {
         return {
             type: SET_SELECTED_RULES,
             payload: info

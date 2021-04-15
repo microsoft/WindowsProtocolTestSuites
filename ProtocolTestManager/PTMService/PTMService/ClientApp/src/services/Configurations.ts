@@ -6,6 +6,7 @@ import { ConfigurationActions, TestSuiteConfigurationActionTypes } from "../acti
 import { FilterTestCaseActions, FilterTestCaseActionTypes } from "../actions/FilterTestCaseAction";
 import { Configuration } from "../model/Configuration";
 import { AppThunkAction } from "../store/configureStore";
+import { AllNode } from "../model/RuleGroup";
 export const ConfigurationsDataSrv = {
     getConfigurations: (testsuiteId: number): AppThunkAction<TestSuiteConfigurationActionTypes> => async (dispatch) => {
         // const state = getState();
@@ -42,23 +43,23 @@ export const ConfigurationsDataSrv = {
             onError: FilterTestCaseActions.getFilterRuleAction_Failure
         });
     },
-    setRules: ( completeCallback: (data: any) => void): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+    setRules: (completeCallback: (data: any) => void): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
         const configurationId = state.configurations.selectedConfiguration?.Id
         const selectedRules = state.filterInfo.selectedRules
-        const data = state.filterInfo.ruleGroup.map(g=>{
-            let curr = selectedRules.find(s=>s.Name==g.Name)            
-            let rules = curr?.Selected.map(r=>{return {Name:r}} )
-            return { Name: g.Name, Rules: rules}
+        const data = state.filterInfo.ruleGroup.map(g => {
+            const curr = selectedRules.find(s => s.Name === g.Name)
+            const rules = curr?.Selected.map(r => { return { Name: r.replace(AllNode.value, g.Name) } })
+            return { Name: g.Name, Rules: rules }
         })
         await FetchService({
             url: `api/configuration/${configurationId}/rule`,
             method: RequestMethod.PUT,
             body: JSON.stringify(data),
-            dispatch,  
+            dispatch,
             onRequest: FilterTestCaseActions.setRulesAction_Request,
             onComplete: FilterTestCaseActions.setRulesAction_Success,
-            onError: FilterTestCaseActions.setRulesAction_Failure,     
+            onError: FilterTestCaseActions.setRulesAction_Failure,
         }).then(completeCallback);
     }
 };

@@ -1,21 +1,32 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+export const AllNode = {
+    value: 'All',
+    lable: '(Select all)'
+};
+
+export interface RuleData {
+    AllRules: RuleGroup[];
+    SelectedRules: Rule[]
+}
 
 export interface RuleGroup {
     DisplayName?: string;
 
     Name: string;
 
-    Rules:Rule[]
+    Rules: Rule[]
 }
+
 export interface Rule {
     DisplayName?: string;
 
     Name: string;
 
-    Rules?: Rule[];    
+    Rules?: Rule[];
     Categories?: string[]
 }
+
 export interface SelectedRuleGroup {
     Name: string;
 
@@ -26,10 +37,14 @@ export interface GroupItem {
     key: string;
 
     name: string;
-    
-    rules:Rule[];
+
+    rules: Rule[];
 
     checked: string[];
 
-    action:(data: any) => void;
+    action: (data: any) => void;
+}
+
+export interface MapItem {
+    [key: string]: string[] | undefined
 }

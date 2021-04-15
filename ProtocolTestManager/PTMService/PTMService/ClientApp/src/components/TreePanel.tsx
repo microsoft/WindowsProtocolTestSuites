@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { FunctionComponent, useState, useEffect } from "react"
-import { Rule, SelectedRuleGroup } from "../model/RuleGroup";
-import CheckboxTree, {Node} from 'react-checkbox-tree';
+import { AllNode, Rule, SelectedRuleGroup } from "../model/RuleGroup";
+import CheckboxTree, { Node } from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import { Icon } from '@fluentui/react/lib/Icon';
 
@@ -11,40 +11,47 @@ type TreePanelProps = {
     groupName: string
     rules: Rule[]
     checked: string[]
-    selectAction: (data:SelectedRuleGroup) => void;
+    selectAction: (data: SelectedRuleGroup) => void;
 }
 
-const getGroup = (rules: Rule[]): Node[] => {
+const getGroup = (rules: Rule[], parent: string): Node[] => {
     return rules.map(rule => {
+        let curr = parent ? parent + "." + rule.Name : rule.Name
         if (rule.Rules) {
-            return {className:"treeNode", value: rule.Name, label: rule.DisplayName, children: getGroup(rule.Rules) }
+            return { className: "treeNode", value: curr, label: rule.DisplayName, categories: rule.Categories, children: getGroup(rule.Rules, curr) }
         }
-        if (rule.Categories) {
-            const nodes = rule.Categories.map(curr => { return { value: curr, label: curr } })
-            return {className:"treeNode", value: rule.Name, label: rule.DisplayName, children: nodes }
-        }
-        return {className:"treeNode", value: rule.Name, label: rule.DisplayName }
+        return { className: "treeNode", value: curr, label: rule.DisplayName, categories: rule.Categories }
     })
 }
 
-const getItems = (rules: Rule[]): string[] => {
+const createGroupItems = (rules: Rule[]): any[] => {
+    const groups: any[] = getGroup(rules, AllNode.value)
+    return [
+        {
+            value: AllNode.value, label: AllNode.lable, children: groups
+        }
+    ]
+}
+
+const getItems = (rules: Rule[], parent: string): string[] => {
     const results: string[] = []
     rules.forEach(rule => {
+        let curr = parent ? parent + "." + rule.Name : rule.Name
         if (rule.Rules) {
 
-            results.push(...getItems(rule.Rules))
+            results.push(...getItems(rule.Rules, curr))
         }
-        results.push(rule.Name)
+        results.push(curr)
     })
     return results;
 }
 const getExpanded = (rules: Rule[]): string[] => {
-    const groups: string[] = getItems(rules)
-    return groups.concat('all')
+    const groups: string[] = getItems(rules, AllNode.value)
+    return groups.concat(AllNode.value)
 }
 
 export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
-    const data = getGroup(props.rules);
+    const data = createGroupItems(props.rules);
     const expandedNode = getExpanded(props.rules);
     const [checked, setChecked] = useState<Array<string>>(props.checked);
     const [expanded, setExpanded] = useState<Array<string>>(expandedNode);
@@ -52,19 +59,18 @@ export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
     useEffect(() => {
         if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
             const data = { Name: props.groupName, Selected: checked }
-            props.selectAction(data);              
+            props.selectAction(data);
         }
     }, [checked]);
 
     useEffect(() => {
-        if(JSON.stringify(checked) != JSON.stringify(props.checked))
-        {
+        if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
             setChecked(props.checked);
-        }       
+        }
     }, [props.checked])
 
     return (
-        <div style={{border: '1px solid rgba(0, 0, 0, 0.35)', padding:5+'px'}}>
+        <div style={{ border: '1px solid rgba(0, 0, 0, 0.35)', padding: 5 + 'px' }}>
             <CheckboxTree nodes={data}
                 checked={checked}
                 expanded={expanded}
@@ -74,7 +80,7 @@ export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
                 icons={{
                     check: <Icon iconName="CheckboxComposite" />,
                     uncheck: <Icon iconName="Checkbox" />,
-                    halfCheck: <i className="ms-Icon ms-Icon--CheckboxIndeterminateCombo"/>,
+                    halfCheck: <i className="ms-Icon ms-Icon--CheckboxIndeterminateCombo" />,
                     expandClose: <Icon iconName="CaretHollow" />,
                     expandOpen: <Icon iconName="CaretSolid" />
                 }} />

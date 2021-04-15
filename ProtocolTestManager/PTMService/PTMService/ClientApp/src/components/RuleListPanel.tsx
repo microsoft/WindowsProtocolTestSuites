@@ -23,7 +23,7 @@ const onRenderCell = (nestingDepth?: number, item?: GroupItem, itemIndex?: numbe
 
 const onRenderHeader = (props?: IGroupHeaderProps): JSX.Element => {
     return (
-        <GroupHeader styles={{"expand":{"height":"30px"},"groupHeaderContainer":{"height":"30px"}, "check": { "display": "none" }, "headerCount": { "display": "none" }, "title": { "font-weight": "normal", "fontSize": "15px","paddingLeft":"0" } }} {...props} />
+        <GroupHeader styles={{ "expand": { "height": "30px" }, "groupHeaderContainer": { "height": "30px" }, "check": { "display": "none" }, "headerCount": { "display": "none" }, "title": { "font-weight": "normal", "fontSize": "15px", "paddingLeft": "0" } }} {...props} />
     );
 }
 
@@ -32,7 +32,7 @@ export const RuleListPanel: FunctionComponent<RuleListPanelProps> = (props) => {
     const groups: IGroup[] = props.ruleGroups.map((group, index) => { return { key: group.Name, name: group.DisplayName || group.Name, startIndex: index, count: 1, level: 0 } });
     const items: GroupItem[] = props.ruleGroups.map(group => { return { key: group.Name, name: group.Name, rules: group.Rules, checked: props.selected.find(e => e.Name == group.Name)?.Selected || [], action: props.checkedAction } })
     return (
-        <div style={{ height: winSize.height - HeaderMenuHeight - 100, overflowY: 'auto', overflowX:'hidden' }}>
+        <div style={{ height: winSize.height - HeaderMenuHeight - 100, overflowY: 'auto', overflowX: 'hidden' }}>
             <GroupedList items={items} onRenderCell={onRenderCell} groupProps={{ onRenderHeader }} groups={groups} />
         </div>
     )

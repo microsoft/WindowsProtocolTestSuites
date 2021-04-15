@@ -3,7 +3,7 @@
 
 import { FilterTestCaseActionTypes, GET_FILTERTESTCASE_RULES_REQUEST, GET_FILTERTESTCASE_RULES_SUCCESS, GET_FILTERTESTCASE_RULES_FAILURE, SET_SELECTED_RULES, GET_TESTSUITETESTCASES_REQUEST, GET_TESTSUITETESTCASES_SUCCESS, GET_TESTSUITETESTCASES_FAILURE, SET_RULES_REQUEST, SET_RULES_SUCCESS, SET_RULES_FAILURE } from "../actions/FilterTestCaseAction";
 import { Configuration } from "../model/Configuration";
-import { RuleGroup, SelectedRuleGroup } from "../model/RuleGroup";
+import { AllNode, RuleGroup, SelectedRuleGroup, Rule, MapItem } from "../model/RuleGroup";
 import { TestCase } from "../model/TestCase";
 
 export interface FilterTestCaseState {
@@ -38,11 +38,16 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
                 ruleGroup: []
             }
         case GET_FILTERTESTCASE_RULES_SUCCESS:
-            let initialSelected = action.payload.map(group => { return { Name: group.Name, Selected: [] } })
+            const initialSelected = action.payload.AllRules.map(group => {
+
+                const selectedRules = action.payload.SelectedRules.find(x => x.Name == group.Name)
+                const currSelected = selectedRules?.Rules?.map(s => s.Name.replace(group.Name, AllNode.value)) || []
+                return { Name: group.Name, Selected: currSelected }
+            })
             return {
                 ...state,
                 isLoading: false,
-                ruleGroup: action.payload,
+                ruleGroup: action.payload.AllRules,
                 selectedRules: initialSelected
             }
         case GET_FILTERTESTCASE_RULES_FAILURE:
@@ -81,16 +86,21 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
             )
             let match: string[] = []
 
-            currSelectedRules.forEach(g=>match.push(...g.Selected));
-            
-            let filterCases = state.listTestCases.filter(x=>
-                {
-                    return x.Category && x.Category.some(r=>match.indexOf(r)>=0)
-                }).map(e => {return e.Name })
+            currSelectedRules.forEach(g => {
+                const currRule = state.ruleGroup.find(o => o.Name == g.Name)?.Rules;
+                const mapitems = getMapCategories(currRule, AllNode.value)
+                g.Selected.forEach(s => {
+                    match.push(...mapitems[s] || [])
+                })
+            });
+
+            let filterCases = state.listTestCases.filter(x => {
+                return x.Category && x.Category.some(r => match.indexOf(r) >= 0)
+            }).map(e => { return e.Name })
             return {
                 ...state,
                 selectedRules: currSelectedRules,
-                listSelectedCases:filterCases
+                listSelectedCases: filterCases
             }
         case SET_RULES_REQUEST:
             return {
@@ -112,4 +122,20 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
         default:
             return state;
     }
+}
+
+function getMapCategories(rules: Rule[] | undefined, parent: string): MapItem {
+    if (rules !== undefined) {
+        return rules.reduce((dict: MapItem, rule) => {
+            const curr = parent ? parent + "." + rule.Name : rule.Name
+            if (rule.Rules) {
+                return { ...dict, ...getMapCategories(rule.Rules, curr) };
+            }
+            else {
+                dict[curr] = rule.Categories;
+                return dict;
+            }
+        }, {});
+    }
+    return {};
 }
