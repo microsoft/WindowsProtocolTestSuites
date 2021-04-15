@@ -52,7 +52,7 @@ export function FilterTestCase(props: any) {
         dispatch(FilterTestCaseActions.setSelectedRuleAction(data));
     }
     return (
-        <StepPanel leftNav={wizard} isLoading={filterInfo.isLoading} errorMsg={filterInfo.errorMsg} >
+        <StepPanel leftNav={wizard} isLoading={filterInfo.isRulesLoading || filterInfo.isCasesLoading} errorMsg={filterInfo.errorMsg} >
             <div>
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
                     <div style={{ width: winSize.width * 0.25, }}>Filter</div>

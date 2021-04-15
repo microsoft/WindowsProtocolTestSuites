@@ -43,7 +43,7 @@ export const ConfigurationsDataSrv = {
             onError: FilterTestCaseActions.getFilterRuleAction_Failure
         });
     },
-    setRules: (completeCallback: (data: any) => void): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+    setRules: (completeCallback: () => void): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
         const configurationId = state.configurations.selectedConfiguration?.Id
         const selectedRules = state.filterInfo.selectedRules
@@ -60,6 +60,11 @@ export const ConfigurationsDataSrv = {
             onRequest: FilterTestCaseActions.setRulesAction_Request,
             onComplete: FilterTestCaseActions.setRulesAction_Success,
             onError: FilterTestCaseActions.setRulesAction_Failure,
-        }).then(completeCallback);
+        }).then(() => {
+            const state = getState();
+            if (state.filterInfo.errorMsg === undefined) {
+                completeCallback()
+            }
+        });
     }
 };

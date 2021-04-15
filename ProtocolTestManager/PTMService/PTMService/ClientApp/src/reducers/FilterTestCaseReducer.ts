@@ -7,7 +7,8 @@ import { AllNode, RuleGroup, SelectedRuleGroup, Rule, MapItem } from "../model/R
 import { TestCase } from "../model/TestCase";
 
 export interface FilterTestCaseState {
-    isLoading: boolean;
+    isCasesLoading: boolean;
+    isRulesLoading: boolean;
     isPosting: boolean;
     errorMsg?: string;
     ruleGroup: RuleGroup[];
@@ -18,7 +19,8 @@ export interface FilterTestCaseState {
 }
 
 const initialFilterTestCaseState: FilterTestCaseState = {
-    isLoading: false,
+    isCasesLoading: false,
+    isRulesLoading: false,
     isPosting: false,
     errorMsg: undefined,
     ruleGroup: [],
@@ -33,7 +35,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
         case GET_FILTERTESTCASE_RULES_REQUEST:
             return {
                 ...state,
-                isLoading: true,
+                isRulesLoading: true,
                 errorMsg: undefined,
                 ruleGroup: []
             }
@@ -46,21 +48,22 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
             })
             return {
                 ...state,
-                isLoading: false,
+                isRulesLoading: false,
                 ruleGroup: action.payload.AllRules,
-                selectedRules: initialSelected
+                selectedRules: initialSelected,
+                listSelectedCases: getSelectCases(initialSelected, action.payload.AllRules, state.listTestCases)
             }
         case GET_FILTERTESTCASE_RULES_FAILURE:
             return {
                 ...state,
-                isLoading: false,
+                isRulesLoading: false,
                 ruleGroup: [],
                 errorMsg: action.errorMsg
             }
         case GET_TESTSUITETESTCASES_REQUEST:
             return {
                 ...state,
-                isLoading: true,
+                isCasesLoading: true,
                 errorMsg: undefined,
                 listTestCases: []
             }
@@ -68,13 +71,14 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
 
             return {
                 ...state,
-                isLoading: false,
-                listTestCases: action.payload
+                isCasesLoading: false,
+                listTestCases: action.payload,
+                listSelectedCases: getSelectCases(state.selectedRules, state.ruleGroup, action.payload)
             }
         case GET_TESTSUITETESTCASES_FAILURE:
             return {
                 ...state,
-                isLoading: false,
+                isCasesLoading: false,
                 listTestCases: [],
                 errorMsg: action.errorMsg
             }
@@ -84,23 +88,11 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
                     ? action.payload
                     : item
             )
-            let match: string[] = []
-
-            currSelectedRules.forEach(g => {
-                const currRule = state.ruleGroup.find(o => o.Name == g.Name)?.Rules;
-                const mapitems = getMapCategories(currRule, AllNode.value)
-                g.Selected.forEach(s => {
-                    match.push(...mapitems[s] || [])
-                })
-            });
-
-            let filterCases = state.listTestCases.filter(x => {
-                return x.Category && x.Category.some(r => match.indexOf(r) >= 0)
-            }).map(e => { return e.Name })
+            let list = getSelectCases(currSelectedRules, state.ruleGroup, state.listTestCases)
             return {
                 ...state,
                 selectedRules: currSelectedRules,
-                listSelectedCases: filterCases
+                listSelectedCases: list
             }
         case SET_RULES_REQUEST:
             return {
@@ -138,4 +130,20 @@ function getMapCategories(rules: Rule[] | undefined, parent: string): MapItem {
         }, {});
     }
     return {};
+}
+
+function getSelectCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]):string[] {
+    let match: string[] = []
+
+    currSelectedRules.forEach(g => {
+        const currRule = ruleGroup.find(o => o.Name == g.Name)?.Rules;
+        const mapitems = getMapCategories(currRule, AllNode.value)
+        g.Selected.forEach(s => {
+            match.push(...mapitems[s] || [])
+        })
+    });
+
+    return listTestCases.filter(x => {
+        return x.Category && x.Category.some(r => match.indexOf(r) >= 0)
+    }).map(e => { return e.Name })
 }
