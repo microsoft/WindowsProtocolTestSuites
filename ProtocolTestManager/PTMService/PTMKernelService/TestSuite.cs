@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using Rule = Microsoft.Protocols.TestManager.Kernel.Rule;
+using RuleGroup = Microsoft.Protocols.TestManager.PTMService.Common.Types.RuleGroup;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -31,9 +34,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             Version = testSuiteInstallation.Version;
 
             StorageRoot = storageRoot;
+
+            // check if config.xml can be found in TestSuite, if not then copy from etc folder.
+            string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, TestSuiteConsts.ConfigXml);
+            if (!File.Exists(configXmlPath))
+            {
+                // TODO: Plugin files will add into TestSuite
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"etc//FileServer//{TestSuiteConsts.ConfigXml}"), configXmlPath);
+            }
+            this.TestSuiteConfigFilePath = configXmlPath;
         }
 
         private string TestEnginePath { get; init; }
+
+        private string TestSuiteConfigFilePath { get; init; }
 
         public int Id { get; private init; }
 
@@ -128,16 +142,71 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public IEnumerable<string> GetTestAssemblies()
         {
-            // In order to get the actual test assemblies, support of plugin is needed.
-            // So far, we return hard-coded dll files.
-            var fakeDlls = new List<string>
+            XmlDocument doc = new XmlDocument();
+            doc.Load(this.TestSuiteConfigFilePath);
+            XmlNode DllFileNamesNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.DllFileNames);
+
+            var assemblyList = new List<string>();
+            foreach (XmlNode xn in DllFileNamesNode.SelectNodes("DllFileName"))
             {
-                "MS-SMB2_ServerTestSuite.dll",
-            };
+                string dllFileName = xn.InnerText.Trim();
+                assemblyList.Add(dllFileName);
+            }
 
-            var result = fakeDlls.Select(name => Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, name));
-
+            var result = assemblyList.Select(name => Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, name));
             return result;
+        }
+
+        public RuleGroup[] LoadTestCaseFilter()
+        {
+            TestCaseFilter filter = new TestCaseFilter();
+            XmlDocument doc = new XmlDocument();
+            doc.Load(this.TestSuiteConfigFilePath);
+            XmlNode configCaseRule = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.ConfigCaseRule);
+
+            var groups = configCaseRule.SelectNodes("Group");
+            foreach (XmlNode group in groups)
+            {
+                Kernel.RuleGroup gp = Kernel.RuleGroup.FromXmlNode(group);
+                filter.Add(gp);
+            }
+
+            var ruleGroups = new List<RuleGroup>();
+
+            foreach (var group in filter)
+            {
+                //ruleGroups.Add()
+                RuleGroup ruleGroup = new RuleGroup()
+                {
+                    Name = group.Name,
+                    DisplayName = group.Name,
+                    Rules = new List<Common.Types.Rule>()
+                };
+                AddItems(ruleGroup.Rules, group);
+                ruleGroups.Add(ruleGroup);
+            }
+            
+            return ruleGroups.ToArray();
+        }
+
+        private void AddItems(IList<Common.Types.Rule> displayRules, List<Rule> rules)
+        {
+            foreach (var rule in rules)
+            {
+                Common.Types.Rule displayRule = new Common.Types.Rule()
+                {
+                    DisplayName = rule.Name,
+                    Name = rule.Name,
+                    Categories = rule.CategoryList.ToArray(),
+                    SelectStatus = Common.Types.RuleSelectStatus.UnSelected,
+                };
+
+                if (rule.Count > 0)
+                {
+                    AddItems(displayRule, rule);
+                }
+                displayRules.Add(displayRule);
+            }
         }
     }
 }

@@ -60,5 +60,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="filter">The optional filter expression.</param>
         /// <returns>The test cases filtered out.</returns>
         IEnumerable<TestCaseInfo> GetTestCases(string filter);
+
+        /// <summary>
+        /// Load Test Case Filter
+        /// </summary>
+        /// <returns></returns>
+        RuleGroup[] LoadTestCaseFilter();
     }
 }
