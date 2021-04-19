@@ -113,12 +113,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
 
-            args.AppendFormat("--results-directory {0} ", ResultOutputFolder);
+            args.AppendFormat("--results-directory \"{0}\" ", ResultOutputFolder);
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
             args.AppendFormat("--logger html ");
 
             ConstructRunSettings(RunSettingsPath);
-            args.AppendFormat("--settings {0} ", RunSettingsPath);
+            args.AppendFormat("--settings \"{0}\" ", RunSettingsPath);
 
             if (caseStack != null)
             {
@@ -192,10 +192,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             if (!String.IsNullOrEmpty(filterExpression))
             {
-                args.AppendFormat("--filter {0} ", filterExpression);
+                args.AppendFormat("--filter \"{0}\" ", filterExpression);
             }
 
-            args.AppendFormat("--results-directory {0} ", outputDirectory);
+            args.AppendFormat("--results-directory \"{0}\" ", outputDirectory);
             args.AppendFormat("--test-adapter-path {0} ", AppDomain.CurrentDomain.BaseDirectory);
             args.AppendFormat("--logger Discovery ");
             args.AppendFormat("--list-tests");
@@ -268,9 +268,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         WorkingDirectory = WorkingDirectory,
                         FileName = EnginePath,
-                        UseShellExecute = true,
+                        UseShellExecute = false,
                         CreateNoWindow = false,
                         Arguments = "test " + runArgs,
+                        RedirectStandardError = true,
                     }
                 };
 
@@ -297,8 +298,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 int err = vstestProcess.ExitCode;
                 if (err != 0)
                 {
+                    string errorMsg = vstestProcess.StandardError.ReadToEnd();
                     Console.Error.WriteLine();
                     Console.Error.WriteLine(StringResource.RunCaseError);
+                    Console.Error.WriteLine(errorMsg);
                 };
             }
             catch (Exception exception)

@@ -195,9 +195,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public void Abort()
         {
-            CancellationTokenSource.Cancel();
-
-            RunTask.Wait();
+            if (RunTask != null)
+            {
+                CancellationTokenSource.Cancel();
+                RunTask.Wait();
+            }
         }
 
         public IDictionary<string, TestCaseOverview> GetRunningStatus()
