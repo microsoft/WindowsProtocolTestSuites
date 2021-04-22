@@ -40,6 +40,8 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
 
             const data = await parseJson(response);
             requestOption.dispatch(requestOption.onComplete(data));
+
+            return data;
         }
 
     } catch (errorMsg) {

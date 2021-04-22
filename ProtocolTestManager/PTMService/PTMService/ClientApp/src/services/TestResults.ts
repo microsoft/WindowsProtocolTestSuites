@@ -3,6 +3,7 @@
 
 import { FetchService, RequestMethod } from '.';
 import { TestResultsActions, TestResultsActionTypes } from '../actions/TestResultsActions';
+import { TestResult } from '../model/TestResult';
 import { AppThunkAction } from '../store/configureStore';
 
 export const TestResultsDataSrv = {
@@ -11,8 +12,10 @@ export const TestResultsDataSrv = {
 
         const pageSize = state.testResults.pageSize;
         const pageNumber = state.testResults.pageNumber;
+        const query = state.testResults.query;
+
         await FetchService({
-            url: `api/testresult?pageSize=${pageSize}&pageNumber=${pageNumber}`,
+            url: `api/testresult?pageSize=${pageSize}&pageNumber=${pageNumber}` + (query === undefined ? "" : `&query=${query}`),
             method: RequestMethod.GET,
             dispatch,
             onRequest: TestResultsActions.listTestResultsAction_Request,
@@ -20,7 +23,7 @@ export const TestResultsDataSrv = {
             onError: TestResultsActions.listTestResultsAction_Failure
         });
     },
-    getTestResultDetail: (testResultId: number): AppThunkAction<TestResultsActionTypes> => async (dispatch, getState) => {
+    getTestResultDetail: (testResultId: number, completeCallback?: (result: TestResult) => void): AppThunkAction<TestResultsActionTypes> => async (dispatch, getState) => {
         await FetchService({
             url: `api/testresult/${testResultId}`,
             method: RequestMethod.GET,
@@ -28,6 +31,6 @@ export const TestResultsDataSrv = {
             onRequest: TestResultsActions.getTestResultDetailAction_Request,
             onComplete: TestResultsActions.getTestResultDetailAction_Success,
             onError: TestResultsActions.getTestResultDetailAction_Failure
-        });
+        }).then(completeCallback);
     }
 };

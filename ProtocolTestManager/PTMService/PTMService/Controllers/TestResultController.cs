@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.Linq;
@@ -46,9 +47,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// </summary>
         /// <param name="pageSize">Maximum count per page.</param>
         /// <param name="pageNumber">Page number.</param>
+        /// <param name="query">The query phrase to search the test resutls.</param>
         /// <returns>The list response.</returns>
         [HttpGet]
-        public ListResponse List(int pageSize, int pageNumber)
+        public ListResponse List(int pageSize, int pageNumber, string query)
         {
             if (pageSize <= 0)
             {
@@ -60,7 +62,28 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 throw new ArgumentOutOfRangeException(nameof(pageNumber));
             }
 
-            var items = PTMKernelService.QueryTestRuns(pageSize, pageNumber, out int totalPage).Select(testRun => new TestResultOverview
+            Func<TestResult, bool> queryFunc = query switch
+            {
+                null or "" => (_) => true,
+                _ => (result) =>
+                {
+                    var configuration = PTMKernelService.GetConfiguration(result.TestSuiteConfigurationId);
+                    if (configuration.Name.ToLower().Contains(query.ToLower()))
+                    {
+                        return true;
+                    }
+
+                    var testSuite = PTMKernelService.GetTestSuite(configuration.TestSuite.Id);
+                    if (testSuite.Name.ToLower().Contains(query.ToLower()))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            };
+
+            var items = PTMKernelService.QueryTestRuns(pageSize, pageNumber, queryFunc, out int totalPage).Select(testRun => new TestResultOverview
             {
                 Id = testRun.Id,
                 ConfigurationId = testRun.Configuration.Id,

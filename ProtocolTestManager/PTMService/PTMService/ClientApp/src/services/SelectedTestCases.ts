@@ -20,12 +20,12 @@ export const SelectedTestCasesDataSrv = {
             onError: SelectedTestCasesActions.getAllTestCasesAction_Failure
         });
     },
-    createRunRequest: (requestedTestCases: string[], completeCallback: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
+    createRunRequest: (requestedTestCases: string[], configurationId?: number, completeCallback?: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
         const state = getState();
 
-        let configurationId = state.configurations.selectedConfiguration?.Id;
+        const confId = configurationId ?? state.configurations.selectedConfiguration?.Id;
         const runRequest: RunRequest = {
-            ConfigurationId: configurationId!,
+            ConfigurationId: confId!,
             SelectedTestCases: requestedTestCases
         };
         await FetchService({

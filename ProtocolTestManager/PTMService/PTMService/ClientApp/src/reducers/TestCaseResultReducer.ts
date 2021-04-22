@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
+    CREATE_RUNREQUEST_REQUEST,
+    CREATE_RUNREQUEST_SUCCESS,
+    CREATE_RUNREQUEST_FAILURE,
     ABORT_RUNREQUEST_REQUEST,
     ABORT_RUNREQUEST_SUCCESS,
     ABORT_RUNREQUEST_FAILURE,
@@ -41,6 +44,26 @@ const initialTestCaseResultState: TestCaseResultState = {
 
 export const getTestCaseResultReducer = (state = initialTestCaseResultState, action: TestCaseResultActionTypes | SelectedTestCasesActionTypes | TestResultsActionTypes): TestCaseResultState => {
     switch (action.type) {
+        case CREATE_RUNREQUEST_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                errorMsg: undefined
+            };
+
+        case CREATE_RUNREQUEST_SUCCESS:
+            return {
+                ...state,
+                isLoading: false
+            };
+
+        case CREATE_RUNREQUEST_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                errorMsg: action.errorMsg
+            };
+
         case ABORT_RUNREQUEST_REQUEST:
             return {
                 ...state,

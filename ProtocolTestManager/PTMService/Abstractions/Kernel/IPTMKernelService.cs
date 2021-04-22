@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
+using System;
 using System.IO;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
@@ -71,9 +73,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// </summary>
         /// <param name="pageSize">The maximum item number per page.</param>
         /// <param name="pageIndex">The page number.</param>
+        /// <param name="queryFunc">The function to filter test results by a query.</param>
         /// <param name="totalPage">Total page number.</param>
         /// <returns>The test runs.</returns>
-        ITestRun[] QueryTestRuns(int pageSize, int pageIndex, out int totalPage);
+        ITestRun[] QueryTestRuns(int pageSize, int pageIndex, Func<TestResult, bool> queryFunc, out int totalPage);
 
         /// <summary>
         /// Get a test run.

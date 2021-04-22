@@ -189,7 +189,7 @@ export function RunSelectedCase(props: StepWizardProps) {
         }
 
         setRunAllClicked(true);
-        dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedTestCases.allTestCases, () => {
+        dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedTestCases.allTestCases, undefined, () => {
             history.push('/Tasks/History', { from: 'RunSelectedCase' });
         }));
     };
@@ -209,7 +209,7 @@ export function RunSelectedCase(props: StepWizardProps) {
         }
 
         setRunSelectedClicked(true);
-        dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedItems, () => {
+        dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedItems, undefined, () => {
             history.push('/Tasks/History', { from: 'RunSelectedCase' });
         }));
     };

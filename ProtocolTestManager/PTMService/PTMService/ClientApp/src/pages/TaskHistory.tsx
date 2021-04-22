@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, PrimaryButton, SelectionMode, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, PrimaryButton, SearchBox, SelectionMode, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { Pagination } from '@uifabric/experiments';
 import { useBoolean } from '@uifabric/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -35,6 +35,7 @@ type ListColumnsProps = {
     onRenderStatus: (status: TestResultState) => JSX.Element,
     onRenderCount: (kind: TestCaseState | 'Total', count: number | undefined) => JSX.Element,
     onAbort: (testResultId: number) => void,
+    onRerun: (testResultId: number, configurationId: number) => void,
     onViewResult: (testResultId: number) => void,
     onExportProfile: (testResultId: number) => void
 }
@@ -144,13 +145,18 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
                 return (
                     <Stack horizontal tokens={StackGap10}>
                         {
-                            item.Status === 'Created' || item.Status === 'Running' ?
-                                <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
+                            item.Status === 'Created' || item.Status === 'Running'
+                                ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
                                 : null
                         }
                         {
-                            item.Status !== 'Created' ?
-                                <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
+                            item.Status !== 'Created' && item.Status !== 'Running'
+                                ? <PrimaryButton onClick={() => { props.onRerun(item.Id, item.ConfigurationId) }}>Rerun</PrimaryButton>
+                                : null
+                        }
+                        {
+                            item.Status !== 'Created'
+                                ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
                                 : null
                         }
                         <PrimaryButton disabled onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
@@ -215,6 +221,8 @@ export function TaskHistory(props: any) {
     const [dialogHidden, { toggle: toggleDialogHidden }] = useBoolean(true);
 
     const [testResultToAbort, setTestResultToAbort] = useState<TestResultOverview | undefined>(undefined);
+
+    const [tempQuery, setTempQuery] = useState<string | undefined>(undefined);
 
     const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases);
     const testResults = useSelector((state: AppState) => state.testResults);
@@ -289,8 +297,8 @@ export function TaskHistory(props: any) {
         return (
             <div>
                 {
-                    testResult !== undefined ?
-                        <div style={{ fontSize: 'large' }}>
+                    testResult !== undefined
+                        ? <div style={{ fontSize: 'large' }}>
                             <Stack tokens={StackGap5}>
                                 <Stack horizontal><div style={{ paddingRight: 5 }}>TestSuite:</div>{renderTestSuite(testResult.ConfigurationId)}</Stack>
                                 <Stack horizontal><div style={{ paddingRight: 5 }}>Configuration:</div>{renderConfiguration(testResult.ConfigurationId)}</Stack>
@@ -321,6 +329,11 @@ export function TaskHistory(props: any) {
             setTestResultToAbort(testResults.currentPageResults.filter(item => item.Id === testResultId)[0]);
             toggleDialogHidden();
         },
+        onRerun: (testResultId: number, configurationId: number) => {
+            dispatch(TestResultsDataSrv.getTestResultDetail(testResultId, (result) => {
+                dispatch(SelectedTestCasesDataSrv.createRunRequest(result.Results.map(item => item.FullName), configurationId));
+            }));
+        },
         onViewResult: (testResultId: number) => {
             dispatch(TestResultsActions.setSelectedTestResultAction(testResultId, getTestResultSummary(testResultId)));
             dispatch(() => history.push('/Tasks/TestResult', { from: 'TaskHistory' }));
@@ -330,6 +343,16 @@ export function TaskHistory(props: any) {
         }
     });
 
+    const onSearchChanged = (query: string | undefined) => {
+        dispatch(TestResultsActions.setQueryAction(query));
+        dispatch(TestResultsDataSrv.listTestResults());
+    };
+
+    const onSearchClear = () => {
+        dispatch(TestResultsActions.setQueryAction(undefined));
+        dispatch(TestResultsDataSrv.listTestResults());
+    }
+
     const onChangePageNumber = (pageNumber: number) => {
         dispatch(TestResultsActions.setPageNumberAction(pageNumber));
         dispatch(TestResultsDataSrv.listTestResults());
@@ -338,6 +361,15 @@ export function TaskHistory(props: any) {
     return (
         <div>
             <FullWidthPanel isLoading={testResults.isLoading} errorMsg={testResults.errorMsg} >
+                <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10 }} tokens={StackGap10}>
+                    <SearchBox
+                        style={{ minWidth: 360 }}
+                        placeholder="Input your query phrase..."
+                        onChange={(_, newValue) => setTempQuery(newValue)}
+                        onSearch={onSearchChanged}
+                        onClear={onSearchClear} />
+                    <PrimaryButton onClick={() => onSearchChanged(tempQuery)}>Search</PrimaryButton>
+                </Stack>
                 <hr style={{ border: "1px solid #d9d9d9" }} />
                 <div style={{ height: winSize.height - 180, overflowY: 'auto' }}>
                     {
@@ -349,10 +381,12 @@ export function TaskHistory(props: any) {
                                 layoutMode={DetailsListLayoutMode.justified}
                                 isHeaderVisible={true}
                             />
-                            : <div>
-                                <Spinner size={SpinnerSize.medium} />
-                                <p style={{ color: '#fa8c16' }}>Loading...</p>
-                            </div>
+                            : testResults.pageCount > 0
+                                ? <div>
+                                    <Spinner size={SpinnerSize.medium} />
+                                    <p style={{ color: '#fa8c16' }}>Loading...</p>
+                                </div>
+                                : <p>There are no results found currently.</p>
                     }
                 </div>
                 <hr style={{ border: "1px solid #d9d9d9" }} />

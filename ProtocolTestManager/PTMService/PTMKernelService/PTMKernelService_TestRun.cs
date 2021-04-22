@@ -11,7 +11,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal partial class PTMKernelService
     {
-        public ITestRun[] QueryTestRuns(int pageSize, int pageIndex, out int totalPage)
+        public ITestRun[] QueryTestRuns(int pageSize, int pageIndex, Func<TestResult, bool> queryFunc, out int totalPage)
         {
             using var instance = ScopedServiceFactory.GetInstance();
 
@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             var repo = pool.Get<TestResult>();
 
-            var all = repo.Get(q => q).Select(item => GetTestRunInternal(item.Id, item));
+            var all = repo.Get(q => q.Where(queryFunc).AsQueryable()).Select(item => GetTestRunInternal(item.Id, item));
 
             int count = all.Count();
 

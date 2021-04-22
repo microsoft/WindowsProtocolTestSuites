@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IGroup, IObjectWithKey, Label, PrimaryButton, SearchBox, Selection, SelectionMode, SelectionZone, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IContextualMenuProps, IGroup, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, SelectionMode, SelectionZone, Spinner, SpinnerSize, Stack } from '@fluentui/react';
 import { useBoolean, useForceUpdate } from '@uifabric/react-hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { FullWidthPanel } from '../components/FullWidthPanel';
 import { StackGap10, StackGap5 } from '../components/StackStyle';
 import { useWindowSize } from '../components/UseWindowSize';
 import { TestCaseOverview, TestCaseResult } from '../model/TestCaseResult';
+import { TestResult } from '../model/TestResult';
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
 import { TestCaseResultDataSrv } from '../services/TestCaseResult';
 import { TestResultsDataSrv } from '../services/TestResults';
@@ -69,6 +70,12 @@ const getSelectionItems = (testCaseResults: TestCaseOverview[]) => {
             key: result.FullName
         };
     });
+};
+
+const hasFailedCases = (results: TestCaseOverview[]) => {
+    return results.length === 0
+        ? false
+        : results.some(item => item.State === 'Failed')
 };
 
 type TestCaseResultViewProps = {
@@ -129,6 +136,63 @@ function TestCaseResultView(props: TestCaseResultViewProps) {
             </Stack >
             : <div>Please select a test case result to view...</div>
     );
+}
+
+type SelectedTestCasesViewProps = {
+    winSize: { width: number, height: number },
+    results: TestCaseOverview[]
+}
+
+function SelectedTestCasesView(props: SelectedTestCasesViewProps) {
+    return (
+        <div>
+            <Label style={{ fontWeight: 'bold', color: '#337ab7', fontSize: 'large' }}>Selected {props.results.length} Test Results:</Label>
+            <div style={{ border: '1px solid #d9d9d9', height: props.winSize.height - 180, overflowY: 'auto' }}>
+                <ul>
+                    {
+                        props.results.sort((a, b) => a.FullName.localeCompare(b.FullName))
+                            .map((item, index) => {
+                                return <li key={index}>{item.FullName}</li>
+                            })
+                    }
+                </ul>
+            </div>
+        </div>
+    );
+}
+
+type RerunContextualMenuProps = {
+    testResult: TestResult,
+    selectedItems: TestCaseOverview[] | undefined,
+    onRerun: (kind: 'All' | 'Failed' | 'Selected') => () => void
+}
+
+function RerunContextualMenu(props: RerunContextualMenuProps) {
+    const menuProps = useMemo<IContextualMenuProps>(() => ({
+        shouldFocusOnMount: true,
+        items: [
+            {
+                key: 'RerunAll',
+                text: 'Rerun All Cases',
+                disabled: props.testResult.Results.length === 0,
+                onClick: props.onRerun('All')
+            },
+            {
+                key: 'RerunFailed',
+                text: 'Rerun Failed Cases',
+                disabled: !hasFailedCases(props.testResult.Results),
+                onClick: props.onRerun('Failed')
+            },
+            {
+                key: 'RerunSelected',
+                text: 'Rerun Selected Cases',
+                disabled: props.selectedItems === undefined || props.selectedItems.length === 0,
+                onClick: props.onRerun('Selected')
+            }
+        ]
+    }), [props]);
+
+    return <PrimaryButton menuProps={menuProps}>Rerun</PrimaryButton>
 }
 
 export function TestResultDetail(props: any) {
@@ -266,6 +330,39 @@ export function TestResultDetail(props: any) {
         setGroupCollapsedStatuses({ ...groupCollapsedStatuses });
     };
 
+    const onRerunClick = (kind: 'All' | 'Failed' | 'Selected') => () => {
+        if (testResults.selectedTestResult?.Results === undefined) {
+            return;
+        }
+
+        const completeCallback = () => {
+            history.push('/Tasks/History', { from: 'TestResultDetail' });
+        }
+
+        const results = testResults.selectedTestResult.Results;
+        const confId = testResults.selectedTestResult.Overview.ConfigurationId;
+        switch (kind) {
+            case 'All': {
+                dispatch(SelectedTestCasesDataSrv.createRunRequest(results.map(item => item.FullName), confId, completeCallback));
+                return;
+            }
+
+            case 'Failed': {
+                dispatch(SelectedTestCasesDataSrv.createRunRequest(results.filter(item => item.State === 'Failed').map(item => item.FullName), confId, completeCallback));
+                return;
+            }
+
+            case 'Selected': {
+                if (selectedItems === undefined || selectedItems.length === 0) {
+                    return;
+                }
+
+                dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedItems.map(item => item.FullName), confId, completeCallback));
+                return;
+            }
+        }
+    };
+
     const onExportProfile = () => {
 
     };
@@ -289,7 +386,7 @@ export function TestResultDetail(props: any) {
             <FullWidthPanel isLoading={testCaseResult.isLoading} errorMsg={testCaseResult.errorMsg} >
                 <Stack horizontal tokens={{ childrenGap: 20 }}>
                     <div style={{ maxWidth: winSize.width * 0.30, height: winSize.height - 140 }}>
-                        <SelectionZone selection={selection} selectionMode={SelectionMode.single}>
+                        <SelectionZone selection={selection} selectionMode={SelectionMode.multiple}>
                             <Stack tokens={StackGap10}>
                                 <SearchBox
                                     style={{ width: 280 }}
@@ -300,56 +397,66 @@ export function TestResultDetail(props: any) {
                                 <div style={{ width: winSize.width * 0.30, height: winSize.height - 180, overflowY: 'auto' }}>
                                     {
                                         filteredResults !== undefined
-                                            ? <DetailsList
-                                                items={filteredResults}
-                                                columns={[
-                                                    {
-                                                        key: 'Name',
-                                                        name: 'Name',
-                                                        minWidth: 360,
-                                                        isRowHeader: true,
-                                                        isResizable: true,
-                                                        onRender: (item: TestCaseOverview | undefined, index: number | undefined) => {
-                                                            if (item != undefined && index != undefined) {
-                                                                const startIndex = item.FullName.lastIndexOf('.') + 1;
-                                                                const caseName = item.FullName.substring(startIndex);
-                                                                return <div>{caseName}</div>
-                                                            }
-                                                            else {
-                                                                return null;
+                                            ? <MarqueeSelection selection={selection}>
+                                                <DetailsList
+                                                    items={filteredResults}
+                                                    columns={[
+                                                        {
+                                                            key: 'Name',
+                                                            name: 'Name',
+                                                            minWidth: 360,
+                                                            isRowHeader: true,
+                                                            isResizable: true,
+                                                            onRender: (item: TestCaseOverview | undefined, index: number | undefined) => {
+                                                                if (item != undefined && index != undefined) {
+                                                                    const startIndex = item.FullName.lastIndexOf('.') + 1;
+                                                                    const caseName = item.FullName.substring(startIndex);
+                                                                    return <div>{caseName}</div>
+                                                                }
+                                                                else {
+                                                                    return null;
+                                                                }
                                                             }
                                                         }
-                                                    }
-                                                ]}
-                                                layoutMode={DetailsListLayoutMode.justified}
-                                                selection={selection}
-                                                selectionMode={SelectionMode.single}
-                                                selectionPreservedOnEmptyClick={true}
-                                                setKey='set'
-                                                getKey={(item: TestCaseOverview) => item.FullName}
-                                                groups={getUpdatedGroups(filteredResults)}
-                                                groupProps={{
-                                                    headerProps: {
-                                                        onToggleCollapse: onToggleGroupCollapse
-                                                    }
-                                                }}
-                                                compact={true}
-                                                isHeaderVisible={false}
-                                            />
-                                            : <div>
-                                                <Spinner size={SpinnerSize.medium} />
-                                                <p style={{ color: '#fa8c16' }}>Loading...</p>
-                                            </div>
+                                                    ]}
+                                                    layoutMode={DetailsListLayoutMode.justified}
+                                                    selection={selection}
+                                                    selectionMode={SelectionMode.multiple}
+                                                    selectionPreservedOnEmptyClick={true}
+                                                    setKey='set'
+                                                    getKey={(item: TestCaseOverview) => item.FullName}
+                                                    groups={getUpdatedGroups(filteredResults)}
+                                                    groupProps={{
+                                                        headerProps: {
+                                                            onToggleCollapse: onToggleGroupCollapse
+                                                        }
+                                                    }}
+                                                    compact={true}
+                                                    isHeaderVisible={false}
+                                                />
+                                            </MarqueeSelection>
+                                            : testResults.selectedTestResultId !== undefined
+                                                ? <div>
+                                                    <Spinner size={SpinnerSize.medium} />
+                                                    <p style={{ color: '#fa8c16' }}>Loading...</p>
+                                                </div>
+                                                : <p>Please select a test result on the Task History page.</p>
                                     }
                                 </div>
                             </Stack>
                         </SelectionZone>
                     </div>
                     <div style={{ borderLeft: '2px solid #bae7ff', minHeight: winSize.height - 140 }}>
-                        <div style={{ paddingLeft: 20, paddingRight: 15, maxWidth: winSize.width * 0.82 }}>
-                            <TestCaseResultView
-                                winSize={winSize}
-                                result={testCaseResult.selectedTestCaseResult} />
+                        <div style={{ paddingLeft: 20, paddingRight: 15, width: winSize.width * 0.66 }}>
+                            {
+                                selectedItems !== undefined && selectedItems.length > 1
+                                    ? <SelectedTestCasesView
+                                        winSize={winSize}
+                                        results={selectedItems} />
+                                    : <TestCaseResultView
+                                        winSize={winSize}
+                                        result={testCaseResult.selectedTestCaseResult} />
+                            }
                         </div>
                     </div>
                 </Stack>
@@ -361,6 +468,16 @@ export function TestResultDetail(props: any) {
                                 ? null
                                 : testResults.selectedTestResult.Overview.Status === 'Running'
                                     ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={toggleDialogHidden}>Abort</PrimaryButton>
+                                    : null
+                        }
+                        {
+                            testResults.selectedTestResult === undefined
+                                ? null
+                                : testResults.selectedTestResult.Overview.Status !== 'Created' && testResults.selectedTestResult.Overview.Status !== 'Running'
+                                    ? <RerunContextualMenu
+                                        testResult={testResults.selectedTestResult}
+                                        selectedItems={selectedItems}
+                                        onRerun={onRerunClick} />
                                     : null
                         }
                         <PrimaryButton disabled onClick={onExportProfile}>Export Profile</PrimaryButton>

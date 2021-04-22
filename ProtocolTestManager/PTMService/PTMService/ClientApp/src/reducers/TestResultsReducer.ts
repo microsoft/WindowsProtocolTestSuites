@@ -16,6 +16,9 @@ import {
 } from '../actions/TestSuiteConfigurationAction';
 
 import {
+    CREATE_RUNREQUEST_REQUEST,
+    CREATE_RUNREQUEST_SUCCESS,
+    CREATE_RUNREQUEST_FAILURE,
     ABORT_RUNREQUEST_REQUEST,
     ABORT_RUNREQUEST_SUCCESS,
     ABORT_RUNREQUEST_FAILURE,
@@ -27,6 +30,7 @@ import {
     LIST_TESTRESULTS_SUCCESS,
     LIST_TESTRESULTS_FAILURE,
     SET_PAGENUMBER,
+    SET_QUERY,
     SET_SELECTEDTESTRESULT,
     CLEAR_SELECTEDTESTRESULT,
     GET_TESTRESULTDETAIL_REQUEST,
@@ -48,6 +52,7 @@ export interface TestResultsState {
     pageCount: number;
     currentPageResults: TestResultOverview[];
     pageSize: 15;
+    query: string | undefined;
     selectedTestResultId: number | undefined;
     selectedTestResultSummary: TestResultSummary | undefined;
     selectedTestResult: TestResult | undefined;
@@ -60,9 +65,10 @@ const initialTestResultsState: TestResultsState = {
     allTestSuites: [],
     allConfigurations: [],
     pageNumber: 0,
-    pageCount: 0,
+    pageCount: 1,
     currentPageResults: [],
     pageSize: 15,
+    query: undefined,
     selectedTestResultId: undefined,
     selectedTestResultSummary: undefined,
     selectedTestResult: undefined
@@ -132,6 +138,26 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
                 errorMsg: action.errorMsg
             };
 
+        case CREATE_RUNREQUEST_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                errorMsg: undefined
+            };
+
+        case CREATE_RUNREQUEST_SUCCESS:
+            return {
+                ...state,
+                isLoading: false
+            };
+
+        case CREATE_RUNREQUEST_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                errorMsg: action.errorMsg
+            };
+
         case ABORT_RUNREQUEST_REQUEST:
             return {
                 ...state,
@@ -163,7 +189,7 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
             return {
                 ...state,
                 isPosting: false,
-                pageNumber: state.pageNumber > action.payload.PageCount - 1 ? action.payload.PageCount - 1 : state.pageNumber,
+                pageNumber: action.payload.PageCount === 0 ? 0 : (state.pageNumber > action.payload.PageCount - 1 ? action.payload.PageCount - 1 : state.pageNumber),
                 pageCount: action.payload.PageCount,
                 currentPageResults: action.payload.TestResults
             };
@@ -179,6 +205,12 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
             return {
                 ...state,
                 pageNumber: action.payload
+            };
+
+        case SET_QUERY:
+            return {
+                ...state,
+                query: action.payload
             };
 
         case SET_SELECTEDTESTRESULT:
@@ -199,21 +231,21 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
         case GET_TESTRESULTDETAIL_REQUEST:
             return {
                 ...state,
-                isPosting: true,
+                isLoading: true,
                 errorMsg: undefined,
             };
 
         case GET_TESTRESULTDETAIL_SUCCESS:
             return {
                 ...state,
-                isPosting: false,
+                isLoading: false,
                 selectedTestResult: action.payload
             };
 
         case GET_TESTRESULTDETAIL_FAILURE:
             return {
                 ...state,
-                isPosting: false,
+                isLoading: false,
                 errorMsg: action.errorMsg
             };
 
