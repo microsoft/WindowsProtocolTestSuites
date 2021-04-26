@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -17,11 +17,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private IScopedServiceFactory<IRepositoryPool> ScopedServiceFactory { get; init; }
 
-        private IDictionary<int, ITestSuite> TestSuitePool { get; init; }
+        private ConcurrentDictionary<int, ITestSuite> TestSuitePool { get; init; }
 
-        private IDictionary<int, IConfiguration> ConfigurationPool { get; init; }
+        private ConcurrentDictionary<int, IConfiguration> ConfigurationPool { get; init; }
 
-        private IDictionary<int, ITestRun> TestRunPool { get; init; }
+        private ConcurrentDictionary<int, ITestRun> TestRunPool { get; init; }
 
         public PTMKernelService(IOptions<PTMKernelServiceOptions> options, IStoragePool storageManager, IScopedServiceFactory<IRepositoryPool> scopedServiceFactory)
         {
@@ -31,11 +31,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             ScopedServiceFactory = scopedServiceFactory;
 
-            TestSuitePool = new Dictionary<int, ITestSuite>();
+            TestSuitePool = new ConcurrentDictionary<int, ITestSuite>();
 
-            ConfigurationPool = new Dictionary<int, IConfiguration>();
+            ConfigurationPool = new ConcurrentDictionary<int, IConfiguration>();
 
-            TestRunPool = new Dictionary<int, ITestRun>();
+            TestRunPool = new ConcurrentDictionary<int, ITestRun>();
         }
     }
 }

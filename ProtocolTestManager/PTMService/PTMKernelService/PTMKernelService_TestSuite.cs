@@ -56,7 +56,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             pool.Save().Wait();
 
-            TestSuitePool.Add(id, testSuite);
+            TestSuitePool.AddOrUpdate(id, _ => testSuite, (_, _) => testSuite);
 
             return id;
         }
@@ -76,7 +76,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     testSuiteInstallation = repo.Get(q => q.Where(item => item.Id == id)).First();
                 }
 
-                TestSuitePool.Add(id, TestSuite.Open(Options.TestEnginePath, testSuiteInstallation, StoragePool));
+                var testSuite = TestSuite.Open(Options.TestEnginePath, testSuiteInstallation, StoragePool);
+                TestSuitePool.AddOrUpdate(id, _ => testSuite, (_, _) => testSuite);
             }
 
             return TestSuitePool[id];

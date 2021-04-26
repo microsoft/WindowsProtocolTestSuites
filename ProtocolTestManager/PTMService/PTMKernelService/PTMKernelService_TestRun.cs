@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             var repo = pool.Get<TestResult>();
 
-            var all = repo.Get(q => q.Where(queryFunc).AsQueryable()).Select(item => GetTestRunInternal(item.Id, item));
+            var all = repo.Get(q => q.Where(queryFunc).OrderByDescending(item => item.Id).AsQueryable()).Select(item => GetTestRunInternal(item.Id, item));
 
             int count = all.Count();
 
@@ -58,8 +58,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
 
                 var configuration = GetConfiguration(testResult.TestSuiteConfigurationId);
+                var testRun = TestRun.Open(Options.TestEnginePath, testResult, configuration, StoragePool, Update);
 
-                TestRunPool.Add(id, TestRun.Open(Options.TestEnginePath, testResult, configuration, StoragePool, Update));
+                TestRunPool.AddOrUpdate(id, _ => testRun, (_, _) => testRun);
             }
 
             return TestRunPool[id];
@@ -95,7 +96,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             testRun.Run(selectedTestCases);
 
-            TestRunPool.Add(id, testRun);
+            TestRunPool.AddOrUpdate(id, _ => testRun, (_, _) => testRun);
 
             return id;
         }

@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             pool.Save().Wait();
 
-            ConfigurationPool.Add(id, configuration);
+            ConfigurationPool.AddOrUpdate(id, _ => configuration, (_, _) => configuration);
 
             return id;
         }
@@ -87,7 +87,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     testSuiteConfiguration = repo.Get(q => q.Where(i => i.Id == id)).First();
                 }
 
-                ConfigurationPool.Add(id, Configuration.Open(testSuiteConfiguration, GetTestSuite(testSuiteConfiguration.TestSuiteId), StoragePool));
+                var configuration = Configuration.Open(testSuiteConfiguration, GetTestSuite(testSuiteConfiguration.TestSuiteId), StoragePool);
+                ConfigurationPool.AddOrUpdate(id, _ => configuration, (_, _) => configuration);
             }
 
             return ConfigurationPool[id];
