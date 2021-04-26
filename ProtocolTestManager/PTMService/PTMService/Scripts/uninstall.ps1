@@ -51,17 +51,20 @@ $appSettingsPath = "$PSScriptRoot/appsettings.json"
 $databasePath = "$PSScriptRoot/ptmservice.db"
 $bashScriptPath = "$PSScriptRoot/run.sh"
 $batchScriptPath = "$PSScriptRoot/run.bat"
+$psScriptPath = "$PSScriptRoot/run.ps1"
 
 $backupPath = "$PSScriptRoot/.bak"
 $appSettingsBackupPath = "$backupPath/appsettings.json"
 $databaseBackupPath = "$backupPath/ptmservice.db"
 $bashScriptBackupPath = "$backupPath/run.sh"
 $batchScriptBackupPath = "$backupPath/run.bat"
+$psScriptBackupPath = "$backupPath/run.ps1"
 
 Copy-Item $appSettingsBackupPath $appSettingsPath -Force -ErrorAction SilentlyContinue
 Copy-Item $databaseBackupPath $databasePath -Force -ErrorAction SilentlyContinue
 Copy-Item $bashScriptBackupPath $bashScriptPath -Force -ErrorAction SilentlyContinue
 Copy-Item $batchScriptBackupPath $batchScriptPath -Force -ErrorAction SilentlyContinue
+Copy-Item $psScriptBackupPath $psScriptPath -Force -ErrorAction SilentlyContinue
 
 if (-not $IsLinux) {
     Remove-Item "$Home/Desktop/PTMService.lnk" -Force -ErrorAction SilentlyContinue

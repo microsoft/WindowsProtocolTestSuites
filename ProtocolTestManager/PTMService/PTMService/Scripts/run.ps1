@@ -9,6 +9,9 @@ $denyPrompt = "(y/N)"
 
 Write-Host "Working directory is $PSScriptRoot."
 
+# Uncomment or modify the following line to set the PTMService URLs.
+# $env:ASPNETCORE_URLS = "http://localhost:5000;https://localhost:5001"
+
 function Read-Confirmation {
     param (
         [bool]$IsYesDefault = $true

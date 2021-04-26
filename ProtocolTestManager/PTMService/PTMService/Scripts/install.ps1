@@ -52,12 +52,14 @@ $appSettingsPath = "$PSScriptRoot/appsettings.json"
 $databasePath = "$PSScriptRoot/ptmservice.db"
 $bashScriptPath = "$PSScriptRoot/run.sh"
 $batchScriptPath = "$PSScriptRoot/run.bat"
+$psScriptPath = "$PSScriptRoot/run.ps1"
 
 $backupPath = "$PSScriptRoot/.bak"
 $appSettingsBackupPath = "$backupPath/appsettings.json"
 $databaseBackupPath = "$backupPath/ptmservice.db"
 $bashScriptBackupPath = "$backupPath/run.sh"
 $batchScriptBackupPath = "$backupPath/run.bat"
+$psScriptBackupPath = "$backupPath/run.ps1"
 
 if ((-not (Test-Path $appSettingsPath)) -or (-not (Test-Path $databasePath))) {
     Write-Error "Your $serviceName distribution is corrupted, please get a new package form the source."
@@ -70,6 +72,7 @@ else {
         Copy-Item $databasePath $databaseBackupPath
         Copy-Item $bashScriptPath $bashScriptBackupPath
         Copy-Item $batchScriptPath $batchScriptBackupPath
+        Copy-Item $psScriptPath $psScriptBackupPath
     }
 }
 
@@ -149,11 +152,12 @@ for ($idx = 0; $idx -lt $appSettings.KnownStorageNodes.Length; $idx++) {
 [System.IO.File]::WriteAllText($appSettingsPath, ($appSettings | ConvertTo-Json))
 
 if (-not $IsLinux) {
-    Write-Host "Do you want to create a desktop top shortcut to $ServiceName`? $confirmPrompt"
+    Write-Host "Do you want to create a desktop shortcut to $serviceName`? $confirmPrompt"
     if (Read-Confirmation) {
         $wsh = New-Object -ComObject WScript.Shell
         $shortcut = $wsh.CreateShortcut("$Home/Desktop/PTMService.lnk")
         $shortcut.TargetPath = "$PSScriptRoot/run.bat"
+        $shortcut.WorkingDirectory = "$PSScriptRoot"
         $shortcut.Save()
     }
 }
@@ -178,7 +182,69 @@ $batchScript = $batchScript.Replace("cd ./", "cd `"$scriptRootPath`"")
 [System.IO.File]::WriteAllText($bashScriptPath, $bashScript)
 [System.IO.File]::WriteAllText($batchScriptPath, $batchScript)
 
-Write-Host "Do you want to start $ServiceName now? $confirmPrompt"
+Write-Host "Do you want to change the $serviceName URLs? $confirmPrompt"
+if (Read-Confirmation) {
+    $defaultHost = "localhost"
+    $defaultHttpPort = 5000
+    $defaultHttpsPort = 5001
+
+    Write-Host "The default host for $serviceName is $defaultHost."
+    Write-Host "Do you want to specify another value for $serviceName host? $confirmPrompt"
+    if (Read-Confirmation) {
+        Write-Host "Please enter your value for $serviceName host:"
+        $userDefinedValue = Read-Host
+        $defaultHost = $userDefinedValue
+    }
+
+    Write-Host "The default HTTP port for $serviceName is $defaultHttpPort."
+    Write-Host "Do you want to specify another value for $serviceName HTTP port? $confirmPrompt"
+    if (Read-Confirmation) {
+        while ($true) {
+            Write-Host "Please enter your value for $serviceName HTTP port (0 - 65535):"
+            [int]$userDefinedValue = Read-Host
+            if (($userDefinedValue -lt 0) -or ($userDefinedValue -gt 65535)) {
+                Write-Warning "Your HTTP port value exceeds the valid range, please specify another value."
+                continue
+            }
+            else {
+                $defaultHttpPort = $userDefinedValue
+                break
+            }
+        }
+    }
+
+    Write-Host "The default HTTPS port for $serviceName is $defaultHttpsPort."
+    Write-Host "Do you want to specify another value for $serviceName HTTP port? $confirmPrompt"
+    if (Read-Confirmation) {
+        while ($true) {
+            Write-Host "Please enter your value for $serviceName HTTPS port (0 - 65535):"
+            [int]$userDefinedValue = Read-Host
+            if (($userDefinedValue -lt 0) -or ($userDefinedValue -gt 65535)) {
+                Write-Warning "Your HTTPS port value exceeds the valid range, please specify another value."
+                continue
+            }
+            elseif ($userDefinedValue -eq $defaultHttpPort) {
+                Write-Warning "Your HTTPS port value conflicts with the HTTP port value, please specify another value."
+                continue
+            }
+            else {
+                $defaultHttpsPort = $userDefinedValue
+                break
+            }
+        }
+    }
+
+    $envSetter = "`$env:ASPNETCORE_URLS = `"http://$defaultHost`:$defaultHttpPort;https://$defaultHost`:$defaultHttpsPort`""
+    $placeholder = "# `$env:ASPNETCORE_URLS = `"http://localhost:5000;https://localhost:5001`""
+
+    # Modify run script PowerShell entry point.
+    $psScript = [System.IO.File]::ReadAllText($psScriptPath)
+    $psScript = $psScript.Replace($placeholder, $envSetter)
+
+    [System.IO.File]::WriteAllText($psScriptPath, $psScript)
+}
+
+Write-Host "Do you want to start $serviceName now? $confirmPrompt"
 if (Read-Confirmation) {
     & $psExe "$PSScriptRoot/run.ps1"
 }
