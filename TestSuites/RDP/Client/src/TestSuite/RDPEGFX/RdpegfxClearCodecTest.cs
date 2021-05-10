@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec(L1&L2) bitmap transition via RDPEGFX.")]
         public void RDPEGFX_ClearCodec_PositiveTest_ResidualBandLayer()
         {
@@ -72,6 +74,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec(L1&L3) bitmap transition via RDPEGFX.")]
         public void RDPEGFX_ClearCodec_PositiveTest_ResidualSubcodecLayer()
         {
@@ -123,6 +127,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec(L1&L2) bitmap transition without resetting vbar cache via RDPEGFX.")]
         public void RDPEGFX_ClearCodec_PositiveTest_NotResetVBarCache()
         {
@@ -172,6 +178,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec multiple band bitmap transition via RDPEGFX.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MultipleBands()
         {
@@ -222,6 +230,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if vbar cache in previous PDU can be used in second PDU.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MultipleFramesPduWithCache()
         {
@@ -287,6 +297,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec multiple subcodec bitmap transition via RDPEGFX.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MultipleSubCodecArea()
         {
@@ -339,6 +351,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec uncompressed subcodec bitmap transition via RDPEGFX.")]
         public void RDPEGFX_ClearCodec_PositiveTest_SubCodecUncompressed()
         {
@@ -391,6 +405,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if ClearCodec stream with glyph index can be handled by the client.")]
         public void RDPEGFX_ClearCodec_PositiveTest_GlyphIndexEnabled()
         {
@@ -442,6 +458,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can cache max size(1024) glyph in clearcodec stream.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MaxGlyphSize()
         {
@@ -492,6 +510,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can support max(4000) ClearCodec glyph slot.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MaxNumGlyphSlot()
         {
@@ -558,6 +578,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can use ClearCodec glyph Cache in same rect area.")]
         public void RDPEGFX_ClearCodec_PositiveTest_GlyphHitEnabled_SameRect()
         {
@@ -621,6 +643,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec glyph Cache can be used in a Rectangle with same size, but different width/height.")]
         public void RDPEGFX_ClearCodec_PositiveTest_GlyphHitEnabled_DiffRect()
         {
@@ -682,6 +706,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with max(32766) bitmap width.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MaxWidthBitmap()
         {
@@ -724,6 +750,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with max bitmap height(32766).")]
         public void RDPEGFX_ClearCodec_PositiveTest_MaxHeightBitmap()
         {
@@ -767,6 +795,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with last RunLengthFactor that is zero in residual layer.")]
         public void RDPEGFX_ClearCodec_PositiveTest_Residual_ZeroRunLengthFactor()
         {
@@ -806,6 +836,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec bitmap transition with max(52 pixels) band height.")]
         public void RDPEGFX_ClearCodec_PositiveTest_MaxBandHeight()
         {
@@ -851,6 +883,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RLEX encoded stream with max color in palette.")]
         public void RDPEGFX_ClearCodec_PositiveTest_Subcodec_MaxPlatteColor()
         {
@@ -896,6 +930,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with width larger than max width(32766).")]
         public void RDPEGFX_ClearCodec_NegativeTest_TooBigWidthBitmap()
         {
@@ -934,6 +970,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with height larger than max height(32766).")]
         public void RDPEGFX_ClearCodec_NegativeTest_TooBigHeightBitmap()
         {
@@ -972,6 +1010,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a glyph larger than max number(1024) square pixels can be handled by the client.")]
         public void RDPEGFX_ClearCodec_NegativeTest_TooBigGlyph()
         {
@@ -1015,6 +1055,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a clearcodec stream with glyph_hit flag set only can be handled by the client.")]
         public void RDPEGFX_ClearCodec_NegativeTest_GlyphHitFlagSet_GlyphIndexFlagNotSet()
         {
@@ -1051,6 +1093,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a clearcodec stream with glyph_hit and glyph_index flag set but glyph index is not used can be handled by the client.")]
         public void RDPEGFX_ClearCodec_NegativeTest_UnusedGlyphIndex()
         {
@@ -1088,6 +1132,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a clearcodec stream with glyph_hit and glyph_index flag set but glyph index is out of range(0, 3999) can be handled by the client.")]
         public void RDPEGFX_ClearCodec_NegativeTest_TooBigGlyphIndex()
         {
@@ -1126,6 +1172,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can support too much(4001) ClearCodec glyph slot.")]
         public void RDPEGFX_ClearCodec_NegativeTest_TooMuchGlyphSlot()
         {
@@ -1186,6 +1234,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with graph index hit flag set but composite payload exists.")]
         public void RDPEGFX_ClearCodec_NegativeTest_GlyphIndexHitSet_CompositePayloadExists()
         {
@@ -1239,6 +1289,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with redundant RunLengthFactor2 in residual layer.")]
         public void RDPEGFX_ClearCodec_NegativeTest_RedundantRunLengthFactor2()
         {
@@ -1279,6 +1331,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with RunLengthFactor1 is 0xff but RunLengthFactor2 is absent in residual layer.")]
         public void RDPEGFX_ClearCodec_NegativeTest_AbsentRunLengthFactor2()
         {
@@ -1318,6 +1372,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with RunLengthFactor2 is less than 0xffff but RunLengthFactor3 exist in residual layer.")]
         public void RDPEGFX_ClearCodec_NegativeTest_RedundantRunLengthFactor3()
         {
@@ -1365,6 +1421,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with absent RunLengthFactor3 in residual layer.")]
         public void RDPEGFX_ClearCodec_NegativeTest_AbsentRunLengthFactor3()
         {
@@ -1411,6 +1469,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec bitmap transition with larger than 52 pixels band height.")]
         public void RDPEGFX_ClearCodec_NegativeTest_TooBigBandHeight()
         {
@@ -1454,6 +1514,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with RLEX encoded bytes number larger than 3 * width * height.")]
         public void RDPEGFX_ClearCodec_NegativeTest_SubCodecRLEX_EncodedBytesTooMuch()
         {
@@ -1495,6 +1557,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with incorrect palette count in subcodec layer.")]
         public void RDPEGFX_ClearCodec_NegativeTest_SubCodecRLEX_IncorrectPlatteCount()
         {

@@ -16,6 +16,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case is to verify SUT drops the connection when the length field with tpktHeader of 
                      MCS Disconnect Provider Ultimatum PDU is inconsistent with the received data.")]
         public void S1_ConnectionTest_Disconnection_NegativeTest_MCSDisconnectProviderUltimatum_InvalidTPKTLength()

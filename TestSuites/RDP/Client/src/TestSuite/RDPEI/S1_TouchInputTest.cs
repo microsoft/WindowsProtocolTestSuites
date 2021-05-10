@@ -25,6 +25,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("RDPEI")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the initialization of touch remoting transactions.")]
         public void Rdpei_TouchInputTest_Positive_TouchReadiness()
         {
@@ -52,6 +53,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("RDPEI")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the content of the RDPINPUT_TOUCH_EVENT_PDU message.")]
         public void Rdpei_TouchInputTest_Positive_SingleTouchEvent()
         {
@@ -94,6 +96,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the position of the contacts in RDPINPUT_TOUCH_EVENT_PDU message.")]
         public void Rdpei_TouchInputTest_Positive_SingleTouchContactPosition()
         {
@@ -202,6 +205,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the multitouch of RDPINPUT_TOUCH_EVENT_PDU message.")]
         public void Rdpei_TouchInputTest_Positive_MultiTouchEvent()
         {
@@ -262,6 +266,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the state transition of contacts in RDPINPUT_TOUCH_EVENT_PDU and RDPINPUT_DISMISS_HOVERING_CONTACT_PDU messages.")]
         public void Rdpei_TouchInputTest_Positive_ContactStateTransition()
         {
@@ -308,6 +313,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("RDPEI")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the RDPINPUT_DISMISS_HOVERING_PDU message. Only if the client device supports proximity.")]
         public void Rdpei_TouchInputTest_Positive_DismissHoveringContact()
         {
@@ -391,6 +397,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Ensure the client will ignore the RDPINPUT_SC_READY_PDU message with invalid eventId.")]
         public void Rdpei_TouchInputTest_Negative_InvalidEventIdInInitializingPhase()
         {
@@ -417,6 +424,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Ensure the client will drop the connection when the pduLength in SC_READY message is inconsistent with the length of the message.")]
         public void Rdpei_TouchInputTest_Negative_InvalidScReadyPduLength()
         {
@@ -445,6 +453,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Ensure the client will not send RDPINPUT_TOUCH_EVENT_PDU to the server without negotiation.")]
         public void Rdpei_TouchInputTest_Negative_TouchEventWithoutNegotiation()
         {

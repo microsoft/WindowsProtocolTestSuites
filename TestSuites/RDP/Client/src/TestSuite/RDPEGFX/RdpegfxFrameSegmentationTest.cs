@@ -21,6 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify if the segmented messages, the compress flag, and Rdpegfx Header can be handled correctly by RDP Client")]
         public void RDPEGFX_Segmentation_Positive_MultipleSegmentedPacking()
         {
@@ -70,6 +72,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle an uncompressed message without segment header.")]
         public void RDPEGFX_Segmentation_Negative_UncompressedNoSegmentHeader()
         {
@@ -104,6 +108,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle an uncompressed message with segment header.")]
         public void RDPEGFX_Segmentation_Positive_UncompressedSegmentHeader()
         {
@@ -156,6 +162,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a compressed message without segment header.")]
         public void RDPEGFX_Segmentation_Negative_CompressedNoSegmentHeader()
         {
@@ -189,6 +197,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with segment descriptor is neither 0xE0 nor 0xE1.")]
         public void RDPEGFX_Segmentation_Negative_IncorrectSegmentDescriptor()
         {
@@ -223,6 +233,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with single segment with segmentCount field")]
         public void RDPEGFX_Segmentation_Negative_SingleSegmentWithSegmentCount()
         {
@@ -257,6 +269,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with single segment with UncompressedSize field")]
         public void RDPEGFX_Segmentation_Negative_SingleSegmentWithUncompressedSize()
         {
@@ -291,6 +305,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with single segment with SegmentArray field")]
         public void RDPEGFX_Segmentation_Negative_SingleSegmentWithSegmentArray()
         {
@@ -324,6 +340,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with multiple segments without SegmentCount field")]
         public void RDPEGFX_Segmentation_Negative_MultiSegmentNoSegmentCount()
         {
@@ -365,6 +383,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with multiple segments without UncompressedSize field")]
         public void RDPEGFX_Segmentation_Negative_MultiSegmentNoUncompressedSize()
         {
@@ -407,6 +427,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with multiple segment without SegmentArray field")]
         public void RDPEGFX_Segmentation_Negative_MultiSegmentNoSegmentArray()
         {

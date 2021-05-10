@@ -22,6 +22,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test addition and removal of monitor and notification with surface management commands")]
         public void S3_RDPEDISP_MonitorAdditionRemoval_RestartGraphicsPipeline()
         {
@@ -60,6 +61,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test addition and removal of monitor and notification with Deactivation-Reactivation Sequence")]
         public void S3_RDPEDISP_MonitorAdditionRemoval_DeactivationReactivation()
         {

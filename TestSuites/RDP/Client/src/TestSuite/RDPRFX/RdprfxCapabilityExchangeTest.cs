@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the connection type and color depth within Client Core Data.")]
         public void Rdprfx_VerifyClientCoreData()
         {
@@ -79,6 +81,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client capabilities.")]
         public void Rdprfx_VerifyClientCapabilities()
         {

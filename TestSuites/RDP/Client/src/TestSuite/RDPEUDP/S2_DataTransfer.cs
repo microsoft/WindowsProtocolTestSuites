@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will send an ACK to acknowledge the received package")]
         public void S2_DataTransfer_ClientReceiveData()
         {
@@ -64,6 +66,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will send an ACK to acknowledge the package loss when detect a package loss in a reliable connection.")]
         public void S2_DataTransfer_AcknowledgeTest_AcknowlegeLossyPackage()
         {
@@ -161,6 +165,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client support congestion control as a receiver.")]
         public void S2_DataTransfer_CongestionControlTest_ClientReceiveData()
         {
@@ -221,6 +227,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the TLS handshake process on the reliable RDP-UDP connection.")]
         public void S2_DataTransfer_SecurityChannelCreation_ReliableConnection()
         {
@@ -257,6 +265,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the DTLS handshake process on the lossy RDP-UDP connection.")]
         public void S2_DataTransfer_SecurityChannelCreation_LossyConnection()
         {
@@ -301,6 +311,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can retransmit source package in the reliable RDP-UDP connection if not receiving ACK acknowledged for a specified time.")]
         public void S2_DataTransfer_RetransmitTest_ClientRetransmit()
         {
@@ -345,6 +357,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will send ACK correctly when sequence number is wrapped around")]
         public void S2_DataTransfer_SequenceNumberWrapAround()
         {
@@ -406,6 +420,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will add RDPUDP_FLAG_ACKDELAYED flag in uFlags field of ACK packet if client delayed the ack")]
         public void S2_DataTransfer_ClientAckDelay()
         {

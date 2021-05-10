@@ -21,6 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the encode header messages can be sent in order of Sync -> Versions -> Channels -> Context.")]
         public void Rdprfx_HeaderMessage_PositiveTest_OrderTest_VersionsChannelsContext()
         {
@@ -118,6 +120,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the encode header messages can be sent in order of Sync -> Channels -> Versions -> Context.")]
         public void Rdprfx_HeaderMessage_PositiveTest_OrderTest_ChannelsVersionsContext()
         {
@@ -215,6 +219,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the encode header messages can be sent in order of Sync -> Context -> Versions -> Channels.")]
         public void Rdprfx_HeaderMessage_PositiveTest_OrderTest_ContextVersionsChannels()
         {
@@ -312,6 +318,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the encode header messages can be sent in order of Sync -> Versions -> Context -> Channels.")]
         public void Rdprfx_HeaderMessage_PositiveTest_OrderTest_VersionsContextChannels()
         {
@@ -411,6 +419,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Ensure that the client terminates the RDP connection when received a TS_RFX_SYNC message
         with the blockLen field set to an invalid value.")]
         public void Rdprfx_HeaderMessage_NegativeTest_TsRfxSync_InvalidBlockLen()
@@ -493,6 +503,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]        
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Ensure the client terminates the RDP connection when received an unspecified type of message.")]
         public void Rdprfx_HeaderMessage_NegativeTest_UnspecifiedMessage()
         {
@@ -574,6 +586,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can support the smallest channel 1x1.")]
         public void Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_1x1Channel()
         {
@@ -595,6 +609,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can support the channel 2x2.")]
         public void Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_2x2Channel()
         {
@@ -616,6 +632,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can support the largest channel 4096x2048.")]
         public void Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_4096x2048Channel()
         {
@@ -637,6 +655,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can support the channel 4095x2047.")]
         public void Rdprfx_HeaderMessage_PositiveTest_ChannelBoundaryTest_4095x2047Channel()
         {

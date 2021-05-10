@@ -23,6 +23,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test RemoteFX codec bitmap(entropy method: RLGR1) transition via RDPEGFX.")]
         public void RDPEGFX_RemoteFXCodec_PositiveTest_ImageMode_RLGR1()
         {
@@ -62,6 +64,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test RemoteFX codec bitmap(entropy method: RLGR3) transition via RDPEGFX.")]
         public void RDPEGFX_RemoteFXCodec_PositiveTest_ImageMode_RLGR3()
         {
@@ -101,6 +105,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test RemoteFX codec video(entropy method: RLGR1) transition via RDPEGFX.")]
         public void RDPEGFX_RemoteFXCodec_PositiveTest_VideoMode_RLGR1()
         {
@@ -140,6 +146,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test RemoteFX codec video(entropy method: RLGR3) transition via RDPEGFX.")]
         public void RDPEGFX_RemoteFXCodec_PositiveTest_VideoMode_RLGR3()
         {

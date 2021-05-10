@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test orientation change (Portrait) and notification with surface management commands")]
         public void S2_RDPEDISP_OrientationChange_RestartGraphicsPipeline()
         {
@@ -53,6 +54,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test orientation change (Portrait) and notification with Deactivation-Reactivation Sequence")]
         public void S2_RDPEDISP_OrientationChange_DeactivationReactivation()
         {
@@ -90,6 +92,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test orientation changes and notification with surface management commands")]
         public void S2_RDPEDISP_OrientationAllChange_RestartGraphicsPipeline()
         {
@@ -142,6 +145,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test orientation changes and notification with Deactivation-Reactivation Sequence")]
         public void S2_RDPEDISP_OrientationAllChange_DeactivationReactivation()
         {
@@ -207,6 +211,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test orientation changes and notification with surface management commands")]
         public void S2_RDPEDISP_OrientationAllChange_EnhancedAdapterDemo()
         {

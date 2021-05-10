@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("RDSTLSAuthentication")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to ensure SUT can process server redirection through RDSTLS protocol successfully by returning redirection GUID obtained in server redirection PDU.")]
         public void BVT_RDSTLSAuthentication_PositiveTest_ServerRedirectionWithPasswordCredentials()
         {
@@ -55,6 +56,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("RDSTLSAuthentication")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to ensure SUT can handle auto-reconnect through RDSTLS protocol successfully after server redirection by returning cookie obtained in Server Save Session Info PDU.")]
         public void S11_RDSTLSAuthentication_PositiveTest_ServerRedirectionAndAutoReconnectWithCookie()
         {
