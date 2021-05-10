@@ -16,6 +16,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that 
                         1. The correctness of Client MCS Connect Initial PDU with GCC Conference Create Request when the server did not advertise support for Extended Client Data Blocks.
                         2. SUT can process the valid Server MCS Connect Response PDU with GCC Conference Create Response correctly.")]
@@ -69,6 +71,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection when the result field of the MCS Connect Response PDU is not set to rt-successful (non 0).")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_MCSConnectResponseFailure()
         {
@@ -118,6 +122,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection when the H.221 nonstandard key embedded at the start of x224Ddata field is ANSI character string “McDn”.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidH221NonStandardkey()
         {
@@ -167,6 +173,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection when the length field of User Data Header to an invalid value (less than the actual value).
             Comment: SDK does not expose method to get the length of user data as of 2011-11-17 ")]        
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidEncodedLength()
@@ -220,6 +228,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection when the clientReaquestedProtocols field in the Server Core Data is not same as that received in RDP Negotiation Response.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidClientReaquestedProtocols()
         {
@@ -269,6 +279,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Potential TDI. This test case verifies that SUT drops the connection when the encryptionMethod field in the Server Security Data is not valid or not supported.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidEncryptionMethod()
         {
@@ -340,6 +352,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection when the serverRandomLen field in the Server Security Data is not valid.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidServerRandomLen()
         {
@@ -418,6 +432,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection when the serverCertificate field in the Server Security Data is not valid.")]
         public void S1_ConnectionTest_BasicSettingExchange_NegativeTest_InvalidServerCertificate()
         {
@@ -496,6 +512,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can connect to a RDP 10.0 Server.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_V10Server()
         {
@@ -659,6 +677,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the earlyCapabilityFlags of the TS_US_SC_CORE correctly with supporting version 1 RNS_UD_SC_EDGE_ACTIONS.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_V1RnsUdScEdgeActionsSupported()
         {
@@ -726,6 +746,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the earlyCapabilityFlags of the TS_US_SC_CORE correctly with supporting version 2 RNS_UD_EDGE_ACTIONS.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_V2RnsUdScEdgeActionsSupported()
         {
@@ -780,6 +802,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the earlyCapabilityFlags of the TS_US_SC_CORE correctly with supporting version 1 and version 2 RNS_UD_SC_EDGE_ACTIONS.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_V1andV2RnsUdScEdgeActionsSupported()
         {
@@ -858,6 +882,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the earlyCapabilityFlags of the TS_US_SC_CORE correctly with supporting RNS_UD_SC_DYNAMIC_DST.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_RnsUdScDynamicDstSupported()
         {
@@ -913,6 +939,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the encryptionMethod and encryptionLevel of the TS_UD_SC_SEC1 correctly.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_EncryptionMethodandLevel()
         {
@@ -975,6 +1003,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (65534) of MCSChannelId field in Server Network Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerNetworkData_LessMaxValue()
         {
@@ -1042,6 +1072,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (1) of MCSChannelId field in Server Network Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerNetworkData_ONE()
         {
@@ -1109,6 +1141,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (0) of MCSChannelId field in Server Network Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerNetworkData_ZERO()
         {
@@ -1178,6 +1212,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (65535) of MCSChannelId field in Server Message Channel Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_MaxValue()
         {
@@ -1244,6 +1280,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (65534) of MCSChannelId field in Server Message Channel Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_LessMaxValue()
         {
@@ -1310,6 +1348,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (1) of MCSChannelId field in Server Message Channel Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_ONE()
         {
@@ -1377,6 +1417,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the boundary value (0) of MCSChannelId field in Server Message Channel Data.")]
         public void S1_ConnectionTest_BasicSettingExchange_PositiveTest_MCSChannelIdOfServerMessageChannelData_ZERO()
         {

@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT drop the connection when received a Server-to-Client PDU when the length field within tpktHeader is invalid.")]
         public void S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidTPKTLength()
         {
@@ -73,6 +75,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT drop the connection when received a Server-to-Client PDU when the length field within mcsSDin is invalid.")]
         public void S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidMCSLength()
         {
@@ -127,6 +131,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT drop the connection when received a Server-to-Client PDU when the signature field within security is invalid.")]
         public void S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidSignature()
         {
@@ -183,6 +189,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT drop the connection when received a Server-to-Client PDU when the SEC_ENCRYPT flag within securityHeader is set")]
         public void S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidEncryptFlag()
         {
@@ -238,6 +246,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT drop the connection when received a Server-to-Client PDU when the totalLength field within shareDataHeader is invalid.")]
         public void S4_SlowPathInputTest_NegativeTest_ServerToClientSlowPath_InvalidTotalLenth()
         {
@@ -293,6 +303,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("Interactive")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify the Client Input Events when Slow-Path is enabled.")]
         public void BVT_ClientInputTest_SlowPath()
         {

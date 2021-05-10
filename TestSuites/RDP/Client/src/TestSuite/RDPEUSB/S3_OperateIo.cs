@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of sending IO control request and related responses.")]
         public void BVT_EUSB_OperateIo_IoControl()
         {
@@ -62,6 +63,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of sending internal IO control request and related responses.")]
         public void BVT_EUSB_OperateIo_InternalIoControl()
         {
@@ -109,6 +111,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of sending transfer in request and related responses.")]
         public void BVT_EUSB_OperateIo_TransferIn()
         {
@@ -165,6 +168,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of sending the query device text request and related responses.")]
         public void BVT_EUSB_OperateIo_QueryDeviceText()
         {
@@ -200,6 +204,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of the select-configuration process.")]
         public void S3_EUSB_OperateIo_SelectConfiguration()
         {
@@ -307,6 +312,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of selecting interface.")]
         public void S3_EUSB_OperateIo_SelectInterface()
         {
@@ -368,6 +374,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of clearing a stall condition on an endpoint.")]
         public void S3_EUSB_OperateIo_PipeRequest()
         {
@@ -458,6 +465,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of retrieving the current frame number.")]
         public void S3_EUSB_OperateIo_GetCurrentFrameNumber()
         {
@@ -515,6 +523,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of retrieving status from a device, interface, endpoint.")]
         public void S3_EUSB_OperateIo_GetStatus()
         {
@@ -622,6 +631,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of retrieving the current configuration for a device.")]
         public void S3_EUSB_OperateIo_GetConfiguration()
         {
@@ -676,6 +686,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of retrieving the current alternate interface setting for an interface in the current configuration.")]
         public void S3_EUSB_OperateIo_GetInterface()
         {
@@ -732,6 +743,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of retrieving Microsoft OS Feature Descriptors from a USB device or an interface on a USB device.")]
         public void S3_EUSB_OperateIo_OsFeatureDescriptor()
         {
@@ -790,6 +802,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of the process to reset the upstream port of the device it manages.")]
         public void S3_EUSB_OperateIo_ResetPort()
         {
@@ -831,6 +844,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of querying the status of the PDO.")]
         public void S3_EUSB_OperateIo_GetPortStatus()
         {
@@ -872,6 +886,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of querying the count of USB hub.")]
         public void S3_EUSB_OperateIo_GetHubCount()
         {
@@ -913,6 +928,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of simulating a device unplug and replug on the port associated with the PDO.")]
         public void S3_EUSB_OperateIo_CyclePort()
         {
@@ -954,6 +970,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of querying the bus driver for certain bus information.")]
         public void S3_EUSB_OperateIo_GetBusInfo()
         {
@@ -995,6 +1012,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of querying the bus driver for the device name of the USB host controller.")]
         public void S3_EUSB_OperateIo_GetControllerName()
         {
@@ -1041,6 +1059,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of issuing OSR FX2 Device vendor command, SET/READ BARGRAPH DISPLAY.")]
         public void S3_EUSB_OperateIo_OSRFX2_BargraphDisplay()
         {
@@ -1140,6 +1159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of issuing OSR FX2 Device vendor command, SET/READ 7 SEGMENT DISPLAY.")]
         public void S3_EUSB_OperateIo_OSRFX2_SegmentDisplay()
         {
@@ -1240,6 +1260,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of issuing OSR FX2 Device vendor command, IS HIGH SPEED.")]
         public void S3_EUSB_OperateIo_OSRFX2_IsHighSpeed()
         {
@@ -1302,6 +1323,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of issuing OSR FX2 Device vendor command, READ SWITCHES.")]
         public void S3_EUSB_OperateIo_OSRFX2_ReadSwitches()
         {
@@ -1360,6 +1382,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of using the interrupt endpoint to read the switch states.")]
         public void S3_EUSB_OperateIo_OSRFX2_InterruptIn()
         {
@@ -1435,6 +1458,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         [TestCategory("RDPEUSB")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Verify behaviors of using the bulk read and write endpoints of the OSR FX2 Device, Bulk read / write.")]
         public void S3_EUSB_OperateIo_OSRFX2_BulkWriteRead()
         {

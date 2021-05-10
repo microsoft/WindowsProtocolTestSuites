@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("RDP10.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("StaticVirtualChannel")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to verify client could tunneling static virtual channel traffic over UDP.")]
         public void S3_Tunneling_StaticVirtualChannel_PositiveTest()
         {

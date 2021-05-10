@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEVOR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if MS-RDPEVOR is supported by SUT (RDP client).")]
         public void Rdpevor_ProtocolSupportTest_Positive()
         {
@@ -40,6 +42,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEVOR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test video control messages such as a presentation request/response.")]
         public void Rdpevor_VideoControlTest_Positive()
         {
@@ -76,6 +80,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEVOR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test video streaming, SUT (RDP client) is expected to decode and render the video.")]
         public void Rdpevor_VideoStreamingTest_Positive()
         {
@@ -123,6 +129,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEVOR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test video streaming over UDP transport, SUT (RDP client) is expected to decode and render the video.")]
         public void Rdpevor_VideoStreamingTest_Positive_OverUDPTransport()
         {

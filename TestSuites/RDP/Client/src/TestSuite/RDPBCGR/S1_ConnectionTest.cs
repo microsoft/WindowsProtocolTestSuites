@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case tests: 1) The correctness of Client X.224 Connection Request PDU. 
                      2) SUT can process the valid Server X.224 Connection Confirm PDU correctly.")]
         public void BVT_ConnectionTest_ConnectionInitiation_PositiveTest()
@@ -71,6 +73,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case tests: 1) The correctness of Client MCS Connect Initial PDU with GCC Conference Create Request when the server advertised support for Extended Client Data Blocks.
             2) SUT can process the valid Server MCS Connect Response PDU with GCC Conference Create Response correctly.")]
         public void BVT_ConnectionTest_BasicSettingExchange_PositiveTest_ExtendedClientDataSupported()
@@ -138,6 +142,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify SUT can process Channel Connection phase correctly.")]
         public void BVT_ConnectionTest_ChannelConnection_PositiveTest()
         {
@@ -233,6 +239,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case is used to verify client packets of following phases: 1) RDP Security Commencement; 2) Secure Setting Exchange; 3) Licensing.")]
         public void BVT_ConnectionTest_SecurityExchange_PositiveTest()
         {
@@ -330,6 +338,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT can complete Capability Exchange phase successfully.")]
         public void BVT_ConnectionTest_CapabilityExchange_PositiveTest()
         {
@@ -448,6 +458,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case is used to ensure SUT can complete the Connection Finalization phase successfully 
                        when the server advertised support for the Bitmap Host Cache Support Capability Set.")]
         public void BVT_ConnectionTest_ConnectionFinalization_PositiveTest_BitmapHostCacheSupported()
@@ -614,6 +626,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify the messages and behaviors of the disconnection sequence initiated by server.")]
         public void BVT_ConnectionTest_Disconnection_PositiveTest_ServerInitiated()
         {
@@ -775,6 +789,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("Interactive")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify the messages and behaviors of the disconnection sequence initiated by the client.")]
         public void S1_ConnectionTest_Disconnection_PositiveTest_ClientInitiated()
         {

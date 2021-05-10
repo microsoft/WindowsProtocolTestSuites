@@ -21,6 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test intra-SurfacetoSurface copy command.")]
         public void RDPEGFX_SurfaceToSurface_PositiveTest_IntraSurfaceCopy()
         {
@@ -61,6 +63,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test inter-SurfacetoSurface copy command.")]
         public void RDPEGFX_SurfaceToSurface_PositiveTest_InterSurfaceCopy()
         {
@@ -114,6 +118,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify whether RDP client can process correctly when receive a RDPGFX_SURFACE_TO_SURFACE_PDU message with source RECT whose specific borders are overlapped with surface.")]
         public void RDPEGFX_SurfaceToSurface_PositiveTest_SrcRectBorderOverlapSurface()
         {
@@ -173,6 +179,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify whether RDP client can process correctly when receive a RDPGFX_SURFACE_TO_SURFACE_PDU message with destRects whose specific borders are overlapped with surface.")]
         public void RDPEGFX_SurfaceToSurface_PositiveTest_DestRectsBorderOverlapSurface()
         {
@@ -242,6 +250,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify whether RDP client can process correctly when receive a RDPGFX_SURFACE_TO_SURFACE_PDU message with destRects partially overlapped with each other.")]
         public void RDPEGFX_SurfaceToSurface_PositiveTest_DestRectsOverlapped()
         {
@@ -306,6 +316,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify whether RDP client can process correctly when receive a RDPGFX_SURFACE_TO_SURFACE_PDU message whose dest rect is partially overlapped with src rect.")]
         public void RDPEGFX_SurfaceToSurface_PositiveTest_DestRectOverlapSourceRect()
         {
@@ -354,6 +366,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Attempt to copy bitmap from inexistent source surface to destination surface")]
         public void RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_InexistentSrc()
         {
@@ -402,6 +416,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Attempt to copy bitmap from source surface to inexistent destination surface")]
         public void RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_InexistentDest()
         {
@@ -451,6 +467,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Attempt to copy bitmap with boundary out of source surface to destination surface")]
         public void RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_SrcOutOfBoundary()
         {
@@ -496,6 +514,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Attempt to copy bitmap of source surface to illegal position outside destination surface")]
         public void RDPEGFX_SurfaceToSurface_Negative_InterSurfaceCopy_DestOutOfBoundary()
         {
@@ -542,6 +562,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Check if the client can handle the situation where value of destPtsCount and the length of destPts doesn't match")]
         public void RDPEGFX_SurfaceToSurface_Negative_DestPtsMismatch()
         {

@@ -15,6 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("ServerRedirection")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to ensure SUT can process server redirection successfully and the routingToken is not expected when the server didn't present LoadBalanceInfo in the Server Redirection PDU.")]
         public void BVT_ServerRedirection_PositiveTest_WithoutRoutingToken()
         {
@@ -106,6 +107,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("ServerRedirection")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to ensure SUT can process server redirection successfully and the routingToken is expected when the server present LoadBalanceInfo in the Server Redirection PDU.")]
         public void S8_ServerRedirection_PositiveTest_WithRoutingToken()
         {

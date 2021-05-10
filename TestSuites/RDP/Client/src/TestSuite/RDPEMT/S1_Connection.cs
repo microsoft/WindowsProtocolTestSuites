@@ -19,6 +19,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can set up a RDPEMT connection upon a reliable RDP-UDP connection.")]
         public void S1_Connection_Initialization_InitialReliableConnection()
         {
@@ -38,6 +40,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can set up a RDPEMT connection upon a Lossy RDP-UDP connection.")]
         public void S1_Connection_Initialization_InitialLossyConnection()
         {
@@ -58,6 +62,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will drop the RDP-UDP reliable connection if RDP-TCP connection uses RDP encryption method.")]
         public void S1_Connection_Initialization_NegativeTest_InitialReliableConnection_RDPEncryption()
         {
@@ -91,6 +97,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will drop the RDP-UDP lossy connection if RDP-TCP connection uses RDP encryption method.")]
         public void S1_Connection_Initialization_NegativeTest_InitialLossyConnection_RDPEncryption()
         {
@@ -126,6 +134,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can handle soft sync connection using RDP-UDP-L.")]
         public void S1_Connection_SoftSync_Lossy()
         {
@@ -140,6 +150,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can handle soft sync connection using RDP-UDP-R.")]
         public void S1_Connection_SoftSync_Reliable()
         {
