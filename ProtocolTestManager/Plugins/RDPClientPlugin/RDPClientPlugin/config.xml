@@ -80,7 +80,11 @@
       </Rule>
     </Group>
 
-    <Group name="Enable Supported Feature" type="Remover">
+    <Group name="Enable Supported Feature">
+      <Rule name = "Basic">
+        <Category name = "BasicFeature"/>
+      </Rule>
+        
       <Rule name = "AutoReconnect">
         <Category name = "AutoReconnect"/>
       </Rule>
@@ -110,7 +114,11 @@
       </Rule>
     </Group>
 
-    <Group name="Specific Requirements" type="Remover">
+    <Group name="Specific Requirements">
+      <Rule name = "Basic">
+        <Category name = "BasicRequirement"/>
+      </Rule>
+      
       <Rule name = "Interactive">
         <Category name = "Interactive"/>
       </Rule>
