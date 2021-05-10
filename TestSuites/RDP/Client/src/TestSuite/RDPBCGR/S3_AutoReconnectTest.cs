@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("AutoReconnect")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to ensure SUT can process Auto-Reconnection sequence successfully.")]
         public void BVT_AutoReconnect_PositiveTest()
         {
@@ -101,6 +102,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("AutoReconnect")]
+        [TestCategory("BasicRequirement")]
         [Description("This test case is used to ensure SUT will continue with the reconnection attempt after received the Server Auto-Reconnect Status PDU. ")]
         public void S3_AutoReconnection_NegativeTest_AutoReconnectionFailed()
         {

@@ -16,6 +16,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection once receiving Server X.224 Connection confirm PDU with rdpNegData field of a valid RDP Negotiation Failure structure from RDP server.")]
         public void S1_ConnectionTest_ConnectionInitiation_NegativeTest_RDPNegotiationFailure()
         {
@@ -56,6 +58,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT drops the connection once receiving a Server X.224 Connection confirm PDU with an invalid TPKT header from RDP server.")]
         public void S1_ConnectionTest_ConnectionInitiation_NegativeTest_InvalidTPKTHeader()
         {
@@ -96,6 +100,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case ensures SUT drop the connection when received a Server X.224 Connection Confirm PDU with an invalid RDP Negotiation Data..")]
         public void S1_ConnectionTest_ConnectionInitiation_NegativeTest_InvalidRDPNegData()
         {
@@ -136,6 +142,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT support PROTOCOL_HYBRID_EX security protocol.")]
         public void S1_ConnectionTest_ConnectionInitiation_PositiveTest_HybridEXSelected()
         {
@@ -302,6 +310,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the valid RDP_NEG_RSP with supporting all protocols correctly.")]
         public void S1_ConnectionTest_ConnectionInitiation_PositiveTest_FlagsOfRdpNegRsp_SupportAllProtocols()
         {
@@ -356,6 +366,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(2)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"This test case verifies that SUT can process the valid RDP_NEG_FAILURE correctly.")]
         public void S1_ConnectionTest_ConnectionInitiation_PositiveTest_RDPNegotiationFailure()
         {

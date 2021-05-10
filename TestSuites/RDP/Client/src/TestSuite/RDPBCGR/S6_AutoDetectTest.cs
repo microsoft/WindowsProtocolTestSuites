@@ -17,6 +17,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("NetcharAutoDetect")]
+        [TestCategory("BasicRequirement")]
         [Description(@"This test case is used to ensure the SUT can complete an auto detection for rtt during connection phase")]
         public void S6_AutoDetection_ConnectTime_RTT()
         {
@@ -128,6 +129,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("NetcharAutoDetect")]
+        [TestCategory("BasicRequirement")]
         [Description(@"This test case is used to ensure the SUT can complete an auto detection for bandwidth during connection phase")]
         public void S6_AutoDetection_ConnectTime_bandwidth()
         {
@@ -251,6 +253,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("NetcharAutoDetect")]
+        [TestCategory("BasicRequirement")]
         [Description(@"This test case is used to ensure the SUT can complete an auto detection for rtt after connection phase")]
         public void S6_AutoDetection_Continuous_RTT()
         {
@@ -322,6 +325,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.0")]
         [TestCategory("RDPBCGR")]
         [TestCategory("NetcharAutoDetect")]
+        [TestCategory("BasicRequirement")]
         [Description(@"This test case is used to ensure the SUT can complete an auto detection for bandwidth after connection phase")]
         public void S6_AutoDetection_Continuous_bandwidth()
         {
@@ -402,6 +406,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDPBCGR")]
         [TestCategory("NetcharAutoDetect")]
         [TestCategory("AutoReconnect")]
+        [TestCategory("BasicRequirement")]
         [Description(@"This test case is used to ensure the SUT can Sync its network characteristic with the server after autoReconnection")]
         public void S6_AutoDetection_NetworkCharacteristicsSync_After_AutoReconnect()
         {

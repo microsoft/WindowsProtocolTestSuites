@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify the client support H264 bitmap codec via RDPEGFX.")]
         public void RDPEGFX_H264Codec_PositiveTest_H264Support()
         {
@@ -32,6 +34,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Base profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_BaseProfile()
         {
@@ -44,6 +48,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and High profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_HighProfile()
         {
@@ -57,6 +63,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Main profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile()
         {
@@ -69,6 +77,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC420_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode, Main profile and CABAC entropy coding mode.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC420_MainProfile_CABACEnabled()
         {
@@ -82,6 +92,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Main profile, only send the first frame (I slice)")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_ISliceOnly()
         {
@@ -94,6 +106,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Base profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_BaseProfile()
         {
@@ -108,6 +122,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Main profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile()
         {
@@ -121,6 +137,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode, Main profile and CABAC entropy coding mode.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_CABACEnabled()
         {
@@ -133,6 +151,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and Main profile, the image size is large (1024*768).")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_MainProfile_LargeSize()
         {
@@ -145,6 +165,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV420p mode and High profile.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Only_HighProfile()
         {
@@ -158,6 +180,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV444 mode and Main profile,  luma frame and chroma frame are separated in two RFX_AVC444_BITMAP_STREAM structures.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Separated_MainProfile()
         {
@@ -170,6 +194,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV444 mode and Main profile, luma frame and chroma frame are together in one RFX_AVC444_BITMAP_STREAM structure.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile()
         {
@@ -182,6 +208,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444_BITMAP_STREAM structure with H264 encoded bitmap using YUV444 mode and Main profile, the image size is large (1024*768), luma frame and chroma frame are together in one RFX_AVC444_BITMAP_STREAM structure.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444_YUV420Chroma420Together_MainProfile_LargeSize()
         {
@@ -194,6 +222,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP10.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify client can accept a RFX_AVC444V2_BITMAP_STREAM structure with H264 encoded bitmap using YUV444v2 mode.")]
         public void RDPEGFX_H264Codec_PositiveTest_AVC444v2()
         {

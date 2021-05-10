@@ -21,6 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test Compression segment of bitmap transition via RDPEGFX.")]
         public void RDPEGFX_Compression_PositiveTest()
         {
@@ -61,6 +63,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with compress flag is not 0x20.")]
         public void RDPEGFX_Compression_Negative_IncorrectCompressFlag()
         {
@@ -86,6 +90,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with compress type is not 0x04.")]
         public void RDPEGFX_Compression_Negative_IncorrectCompressType()
         {
@@ -111,6 +117,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to check if client can handle a message with incorrect compressed pdu.")]
         public void RDPEGFX_Compression_Negative_InvalidCompressPdu()
         {

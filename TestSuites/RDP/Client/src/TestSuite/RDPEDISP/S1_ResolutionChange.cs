@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]   
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test resolution change and notification with surface management commands")]
         public void S1_RDPEDISP_ResolutionChange_RestartGraphicsPipeline()
         {
@@ -50,6 +52,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEDISP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test is used to test resolution change and notification with Deactivation-Reactivation Sequence")]
         public void S1_RDPEDISP_ResolutionChange_DeactivationReactivation()
         {

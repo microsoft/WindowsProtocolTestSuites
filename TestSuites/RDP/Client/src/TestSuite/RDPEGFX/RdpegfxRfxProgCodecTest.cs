@@ -23,6 +23,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is progressively encoded.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_Default()
         {
@@ -63,6 +65,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is non-progressively encoded.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_Default()
         {
@@ -102,6 +106,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is progressively encoded with tile diff.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncodingWithTileDiff()
         {
@@ -154,6 +160,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream which is non-progressively encoded with tile diff.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncodingWithTileDiff()
         {
@@ -206,6 +214,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream when surface size is not tile aligned.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_SurfaceNotTileAligned()
         {
@@ -247,6 +257,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream when surface size is not tile aligned.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_SurfaceNotTileAligned()
         {
@@ -288,6 +300,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream with sync block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_WithSyncBlock()
         {
@@ -325,6 +339,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream without context block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_WithoutContextBlock()
         {
@@ -362,6 +378,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts second RFX Progressive codec stream (progressively encoded) with SubBand_Diffing disabled in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_SubBandDiffDisabled()
         {
@@ -414,6 +432,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts second RFX Progressive codec stream (non-progressively encoded) with SubBand_Diffing disabled in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_SubBandDiffDisabled()
         {
@@ -466,6 +486,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts RFX Progressive codec stream (progressively encoded) with DWT doesn't use Reduce Extrapolate method.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_ProgressiveEncoding_ReduceExtrapolateDisabled()
         {
@@ -505,6 +527,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts second RFX Progressive codec stream (non-progressively encoded) with DWT doesn't use Reduce Extrapolate method.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_NonProgressiveEncoding_ReduceExtrapolateDisabled()
         {
@@ -544,6 +568,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can delete a RFX Progressive codec stream.")]
         public void RDPEGFX_RfxProgressiveCodec_PositiveTest_DeleteContext()
         {
@@ -590,6 +616,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream which is sent to a non-exist surface.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_InexistSurface()
         {
@@ -636,6 +664,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with sync block len is not 12.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_SyncBlock_IncorrectBlockLen()
         {
@@ -670,6 +700,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with duplicated frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_DuplicatedFrameBeginBlock()
         {
@@ -704,6 +736,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with missing frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_MissedFrameBeginBlock()
         {
@@ -738,6 +772,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with Nested frame block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_NestedFrameBlock()
         {
@@ -772,6 +808,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect length in frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_FrameBeginBlock_IncorrectLength()
         {
@@ -806,6 +844,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with missing frame end block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_MissedFrameEndBlock()
         {
@@ -840,6 +880,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect length in frame end block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_FrameEndBlockIncorrectLength()
         {
@@ -875,6 +917,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect length in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_ContextBlock_IncorrectLength()
         {
@@ -909,6 +953,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect tile size in context block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_ContextBlock_IncorrectTileSize()
         {
@@ -943,6 +989,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with region block is before frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_BeforeFrameBeginBlock()
         {
@@ -979,6 +1027,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect block length of region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectLen()
         {
@@ -1015,6 +1065,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect tile size in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectTileSize()
         {
@@ -1052,6 +1104,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client can accept a RFX Progressive codec stream with incorrect Rects Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectRectsNumber()
         {
@@ -1089,6 +1143,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with zero Rects Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_ZeroRectsNumber()
         {
@@ -1125,6 +1181,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with incorrect Quant Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectQuantNumber()
         {
@@ -1161,6 +1219,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with zero Quant Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_ZeroQuantNumber()
         {
@@ -1197,6 +1257,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with incorrect ProgQuant Number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectProgQuantNumber()
         {
@@ -1233,6 +1295,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with incorrect tile block number in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_IncorrectTileBlockNumber()
         {
@@ -1269,6 +1333,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with invalid tile block type in region block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_InvalidTileBlockType()
         {
@@ -1306,6 +1372,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream with mismatched region block number as that in frame begin block.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlockNumberMismatch()
         {
@@ -1342,6 +1410,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RFX Progressive codec stream to delete non-exist context on client.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_RegionBlock_DeleteInexistContext()
         {
@@ -1397,6 +1467,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can delete Rfx Progressive codec context from a non-exist surface.")]
         public void RDPEGFX_RfxProgressiveCodec_NegativeTest_DeleteContextFromInexistSurface()
         {

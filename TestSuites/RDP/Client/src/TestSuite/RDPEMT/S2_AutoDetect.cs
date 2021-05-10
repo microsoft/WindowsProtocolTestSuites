@@ -16,6 +16,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly via an encrypted reliable RDPEUDP connection.")]
         public void S2_AutoDetect_RTTMeasure_Reliable()
         {
@@ -48,6 +50,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can response to round-trip measurement operations initiated by the RTT Measure Request correctly via an encrypted lossy RDPEUDP connection.")]
         public void S2_AutoDetect_RTTMeasure_Lossy()
         {
@@ -82,6 +86,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can complete the bandwidth measure auto detection in a reliable UDP transport.")]
         public void S2_AutoDetect_ReliableBandwidthMeasure()
         {
@@ -118,6 +124,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can complete the bandwidth measure auto detection in a lossy UDP transport.")]
         public void S2_AutoDetect_LossyBandwidthMeasure()
         {
@@ -155,6 +163,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpemt
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEMT")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client doesn't respond Bandwidth detection request in a lossy UDP transport if the sequenceNumber field in the Bandwidth Measure Stop structure is not the same as that in the Bandwidth Measure Start structure.")]
         public void S2_AutoDetect_NegtiveLossyBandwidthMeasure()
         {
