@@ -5084,7 +5084,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <returns>The data length of this context.</returns>
         public ushort GetDataLength()
         {
-            return (ushort)NetName.Length;
+            return (ushort)Encoding.Unicode.GetBytes(NetName).Length;
         }
     }
 
@@ -9920,7 +9920,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         [StaticSize(48)]
         public byte[] ExtendedInfo;
-    }   
+    }
 
     /// <summary>
     /// ReadMode_Values
@@ -10300,7 +10300,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public byte Directory;
     }
 
-   
+
 
 
     /// <summary>
