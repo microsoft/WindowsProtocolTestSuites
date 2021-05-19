@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Storage
@@ -76,7 +77,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Storage
 
         public IEnumerable<string> GetNodes()
         {
-            return Directory.EnumerateFiles(AbsolutePath);
+            return Nodes.Values.Select(n => n.AbsolutePath);
         }
 
         public void RemoveFile(string name)

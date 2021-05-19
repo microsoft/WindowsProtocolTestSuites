@@ -214,7 +214,7 @@ if (Read-Confirmation) {
     }
 
     Write-Host "The default HTTPS port for $serviceName is $defaultHttpsPort."
-    Write-Host "Do you want to specify another value for $serviceName HTTP port? $confirmPrompt"
+    Write-Host "Do you want to specify another value for $serviceName HTTPS port? $confirmPrompt"
     if (Read-Confirmation) {
         while ($true) {
             Write-Host "Please enter your value for $serviceName HTTPS port (0 - 65535):"

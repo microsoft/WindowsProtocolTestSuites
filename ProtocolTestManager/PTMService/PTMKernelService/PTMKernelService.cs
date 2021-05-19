@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -23,6 +24,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private ConcurrentDictionary<int, ITestRun> TestRunPool { get; init; }
 
+        private ConcurrentDictionary<int, Dictionary<string, string>> DescriptionDictCache { get; init; }
+
+        private object syncRoot = new object();
+
         public PTMKernelService(IOptions<PTMKernelServiceOptions> options, IStoragePool storageManager, IScopedServiceFactory<IRepositoryPool> scopedServiceFactory)
         {
             Options = options.Value;
@@ -36,6 +41,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             ConfigurationPool = new ConcurrentDictionary<int, IConfiguration>();
 
             TestRunPool = new ConcurrentDictionary<int, ITestRun>();
+
+            DescriptionDictCache = new ConcurrentDictionary<int, Dictionary<string, string>>();
         }
     }
 }

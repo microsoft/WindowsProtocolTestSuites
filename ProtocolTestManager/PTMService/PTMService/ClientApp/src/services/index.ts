@@ -38,10 +38,16 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
                 throw new Error("Bad response from server");
             }
 
-            const data = await parseJson(response);
-            requestOption.dispatch(requestOption.onComplete(data));
+            const jsonHeader = response.headers.get('Content-Type');
+            if (jsonHeader !== null && jsonHeader.indexOf('application/json') > -1) {
+                const data = await parseJson(response);
+                requestOption.dispatch(requestOption.onComplete(data));
 
-            return data;
+                return data;
+            }
+
+            requestOption.dispatch(requestOption.onComplete());
+            return response.blob();
         }
 
     } catch (errorMsg) {

@@ -1,10 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
@@ -116,6 +120,91 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             repo.Update(testResult);
 
             pool.Save().Wait();
+        }
+
+        public string GetTestRunReport(int testResultId, ReportFormat format, string[] testCases)
+        {
+            var testRun = GetTestRun(testResultId);
+            var testCaseDetails = testCases.Select(testRun.GetTestCaseDetail);
+
+            Dictionary<string, string> descriptionDict = null;
+            if (format == ReportFormat.Json)
+            {
+                if (DescriptionDictCache.ContainsKey(testRun.Configuration.TestSuite.Id))
+                {
+                    DescriptionDictCache.TryGetValue(testRun.Configuration.TestSuite.Id, out descriptionDict);
+                }
+                else
+                {
+                    var testSuite = GetTestSuite(testRun.Configuration.TestSuite.Id);
+                    descriptionDict = testSuite.GetTestCases(null).GroupBy(info => info.FullName).ToDictionary(g => g.Key, g => g.Single().Description);
+
+                    DescriptionDictCache.AddOrUpdate(testSuite.Id, _ => descriptionDict, (_, _) => descriptionDict);
+                }
+            }
+
+            var kernelTestCases = testCaseDetails.Select(detail =>
+            {
+                var kernelTestCase = new TestCase
+                {
+                    Category = detail.Categories,
+                    Name = detail.Name,
+                    FullName = detail.FullyQualifiedName,
+                    Assembly = detail.Source,
+                    Status = detail.Result switch
+                    {
+                        "Passed" => TestCaseStatus.Passed,
+                        "Failed" => TestCaseStatus.Failed,
+                        "Inconclusive" => TestCaseStatus.Other,
+                        _ => TestCaseStatus.NotRun,
+                    },
+                    StartTime = DateTimeOffset.Parse(detail.StartTime),
+                    EndTime = DateTimeOffset.Parse(detail.EndTime),
+                    StdOut = string.Join(Environment.NewLine, detail.StandardOut.Select(line => line.Content)),
+                    ErrorStackTrace = string.Join(Environment.NewLine, detail.ErrorStackTrace),
+                    ErrorMessage = string.Join(Environment.NewLine, detail.ErrorMessage)
+                };
+
+                if (format == ReportFormat.Json)
+                {
+                    if (descriptionDict.ContainsKey(kernelTestCase.FullName))
+                    {
+                        kernelTestCase.Description = descriptionDict[kernelTestCase.FullName];
+                    }
+                    else
+                    {
+                        kernelTestCase.Description = string.Empty;
+                    }
+                }
+
+                return kernelTestCase;
+            });
+
+            var report = TestReport.GetInstance(format.ToString(), kernelTestCases.ToList());
+
+            var tempNode = GetTestRunTempNode();
+            var reportPath = Path.Combine(tempNode.AbsolutePath, $"Report_{testResultId}_{Guid.NewGuid()}.{report.FileExtension}");
+            report.ExportReport(reportPath);
+
+            return reportPath;
+        }
+
+        private IStorageNode GetTestRunTempNode()
+        {
+            var testResultNode = StoragePool.GetKnownNode(KnownStorageNodeNames.TestResult);
+
+            lock (syncRoot)
+            {
+                var tempNodeName = "temp";
+                var tempNodePath = testResultNode.GetNodes().Where(n => new DirectoryInfo(n).Name == tempNodeName).FirstOrDefault();
+
+                if (tempNodePath != null)
+                {
+                    return testResultNode.GetNode(tempNodeName);
+                }
+
+                return testResultNode.CreateNode(tempNodeName);
+            }
         }
     }
 }

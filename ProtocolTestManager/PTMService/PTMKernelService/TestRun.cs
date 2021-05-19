@@ -231,7 +231,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     try
                     {
-                        var testCaseResult = GetTestCaseResult(test);
+                        var testCaseResult = GetTestCaseResultInternal(test);
 
                         return testCaseResult.Overview;
                     }
@@ -249,7 +249,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        public TestCaseResult GetTestCaseDetail(string name)
+        public TestCaseResult GetTestCaseResult(string name)
         {
             if (runningTestResult != null)
             {
@@ -280,7 +280,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 try
                 {
-                    var testCaseResult = GetTestCaseResult(name);
+                    var testCaseResult = GetTestCaseResultInternal(name);
 
                     return testCaseResult;
                 }
@@ -296,6 +296,26 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     };
                 }
             }
+        }
+
+        public TestCaseDetail GetTestCaseDetail(string name)
+        {
+            string filePath = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{name}.html", SearchOption.AllDirectories).First();
+
+            var content = File.ReadAllLines(filePath);
+
+            var detailLine = content.Where(l => l.StartsWith(AppConfig.DetailKeyword));
+            string detailStr;
+
+            detailStr = detailLine.First();
+
+            int startIndex = AppConfig.DetailKeyword.Length;
+            int endIndex = detailStr.Length - 1;
+            string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
+
+            var detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
+
+            return detail;
         }
 
         private void UpdateItem()
@@ -333,7 +353,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     // Need to wait before HTML file is generated.
                     Task.Delay(5000).Wait();
 
-                    var testCaseResult = GetTestCaseResult(testCase.FullName);
+                    var testCaseResult = GetTestCaseResultInternal(testCase.FullName);
 
                     var info = new TestCaseInfo(state, testCaseResult, null);
 
@@ -352,22 +372,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        private TestCaseResult GetTestCaseResult(string test)
+        private TestCaseResult GetTestCaseResultInternal(string name)
         {
-            string filePath = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{test}.html", SearchOption.AllDirectories).First();
-
-            var content = File.ReadAllLines(filePath);
-
-            var detailLine = content.Where(l => l.StartsWith(AppConfig.DetailKeyword));
-            string detailStr;
-
-            detailStr = detailLine.First();
-
-            int startIndex = AppConfig.DetailKeyword.Length;
-            int endIndex = detailStr.Length - 1;
-            string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
-
-            var detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
+            var detail = GetTestCaseDetail(name);
 
             var state = detail.Result switch
             {
@@ -381,7 +388,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 Overview = new TestCaseOverview
                 {
-                    FullName = test,
+                    FullName = name,
                     State = state,
                 },
                 StartTime = detail.StartTime,

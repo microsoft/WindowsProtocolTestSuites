@@ -20,10 +20,10 @@ import { TestResultsDataSrv } from '../services/TestResults';
 import { TestSuitesDataSrv } from '../services/TestSuites';
 import { AppState } from '../store/configureStore';
 
-function getDict<TItem>(items: TItem[], keyName: keyof TItem) {
+function getDict<TItem extends Extract<{ [P in keyof TItem]: any }, { [P in keyof TItem]: number }>>(items: TItem[], keyName: keyof TItem) {
     return items.reduce((dict: { [key: number]: TItem }, item) => {
-        const keyValue = item[keyName] as unknown as number;
-        dict[keyValue] = item
+        const keyValue = item[keyName];
+        dict[keyValue] = item;
         return dict;
     }, {});
 }
@@ -244,6 +244,7 @@ export function TaskHistory(props: any) {
             dispatch(TestResultsDataSrv.listTestResults());
         };
 
+        dispatch(TestResultsActions.clearSelectedTestResultAction());
         handler();
         const interval = setInterval(handler, 5000);
 
@@ -351,7 +352,7 @@ export function TaskHistory(props: any) {
     const onSearchClear = () => {
         dispatch(TestResultsActions.setQueryAction(undefined));
         dispatch(TestResultsDataSrv.listTestResults());
-    }
+    };
 
     const onChangePageNumber = (pageNumber: number) => {
         dispatch(TestResultsActions.setPageNumberAction(pageNumber));

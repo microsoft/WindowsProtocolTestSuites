@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IContextualMenuProps, IGroup, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, SelectionMode, SelectionZone, Spinner, SpinnerSize, Stack } from '@fluentui/react';
-import { useBoolean, useForceUpdate } from '@uifabric/react-hooks';
+import { Checkbox, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, Dropdown, IContextualMenuProps, IDropdownOption, IGroup, IObjectWithKey, Label, MarqueeSelection, MessageBar, MessageBarType, PrimaryButton, SearchBox, Selection, SelectionMode, SelectionZone, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import { useBoolean, useConst, useForceUpdate } from '@uifabric/react-hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -11,8 +11,8 @@ import { TestResultsActions } from '../actions/TestResultsActions';
 import { FullWidthPanel } from '../components/FullWidthPanel';
 import { StackGap10, StackGap5 } from '../components/StackStyle';
 import { useWindowSize } from '../components/UseWindowSize';
-import { TestCaseOverview, TestCaseResult } from '../model/TestCaseResult';
-import { TestResult } from '../model/TestResult';
+import { TestCaseOverview, TestCaseResult, TestCaseState } from '../model/TestCaseResult';
+import { ReportFormat, ReportRequest, TestResult } from '../model/TestResult';
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
 import { TestCaseResultDataSrv } from '../services/TestCaseResult';
 import { TestResultsDataSrv } from '../services/TestResults';
@@ -49,7 +49,7 @@ const groupByTestCaseStateKeys: GroupKeys = {
         }
     ],
     KeyComparer: (result, key) => result.State === key
-}
+};
 
 const isValidFilterPhrase = (filterPhrase: string | undefined) => {
     return filterPhrase !== undefined && filterPhrase !== null && filterPhrase !== '';
@@ -98,22 +98,17 @@ const getLineBackgroundColor = (kind: string) => {
 };
 
 const renderOutputLines = (lines: string[]) => {
-    return lines.reduce((res: { elements: JSX.Element[], index: number }, currentLine) => {
+    return lines.reduce((res: JSX.Element[], currentLine) => {
         lineHeader.lastIndex = 0;
         const matches = lineHeader.exec(currentLine);
         if (matches !== null && matches.groups !== undefined) {
-            return {
-                elements: [...res.elements, <p key={res.index} style={{ overflowWrap: 'normal', backgroundColor: getLineBackgroundColor(matches.groups.kind) }}>{currentLine}</p>],
-                index: res.index + 1
-            };
+            return [...res, <p key={res.length} style={{ overflowWrap: 'normal', backgroundColor: getLineBackgroundColor(matches.groups.kind) }}>{currentLine}</p>];
+
         }
         else {
-            return {
-                elements: [...res.elements, <p key={res.index} style={{ overflowWrap: 'normal' }}>&nbsp;&nbsp;&nbsp;&nbsp;{currentLine}</p>],
-                index: res.index + 1
-            };
+            return [...res, <p key={res.length} style={{ overflowWrap: 'normal' }}>&nbsp;&nbsp;&nbsp;&nbsp;{currentLine}</p>];
         }
-    }, { elements: [], index: 0 }).elements;
+    }, []);
 };
 
 function TestCaseResultView(props: TestCaseResultViewProps) {
@@ -146,7 +141,7 @@ type SelectedTestCasesViewProps = {
 function SelectedTestCasesView(props: SelectedTestCasesViewProps) {
     return (
         <div>
-            <Label style={{ fontWeight: 'bold', color: '#337ab7', fontSize: 'large' }}>Selected {props.results.length} Test Results:</Label>
+            <Label style={{ fontWeight: 'bold', color: '#337ab7', fontSize: 'large' }}>Selected {props.results.length} Test Case Results:</Label>
             <div style={{ border: '1px solid #d9d9d9', height: props.winSize.height - 180, overflowY: 'auto' }}>
                 <ul>
                     {
@@ -202,10 +197,20 @@ export function TestResultDetail(props: any) {
 
     const dispatch = useDispatch();
 
-    const [dialogHidden, { toggle: toggleDialogHidden }] = useBoolean(true);
+    const [abortDialogHidden, { toggle: toggleAbortDialogHidden }] = useBoolean(true);
+    const [reportDialogHidden, { toggle: toggleReportDialogHidden }] = useBoolean(true);
+
+    const reportOutcomes = useConst<TestCaseState[]>(['Passed', 'Failed', 'Inconclusive']);
+    const reportFormatOptions = useConst<IDropdownOption[]>(() => {
+        const reportFormats: ReportFormat[] = ['Plain', 'Json', 'XUnit'];
+        return reportFormats.map(format => { return { key: format, text: format }; });
+    });
 
     const [filterPhrase, setFilterPhrase] = useState<string | undefined>(undefined);
     const [filteredResults, setFilteredResults] = useState<SelectionItem[] | undefined>(undefined);
+    const [reportedStates, setReportedStates] = useState<TestCaseState[]>([]);
+    const [reportFormat, setReportFormat] = useState<ReportFormat>('Plain');
+    const [reportDialogShowMsg, setReportDialogShowMsg] = useState(true);
 
     const [groupKeys, setGroupKeys] = useState(groupByTestCaseStateKeys);
 
@@ -232,6 +237,17 @@ export function TestResultDetail(props: any) {
             dispatch(TestResultsDataSrv.getTestResultDetail(testResults.selectedTestResultId));
         }
     }, [dispatch, testResults.selectedTestResultId]);
+
+    useEffect(() => {
+        setReportDialogShowMsg(testResults.errorMsg !== undefined);
+    }, [testResults.errorMsg]);
+
+    useEffect(() => {
+        if (testResults.selectedTestResult !== undefined) {
+            const newStates = reportOutcomes.filter(state => testResults.selectedTestResult?.Results.some(res => res.State === state));
+            setReportedStates(newStates);
+        }
+    }, [testResults.selectedTestResult, reportOutcomes]);
 
     useEffect(() => {
         const handler = () => {
@@ -373,12 +389,46 @@ export function TestResultDetail(props: any) {
         dispatch(() => history.push('/Tasks/History', { from: 'TestResultDetail' }));
     };
 
-    const onDialogAbortButtonClick = () => {
+    const onAbortDialogAbortButtonClick = () => {
         if (testResults.selectedTestResultId !== undefined) {
             dispatch(SelectedTestCasesDataSrv.abortRunRequest(testResults.selectedTestResultId));
         }
 
-        dispatch(() => toggleDialogHidden());
+        dispatch(() => toggleAbortDialogHidden());
+    };
+
+    const getReportedTestCases = useCallback(() => {
+        if (testResults.selectedTestResult !== undefined) {
+            return reportedStates.flatMap(state => testResults.selectedTestResult!.Results.filter(res => res.State === state).map(res => res.FullName));
+        }
+        else {
+            return [];
+        }
+    }, [testResults.selectedTestResult, reportedStates])
+
+    const onReportDialogCheckboxChange = useCallback((state: TestCaseState, checked: boolean) => {
+        if (reportedStates.includes(state)) {
+            if (!checked) {
+                const newStates = reportedStates.filter(s => s !== state);
+                setReportedStates(newStates);
+            }
+        }
+        else {
+            if (checked) {
+                setReportedStates([...reportedStates, state])
+            }
+        }
+    }, [reportedStates]);
+
+    const onReportDialogExportButtonClick = () => {
+        if (testResults.selectedTestResultId !== undefined) {
+            const reportRequest: ReportRequest = {
+                TestCases: getReportedTestCases(),
+                Format: reportFormat
+            };
+
+            dispatch(TestResultsDataSrv.getTestRunReport(testResults.selectedTestResultId, reportRequest));
+        }
     };
 
     return (
@@ -447,7 +497,7 @@ export function TestResultDetail(props: any) {
                         </SelectionZone>
                     </div>
                     <div style={{ borderLeft: '2px solid #bae7ff', minHeight: winSize.height - 140 }}>
-                        <div style={{ paddingLeft: 20, paddingRight: 15, width: winSize.width * 0.66 }}>
+                        <div style={{ paddingLeft: 20, width: winSize.width * 0.66 }}>
                             {
                                 selectedItems !== undefined && selectedItems.length > 1
                                     ? <SelectedTestCasesView
@@ -467,7 +517,7 @@ export function TestResultDetail(props: any) {
                             testResults.selectedTestResult === undefined
                                 ? null
                                 : testResults.selectedTestResult.Overview.Status === 'Running'
-                                    ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={toggleDialogHidden}>Abort</PrimaryButton>
+                                    ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={toggleAbortDialogHidden}>Abort</PrimaryButton>
                                     : null
                         }
                         {
@@ -480,14 +530,25 @@ export function TestResultDetail(props: any) {
                                         onRerun={onRerunClick} />
                                     : null
                         }
-                        <PrimaryButton disabled onClick={onExportProfile}>Export Profile</PrimaryButton>
+                        {
+                            testResults.selectedTestResult === undefined
+                                ? null
+                                : testResults.selectedTestResult.Overview.Status === 'Failed' || testResults.selectedTestResult.Overview.Status === 'Finished'
+                                    ? <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden}>Export Report</PrimaryButton>
+                                    : null
+                        }
+                        {
+                            testResults.selectedTestResult === undefined
+                                ? null
+                                : <PrimaryButton disabled onClick={onExportProfile}>Export Profile</PrimaryButton>
+                        }
                         <PrimaryButton onClick={onGoBackClick}>Go Back</PrimaryButton>
                     </Stack>
                 </div>
             </FullWidthPanel>
             <Dialog
-                hidden={dialogHidden}
-                onDismiss={toggleDialogHidden}
+                hidden={abortDialogHidden}
+                onDismiss={toggleAbortDialogHidden}
                 dialogContentProps={{
                     type: DialogType.normal,
                     title: `Abort Test Run ${testResults.selectedTestResultId}?`
@@ -503,8 +564,61 @@ export function TestResultDetail(props: any) {
                     </Stack>
                 </div>
                 <DialogFooter>
-                    <PrimaryButton onClick={toggleDialogHidden} text="Cancel" />
-                    <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogAbortButtonClick} text="Abort" />
+                    <PrimaryButton onClick={toggleAbortDialogHidden} text="Cancel" />
+                    <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onAbortDialogAbortButtonClick} text="Abort" />
+                </DialogFooter>
+            </Dialog>
+            <Dialog
+                hidden={reportDialogHidden}
+                onDismiss={toggleReportDialogHidden}
+                dialogContentProps={{
+                    type: DialogType.normal,
+                    title: `Export Report for Test Run ${testResults.selectedTestResultId}?`
+                }}
+                modalProps={{
+                    isBlocking: true
+                }}>
+                <div style={{ fontSize: 'large' }}>
+                    <Stack horizontalAlign='start' tokens={StackGap10}>
+                        {
+                            !reportDialogShowMsg
+                                ? null
+                                : <MessageBar
+                                    messageBarType={MessageBarType.error}
+                                    onDismiss={() => setReportDialogShowMsg(false)}>
+                                    {testResults.errorMsg}
+                                </MessageBar>
+                        }
+                        <Label>Outcome</Label>
+                        {
+                            testResults.selectedTestResult !== undefined
+                                ? reportOutcomes.map(state => {
+                                    const isCheckboxEnabled = testResults.selectedTestResult?.Results.some(res => res.State === state);
+                                    return <Checkbox
+                                        key={state}
+                                        disabled={!isCheckboxEnabled}
+                                        label={`${state} Test Cases`}
+                                        checked={isCheckboxEnabled && reportedStates.includes(state)}
+                                        onChange={(_, checked) => onReportDialogCheckboxChange(state, checked!)}
+                                    />
+                                })
+                                : null
+                        }
+                        <Stack horizontal tokens={StackGap10}>
+                            <Label>Format</Label>
+                            <Dropdown
+                                style={{ alignSelf: 'center', minWidth: 180 }}
+                                placeholder='Select a report format'
+                                selectedKey={reportFormat}
+                                options={reportFormatOptions}
+                                onChange={(_, newValue, __) => setReportFormat(newValue?.text! as ReportFormat)}
+                            />
+                        </Stack>
+                    </Stack>
+                </div>
+                <DialogFooter>
+                    <PrimaryButton disabled={reportedStates.length === 0 || testResults.isDownloading} onClick={onReportDialogExportButtonClick} text="Export" />
+                    <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden} text="Cancel" />
                 </DialogFooter>
             </Dialog>
         </div>

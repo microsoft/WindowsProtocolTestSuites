@@ -15,6 +15,9 @@ import {
     GET_TESTRESULTDETAIL_REQUEST,
     GET_TESTRESULTDETAIL_SUCCESS,
     GET_TESTRESULTDETAIL_FAILURE,
+    GET_TESTRUNREPORT_REQUEST,
+    GET_TESTRUNREPORT_SUCCESS,
+    GET_TESTRUNREPORT_FAILURE,
     TestResultsActionTypes
 } from '../actions/TestResultsActions';
 
@@ -98,6 +101,26 @@ export const getTestCaseResultReducer = (state = initialTestCaseResultState, act
             };
 
         case GET_TESTRESULTDETAIL_FAILURE:
+            return {
+                ...state,
+                isPosting: false,
+                errorMsg: action.errorMsg
+            };
+
+        case GET_TESTRUNREPORT_REQUEST:
+            return {
+                ...state,
+                isPosting: true,
+                errorMsg: undefined,
+            };
+
+        case GET_TESTRUNREPORT_SUCCESS:
+            return {
+                ...state,
+                isPosting: false,
+            };
+
+        case GET_TESTRUNREPORT_FAILURE:
             return {
                 ...state,
                 isPosting: false,
