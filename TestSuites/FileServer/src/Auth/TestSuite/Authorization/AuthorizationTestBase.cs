@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.DirectoryServices;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
@@ -27,6 +26,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
     {
         protected const string azUser01Name = "AzUser01";
         protected const string azGroup01Name = "AzGroup01";
+        protected SutCommonControlAdapterAccessor sutCommonControlAdapterAccessor;
         public AuthTestConfig TestConfig
         {
             get
@@ -38,12 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
         {
             base.TestInitialize();
             testConfig = new AuthTestConfig(BaseTestSite);
-
-            // valid domain name matching, for example: contoso.com, local.contoso.com
-            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
-            {
-                BaseTestSite.Assert.Inconclusive("Authentication test cases are not applicable in non-domain environment");
-            }
+            sutCommonControlAdapterAccessor = new SutCommonControlAdapterAccessor(BaseTestSite);
         }
 
         protected bool AccessShare(AccountCredential user, string sharePath)
