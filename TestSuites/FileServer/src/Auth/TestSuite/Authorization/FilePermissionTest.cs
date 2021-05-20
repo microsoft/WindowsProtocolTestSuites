@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_ALLOWED_ACE with user SID exists in file Security Descriptor.")]
         public void BVT_FilePermission_AccessAllow_UserSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
+            _SID sid = sutCommonControlAdapterAccessor.GetUserSid(azUser01Name);
             object ace = DtypUtility.CreateAccessAllowedAce(sid, DtypUtility.ACCESS_MASK_GENERIC_READ, ACE_FLAGS.None);
             SetSecurityDescriptorOnFile(ace);
 
@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_ALLOWED_ACE with user's group SID exists in file Security Descriptor.")]
         public void FilePermission_AccessAllow_GroupSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azGroup01Name, testConfig.UserName, testConfig.UserPassword);
+            _SID sid = sutCommonControlAdapterAccessor.GetGroupSid(azGroup01Name);
             object ace = DtypUtility.CreateAccessAllowedAce(sid, DtypUtility.ACCESS_MASK_GENERIC_READ, ACE_FLAGS.None);
             SetSecurityDescriptorOnFile(ace);
 
@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_DENIED_ACE with user SID exists in file Security Descriptor.")]
         public void FilePermission_AccessDeny_UserSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
+            _SID sid = sutCommonControlAdapterAccessor.GetUserSid(azUser01Name);
             object ace = DtypUtility.CreateAccessDeniedAce(sid, DtypUtility.ACCESS_MASK_GENERIC_READ, ACE_FLAGS.None);
             SetSecurityDescriptorOnFile(ace);
 
@@ -144,7 +144,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_DENIED_ACE with user's group SID exists in file Security Descriptor.")]
         public void FilePermission_AccessDeny_GroupSid()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azGroup01Name, testConfig.UserName, testConfig.UserPassword);
+            _SID sid = sutCommonControlAdapterAccessor.GetGroupSid(azGroup01Name);
             object ace = DtypUtility.CreateAccessDeniedAce(sid, DtypUtility.ACCESS_MASK_GENERIC_READ, ACE_FLAGS.None);
             SetSecurityDescriptorOnFile(ace);
 
@@ -163,7 +163,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "user SID does not exist in file Security Descriptor.")]
         public void FilePermission_AccessDeny_SidNoInclude()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
+            _SID sid = sutCommonControlAdapterAccessor.GetUserSid(azUser01Name);
 
             BaseTestSite.Assert.IsFalse(
                 TryReadFile(), 
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             "ACCESS_ALLOWED_ACE associated with the user does not have READ permission in file Security Descriptor.")]
         public void FilePermission_AccessDeny_UserSidWithoutReadPermission()
         {
-            _SID sid = DtypUtility.GetSidFromAccount(TestConfig.DomainName, azUser01Name, testConfig.UserName, testConfig.UserPassword);
+            _SID sid = sutCommonControlAdapterAccessor.GetUserSid(azUser01Name);
             object ace = DtypUtility.CreateAccessAllowedAce(sid, 0, ACE_FLAGS.None); // 0 stands for non access mask flag set
             SetSecurityDescriptorOnFile(ace);
 
