@@ -161,6 +161,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             bool isChained = packet.Header.Flags.HasFlag(Compression_Transform_Header_Flags.SMB2_COMPRESSION_FLAG_CHAINED);
 
             byte[] decompressedData;
+            int uncompressedDataSize = 0;
 
             if (isChained)
             {
@@ -169,11 +170,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             else
             {
                 decompressedData = DecompressForNonChained(packet, compressionInfo, role);
+                var p = packet as Smb2NonChainedCompressedPacket;
+                uncompressedDataSize = p.UncompressedData.Length;
             }
 
-            if (decompressedData.Length != packet.Header.OriginalCompressedSegmentSize)
+            // If the packed is not chained, the length of UncompressedData may not be 0.
+            if (decompressedData.Length != packet.Header.OriginalCompressedSegmentSize + uncompressedDataSize)
             {
-                throw new InvalidOperationException($"The length of decompressed data (0x{decompressedData.Length:X08}) is inconsistent with compression header (0x{packet.Header.OriginalCompressedSegmentSize:X08}).");
+                throw new InvalidOperationException($"The length of decompressed data ({decompressedData.Length}) is inconsistent with the sum of compression header length ({packet.Header.OriginalCompressedSegmentSize}) and UncompressedData length ({uncompressedDataSize}).");
             }
 
             return decompressedData;

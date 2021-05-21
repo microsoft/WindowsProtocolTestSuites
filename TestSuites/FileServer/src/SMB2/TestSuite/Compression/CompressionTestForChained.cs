@@ -106,6 +106,69 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedIncompressibleRead, needPatternV1: true, needCompressionAlgorithm: true);
         }
 
+        #region Large file tests
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can decompress large file WRITE request and compress READ response correctly using chained compression and PatternV1.")]
+        public void SMB2Compression_Chained_PatternV1_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2ChainedCompression_Variant(CompressionTestVariant.BasicChainedReadWrite, needPatternV1: true, needCompressionAlgorithm: true, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can handle chained and compressed large file WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at front.")]
+        public void SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFront_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleWritePatternV1AtFront, needPatternV1: true, needCompressionAlgorithm: true, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can handle chained and compressed large file WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at end.")]
+        public void SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtEnd_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleWritePatternV1AtEnd, needPatternV1: true, needCompressionAlgorithm: true, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can handle chained and compressed large file WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at both front and end.")]
+        public void SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFrontAndEnd_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleWritePatternV1AtFrontAndEnd, needPatternV1: true, needCompressionAlgorithm: true, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can chain and compress large file read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible.")]
+        public void SMB2Compression_Chained_PatternV1_CompressibleReadResponse_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2ChainedCompression_Variant(CompressionTestVariant.ChainedCompressibleRead, needPatternV1: true, needCompressionAlgorithm: true, isLargeFile: true);
+        }
+        #endregion
+
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Compression)]
@@ -225,7 +288,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2ChainedCompressionNegativeTest(null, processedPacketModifier, null, needPatternV1: true);
         }
 
-        private void SMB2ChainedCompression_Variant(CompressionTestVariant variant, bool needPatternV1 = false, bool needCompressionAlgorithm = false, bool needEncryption = false)
+        private void SMB2ChainedCompression_Variant(CompressionTestVariant variant, bool needPatternV1 = false, bool needCompressionAlgorithm = false, bool needEncryption = false, bool isLargeFile = false)
         {
             CompressionAlgorithm? compressionAlgorithmToCheck = null;
 
@@ -248,7 +311,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 compressionAlgorithms.AddRange(Smb2Utility.GetSupportedCompressionAlgorithms(TestConfig.SupportedCompressionAlgorithmList.ToArray()));
             }
 
-            SMB2CompressionTest(compressionAlgorithms.ToArray(), variant, needEncryption, enableChainedCompression: true);
+            SMB2CompressionTest(compressionAlgorithms.ToArray(), variant, needEncryption, enableChainedCompression: true, isLargeFile: isLargeFile);
         }
 
         private void Smb2ChainedCompressionNegativeTest(Action<Smb2Packet> unprocessedPacketModifier, Action<Smb2Packet> processedPacketModifier, Func<byte[], byte[]> onWirePacketModifier, bool needPatternV1 = false)
