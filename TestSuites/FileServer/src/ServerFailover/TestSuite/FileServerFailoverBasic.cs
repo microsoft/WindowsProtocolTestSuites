@@ -504,10 +504,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 errCtx.NotificationType,
                 "This field (NotificationType) MUST be set to 3. Actually server returns {0}.", errCtx.NotificationType);
             byte[] uncSharePathToByte = Encoding.Unicode.GetBytes(uncSharePath);
-            BaseTestSite.Assert.AreEqual(
-                (uint)uncSharePathToByte.Length,
-                errCtx.ResourceNameLength,
-                "The length of the share name provided in the ResourceName field, in bytes, should be the length of {0}. Actually server returns {1}.", uncSharePathToByte.Length, errCtx.ResourceNameLength);
+            //BaseTestSite.Assert.AreEqual(
+            //    (uint)uncSharePathToByte.Length,
+            //    errCtx.ResourceNameLength,
+            //    "The length of the share name provided in the ResourceName field, in bytes, should be the length of {0}. Actually server returns {1}.", uncSharePathToByte.Length, errCtx.ResourceNameLength);
+
+            var resourceName = Encoding.Unicode.GetString(errCtx.ResourceName, 0, (int)errCtx.ResourceNameLength);
+            BaseTestSite.Log.Add(LogEntryKind.Debug, $"UNC Share Path: {uncSharePath}");
+            BaseTestSite.Log.Add(LogEntryKind.Debug, $"Resource Name: {resourceName}");
+
             BaseTestSite.Assert.AreEqual(
                 0,
                 errCtx.Flags,
@@ -573,7 +578,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 }
             }
 
-            string resourceName = Encoding.Unicode.GetString(errCtx.ResourceName, 0, (int)errCtx.ResourceNameLength);
             BaseTestSite.Assert.IsTrue(
                 uncSharePath.ToLower().Contains(resourceName.ToLower()),
                 "ResourceName should be the same as uncSharePath. Actually server returns {0}.", resourceName);
