@@ -186,6 +186,67 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             SMB2Compression_Variant(CompressionTestVariant.IncompressibleRead);
         }
 
+        #region Large file tests
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can decompress large file WRITE request and compress READ response correctly using LZNT1.")]
+        public void SMB2Compression_LZNT1_LargeFile()
+        {
+            var compressionAlgorithm = CompressionAlgorithm.LZNT1;
+            BasicSMB2Compression(compressionAlgorithm, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can decompress large file WRITE request and compress READ response correctly using LZ77.")]
+        public void SMB2Compression_LZ77_LargeFile()
+        {
+            var compressionAlgorithm = CompressionAlgorithm.LZ77;
+            BasicSMB2Compression(compressionAlgorithm, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can decompress large file WRITE request and compress READ response correctly using LZ77 Huffman.")]
+        public void SMB2Compression_LZ77Huffman_LargeFile()
+        {
+            var compressionAlgorithm = CompressionAlgorithm.LZ77Huffman;
+            BasicSMB2Compression(compressionAlgorithm, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can handle compressed large file WRITE request correctly using supported compression algorithms.")]
+        public void SMB2Compression_CompressedWriteRequest_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2Compression_Variant(CompressionTestVariant.CompressibleWrite, isLargeFile: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Compression)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can compress large file read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible.")]
+        public void SMB2Compression_CompressibleReadResponse_LargeFile()
+        {
+            CheckCompressedPacketForGlobalEncryptDataEnabled();
+
+            SMB2Compression_Variant(CompressionTestVariant.CompressibleRead, isLargeFile: true);
+        }
+
+        #endregion
+
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Compression)]
@@ -326,7 +387,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             ChainedIncompressibleRead,
         }
 
-        private void BasicSMB2Compression(CompressionAlgorithm compressionAlgorithm)
+        private void BasicSMB2Compression(CompressionAlgorithm compressionAlgorithm, bool isLargeFile = false)
         {
             if (testConfig.IsGlobalEncryptDataEnabled)
             {
@@ -342,7 +403,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             CheckCompressionAndEncryptionApplicability(compressionAlgorithm);
             var compressionAlgorithms = new CompressionAlgorithm[] { compressionAlgorithm };
-            SMB2CompressionTest(compressionAlgorithms, CompressionTestVariant.BasicReadWrite);
+            SMB2CompressionTest(compressionAlgorithms, CompressionTestVariant.BasicReadWrite, isLargeFile: isLargeFile);
         }
 
         private void BasicSMB2Compression_Encrypted(CompressionAlgorithm compressionAlgorithm)
@@ -352,14 +413,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             SMB2CompressionTest(compressionAlgorithms, CompressionTestVariant.BasicReadWrite, enableEncryption: true);
         }
 
-        private void SMB2Compression_Variant(CompressionTestVariant variant)
+        private void SMB2Compression_Variant(CompressionTestVariant variant, bool isLargeFile = false)
         {
             CheckCompressionAndEncryptionApplicability();
             var compressionAlgorithms = TestConfig.SupportedCompressionAlgorithmList.ToArray();
-            SMB2CompressionTest(compressionAlgorithms, variant);
+            SMB2CompressionTest(compressionAlgorithms, variant, isLargeFile: isLargeFile);
         }
 
-        private void SMB2CompressionTest(CompressionAlgorithm[] compressionAlgorithms, CompressionTestVariant variant, bool enableEncryption = false, bool enableChainedCompression = false)
+        private void SMB2CompressionTest(CompressionAlgorithm[] compressionAlgorithms, CompressionTestVariant variant, bool enableEncryption = false, bool enableChainedCompression = false, bool isLargeFile = false)
         {
             uint treeId;
             FILEID fileId;
@@ -375,7 +436,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             foreach (var instance in instances)
             {
-                instance.Run(client, treeId, fileId);
+                instance.Run(client, variant, treeId, fileId, isLargeFile);
             }
 
             client.Close(treeId, fileId);
@@ -711,9 +772,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             ///     4. Check whether data read out is equal to test data.
             /// </summary>
             /// <param name="client">SMB2 functional client to use.</param>
+            /// <param name="variant">Compression test variant.</param>
             /// <param name="treeId">TreeId to use.</param>
             /// <param name="fileId">FileId to use.</param>
-            public void Run(Smb2FunctionalClient client, uint treeId, FILEID fileId)
+            /// <param name="isLargeFile">Whether is large file.</param>
+            public void Run(Smb2FunctionalClient client, CompressionTestVariant variant, uint treeId, FILEID fileId, bool isLargeFile = false)
             {
                 if (compressionAlgorithmForTest != CompressionAlgorithm.NONE)
                 {
@@ -739,7 +802,65 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     client.Smb2Client.CompressionInfo.CompressBufferOnly = true;
                 }
 
-                client.Write(treeId, fileId, testData, compressWrite: compressWriteRequest);
+                if (isLargeFile)
+                {
+                    // Write several times for existing testData for large data write and read tests
+                    // Base testData:
+                    // Length of LZ77 and LZ77 Huffman testData is 300 bytes.
+                    // Length of LZNT1 testData is 142 bytes.
+                    // Length of Pattern_V1 testData is 256 bytes.
+                    // Length of Compressible data testData is 2048 bytes.
+                    // We will change testData to 1 MB, and write 100 times to generate a 100 MB file
+                    int writeRequestCount = 100;
+                    ulong offset = 0;
+
+                    // According to real experience with copying large file to shared folder, the client will request 1 MB packet per request.
+                    // Change testData to 512 bytes * 2048 = 1 megabytes, so we can test large file
+                    if (compressionAlgorithmForTest == CompressionAlgorithm.LZ77Huffman)
+                    {
+                        // LZ77Huffman match length needs to be less than 65538, so we use 512*128=65536.
+                        var test512Bytes = Enumerable.Repeat(testData, 2).SelectMany(a => a).Take(512).ToArray();
+                        testData = Enumerable.Repeat(test512Bytes, 128).SelectMany(b => b).ToArray();
+                    }
+                    else if (variant == CompressionTestVariant.ChainedCompressibleWritePatternV1AtFront)
+                    {
+                        // For ChainedCompressibleWritePatternV1AtFront, we need to prepend some data which can be compressed with PatternV1.
+                        var test256Bytes = commonCompressibleData.Take(256).ToArray();
+                        var newCommonCompressibleData = Enumerable.Repeat(test256Bytes, 4 * 1024 - 1).SelectMany(b => b).ToArray();
+                        testData = GenerateByteArray(exampleTestData[CompressionAlgorithm.Pattern_V1], newCommonCompressibleData);
+                    }
+                    else if (variant == CompressionTestVariant.ChainedCompressibleRead || variant == CompressionTestVariant.ChainedCompressibleWritePatternV1AtEnd)
+                    {
+                        // For ChainedCompressibleRead or ChainedCompressibleWritePatternV1AtEnd, we need to append some data which can be compressed with PatternV1.
+                        var test256Bytes = commonCompressibleData.Take(256).ToArray();
+                        var newCommonCompressibleData = Enumerable.Repeat(test256Bytes, 4*1024-1).SelectMany(b => b).ToArray();
+                        testData = GenerateByteArray(newCommonCompressibleData, exampleTestData[CompressionAlgorithm.Pattern_V1]);
+                    }
+                    else if (variant == CompressionTestVariant.ChainedCompressibleWritePatternV1AtFrontAndEnd)
+                    {
+                        // For ChainedCompressibleWritePatternV1AtFrontAndEnd, we need to add start and end with PatternV1.
+                        var test256Bytes = commonCompressibleData.Take(256).ToArray();
+                        var newCommonCompressibleData = Enumerable.Repeat(test256Bytes, 4 * 1024 - 2).SelectMany(b => b).ToArray();
+                        testData = GenerateByteArray(exampleTestData[CompressionAlgorithm.Pattern_V1], newCommonCompressibleData, exampleTestData[CompressionAlgorithm.Pattern_V1]);
+                    }
+                    else
+                    {
+                        // For other cases, testData with a length of 1 MB will be used.
+                        var test512Bytes = Enumerable.Repeat(testData, 4).SelectMany(a => a).Take(512).ToArray();
+                        testData = Enumerable.Repeat(test512Bytes, 2048).SelectMany(b => b).ToArray();
+                    }
+                    int requestBytes = testData.Length;
+
+                    for (int time = 0; time < writeRequestCount; time++)
+                    {
+                        client.Write(treeId, fileId, testData, offset, compressWrite: compressWriteRequest);
+                        offset += (uint)requestBytes;
+                    }
+                }
+                else
+                {
+                    client.Write(treeId, fileId, testData, compressWrite: compressWriteRequest);
+                }
 
                 if (compressWriteRequestBufferOnly)
                 {
@@ -777,7 +898,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     );
 
                 client.Smb2Client.PacketReceived += Smb2Client_PacketReceived;
-                client.Read(treeId, fileId, 0, (uint)testData.Length, out readOutData, compressRead: compressReadRequest);
+
+                if (isLargeFile)
+                {
+                    // Read several times for exist testData for large data write and read tests
+                    int requestBytes = testData.Length;
+                    int readRequestCount = 100;
+                    ulong offset = 0;
+
+                    for (int time = 0; time < readRequestCount; time++)
+                    {
+                        client.Read(treeId, fileId, (uint)offset, (uint)requestBytes, out readOutData, compressRead: compressReadRequest);
+                        BaseTestSite.Assert.IsTrue(Enumerable.SequenceEqual(testData, readOutData), $"Request times:{time + 1}, packet offset: {offset}, byteSize:{requestBytes}, the read out content MUST be the same with that is written.");
+                        offset += (uint)requestBytes;
+                    }
+                }
+                else
+                {
+                    client.Read(treeId, fileId, 0, (uint)testData.Length, out readOutData, compressRead: compressReadRequest);
+                    BaseTestSite.Assert.IsTrue(Enumerable.SequenceEqual(testData, readOutData), "The read out content MUST be the same with that is written.");
+                }
+
                 client.Smb2Client.PacketReceived -= Smb2Client_PacketReceived;
 
                 if (compressReadRequest)
@@ -812,8 +953,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         BaseTestSite.Log.Add(LogEntryKind.Debug, "Read response is compressed using {0}.", compressedPacket.Header.CompressionAlgorithm);
                     }
                 }
-
-                BaseTestSite.Assert.IsTrue(Enumerable.SequenceEqual(testData, readOutData), "The read out content MUST be the same with that is written.");
             }
         }
     }
