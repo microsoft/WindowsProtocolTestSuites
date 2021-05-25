@@ -8,10 +8,10 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Swn;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 {
@@ -503,15 +503,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 (uint)3,
                 errCtx.NotificationType,
                 "This field (NotificationType) MUST be set to 3. Actually server returns {0}.", errCtx.NotificationType);
-            byte[] uncSharePathToByte = Encoding.Unicode.GetBytes(uncSharePath);
-            //BaseTestSite.Assert.AreEqual(
-            //    (uint)uncSharePathToByte.Length,
-            //    errCtx.ResourceNameLength,
-            //    "The length of the share name provided in the ResourceName field, in bytes, should be the length of {0}. Actually server returns {1}.", uncSharePathToByte.Length, errCtx.ResourceNameLength);
-
-            var resourceName = Encoding.Unicode.GetString(errCtx.ResourceName, 0, (int)errCtx.ResourceNameLength);
-            BaseTestSite.Log.Add(LogEntryKind.Debug, $"UNC Share Path: {uncSharePath}");
-            BaseTestSite.Log.Add(LogEntryKind.Debug, $"Resource Name: {resourceName}");
 
             BaseTestSite.Assert.AreEqual(
                 0,
@@ -578,9 +569,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 }
             }
 
+            var resourceName = Encoding.Unicode.GetString(errCtx.ResourceName, 0, (int)errCtx.ResourceNameLength);
+            BaseTestSite.Log.Add(LogEntryKind.Debug, $"uncSharePath: {uncSharePath}");
+            BaseTestSite.Log.Add(LogEntryKind.Debug, $"ResourceName: {resourceName}");
+
             BaseTestSite.Assert.IsTrue(
-                uncSharePath.ToLower().Contains(resourceName.ToLower()),
-                "ResourceName should be the same as uncSharePath. Actually server returns {0}.", resourceName);
+                CompareUNCSharePathAndResourceName(uncSharePath.ToLower(), resourceName.ToLower()),
+                "ResourceName should indicate the same share as what uncSharePath indicates. Actually server returns {0}.", resourceName);
+
+            bool CompareUNCSharePathAndResourceName(string uncSharePath, string resourceName)
+            {
+                var pathRegex = @"\\\\(?<serverName>[\.\w]+)\\(?<shareName>\w+)";
+                var regex = new Regex(pathRegex);
+
+                var uncSharePathMatch = regex.Match(uncSharePath);
+                var shareServer = uncSharePathMatch.Groups["serverName"].Value.Split(".", StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                var shareName = uncSharePathMatch.Groups["shareName"].Value;
+
+                var resourceNameMatch = regex.Match(resourceName);
+                var resourceShareServer = resourceNameMatch.Groups["serverName"].Value.Split(".", StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                var resourceShareName = resourceNameMatch.Groups["shareName"].Value;
+
+                return shareServer == resourceShareServer && shareName == resourceShareName;
+            }
+
             #endregion
         }
 
