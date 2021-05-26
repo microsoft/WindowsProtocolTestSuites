@@ -47,6 +47,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
         IEnumerable<string> GetNodes();
 
         /// <summary>
+        /// Detects if node exists.
+        /// </summary>
+        /// <param name="name">The name of the node.</param>
+        bool NodeExists(string name);
+
+        /// <summary>
         /// Remove a child node.
         /// </summary>
         /// <param name="name">The name of child node.</param>

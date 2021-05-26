@@ -18,6 +18,7 @@ import { ConfigurationsDataSrv } from '../services/Configurations';
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
 import { TestResultsDataSrv } from '../services/TestResults';
 import { TestSuitesDataSrv } from '../services/TestSuites';
+import { ProfileDataSrv } from '../services/ProfileService';
 import { AppState } from '../store/configureStore';
 
 function getDict<TItem extends Extract<{ [P in keyof TItem]: any }, { [P in keyof TItem]: number }>>(items: TItem[], keyName: keyof TItem) {
@@ -159,7 +160,7 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
                                 ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
                                 : null
                         }
-                        <PrimaryButton disabled onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
+                        <PrimaryButton onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
                     </Stack>
                 );
             }
@@ -340,7 +341,7 @@ export function TaskHistory(props: any) {
             dispatch(() => history.push('/Tasks/TestResult', { from: 'TaskHistory' }));
         },
         onExportProfile: (testResultId: number) => {
-
+            dispatch(ProfileDataSrv.saveProfileByResultId(testResultId));
         }
     });
 

@@ -25,6 +25,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string DllFileName = "DllFileName";
 
         public const string ConfigCaseRule = "ConfigCaseRule";
+
+        public const string ProfileExtension = ".ptm";
     }
 
     public static class ConfigurationConsts
@@ -61,5 +63,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     public static class TestRunConsts
     {
         public const string TestCaseListFile = "list.json";
+    }
+
+    public static class StringMessages
+    {
+        public const string InvalidProfile = "It is not a valid PTM test profile";
+        
+        public const string ProfileNotMatchError = "The profile does not match the installed test suite. The profile is for {0} {1}. The test suite is {2} {3}.";
     }
 }

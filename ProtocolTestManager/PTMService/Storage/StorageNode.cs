@@ -56,6 +56,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.Storage
             return result;
         }
 
+        public bool NodeExists(string name)
+        {
+            string path = Path.Combine(AbsolutePath, name);
+            
+            return Directory.Exists(path);
+        }
+
         public void RemoveNode(string name)
         {
             string path = Path.Combine(AbsolutePath, name);

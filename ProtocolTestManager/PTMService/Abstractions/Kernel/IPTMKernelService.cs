@@ -5,6 +5,7 @@ using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
+using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
@@ -102,6 +103,37 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="testCases">The test case list to be exported.</param>
         /// <returns>The path to the test run report.</returns>
         string GetTestRunReport(int testResultId, ReportFormat format, string[] testCases);
+
+        #endregion
+
+        #region Save and Load profile
+
+        /// <summary>
+        /// Saves profile
+        /// </summary>
+        /// <param name="request">Profile request.</param>
+        /// <returns>Returns location where file was saved.</returns>
+        string SaveProfileSettingsByTestResult(int testResultId);
+
+        /// <summary>
+        /// Saves profile
+        /// </summary>
+        /// <param name="request">Profile request.</param>
+        /// <returns>Returns location where file was saved.</returns>
+        string SaveProfileSettings(ProfileExportRequest request);
+
+        /// <summary>
+        /// Loads a ptm profile.
+        /// </summary>
+        /// <param name="request">Profile request.</param>
+        void LoadProfileSettings(ProfileRequest request);
+
+        /// <summary>
+        /// Ensures a profile name matches test manager format.
+        /// </summary>
+        /// <param name="profileName">Profile name.</param>
+        /// <returns>Returns compliant profile name.</returns>
+        string EnsureProfileName(string profileName);
 
         #endregion
     }

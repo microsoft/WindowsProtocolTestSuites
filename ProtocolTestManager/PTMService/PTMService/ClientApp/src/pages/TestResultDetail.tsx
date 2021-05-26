@@ -16,6 +16,7 @@ import { ReportFormat, ReportRequest, TestResult } from '../model/TestResult';
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
 import { TestCaseResultDataSrv } from '../services/TestCaseResult';
 import { TestResultsDataSrv } from '../services/TestResults';
+import { ProfileDataSrv } from '../services/ProfileService';
 import { AppState } from '../store/configureStore';
 
 type GroupKeys = {
@@ -226,6 +227,7 @@ export function TestResultDetail(props: any) {
     const [selectedItems, setSelectedItems] = useState<TestCaseOverview[] | undefined>(undefined);
 
     const testResults = useSelector((state: AppState) => state.testResults);
+    const configureMethod = useSelector((state: AppState) => state.configureMethod);
     const testCaseResult = useSelector((state: AppState) => state.testCaseResult);
 
     const testCaseResults = useMemo(() => testResults.selectedTestResult?.Results ?? [], [testResults.selectedTestResult]);
@@ -380,7 +382,9 @@ export function TestResultDetail(props: any) {
     };
 
     const onExportProfile = () => {
-
+        if (selectedItems !== undefined) {
+            dispatch(ProfileDataSrv.saveProfile(selectedItems.map(item => item.FullName)));
+        }
     };
 
     const onGoBackClick = () => {
@@ -540,7 +544,7 @@ export function TestResultDetail(props: any) {
                         {
                             testResults.selectedTestResult === undefined
                                 ? null
-                                : <PrimaryButton disabled onClick={onExportProfile}>Export Profile</PrimaryButton>
+                                : <PrimaryButton onClick={onExportProfile}>Export Profile</PrimaryButton>
                         }
                         <PrimaryButton onClick={onGoBackClick}>Go Back</PrimaryButton>
                     </Stack>
