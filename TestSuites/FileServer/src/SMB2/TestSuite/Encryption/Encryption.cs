@@ -113,11 +113,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Encryption)]
+        [Description("This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2_ENCRYPTION_CAPABILITIES context and AES-256-CCM as encryption algorithm.")]
+        public void BVT_Encryption_SMB311_AES_256_CCM()
+        {
+            TestConfig.CheckPlatform(Platform.WindowsServer2022);
+            NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm.ENCRYPTION_AES256_CCM);
+            PostNegotiateOperations(EnableEncryptionType.EnableEncryptionPerSession, connectEncryptedShare: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Encryption)]
         [Description("This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2_ENCRYPTION_CAPABILITIES context and AES-128-GCM as encryption algorithm.")]
         public void BVT_Encryption_SMB311_GCM()
         {
             NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm.ENCRYPTION_AES128_GCM);
-            PostNegotiateOperations(EnableEncryptionType.EnableEncryptionPerSession, connectEncryptedShare:true);
+            PostNegotiateOperations(EnableEncryptionType.EnableEncryptionPerSession, connectEncryptedShare: true);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Encryption)]
+        [Description("This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2_ENCRYPTION_CAPABILITIES context and AES-256-GCM as encryption algorithm.")]
+        public void BVT_Encryption_SMB311_AES_256_GCM()
+        {
+            TestConfig.CheckPlatform(Platform.WindowsServer2022);
+            NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm.ENCRYPTION_AES256_GCM);
+            PostNegotiateOperations(EnableEncryptionType.EnableEncryptionPerSession, connectEncryptedShare: true);
         }
 
         #endregion
@@ -136,12 +160,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 capabilityValue: Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING | Capabilities_Values.GLOBAL_CAP_LARGE_MTU | Capabilities_Values.GLOBAL_CAP_LEASING | Capabilities_Values.GLOBAL_CAP_ENCRYPTION
                 );
         }
-        
+
         private void NegotiateWithEncryptionCapabilitiesContext(EncryptionAlgorithm cipherId, bool sendCipherArray = false)
         {
             if (cipherId == EncryptionAlgorithm.ENCRYPTION_NONE)
             {
-                throw new ArgumentException("CipherId should be either AES-128-CCM or AES-128-GCM.");
+                throw new ArgumentException("CipherId should be either AES-128-CCM, AES-128-GCM, AES-256-CCM or AES-256-GCM.");
             }
 
             #region Check Applicability
@@ -160,8 +184,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             EncryptionAlgorithm[] encryptionAlgs = null;
             if (sendCipherArray)
             {
-                encryptionAlgs = new EncryptionAlgorithm[] { 
-                    cipherId, 
+                encryptionAlgs = new EncryptionAlgorithm[] {
+                    cipherId,
                     cipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM? EncryptionAlgorithm.ENCRYPTION_AES128_GCM : EncryptionAlgorithm.ENCRYPTION_AES128_CCM };
             }
             else

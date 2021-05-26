@@ -290,6 +290,41 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 });
         }
 
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with " +
+            "Smb 3.11 dialect and SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
+            "SMB2_ENCRYPTION_CAPABILITIES context with AES-256-CCM preferred.")]
+        public void BVT_Negotiate_SMB311_Preauthentication_Encryption_AES_256_CCM()
+        {
+            if (TestConfig.MaxSmbVersionSupported < DialectRevision.Smb311)
+                BaseTestSite.Assume.Inconclusive("Stop to run this test case because the configured server max dialect is lower than 3.11.");
+
+            TestConfig.CheckPlatform(Platform.WindowsServer2022);
+
+            DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
+            PreauthIntegrityHashID[] preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
+            EncryptionAlgorithm[] encryptionAlgs = new EncryptionAlgorithm[] {
+                EncryptionAlgorithm.ENCRYPTION_AES256_CCM,
+                EncryptionAlgorithm.ENCRYPTION_AES256_GCM };
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
+               "SMB2_ENCRYPTION_CAPABILITIES context with AES-256-CCM preferred.");
+            NegotiateWithNegotiateContexts(
+                clientMaxDialectSupported,
+                preauthHashAlgs,
+                encryptionAlgs,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    CheckNegotiateResponse(header, response, clientMaxDialectSupported, encryptionAlgs);
+                });
+        }
+
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
@@ -312,6 +347,40 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                LogEntryKind.TestStep,
                "Send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
                "SMB2_ENCRYPTION_CAPABILITIES context with AES-128-GCM preferred.");
+            NegotiateWithNegotiateContexts(
+                clientMaxDialectSupported,
+                preauthHashAlgs,
+                encryptionAlgs,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    CheckNegotiateResponse(header, response, clientMaxDialectSupported, encryptionAlgs);
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with " +
+            "Smb 3.11 dialect and SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
+            "SMB2_ENCRYPTION_CAPABILITIES context with AES-256-GCM preferred.")]
+        public void BVT_Negotiate_SMB311_Preauthentication_Encryption_AES_256_GCM()
+        {
+            if (TestConfig.MaxSmbVersionSupported < DialectRevision.Smb311)
+                BaseTestSite.Assume.Inconclusive("Stop to run this test case because the configured server max dialect is lower than 3.11.");
+
+            TestConfig.CheckPlatform(Platform.WindowsServer2022);
+
+            DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
+            PreauthIntegrityHashID[] preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
+            EncryptionAlgorithm[] encryptionAlgs = new EncryptionAlgorithm[] {
+                EncryptionAlgorithm.ENCRYPTION_AES256_GCM,
+                EncryptionAlgorithm.ENCRYPTION_AES256_CCM };
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and " +
+               "SMB2_ENCRYPTION_CAPABILITIES context with AES-256-GCM preferred.");
             NegotiateWithNegotiateContexts(
                 clientMaxDialectSupported,
                 preauthHashAlgs,
