@@ -215,7 +215,7 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 90         | SMB2 common scenarios.                                                                                            |
+| SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2632       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
@@ -542,10 +542,30 @@ This is used to test SMB2 common user scenarios.
 
 |                          |                                                                                                                                                       |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_AES\_256\_CCM                                                                                                                                |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-CCM preferred. |
+| **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-CCM preferred.            |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES context.                                                           |
+| **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_GCM                                                                                                                                |
 | **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
 | **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred.            |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
+| **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_AES\_256\_GCM                                                                                                                                |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-GCM preferred. |
+| **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-GCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
 | **Cleanup**              |                                                                                                                                                                                           |
 
@@ -959,7 +979,17 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT_Encryption_SMB311_CCM                                                                                                                                    |
 | **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as encryption algorithm.  | 
 | **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
-| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-CCM is as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as cipher algorithm.                                                                                                                         |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-CCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as cipher algorithm.                                                                                                                         |
+|                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
+|                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request and gets successful responses.                                     |
+| **Cleanup**              |                                                                                                                                                                               |
+
+|||
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Encryption_SMB311_AES_256_CCM                                                                                                                                    |
+| **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-CCM as encryption algorithm.  | 
+| **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-256-CCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-CCM as cipher algorithm.                                                                                                                         |
 |                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
 |                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request and gets successful responses.                                     |
 | **Cleanup**              |                                                                                                                                                                               |
@@ -969,7 +999,17 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT_Encryption_SMB311_GCM                                                                                                                                                 |
 | **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as encryption algorithm.   |
 | **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
-| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-GCM is as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as cipher algorithm.            | 
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-GCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as cipher algorithm.            | 
+|                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
+|                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request, and gets successful  responses.                                   |
+| **Cleanup**              |                                                                                                                                                                              |
+
+|||
+|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Encryption_SMB311_AES_256_GCM                                                                                                                                                 |
+| **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-GCM as encryption algorithm.   |
+| **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-256-GCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-GCM as cipher algorithm.            | 
 |                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
 |                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request, and gets successful  responses.                                   |
 | **Cleanup**              |                                                                                                                                                                              |
