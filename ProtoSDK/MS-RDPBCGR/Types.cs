@@ -7904,12 +7904,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         /// <summary>
         /// RDP 10.8 servers
-        /// </summary>,
+        /// </summary>
+        V11 = 0x0008000D,
 
         /// <summary>
         /// RDP 10.9 servers
         /// </summary>
-        V11 = 0x0008000E
+        V12 = 0x0008000E
     }
 
     /// <summary>
