@@ -10,46 +10,15 @@ if($nodeName -notmatch "\.")
 {
 	$nodeName = "$nodeName.$domain"
 }
-$clusterServiceName = "ClusSvc"
-
-try
-{
-    Get-PSSession|Remove-PSSession
-    $psSession=New-PSSession -HostName $nodeName -UserName "$domain\$userName"
-}
-catch
-{
-    Get-Error
-}
-
-$myScriptBlock = {
-    param(
-    [string] $className,
-    [string] $filter
-    )
-    $result = Get-CimInstance -ClassName $className -Filter $filter
-    if($result -eq $null)
-    {
-        return $FALSE
-    }
-
-    return $result | Invoke-CimMethod -Name StartService
-}
 
 $ret = $FALSE
 try
 {
-    $className="Win32_Service"
-    $filter="Name = '$clusterServiceName'"
-    $result = Invoke-Command -Session $psSession -ScriptBlock $myScriptBlock -ArgumentList $className,$filter
+    $result = Invoke-Command -HostName $nodeName -UserName "$domain\$userName" -ScriptBlock { cmd /c net start ClusSvc }
     $ret = $TRUE
 }
 catch
 {
     Get-Error
-}
-finally
-{
-    Get-PSSession|Remove-PSSession
 }
 return $ret
