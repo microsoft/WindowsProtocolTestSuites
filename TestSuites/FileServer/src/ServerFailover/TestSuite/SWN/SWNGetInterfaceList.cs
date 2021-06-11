@@ -104,6 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             WITNESS_INTERFACE_LIST interfaceList = new WITNESS_INTERFACE_LIST();
             IPAddress currentAccessIpAddr;
 
+            sutController.FlushDNS();
             currentAccessIpAddr = SWNTestUtility.GetCurrentAccessIP(TestConfig.ClusteredScaleOutFileServerName);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Get interface list to register.");

@@ -47,6 +47,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             testConfig = new ServerFailoverTestConfig(BaseTestSite);
             sutController = BaseTestSite.GetAdapter<ISutControlAdapter>();
+            this.sutController.FlushDNS();
         }
 
         protected override void TestCleanup()
@@ -56,8 +57,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                 beforeFailover.Disconnect();
             }
 
-            this.sutController.FlushDNS();
             RestoreServer();
+            this.sutController.FlushDNS();
 
             base.TestCleanup();
         }
@@ -91,6 +92,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             DoUntilSucceed(() => sutController.DisableClusterNode(clusterNode), TestConfig.FailoverTimeout,
                 "Retry to stop cluster service on {0} until succeed within timeout span", clusterNode);
+
+            sutController.FlushDNS();
+
+            // Sleep 30 seconds to wait cluster stable
+            System.Threading.Thread.Sleep(1000*30);
         }
 
         protected void RestoreClusterNodes(params string[] servers)
