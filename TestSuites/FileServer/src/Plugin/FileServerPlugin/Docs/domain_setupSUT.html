@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Setup SUT</title>
+    <style>
+        table, th, td
+        {
+            border:0.0625rem solid black;
+            border-collapse:collapse;
+        }
+        div.Title
+        {
+            font-family:Arial;
+            font-size:larger;
+            margin-bottom:0.625rem;
+        }
+        div.Context
+        {
+            font-family:'Segoe UI';
+            font-size:medium;
+            margin-top:auto;
+        }
+        .icon
+        {
+            font-family:'Segoe UI';
+            font-size:larger;
+            font-weight:bold;
+            margin-top:5rem;
+        }
+        .List
+        {
+            margin-top: 0.25rem;
+        }
+        .img
+        {
+            vertical-align:text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        <div style="font-weight:bold;font-size:large">Common Setup</div>
+        <ul class="List">
+            <li>1. Configure IP addresses on the SUT node and set the computer name to <b>Node01</b>. </li>
+            <li>2. Turn off firewall.</li>
+            <li>3. Create local user accounts:
+                <div style="margin-left:1.25rem">a.	Admin User </div>
+                <div style="margin-left:1.25rem">b.	Non-Admin User </div>
+            </li>
+            <li>4. Enable Guest account</li>
+            <li>5. The password for all accounts is set to <b>Password01!</b> </li>
+            <li>6. Join the SUT to the Domain provided by the DC.</li>
+            <li>7. Setup the Computer Password for SUT.</li>
+        </ul>
+        <div style="font-weight:bold;font-size:large">Setup to test Smb2</div>
+        <ul class="List">
+            <li>1. Create a share <b>SMBBasic</b>
+                <div style="margin-left:1.25rem">It's basic file share to test SMB2 cases.</div>
+                <div style="margin-left:1.25rem">a. Create a share <b>SMBBasic</b> on node01. </div>
+                <div style="margin-left:1.25rem">b. Share with read/write access to Admin User (including Domain Admin User). </div>
+            </li>
+            <li style ="margin-top:0.625rem">2. Create a share with Encrypt data enabled
+                <div style="margin-left:1.25rem">It's used to test Encryption feature of SMB2 protocol.</div>
+                <div style="margin-left:1.25rem">a. Create share <b>SMBEncrypted</b> on node01. </div>
+                <div style="margin-left:1.25rem">b. Share with read/write access to Admin User (including Domain Admin User).</div>
+                <div style="margin-left:1.25rem">c. Enable share folder with Encrypt data which indicates that the server requires messages for accessing this share to be encrypted.</div>
+                <div />
+            </li>
+            <li style ="margin-top:0.625rem">3. Create a share with Oplock Force Level 2 enabled
+                <div style="margin-left:1.25rem">It's used for some cases when testing Oplock feature of SMB2 protocol.</div>
+                <div style="margin-left:1.25rem">a. Create a share <b>ShareForceLevel2</b> on node01.  </div>
+                <div style="margin-left:1.25rem">b. Share with read/write access to Admin User (including Domain Admin User). </div>
+                <div style="margin-left:1.25rem">c. Enable <b>FORCE_LEVELII_OPLOCK</b> on this share.</div>
+                <div />
+            </li>
+            <li style ="margin-top:0.625rem">4. Create a share <b>SameWithSMBBasic</b>
+                <div style="margin-left:1.25rem">It's used for some negative cases when testing AppInstanceId feature of SMB2. </div>
+                <div style="margin-left:1.25rem">If AppInstanceId is not supported, this section can be ignored. </div>
+                <div style="margin-left:1.25rem">Add a share named <b>SameWithSMBBasic</b>, this share should have the same local path with <b>SMBBasic</b> share. </div>
+                <div style="margin-left:1.25rem">Summary of the negative cases: </div>
+                <div style="margin-left:1.25rem">a. The case creates an open under the share <b>SMBBasic</b>. There's an AppInstanceId in the Create Request.  </div>
+                <div style="margin-left:1.25rem">b. The case sends a second Create Request to SUT with the same AppInstanceId.</div>
+                <div style="margin-left:1.25rem">c. Verify the open is not closed if the case uses this share <b>SameWithSMBBasic</b>, not share <b>SMBBasic</b>.</div>
+                <div />
+            </li>
+            <li style ="margin-top:0.625rem">5. Create a share different from <b>SMBBasic</b>
+                <div style="margin-left:1.25rem">It's used for some negative cases when testing AppInstanceId feature of SMB2. </div>
+                <div style="margin-left:1.25rem">If AppInstanceId is not supported, this section can be ignored. </div>
+                <div style="margin-left:1.25rem">a. Create a share named <b>DifferentFromSMBBasic</b> on node01. The local path of this share should be different from <b>SMBBasic</b> share. </div>
+                <div style="margin-left:1.25rem">b. Share with read/write access to Admin User (including Domain Admin User).</div>
+            </li>
+            <li style ="margin-top:0.625rem">6.	Create Symbolic Links
+                <div style="margin-left:1.25rem">It's used for some negative cases when testing Create/Close feature of SMB2. Details see section 3.3.5.9 in [MS-SMB2]. </div>
+                <div style="margin-left:1.25rem">If AppInstanceId is not supported, this section can be ignored. </div>
+                <div style="margin-left:1.25rem">a. Add a Symbolic Link to <b>SMBBasic</b>  </div>
+                <div style="margin-left:1.25rem">In share <b>SMBBasic</b>, add a symbolic link named <b>Symboliclink</b>, which links to <b>SMBBasic</b>.</div>
+                <div style="margin-left:1.25rem">b. Add a new folder <b>Sub</b> under <b>SMBBasic</b>, add another symbolic link named <b>Symboliclink2</b> under <b>Sub</b> folder, and links to <b>SMBBasic</b>. </div>
+            </li>
+            <li style ="margin-top:0.625rem">7.	Create a share on volume supporting integrity
+                <div style="margin-left:1.25rem">If integrity is not supported by file system, this section can be ignored. </div>
+                <div style="margin-left:1.25rem">The share is used to test IoCtl codes <b>FSCTL_GET_INTEGRITY_INFORMATION</b> and <b>FSCTL_SET_INTEGRITY_INFORMATION</b>.</div>
+                <div style="margin-left:1.25rem">a. Create a share named <b>SMBReFSShare</b> on node01.</div>
+                <div style="margin-left:1.25rem">The file system of the volume containing the specified share should support the use of integrity.</div>
+                <div style="margin-left:1.25rem">b. Share with read/write access to Admin User (including Domain Admin User). </div>
+            </li>
+            <li style ="margin-top:0.625rem">8.	Modify the Signing configurations
+                <div style="margin-left:1.25rem">If Signing is not supported by file system, this section can be ignored.</div>
+                <div style="margin-left:1.25rem">The configuration is used to test the Signing function.</div>
+                <div style="margin-left:1.25rem">In order to run Signing cases, you need to do:</div>
+                <div style="margin-left:1.25rem">a. Open the ptf config file under the location:</div>
+                <div style="margin-left:1.25rem">C:\FileServer-TestSuite-ServerEP\Bin\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig</div>
+                <div style="margin-left:1.25rem">b. If <b>SigningRequired</b> is enabled on SUT, set the property value of <b>IsRequireMessageSigning</b> to true in the above file. </div>
+                <div style="margin-left:1.25rem">c. If <b>SigningRequired</b> is disabled on SUT, set the property value of <b>IsRequireMessageSigning</b> to false in the above file.</div>
+
+            </li>
+        </ul>
+        <div style="font-weight:bold;font-size:large">Setup to test DFSC</div>
+        <div>If DFS is not supported, this part can be ignored.</div>
+        <ul class="List">
+            <li>1. Create DFS namespaces.
+                <div style="margin-left:1.25rem">Two Stand-alone namespaces: <b>SMBDfs</b> and <b>Standalone</b></div>
+                <div style="margin-left:1.25rem">One Domain-based namespace: <b>DomainBased</b></div>
+            </li>
+            <li>2. Create a share FileShare on SUT.
+                <div style="margin-left:1.25rem">Share with read/write access to Admin User (including Domain Admin User).</div>
+            </li>
+            <li>3. Add one folder to namespace <b>SMBDfs</b>.
+                <div style="margin-left:1.25rem">Folder name is <b>SMBDfsLink</b>, link target is <b>\\node01\FileShare</b></div>
+            </li>
+            <li>4. Add two folders to namespace Standalone.
+                <div style="margin-left:1.25rem">One is <b>DFSLink</b>, link target is <b>\\node01\FileShare</b></div>
+                <div style="margin-left:1.25rem">The other is <b>Interlink</b>, link target is <b>\\node01\SMBDfs\SMBDfsLink</b></div>
+            </li>
+            <li>5. Add two folders to namespace DomainBased
+                <div style="margin-left:1.25rem">One is <b>DFSLink</b>. If there is node02, link target is <b>\\node02\FileShare</b>, and otherwise link target is <b>\\node01\FileShare</b></div>
+                <div style="margin-left:1.25rem">The other is <b>Interlink</b>, link target is <b>\\node01\SMBDfs\SMBDfsLink</b></div>
+            </li>
+        </ul>
+
+        <div style="font-weight:bold;font-size:large;">Setup to test Server Failover/FSRVP/SWN</div>
+        <ul class="List">
+            <li>1. Create a share named <b>SMBClustered</b> with the property <b>Share.IsCA</b> is TRUE, <b>Share.Type</b> includes <b>STYPE_CLUSTER_SOFS</b>, and make the share <b>asymmetric</b>.
+                <div style="margin-left:1.25rem">a. <b>Share.IsCA</b> is TRUE, it's indicated by <b>SHI1005_FLAGS_ENABLE_CA</b> bit in <b>shi1005_flags</b> as specified in [MS-SRVS] section 2.2.4.29.</div>
+                <div style="margin-left:1.25rem">b. <b>Share.Type</b> includes <b>STYPE_CLUSTER_SOFS</b>, it's indicated by share type as mentioned in [MS-SRVS] section 2.2.2.4.</div>
+            </li>
+            <li>2. Create a share named <b>SMBClusteredEncrypted</b> with the property <b>Share.IsCA</b> is TRUE and <b>Share.EncryptData</b> is TRUE.</li>
+            <li>3. Create a share named <b>SMBClusteredForceLevel2</b> with following properties:
+                <div style="margin-left:1.25rem">a. <b>Share.ForceLevel2Oplock</b> is TRUE, it's indicated by <b>SHI1005_FLAGS_FORCE_LEVELII_OPLOCK</b> bit in <b>shi1005_flags</b> as specified in [MS-SRVS] section 2.2.4.29; otherwise, it MUST be set to FALSE.</div>
+                <div style="margin-left:1.25rem">b. <b>Share.Type</b> includes <b>STYPE_CLUSTER_SOFS</b>, it's indicated by share type as mentioned in [MS-SRVS] section 2.2.2.4.</div>
+            </li>
+        </ul>
+        <div style="font-weight:bold;font-size:large">Setup to test RSVD</div>
+        <div>If RSVD is not supported, this part can be ignored.</div>
+        <ul class="List">
+            <li>1. Create a virtual hard disk file named <b>rsvd.vhdx</b> and put it to a share of SUT.</li>
+            <li>2. Create a virtual hard disk file named <b>convert.vhdx</b> and put it to a share of SUT.</li>
+            <li>3. Create a virtual hard disk set file named <b>rsvd.vhds</b> and put it to a share of SUT.</li>
+        </ul>
+        <div style="font-weight:bold;font-size:large">Setup to test SQOS</div>
+        <div>If SQOS is not supported, this part can be ignored.</div>
+        <ul class="List">
+            <li>1. Create a virtual hard disk file named <b>sqos.vhdx</b> and put it to a share of SUT.</li>
+            <li>2. Create a new policy (with <b>MinimumIoRate</b>: 100 and <b>MaximumIoRate</b>: 200). Save the policy id to the ptfconfig item: <b>SqosPolicyId</b></li>
+        </ul>		
+        <div style="font-weight:bold;font-size:large">Setup to test Authorization</div>
+        <ul class="List">
+            <li>1. Create a share named <b>AzShare</b>. NTFS Permission: Allow Everyone, Share Permission: Allow Domain Admins.</li>
+            <li>2. Create a share named <b>AzFolder</b>. NTFS Permission: Allow Domain Admins, Share Permission: Allow Everyone.</li>
+            <li>3. Create a share named <b>AzFile</b>. NTFS Permission: Allow Domain Admins, Share Permission: Allow Everyone.</li>
+            <li>4. Create a share named <b>AzCBAC</b>. NTFS Permission: Allow Everyone, Share Permission: Allow Everyone.</li>
+            <li>5. If <b>SRVS</b> (Server Service Remote Protocol) is not supported, please create 6 shares: <b>AzShare01</b>... <b>AzShare06</b>.</li>
+                <div style="margin-left:1rem">Share permissions should be set according to the following table: </div>
+                <div style="margin-left:1rem"><b>AzShare01</b>: O:SYG:SYD:(A;;0x1fffff;;;[SID of AzUser01])(A;;FA;;;BA)</div>                
+                <div style="margin-left:1rem"><b>AzShare02</b>: O:SYG:SYD:(A;;0x1fffff;;; [SID of AzGroup01])(A;;FA;;;BA)</div>                
+                <div style="margin-left:1rem"><b>AzShare03</b>: O:SYG:SYD:(D;;0x1fffff;;; [SID of AzUser01])(A;;FA;;;BA)</div>                
+                <div style="margin-left:1rem"><b>AzShare04</b>: O:SYG:SYD:(D;;0x1fffff;;; [SID of AzGroup01])(A;;FA;;;BA)</div>                
+                <div style="margin-left:1rem"><b>AzShare05</b>: O:SYG:SYD:(A;;FA;;;BA)</div>                
+                <div style="margin-left:1rem"><b>AzShare06</b>: O:SYG:SYD:(D;;;;; [SID of AzUser01])(A;;FA;;;BA)</div>                             
+        </ul>
+    </div>
+</body>
+</html>
