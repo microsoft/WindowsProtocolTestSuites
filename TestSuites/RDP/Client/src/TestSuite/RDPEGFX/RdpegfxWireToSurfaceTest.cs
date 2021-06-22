@@ -21,6 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify whether RDP client can accept a RDPGFX_WIRE_TO_SURFACE_PDU_1 message with an uncompressed image.")]
         public void RDPEGFX_WireToSurface_PositiveTest()
         {
@@ -64,6 +66,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify whether RDP client can process correctly when accept a RDPGFX_WIRE_TO_SURFACE_PDU_1 message with an uncompressed image whose specific borders are overlapped with surface.")]
         public void RDPEGFX_WireToSurface_PositiveTest_ImageBorderOverlapSurface()
         {

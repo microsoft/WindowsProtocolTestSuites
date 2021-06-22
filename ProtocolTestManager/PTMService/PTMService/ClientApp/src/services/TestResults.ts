@@ -3,8 +3,61 @@
 
 import { FetchService, RequestMethod } from '.';
 import { TestResultsActions, TestResultsActionTypes } from '../actions/TestResultsActions';
-import { TestResult } from '../model/TestResult';
+import { ReportFormat, ReportRequest, TestResult } from '../model/TestResult';
 import { AppThunkAction } from '../store/configureStore';
+
+const downloadBlob = (fileName: string, blob: Blob | undefined) => {
+    if (blob === undefined) {
+        return;
+    }
+
+    const url = window.URL.createObjectURL(new Blob([blob]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    link.click();
+};
+
+const getRequestHeaders = (format: ReportFormat) => {
+    let mimeType = 'text/plain';
+    switch (format) {
+        case 'Plain':
+            mimeType = 'text/plain';
+            break;
+
+        case 'Json':
+            mimeType = 'text/plain';
+            break;
+
+        case 'XUnit':
+            mimeType = 'application/xml';
+            break;
+    }
+
+    return {
+        'Accept': mimeType,
+        'Content-Type': 'application/json'
+    };
+};
+
+const getFileNameWithExtension = (fileName: string, format: ReportFormat) => {
+    let extension = 'txt';
+    switch (format) {
+        case 'Plain':
+            extension = 'txt';
+            break;
+
+        case 'Json':
+            extension = 'json';
+            break;
+
+        case 'XUnit':
+            extension = 'xml';
+            break;
+    }
+
+    return `${fileName}.${extension}`;
+}
 
 export const TestResultsDataSrv = {
     listTestResults: (): AppThunkAction<TestResultsActionTypes> => async (dispatch, getState) => {
@@ -32,5 +85,17 @@ export const TestResultsDataSrv = {
             onComplete: TestResultsActions.getTestResultDetailAction_Success,
             onError: TestResultsActions.getTestResultDetailAction_Failure
         }).then(completeCallback);
+    },
+    getTestRunReport: (testResultId: number, reportRequest: ReportRequest): AppThunkAction<TestResultsActionTypes> => async (dispatch, getState) => {
+        await FetchService({
+            url: `api/testresult/${testResultId}/report`,
+            method: RequestMethod.POST,
+            headers: getRequestHeaders(reportRequest.Format),
+            body: JSON.stringify(reportRequest),
+            dispatch,
+            onRequest: TestResultsActions.getTestRunReportAction_Request,
+            onComplete: TestResultsActions.getTestRunReportAction_Success,
+            onError: TestResultsActions.getTestRunReportAction_Failure
+        }).then((data: Blob | undefined) => downloadBlob(getFileNameWithExtension(`${testResultId}`, reportRequest.Format), data));
     }
 };

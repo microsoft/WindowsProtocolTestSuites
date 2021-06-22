@@ -843,5 +843,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Windows Server v2004
         /// </summary>
         WindowsServerV2004 = 0x1000000E,
+
+        /// <summary>
+        /// Windows Server v2022
+        /// </summary>
+        WindowsServer2022 = 0x1000000F,
     }
 }

@@ -27,3 +27,10 @@ export interface TestResultSummary {
     TestSuite: TestSuite;
     Configuration: string;
 }
+
+export type ReportFormat = 'Plain' | 'Json' | 'XUnit';
+
+export interface ReportRequest {
+    TestCases: string[];
+    Format: ReportFormat;
+}

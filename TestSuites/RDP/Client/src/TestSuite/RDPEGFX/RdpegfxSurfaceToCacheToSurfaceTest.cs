@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command.")]
         public void RDPEGFX_CacheManagement_PositiveTest()
         {
@@ -30,6 +32,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command over reliable UDP transport using Soft Sync Negotiation.")]
         public void RDPEGFX_CacheManagement_PositiveTest_OverUDP_Reliable_SoftSync()
         {
@@ -44,6 +48,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test SurfacetoCache, and CacheToSurface command over lossy UDP transport using Soft Sync Negotiation.")]
         public void RDPEGFX_CacheManagement_PositiveTest_OverUDP_Lossy_SoftSync()
         {
@@ -60,6 +66,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_SURFACE_TO_CACHE_PDU with the max cacheSlot number.")]
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSlot()
         {
@@ -110,6 +118,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when its cache reached max size.")]
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_MaxCacheSize()
         {
@@ -155,6 +165,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process correctly when receiving RDPGFX_SURFACE_TO_CACHE_PDU whose srcRect specific borders overlapped with surface.")]
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_SrcRectBorderOverlapSurface()
         {
@@ -202,6 +214,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_SURFACE_TO_CACHE_PDU with a used cacheSlot number.")]
         public void RDPEGFX_CacheManagement_PositiveTest_SurfaceToCache_UpdateCache()
         {
@@ -244,6 +258,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_CACHE_TO_SURFACE_PDU whose dest rects specific borders overlapped with surface.")]
         public void RDPEGFX_CacheManagement_PositiveTest_CacheToSurface_DestRectsBorderOverlapSurface()
         {
@@ -285,6 +301,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_CACHE_TO_SURFACE_PDU whose dest rects partially overlapped with each other.")]
         public void RDPEGFX_CacheManagement_PositiveTest_CacheToSurface_DestRectsOverlapped()
         {
@@ -341,6 +359,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_EVICT_CACHE_ENTRY_PDU to delete a slot.")]
         public void RDPEGFX_CacheManagement_PositiveTest_EvictCache_DeleteCacheSlot()
         {
@@ -381,6 +401,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("The server attempts to allocate cache slots which exceeds size upper limitation for default cache flag")]
         public void RDPEGFX_CacheManagement_Negative_Default_ExceedMaxCacheSize()
         {
@@ -428,6 +450,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Check if client can use an inexistent surface as source for cache successfully")]
         public void RDPEGFX_CacheManagement_Negative_SurfaceToCache_InexistentSurface()
         {
@@ -463,6 +487,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Check if client can copy cached bitmap data to inexistent surface")]
         public void RDPEGFX_CacheManagement_Negative_CacheToSurface_InexistentSurface()
         {
@@ -518,6 +544,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process cache correctly when receiving RDPGFX_EVICT_CACHE_ENTRY_PDU to delete a slot.")]
         public void RDPEGFX_CacheManagement_PositiveTest_EvictCache()
         {
@@ -565,6 +593,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Check if client can copy cached bitmap from an inexistent cache slot to destination surface")]
         public void RDPEGFX_CacheManagement_Negative_CacheToSurface_InexistentCacheSlot()
         {
@@ -620,6 +650,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Check if client can handle a request of deleting an inexistent cache slot")]
         public void RDPEGFX_CacheManagement_Negative_Delete_InexistentCacheSlot()
         {

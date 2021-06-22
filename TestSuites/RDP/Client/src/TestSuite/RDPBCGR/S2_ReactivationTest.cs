@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT can process the Deactivation-Reactivation successfully.")]
         public void BVT_ReactivationTest_PositiveTest_BitmapHostCacheSupported()
         {
@@ -84,6 +86,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure SUT can process the Deactivation-Reactivation successfully.")]
         public void S2_ReactivationTest_PositiveTest_BitmapHostCacheNotSupported()
         {

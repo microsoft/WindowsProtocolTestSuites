@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Test Environment</title>
+    <style>
+        div.Title
+        {
+            font-family: Arial;
+            font-size: larger;
+            margin-bottom: 0.625rem;
+        }
+
+        div.Context
+        {
+            font-family: 'Segoe UI';
+            font-size: medium;
+            margin-top: auto;
+        }
+
+        .icon
+        {
+            font-family: 'Segoe UI';
+            font-size: medium;
+            font-weight: bold;
+            margin-top: 0.625rem;
+            text-align: center;
+        }
+
+        .List
+        {
+            margin-top: 0.25rem;
+        }
+
+        .img
+        {
+            vertical-align: text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        <p>
+            You can run this test suite in a workgroup or domain environment using either physical or virtual machines. This section describes the test environment
+            using physical computers. For information about configuring a virtual machine, see
+            <a href="https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine">
+                https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine
+            </a>
+            .
+        </p>
+        <h3>
+            Domain Environment
+        </h3>
+        <p>
+            The domain environment requires interactions between the following computers and server roles. Note that the domain controller, required for a domain
+            environment, can be installed on the SUT.
+        </p>
+        <ul>
+            <li>
+                <p>
+                    The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
+                </p>
+            </li>
+            <li>
+                <p>
+                    The SUT, which runs a client implementation of the protocol that is being tested. The SUT responds to the requests sent by the driver computer.
+                </p>
+            </li>
+            <li>
+                <p>
+                    The DC provides functionality that is required to test the protocol implementation. Specifically, the DC hosts Active Directory Domain Services (AD
+                    DS).
+                </p>
+            </li>
+        </ul>
+        <p>
+            The following figure shows the domain environment:
+        </p>
+
+        <div class="Context" style="float: left">
+            <img class="img" src="domain.png" />
+        </div>
+        <div style="clear:both" />
+
+        <h3>
+            Workgroup Environment
+        </h3>
+        <p>
+            The workgroup environment requires interactions between the following computers:
+        </p>
+        <ul>
+            <li>
+                <p>
+                    The driver computer, which runs the test cases by sending requests over the wire in the form of protocol messages.
+                </p>
+            </li>
+            <li>
+                <p>
+                    The SUT, which runs a client implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.
+                </p>
+            </li>
+        </ul>
+        <p>
+            The following figure shows the workgroup environment:
+        </p>
+
+        <div class="Context" style="float: left">
+            <img class="img" src="workgroup.png" />
+        </div>
+        <div style="clear:both" />
+
+        <div class="icon" style="float:left">
+            <img class="img" src="arrow_right.png" /> <a href="configure.html">Configure environment for test suite version no less than v4.20.9.0, .NET Core</a>
+        </div>
+    </div>
+</body>
+</html>

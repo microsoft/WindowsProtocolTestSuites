@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to test capability advertise from client and server sends capability confirm.")]
         public void RDPEGFX_CapabilityExchange_PositiveTest()
         {
@@ -51,6 +53,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Server set an incorrect capability version in CapabilityConfirm response.")]
         public void RDPEGFX_CapabilityExchange_Negative_IncorrectVersion()
         {
@@ -84,6 +88,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEGFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Server set an incorrect CapsDataLength in CapabilityConfirm response")]
         public void RDPEGFX_CapabilityExchange_Negative_IncorrectCapsDataLength()
         {

@@ -36,6 +36,9 @@ import {
     GET_TESTRESULTDETAIL_REQUEST,
     GET_TESTRESULTDETAIL_SUCCESS,
     GET_TESTRESULTDETAIL_FAILURE,
+    GET_TESTRUNREPORT_REQUEST,
+    GET_TESTRUNREPORT_SUCCESS,
+    GET_TESTRUNREPORT_FAILURE,
     TestResultsActionTypes
 } from '../actions/TestResultsActions';
 import { Configuration } from '../model/Configuration';
@@ -45,9 +48,10 @@ import { TestSuite } from '../model/TestSuite';
 export interface TestResultsState {
     isLoading: boolean;
     isPosting: boolean;
+    isDownloading: boolean;
     errorMsg?: string;
     allTestSuites: TestSuite[];
-    allConfigurations: Configuration[];
+    allConfigurations: Required<Configuration>[];
     pageNumber: number;
     pageCount: number;
     currentPageResults: TestResultOverview[];
@@ -61,6 +65,7 @@ export interface TestResultsState {
 const initialTestResultsState: TestResultsState = {
     isLoading: false,
     isPosting: false,
+    isDownloading: false,
     errorMsg: undefined,
     allTestSuites: [],
     allConfigurations: [],
@@ -74,24 +79,38 @@ const initialTestResultsState: TestResultsState = {
     selectedTestResult: undefined
 };
 
-const getUpdatedConfigurations = (state: TestResultsState, newConfigurations: Configuration[]) => {
+const getUpdatedRequiredConfigurations = (state: TestResultsState, newConfigurations: Configuration[]): Required<Configuration>[] => {
     if (state.allConfigurations.length === 0) {
-        return newConfigurations;
+        return newConfigurations.map(item => {
+            return {
+                ...item,
+                Id: item.Id!
+            };
+        });
     }
 
-    const updatedConf = state.allConfigurations.map((item) => {
+    const updatedRequiredConf = state.allConfigurations.map((item) => {
         const updatedList = newConfigurations.filter((i) => i.Id === item.Id);
         if (updatedList.length > 0) {
-            return updatedList[0];
+            return {
+                ...updatedList[0],
+                Id: updatedList[0].Id!
+            };
         }
         else {
             return item;
         }
     });
 
-    const newConf = newConfigurations.filter((item) => updatedConf.reduce((res: boolean, curr) => res && curr.Id !== item.Id, true));
+    const newRequiredConf = newConfigurations.filter((item) => updatedRequiredConf.reduce((res: boolean, curr) => res && curr.Id !== item.Id, true))
+        .map(item => {
+            return {
+                ...item,
+                Id: item.Id!
+            };
+        });
 
-    return [...updatedConf, ...newConf]
+    return [...updatedRequiredConf, ...newRequiredConf]
 };
 
 export const getTestResultsReducer = (state = initialTestResultsState, action: TestResultsActionTypes | TestSuitesActionTypes | TestSuiteConfigurationActionTypes | SelectedTestCasesActionTypes): TestResultsState => {
@@ -128,7 +147,7 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
             return {
                 ...state,
                 isPosting: false,
-                allConfigurations: getUpdatedConfigurations(state, action.payload)
+                allConfigurations: getUpdatedRequiredConfigurations(state, action.payload)
             };
 
         case GET_TESTSUITE_CONFIGURATIONS_FAILURE:
@@ -246,6 +265,26 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
             return {
                 ...state,
                 isLoading: false,
+                errorMsg: action.errorMsg
+            };
+
+        case GET_TESTRUNREPORT_REQUEST:
+            return {
+                ...state,
+                isDownloading: true,
+                errorMsg: undefined,
+            };
+
+        case GET_TESTRUNREPORT_SUCCESS:
+            return {
+                ...state,
+                isDownloading: false,
+            };
+
+        case GET_TESTRUNREPORT_FAILURE:
+            return {
+                ...state,
+                isDownloading: false,
                 errorMsg: action.errorMsg
             };
 

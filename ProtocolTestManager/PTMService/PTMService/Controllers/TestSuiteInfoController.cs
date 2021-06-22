@@ -4,6 +4,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System.Linq;
+using System;
+using System.IO;
+using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
@@ -64,6 +69,76 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             };
 
             return result;
+        }
+
+        /// <summary>
+        /// Endpoint to save profile by test result id
+        /// </summary>
+        /// <param name="testResultId">Test result id</param>
+        /// <returns></returns>
+        [Route("{testResultId}/profile/export")]
+        [HttpPost]
+        public IActionResult SaveProfile(int testResultId)
+        {
+
+            string profileLocation = PTMKernelService.SaveProfileSettingsByTestResult(testResultId);
+
+            var profileStream = new FileStream(profileLocation, FileMode.Open, FileAccess.Read, FileShare.Read);
+            
+            return new FileStreamResult(profileStream, System.Net.Mime.MediaTypeNames.Text.Xml)
+            {
+                FileDownloadName = Path.GetFileName(profileLocation)
+            };
+        }
+
+        /// <summary>
+        /// Endpoint to save profile.
+        /// </summary>
+        /// <param name="request">Profile request instance</param>
+        /// <returns>Profile stream</returns>
+        [Route("profile/export")]
+        [HttpPost]
+        public IActionResult SaveProfile(ProfileExportRequest request)
+        {
+
+            request.FileName = PTMKernelService.EnsureProfileName(request.FileName);
+
+            string profileLocation = PTMKernelService.SaveProfileSettings(request);
+
+            var profileStream = new FileStream(profileLocation, FileMode.Open, FileAccess.Read, FileShare.Read);
+            
+            return new FileStreamResult(profileStream, System.Net.Mime.MediaTypeNames.Text.Xml)
+            {
+                FileDownloadName = Path.GetFileName(profileLocation)
+            };
+        }
+
+        /// <summary>
+        /// Loads an existing profile.
+        /// </summary>
+        /// <param name="package">Upload request.</param>
+        /// <param name="testSuiteId">Test suite id</param>
+        /// <param name="configurationId">Configuration id</param>
+        /// <returns></returns>
+        [Route("{testSuiteId}/profile/{configurationId}")]
+        [HttpPost]
+        public bool LoadProfile([FromForm] IFormFile package, [FromForm] int testSuiteId, [FromForm] int configurationId)
+        {
+            if (package == null)
+            {
+                throw new ArgumentNullException(nameof(package));
+            }
+
+            var profileRequest = new ProfileRequest()
+            {
+                FileName = $"{Guid.NewGuid().ToString()}{TestSuiteConsts.ProfileExtension}",
+                TestSuiteId = testSuiteId,
+                ConfigurationId = configurationId,
+                Stream = package.OpenReadStream()
+            };
+
+            PTMKernelService.LoadProfileSettings(profileRequest);
+            return true;
         }
     }
 }

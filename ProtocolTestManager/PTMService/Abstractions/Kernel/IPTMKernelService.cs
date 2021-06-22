@@ -2,8 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
+using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
@@ -92,6 +94,46 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="selectedTestCases">The optional selected test cases.</param>
         /// <returns>The test run Id.</returns>
         int CreateTestRun(int configurationId, string[] selectedTestCases);
+
+        /// <summary>
+        /// Get the path to a test run report.
+        /// </summary>
+        /// <param name="testResultId">The tes restult Id.</param>
+        /// <param name="format">The report format.</param>
+        /// <param name="testCases">The test case list to be exported.</param>
+        /// <returns>The path to the test run report.</returns>
+        string GetTestRunReport(int testResultId, ReportFormat format, string[] testCases);
+
+        #endregion
+
+        #region Save and Load profile
+
+        /// <summary>
+        /// Saves profile
+        /// </summary>
+        /// <param name="request">Profile request.</param>
+        /// <returns>Returns location where file was saved.</returns>
+        string SaveProfileSettingsByTestResult(int testResultId);
+
+        /// <summary>
+        /// Saves profile
+        /// </summary>
+        /// <param name="request">Profile request.</param>
+        /// <returns>Returns location where file was saved.</returns>
+        string SaveProfileSettings(ProfileExportRequest request);
+
+        /// <summary>
+        /// Loads a ptm profile.
+        /// </summary>
+        /// <param name="request">Profile request.</param>
+        void LoadProfileSettings(ProfileRequest request);
+
+        /// <summary>
+        /// Ensures a profile name matches test manager format.
+        /// </summary>
+        /// <param name="profileName">Profile name.</param>
+        /// <returns>Returns compliant profile name.</returns>
+        string EnsureProfileName(string profileName);
 
         #endregion
     }

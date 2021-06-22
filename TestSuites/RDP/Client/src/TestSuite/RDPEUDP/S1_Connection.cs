@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection.")]
         public void S1_Connection_Initialization_InitialUDPConnection()
         {
@@ -43,6 +45,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports only RDPUDP_PROTOCOL_VERSION_1.")]
         public void S1_Connection_Initialization_InitialUDPConnection_UUDPVer1()
         {
@@ -68,6 +72,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client can initiate a reliable RDP-UDP (RDP-UDP-R) connection and a lossy RDP-UDP (RDP-UDP-L) connection. Server supports highest version RDPUDP_PROTOCOL_VERSION_2.")]
         public void S1_Connection_Initialization_InitialUDPConnection_UUDPVer2()
         {
@@ -93,6 +99,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEUDP")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("Verify the RDP client will resend the ACK packet to keep alive.")]
         public void S1_Connection_Keepalive_ClientSendKeepAlive()
         {

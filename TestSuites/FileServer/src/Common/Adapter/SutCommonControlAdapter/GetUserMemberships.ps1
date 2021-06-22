@@ -37,14 +37,15 @@ $commandForLocalComputer = {
     )
 
     $localUser = Get-LocalUser -Name $userName
-    $localUserSid = $localUser.SID.Value
+    $localUserSid = $localUser.SID.Value ?? $localUser.SID
 
     $localGroups = @(Get-LocalGroup)
     $localMemberships = @()
     foreach ($localGroup in $localGroups) {
         $localGroupMembers = @(Get-LocalGroupMember -Name $localGroup.Name)
         foreach ($localGroupMember in $localGroupMembers) {
-            if ($localGroupMember.SID.Value -eq $localUserSid) {
+            $localGroupMemberSid = $localGroupMember.SID.Value ?? $localGroupMember.SID
+            if ($localGroupMemberSid -eq $localUserSid) {
                 $localMemberships += $localGroup
                 break
             }

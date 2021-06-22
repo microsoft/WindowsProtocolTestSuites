@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
+using System.IO;
 using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
@@ -40,6 +41,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             /// The test results.
             /// </summary>
             public TestResultOverview[] TestResults { get; set; }
+        }
+
+        public class ReportRequest
+        {
+            public string[] TestCases { get; set; }
+
+            public ReportFormat Format { get; set; }
         }
 
         /// <summary>
@@ -139,6 +147,33 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
+        /// Get test result report.
+        /// </summary>
+        /// <param name="id">The Id of test result.</param>
+        /// <param name="request">The report export request.</param>
+        /// <returns>The test result report.</returns>
+        [Route("{id}/report")]
+        [HttpPost]
+        public IActionResult GetTestRunReport(int id, [FromBody] ReportRequest request)
+        {
+            var reportPath = PTMKernelService.GetTestRunReport(id, request.Format, request.TestCases);
+            var reportStream = new FileStream(reportPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            return new FileStreamResult(reportStream, GetMIMEType(request.Format))
+            {
+                FileDownloadName = Path.GetFileName(reportPath)
+            };
+
+            string GetMIMEType(ReportFormat format) => format switch
+            {
+                ReportFormat.Plain => "text/plain",
+                ReportFormat.Json => "text/plain",
+                ReportFormat.XUnit => "application/xml",
+                _ => throw new InvalidOperationException($"\"{format}\" is not a valid report format.")
+            };
+        }
+
+        /// <summary>
         /// Get result of a specific test case.
         /// </summary>
         /// <param name="id">The Id of test result.</param>
@@ -150,7 +185,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         {
             var testRun = PTMKernelService.GetTestRun(id);
 
-            var result = testRun.GetTestCaseDetail(testCaseName);
+            var result = testRun.GetTestCaseResult(testCaseName);
 
             return result;
         }

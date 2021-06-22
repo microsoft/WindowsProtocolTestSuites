@@ -102,16 +102,23 @@ if([System.String]::IsNullOrEmpty($password))
 
 $azgroups = $params.Parameters.Groups
 $users =  $params.Parameters.Users
+$isDomainEnv = (gwmi win32_computersystem).partofdomain
 
 #----------------------------------------------------------------------------
 # Start required services
 #----------------------------------------------------------------------------
-.\Write-Info.ps1 "Check and start Active Directory Domain Services"
-StartService "NTDS"
+if($isDomainEnv -eq $true)
+{
+    .\Write-Info.ps1 "Check and start Active Directory Domain Services"
+    StartService "NTDS"
 
-.\Write-Info.ps1 "Check and start Active Directory Web Services"
-StartService "ADWS"
-
+    .\Write-Info.ps1 "Check and start Active Directory Web Services"
+    StartService "ADWS"
+}
+else
+{
+    .\Write-Info.ps1 "Workgroup env, skip checking Active Directory Services"
+}
 
 #----------------------------------------------------------------------------
 # Create CBAC ENV
@@ -119,28 +126,35 @@ StartService "ADWS"
 $domainName = (Get-WmiObject win32_computersystem).Domain
 
 # Retry to wait until the ADWS can respond to PowerShell commands correctly
-$retryTimes = 0
-$domain = $null
-while ($retryTimes -lt 30) {
-    $domain = Get-ADDomain $domainName
-    if ($domain -ne $null) {
-        break;
+if($isDomainEnv -eq $true)
+{
+    $retryTimes = 0
+    $domain = $null
+    while ($retryTimes -lt 30) {
+        $domain = Get-ADDomain $domainName
+        if ($domain -ne $null) {
+            break;
+        }
+        else {
+            Start-Sleep 10
+            $retryTimes += 1
+        }
     }
-    else {
-        Start-Sleep 10
-        $retryTimes += 1
+
+    if ($domain -eq $null) {
+        .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
     }
 }
-
-if ($domain -eq $null) {
-    .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
+else
+{
+    .\Write-Info.ps1 "Workgroup env, skip checking ADWS Services"
 }
 
 #----------------------------------------------------------------------------
 # Create and active test accounts
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Create and active test accounts"
-if((gwmi win32_computersystem).partofdomain -eq $true)
+if($isDomainEnv -eq $true)
 {
     $domainAdmin = $config.lab.core.username
 
@@ -177,10 +191,21 @@ if((gwmi win32_computersystem).partofdomain -eq $true)
 }
 else
 {
+    foreach($g in $azgroups)
+    {
+        .\Write-Info.ps1 "Create group: $($g.Group.GroupName)"
+        $azGroupDN = $g.Group.GroupName
+        CMD /C net.exe localgroup $azGroupDN /ADD 2>&1 | .\Write-Info.ps1
+    }
+
     foreach($user in $users.User)
     {        
         .\Write-Info.ps1 "Create user account: $($user.Username)"
-        CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1   
+        CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1
+        if($user.Group -ne $null)
+        {
+            CMD /C net.exe localgroup $user.Group $user.Username /ADD 2>&1 | .\Write-Info.ps1
+        }
     }
 
     .\Write-Info.ps1 "Enable Guest account"

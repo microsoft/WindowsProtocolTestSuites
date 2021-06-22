@@ -13,6 +13,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can hide the pointer correctly when receiving a Fast-Path System Pointer Hidden Update message.")]
         public void S10_FastPathOutput_PositiveTest_PointerHidden()
         {
@@ -74,6 +76,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can move the pointer correctly when receiving Fast-Path Pointer Position Update messages.")]
         public void S10_FastPathOutput_PositiveTest_PointerPosUpdate_PointerMove()
         {
@@ -135,6 +139,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can locate the pointer correctly when receiving Fast-Path Pointer Position Update messages with pointer positions on the border of screen.")]
         public void S10_FastPathOutput_PositiveTest_PointerPosUpdate_PointerOnTheBorderOfScreen()
         {
@@ -208,6 +214,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Color Pointer Update message.")]
         public void S10_FastPathOutput_PositiveTest_ColorPointer_InitPointer()
         {
@@ -265,6 +273,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can update the pointer correctly when receiving multiple Fast-Path Color Pointer Update message.")]
         public void S10_FastPathOutput_PositiveTest_ColorPointer_UpdatePointer()
         {
@@ -326,6 +336,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Color Pointer Update message, the pointer's width and height are set to maximum allowed value when large pointer is not supported.")]
         public void S10_FastPathOutput_PositiveTest_ColorPointer_MaxAllowedWidthHeightLargePointerNotSupported()
         {
@@ -388,6 +400,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Color Pointer Update message, the cacheIndex is set to the maximum allowed value according to capability change.")]
         public void S10_FastPathOutput_PositiveTest_ColorPointer_MaxAllowedCacheIndex()
         {
@@ -448,6 +462,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Color Pointer Update message with hotspot on the border of pointer.")]
         public void S10_FastPathOutput_PositiveTest_ColorPointer_HotSpotOnTheBorderOfPointer()
         {
@@ -505,6 +521,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Color Pointer Update message with xorMaskData with padded data (set pointer's width to an odd value).")]
         public void S10_FastPathOutput_PositiveTest_ColorPointer_OddWidth()
         {
@@ -562,6 +580,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path New Pointer Update message.")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_InitPointer()
         {
@@ -619,6 +639,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can update the pointer correctly when receiving multiple Fast-Path New Pointer Update messages.")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_UpdatePointer()
         {
@@ -680,6 +702,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path New Pointer Update message, the pointer's width and height are set to maximum allowed value when large pointer is not supported.")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_MaxAllowedWidthHeightLargePointerNotSupported()
         {
@@ -742,6 +766,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path New Pointer Update message, the cacheIndex is set to the maximum allowed value according to capability change.")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_MaxAllowedCacheIndex()
         {
@@ -802,6 +828,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path New Pointer Update message with hotspot on the border of pointer.")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_HotSpotOnTheBorderOfPointer()
         {
@@ -859,6 +887,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path New Pointer Update message with xorMaskData with padded data (set pointer's width to an odd value).")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_OddWidth()
         {
@@ -916,6 +946,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path New Pointer Update message with XorBpp be set to 32.")]
         public void S10_FastPathOutput_PositiveTest_NewPointer_XorBpp_32()
         {
@@ -973,6 +1005,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Cached Pointer Update message to update the pointer to the shape cached from previous Fast-Path Color Pointer Update message.")]
         public void S10_FastPathOutput_PositiveTest_CachedPointer_WithColorPointer()
         {
@@ -1038,6 +1072,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Cached Pointer Update message to update the pointer to the shape cached from previous Fast-Path New Pointer Update message.")]
         public void S10_FastPathOutput_PositiveTest_CachedPointer_WithNewPointer()
         {
@@ -1104,6 +1140,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process correctly when receiving two Fast-Path New Pointer Update messages with the same cacheIndex.")]
         public void S10_FastPathOutput_PositiveTest_CachedPointer_WithNewPointer_ReuseCacheIndex()
         {
@@ -1173,6 +1211,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can process correctly when cached multiple pointer shapes from Fast-Path New Pointer Update messages.")]
         public void S10_FastPathOutput_PositiveTest_CachedPointer_WithNewPointer_MultiCachedPointers()
         {
@@ -1242,6 +1282,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP10.7")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of small size.")]
         public void S10_FastPathOutput_PositiveTest_LargePointer_Small()
         {
@@ -1264,6 +1306,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP10.7")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of medium size.")]
         public void S10_FastPathOutput_PositiveTest_LargePointer_Medium()
         {
@@ -1286,6 +1330,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP10.7")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of large size.")]
         public void S10_FastPathOutput_PositiveTest_LargePointer_Large()
         {
@@ -1308,6 +1354,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(1)]
         [TestCategory("RDP10.7")]
         [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to verify RDP client can show the pointer correctly when receiving a Fast-Path Large Pointer Update message of extra-large size.")]
         public void S10_FastPathOutput_PositiveTest_LargePointer_ExtraLarge()
         {

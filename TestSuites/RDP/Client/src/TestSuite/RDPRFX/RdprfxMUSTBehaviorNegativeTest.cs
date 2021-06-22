@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(2)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Negative test for MUST statements in message of TS_RFX_CODEC_CHANNELT.")]
         public void Rdprfx_MUST_NegativeTest_TsRfxCodecChannelT()
         {
@@ -45,6 +47,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(2)]        
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Negative test for MUST statements in message of TS_RFX_SYNC.")]
         public void Rdprfx_MUST_NegativeTest_TsRfxSync()
         {
@@ -72,6 +76,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(2)]        
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Negative test for MUST statements in message of TS_RFX_CHANNELS.")]
         public void Rdprfx_MUST_NegativeTest_TsRfxChannels()
         {

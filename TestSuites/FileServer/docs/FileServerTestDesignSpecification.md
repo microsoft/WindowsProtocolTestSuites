@@ -215,8 +215,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 90         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2622       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2632       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -542,10 +542,30 @@ This is used to test SMB2 common user scenarios.
 
 |                          |                                                                                                                                                       |
 |--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_AES\_256\_CCM                                                                                                                                |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-CCM preferred. |
+| **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-CCM preferred.            |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES context.                                                           |
+| **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_GCM                                                                                                                                |
 | **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred. |
 | **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
 | **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-128-GCM preferred.            |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
+| **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT\_Negotiate\_SMB311\_Preauthentication\_Encryption\_AES\_256\_GCM                                                                                                                                |
+| **Description**         | This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect and SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-GCM preferred. |
+| **Prerequisites**        | The server implements dialect 3.11.                                                                                                                                                       |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES context and SMB2\_ENCRYPTION\_CAPABILITIES context with AES-256-GCM preferred.            |
 |                          | 2.  Server returns SMB2 NEGOTIATE response with dialect 3.11 and the correct Ciphers in SMB2\_ENCRYPTION\_CAPABILITIES  context.                                                          |
 | **Cleanup**              |                                                                                                                                                                                           |
 
@@ -959,7 +979,17 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT_Encryption_SMB311_CCM                                                                                                                                    |
 | **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as encryption algorithm.  | 
 | **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
-| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-CCM is as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as cipher algorithm.                                                                                                                         |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-CCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-CCM as cipher algorithm.                                                                                                                         |
+|                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
+|                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request and gets successful responses.                                     |
+| **Cleanup**              |                                                                                                                                                                               |
+
+|||
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Encryption_SMB311_AES_256_CCM                                                                                                                                    |
+| **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-CCM as encryption algorithm.  | 
+| **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-256-CCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-CCM as cipher algorithm.                                                                                                                         |
 |                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
 |                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request and gets successful responses.                                     |
 | **Cleanup**              |                                                                                                                                                                               |
@@ -969,7 +999,17 @@ This is used to test SMB2 common user scenarios.
 | **Test ID**              | BVT_Encryption_SMB311_GCM                                                                                                                                                 |
 | **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as encryption algorithm.   |
 | **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
-| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-GCM is as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as cipher algorithm.            | 
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-128-GCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-128-GCM as cipher algorithm.            | 
+|                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
+|                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request, and gets successful  responses.                                   |
+| **Cleanup**              |                                                                                                                                                                              |
+
+|||
+|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Encryption_SMB311_AES_256_GCM                                                                                                                                                 |
+| **Description**         | This case is to ensure server could handle encrypted requests correctly with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-GCM as encryption algorithm.   |
+| **Prerequisites**        | The server implement dialect 3.11.                                                                                                                                           |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context. AES-256-GCM is sent as the preferred cipher algorithm. Server should reply NEGOTIATE response with dialect 3.11, SMB2\_ENCRYPTION\_CAPABILITIES context and AES-256-GCM as cipher algorithm.            | 
 |                          | 2.  Client sends SESSION\_SETUP request and gets response.                                                                                                                   |
 |                          | 3.  Client sends encrypted TREE\_CONNECT, Create, Write, Read, Close, TREE\_DISCONNECT and Logoff request, and gets successful  responses.                                   |
 | **Cleanup**              |                                                                                                                                                                              |
@@ -6437,6 +6477,130 @@ Scenario see [Scenario](#3.1.57).
 |                          | 2.  Client write compressible data to server by sending uncompressed WRITE request. |
 |                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
 |                          | 4.  Verifies the READ response is chained and compressed with supported algorithm and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | SMB2Compression_LZNT1_LargeFile |
+| **Description** | This test case is designed to test whether server can decompress large file WRITE request and compress read response correctly using LZNT1. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZNT1; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write 1 megabyte copmressible data to server by sending WRITE request compressed with LZNT1 for multiple times to generate a large file. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          | 4.  Verifies each READ reponse is compressed with LZNT1 and data read out are equal to the written ones. |
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | SMB2Compression_LZ77_LargeFile |
+| **Description** | This test case is designed to test whether server can decompress large file WRITE request and compress read response correctly using LZ77. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZ77; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write 1 megabyte copmressible data to server by sending WRITE request compressed with LZ77 for multiple times to generate a large file. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          | 4.  Verifies each READ reponse is compressed with LZ77 and data read out are equal to the written ones. |
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | SMB2Compression_LZ77Huffman_LargeFile |
+| **Description** | This test case is designed to test whether server can decompress large file WRITE request and compress read response correctly using LZ77 Huffman. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to LZ77 Huffman; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write copmressible data to server by sending WRITE request compressed with LZ77 Huffman for multiple times to generate a large file. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          | 4.  Verifies each READ reponse is compressed with LZ77 Huffman and data read out are equal to the written ones. |
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_CompressedWriteRequest_LargeFile|
+|**Description**| This test case is designed to test whether server can handle compressed large file WRITE request correctly using supported compression algorithms. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all comression algorithm supported by SUT as below:
+|                          |         a.  Client write 1 megabyte copmressible data to server by sending WRITE request compressed with the given compression algorithm for multiple times to generate a large file. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          |         c.  Verifies each READ reponse is compressed with supported algorithm and data read out are equal to the written ones. |
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_CompressibleReadResponse_LargeFile |
+|**Description**| This test case is designed to test whether server can compress large file read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible. |
+| **Prerequisites** | The server implements dialect 3.11 and compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write 1 megabyte copmressible data to server by sending uncompressed WRITE request for multiple times to generate a large file. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          | 4.  Verifies each READ reponse is compressed with supported algorithm and data read out are equal to the written ones. |
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_LargeFile|
+|**Description**| This test case is designed to test whether server can decompress large file WRITE request and compress READ response correctly using chained compression and PatternV1. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to PatternV1 and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write 1 megabyte compressible data to server by sending WRITE request chained and compressed with PatternV1 for multiple times to generate a large file. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          | 4.  Verifies each READ response is chained and compressed with supported algorithm and data read out are equal to the written ones. |
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFront_LargeFile|
+|**Description**| This test case is designed to test whether server can handle chained and compressed large file WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at front. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all compression algorithm supported by SUT as below:
+|                          |         a.  Client write 1 megabyte compressible data to server by sending WRITE request chained and compressed with the given compression algorithm for multiple times to generate a large file. The PatternV1 compressible data appear at front. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          |         c.  Verifies each READ response is chained and compressed with supported algorithm and data read out are equal to the written ones. |
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtEnd_LargeFile|
+|**Description**| This test case is designed to test whether server can handle chained and compressed large file WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at end. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all compression algorithm supported by SUT as below:
+|                          |         a.  Client write 1 megabyte compressible data to server by sending WRITE request chained and compressed with the given compression algorithm for multiple times to generate a large file. The PatternV1 compressible data appear at end. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          |         c.  Verifies each READ response is chained and compressed with supported algorithm and data read out are equal to the written ones. |
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFrontAndEnd_LargeFile|
+|**Description**| This test case is designed to test whether server can handle chained and compressed large file WRITE request correctly using supported compression algorithms. The PatternV1 compressible data appear at both front and end. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client iterates through all compression algorithm supported by SUT as below:
+|                          |         a.  Client write 1 megabyte compressible data to server by sending WRITE request chained and compressed with the given compression algorithm for multiple times to generate a large file. The PatternV1 compressible data appear at both front and end. |
+|                          |         b.  Client read the data just written by sending READ request without SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          |         c.  Verifies each READ response is chained and compressed with supported algorithm and data read out are equal to the written ones. |
+|                          | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+|**Test ID**| SMB2Compression_Chained_PatternV1_CompressibleReadResponse_LargeFile |
+|**Description**| This test case is designed to test whether server can chain and compress large file read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible. |
+| **Prerequisites** | The server implements dialect 3.11 and chained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with compression algorithms set to all supported ones and chained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write 1 megabyte compressible data to server by sending uncompressed WRITE request for multiple times to generate a large file. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file. |
+|                          | 4.  Verifies each READ response is chained and compressed with supported algorithm and data read out are equal to the written ones. |
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cleanup**              ||
 

@@ -78,7 +78,15 @@ export function getNavSteps(wizardProps: StepWizardChildProps, configureMethod?:
                 IsActive: false,
                 IsEnabled: false,
             }
-        } else if (item.TargetStep < wizardProps.currentStep) {
+        }
+        else if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
+            return {
+                ...item,
+                IsActive: false,
+                IsEnabled: false
+            }
+        }
+        else if (item.TargetStep < wizardProps.currentStep) {
             return {
                 ...item,
                 IsActive: false,

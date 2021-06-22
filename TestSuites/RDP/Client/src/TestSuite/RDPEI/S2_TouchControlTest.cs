@@ -25,6 +25,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("RDPEI")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the RDPINPUT_SUSPEND_TOUCH_PDU message.")]
         public void Rdpei_TouchControlTest_Positive_Suspend()
         {
@@ -63,6 +64,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("RDPEI")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the RDPINPUT_RESUME_TOUCH_PDU message.")]
         public void Rdpei_TouchControlTest_Positive_Resume()
         {
@@ -115,6 +117,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Ensure the client will drop the connection when the pduLength in RDPINPUT_SUSPEND_TOUCH_PDU message is inconsistent with the length of the message.")]
         public void Rdpei_TouchControlTest_Negative_InvalidSuspendPduLength()
         {
@@ -161,6 +164,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Ensure the client will drop the connection when the pduLength in RDPINPUT_RESUME_TOUCH_PDU message is inconsistent with the length of the message.")]
         public void Rdpei_TouchControlTest_Negative_InvalidResumePduLength()
         {
@@ -206,6 +210,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Ensure the client will ignore the message with invalid eventId during running phase.")]
         public void Rdpei_TouchControlTest_Negative_InvalidEventIdInRunningPhase()
         {
@@ -250,6 +255,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the client will ignore the duplicated RDPINPUT_SUSPEND_TOUCH_PDU message.")]
         public void Rdpei_TouchControlTest_Negative_DuplicatedSuspend()
         {
@@ -293,6 +299,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         [TestCategory("TouchSimulated")]
         [TestCategory("Interactive")]
         [TestCategory("DeviceNeeded")]
+        [TestCategory("BasicFeature")]
         [Description("Test the client will ignore the duplicated RDPINPUT_RESUME_TOUCH_PDU message.")]
         public void Rdpei_TouchControlTest_Negative_DuplicatedResume()
         {

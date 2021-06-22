@@ -20,6 +20,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Sending client an encoded bitmap data which encoded with RLGR1 algorithm.")]
         public void Rdprfx_VideoMode_PositiveTest_RLGR1()
         {
@@ -108,6 +110,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Sending client an encoded bitmap data which encoded with RLGR3 algorithm.")]
         public void Rdprfx_VideoMode_PositiveTest_RLGR3()
         {
@@ -195,6 +199,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_SYNC message among frames of the video mode stream.")]
         public void Rdprfx_VideoMode_PositiveTest_SendTsRfxSyncInStream()
         {
@@ -305,6 +311,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_CODEC_VERSIONS message among frames of the video mode stream.")]
         public void Rdprfx_VideoMode_PositiveTest_SendTsRfxCodecVersioinsInStream()
         {
@@ -415,6 +423,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_CHANNELS message among frames of the video mode stream.")]
         public void Rdprfx_VideoMode_PositiveTest_SendTsRfxChannelsInStream()
         {
@@ -525,6 +535,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_CONTEXT message among frames of the video mode stream.")]
         public void Rdprfx_VideoMode_PositiveTest_SendTsRfxContextInStream()
         {
@@ -635,6 +647,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"When Video Mode is in effect, ensure the client terminates the RDP connection when the server uses an unsupported entropy algorithm to encode data.")]
         public void Rdprfx_VideoMode_NegativeTest_UnsupportedEntropyAlgorithm()
         {
@@ -719,6 +733,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Ensure  the client terminates the RDP connection when received a TS_RFX_FRAME_BEGIN with the blockLen field set to an invalid value.")]
         public void Rdprfx_VideoMode_NegativeTest_TsRfxFrameBegin_InvalidBlockLen()
         {
@@ -804,6 +820,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Test video mode differencing scenario.")]
         public void Rdprfx_VideoMode_PositiveTest_Differencing()
         {
@@ -960,6 +978,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when one rectangular is composed by four tiles in the corner in TS_RFX_REGION and the rectangle has no common boundaries with each tile.")]
         public void Rdprfx_VideoMode_PositiveTest_FourTilesComposeOneRectWithoutCommonBoundary()
         {
@@ -981,6 +1001,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when one rectangular is composed by four tiles in the corner in TS_RFX_REGION and the rectangle has common boundaries with each tile.")]
         public void Rdprfx_VideoMode_PositiveTest_FourTilesComposeOneRectWithCommonBoundary()
         {
@@ -1002,6 +1024,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangle.")]
         public void Rdprfx_VideoMode_PositiveTest_ListOfRects()
         {
@@ -1023,6 +1047,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangles with overlapping.")]
         public void Rdprfx_VideoMode_PositiveTest_ListOfRectsOverlap()
         {
@@ -1044,6 +1070,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when send a list of rectangles with overlapping and duplicated tile.")]
         public void Rdprfx_VideoMode_PositiveTest_ListOfRectsOverlapWithDuplicateTiles()
         {
@@ -1065,6 +1093,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can handle a duplicated tile correctly.")]
         public void Rdprfx_VideoMode_NegtiveTest_DuplicatedTile()
         {
@@ -1085,6 +1115,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when the numRects field of TS_RFX_REGION is set to zero.")]
         public void Rdprfx_VideoMode_PositiveTest_numRectsSetToZero()
         {
@@ -1106,6 +1138,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(1)]
         [TestCategory("RDP7.1")]
         [TestCategory("RDPRFX")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description(@"Verify the client can decode a RemoteFX encoded bitmap and render correctly when some tiles are out of the rectangle in TS_RFX_REGION.")]
         public void Rdprfx_VideoMode_PositiveTest_OutOfRects()
         {

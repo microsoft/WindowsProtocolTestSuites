@@ -24,6 +24,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEVOR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure RDP client drop the connection if the packet length of Presentation Request is invalid.")]
         public void Rdpevor_VideoControlTest_Negative_InvalidPacketLength()
         {
@@ -62,6 +64,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpevor
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
         [TestCategory("RDPEVOR")]        
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
         [Description("This test case is used to ensure RDP client drop the connection when the packet length of TSMM_VIDEO_DATA is invalid.")]
         public void Rdpevor_VideoStreamingTest_Negative_InvalidPacketLength()
         {

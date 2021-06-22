@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("RDP8.1")]
         [TestCategory("RDPBCGR")]
         [TestCategory("HeartBeat")]
+        [TestCategory("BasicRequirement")]
         [Description(@"This test verify client can receive Server Heartbeat PDU, and will auto-reconnect if not receive a heartbeat after certain time")]
         public void BVT_HealthMonitoring_PositiveTest_SendHeartbeat()
         {

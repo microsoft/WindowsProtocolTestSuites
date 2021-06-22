@@ -66,6 +66,17 @@ You should install the software listed below based on your testing purpose, incl
 
    This is required only when user want to use [PowerShell Core Remoting over SSH](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/Run-Test-Suites-With-Enabling-PowerShell-Core-Remoting-Over-SSH) for Windows platform.
 
+1. [WMF 5.1](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/wmf/setup/install-configure?view=powershell-7.1)
+
+   This is required only when user want to use PowerShell implementation on Windows Server 2012R2 for ISutCommonControlAdapter in [CommonTestSuite.ptfconfig](./TestSuites/FileServer/src/Common/TestSuite/CommonTestSuite.ptfconfig).
+
+   a. If you choose PowerShell implementation for ISutCommonControlAdapter in a domain environment where the DC runs Windows Server 2012R2, in order to get SID from the DC, you need to install WMF 5.1 on the DC, for other Windows Server versions newer than Windows Server 2012R2, you do not need to install WMF 5.1 on the DC.
+
+   b. If you choose PowerShell implementation for ISutCommonControlAdapter on Windows platforms (including Windows Server 2012R2 and newer versions) in workgroup environment, you do not need to install WMF 5.1 on the SUT.
+
+   c. If you choose managed implementation for ISutCommonControlAdapter on Windows platforms (including Windows Server 2012R2 and newer versions), it will use LDAP queries to get SID and only supports domain environment.
+
+
 If your work on Windows, you can use the script in `InstallPrerequisites` folder to automatically download and install these software.
 
 Tips when using the script in `InstallPrerequisites` folder:

@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { ListResponse } from "../model/ListResponse";
-import { TestResult, TestResultSummary } from "../model/TestResult";
+import { ReportRequest, TestResult, TestResultSummary } from "../model/TestResult";
 
 // define action consts
 export const LIST_TESTRESULTS_REQUEST = 'TESTRESULTS/LIST_TESTRESULTS_REQUEST';
@@ -19,6 +19,10 @@ export const GET_TESTRESULTDETAIL_REQUEST = 'TESTRESULTS/GET_TESTRESULTDETAIL_RE
 export const GET_TESTRESULTDETAIL_SUCCESS = 'TESTRESULTS/GET_TESTRESULTDETAIL_SUCCESS';
 export const GET_TESTRESULTDETAIL_FAILURE = 'TESTRESULTS/GET_TESTRESULTDETAIL_FAILURE';
 
+export const GET_TESTRUNREPORT_REQUEST = 'TESTRESULTS/GET_TESTRUNREPORT_REQUEST';
+export const GET_TESTRUNREPORT_SUCCESS = 'TESTRESULTS/GET_TESTRUNREPORT_SUCCESS';
+export const GET_TESTRUNREPORT_FAILURE = 'TESTRESULTS/GET_TESTRUNREPORT_FAILURE';
+
 // define action types
 interface ListTestResultsActionRequestType { type: typeof LIST_TESTRESULTS_REQUEST; payload: number; }
 interface ListTestResultsActionSuccessType { type: typeof LIST_TESTRESULTS_SUCCESS; payload: ListResponse; }
@@ -34,6 +38,10 @@ interface GetTestResultDetailActionRequestType { type: typeof GET_TESTRESULTDETA
 interface GetTestResultDetailActionSuccessType { type: typeof GET_TESTRESULTDETAIL_SUCCESS; payload: TestResult; }
 interface GetTestResultDetailActionFailureType { type: typeof GET_TESTRESULTDETAIL_FAILURE; errorMsg: string; }
 
+interface GetTestRunReportActionRequestType { type: typeof GET_TESTRUNREPORT_REQUEST; testResultId: number; reportRequest: ReportRequest; }
+interface GetTestRunReportActionSuccessType { type: typeof GET_TESTRUNREPORT_SUCCESS; }
+interface GetTestRunReportActionFailureType { type: typeof GET_TESTRUNREPORT_FAILURE; errorMsg: string; }
+
 export type TestResultsActionTypes =
     ListTestResultsActionRequestType |
     ListTestResultsActionSuccessType |
@@ -44,7 +52,10 @@ export type TestResultsActionTypes =
     ClearSelectedTestResultActionType |
     GetTestResultDetailActionRequestType |
     GetTestResultDetailActionSuccessType |
-    GetTestResultDetailActionFailureType;
+    GetTestResultDetailActionFailureType |
+    GetTestRunReportActionRequestType |
+    GetTestRunReportActionSuccessType |
+    GetTestRunReportActionFailureType;
 
 // define actions
 export const TestResultsActions = {
@@ -105,6 +116,24 @@ export const TestResultsActions = {
     getTestResultDetailAction_Failure: (error: string): TestResultsActionTypes => {
         return {
             type: GET_TESTRESULTDETAIL_FAILURE,
+            errorMsg: error
+        };
+    },
+    getTestRunReportAction_Request: (testResultId: number, reportRequest: ReportRequest): TestResultsActionTypes => {
+        return {
+            type: GET_TESTRUNREPORT_REQUEST,
+            testResultId: testResultId,
+            reportRequest: reportRequest
+        };
+    },
+    getTestRunReportAction_Success: (): TestResultsActionTypes => {
+        return {
+            type: GET_TESTRUNREPORT_SUCCESS
+        };
+    },
+    getTestRunReportAction_Failure: (error: string): TestResultsActionTypes => {
+        return {
+            type: GET_TESTRUNREPORT_FAILURE,
             errorMsg: error
         };
     }

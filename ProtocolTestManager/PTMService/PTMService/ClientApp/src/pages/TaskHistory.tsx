@@ -18,12 +18,13 @@ import { ConfigurationsDataSrv } from '../services/Configurations';
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
 import { TestResultsDataSrv } from '../services/TestResults';
 import { TestSuitesDataSrv } from '../services/TestSuites';
+import { ProfileDataSrv } from '../services/ProfileService';
 import { AppState } from '../store/configureStore';
 
-function getDict<TItem>(items: TItem[], keyName: keyof TItem) {
+function getDict<TItem extends Extract<{ [P in keyof TItem]: any }, { [P in keyof TItem]: number }>>(items: TItem[], keyName: keyof TItem) {
     return items.reduce((dict: { [key: number]: TItem }, item) => {
-        const keyValue = item[keyName] as unknown as number;
-        dict[keyValue] = item
+        const keyValue = item[keyName];
+        dict[keyValue] = item;
         return dict;
     }, {});
 }
@@ -159,7 +160,7 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
                                 ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
                                 : null
                         }
-                        <PrimaryButton disabled onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
+                        <PrimaryButton onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
                     </Stack>
                 );
             }
@@ -244,6 +245,7 @@ export function TaskHistory(props: any) {
             dispatch(TestResultsDataSrv.listTestResults());
         };
 
+        dispatch(TestResultsActions.clearSelectedTestResultAction());
         handler();
         const interval = setInterval(handler, 5000);
 
@@ -339,7 +341,7 @@ export function TaskHistory(props: any) {
             dispatch(() => history.push('/Tasks/TestResult', { from: 'TaskHistory' }));
         },
         onExportProfile: (testResultId: number) => {
-
+            dispatch(ProfileDataSrv.saveProfileByResultId(testResultId));
         }
     });
 
@@ -351,7 +353,7 @@ export function TaskHistory(props: any) {
     const onSearchClear = () => {
         dispatch(TestResultsActions.setQueryAction(undefined));
         dispatch(TestResultsDataSrv.listTestResults());
-    }
+    };
 
     const onChangePageNumber = (pageNumber: number) => {
         dispatch(TestResultsActions.setPageNumberAction(pageNumber));

@@ -24,6 +24,9 @@
     <Content Include="SutCommonControlAdapter\GetUserMemberships.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="SutCommonControlAdapter\GetGroupSid.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SutCommonControlAdapter\GetUserSid.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
