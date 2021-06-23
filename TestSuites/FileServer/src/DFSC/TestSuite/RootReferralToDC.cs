@@ -81,6 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends an invalid v4 Root referral request to DC and expects negative response.")]
         public void InvalidRootReferralToDC()
         {
+            CheckDomainName();
             uint status;
             string invalidRootPath = string.Format(@"\{0}\{1}", TestConfig.DomainFQDNName, DFSCTestUtility.Consts.InvalidComponent);
             utility.CheckEXOverSMB();

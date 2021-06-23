@@ -90,6 +90,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a v4 DC referral request with an invalid domain name(NETBIOS) to DC and expects negative response.")]
         public void InvalidDCReferralToDC()
         {
+            CheckDomainName();
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v4 DC referral request with an invalid domain name(NETBIOS) to DC.");
             utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V4, "\\" + DFSCTestUtility.Consts.InvalidComponent, true);

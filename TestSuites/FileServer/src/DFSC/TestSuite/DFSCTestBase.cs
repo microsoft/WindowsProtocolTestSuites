@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 {
@@ -55,6 +56,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             }
             client.Dispose();
             base.TestCleanup();
+        }
+
+        protected void CheckDomainName()
+        {
+            // valid domain name matching, for example: contoso.com, local.contoso.com
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
+            {
+                BaseTestSite.Assume.Inconclusive("This DFSC test case is not applicable in non-domain environment");
+            }
         }
     }
 }

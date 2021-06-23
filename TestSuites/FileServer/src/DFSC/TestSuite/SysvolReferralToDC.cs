@@ -101,6 +101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a v1 Sysvol referral request with invalid Domain name to DC and expects negative response.")]
         public void InvalidSysvolReferralToDC()
         {
+            CheckDomainName();
             uint status;
             string invalidFQDNSysvolPath = string.Format(@"\{0}\{1}", DFSCTestUtility.Consts.InvalidComponent, DfscConsts.SysvolShare);
 
