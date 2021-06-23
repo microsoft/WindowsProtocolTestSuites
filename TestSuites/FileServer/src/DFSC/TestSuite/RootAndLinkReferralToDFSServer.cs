@@ -77,6 +77,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a DFS root referral request v1 to DFS Server first, and then link referral request v1.")]
         public void RootAndLinkReferralEXStandaloneV1ToDFSServer()
         {
+            CheckDomainName();
             utility.CheckEXOverSMB();
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a DFS root referral request v1 to DFS Server, the request path is stand-alone, and expects success.");
             ValidRootOrLinkReferralToDFSServer(ReferralEntryType_Values.DFS_REFERRAL_V1, false, true, true);
