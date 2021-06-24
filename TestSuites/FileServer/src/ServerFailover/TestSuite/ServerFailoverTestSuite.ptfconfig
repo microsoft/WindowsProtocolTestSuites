@@ -9,7 +9,7 @@
 
   <Properties>
     <Group name="Cluster">
-      <Property name="FailoverTimeout" value ="300">
+      <Property name="FailoverTimeout" value ="480">
         <Description>
           Timeout in seconds specially for file server failover scenarios
         </Description>
