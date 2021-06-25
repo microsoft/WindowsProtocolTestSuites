@@ -1,10 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 {
@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         private DFSCTestConfig testConfig;
 
         #region consts
-        
+
         /// <summary>
         /// Const types for DFSC cases
         /// </summary>
@@ -47,12 +47,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         /// <param name="containSiteName">If REQ_GET_DFS_REFERRAL_EX contains "SiteName" field</param>
         /// <returns>The response packet</returns>
         public DfscReferralResponsePacket SendAndReceiveDFSReferral(
-            out uint status, 
-            DfscClient client, 
-            ReferralEntryType_Values entryType, 
-            string reqPath, 
+            out uint status,
+            DfscClient client,
+            ReferralEntryType_Values entryType,
+            string reqPath,
             bool dcOrDFSServer,
-            bool isEx = false, 
+            bool isEx = false,
             bool containSiteName = false)
         {
             string serverName;
@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             {
                 reqPacket = client.CreateDfscReferralRequestPacket((ushort)entryType, reqPath);
             }
-            
+
             DfscReferralResponsePacket respPacket = client.SendAndRecieveDFSCReferralMessages(out status, testConfig.Timeout, reqPacketEX, reqPacket);
             return respPacket;
         }
@@ -118,10 +118,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         /// <param name="target">The resolved path</param>
         /// <param name="respPacket">Packet of DFS referral response</param>
         public void VerifyReferralResponse(
-            ReferralResponseType referralResponseType, 
-            ReferralEntryType_Values entryType, 
-            string reqPath, 
-            string target, 
+            ReferralResponseType referralResponseType,
+            ReferralEntryType_Values entryType,
+            string reqPath,
+            string target,
             DfscReferralResponsePacket respPacket)
         {
             if (ReferralResponseType.DCReferralResponse == referralResponseType || ReferralResponseType.DomainReferralResponse == referralResponseType)
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                 // Otherwise, the ReferralServers field MUST be set to 0 and the StorageServers field MUST be set to 1.
 
                 // Check StorageServers bit
-                if (ReferralResponseType.RootTarget == referralResponseType 
+                if (ReferralResponseType.RootTarget == referralResponseType
                  || ReferralResponseType.LinkTarget == referralResponseType
                  || ReferralResponseType.SysvolReferralResponse == referralResponseType)
                 {
@@ -166,7 +166,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                 }
 
                 // Check ReferralServers bit
-                if (ReferralResponseType.RootTarget == referralResponseType 
+                if (ReferralResponseType.RootTarget == referralResponseType
                  || ReferralResponseType.Interlink == referralResponseType)
                 {
                     baseTestSite.Assert.AreEqual(ReferralHeaderFlags.R, respPacket.ReferralResponse.ReferralHeaderFlags & ReferralHeaderFlags.R,
@@ -202,7 +202,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
                         baseTestSite.Log.Add(LogEntryKind.Debug, "ShareName is {0}", entry.ShareName);
                         if (!containTarget)
-                            containTarget = target.Equals(entry.ShareName, StringComparison.OrdinalIgnoreCase);
+                        {
+                            containTarget = CompareDFSTargetPaths(target, entry.ShareName);
+                        }
                     }
                     break;
 
@@ -229,7 +231,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                         baseTestSite.Log.Add(LogEntryKind.Debug, "DFSTargetPath is {0}", entry.DFSTargetPath);
 
                         if (!containTarget)
-                            containTarget = target.Equals(entry.DFSTargetPath, StringComparison.OrdinalIgnoreCase);
+                        {
+                            containTarget = CompareDFSTargetPaths(target, entry.DFSTargetPath);
+                        }
                         timeToLive = entry.TimeToLive;
                     }
                     break;
@@ -263,7 +267,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
                         if (!containTarget)
                         {
-                            containTarget = target.Equals(entry.DFSTargetPath, StringComparison.OrdinalIgnoreCase);
+                            containTarget = CompareDFSTargetPaths(target, entry.DFSTargetPath);
                         }
 
                         timeToLive = entry.TimeToLive;
@@ -286,7 +290,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                     throw new InvalidOperationException("The version number of Referral Entry is not correct.");
             }
 
-            baseTestSite.Assert.IsTrue(containTarget, "{0} response must contain {1}", Enum.GetName(typeof(ReferralResponseType), referralResponseType), target);
+            baseTestSite.Assert.IsTrue(containTarget, "{0} response must indicate the same target that {1} indicates", Enum.GetName(typeof(ReferralResponseType), referralResponseType), target);
         }
 
         /// <summary>
@@ -297,6 +301,49 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
             if (testConfig.TransportPreferredSMB)
             {
                 baseTestSite.Assert.Inconclusive("REQ_GET_DFS_REFERRAL_EX can not be sent over SMB");
+            }
+        }
+
+        private bool CompareDFSTargetPaths(string targetFromConfig, string targetFromResponse)
+        {
+            var pathRegex = @"\\(?<serverName>.+)\\(?<targetName>.+)";
+            var regex = new Regex(pathRegex);
+
+            var targetFromConfigMatch = regex.Match(targetFromConfig);
+            if (!targetFromConfigMatch.Success)
+            {
+                baseTestSite.Log.Add(LogEntryKind.Debug, $"The path \"{nameof(targetFromConfig)}\" is {targetFromConfig}, which does not match the ordinary DFS target path pattern.");
+                return false;
+            }
+
+            var targetFromResponseMatch = regex.Match(targetFromResponse);
+            if (!targetFromResponseMatch.Success)
+            {
+                baseTestSite.Log.Add(LogEntryKind.Debug, $"The path \"{nameof(targetFromResponse)}\" is {targetFromResponse}, which does not match the ordinary DFS target path pattern.");
+                return false;
+            }
+
+            var serverNameFromConfig = ExtractServerName(targetFromConfigMatch.Groups["serverName"].Value);
+            var targetNameFromConfig = targetFromConfigMatch.Groups["targetName"].Value;
+
+            var serverNameFromResponse = ExtractServerName(targetFromResponseMatch.Groups["serverName"].Value);
+            var targetNameFromResponse = targetFromResponseMatch.Groups["targetName"].Value;
+
+            return serverNameFromConfig.Equals(serverNameFromResponse, StringComparison.OrdinalIgnoreCase) &&
+                targetNameFromConfig.Equals(targetNameFromResponse, StringComparison.OrdinalIgnoreCase);
+
+            string ExtractServerName(string matchedGroupValue)
+            {
+                // If the matched value is not an FQDN (e.g. computer name or IP address), return it directly.
+                // If the matched value is an FQDN, extract the server name from it.
+                if (!matchedGroupValue.Contains(testConfig.DomainFQDNName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return matchedGroupValue;
+                }
+                else
+                {
+                    return matchedGroupValue.Substring(0, matchedGroupValue.IndexOf(testConfig.DomainFQDNName, StringComparison.OrdinalIgnoreCase) - 1);
+                }
             }
         }
 
