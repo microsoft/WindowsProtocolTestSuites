@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
             uint status;
             string reqPath;
-            ReferralResponseType ReferralResponseType;
+            ReferralResponseType referralResponseType;
 
             string target;
             if (rootOrLink)
@@ -294,7 +294,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                     target = TestConfig.RootTargetStandalone;
                 }
 
-                ReferralResponseType = ReferralResponseType.RootTarget;
+                referralResponseType = ReferralResponseType.RootTarget;
             }
             else
             {
@@ -304,14 +304,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
                     reqPath = TestConfig.ValidLinkPathStandalone;
 
                 target = TestConfig.LinkTarget;
-                ReferralResponseType = ReferralResponseType.LinkTarget;
+                referralResponseType = ReferralResponseType.LinkTarget;
             }
 
             DfscReferralResponsePacket respPacket = utility.SendAndReceiveDFSReferral(out status, client, entryType, reqPath, false, isEx, containSiteName);
 
             BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Root Referral to DFS Server Response should succeed, actual status is {0}", Smb2Status.GetStatusCode(status));
 
-            utility.VerifyReferralResponse(ReferralResponseType, entryType, reqPath, target, respPacket);
+            utility.VerifyReferralResponse(referralResponseType, entryType, reqPath, target, respPacket);
         }
     }
 }
