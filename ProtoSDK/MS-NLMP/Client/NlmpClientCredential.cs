@@ -91,10 +91,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         public NlmpClientCredential(string targetName, string domain, string userName, string password)
             : base(NlmpUtility.UpperCase(domain), userName, password)
         {
-            if (targetName == null)
-            {
-                throw new ArgumentNullException("targetName");
-            }
             if (domain == null)
             {
                 throw new ArgumentNullException("domain");
