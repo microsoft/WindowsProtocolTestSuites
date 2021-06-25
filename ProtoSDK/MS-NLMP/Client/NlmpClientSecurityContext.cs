@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 
                     if (NlmpUtility.IsWorkstationSupplied(this.Context.ClientConfigFlags))
                     {
-                        workstationName = this.Credential.TargetName;
+                        workstationName = Environment.MachineName;
                     }
                 }
 
@@ -286,7 +286,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
                     workstationName, domainName,
                     this.Credential.AccountName, this.Credential.Password);
 
-                this.token = GetSecurityToken();
+                this.token = GetSecurityToken(workstationName);
 
                 this.needContinueProcessing = true;
             }
@@ -461,7 +461,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 
             #region Prepare the Nlmp Negotiate Flags
 
-            // the flags for negotiage
+            // the flags for negotiate
             NegotiateTypes nlmpFlags = NegotiateTypes.NTLMSSP_NEGOTIATE_NTLM | NegotiateTypes.NTLM_NEGOTIATE_OEM;
 
             #endregion
@@ -479,7 +479,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 
             #endregion
 
-            #region Compute Resonse
+            #region Compute Response
 
             // clientChallenge, a 8 bytes random number.
             ulong clientChallenge = BitConverter.ToUInt64(NlmpUtility.Nonce(8), 0);
@@ -759,11 +759,41 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// initialize the negotiate flags
         /// </summary>
         /// <returns>the negotiate flags for authenticate</returns>
-        private NegotiateTypes InitializeNegotiateFlags()
+        private NegotiateTypes InitializeNegotiateFlags(NegotiateTypes challengeFlags)
         {
             NegotiateTypes flags = this.Context.ClientConfigFlags;
 
             flags |= NegotiateTypes.NTLMSSP_NEGOTIATE_TARGET_INFO;
+
+            // A==1: The choice of character set encoding MUST be Unicode.
+            // A==0 and B==1: The choice of character set encoding MUST be OEM.
+            // A==0 and B==0: The protocol MUST return SEC_E_INVALID_TOKEN.
+            if (NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE == (challengeFlags & NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE))
+            {
+                if (flags.HasFlag(NegotiateTypes.NTLM_NEGOTIATE_OEM))
+                {
+                    flags ^= NegotiateTypes.NTLM_NEGOTIATE_OEM;
+                }
+                if (!flags.HasFlag(NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE))
+                {
+                    flags |= NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE;
+                }
+            }
+            else if (NegotiateTypes.NTLM_NEGOTIATE_OEM == (challengeFlags & NegotiateTypes.NTLM_NEGOTIATE_OEM))
+            {
+                if (flags.HasFlag(NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE))
+                {
+                    flags ^= NegotiateTypes.NTLMSSP_NEGOTIATE_UNICODE;
+                }
+                if (!flags.HasFlag(NegotiateTypes.NTLM_NEGOTIATE_OEM))
+                {
+                    flags |= NegotiateTypes.NTLM_NEGOTIATE_OEM;
+                }
+            }
+            else
+            {
+                throw new Exception("The protocol MUST return SEC_E_INVALID_TOKEN");
+            }
 
             return flags;
         }
@@ -821,7 +851,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// get the security token
         /// </summary>
         /// <returns>the security token</returns>
-        private byte[] GetSecurityToken()
+        private byte[] GetSecurityToken(string workstationName)
         {
             if (this.client == null)
             {
@@ -833,7 +863,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
 
             NlmpNegotiatePacket packet = this.client.CreateNegotiatePacket(
                 this.Context.ClientConfigFlags, version, this.currentActiveCredential.DomainName,
-                this.currentActiveCredential.TargetName);
+                workstationName);
 
             this.negotiate = packet;
 
@@ -855,10 +885,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
                 throw new InvalidOperationException("The client is null! You must initialize this field first!");
             }
 
-            NegotiateTypes flags = InitializeNegotiateFlags();
-
             // the challenge packet from server
             NlmpChallengePacket challenge = new NlmpChallengePacket(serverToken);
+
+            NegotiateTypes flags = InitializeNegotiateFlags(challenge.Payload.NegotiateFlags);
 
             // the target info
             ICollection<AV_PAIR> targetInfo = InitializeTargetInfo(challenge.Payload.TargetInfo);
@@ -872,7 +902,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             // ntChallengeResponse
             byte[] ntChallengeResponse;
 
-            // initiliaze the challenge response
+            // initialize the challenge response
             InitializeChallengeResponse(
                 flags, challenge, targetInfo, out responseKeyLM, out lmChallengeResponse, out ntChallengeResponse);
 
