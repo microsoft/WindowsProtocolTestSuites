@@ -183,6 +183,110 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                 FileNameType.NotExistedValidFileName,
                 false); //Invalid AccessMask
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.CreateClose)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This case is designed to test whether server can handle Create and Delete operations on file with dot directory name correctly.")]
+        public void CreateClose_CreateAndCloseFileWithDotDir()
+        {
+            // Client1 create a directory
+            OperateFileOrDirectory(
+                client1,
+                true,   //A directory
+                false,  //FILE_DELETE_ON_CLOSE flag not set
+                false,   //Use Administrator
+                FileNameType.NotExistedValidFileName,
+                true);   //Valid AccessMask
+
+            // Client2 create a file with dot directory name
+            OperateFileOrDirectory(
+                client2,
+                false,   //Not a directory
+                true,    //FILE_DELETE_ON_CLOSE flag set
+                false,   //Use Administrator
+                FileNameType.NotExistedValidFileNameWithDotDirectoryName,
+                true);   //Valid AccessMask
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.CreateClose)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This case is designed to test whether server can handle Create and Delete operations on directory with dot directory name correctly.")]
+        public void CreateClose_CreateAndCloseDirWithDotDir()
+        {
+            // Client1 create a directory
+            OperateFileOrDirectory(
+                client1,
+                true,   //A directory
+                false,  //FILE_DELETE_ON_CLOSE flag not set
+                false,   //Use Administrator
+                FileNameType.NotExistedValidFileName,
+                true);   //Valid AccessMask
+
+            // Client2 create a directory with dot directory name
+            OperateFileOrDirectory(
+                client2,
+                true,   //A directory
+                true,   //FILE_DELETE_ON_CLOSE flag set
+                false,  //Use Administrator
+                FileNameType.NotExistedValidFileNameWithDotDirectoryName,
+                true);  //Valid AccessMask
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.CreateClose)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("This case is designed to test whether server can handle Create and Delete operations on file with double dot directory name correctly.")]
+        public void CreateClose_CreateAndCloseFileWithDoubleDotDir()
+        {
+            // Client1 create a directory
+            OperateFileOrDirectory(
+                client1,
+                true,   //A directory
+                false,  //FILE_DELETE_ON_CLOSE flag not set
+                false,   //Use Administrator
+                FileNameType.NotExistedValidFileName,
+                true);   //Valid AccessMask
+
+            // Client2 create a file with doule dot directory name
+            OperateFileOrDirectory(
+                client2,
+                false,   //Not a directory
+                true,    //FILE_DELETE_ON_CLOSE flag set
+                false,   //Use Administrator
+                FileNameType.NotExistedValidFileNameWithDoubleDotDirectoryName,
+                true);   //Valid AccessMask
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.CreateClose)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("This case is designed to test whether server can handle Create and Delete operations on directory with double dot directory name correctly.")]
+        public void CreateClose_CreateAndCloseDirWithDoubleDotDir()
+        {
+            // Client1 create a directory
+            OperateFileOrDirectory(
+                client1,
+                true,   //A directory
+                false,  //FILE_DELETE_ON_CLOSE flag not set
+                false,   //Use Administrator
+                FileNameType.NotExistedValidFileName,
+                true);   //Valid AccessMask
+
+            // Client2 create a directory with doule dot directory name
+            OperateFileOrDirectory(
+                client2,
+                true,   //A directory
+                true,   //FILE_DELETE_ON_CLOSE flag set
+                false,  //Use Administrator
+                FileNameType.NotExistedValidFileNameWithDoubleDotDirectoryName,
+                true);  //Valid AccessMask
+        }
         #endregion
 
         #region Common Methods
@@ -273,6 +377,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                     break;
                 case FileNameType.InvalidSymbolicLink:
                     fileName = TestConfig.Symboliclink + "\\CreateClose" + Guid.NewGuid();
+                    break;
+                case FileNameType.NotExistedValidFileNameWithDotDirectoryName:
+                    fileName = isDirectory ? fileName + "\\.\\CreateClose_Directory_" + Guid.NewGuid() : fileName + "\\.\\CreateClose_File_" + Guid.NewGuid() + ".txt";
+                    break;
+                case FileNameType.NotExistedValidFileNameWithDoubleDotDirectoryName:
+                    fileName = isDirectory ? fileName + "\\..\\CreateClose_Directory_" + Guid.NewGuid() : fileName + "\\..\\CreateClose_File_" + Guid.NewGuid() + ".txt";
                     break;
                 default:
                     throw new ArgumentException("fileNameType");
@@ -411,6 +521,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                                 Smb2Status.STATUS_SUCCESS,
                                 header.Status,
                                 "{0} should be successful, actually server returns with {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    }
+                    break;
+                case FileNameType.NotExistedValidFileNameWithDotDirectoryName:
+                    {
+                        BaseTestSite.Assert.AreEqual(
+                                Smb2Status.STATUS_SUCCESS,
+                                header.Status,
+                                "{0} should be successful, actually server returns with {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    }
+                    break;
+                case FileNameType.NotExistedValidFileNameWithDoubleDotDirectoryName:
+                    {
+                        BaseTestSite.Assert.AreEqual(
+                                Smb2Status.STATUS_INVALID_PARAMETER,
+                                header.Status,
+                                    "3.3.5.9: Windows-based servers accept the path names containing Dot Directory Names specified in [MS-FSCC] section 2.1.5.1 and attempt to normalize the path name by removing the pathname components of \".\"  and \"..\"." +
+                                    "Windows-based servers fail the CREATE request with STATUS_INVALID_PARAMETER if the file name in the Buffer field of the request begins in the form \"subfolder\\..\\\", for example \"x\\..\\y.txt\". " +
+                                    "Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                     }
                     break;
                 default:
