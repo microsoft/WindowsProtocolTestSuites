@@ -189,6 +189,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return ruleGroups.ToArray();
         }
 
+        public string GetDetectorAssembly()
+        {
+            string detectorAssembly = null;
+            string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, TestSuiteConsts.ConfigXml);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(configXmlPath);
+            XmlNode autoDetectionDllNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.AutoDetectionDllName);
+
+            detectorAssembly = autoDetectionDllNode.InnerText.Trim();
+
+            return detectorAssembly;
+        }
+
         private void AddItems(IList<Common.Types.Rule> displayRules, List<Rule> rules)
         {
             foreach (var rule in rules)

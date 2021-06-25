@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\Common\Common.csproj" />
     <ProjectReference Include="..\..\Kernel\Kernel.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\..\PropertyValueDetector\PropertyValueDetector.csproj" />
   </ItemGroup>
 
 </Project>

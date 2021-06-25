@@ -1,14 +1,18 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
+using System.Collections.Generic;
+using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
+    public delegate void DetectionCallback(DetectionOutcome outcome);
+
     /// <summary>
     /// Interface of PTM kernel service.
     /// </summary>
@@ -134,6 +138,68 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="profileName">Profile name.</param>
         /// <returns>Returns compliant profile name.</returns>
         string EnsureProfileName(string profileName);
+
+        #endregion
+
+        #region Test Suite Auto-Detection
+
+        /// <summary>
+        /// Creates a new auto detector instance.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Auto detector instance id.</returns>
+        int CreateAutoDetector(int configurationId);
+
+        /// <summary>
+        /// Gets or create a new auto detector instance.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Auto detector instance.</returns>
+        IAutoDetection GetAutoDetection(int configurationId);
+        
+        /// <summary>
+        /// Gets the properties required for auto-detection.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Prerequisites object.</returns>
+        PrerequisiteView GetPrerequisites(int configurationId);
+
+        /// <summary>
+        /// Sets the property values required for auto-detection.
+        /// </summary>
+        /// <param name="prerequisiteProperties">List of PrerequisiteProperty.</param>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Returns true if succeeded, otherwise false.</returns>
+        bool SetPrerequisites(List<PrerequisiteProperty> prerequisiteProperties, int configurationId);
+
+        /// <summary>
+        /// Gets a list of the detection steps.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>A list of the detection steps.</returns>
+        List<DetectingItem> GetDetectedSteps(int configurationId);
+
+        /// <summary>
+        /// Begins the auto-detection.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <param name="callback">Callback function when the detection finished.</param>
+        void StartDetection(int configurationId, DetectionCallback callback);
+
+        /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <param name="callback">Action to perform after stopping auto detection.</param>
+        void StopDetection(int configurationId, Action callBack);
+
+
+        /// <summary>
+        /// Gets an object represents the detection summary.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>An object</returns>
+        object GetDetectionSummary(int configurationId);
 
         #endregion
     }

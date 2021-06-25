@@ -26,6 +26,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private ConcurrentDictionary<int, Dictionary<string, string>> DescriptionDictCache { get; init; }
 
+        private ConcurrentDictionary<int, IAutoDetection> AutoDetectionPool { get; init; }
+
         private object syncRoot = new object();
 
         public PTMKernelService(IOptions<PTMKernelServiceOptions> options, IStoragePool storageManager, IScopedServiceFactory<IRepositoryPool> scopedServiceFactory)
@@ -43,6 +45,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             TestRunPool = new ConcurrentDictionary<int, ITestRun>();
 
             DescriptionDictCache = new ConcurrentDictionary<int, Dictionary<string, string>>();
+
+            AutoDetectionPool = new ConcurrentDictionary<int, IAutoDetection>();
         }
     }
 }

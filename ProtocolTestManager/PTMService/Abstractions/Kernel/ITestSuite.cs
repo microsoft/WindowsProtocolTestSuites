@@ -66,5 +66,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// </summary>
         /// <returns></returns>
         RuleGroup[] LoadTestCaseFilter();
+
+        /// <summary>
+        /// Get auto-detection dll file name
+        /// </summary>
+        /// <returns>Auto-detection file name</returns>
+        string GetDetectorAssembly();
     }
 }
