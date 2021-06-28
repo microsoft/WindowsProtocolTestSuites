@@ -1,0 +1,204 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Domain Environment Network Setup</title>
+    <style>
+        table, th, td
+        {
+            border:0.0625rem solid black;
+            border-collapse:collapse;
+        }
+        div.Title
+        {
+            font-family:Arial;
+            font-size:larger;
+            margin-bottom:0.625rem;
+        }
+        div.Context
+        {
+            font-family:'Segoe UI';
+            font-size:medium;
+            margin-top:auto;
+        }
+        .icon
+        {
+            font-family:'Segoe UI';
+            font-size:larger;
+            font-weight:bold;
+            margin-top:5rem;
+        }
+        .List
+        {
+            margin-top: 0.25rem;
+        }
+        .img
+        {
+            vertical-align:text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        The domain environment requires interactions between the following computers and server roles. <br />
+        <ul class="List">
+            <li>The driver computer runs the test cases by sending requests over the wire in the form of protocol messages. </li>
+            <li>The SUT runs an implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.</li>
+            <li>The domain controller (DC) responds to security authentication requests (logging in, checking permissions, etc.) within the domain.</li>
+            <li>Any additional computers and server roles are specified to provide functionality that is required to test the protocol implementation.</li>
+        </ul>
+        <div class="Context">
+            <div style="font-weight:600"><img class="img" src="note.png"/>Note</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;Below part applies only to the Windows based computers in the test environment.
+    For cluster involved scenarios, driver computer in this test suite will simulate a physical machine to contact to Node01 and Node02 which are built as failover cluster for SUT. SAN storage server Storage01 is on isolated network to provide backend storage for failover cluster.<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;For non-cluster involved scenarios, driver computer will simulate a physical machine to contact either node which plays as SUT.<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;The following figure shows the domain environment with recommended network configurations for reference.<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;"Cluster01" is the Failover Cluster; “GeneralFS” is a File Server role provided by the Failover Cluster.<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;For Non-Windows, Node01, Node02 and Storage01 could be replaced by the implementation-specific SUT.
+        </div>
+        <div style="margin-left:2.5rem;margin-right:auto; width:34.375rem">
+            <table style="text-align:center">
+                <tr>
+                    <th>Machine Name /<br /> Access Point</th>
+                    <th>NIC</th>
+                    <th>IPv4</th>
+                    <th>Subnet Mask</th>
+                    <th>default Gateway</th>
+                    <th>DNS Server</th>
+                </tr>
+                <tr>
+                    <td rowspan="2">DC01</td>
+                    <td>External1</td>
+                    <td>192.168.1.1</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>127.0.0.1</td>
+                </tr>
+                <tr>
+                    <td>External2</td>
+                    <td>192.168.2.1</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>127.0.0.1</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Client01</td>
+                    <td>External1</td>
+                    <td>192.168.1.111</td>
+                    <td>255.255.255.0</td>
+                    <td>192.168.1.1</td>
+                    <td>192.168.1.1</td>
+                </tr>
+                <tr>
+                    <td>External2</td>
+                    <td>192.168.2.111</td>
+                    <td>255.255.255.0</td>
+                    <td>192.168.2.1</td>
+                    <td>192.168.2.1</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Node01</td>
+                    <td>External1</td>
+                    <td>192.168.1.11</td>
+                    <td>255.255.255.0</td>
+                    <td>192.168.1.1</td>
+                    <td>192.168.1.1</td>
+                </tr>
+                <tr>
+                    <td>External2</td>
+                    <td>192.168.2.11</td>
+                    <td>255.255.255.0</td>
+                    <td>192.168.2.1</td>
+                    <td>192.168.2.1</td>
+                </tr>
+                <tr>
+                    <td>Cluster</td>
+                    <td>10.10.0.11</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>&lt;empty&gt;</td>
+                </tr>
+                <tr>
+                    <td>iSCSI</td>
+                    <td>192.168.0.11</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>&lt;empty&gt;</td>
+                </tr>
+                <tr>
+                    <td rowspan="4">Node02</td>
+                    <td>External1</td>
+                    <td>192.168.1.12</td>
+                    <td>255.255.255.0</td>
+                    <td>192.168.1.1</td>
+                    <td>192.168.1.1</td>
+                </tr>
+                <tr>
+                    <td>External2</td>
+                    <td>192.168.2.12</td>
+                    <td>255.255.255.0</td>
+                    <td>192.168.2.1</td>
+                    <td>192.168.2.1</td>
+                </tr>
+                <tr>
+                    <td>Cluster</td>
+                    <td>10.10.0.12</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>&lt;empty&gt;</td>
+                </tr>
+                <tr>
+                    <td>iSCSI</td>
+                    <td>192.168.0.12</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>&lt;empty&gt;</td>
+                </tr>
+                <tr>
+                    <td>Storage01</td>
+                    <td>iSCSI</td>
+                    <td>192.168.0.1</td>
+                    <td>255.255.255.0</td>
+                    <td>&lt;empty&gt;</td>
+                    <td>&lt;empty&gt;</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Cluster01</td>
+                    <td>External01</td>
+                    <td>192.168.1.100</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>External02</td>
+                    <td>192.168.2.100</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">GeneralFS</td>
+                    <td>External01</td>
+                    <td>192.168.1.200</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>External02</td>
+                    <td>192.168.2.200</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    <div class="icon" style ="margin-top:1.25rem">
+        <img class="img" src="arrow_right.png" /><a href="domain_setupSUT.html">Set up SUT</a>
+    </div>
+    </div>
+</body>
+</html>
