@@ -21,4 +21,10 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SQOS\Sqos.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
