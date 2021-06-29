@@ -216,7 +216,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2632       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2636       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -3459,6 +3459,88 @@ The feature has 34 model-based test cases and several traditional test cases.
 ||CREATE (CreateOption: FILE_DIRECTORY_FILE; CreateDisposition: FILE_CREATE, file name contains symbolic link in the middle.)|
 ||Expect server failed with specific error code according to server's implementation.|
 ||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+
+
+|||
+|---|---|
+|**Test ID**|CreateClose_CreateAndCloseFileWithDotDir|
+|**Description**|This case is designed to test whether server can handle Create and Delete operations on file with dot directory name correctly.|
+|**Message Sequence**|NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_DIRECTORY_FILE; CreateDisposition: FILE_CREATE)|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_NON_DIRECTORY_FILE &#124;  FILE_DELETE_ON_CLOSE; CreateDisposition: FILE_CREATE, file name contains dot directory name)|
+||Expect server responds successfully.|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+
+
+|||
+|---|---|
+|**Test ID**|CreateClose_CreateAndCloseDirWithDotDir|
+|**Description**|This case is designed to test whether server can handle Create and Delete operations on directory with dot directory name correctly.|
+|**Message Sequence**|NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_DIRECTORY_FILE; CreateDisposition: FILE_CREATE)|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_DIRECTORY_FILE &#124;  FILE_DELETE_ON_CLOSE; CreateDisposition: FILE_CREATE, file name contains dot directory name)|
+||Expect server responds successfully.|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+
+
+|||
+|---|---|
+|**Test ID**|CreateClose_CreateAndCloseFileWithDoubleDotDir|
+|**Description**|This case is designed to test whether server can handle Create operations on file with double dot directory name correctly.|
+|**Message Sequence**|NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_DIRECTORY_FILE; CreateDisposition: FILE_CREATE)|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_NON_DIRECTORY_FILE &#124;  FILE_DELETE_ON_CLOSE; CreateDisposition: FILE_CREATE, file name contains double dot directory name)|
+||Expect server failed with STATUS_INVALID_PARAMETER according to server's implementation.|
+||TREE_DISCONNECT|
+||LOGOFF|
+
+
+|||
+|---|---|
+|**Test ID**|CreateClose_CreateAndCloseDirWithDoubleDotDir|
+|**Description**|This case is designed to test whether server can handle Create operations on directory with double dot directory name correctly.|
+|**Message Sequence**|NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_DIRECTORY_FILE; CreateDisposition: FILE_CREATE)|
+||CLOSE|
+||TREE_DISCONNECT|
+||LOGOFF|
+||NEGOTIATE|
+||SESSION_SETUP|
+||TREE_CONNECT|
+||CREATE (CreateOption: FILE_DIRECTORY_FILE &#124;  FILE_DELETE_ON_CLOSE; CreateDisposition: FILE_CREATE, file name contains double dot directory name)|
+||Expect server failed with STATUS_INVALID_PARAMETER according to server's implementation.|
 ||TREE_DISCONNECT|
 ||LOGOFF|
 
