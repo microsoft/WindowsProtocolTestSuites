@@ -310,6 +310,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <param name="DetectionEvent">Callback function when the detection finished.</param>
         private void BeginDetection(DetectionCallback DetectionEvent)
         {
+            if (detectTask != null)
+            {
+                return;
+            }
+
             var token = cts.Token;
 
             token.Register(() => {
