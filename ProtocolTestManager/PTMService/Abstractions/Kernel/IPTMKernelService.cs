@@ -147,7 +147,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// Creates a new auto detector instance.
         /// </summary>
         /// <param name="configurationId">Test suite configuration id.</param>
-        /// <returns>Auto detector instance id.</returns>
+        /// <returns>Auto detector configuration id.</returns>
         int CreateAutoDetector(int configurationId);
 
         /// <summary>

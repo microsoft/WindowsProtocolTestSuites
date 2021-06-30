@@ -9,20 +9,43 @@ using Microsoft.Protocols.TestManager.Kernel;
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Reflection;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
-    public class AutoDetection : IAutoDetection
+    public class AutoDetection: IAutoDetection
     {
         private StreamWriter logWriter;
 
         private int stepIndex;
 
-        private Detector detector = null;
+        //private Detector detector = null;
 
         private List<DetectingItem> detectSteps;
 
         private ITestSuite TestSuite { get; set; }
+
+        private CancellationTokenSource cts = new CancellationTokenSource();
+
+        private IValueDetector valueDetector = null;
+
+        private Task detectTask = null;
+
+        private bool taskCanceled = false;
+
+        /// <summary>
+        /// Delegate of logging.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="style"></param>
+        public delegate void DetectLog(string message, LogStyle style);
+
+        /// <summary>
+        /// Instance of DetectLog.
+        /// </summary>
+        public DetectLog DetectLogCallback;
 
         private AutoDetection(ITestSuite testSuite)
         {
@@ -36,6 +59,43 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var instance = new AutoDetection(testSuite);
 
             return instance;
+        }
+
+        public void Reset()
+        {
+            if (valueDetector != null) valueDetector.Dispose();
+            valueDetector = null;
+            UtilCallBackFunctions.WriteLog = (message, newline, style) =>
+            {
+                if (DetectLogCallback != null) DetectLogCallback(message, style);
+            };
+        }
+
+        /// <summary>
+        /// Loads the auto-detect plug-in from assembly file.
+        /// </summary>
+        /// <param name="detectorAssembly">File name</param>
+        public void Load(string detectorAssembly)
+        {
+            Reset();
+
+            // Get CustomerInterface
+            Type interfaceType = typeof(IValueDetector);
+
+            Assembly assembly = Assembly.LoadFrom(detectorAssembly);
+
+            Type[] types = assembly.GetTypes();
+
+            // Find a class that implement Customer Interface
+            foreach (Type type in types)
+            {
+                if (type.IsClass && interfaceType.IsAssignableFrom(type) == true)
+                {
+                    // Create an instance
+                    valueDetector = assembly.CreateInstance(type.FullName) as IValueDetector;
+                }
+            }
+            if (valueDetector == null) throw new Exception(AutoDetectionConsts.LoadingAutoDetectorFailed);
         }
 
         public void InitializeDetector(int testSuiteId)
@@ -58,9 +118,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             string detectorAssembly = TestSuite.GetDetectorAssembly();
 
-            detector = new Detector();
-
-            detector.Load(detectorAssembly);
+            Load(detectorAssembly);
         }
 
         /// <summary>
@@ -69,9 +127,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>Prerequisites object.</returns>
         public PrerequisiteView GetPrerequisites()
         {
-            Prerequisites p = detector.GetPrerequisits();
+            Prerequisites p = GetPrerequisitsInValueDetectorAssembly();
 
-            var prerequisits = new PrerequisiteView()
+            var prerequisites = new PrerequisiteView()
             {
                 Summary = p.Summary,
                 Title = p.Title,
@@ -79,14 +137,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             };
             foreach (var i in p.Properties)
             {
-                prerequisits.Properties.Add(new Property()
+                prerequisites.Properties.Add(new Property()
                 {
                     Name = i.Key,
                     Choices = i.Value
                 });
             }
 
-            return prerequisits;
+            return prerequisites;
         }
 
         /// <summary>
@@ -100,7 +158,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 properties.Add(p.PropertyName, p.Value);
             };
-            return detector.SetPrerequisites(properties);
+            return SetPrerequisitesInValueDetectorAssembly(properties);
         }
 
         /// <summary>
@@ -109,7 +167,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>A list of the detection steps.</returns>
         public List<DetectingItem> GetDetectedSteps()
         {
-            return detector.GetDetectSteps();
+            return GetDetectStepsInValueDetectorAssembly();
         }
 
         /// <summary>
@@ -122,7 +180,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             detectSteps = GetDetectedSteps();
             string detectorLog = Path.Combine(TestSuite.StorageRoot.AbsolutePath, "Detector_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
             logWriter = new StreamWriter(detectorLog);
-            detector.DetectLogCallback = (msg, style) => 
+            DetectLogCallback = (msg, style) => 
             {
                 if (stepIndex == detectSteps.Count) return;
                 var item = detectSteps[stepIndex];
@@ -159,7 +217,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 logWriter.WriteLine("[{0}] {1}", DateTime.Now.ToString(), msg);
                 logWriter.Flush();
             };
-            detector.BeginDetection((outcome) => 
+            BeginDetection((outcome) => 
             {
                 if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
                 callback(outcome);
@@ -173,11 +231,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         public void StopDetection(Action callback)
         {
-            detector.DetectLogCallback = null;
+            DetectLogCallback = null;
 
             detectSteps[stepIndex].DetectingStatus = DetectingStatus.Canceling;
-            
-            detector.StopDetection(callback);
+
+            StopAndCancelDetection(callback);
             
             if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
             
@@ -196,7 +254,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>An object</returns>
         public object GetDetectionSummary()
         {
-            return detector.GetDetectionSummary();
+            return GetDetectionSummaryInValueDetectorAssembly();
         }
 
         private PtfConfig LoadPtfconfig(int testSuiteId)
@@ -213,6 +271,137 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 throw new Exception(string.Format(AutoDetectionConsts.LoadPtfconfigError, e.Message));
             }
+        }
+
+        /// <summary>
+        /// Gets the properties required for auto-detection.
+        /// </summary>
+        /// <returns>Prerequisites object.</returns>
+        private Prerequisites GetPrerequisitsInValueDetectorAssembly()
+        {
+            return valueDetector.GetPrerequisites();
+        }
+
+        /// <summary>
+        /// Gets a list of the detection steps.
+        /// </summary>
+        /// <returns>A list fo the detection steps.</returns>
+        private List<DetectingItem> GetDetectStepsInValueDetectorAssembly()
+        {
+            return valueDetector.GetDetectionSteps();
+        }
+
+        private DetectionOutcome RunDetectionInValueDetectorAssembly()
+        {
+            try
+            {
+                valueDetector.RunDetection();
+            }
+            catch (Exception exception)
+            {
+                return new DetectionOutcome(DetectionStatus.Error, exception);
+            }
+            return new DetectionOutcome(DetectionStatus.Finished, null);
+        }
+
+        /// <summary>
+        /// Begins the auto-detection.
+        /// </summary>
+        /// <param name="DetectionEvent">Callback function when the detection finished.</param>
+        private void BeginDetection(DetectionCallback DetectionEvent)
+        {
+            var token = cts.Token;
+
+            token.Register(() => {
+                taskCanceled = true;
+            });
+
+            detectTask = new Task(() =>
+            {
+                token.ThrowIfCancellationRequested();
+
+                var outcome = RunDetectionInValueDetectorAssembly();
+
+                if (DetectionEvent != null)
+                {
+                    DetectionEvent(outcome);
+                }
+            }, token);
+
+            detectTask.Start();
+        }
+
+        /// <summary>
+        /// Stop the auto-detection
+        /// </summary>
+        private void StopAndCancelDetection(Action callback)
+        {
+            if (detectTask != null)
+            {
+                cts.Cancel();
+                while (!taskCanceled)
+                {
+                    Thread.SpinWait(100);
+                }
+
+                if (callback != null)
+                {
+                    callback();
+                }
+
+                detectTask = null;
+            }
+
+            taskCanceled = false;
+        }
+
+        /// <summary>
+        /// Sets the values of the properties required for auto-detection.
+        /// </summary>
+        /// <param name="properties">Name - value map.</param>
+        /// <returns>Returns true if provided values are enough, otherwise returns false.</returns>
+        private bool SetPrerequisitesInValueDetectorAssembly(Dictionary<string, string> properties)
+        {
+            return valueDetector.SetPrerequisiteProperties(properties);
+        }
+
+        /// <summary>
+        /// Gets an object represents the detection summary.
+        /// </summary>
+        /// <returns>An object</returns>
+        private object GetDetectionSummaryInValueDetectorAssembly()
+        {
+            return valueDetector.GetSUTSummary();
+        }
+
+        /// <summary>
+        /// Gets the case selection rules suggested by the detector.
+        /// </summary>
+        /// <returns>A list of the rules</returns>
+        private List<CaseSelectRule> GetRulesInValueDetectorAssembly()
+        {
+            return valueDetector.GetSelectedRules();
+        }
+
+        /// <summary>
+        /// Gets a list of properties to hide.
+        /// </summary>
+        /// <param name="rules">Test case selection rules</param>
+        /// <returns>A list of properties to hide.</returns>
+        private List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules)
+        {
+            return valueDetector.GetHiddenProperties(rules);
+        }
+
+        /// <summary>
+        /// Gets the property values detected by the detector.
+        /// </summary>
+        /// <returns>Name - value / values map.</returns>
+        private Dictionary<string, List<string>> GetDetectedPropertyInValueDetectorAssembly()
+        {
+            Dictionary<string, List<string>> dict;
+            valueDetector.GetDetectedProperty(out dict);
+            return dict;
         }
     }
 }

@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "..\Common\Common.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscoveryTestLogger", "..\DiscoveryTestLogger\DiscoveryTestLogger.csproj", "{36F8B56D-1CD8-4289-A252-46F28D38DB2C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyValueDetector", "..\PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36F8B56D-1CD8-4289-A252-46F28D38DB2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
