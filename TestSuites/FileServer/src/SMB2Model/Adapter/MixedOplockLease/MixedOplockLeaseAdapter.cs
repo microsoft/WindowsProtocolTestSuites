@@ -149,6 +149,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.MixedOplo
                         LeaseState = leaseState
                     }
                 });
+
+            if (responses == null)
+            {
+                throw new Exception("There is no Smb2CreateContextResponse in response data!");
+            }
+
+            if (responses.Length == 0 || responses[0] is not Smb2CreateResponseLease)
+            {
+                throw new Exception("There is no SMB2_CREATE_RESPONSE_LEASE create context in response data!");
+            }
+
             grantedLeaseState = ((Smb2CreateResponseLease)responses[0]).LeaseState;
             HandleResult();
         }
