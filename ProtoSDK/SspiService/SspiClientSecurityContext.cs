@@ -226,7 +226,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                                     this.serverPrincipalName,
                                     credential.DomainName,
                                     credential.AccountName,
-                                    credential.Password)
+                                    credential.Password),
+                                this.securityContextAttributes
                            );
                         }
                         else
@@ -259,13 +260,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                     }
                 case SecurityPackageType.Negotiate:
                     {
+                        this.securityContextAttributes |= ClientSecurityContextAttribute.MutualAuth;
+                        
                         if (accountCredential is AccountCredential)
                         {
-                            if (this.securityContextAttributes == ClientSecurityContextAttribute.None)
-                            {
-                                this.securityContextAttributes = ClientSecurityContextAttribute.MutualAuth; // MS-SPNG 3.3.3 The client MUST request Mutual Authentication services
-                            }
-
                             var credential = accountCredential as AccountCredential;
                             NlmpClientSecurityConfig nlmpSecurityConfig = new NlmpClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
 
