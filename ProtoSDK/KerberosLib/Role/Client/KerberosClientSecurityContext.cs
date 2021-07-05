@@ -346,6 +346,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
             else
             {
+                this.Context.SessionKey = this.Context.ApSubKey;
                 this.needContinueProcessing = false;
             }
         }
