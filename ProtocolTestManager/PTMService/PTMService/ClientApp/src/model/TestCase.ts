@@ -3,5 +3,6 @@
 
 export interface TestCase {
     Name: string;
+    FullName: string;
     Category: string[];
 }

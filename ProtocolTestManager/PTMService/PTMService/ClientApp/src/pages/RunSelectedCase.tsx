@@ -12,6 +12,8 @@ import { StepPanel } from '../components/StepPanel';
 import { useWindowSize } from '../components/UseWindowSize';
 import { WizardNavBar } from '../components/WizardNavBar';
 import { getNavSteps } from '../model/DefaultNavSteps';
+import { ConfigurationsDataSrv } from '../services/Configurations';
+import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
 import { AppState } from '../store/configureStore';
 
@@ -81,6 +83,7 @@ function FilterByDropdown(props: FilterByDropdownProps) {
 export function RunSelectedCase(props: StepWizardProps) {
     const dispatch = useDispatch();
 
+    const filterInfo = useSelector((state: AppState) => state.filterInfo);
     const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases);
     const configureMethod = useSelector((state: AppState) => state.configureMethod);
 
@@ -137,8 +140,13 @@ export function RunSelectedCase(props: StepWizardProps) {
     const history = useHistory();
 
     useEffect(() => {
+        dispatch(ConfigurationsDataSrv.getRules());
+        dispatch(TestSuitesDataSrv.getTestSuiteTestCases());
+    }, [dispatch])
+
+    useEffect(() => {
         dispatch(SelectedTestCasesDataSrv.getAllTestCases());
-    }, [dispatch]);
+    }, [filterInfo]);
 
     useEffect(() => {
         if (!isValidFilterPhrase(filterPhrase)) {

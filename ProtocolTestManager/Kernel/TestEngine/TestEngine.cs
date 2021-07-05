@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -436,6 +437,155 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="filterExpression">The filter expression. If it is null, no filter will be used.</param>
         /// <returns>The test case list.</returns>
         public List<TestCase> LoadTestCases(string filterExpression = null)
+        {
+            return filterExpression == null ? LoadAllTestCases() : LoadFilteredTestCases(filterExpression);
+        }
+
+        /// <summary>
+        /// Load test cases of given dll files.
+        /// </summary>
+        /// <param name="dllPath">The dll path.</param>
+        /// <returns>The loaded test cases.</returns>
+        private IEnumerable<TestCase> LoadDlls(string[] dllPath)
+        {
+            var _testCaseList = new List<TestCase>();
+
+            foreach (string DllFileName in dllPath)
+            {
+                Assembly assembly = Assembly.LoadFrom(DllFileName);
+                Type[] types = assembly.GetTypes();
+
+                foreach (Type type in types)
+                {
+                    // Search for class, interfaces and other type
+                    if (type.IsClass)
+                    {
+                        MethodInfo[] methods = type.GetMethods();
+                        foreach (MethodInfo method in methods)
+                        {
+                            // Search for methods with TestMethodAttribute
+                            object[] attributes = method.GetCustomAttributes(false);
+                            bool isTestMethod = false;
+                            bool isIgnored = false;
+                            foreach (object attribute in attributes)
+                            {
+                                string name = attribute.GetType().Name;
+                                // Break the loop when "IgnoreAttribute" is found
+                                if (name == "IgnoreAttribute")
+                                {
+                                    isIgnored = true;
+                                    break;
+                                }
+
+                                // Do not break the loop when "TestMethodAttribute" is found
+                                // It's possible to have "IgnoreAttribute" after "TestMethodAttribute"
+                                if (name == "TestMethodAttribute")
+                                {
+                                    isTestMethod = true;
+                                }
+
+                                // Ignore test case with TestCategory "Disabled"
+                                if (name == "TestCategoryAttribute")
+                                {
+                                    PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
+                                    var category = property.GetValue(attribute, null) as List<string>;
+                                    foreach (string str in category)
+                                    {
+                                        if (str == "Disabled")
+                                        {
+                                            isIgnored = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (isTestMethod && !isIgnored)
+                            {
+                                // Get categories and description
+                                List<string> categories = new List<string>();
+                                string description = null;
+                                string caseFullName = method.DeclaringType.FullName + "." + method.Name;
+                                foreach (object attribute in attributes)
+                                {
+                                    // Record TestCategories
+                                    if (attribute.GetType().Name == "TestCategoryAttribute")
+                                    {
+                                        PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
+                                        var category = property.GetValue(attribute, null) as List<string>;
+                                        foreach (string str in category)
+                                        {
+                                            categories.Add(str);
+                                        }
+                                    }
+
+                                    // Record Description
+                                    if (attribute.GetType().Name == "DescriptionAttribute")
+                                    {
+                                        var descriptionProp = attribute.GetType().GetProperty("Description");
+                                        description = descriptionProp.GetValue(attribute, null) as string;
+                                    }
+                                }
+
+                                var testcase = new TestCase()
+                                {
+                                    FullName = caseFullName,
+                                    Category = categories.ToList(),
+                                    Description = description,
+                                    Name = method.Name
+                                };
+
+                                var testcaseToolTipBuilder = new StringBuilder();
+                                testcaseToolTipBuilder.Append(testcase.Name);
+                                if (testcase.Category.Any())
+                                {
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Category:");
+                                    foreach (var category in testcase.Category)
+                                    {
+                                        testcaseToolTipBuilder.Append(Environment.NewLine + "  " + category);
+                                    }
+                                }
+                                if (!string.IsNullOrEmpty(testcase.Description))
+                                {
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Description:");
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "  " + testcase.Description);
+                                }
+                                testcase.ToolTipOnUI = testcaseToolTipBuilder.ToString();
+
+                                _testCaseList.Add(testcase);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            return _testCaseList;
+        }
+
+        /// <summary>
+        /// Load all test cases.
+        /// </summary>
+        /// <returns>The test case list.</returns>
+        private List<TestCase> LoadAllTestCases()
+        {
+            try
+            {
+                return LoadDlls(TestAssemblies.ToArray()).ToList();
+            }
+            catch (Exception e)
+            {
+                Utility.LogException(new List<Exception> { e });
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Load filtered test cases.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression. If it is null, no filter will be used.</param>
+        /// <returns>The test case list.</returns>
+        private List<TestCase> LoadFilteredTestCases(string filterExpression)
         {
             try
             {

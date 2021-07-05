@@ -13,6 +13,7 @@ export interface FilterTestCaseState {
     errorMsg?: string;
     ruleGroup: RuleGroup[];
     listTestCases: TestCase[];
+    listFilteredTestCases: TestCase[];
     selectedConfiguration?: Configuration;
     listSelectedCases?: string[];
     selectedRules: SelectedRuleGroup[];
@@ -25,6 +26,7 @@ const initialFilterTestCaseState: FilterTestCaseState = {
     errorMsg: undefined,
     ruleGroup: [],
     listTestCases: [],
+    listFilteredTestCases: [],
     selectedConfiguration: undefined,
     listSelectedCases: [],
     selectedRules: []
@@ -51,6 +53,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
                 isRulesLoading: false,
                 ruleGroup: action.payload.AllRules,
                 selectedRules: initialSelected,
+                listFilteredTestCases: getFilteredTestCases(initialSelected, action.payload.AllRules, state.listTestCases),
                 listSelectedCases: getSelectCases(initialSelected, action.payload.AllRules, state.listTestCases)
             }
         case GET_FILTERTESTCASE_RULES_FAILURE:
@@ -73,6 +76,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
                 ...state,
                 isCasesLoading: false,
                 listTestCases: action.payload,
+                listFilteredTestCases: getFilteredTestCases(state.selectedRules, state.ruleGroup, action.payload),
                 listSelectedCases: getSelectCases(state.selectedRules, state.ruleGroup, action.payload)
             }
         case GET_TESTSUITETESTCASES_FAILURE:
@@ -88,11 +92,12 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
                     ? action.payload
                     : item
             )
-            let list = getSelectCases(currSelectedRules, state.ruleGroup, state.listTestCases)
+
             return {
                 ...state,
                 selectedRules: currSelectedRules,
-                listSelectedCases: list
+                listFilteredTestCases: getFilteredTestCases(currSelectedRules, state.ruleGroup, state.listTestCases),
+                listSelectedCases: getSelectCases(currSelectedRules, state.ruleGroup, state.listTestCases)
             }
         case SET_RULES_REQUEST:
             return {
@@ -132,7 +137,7 @@ function getMapCategories(rules: Rule[] | undefined, parent: string): MapItem {
     return {};
 }
 
-function getSelectCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]):string[] {
+function getFilteredTestCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]): TestCase[] {
     let match: string[] = []
 
     currSelectedRules.forEach(g => {
@@ -145,5 +150,9 @@ function getSelectCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleG
 
     return listTestCases.filter(x => {
         return x.Category && x.Category.some(r => match.indexOf(r) >= 0)
-    }).map(e => { return e.Name })
+    });
+}
+
+function getSelectCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]):string[] {
+    return getFilteredTestCases(currSelectedRules, ruleGroup, listTestCases).map(e => { return e.Name })
 }

@@ -7,19 +7,17 @@ import { RunRequest } from '../model/RunRequest';
 import { AppThunkAction } from '../store/configureStore';
 
 export const SelectedTestCasesDataSrv = {
-    getAllTestCases: (): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
+    getAllTestCases: (): AppThunkAction<SelectedTestCasesActionTypes> => (dispatch, getState) => {
         const state = getState();
 
-        let configurationId = state.configurations.selectedConfiguration?.Id;
-        await FetchService({
-            url: `api/configuration/${configurationId}/test`,
-            method: RequestMethod.GET,
-            dispatch,
-            onRequest: SelectedTestCasesActions.getAllTestCasesAction_Request,
-            onComplete: SelectedTestCasesActions.getAllTestCasesAction_Success,
-            onError: SelectedTestCasesActions.getAllTestCasesAction_Failure
-        });
+        if (state.filterInfo.isRulesLoading || state.filterInfo.isCasesLoading) {
+            dispatch(SelectedTestCasesActions.getAllTestCasesAction_Request());
+        }
+        else {
+            dispatch(SelectedTestCasesActions.getAllTestCasesAction_Success(state.filterInfo.listFilteredTestCases.map(e => e.FullName)));
+        }
     },
+
     createRunRequest: (requestedTestCases: string[], configurationId?: number, completeCallback?: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
         const state = getState();
 
