@@ -23,6 +23,7 @@ export function ConfigureMethod(props: StepWizardProps) {
     const dispatch = useDispatch();
     
     const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
+    const [hideAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(true);
     const [importErrMsg, setImportErrMsg] = useState('');
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
     const navSteps = getNavSteps(wizardProps);
@@ -32,7 +33,6 @@ export function ConfigureMethod(props: StepWizardProps) {
         Title: 'Run Auto-Detection',
         Key: ConfigureMethod_AutoDetection,
         Description: 'Run Auto-Detection to retrieve capabilities of System Under Test(SUT) which are used to configure the test suite and select test cases automatically.',
-        Disabled: true,
     }, {
         Title: 'Do Manual Configuration',
         Key: ConfigureMethod_Manual,
@@ -48,7 +48,7 @@ export function ConfigureMethod(props: StepWizardProps) {
 
         switch (key) {
             case ConfigureMethod_AutoDetection:
-                wizardProps.goToStep(RunSteps.AUTO_DETECTION);
+                toggleAutoDetectWarningDialog();
                 return;
             case ConfigureMethod_Manual:
                 wizardProps.goToStep(RunSteps.FILTERTESTCASE);
@@ -68,9 +68,23 @@ export function ConfigureMethod(props: StepWizardProps) {
         title: 'Load Profile',
     };
 
+    const autoDetectDialgContentProps = {
+        type: DialogType.normal,
+        title: 'Warning: ',
+    };
+
     const modalProps = {
         isBlocking: true,
         styles: { main: { innerWidth: 600, maxWidth: 650 } },
+        dragOptions: {
+            moveMenuItemText: 'Move',
+            closeMenuItemText: 'Close',
+            menu: ContextualMenu,
+        }
+    }
+
+    const autoDetectWarningModalProps = {
+        isBlocking: true,
         dragOptions: {
             moveMenuItemText: 'Move',
             closeMenuItemText: 'Close',
@@ -82,6 +96,10 @@ export function ConfigureMethod(props: StepWizardProps) {
         if (files.length > 0) {
             setFile(files[0]);
         }
+    }
+
+    const onRunAutoDetection = () => {
+        wizardProps.goToStep(RunSteps.AUTO_DETECTION);
     }
 
     const onConfigurationCreate = () => {
@@ -158,6 +176,22 @@ export function ConfigureMethod(props: StepWizardProps) {
                 <DialogFooter>
                     <PrimaryButton onClick={onConfigurationCreate} text={configureMethod.isProfileUploading ? "Uploading..." : "Load Profile"} disabled={configureMethod.isProfileUploading} />
                     <DefaultButton onClick={toggleHideDialog} text="Close" disabled={configureMethod.isProfileUploading} />
+                </DialogFooter>
+            </Dialog>
+
+            <Dialog
+                hidden={hideAutoDetectWarningDialog}
+                onDismiss={toggleAutoDetectWarningDialog}
+                dialogContentProps={autoDetectDialgContentProps}
+                modalProps={autoDetectWarningModalProps}
+            >
+                <Stack>
+                    <div>Run Auto-Detection may have impact to SUT's states (PTM may create directories or files, may establish connections with SUT and send packets, etc).</div>
+                    <div>Do you want to continue?</div>
+                </Stack>
+                <DialogFooter>
+                    <PrimaryButton onClick={onRunAutoDetection} text={"Yes"}/>
+                    <DefaultButton onClick={toggleAutoDetectWarningDialog} text="No"/>
                 </DialogFooter>
             </Dialog>
         </div>
