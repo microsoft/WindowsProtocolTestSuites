@@ -87,9 +87,6 @@ if (Read-Confirmation -IsYesDefault $false) {
 
 $storagePath = "$PSScriptRoot/$installationId"
 $storageDatabasePath = "$storagePath/ptmservice.db"
-$testSuitePoolPath = "$storagePath/testsuite"
-$configurationPoolPath = "$storagePath/configuration"
-$testResultPoolPath = "$storagePath/testresult"
 
 mkdir $storagePath
 Copy-Item $databasePath $storageDatabasePath
@@ -97,22 +94,16 @@ Copy-Item $databasePath $storageDatabasePath
 function Read-UserDefinedValue {
     param (
         [string]$Name,
-        [string]$DefaultValue,
-        [bool]$IsKnownStorageNodeValue = $true
+        [string]$DefaultValue
     )
 
-    if ($IsKnownStorageNodeValue) {
-        Write-Host "The default value for known storage node $Name is $DefaultValue."
-    }
-    else {
-        Write-Host "The default value for database path $Name is $DefaultValue."
-    }
+    Write-Host "The default value for $Name is $DefaultValue."
     Write-Host "Do you want to specify another $Name value? $denyPrompt"
     if (Read-Confirmation -IsYesDefault $false) {
         $destExists = $false
         while (-not $destExists) {
             Write-Host "Please enter your value for $Name`:"
-            $userDefinedValue = Read-Host
+            $userDefinedValue = (Read-Host).Trim("`"")
             if (Test-Path $userDefinedValue) {
                 $destExists = $true
                 return $userDefinedValue
@@ -127,27 +118,16 @@ function Read-UserDefinedValue {
     }
 }
 
-$storageDatabasePath = Read-UserDefinedValue -Name "Data Source" -DefaultValue $storageDatabasePath -IsKnownStorageNodeValue $false
-
-$testSuitePoolPath = Read-UserDefinedValue -Name "testsuite" -DefaultValue $testSuitePoolPath
-$configurationPoolPath = Read-UserDefinedValue -Name "configuration" -DefaultValue $configurationPoolPath
-$testResultPoolPath = Read-UserDefinedValue -Name "testresult" -DefaultValue $testResultPoolPath
+$storageRootPath = Read-UserDefinedValue -Name "PTMServiceStorageRoot" -DefaultValue $storagePath
+$storageDatabasePath = "$storageRootPath\ptmservice.db"
+if (-not (Test-Path $storageDatabasePath)) {
+    Write-Host "Copy the initial database file to $storageDatabasePath."
+    Copy-Item $databasePath $storageDatabasePath
+}
 
 $appSettings = Get-Content $appSettingsPath | ConvertFrom-Json
-$appSettings.ConnectionStrings.Database = "Data Source = $storageDatabasePath"
-for ($idx = 0; $idx -lt $appSettings.KnownStorageNodes.Length; $idx++) {
-    switch ($appSettings.KnownStorageNodes[$idx].Name) {
-        "testsuite" {
-            $appSettings.KnownStorageNodes[$idx].Path = $testSuitePoolPath
-        }
-        "configuration" {
-            $appSettings.KnownStorageNodes[$idx].Path = $configurationPoolPath
-        }
-        "testresult" {
-            $appSettings.KnownStorageNodes[$idx].Path = $testResultPoolPath
-        }
-    }
-}
+$appSettings.ConnectionStrings.Database = "Data Source = `"$storageDatabasePath`""
+$appSettings.PTMServiceStorageRoot = $storageRootPath
 
 [System.IO.File]::WriteAllText($appSettingsPath, ($appSettings | ConvertTo-Json))
 
@@ -163,11 +143,9 @@ if (-not $IsLinux) {
 }
 
 $flag = @{
-    installationId        = $installationId
-    storageDatabasePath   = $storageDatabasePath
-    testSuitePoolPath     = $testSuitePoolPath
-    configurationPoolPath = $configurationPoolPath
-    testResultPoolPath    = $testResultPoolPath
+    installationId      = $installationId
+    storageRootPath     = $storageRootPath
+    storageDatabasePath = $storageDatabasePath
 }
 
 [System.IO.File]::WriteAllText($flagPath, ($flag | ConvertTo-Json))

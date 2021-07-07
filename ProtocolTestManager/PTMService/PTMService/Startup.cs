@@ -67,7 +67,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 
             services.Configure<StoragePoolOptions>(options =>
             {
-                var items = Configuration.GetSection("KnownStorageNodes").Get<KnownStorageNodeItem[]>();
+                var storageRoot = Configuration.GetSection("PTMServiceStorageRoot").Get<string>();
+                var items = new string[]
+                {
+                    KnownStorageNodeNames.TestSuite,
+                    KnownStorageNodeNames.Configuration,
+                    KnownStorageNodeNames.TestResult
+                }.Select(name => new KnownStorageNodeItem { Name = name, Path = Path.Combine(storageRoot, name) });
 
                 options.Nodes = items.ToDictionary(item => item.Name, item => item.Path);
             });
