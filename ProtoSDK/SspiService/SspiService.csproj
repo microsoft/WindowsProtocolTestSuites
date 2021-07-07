@@ -98,6 +98,10 @@
     <Compile Include="SspiServerSecurityContext.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KerberosLib\KerberosLib.csproj">
       <Project>{f1eda208-50b6-4501-a9d8-d18d3434d587}</Project>
       <Name>KerberosLib</Name>

@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Spng;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
+using System.Net;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
 {
@@ -208,6 +209,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
         /// <param name="accountCredential"></param>
         protected void AcquireCredentialsHandle<T>(T accountCredential)
         {
+            if (!string.IsNullOrEmpty(this.serverPrincipalName))
+            {
+                this.serverPrincipalName = GetServicePrincipalName(this.serverPrincipalName);
+            }
+
             switch (packageType)
             {
                 case SecurityPackageType.Ntlm:
@@ -220,7 +226,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                                     this.serverPrincipalName,
                                     credential.DomainName,
                                     credential.AccountName,
-                                    credential.Password)
+                                    credential.Password),
+                                this.securityContextAttributes
                            );
                         }
                         else
@@ -234,7 +241,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                         if (accountCredential is AccountCredential)
                         {
                             var credential = accountCredential as AccountCredential;
-                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(this.serverPrincipalName, credential, this.securityContextAttributes);
+                            IPAddress kdcIpAddress = (string.IsNullOrEmpty(KerberosContext.KDCComputerName) ? credential.DomainName : KerberosContext.KDCComputerName).ParseIPAddress();
+                            this.Context = KerberosClientSecurityContext.CreateClientSecurityContext(
+                                this.serverPrincipalName,
+                                credential,
+                                KerberosAccountType.User,
+                                kdcIpAddress,
+                                KerberosContext.KDCPort,
+                                KerberosLib.TransportType.TCP,
+                                this.securityContextAttributes
+                            );
                         }
                         else
                         {
@@ -244,16 +260,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                     }
                 case SecurityPackageType.Negotiate:
                     {
+                        this.securityContextAttributes |= ClientSecurityContextAttribute.MutualAuth;
+                        
                         if (accountCredential is AccountCredential)
                         {
-                            if (this.securityContextAttributes == ClientSecurityContextAttribute.None)
-                            {
-                                this.securityContextAttributes = ClientSecurityContextAttribute.MutualAuth; // MS-SPNG 3.3.3 The client MUST request Mutual Authentication services
-                            }
-
                             var credential = accountCredential as AccountCredential;
                             NlmpClientSecurityConfig nlmpSecurityConfig = new NlmpClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
-                            KerberosClientSecurityConfig kerberosSecurityConfig = new KerberosClientSecurityConfig(credential, this.serverPrincipalName, this.securityContextAttributes);
+
+                            IPAddress kdcIpAddress = (string.IsNullOrEmpty(KerberosContext.KDCComputerName) ? credential.DomainName : KerberosContext.KDCComputerName).ParseIPAddress();
+                            KerberosClientSecurityConfig kerberosSecurityConfig = new KerberosClientSecurityConfig(
+                                credential, 
+                                credential.AccountName, 
+                                this.serverPrincipalName,
+                                kdcIpAddress,
+                                KerberosContext.KDCPort, 
+                                this.securityContextAttributes,
+                                KerberosLib.TransportType.TCP
+                            );
 
                             this.Context = new SpngClientSecurityContext(this.securityContextAttributes, nlmpSecurityConfig, kerberosSecurityConfig);
                         }
@@ -366,6 +389,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                     securityContextAttributes,
                     targetDataRepresentaion
                );
+            }
+        }
+
+        private static string GetServicePrincipalName(string serverName)
+        {
+            try
+            {
+                if (!serverName.Contains("/")) // check SPN is valid
+                {
+                    // If the server name is an IP address. No need to query DNS.
+                    // The server may not support kerberos. Use NTLM instead.
+                    IPAddress address;
+                    if (IPAddress.TryParse(serverName, out address))
+                    {
+                        return null;
+                    }
+
+                    // sometimes uplayer only provider hostname as serverPrincipalName for example "PDC.contoso.com", so here it'll become "HOST/PDC.contoso.com" to let it as a valid SPN.
+                    // [TODO]: find a way to determin which service descriptor the uplayer used then set correct service descriptor, ldap/host/rpc/nfs/imap/pop/http...
+                    serverName = $"HOST/{serverName}"; // use host as default service descriptor
+                }
+                return serverName;
+            }
+            catch
+            {
+                // For workgroup environment, it will use NTLM authentication method
+                return serverName;
             }
         }
 

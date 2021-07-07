@@ -31,8 +31,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk
             {
                 try
                 {
-                    var entry = Dns.Resolve(hostNameOrIpAddress);
-                    ipAddress = entry.AddressList.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First();
+                    var entryAddresses = Dns.GetHostAddresses(hostNameOrIpAddress);
+                    ipAddress = entryAddresses.Where(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork).First();
                 }
                 catch
                 {

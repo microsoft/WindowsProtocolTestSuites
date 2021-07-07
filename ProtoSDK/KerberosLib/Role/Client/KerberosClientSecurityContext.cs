@@ -192,7 +192,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             string serverName,
             AccountCredential credential,
             KerberosAccountType accountType,
-            string kdcAddress,
+            IPAddress kdcAddress,
             int kdcPort,
             TransportType transportType,
             ClientSecurityContextAttribute contextAttribute,
@@ -200,22 +200,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             string salt = null
             )
         {
-            string fullDomainName = KerberosUtility.GetFullDomainName(serverName, kdcAddress);
-
             this.credential = credential;
             this.serverName = serverName;
             this.contextAttribute = contextAttribute;
-            this.client = new KerberosClient(fullDomainName, this.credential.AccountName, this.credential.Password, accountType, fullDomainName, kdcPort, transportType, oidPkt, salt);
+            this.client = new KerberosClient(this.credential.DomainName, this.credential.AccountName, this.credential.Password, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt);
             this.UpdateDefaultSettings();
-        }
-
-        public static ClientSecurityContext CreateClientSecurityContext(
-            string serverName,
-            AccountCredential credential,
-            ClientSecurityContextAttribute contextAttribute
-            )
-        {
-            return CreateClientSecurityContext(serverName, credential, KerberosAccountType.User, credential.DomainName, 88, TransportType.TCP, contextAttribute);
         }
 
         /// <summary>
@@ -231,7 +220,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             string serverName,
             AccountCredential credential,
             KerberosAccountType accountType,
-            string kdcAddress,
+            IPAddress kdcAddress,
             int kdcPort,
             TransportType transportType,
             ClientSecurityContextAttribute contextAttribute,
@@ -357,6 +346,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
             else
             {
+                this.Context.SessionKey = this.Context.ApSubKey;
                 this.needContinueProcessing = false;
             }
         }

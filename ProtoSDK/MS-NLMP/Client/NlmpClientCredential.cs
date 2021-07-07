@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
         /// Constructor
         /// </summary>
         public NlmpClientCredential()
-            : base(string.Empty, string.Empty,string.Empty)
+            : base(string.Empty, string.Empty, string.Empty)
         {
         }
 
