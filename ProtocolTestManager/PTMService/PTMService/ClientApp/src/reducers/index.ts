@@ -8,6 +8,7 @@ import { getSelectedTestCasesReducer } from "./SelectedTestCasesReducer";
 import { getTestSuitesReducer } from "./TestSuitesReducer";
 import { getManagementReducer } from "./Management";
 import { getConfigureMethodReducer } from "./ConfigureMethodReducer";
+import { getAutoDetectReducer } from "./AutoDetectReducer";
 import { getFilterTestCaseReducer } from "./FilterTestCaseReducer";
 import { getTestCaseResultReducer } from "./TestCaseResultReducer";
 import { getTestResultsReducer } from "./TestResultsReducer";
@@ -16,7 +17,7 @@ export const appReducers = {
     testsuites: getTestSuitesReducer,
     configurations: getConfigurationReducer,
     configureMethod: getConfigureMethodReducer,
-    // autoDetection:
+    autoDetection: getAutoDetectReducer,
     // detectResult:
     // filterTestCase:
     propertyGroups: getPropertyGroupsReducer,

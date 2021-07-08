@@ -6,11 +6,13 @@ import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
 import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
 import { getNavSteps } from '../model/DefaultNavSteps';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function AutoDetection(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
     const navSteps = getNavSteps(wizardProps);
     const wizard = WizardNavBar(wizardProps, navSteps);
+    const dispatch = useDispatch();
 
     return (
         <div>
