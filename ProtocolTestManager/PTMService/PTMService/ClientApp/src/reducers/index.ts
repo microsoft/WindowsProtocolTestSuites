@@ -8,7 +8,7 @@ import { getSelectedTestCasesReducer } from "./SelectedTestCasesReducer";
 import { getTestSuitesReducer } from "./TestSuitesReducer";
 import { getManagementReducer } from "./Management";
 import { getConfigureMethodReducer } from "./ConfigureMethodReducer";
-import { getAutoDetectReducer } from "./AutoDetectReducer";
+import { getAutoDetectReducer } from "./AutoDetectionReducer";
 import { getFilterTestCaseReducer } from "./FilterTestCaseReducer";
 import { getTestCaseResultReducer } from "./TestCaseResultReducer";
 import { getTestResultsReducer } from "./TestResultsReducer";
