@@ -150,8 +150,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>The action result.</returns>
-        [Route("{configurationId}/autodetect")]
-        [HttpGet]
+        [Route("{configurationId}/autodetect/initialize")]
+        [HttpPost]
         public IActionResult InitializeDetector(int configurationId)
         {
             PTMKernelService.CreateAutoDetector(configurationId);
@@ -163,7 +163,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// Gets auto detection prerequisites.
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>
-        /// <returns>Prerequisit View.</returns>
+        /// <returns>Prerequisite View.</returns>
         [Route("{configurationId}/autodetect/prerequisites")]
         [HttpGet]
         public PrerequisiteView GetPrerequisites(int configurationId)
