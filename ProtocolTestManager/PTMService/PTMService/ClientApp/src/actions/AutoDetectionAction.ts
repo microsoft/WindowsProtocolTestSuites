@@ -56,10 +56,22 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
     | StopAutoDetectionActionFailureType
 
 // define actions
-export const AutoDetectAction = {
+export const AutoDetectActions = {
     GetAutoDetectPrerequisiteAction_Request: (): TestSuiteAutoDetectionActionTypes => {
         return {
             type: GET_PREREQUISITE_REQUEST
+        }
+    },
+    GetAutoDetectPrerequisiteAction_Success: (data: Prerequisite): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: GET_PREREQUISITE_SUCCESS,
+            payload: data
+        }
+    },
+    GetAutoDetectPrerequisiteAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: GET_PREREQUISITE_FAILURE,
+            errorMsg: error
         }
     },
 }
