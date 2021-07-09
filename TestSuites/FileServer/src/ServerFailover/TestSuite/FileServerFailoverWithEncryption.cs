@@ -60,6 +60,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         /// <param name="encryptionAfterFailover">Set true if encryption is enabled after server failover, otherwise set false</param>
         private void FileServerFailoverWithEncryption(bool encryptionBeforeFailover, bool encryptionAfterFailover)
         {
+            RestoreCluster();
+
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.ClusteredFileServerName, TestConfig.ClusteredEncryptedFileShare);
 
             FILEID fileIdBeforeFailover;
@@ -272,6 +274,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
             }
 
             status = clientAfterFailover.LogOff();
+        }
+
+        private void RestoreCluster()
+        {
+            string ownerNode = sutController.GetClusterResourceOwner(TestConfig.ClusteredFileServerName);
+            string resName = Smb2Utility.GetPrincipleName(TestConfig.ClusteredFileServerName);
+            BaseTestSite.Log.Add(LogEntryKind.Debug, "Move the owner of {0} to {1}.", resName, ownerNode);
+            bool ret = sutController.MoveClusterResourceOwner(resName, ownerNode);
+            BaseTestSite.Assert.IsTrue(ret, "Expect that moving the owner node of {0} to {1} succeeds.", resName, ownerNode);
         }
         #endregion
     }
