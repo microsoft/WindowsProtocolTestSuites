@@ -100,7 +100,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
                     },
                     checker: (header, response) => { }),
                 TestConfig.FailoverTimeout,
-                "Retry Create until succeed within timeout span");
+                $"Retry Create until succeed within timeout span (\"{TestConfig.FailoverTimeout}\")");
             #endregion
 
             #region READ and WRITE
