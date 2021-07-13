@@ -579,18 +579,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 
             bool CompareUNCSharePathAndResourceName(string uncSharePath, string resourceName)
             {
-                var pathRegex = @"\\\\(?<serverName>[\.\w]+)\\(?<shareName>\w+)";
+                var pathRegex = @"\\\\(?<serverName>.+)\\(?<shareName>.+)";
                 var regex = new Regex(pathRegex);
 
                 var uncSharePathMatch = regex.Match(uncSharePath);
-                var shareServer = uncSharePathMatch.Groups["serverName"].Value.Split(".", StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                var shareServer = ExtractServerName(uncSharePathMatch.Groups["serverName"].Value);
                 var shareName = uncSharePathMatch.Groups["shareName"].Value;
 
                 var resourceNameMatch = regex.Match(resourceName);
-                var resourceShareServer = resourceNameMatch.Groups["serverName"].Value.Split(".", StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                var resourceShareServer = ExtractServerName(resourceNameMatch.Groups["serverName"].Value);
                 var resourceShareName = resourceNameMatch.Groups["shareName"].Value;
 
                 return shareServer == resourceShareServer && shareName == resourceShareName;
+
+                string ExtractServerName(string matchedGroupValue)
+                {
+                    // If the matched value is not an FQDN (e.g. computer name or IP address), return it directly.
+                    // If the matched value is an FQDN, extract the server name from it.
+                    if (!matchedGroupValue.Contains(TestConfig.DomainName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return matchedGroupValue;
+                    }
+                    else
+                    {
+                        return matchedGroupValue.Substring(0, matchedGroupValue.IndexOf(TestConfig.DomainName, StringComparison.OrdinalIgnoreCase) - 1);
+                    }
+                }
             }
 
             #endregion

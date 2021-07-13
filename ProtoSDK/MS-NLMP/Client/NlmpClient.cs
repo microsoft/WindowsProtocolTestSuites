@@ -114,22 +114,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             string workstationName
             )
         {
+            #region Parameter validation
+
             if (NlmpUtility.IsConnectionless(negotiateFlags))
             {
                 throw new NotSupportedException("NEGOTIATE message is not supported under Connectionless mode.");
             }
 
-            if (domainName == null)
+            if (NlmpUtility.IsDomainNameSupplied(negotiateFlags) && (domainName == null))
             {
                 throw new ArgumentNullException("domainName");
             }
 
-            if (workstationName == null)
+            if (NlmpUtility.IsWorkstationSupplied(negotiateFlags) && (workstationName == null))
             {
                 throw new ArgumentNullException("workstationName");
             }
-
-            #region Parameter validation
 
             if (NlmpUtility.IsVersionRequired(negotiateFlags))
             {
@@ -171,17 +171,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             {
                 packet.SetVersion(version);
             }
-            else
-            {
-                if (NlmpUtility.IsDomainNameSupplied(negotiateFlags))
-                {
-                    packet.SetDomainName(domainName);
-                }
 
-                if (NlmpUtility.IsWorkstationSupplied(negotiateFlags))
-                {
-                    packet.SetWorkstationName(workstationName);
-                }
+            if (NlmpUtility.IsDomainNameSupplied(negotiateFlags))
+            {
+                packet.SetDomainName(domainName);
+            }
+
+            if (NlmpUtility.IsWorkstationSupplied(negotiateFlags))
+            {
+                packet.SetWorkstationName(workstationName);
             }
 
             return packet;

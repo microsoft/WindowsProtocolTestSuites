@@ -182,7 +182,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite
         /// <summary>
         /// Indicates that the attempted open operation failed due to the presence of a symbolic link in the target path name
         /// </summary>
-        InvalidSymbolicLink
+        InvalidSymbolicLink,
+
+        /// <summary>
+        /// Indicates an normal valid file name(not symbolic link nor DFS link) with dot directory name which not existed on SUT
+        /// </summary>
+        NotExistedValidFileNameWithDotDirectoryName,
+
+        /// <summary>
+        /// Indicates an normal valid file name(not symbolic link nor DFS link) with double dot directory name which not existed on SUT
+        /// </summary>
+        NotExistedValidFileNameWithDoubleDotDirectoryName
     }
     #endregion
 

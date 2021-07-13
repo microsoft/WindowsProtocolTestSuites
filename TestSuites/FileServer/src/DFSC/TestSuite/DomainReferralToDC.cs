@@ -40,6 +40,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a version 3 Domain referral request to DC and expects positive response.")]
         public void BVT_DomainReferralV3ToDC()
         {
+            CheckDomainName();
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a version 3 Domain referral request to DC.");
             DfscReferralResponsePacket respPacket = utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V3, "", true);
@@ -56,6 +57,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a v1 Domain referral request to DC and expects negative response.")]
         public void DomainReferralV1ToDC()
         {
+            CheckDomainName();
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v1 Domain referral request to DC.");
             utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V1, "", true);
@@ -72,6 +74,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client send a v2 Domain referral request to DC and expects negative response.")]
         public void DomainReferralV2ToDC()
         {
+            CheckDomainName();
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client send a v2 Domain referral request to DC.");
             utility.SendAndReceiveDFSReferral(out status, client, ReferralEntryType_Values.DFS_REFERRAL_V2, "", true);
@@ -88,6 +91,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a v4 Domain referral request EX to DC and expects positive response.")]
         public void DomainReferralV4EXToDC()
         {
+            CheckDomainName();
             utility.CheckEXOverSMB();
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v4 Domain referral request EX to DC.");
@@ -105,6 +109,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [Description("Client sends a v4 Domain referral request EX to DC and expects positive response.")]
         public void DomainReferralV4EXSiteToDC()
         {
+            CheckDomainName();
             utility.CheckEXOverSMB();
             uint status;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a v4 Domain referral request EX to DC.");

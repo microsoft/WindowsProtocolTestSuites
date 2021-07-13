@@ -264,13 +264,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Asn1
                     fullContent[curPos++] = 0;
                 }
             }
-            else//it's a negative data's encoding result
-            {
-                while (curPos != BytesCountForLong)
-                {
-                    fullContent[curPos++] = 255;
-                }
-            }
+
             return fullContent;
         }
 

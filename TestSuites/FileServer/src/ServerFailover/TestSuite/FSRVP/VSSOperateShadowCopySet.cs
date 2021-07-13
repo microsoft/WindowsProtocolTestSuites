@@ -205,16 +205,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite.FS
             {
                 // testConfig.BasicFileShare only exists on testConfig.ClusterNode01
                 string resName = Smb2Utility.GetPrincipleName(TestConfig.ClusteredFileServerName);
-                BaseTestSite.Log.Add(LogEntryKind.Debug, "Move the owner of {0} to {1}.", resName, TestConfig.ClusterNode01);
-                bool ret = sutController.MoveClusterResourceOwner(resName, TestConfig.ClusterNode01);
-                BaseTestSite.Assert.IsTrue(ret, "Expect that moving the owner node of {0} to {1} succeeds.",
-                    resName, TestConfig.ClusterNode01);
-
-                ownerNode = GetClusterOwnerNode(TestConfig.ClusteredFileServerName);
-                BaseTestSite.Assert.IsTrue(string.Compare(Smb2Utility.GetPrincipleName(ownerNode), Smb2Utility.GetPrincipleName(TestConfig.ClusterNode01), true) == 0,
-                    "Expect that the new owner is {0}. The actual owner is {1}.",
-                    Smb2Utility.GetPrincipleName(TestConfig.ClusterNode01),
-                    Smb2Utility.GetPrincipleName(ownerNode));
+                DoUntilSucceed(() =>
+                {
+                    BaseTestSite.Log.Add(LogEntryKind.Debug, "Move the owner of {0} to {1}.", resName, TestConfig.ClusterNode01);
+                    if (sutController.MoveClusterResourceOwner(resName, TestConfig.ClusterNode01))
+                    {
+                        // Check ownerNode
+                        ownerNode = GetClusterOwnerNode(TestConfig.ClusteredFileServerName);
+                        return string.Compare(Smb2Utility.GetPrincipleName(ownerNode), Smb2Utility.GetPrincipleName(TestConfig.ClusterNode01), true) == 0;
+                    }
+                    return false;
+                }, TestConfig.FailoverTimeout, "Retry to move the owner to {0} until succeed within timeout span", TestConfig.ClusterNode01);
             }
             shareUncPaths.Add(@"\\" + ownerNode + @"\" + TestConfig.BasicFileShare);
             TestShadowCopySet((ulong)FsrvpContextValues.FSRVP_CTX_BACKUP | (ulong)FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY,
