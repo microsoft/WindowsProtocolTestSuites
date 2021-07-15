@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.IO;
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Gcc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
@@ -3206,7 +3202,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             // Fast-Path
                             messageName = "RDPBCGR:ReceivedFastPathPDU";
                         }
-                        ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer0, "Received Original RDPBCGR Message", packetData);
 
                         pdu = DecodePdu(server.ServerContext.SessionContexts[i], packetData);
                     }
@@ -3699,7 +3694,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -3732,7 +3726,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -3765,7 +3758,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -3800,7 +3792,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -3840,7 +3831,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -3880,7 +3870,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -3928,7 +3917,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     // RDP Standard Security
                     string messageName = "RDPBCGR:" + cooperatePdu.GetType().Name;
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, cooperatePdu.GetType().Name, decryptedUserData);
                 }
             }
             else if (controlPduData.action == action_Values.CTRLACTION_REQUEST_CONTROL)
@@ -3944,7 +3932,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 {
                     // RDP Standard Security
                     string messageName = "RDPBCGR:" + requestPdu.GetType().Name;
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, requestPdu.GetType().Name, decryptedUserData);
                 }
             }
             else
@@ -3989,7 +3976,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -4029,7 +4015,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -4098,7 +4083,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation
@@ -4144,7 +4128,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             while (userDataIndex < decryptedUserData.Length)
@@ -4227,7 +4210,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // Fast-Path encrypted
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedData);
             }
 
             // Check if data length exceeded expectation
@@ -4261,7 +4243,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
@@ -4292,7 +4273,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
@@ -4383,7 +4363,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 // RDP Standard Security
                 string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
             }
 
             // Check if data length exceeded expectation

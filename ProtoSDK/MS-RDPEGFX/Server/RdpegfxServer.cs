@@ -1,17 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
-{   
+{
 
     /// <summary>
     /// The RdpegfxServer is used to transform multiple EGFX server PDUs into byte stream.
@@ -588,7 +583,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
                     // ETW Provider Dump message
                     string messageName = "RDPEGFX:DecompressedData";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "RDPEGFX decompressed data", rawSvrData);
                 }
                 else
                 {
@@ -647,7 +641,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
                         // ETW Provider Dump message
                         string messageName = "RDPEGFX:DecompressedData";
-                        ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "RDPEGFX decompressed data", rawPartData);
                     }
                     else
                     {

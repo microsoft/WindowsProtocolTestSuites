@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.Protocols.TestTools.ExtendedLogging;
+
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System;
@@ -900,7 +900,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 if (sessionContext.RdpEncryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE)
                 {
                     string messageName = "RDPEDYC:ReceivedPDU";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer1, pdu.GetType().Name, completePdu.virtualChannelData);
                 }
 
             }
@@ -932,7 +931,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 if (sessionContext.ClientEncryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE)
                 {
                     string messageName = "RDPEDYC:ReceivedPDU";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer1, pdu.GetType().Name, rawPdu.virtualChannelData);
                 }
             }
 

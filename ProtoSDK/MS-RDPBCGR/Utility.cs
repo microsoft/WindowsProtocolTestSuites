@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,13 +30,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return clientRandom;
         }
 
-        // Dump Level layer definition for ETW Provider
-        public const DumpLevel DumpLevel_Layer0 = (DumpLevel)0;
-        public const DumpLevel DumpLevel_Layer1 = (DumpLevel)1;
-        public const DumpLevel DumpLevel_Layer2 = (DumpLevel)2;
-        public const DumpLevel DumpLevel_Layer3 = (DumpLevel)3;
-        public const DumpLevel DumpLevel_LayerTLS = (DumpLevel)10;
-
         /// <summary>
         /// ETW provider dump messages
         /// </summary>
@@ -59,13 +51,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 // Fast-Path
                 messageName = "RDPBCGR:SentFastPathPDU";
             }
-            ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer0, TypeName, EncodeBytes);
             // Dump decrypted structure
             if (isRDPStandardSecurity)
             {
                 // RDP Standard Security
                 messageName = "RDPBCGR:" + TypeName;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, TypeName, decryptedBytes);
             }
         }
 

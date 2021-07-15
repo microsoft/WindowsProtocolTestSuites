@@ -2,11 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 {
@@ -858,7 +855,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
                     // ETW Provider Dump message
                     string messageName = "DecompressedData";
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "Decompressed data", rawSvrData);
                 }
                 else
                 {
@@ -911,7 +907,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc
 
                         // ETW Provider Dump message
                         string messageName = "DecompressedData";
-                        ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, "Decompressed data", rawPartData);
                     }
                     else
                     {

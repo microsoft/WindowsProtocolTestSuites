@@ -3,12 +3,8 @@
 using System;
 using System.Net;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -295,7 +291,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                             // ETW Provider Dump Message
                             byte[] packetBytes = receivedPacket.ToBytes();
                             string messageName = "RDPEUDP:ReceivedPDU";
-                            ExtendedLogger.DumpMessage(messageName, RdpeudpSocket.DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, packetBytes);
 
                         }
                     }

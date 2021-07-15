@@ -3,10 +3,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Protocols.TestTools.StackSdk.Compression.Mppc;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 {
@@ -171,7 +168,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // ETW Provider Dump message
             string messageName = "RDPBCGR:SVC Sent Data";
-            ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer1, "RDPBCGR: Static Virtual Channel Sent Data", data);
         }
 
         /// <summary>
@@ -211,7 +207,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // ETW Provider Dump message
             string messageName = "RDPBCGR:SVC Received Data";
-            ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer1, "RDPBCGR: Static Virtual Channel Received Data", data);
         }
 
         #endregion Protected Methods
