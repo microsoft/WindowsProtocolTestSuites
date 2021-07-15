@@ -1,19 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Update="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
@@ -24,17 +22,20 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj" />
     <ProjectReference Include="..\Adapter\RDP_ServerAdapter.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
   </ItemGroup>
+
   <ItemGroup>
     <None Update="RDP_ServerTestSuite.deployment.ptfconfig">
-      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="RDP_ServerTestSuite.ptfconfig">
-      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 </Project>

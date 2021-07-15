@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Protocols.TestManager.RDPServerPlugin</RootNamespace>
+    <AssemblyName>RDPServerPlugin</AssemblyName>
+    <TargetFramework>net5.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <DocFiles Include="Docs\*.*"/>
+    <IconFiles Include="Icons\*.*"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Messages\Messages.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPELE\Rdpele.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\Sspi\Sspi.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="CopyCustomContent" AfterTargets="Publish">
+    <Copy SourceFiles="@(DocFiles)" DestinationFolder="$(PublishDir)Docs"/>
+    <Copy SourceFiles="@(IconFiles)" DestinationFolder="$(PublishDir)Icons"/>
+  </Target>
+
+</Project>
