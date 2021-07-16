@@ -343,24 +343,37 @@ namespace Microsoft.Protocols.TestManager.UI
             Pages.RunPage.TotalResults.Visibility = System.Windows.Visibility.Hidden;
             Pages.RunPage.TotalResultsLinkText.Text = "";
             Logger logger = util.GetLogger();
-            logger.GroupByOutcome.UpdateTestCaseStatus = (from, to, testcase) =>
+            logger.GroupByOutcome.UpdateTestCaseStatus = (from, to, testcase, testCaseStatus) =>
             {
-                this.Dispatcher.Invoke((Action)(() =>
+                if (testcase != null)
                 {
-                    from.RemoveTestCase(testcase);
-                    to.AddTestCase(testcase);
-                }));
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        if (testcase != null)
+                        {
+                            testcase.Status = testCaseStatus;
+                            if (from != null) from.RemoveTestCase(testcase);
+                            if (to != null) to.AddTestCase(testcase);
+                        }
+                    }));
+                }
             };
             logger.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
             {
-                this.Dispatcher.Invoke((Action)(() =>
+                if (runningcase != null)
                 {
-                    int index = group.TestCaseList.IndexOf(runningcase);
-                    if (index > 0)
+                    this.Dispatcher.Invoke((Action)(() =>
                     {
-                        group.TestCaseList.Move(index, 0);
-                    }
-                }));
+                        if (runningcase != null)
+                        {
+                            int index = group.TestCaseList.IndexOf(runningcase);
+                            if (index > 0)
+                            {
+                                group.TestCaseList.Move(index, 0);
+                            }
+                        }
+                    }));
+                }
             };
             Pages.RunPage.SetLogger(logger);
         }

@@ -83,6 +83,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public TestCase RunningTestCase { get; set; }
 
+        public bool IsAborted { get; set; }
+
         private List<TestCaseGroup> groupList = null;
         public List<TestCaseGroup> GetList()
         {
@@ -93,6 +95,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 groupList.Add(FailedTestCases);
                 groupList.Add(OtherTestCases);
                 groupList.Add(NotRunTestCases);
+                IsAborted = false;
             }
             return groupList;
         }
@@ -121,25 +124,49 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     if (RunningTestCase != null)
                     {
                         if (RunningTestCase.Status == TestCaseStatus.Running)
-                            RunningTestCase.Status = TestCaseStatus.Waiting;
+                        {
+                            if (UpdateTestCaseStatus != null)
+                            {
+                                UpdateTestCaseStatus(null, null, RunningTestCase, TestCaseStatus.Waiting);
+                            }
+                            else
+                            {
+                                RunningTestCase.Status = TestCaseStatus.Waiting;
+                            }
+                        }
                     }
                     RunningTestCase = testcase;
-                    RunningTestCase.Status = status;
-                    if (UpdateTestCaseList != null)
+                    if (UpdateTestCaseStatus != null)
+                    {
+                        if(RunningTestCase != null) UpdateTestCaseStatus(null, null, RunningTestCase, status);
+                    }
+                    else
+                    {
+                        RunningTestCase.Status = status;
+                    }
+                    if (UpdateTestCaseList != null && RunningTestCase != null)
                     {
                         UpdateTestCaseList(from, RunningTestCase);
                     }
+                    SetActualStatusesForRunningWaitingTestCases();
                     return;
                 }
                 if (status == TestCaseStatus.Waiting)
                 {
                     if (testcase.Status == TestCaseStatus.Running)
                     {
-                        testcase.Status = status;
+                        if (UpdateTestCaseStatus != null)
+                        {
+                            UpdateTestCaseStatus(null, null, testcase, status);
+                        }
+                        else
+                        {
+                            testcase.Status = status;
+                        }
+                        SetActualStatusesForRunningWaitingTestCases();
                         return;
                     }
                 }
-
                 switch (status)
                 {
                     case TestCaseStatus.Passed:
@@ -155,21 +182,92 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         to = NotRunTestCases;
                         break;
                 }
-                testcase.Status = status;
+
                 if (UpdateTestCaseStatus != null)
                 {
-
-                    UpdateTestCaseStatus(from, to, testcase);
+                    UpdateTestCaseStatus(from, to, testcase, status);
                 }
                 else
                 {
+                    testcase.Status = status;
                     from.RemoveTestCase(testcase);
                     to.AddTestCase(testcase);
                 }
                 testcasemap[testCaseName] = to;
+                SetActualStatusesForRunningWaitingTestCases();
             }
         }
 
+        private void SetActualStatusesForRunningWaitingTestCases()
+        {
+            // When it is aborted, we need to set the statuses of test cases whose current statuses are Running or Waiting to their actual statuses.
+            if (IsAborted)
+            {
+                var casesNeedUpdateToNotRun = new List<TestCase>();
+                foreach (var group in groupList)
+                {
+                    var runningTestCases = group.TestCaseList.Where(c => c.Status == TestCaseStatus.Running);
+                    foreach (var testcase in runningTestCases)
+                    {
+                        casesNeedUpdateToNotRun.Add(testcase);
+                    }
+                    var waitingTestCases = group.TestCaseList.Where(c => c.Status == TestCaseStatus.Waiting);
+                    foreach (var testcase in waitingTestCases)
+                    {
+                        casesNeedUpdateToNotRun.Add(testcase);
+                    }
+                }
+                for (int i = 0; i < casesNeedUpdateToNotRun.Count; i++)
+                {
+                    SetTestCaseToExpectedStatusAndGroup(casesNeedUpdateToNotRun[i]);
+                }
+            }
+        }
+
+        private void SetTestCaseToExpectedStatusAndGroup(TestCase testcase)
+        {
+            string testCaseName = testcase.FullName;
+            var originalGroup = testcasemap[testCaseName];
+            TestCaseStatus status = TestCaseStatus.NotRun;
+            TestCaseDetail caseDetail;
+            if (testcase.LogUri != null && System.IO.File.Exists(testcase.LogUri.AbsolutePath))
+            {
+                Utility.ParseFileGetStatus(testcase.LogUri.AbsolutePath, out status, out caseDetail);
+            }
+            string expectedGroupName = NotRunTestCases.Name;
+            if (status == TestCaseStatus.Passed) expectedGroupName = PassedTestCases.Name;
+            if (status == TestCaseStatus.Failed) expectedGroupName = FailedTestCases.Name;
+            if (status == TestCaseStatus.Other) expectedGroupName = OtherTestCases.Name;
+            TestCaseGroup expectedGroup = GetList().Where(i => i.Name == expectedGroupName).FirstOrDefault();
+
+            // If original group name is different with expected group name, then we need to change both test case group and status.
+            // otherwise we only need to change test case status.
+            if (originalGroup.Name != expectedGroupName)
+            {
+                if (UpdateTestCaseStatus != null)
+                {
+                    UpdateTestCaseStatus(originalGroup, expectedGroup, testcase, status);
+                }
+                else
+                {
+                    testcase.Status = status;
+                    originalGroup.RemoveTestCase(testcase);
+                    expectedGroup.AddTestCase(testcase);
+                }
+                testcasemap[testCaseName] = expectedGroup;
+            }
+            else
+            {
+                if (UpdateTestCaseStatus != null)
+                {
+                    UpdateTestCaseStatus(null, null, testcase, status);
+                }
+                else
+                {
+                    testcase.Status = status;
+                }
+            }
+        }
 
         public UpdateTestCaseStatusCallback UpdateTestCaseStatus;
         public UpdateTestCaseListCallback UpdateTestCaseList;

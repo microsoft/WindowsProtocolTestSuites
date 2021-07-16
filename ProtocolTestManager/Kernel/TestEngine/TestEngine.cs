@@ -155,6 +155,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private Exception Run(string runArgs)
         {
+            logger.GroupByOutcome.IsAborted = false;
             try
             {
                 vstestProcess = new Process()
@@ -279,6 +280,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             if (runningCaseStack != null) runningCaseStack.Clear();
 
+            logger.GroupByOutcome.IsAborted = true;
+            // Sleep 0.5 second to make sure the IsAborted checking logic with updating Running and Waiting Cases' statuses will be executed before TerminateProcessTree.
+            System.Threading.Thread.Sleep(500);
             TerminateProcessTree(vstestProcess.Id);
         }
 

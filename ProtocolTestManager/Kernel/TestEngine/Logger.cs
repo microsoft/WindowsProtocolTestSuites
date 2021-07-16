@@ -377,7 +377,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         }
     }
 
-    public delegate void UpdateTestCaseStatusCallback(TestCaseGroup from, TestCaseGroup to, TestCase testcase);
+    public delegate void UpdateTestCaseStatusCallback(TestCaseGroup from, TestCaseGroup to, TestCase testcase, TestCaseStatus testCaseStatus);
     public delegate void UpdateTestCaseListCallback(TestCaseGroup group, TestCase runningcase);
 
 }

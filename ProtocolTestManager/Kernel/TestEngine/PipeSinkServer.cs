@@ -113,10 +113,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
 
             string line;
-            while ((line = SR.ReadLine()) != null)
+            try
             {
-                if (!IgnoreLogs && PipeSinkServer.ParseLogMessage != null)
-                    PipeSinkServer.ParseLogMessage(line);
+                while ((SR != null) && ((line = SR.ReadLine()) != null))
+                {
+                    if (!IgnoreLogs && PipeSinkServer.ParseLogMessage != null)
+                        PipeSinkServer.ParseLogMessage(line);
+                }
+            }
+            catch (System.ObjectDisposedException)
+            {
+                // StreamReader has closed
+                Stop();
             }
         }
     }
