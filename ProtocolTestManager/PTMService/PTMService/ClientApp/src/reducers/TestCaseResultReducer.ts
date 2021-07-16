@@ -9,7 +9,7 @@ import {
     ABORT_RUNREQUEST_SUCCESS,
     ABORT_RUNREQUEST_FAILURE,
     SelectedTestCasesActionTypes
-} from '../actions/SelectedTestCasesActions';
+} from '../actions/SelectedTestCasesAction';
 
 import {
     GET_TESTRESULTDETAIL_REQUEST,
@@ -19,7 +19,7 @@ import {
     GET_TESTRUNREPORT_SUCCESS,
     GET_TESTRUNREPORT_FAILURE,
     TestResultsActionTypes
-} from '../actions/TestResultsActions';
+} from '../actions/TestResultsAction';
 
 import {
     GET_TESTCASERESULT_REQUEST,
@@ -27,7 +27,7 @@ import {
     GET_TESTCASERESULT_FAILURE,
     CLEAR_SELECTEDTESTCASERESULT,
     TestCaseResultActionTypes
-} from '../actions/TestCaseResultActions';
+} from '../actions/TestCaseResultAction';
 
 import { TestCaseResult } from '../model/TestCaseResult';
 

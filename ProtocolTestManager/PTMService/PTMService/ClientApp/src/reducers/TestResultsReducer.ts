@@ -6,7 +6,7 @@ import {
     GET_TESTSUITES_SUCCESS,
     GET_TESTSUITES_FAILURE,
     TestSuitesActionTypes
-} from '../actions/TestSuitesActions';
+} from '../actions/TestSuitesAction';
 
 import {
     GET_TESTSUITE_CONFIGURATIONS_REQUEST,
@@ -23,12 +23,13 @@ import {
     ABORT_RUNREQUEST_SUCCESS,
     ABORT_RUNREQUEST_FAILURE,
     SelectedTestCasesActionTypes
-} from '../actions/SelectedTestCasesActions';
+} from '../actions/SelectedTestCasesAction';
 
 import {
     LIST_TESTRESULTS_REQUEST,
     LIST_TESTRESULTS_SUCCESS,
     LIST_TESTRESULTS_FAILURE,
+    SET_SHOWREMOVEDTESTSUITES,
     SET_PAGENUMBER,
     SET_QUERY,
     SET_SELECTEDTESTRESULT,
@@ -40,7 +41,7 @@ import {
     GET_TESTRUNREPORT_SUCCESS,
     GET_TESTRUNREPORT_FAILURE,
     TestResultsActionTypes
-} from '../actions/TestResultsActions';
+} from '../actions/TestResultsAction';
 import { Configuration } from '../model/Configuration';
 import { TestResult, TestResultOverview, TestResultSummary } from '../model/TestResult';
 import { TestSuite } from '../model/TestSuite';
@@ -51,6 +52,7 @@ export interface TestResultsState {
     isDownloading: boolean;
     errorMsg?: string;
     allTestSuites: TestSuite[];
+    showRemovedTestSuites: boolean;
     allConfigurations: Required<Configuration>[];
     pageNumber: number;
     pageCount: number;
@@ -68,6 +70,7 @@ const initialTestResultsState: TestResultsState = {
     isDownloading: false,
     errorMsg: undefined,
     allTestSuites: [],
+    showRemovedTestSuites: false,
     allConfigurations: [],
     pageNumber: 0,
     pageCount: 1,
@@ -218,6 +221,12 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
                 ...state,
                 isPosting: false,
                 errorMsg: action.errorMsg
+            };
+
+        case SET_SHOWREMOVEDTESTSUITES:
+            return {
+                ...state,
+                showRemovedTestSuites: action.payload
             };
 
         case SET_PAGENUMBER:

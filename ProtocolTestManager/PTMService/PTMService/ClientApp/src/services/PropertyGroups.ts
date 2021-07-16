@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { FetchService, RequestMethod } from '.';
-import { PropertyGroupsActions, PropertyGroupsActionTypes } from '../actions/PropertyGroupsActions';
+import { PropertyGroupsActions, PropertyGroupsActionTypes } from '../actions/PropertyGroupsAction';
 import { AppThunkAction } from '../store/configureStore';
 
 export const PropertyGroupsDataSrv = {

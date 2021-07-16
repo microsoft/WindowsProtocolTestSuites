@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { StepWizardChildProps } from 'react-step-wizard';
-import { TestSuiteActions } from '../actions/TestSuitesActions';
+import { TestSuiteActions } from '../actions/TestSuitesAction';
 import { StepPanel } from '../components/StepPanel';
 import { TestSuiteInfo } from '../components/TestSuiteInfo';
 import { WizardNavBar } from '../components/WizardNavBar';

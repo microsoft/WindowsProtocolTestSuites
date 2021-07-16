@@ -9,7 +9,7 @@ import {
     CREATE_RUNREQUEST_SUCCESS,
     CREATE_RUNREQUEST_FAILURE,
     SelectedTestCasesActionTypes,
-} from '../actions/SelectedTestCasesActions';
+} from '../actions/SelectedTestCasesAction';
 
 export interface SelectedTestCasesState {
     isLoading: boolean;

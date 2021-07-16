@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Protocols.TestManager.PTMService.DatabaseMigration;
 
 namespace Microsoft.Protocols.TestManager.PTMService.DatabaseMigration.Migrations
 {
     [DbContext(typeof(PTMServiceDbContextForMigration))]
-    partial class PTMServiceDbContextForMigrationModelSnapshot : ModelSnapshot
+    [Migration("20210702055520_SupportTestSuiteInstallationRemoval")]
+    partial class SupportTestSuiteInstallationRemoval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

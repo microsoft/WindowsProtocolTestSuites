@@ -6,7 +6,7 @@ import { getPropertyGroupsReducer } from "./PropertyGroupsReducer";
 import { getConfigurationReducer } from "./TestSuiteConfigurationReducer";
 import { getSelectedTestCasesReducer } from "./SelectedTestCasesReducer";
 import { getTestSuitesReducer } from "./TestSuitesReducer";
-import { getManagementReducer } from "./Management";
+import { getManagementReducer } from "./ManagementReducer";
 import { getConfigureMethodReducer } from "./ConfigureMethodReducer";
 import { getFilterTestCaseReducer } from "./FilterTestCaseReducer";
 import { getTestCaseResultReducer } from "./TestCaseResultReducer";

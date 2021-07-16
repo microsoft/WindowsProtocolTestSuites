@@ -18,6 +18,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 
         public string Description { get; set; }
 
+        public bool Removed { get; set; }
+
         public TestCaseInfo[] TestCases { get; set; }
     }
 
@@ -41,6 +43,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public string Name { get; set; }
 
         public string[] Categories { get; set; }
+
         public Rule[]? Rules { get; set; }
     }
 

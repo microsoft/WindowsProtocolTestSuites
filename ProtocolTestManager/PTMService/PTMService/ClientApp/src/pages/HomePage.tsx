@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
       <div className="ms-Grid-col ms-lg12 ms-xl11 ms-xxl11 ms-xxxl11">
         <div className="ms-Grid-row center">
           <div className="ms-Grid ms-Grid-col ms-lg12 ms-xl11 ms-xxl11">
-            <p className="title">Protocol TestSuite Manager Web Service</p>
+            <p className="title">Protocol Test Manager Web Service</p>
           </div>
 
         </div>
