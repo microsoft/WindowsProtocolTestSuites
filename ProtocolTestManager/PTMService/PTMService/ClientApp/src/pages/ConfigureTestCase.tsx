@@ -20,7 +20,6 @@ export function ConfigureTestCase(props: StepWizardProps) {
     const dispatch = useDispatch();
     const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
     const configureMethod = useSelector((state: AppState) => state.configureMethod);
-
     useEffect(() => {
         dispatch(PropertyGroupsDataSrv.getPropertyGroups());
     }, [dispatch]);
