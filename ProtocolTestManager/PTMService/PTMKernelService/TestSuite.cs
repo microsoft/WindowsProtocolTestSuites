@@ -198,8 +198,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             XmlNode autoDetectionDllNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.AutoDetectionDllName);
 
             detectorAssembly = autoDetectionDllNode.InnerText.Trim();
-
-            return detectorAssembly;
+            var detectorAssemblyPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, detectorAssembly);
+            return detectorAssemblyPath;
         }
 
         private void AddItems(IList<Common.Types.Rule> displayRules, List<Rule> rules)

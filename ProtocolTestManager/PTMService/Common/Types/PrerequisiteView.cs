@@ -2,12 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Common.Types
 {
     /// <summary>
-    /// This class defines the view of prerequisit.
+    /// This class defines the view of prerequisite for front end view.
     /// </summary>
     public class PrerequisiteView
     {
@@ -38,6 +37,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Types
                 return "Choice";
             }
         }
+
         private List<string> propertyValues;
 
         public List<string> PropertyValues

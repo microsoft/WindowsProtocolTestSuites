@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\PropertyValueDetector\PropertyValueDetector.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="etc\\**\*">

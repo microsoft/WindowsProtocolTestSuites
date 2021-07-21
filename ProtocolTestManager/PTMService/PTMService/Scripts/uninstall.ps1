@@ -72,10 +72,8 @@ if (-not $IsLinux) {
 
 $flag = Get-Content $flagPath | ConvertFrom-Json
 Write-Host "You can backup or clean up the data in the following locations:"
+Write-Host "PTMService Storage Root: $($flag.storageRootPath)"
 Write-Host "Database: $($flag.storageDatabasePath)"
-Write-Host "Test Suite Storage Pool: $($flag.testSuitePoolPath)"
-Write-Host "Configuration Storage Pool: $($flag.configurationPoolPath)"
-Write-Host "Test Result Pool: $($flag.testResultPoolPath)"
 
 Remove-Item $flagPath -Force -ErrorAction SilentlyContinue
 
