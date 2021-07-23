@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Prerequisite, DetectionSteps } from "../model/AutoDetectionData";
+import { Prerequisite, DetectionSteps, DetectionStepsResponse } from "../model/AutoDetectionData";
 
 export const GET_PREREQUISITE_REQUEST = 'AUTO_DETECT/GET_PREREQUISITE_REQUEST';
 export const GET_PREREQUISITE_SUCCESS = 'AUTO_DETECT/GET_PREREQUISITE_SUCCESS';
@@ -23,6 +23,8 @@ export const GET_DETECTION_SUMMARY_REQUEST = 'AUTO_DETECT/GET_DETECTION_SUMMARY_
 export const GET_DETECTION_SUMMARY_SUCCESS = 'AUTO_DETECT/GET_DETECTION_SUMMARY_SUCCESS';
 export const GET_DETECTION_SUMMARY_FAILURE = 'AUTO_DETECT/GET_DETECTION_SUMMARY_FAILURE';
 
+export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE';
+
 // define action types
 interface GetAutoDetectPrerequisiteActionRequestType { type: typeof GET_PREREQUISITE_REQUEST; }
 interface GetAutoDetectPrerequisiteActionSuccessType { type: typeof GET_PREREQUISITE_SUCCESS; payload: Prerequisite; }
@@ -40,6 +42,7 @@ interface StopAutoDetectionActionRequestType { type: typeof STOP_AUTO_DETECTION_
 interface StopAutoDetectionActionSuccessType { type: typeof STOP_AUTO_DETECTION_SUCCESS; }
 interface StopAutoDetectionActionFailureType { type: typeof STOP_AUTO_DETECTION_FAILURE; errorMsg: string; }
 
+interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Prerequisite };
 
 
 export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionRequestType
@@ -54,6 +57,7 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
     | StopAutoDetectionActionRequestType
     | StopAutoDetectionActionSuccessType
     | StopAutoDetectionActionFailureType
+    | UpdateAutoDetectPrerequisiteActionType
 
 // define actions
 export const AutoDetectActions = {
@@ -68,9 +72,60 @@ export const AutoDetectActions = {
             payload: data
         }
     },
+    UpdateAutoDetectPrerequisiteAction: (data: Prerequisite): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: UPDATE_PREREQUISITE,
+            payload: data
+        }
+    },
     GetAutoDetectPrerequisiteAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
         return {
             type: GET_PREREQUISITE_FAILURE,
+            errorMsg: error
+        }
+    },
+
+    GetAutoDetectStepsAction_Request: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: GET_DETECTION_STEPS_REQUEST
+        }
+    },
+
+    GetAutoDetectStepsAction_Success: (data: DetectionStepsResponse[]): TestSuiteAutoDetectionActionTypes => {
+        const detectionSteps = {} as DetectionSteps;
+        detectionSteps.DetectingItems = [];
+
+        data.map(step => {
+            detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus });
+        })
+        return {
+            type: GET_DETECTION_STEPS_SUCCESS,
+            payload: detectionSteps
+        }
+    },
+
+    GetAutoDetectStepsAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: GET_DETECTION_STEPS_FAILURE,
+            errorMsg: error
+        }
+    },
+
+    PostAutoDetectStart_Request: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: START_AUTO_DETECTION_REQUEST
+        }
+    },
+
+    PostAutoDetectStart_Success: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: START_AUTO_DETECTION_SUCCESS
+        }
+    },
+
+    PostAutoDetectStart_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: START_AUTO_DETECTION_FAILURE,
             errorMsg: error
         }
     },

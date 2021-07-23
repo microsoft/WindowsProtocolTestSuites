@@ -23,6 +23,11 @@ export interface DetectingItem {
 
 //GetDetectionStepsRequest:api/testsuite/${configurationId}/autodetect/detectionsteps
 //GetDetectionStepsResponse:
+export interface DetectionStepsResponse {
+    DetectingContent: string;
+    DetectingStatus: string;
+}
+
 export interface DetectionSteps {
     DetectingItems: DetectingItem[];
     LogFileName: string;

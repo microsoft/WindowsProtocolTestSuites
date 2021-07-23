@@ -40,8 +40,46 @@ export const TestSuitesDataSrv = {
             method: RequestMethod.GET,
             dispatch,
             onRequest: AutoDetectActions.GetAutoDetectPrerequisiteAction_Request,
-            onComplete: FilterTestCaseActions.getFilterRulesAction_Success,
-            onError: FilterTestCaseActions.getFilterRuleAction_Failure
+            onComplete: AutoDetectActions.GetAutoDetectPrerequisiteAction_Success,
+            onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
         });
-    }
+    },
+    updateAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+        const state = getState();
+        const configurationId = state.configurations.selectedConfiguration?.Id;
+        await FetchService({
+            url: `api/testsuite/${configurationId}/autodetect/prerequisites`,
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: AutoDetectActions.GetAutoDetectPrerequisiteAction_Request,
+            onComplete: AutoDetectActions.GetAutoDetectPrerequisiteAction_Success,
+            onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
+        });
+    },
+
+    getAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+        const state = getState();
+        const configurationId = state.configurations.selectedConfiguration?.Id;
+        await FetchService({
+            url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: AutoDetectActions.GetAutoDetectStepsAction_Request,
+            onComplete: AutoDetectActions.GetAutoDetectStepsAction_Success,
+            onError: AutoDetectActions.GetAutoDetectStepsAction_Failure
+        });
+    },
+
+    startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+        const state = getState();
+        const configurationId = state.configurations.selectedConfiguration?.Id;
+        await FetchService({
+            url: `api/testsuite/${configurationId}/autodetect/start`,
+            method: RequestMethod.POST,
+            dispatch,
+            onRequest: AutoDetectActions.PostAutoDetectStart_Request,
+            onComplete: AutoDetectActions.PostAutoDetectStart_Success,
+            onError: AutoDetectActions.PostAutoDetectStart_Failure
+        });
+    },
 };
