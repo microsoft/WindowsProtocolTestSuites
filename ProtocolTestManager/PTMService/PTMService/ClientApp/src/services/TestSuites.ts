@@ -95,4 +95,16 @@ export const TestSuitesDataSrv = {
             onError: AutoDetectActions.PostAutoDetectStop_Failure
         });
     },
+    pullAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+        const state = getState();
+        const configurationId = state.configurations.selectedConfiguration?.Id;
+        await FetchService({
+            url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: AutoDetectActions.StartPolling,
+            onComplete: AutoDetectActions.GetAutoDetectStepsAction_Success,
+            onError: AutoDetectActions.GetAutoDetectStepsAction_Failure
+        });
+    },
 };

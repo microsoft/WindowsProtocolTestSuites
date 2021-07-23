@@ -22,7 +22,6 @@ import { Prerequisite } from '../model/AutoDetectionData';
 
 export function AutoDetection(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const propertyGroups = useSelector((state: AppState) => state.propertyGroups);
     const testSuites = useSelector((state: AppState) => state.testsuites);
     const prerequisite = useSelector((state: AppState) => state.autoDetection);
     const navSteps = getNavSteps(wizardProps);
@@ -30,8 +29,7 @@ export function AutoDetection(props: StepWizardProps) {
     const dispatch = useDispatch();
     const autoDetection = useSelector((state: AppState) => state.autoDetection);
     const winSize = useWindowSize();
-    const [isDetecting, setIsDetecting] = useState(true);
-
+    const [detectingTimes, setDetectingTimes] = useState(0);
 
     useEffect(() => {
         dispatch(TestSuitesDataSrv.getAutoDetectionPrerequisite());
@@ -42,10 +40,20 @@ export function AutoDetection(props: StepWizardProps) {
     }, [dispatch]);
 
     useEffect(() => {
-        if (!propertyGroups.updated) {
-            dispatch(TestSuitesDataSrv.getAutoDetectionPrerequisite());
+        console.log('useEffect');
+        console.log(detectingTimes);
+
+        if (detectingTimes <= 0 || isAutoDetectFinished()) {
+            return;
         }
-    }, [dispatch, propertyGroups.updated]);
+
+        const timer = setTimeout(() => {
+            setDetectingTimes(detectingTimes - 1);
+            dispatch(TestSuitesDataSrv.pullAutoDetectionSteps());
+            }, 1000);
+       
+        return () => clearTimeout(timer);
+    }, [detectingTimes])
 
     const onPreviousButtonClick = () => {
         dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
@@ -74,14 +82,24 @@ export function AutoDetection(props: StepWizardProps) {
         return isStarted;
     }
 
+    const isAutoDetectFinished = () => {
+        const hasPending = prerequisite.detectionSteps?.DetectingItems.some(item => {
+            if (item.Status === 'Pending') {
+                return true;
+            }
+            return false;
+        })
+        return !hasPending;
+    }
+
     const onNextButtonClick = () => {
-        
         if (isAutoDetectStarted()) {
             // Cancel
             dispatch(TestSuitesDataSrv.stopAutoDetection());
         }
         else {
             dispatch(TestSuitesDataSrv.startAutoDetection());
+            setDetectingTimes(10);
         }
     };
 

@@ -25,6 +25,12 @@ export const GET_DETECTION_SUMMARY_FAILURE = 'AUTO_DETECT/GET_DETECTION_SUMMARY_
 
 export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE';
 
+export const START_POLLING = 'START_POLLING';
+export const STOP_POLLING = 'STOP_POLLING';
+export const START_POLLING_Success = 'START_POLLING_Success';
+export const START_POLLING_Failure = 'START_POLLING_Failure';
+
+
 // define action types
 interface GetAutoDetectPrerequisiteActionRequestType { type: typeof GET_PREREQUISITE_REQUEST; }
 interface GetAutoDetectPrerequisiteActionSuccessType { type: typeof GET_PREREQUISITE_SUCCESS; payload: Prerequisite; }
@@ -44,6 +50,10 @@ interface StopAutoDetectionActionFailureType { type: typeof STOP_AUTO_DETECTION_
 
 interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Prerequisite };
 
+interface StopPolling { type: typeof STOP_POLLING };
+interface StartPolling { type: typeof START_POLLING };
+interface StartPollingSuccess { type: typeof START_POLLING_Success; payload: DetectionSteps; };
+interface StartPollingFailure { type: typeof START_POLLING_Failure; errorMsg: string;};
 
 export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionRequestType
     | GetAutoDetectPrerequisiteActionSuccessType
@@ -58,6 +68,10 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
     | StopAutoDetectionActionSuccessType
     | StopAutoDetectionActionFailureType
     | UpdateAutoDetectPrerequisiteActionType
+    | StartPolling
+    | StopPolling
+    | StartPollingSuccess
+    | StartPollingFailure
 
 // define actions
 export const AutoDetectActions = {
@@ -145,6 +159,38 @@ export const AutoDetectActions = {
     PostAutoDetectStop_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
         return {
             type: STOP_AUTO_DETECTION_FAILURE,
+            errorMsg: error
+        }
+    },
+
+    StartPolling: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: START_POLLING
+        };
+    },
+
+    StopPolling: () => {
+        return {
+            type: STOP_POLLING
+        };
+    },
+
+    StartPolling_Success: (data: DetectionStepsResponse[]): TestSuiteAutoDetectionActionTypes => {
+        const detectionSteps = {} as DetectionSteps;
+        detectionSteps.DetectingItems = [];
+
+        data.map(step => {
+            detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus });
+        })
+        return {
+            type: START_POLLING_Success,
+            payload: detectionSteps
+        }
+    },
+
+    StartPolling_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: START_POLLING_Failure,
             errorMsg: error
         }
     },
