@@ -14,7 +14,7 @@ import { useWindowSize } from '../components/UseWindowSize';
 import { LoadingPanel } from '../components/LoadingPanel';
 import { PropertyGroupView } from '../components/PropertyGroupView';
 import { Property } from '../model/Property';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities';
 import { AutoDetectActions } from '../actions/AutoDetectionAction';
@@ -30,6 +30,8 @@ export function AutoDetection(props: StepWizardProps) {
     const dispatch = useDispatch();
     const autoDetection = useSelector((state: AppState) => state.autoDetection);
     const winSize = useWindowSize();
+    const [isDetecting, setIsDetecting] = useState(true);
+
 
     useEffect(() => {
         dispatch(TestSuitesDataSrv.getAutoDetectionPrerequisite());
@@ -45,9 +47,6 @@ export function AutoDetection(props: StepWizardProps) {
         }
     }, [dispatch, propertyGroups.updated]);
 
-    console.log('*******************');
-    console.log(prerequisite);
-    console.log(prerequisite.detectionSteps?.DetectingItems);
     const onPreviousButtonClick = () => {
         dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
         wizardProps.previousStep();
@@ -65,21 +64,47 @@ export function AutoDetection(props: StepWizardProps) {
         dispatch(AutoDetectActions.UpdateAutoDetectPrerequisiteAction(prerequisite.prerequisite!));
     };
 
+    const isAutoDetectStarted = () => {
+        const isStarted = prerequisite.detectionSteps?.DetectingItems.some(item => {
+            if (item.Status != 'Pending') {
+                return true;
+            }
+            return false;
+        })
+        return isStarted;
+    }
+
     const onNextButtonClick = () => {
-        //dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
-        //dispatch(PropertyGroupsDataSrv.setPropertyGroups(() => {
-        //    if (propertyGroups.errorMsg === undefined) {
-        //        wizardProps.nextStep();
-        //    }
-        //}));
-
-        dispatch(TestSuitesDataSrv.startAutoDetection());
-
+        
+        if (isAutoDetectStarted()) {
+            // Cancel
+            dispatch(TestSuitesDataSrv.stopAutoDetection());
+        }
+        else {
+            dispatch(TestSuitesDataSrv.startAutoDetection());
+        }
     };
 
-    const isPreviousButtonDisabled = () => { return false };
+    const isPreviousButtonDisabled = () => {
+        if (isAutoDetectStarted()) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+
     const isNextButtonDisabled = () => { return false };
-    const getNextButtonText = () => { return 'Detect' };
+    const getNextButtonText = () => {
+
+        if (isAutoDetectStarted()) {
+            return 'Cancel';
+        }
+        else {
+            return 'Detect';
+        }
+        
+    };
 
     const StepColumns = (): IColumn[] => {
         return [{

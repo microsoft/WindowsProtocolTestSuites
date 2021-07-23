@@ -129,4 +129,23 @@ export const AutoDetectActions = {
             errorMsg: error
         }
     },
+
+    PostAutoDetectStop_Request: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: STOP_AUTO_DETECTION_REQUEST
+        }
+    },
+
+    PostAutoDetectStop_Success: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: STOP_AUTO_DETECTION_SUCCESS
+        }
+    },
+
+    PostAutoDetectStop_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: STOP_AUTO_DETECTION_FAILURE,
+            errorMsg: error
+        }
+    },
 }
