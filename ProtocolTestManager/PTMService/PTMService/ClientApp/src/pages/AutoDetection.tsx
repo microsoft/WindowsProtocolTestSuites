@@ -29,7 +29,7 @@ export function AutoDetection(props: StepWizardProps) {
     const dispatch = useDispatch();
     const autoDetection = useSelector((state: AppState) => state.autoDetection);
     const winSize = useWindowSize();
-    const [detectingTimes, setDetectingTimes] = useState(0);
+    const [detectingTimes, setDetectingTimes] = useState(-999);
 
     useEffect(() => {
         dispatch(TestSuitesDataSrv.getAutoDetectionPrerequisite());
@@ -43,7 +43,7 @@ export function AutoDetection(props: StepWizardProps) {
         console.log('useEffect');
         console.log(detectingTimes);
 
-        if (isAutoDetectFinished()) {
+        if (detectingTimes === -999 || isAutoDetectFinished()) {
             return;
         }
 
@@ -61,14 +61,7 @@ export function AutoDetection(props: StepWizardProps) {
 
     const onPropertyValueChange = (updatedProperty: Property) => {
 
-        console.log(updatedProperty);
-        prerequisite.prerequisite?.Properties.map(p => {
-            if (p.Name === updatedProperty.Name) {
-                p.Value = updatedProperty.Value;
-            }
-        });
-
-        dispatch(AutoDetectActions.UpdateAutoDetectPrerequisiteAction(prerequisite.prerequisite!));
+        dispatch(AutoDetectActions.updateAUtoDetectionPrerequisiteAction(updatedProperty));
     };
 
     const isAutoDetectStarted = () => {

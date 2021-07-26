@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Prerequisite, DetectionSteps, DetectionStepsResponse } from "../model/AutoDetectionData";
+import { Property } from "../model/Property";
 
 export const GET_PREREQUISITE_REQUEST = 'AUTO_DETECT/GET_PREREQUISITE_REQUEST';
 export const GET_PREREQUISITE_SUCCESS = 'AUTO_DETECT/GET_PREREQUISITE_SUCCESS';
@@ -24,6 +25,8 @@ export const GET_DETECTION_SUMMARY_SUCCESS = 'AUTO_DETECT/GET_DETECTION_SUMMARY_
 export const GET_DETECTION_SUMMARY_FAILURE = 'AUTO_DETECT/GET_DETECTION_SUMMARY_FAILURE';
 
 export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE';
+//export const UPDATE_PREREQUISITE_SUCCESS = 'AUTO_DETECT/UPDATE_PREREQUISITE';
+//export const UPDATE_PREREQUISITE_FAIL = 'AUTO_DETECT/UPDATE_PREREQUISITE';
 
 export const START_POLLING = 'START_POLLING';
 export const STOP_POLLING = 'STOP_POLLING';
@@ -48,7 +51,7 @@ interface StopAutoDetectionActionRequestType { type: typeof STOP_AUTO_DETECTION_
 interface StopAutoDetectionActionSuccessType { type: typeof STOP_AUTO_DETECTION_SUCCESS; }
 interface StopAutoDetectionActionFailureType { type: typeof STOP_AUTO_DETECTION_FAILURE; errorMsg: string; }
 
-interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Prerequisite };
+interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Property };
 
 interface StopPolling { type: typeof STOP_POLLING };
 interface StartPolling { type: typeof START_POLLING };
@@ -86,12 +89,7 @@ export const AutoDetectActions = {
             payload: data
         }
     },
-    UpdateAutoDetectPrerequisiteAction: (data: Prerequisite): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: UPDATE_PREREQUISITE,
-            payload: data
-        }
-    },
+   
     GetAutoDetectPrerequisiteAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
         return {
             type: GET_PREREQUISITE_FAILURE,
@@ -193,5 +191,12 @@ export const AutoDetectActions = {
             type: START_POLLING_Failure,
             errorMsg: error
         }
+    },
+
+    updateAUtoDetectionPrerequisiteAction: (property: Property): UpdateAutoDetectPrerequisiteActionType => {
+        return {
+            type: UPDATE_PREREQUISITE,
+            payload: property
+        };
     },
 }

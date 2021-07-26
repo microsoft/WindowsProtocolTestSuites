@@ -44,18 +44,18 @@ export const TestSuitesDataSrv = {
             onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
         });
     },
-    updateAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
-        const state = getState();
-        const configurationId = state.configurations.selectedConfiguration?.Id;
-        await FetchService({
-            url: `api/testsuite/${configurationId}/autodetect/prerequisites`,
-            method: RequestMethod.GET,
-            dispatch,
-            onRequest: AutoDetectActions.GetAutoDetectPrerequisiteAction_Request,
-            onComplete: AutoDetectActions.GetAutoDetectPrerequisiteAction_Success,
-            onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
-        });
-    },
+    //updateAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+    //    const state = getState();
+    //    const configurationId = state.configurations.selectedConfiguration?.Id;
+    //    await FetchService({
+    //        url: `api/testsuite/${configurationId}/autodetect/prerequisites`,
+    //        method: RequestMethod.POST,
+    //        dispatch,
+    //        onRequest: AutoDetectActions.GetAutoDetectPrerequisiteAction_Request,
+    //        onComplete: AutoDetectActions.GetAutoDetectPrerequisiteAction_Success,
+    //        onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
+    //    });
+    //},
 
     getAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
         const state = getState();
