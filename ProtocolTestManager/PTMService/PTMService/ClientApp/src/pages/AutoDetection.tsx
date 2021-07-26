@@ -43,7 +43,7 @@ export function AutoDetection(props: StepWizardProps) {
         console.log('useEffect');
         console.log(detectingTimes);
 
-        if (detectingTimes <= 0 || isAutoDetectFinished()) {
+        if (isAutoDetectFinished()) {
             return;
         }
 
@@ -56,7 +56,6 @@ export function AutoDetection(props: StepWizardProps) {
     }, [detectingTimes])
 
     const onPreviousButtonClick = () => {
-        dispatch(PropertyGroupsActions.updatePropertyGroupsAction());
         wizardProps.previousStep();
     };
 
@@ -93,13 +92,17 @@ export function AutoDetection(props: StepWizardProps) {
     }
 
     const onNextButtonClick = () => {
-        if (isAutoDetectStarted()) {
+        if (isAutoDetectFinished()) {
+            // Next page
+            wizardProps.nextStep();
+        }
+        else if (isAutoDetectStarted()) {
             // Cancel
             dispatch(TestSuitesDataSrv.stopAutoDetection());
         }
         else {
             dispatch(TestSuitesDataSrv.startAutoDetection());
-            setDetectingTimes(10);
+            setDetectingTimes(100);
         }
     };
 
@@ -114,8 +117,10 @@ export function AutoDetection(props: StepWizardProps) {
 
     const isNextButtonDisabled = () => { return false };
     const getNextButtonText = () => {
-
-        if (isAutoDetectStarted()) {
+        if (isAutoDetectFinished()) {
+            return 'Next';
+        }
+        else if (isAutoDetectStarted()) {
             return 'Cancel';
         }
         else {
@@ -148,9 +153,20 @@ export function AutoDetection(props: StepWizardProps) {
                 isResizable: true,
                 isPadded: true,
                 onRender: (item: any) => {
+                    let style = { };
+
+                    if (item.Status === 'Failed') {
+                        style = { paddingLeft: 5, color: 'red' };
+                    }
+                    else if (item.Status === 'Finished') {
+                        style = { paddingLeft: 5, color: 'green' };
+                    }
+                    else {
+                        style = { paddingLeft: 5 };
+                    }
                     return (
                         <Label>
-                            <div style={{ paddingLeft: 5 }}>{item.Status}</div>
+                            <div style={ style }>{item.Status}</div>
                         </Label>
                     );
                 }
