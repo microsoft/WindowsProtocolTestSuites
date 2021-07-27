@@ -205,15 +205,26 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <summary>
         /// Start auto detection.
         /// </summary>
+        /// <param name="prerequisitProperties">List of PrerequisitProperty.</param>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>The action result.</returns>
         [Route("{configurationId}/autodetect/start")]
         [HttpPost]
-        public IActionResult StartAutoDetection(int configurationId)
+        public IActionResult StartAutoDetection(List<PrerequisiteProperty> prerequisitProperties, int configurationId)
         {
-            PTMKernelService.StartDetection(configurationId, (o) => {});
+            var setPrerequisite = PTMKernelService.SetPrerequisites(prerequisitProperties, configurationId);
 
-            return Ok();
+            if (setPrerequisite)
+            {
+                PTMKernelService.StartDetection(configurationId, (o) => { });
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("There's errors when set prerequisites");
+            }
+                       
         }
 
         /// <summary>

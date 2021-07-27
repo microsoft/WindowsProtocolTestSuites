@@ -43,10 +43,16 @@ export const getAutoDetectReducer = (state = initialAutoDetectState, action: Tes
                 prerequisite: action.payload
             }
         case UPDATE_PREREQUISITE:
+            const updatedItems = state.prerequisite?.Properties.map((item) => {
+                if (item.Name === action.payload.Name) {
+                    item.Value = action.payload.Value
+                    return item;
+                }
+            });
+            console.log(state);
             return {
                 ...state,
                 isPrerequisiteLoading: false,
-                prerequisite: action.payload
             };
 
         case GET_DETECTION_STEPS_REQUEST:
