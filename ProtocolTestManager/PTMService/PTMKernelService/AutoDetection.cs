@@ -15,8 +15,10 @@ using System.Reflection;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
-    public class AutoDetection: IAutoDetection
+    public class AutoDetection : IAutoDetection
     {
+        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();
+
         private StreamWriter logWriter;
 
         private int stepIndex;
@@ -165,10 +167,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Gets a list of the detection steps.
         /// </summary>
         /// <returns>A list of the detection steps.</returns>
-        public List<DetectingItem> GetDetectedSteps()
+        public List<DetectingItem> GetDetectedSteps(bool resetSteps = false)
         {
-            return GetDetectStepsInValueDetectorAssembly();
+            cacheLock.EnterWriteLock();
+            try
+            {
+                if ((detectSteps == null) || resetSteps)
+                {
+                    detectSteps = valueDetector.GetDetectionSteps();
+                }
+                return detectSteps;
+            }
+            finally
+            {
+                cacheLock.ExitWriteLock();
+            }
         }
+
+        //public 
 
         /// <summary>
         /// Begins the auto-detection.
@@ -177,49 +193,67 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public void StartDetection(DetectionCallback callback)
         {
             stepIndex = 0;
-            detectSteps = GetDetectedSteps();
+            GetDetectedSteps(true);
             string detectorLog = Path.Combine(TestSuite.StorageRoot.AbsolutePath, "Detector_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
             logWriter = new StreamWriter(detectorLog);
-            DetectLogCallback = (msg, style) => 
+            DetectLogCallback = (msg, style) =>
             {
-                if (stepIndex == detectSteps.Count) return;
-                var item = detectSteps[stepIndex];
-                item.Style = style;
-                switch(style)
+                cacheLock.EnterWriteLock();
+                try
                 {
-                    case LogStyle.Default:
-                        detectSteps[stepIndex].DetectingStatus = DetectingStatus.Detecting;
-                        break;
-                    case LogStyle.Error:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Error;
-                        break;
-                    case LogStyle.StepFailed:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Failed;
-                        break;
-                    case LogStyle.StepSkipped:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Skipped;
-                        break;
-                    case LogStyle.StepNotFound:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.NotFound;
-                        break;
-                    case LogStyle.StepPassed:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Finished;
-                        break;
-                    default:
-                        item.DetectingStatus = DetectingStatus.Pending;
-                        break;
+                    if (stepIndex == detectSteps.Count) return;
+                    var item = detectSteps[stepIndex];
+                    item.Style = style;
+                    switch (style)
+                    {
+                        case LogStyle.Default:
+                            detectSteps[stepIndex].DetectingStatus = DetectingStatus.Detecting;
+                            break;
+                        case LogStyle.Error:
+                            stepIndex++;
+                            item.DetectingStatus = DetectingStatus.Error;
+                            break;
+                        case LogStyle.StepFailed:
+                            stepIndex++;
+                            item.DetectingStatus = DetectingStatus.Failed;
+                            break;
+                        case LogStyle.StepSkipped:
+                            stepIndex++;
+                            item.DetectingStatus = DetectingStatus.Skipped;
+                            break;
+                        case LogStyle.StepNotFound:
+                            stepIndex++;
+                            item.DetectingStatus = DetectingStatus.NotFound;
+                            break;
+                        case LogStyle.StepPassed:
+                            stepIndex++;
+                            item.DetectingStatus = DetectingStatus.Finished;
+                            break;
+                        default:
+                            item.DetectingStatus = DetectingStatus.Pending;
+                            break;
+                    }
                 }
+                finally
+                {
+                    cacheLock.ExitWriteLock();
+                }
+                
                 logWriter.WriteLine("[{0}] {1}", DateTime.Now.ToString(), msg);
                 logWriter.Flush();
             };
-            BeginDetection((outcome) => 
+            BeginDetection((outcome) =>
             {
-                if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
+                cacheLock.EnterReadLock();
+                try
+                {
+                    if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
+                }
+                finally
+                {
+                    cacheLock.ExitReadLock();
+                }
+                
                 callback(outcome);
                 logWriter.Close();
                 logWriter = null;
@@ -233,11 +267,27 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         {
             DetectLogCallback = null;
 
-            detectSteps[stepIndex].DetectingStatus = DetectingStatus.Canceling;
-
-            StopAndCancelDetection(callback);
+            cacheLock.EnterWriteLock();
+            try
+            {
+                detectSteps[stepIndex].DetectingStatus = DetectingStatus.Canceling;
+            }
+            finally
+            {
+                cacheLock.ExitWriteLock();
+            }
             
-            if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
+            StopAndCancelDetection(callback);
+
+            cacheLock.EnterReadLock();
+            try
+            {
+                if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
+            }
+            finally
+            {
+                cacheLock.ExitReadLock();
+            }
             
             if (logWriter != null)
             {
@@ -262,7 +312,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             try
             {
                 var ptfConfigFiles = TestSuite.GetConfigurationFiles().ToList();
-                
                 var ptfconfig = new PtfConfig(ptfConfigFiles);
 
                 return ptfconfig;
@@ -280,15 +329,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         private Prerequisites GetPrerequisitsInValueDetectorAssembly()
         {
             return valueDetector.GetPrerequisites();
-        }
-
-        /// <summary>
-        /// Gets a list of the detection steps.
-        /// </summary>
-        /// <returns>A list fo the detection steps.</returns>
-        private List<DetectingItem> GetDetectStepsInValueDetectorAssembly()
-        {
-            return valueDetector.GetDetectionSteps();
         }
 
         private DetectionOutcome RunDetectionInValueDetectorAssembly()
@@ -317,7 +357,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             var token = cts.Token;
 
-            token.Register(() => {
+            token.Register(() =>
+            {
                 taskCanceled = true;
             });
 

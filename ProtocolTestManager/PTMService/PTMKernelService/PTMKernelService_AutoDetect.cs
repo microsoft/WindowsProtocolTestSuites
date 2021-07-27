@@ -6,32 +6,50 @@ using System.Collections.Generic;
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal partial class PTMKernelService
     {
+        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();
+
         public int CreateAutoDetector(int configurationId)
         {
             var configuration = GetConfiguration(configurationId);
 
             var testSuite = configuration.TestSuite;
 
-            var autoDetector = AutoDetection.Create(testSuite);
-
-            AutoDetectionPool.AddOrUpdate(configurationId, _ => autoDetector, (_, _) => autoDetector);
+            cacheLock.EnterWriteLock();
+            try
+            {
+                var autoDetector = AutoDetection.Create(testSuite);
+                AutoDetectionPool.AddOrUpdate(configurationId, _ => autoDetector, (_, _) => autoDetector);
+            }
+            finally
+            {
+                cacheLock.ExitWriteLock();
+            }
 
             return configurationId;
         }
 
         public IAutoDetection GetAutoDetection(int configurationId)
         {
-            if (!AutoDetectionPool.ContainsKey(configurationId))
+            cacheLock.EnterUpgradeableReadLock();
+            try
             {
-                CreateAutoDetector(configurationId);
-            }
+                if (!AutoDetectionPool.ContainsKey(configurationId))
+                {
+                    CreateAutoDetector(configurationId);
+                }
 
-            return AutoDetectionPool[configurationId];
+                return AutoDetectionPool[configurationId];
+            }
+            finally
+            {
+                cacheLock.ExitUpgradeableReadLock();
+            }
         }
 
         public PrerequisiteView GetPrerequisites(int configurationId)

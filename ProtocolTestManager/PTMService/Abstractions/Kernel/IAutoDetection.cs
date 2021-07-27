@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         bool SetPrerequisits(List<PrerequisiteProperty> prerequisitProperties);
 
-        List<DetectingItem> GetDetectedSteps();
+        List<DetectingItem> GetDetectedSteps(bool resetSteps = false);
 
         void StartDetection(DetectionCallback callback);
 
