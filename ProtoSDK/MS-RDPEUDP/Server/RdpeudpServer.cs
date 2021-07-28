@@ -288,10 +288,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                                 unprocessedPacketBuffer.Add(packetinfo);
                             }
 
-                            // ETW Provider Dump Message
-                            byte[] packetBytes = receivedPacket.ToBytes();
-                            string messageName = "RDPEUDP:ReceivedPDU";
-
                         }
                     }
                     catch (TimeoutException)

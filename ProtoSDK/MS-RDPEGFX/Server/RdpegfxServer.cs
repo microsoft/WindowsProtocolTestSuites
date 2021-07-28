@@ -580,9 +580,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     CompressFactory cpf = new CompressFactory();
                     byte[] compressedData = cpf.Compress(rawSvrData);
                     segHeader.bulkData.data = compressedData;
-
-                    // ETW Provider Dump message
-                    string messageName = "RDPEGFX:DecompressedData";
                 }
                 else
                 {
@@ -638,9 +635,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                         segHeader.segmentArray[cnt].bulkData.header = compressFlag;
                         segHeader.segmentArray[cnt].bulkData.data = compressData;
                         segHeader.segmentArray[cnt].size = (uint)(segHeader.segmentArray[cnt].bulkData.data.Length + 1);
-
-                        // ETW Provider Dump message
-                        string messageName = "RDPEGFX:DecompressedData";
                     }
                     else
                     {

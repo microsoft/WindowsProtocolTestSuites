@@ -360,9 +360,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
             {
                 byte[] dataToSent = Encrypt(data);
                 this.rdpeudpSocket.Send(dataToSent);
-
-                // ETW Provider Dump Message
-                string messageName = "RDPEMT:SentPDU";
             }
         }
 
@@ -470,9 +467,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                     int actualLen = this.sslStream.Read(readBuffer, 0, readBuffer.Length);
                     byte[] decryptedData = new byte[actualLen];
                     Array.Copy(readBuffer, 0, decryptedData, 0, actualLen);
-
-                    // ETW Provider Dump Message
-                    string messageName = "RDPEMT:ReceivedPDU";
 
                     if (Received != null)
                     {

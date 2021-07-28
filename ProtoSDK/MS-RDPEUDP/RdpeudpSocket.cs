@@ -404,8 +404,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             StackPacket stackPacket = new RdpeudpBasePacket(data);
             packetSender(remoteEndPoint, stackPacket);
 
-            // ETW Provider Dump Message
-            string messageName = "RDPEUDP:SentPDU";
         }
 
         public RdpeudpPacket ExpectPacket(TimeSpan timeout)
@@ -708,8 +706,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 return;
             }
 
-            // ETW Provider Dump Message
-            string messageName = "RDPEUDP:ReceivedPDU";
 
             ReceivePacket(eudpPacket);
         }

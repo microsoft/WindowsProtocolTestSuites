@@ -136,9 +136,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                         rdpeudpSocket.Send(toSentData);
                     }
                 }
-
-                // ETW Provider Dump Message
-                string messageName = "RDPEMT:SentPDU";
             }
         }
 
@@ -220,9 +217,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt
                 if (isAuthenticated)
                 {
                     byte[] decryptedData = Decrypt(data);
-
-                    // ETW Provider Dump Message
-                    string messageName = "RDPEMT:ReceivedPDU";
 
                     if (Received != null)
                     {

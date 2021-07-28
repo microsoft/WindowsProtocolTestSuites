@@ -30,36 +30,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             return clientRandom;
         }
 
-        /// <summary>
-        /// ETW provider dump messages
-        /// </summary>
-        /// <param name="TypeName">Message Name</param>
-        /// <param name="EncodeBytes">Encrypted or original bytes</param>
-        /// <param name="isRDPStandardSecurity">Whether it is RDP Standard Security</param>
-        /// <param name="decryptedBytes">Decrypted part of message</param>
-        public static void ETWProviderDump(String TypeName, byte[] EncodeBytes, bool isRDPStandardSecurity = false, byte[] decryptedBytes = null)
-        {
-            // ETW Provider Dump Code
-            string messageName;
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == EncodeBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
-            {
-                // Slow-Path
-                messageName = "RDPBCGR:SentSlowPathPDU";
-            }
-            else
-            {
-                // Fast-Path
-                messageName = "RDPBCGR:SentFastPathPDU";
-            }
-            // Dump decrypted structure
-            if (isRDPStandardSecurity)
-            {
-                // RDP Standard Security
-                messageName = "RDPBCGR:" + TypeName;
-            }
-        }
-
-
 
         /// <summary>
         /// Generate encrypted random according to section 5.3.4.1 Encrypting Client Random.
