@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+	<AssemblyName>FileServerPlugin</AssemblyName>
+    <RootNamespace>Microsoft.Protocols.TestManager.FileServerPlugin</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +23,11 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SQOS\Sqos.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <None Update="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

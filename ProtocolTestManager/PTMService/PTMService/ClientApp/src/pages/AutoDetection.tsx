@@ -1,24 +1,20 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, Dropdown, IColumn, Label, Link, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react';
+import { DetailsList, Dropdown, IColumn, Label, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react';
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
 import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
 import { getNavSteps } from '../model/DefaultNavSteps';
 import { AppState } from '../store/configureStore';
 import { useDispatch, useSelector } from 'react-redux';
-import { PropertyGroupsActions } from '../actions/PropertyGroupsActions';
-import { PropertyGroupsDataSrv } from '../services/PropertyGroups';
 import { useWindowSize } from '../components/UseWindowSize';
 import { LoadingPanel } from '../components/LoadingPanel';
-import { PropertyGroupView } from '../components/PropertyGroupView';
 import { Property } from '../model/Property';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities';
 import { AutoDetectActions } from '../actions/AutoDetectionAction';
-import { Prerequisite } from '../model/AutoDetectionData';
 
 export function AutoDetection(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;

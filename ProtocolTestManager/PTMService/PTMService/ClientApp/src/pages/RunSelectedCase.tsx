@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DefaultButton, DetailsList, DetailsListLayoutMode, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react';
 import { useForceUpdate } from '@uifabric/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
