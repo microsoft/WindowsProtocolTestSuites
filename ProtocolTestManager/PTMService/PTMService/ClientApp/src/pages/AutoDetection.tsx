@@ -30,6 +30,7 @@ export function AutoDetection(props: StepWizardProps) {
     const autoDetection = useSelector((state: AppState) => state.autoDetection);
     const winSize = useWindowSize();
     const [detectingTimes, setDetectingTimes] = useState(-999);
+    const [detecting, setDetecting] = useState(false);
 
     useEffect(() => {
         dispatch(TestSuitesDataSrv.getAutoDetectionPrerequisite());
@@ -92,8 +93,10 @@ export function AutoDetection(props: StepWizardProps) {
         else if (isAutoDetectStarted()) {
             // Cancel
             dispatch(TestSuitesDataSrv.stopAutoDetection());
+            setDetectingTimes(-999);
         }
         else {
+            // Start detect
             dispatch(TestSuitesDataSrv.startAutoDetection());
             setDetectingTimes(100);
         }

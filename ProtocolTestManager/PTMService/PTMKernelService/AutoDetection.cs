@@ -164,6 +164,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         }
 
         /// <summary>
+        /// Sets the property values required for auto-detection.
+        /// </summary>
+        /// <returns>Returns true if succeeded, otherwise false.</returns>
+        public bool SetPrerequisits(List<Property> prerequisitProperties)
+        {
+            Dictionary<string, string> properties = new Dictionary<string, string>();
+            foreach (var p in prerequisitProperties)
+            {
+                properties.Add(p.Name, p.Value);
+            };
+            return SetPrerequisitesInValueDetectorAssembly(properties);
+        }
+
+        /// <summary>
         /// Gets a list of the detection steps.
         /// </summary>
         /// <returns>A list of the detection steps.</returns>

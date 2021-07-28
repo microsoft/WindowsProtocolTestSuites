@@ -68,6 +68,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return detector.SetPrerequisits(prerequisitProperties);
         }
 
+        public bool SetPrerequisites(List<Property> prerequisitProperties, int configurationId)
+        {
+            var detector = GetAutoDetection(configurationId);
+
+            return detector.SetPrerequisits(prerequisitProperties);
+        }
+
         public List<DetectingItem> GetDetectedSteps(int configurationId)
         {
             var detector = GetAutoDetection(configurationId);

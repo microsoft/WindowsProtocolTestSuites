@@ -173,6 +173,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         bool SetPrerequisites(List<PrerequisiteProperty> prerequisiteProperties, int configurationId);
 
         /// <summary>
+        /// Sets the property values required for auto-detection.
+        /// </summary>
+        /// <param name="Property">List of Property.</param>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Returns true if succeeded, otherwise false.</returns>
+        bool SetPrerequisites(List<Property> prerequisiteProperties, int configurationId);
+
+        /// <summary>
         /// Gets a list of the detection steps.
         /// </summary>
         /// <param name="configurationId">Test suite configuration id.</param>

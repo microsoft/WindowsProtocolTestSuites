@@ -44,6 +44,7 @@ export const TestSuitesDataSrv = {
             onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
         });
     },
+
     //updateAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     //    const state = getState();
     //    const configurationId = state.configurations.selectedConfiguration?.Id;
@@ -73,13 +74,15 @@ export const TestSuitesDataSrv = {
     startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
         const configurationId = state.configurations.selectedConfiguration?.Id;
+        const body = state.autoDetection.prerequisite?.Properties;
         await FetchService({
             url: `api/testsuite/${configurationId}/autodetect/start`,
             method: RequestMethod.POST,
             dispatch,
             onRequest: AutoDetectActions.PostAutoDetectStart_Request,
             onComplete: AutoDetectActions.PostAutoDetectStart_Success,
-            onError: AutoDetectActions.PostAutoDetectStart_Failure
+            onError: AutoDetectActions.PostAutoDetectStart_Failure,
+            body: JSON.stringify(body)
         });
     },
 
