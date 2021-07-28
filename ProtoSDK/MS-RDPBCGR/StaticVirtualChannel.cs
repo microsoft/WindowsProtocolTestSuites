@@ -166,8 +166,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 Sender(ChannelId, chunk.channelPduHeader, chunk.chunkData);
             }
 
-            // ETW Provider Dump message
-            string messageName = "RDPBCGR:SVC Sent Data";
         }
 
         /// <summary>
@@ -205,8 +203,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 Received(data);
             }
 
-            // ETW Provider Dump message
-            string messageName = "RDPBCGR:SVC Received Data";
         }
 
         #endregion Protected Methods
