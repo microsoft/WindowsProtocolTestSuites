@@ -926,12 +926,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
 
                 pdu = rawPdu;
-
-                // ETW Provider Dump Message
-                if (sessionContext.ClientEncryptionMethod != EncryptionMethods.ENCRYPTION_METHOD_NONE)
-                {
-                    string messageName = "RDPEDYC:ReceivedPDU";
-                }
             }
 
 
