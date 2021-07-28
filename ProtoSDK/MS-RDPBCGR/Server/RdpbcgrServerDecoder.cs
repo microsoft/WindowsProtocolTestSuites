@@ -3689,13 +3689,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 decryptedUserData,
                 ref userDataIndex);
 
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -3721,13 +3714,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int userDataIndex = 0;
             pdu.infoPacket = ParseClientInfo(decryptedUserData, ref userDataIndex);
 
-            // ETW Provider Dump Message
-            if (type != SecurityHeaderType.Basic)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -3752,13 +3738,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             int userDataIndex = 0;
             pdu.autodetectRspPduData = ParseNetworkDetectionResponse(decryptedUserData, ref userDataIndex);
-
-            // ETW Provider Dump Message
-            if (type != SecurityHeaderType.Basic)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
@@ -3786,13 +3765,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int userDataIndex = 0;
             pdu.requestId = ParseUInt32(decryptedUserData, ref userDataIndex, false);
             pdu.hrResponse = (HrResponse_Value)ParseUInt32(decryptedUserData, ref userDataIndex, false);
-
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
@@ -3826,13 +3798,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // DemandActivePDU: demandActivePduData
             pdu.confirmActivePduData = ParseTsConfirmActivePdu(decryptedUserData, ref userDataIndex);
 
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -3864,13 +3829,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // SynchronizePDU: synchronizePduData
             pdu.synchronizePduData = ParseTsSynchronizePdu(decryptedUserData, ref userDataIndex);
-
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
@@ -3912,12 +3870,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 cooperatePdu.controlPduData = controlPduData;
                 pdu = cooperatePdu;
 
-                // ETW Provider Dump Message
-                if (cooperatePdu.commonHeader.securityHeader != null)
-                {
-                    // RDP Standard Security
-                    string messageName = "RDPBCGR:" + cooperatePdu.GetType().Name;
-                }
             }
             else if (controlPduData.action == action_Values.CTRLACTION_REQUEST_CONTROL)
             {
@@ -3927,12 +3879,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 requestPdu.controlPduData = controlPduData;
                 pdu = requestPdu;
 
-                // ETW Provider Dump Message
-                if (requestPdu.commonHeader.securityHeader != null)
-                {
-                    // RDP Standard Security
-                    string messageName = "RDPBCGR:" + requestPdu.GetType().Name;
-                }
             }
             else
             {
@@ -3971,13 +3917,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // FontMapPDU: fontMapPduData
             pdu.persistentKeyListPduData = ParseTsPersistentListPdu(decryptedUserData, ref userDataIndex);
 
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -4009,13 +3948,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             // FontMapPDU: fontMapPduData
             pdu.fontListPduData = ParseTsFontListPdu(decryptedUserData, ref userDataIndex);
-
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
@@ -4078,13 +4010,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // ShutdownRequestDeniedPDU: 
             pdu.shutdownRequestPduData = ParseTsShutdownReuqestPdu(decryptedUserData, ref userDataIndex);
 
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -4122,13 +4047,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.numberEvents = ParseUInt16(decryptedUserData, ref userDataIndex, false);
             pdu.pad2Octets = ParseUInt16(decryptedUserData, ref userDataIndex, false);
             pdu.slowPathInputEvents = new Collection<TS_INPUT_EVENT>();
-
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             while (userDataIndex < decryptedUserData.Length)
             {
@@ -4205,13 +4123,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             // TS_FP_UPDATE_PDU: fpOutputUpdates
             pdu.fpInputEvents = ParseTsFpInputEvents(decryptedData, ref decryptedDataIndex);
 
-            // ETW Provider Dump Message
-            if (pdu.dataSignature != null)
-            {
-                // Fast-Path encrypted
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedData.Length, decryptedDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -4238,13 +4149,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int userDataIndex = 0;
             pdu.refreshRectPduData = ParseTsRefreshRectPdu(decryptedUserData, ref userDataIndex);
 
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
-
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
         }
@@ -4267,13 +4171,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.commonHeader = ParseMcsCommonHeader(data, ref dataIndex, type);
             int userDataIndex = 0;
             pdu.suppressOutputPduData = ParseTsSuppressOutputPdu(decryptedUserData, ref userDataIndex);
-
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -4312,16 +4209,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int remainLength = decryptedUserData.Length - Marshal.SizeOf(pdu.channelPduHeader);
             pdu.virtualChannelData = GetBytes(decryptedUserData, ref userDataIndex, remainLength);
 
-            /*
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, pdu.GetType().Name, decryptedUserData);
-            }
-             * */
-
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
@@ -4357,13 +4244,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             //frame id
             pdu.frameID = ParseUInt32(decryptedUserData, ref userDataIndex, false);
-
-            // ETW Provider Dump Message
-            if (pdu.commonHeader.securityHeader != null)
-            {
-                // RDP Standard Security
-                string messageName = "RDPBCGR:" + pdu.GetType().Name;
-            }
 
             // Check if data length exceeded expectation
             VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
