@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public int Install([FromForm] InstallRequest request)
         {
-            if (String.IsNullOrEmpty(request.TestSuiteName))
+            if (string.IsNullOrEmpty(request.TestSuiteName))
             {
                 throw new ArgumentNullException(nameof(request.TestSuiteName));
             }
@@ -71,6 +71,49 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             int id = PTMKernelService.InstallTestSuite(request.TestSuiteName, packageName, packageStream, request.Description);
 
             return id;
+        }
+
+        /// <summary>
+        /// Update an existing test suite by uploading a new package.
+        /// </summary>
+        /// <param name="id">The ID of the test suite to be updated.</param>
+        /// <param name="request">The install request.</param>
+        /// <returns>The action result.</returns>
+        [Route("{id}")]
+        [HttpPost]
+        public IActionResult Update(int id, [FromForm] InstallRequest request)
+        {
+            if (string.IsNullOrEmpty(request.TestSuiteName))
+            {
+                throw new ArgumentNullException(nameof(request.TestSuiteName));
+            }
+
+            if (request.Package == null)
+            {
+                throw new ArgumentNullException(nameof(request.Package));
+            }
+
+            var packageName = request.Package.FileName;
+
+            var packageStream = request.Package.OpenReadStream();
+
+            PTMKernelService.UpdateTestSuite(id, request.TestSuiteName, packageName, packageStream, request.Description);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Remove an existing test suite.
+        /// </summary>
+        /// <param name="id">The ID of the test suite to be removed.</param>
+        /// <returns>The action result.</returns>
+        [Route("{id}")]
+        [HttpDelete]
+        public IActionResult Remove(int id)
+        {
+            PTMKernelService.RemoveTestSuite(id);
+
+            return Ok();
         }
     }
 }

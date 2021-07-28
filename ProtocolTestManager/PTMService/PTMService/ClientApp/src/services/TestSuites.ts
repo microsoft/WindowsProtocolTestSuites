@@ -2,11 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { RequestMethod, FetchService } from ".";
-import { TestSuiteActions, TestSuitesActionTypes } from "../actions/TestSuitesActions";
+import { TestSuiteActions, TestSuitesActionTypes } from "../actions/TestSuitesAction";
 import { FilterTestCaseActions, FilterTestCaseActionTypes } from "../actions/FilterTestCaseAction";
 import { AutoDetectActions, TestSuiteAutoDetectionActionTypes } from "../actions/AutoDetectionAction";
 import { AppThunkAction } from "../store/configureStore";
-
 
 export const TestSuitesDataSrv = {
     getTestSuiteList: (): AppThunkAction<TestSuitesActionTypes> => async (dispatch, getState) => {

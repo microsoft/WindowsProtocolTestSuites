@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { FetchService, RequestMethod } from '.';
-import { TestCaseResultActions, TestCaseResultActionTypes } from '../actions/TestCaseResultActions';
+import { TestCaseResultActions, TestCaseResultActionTypes } from '../actions/TestCaseResultAction';
 import { AppThunkAction } from '../store/configureStore';
 
 export const TestCaseResultDataSrv = {

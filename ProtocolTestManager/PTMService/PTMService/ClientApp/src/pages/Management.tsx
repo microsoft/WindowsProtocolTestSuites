@@ -1,20 +1,33 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { CommandBarButton, ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, PrimaryButton, SearchBox, SelectionMode, Stack, TextField } from '@fluentui/react';
+import { CommandBarButton, ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, Label, PrimaryButton, SearchBox, SelectionMode, Stack, TextField } from '@fluentui/react';
 import { useBoolean } from '@uifabric/react-hooks';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { ManagementActions } from '../actions/ManagementAction';
+import { TestSuiteActions } from '../actions/TestSuitesAction';
 import { FileUploader, IFile } from '../components/FileUploader';
-import { StackGap10 } from '../components/StackStyle';
+import { StackGap10, StackGap5 } from '../components/StackStyle';
 import { TestSuite } from '../model/TestSuite';
 import { ManagementDataSrv } from '../services/Management';
 import { AppState } from '../store/configureStore';
 
+type TestSuiteManagementDialogKind = 'Install' | 'Update' | 'Remove';
+
+type TestSuiteManagementDialogContentProps = {
+    kind: TestSuiteManagementDialogKind,
+    type: DialogType,
+    title: string
+};
+
 export function Management(props: any) {
+    const history = useHistory();
     const dispatch = useDispatch();
     const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
+    const [dialogContentProps, setDialogContentProps] = useState<TestSuiteManagementDialogContentProps | undefined>(undefined);
+    const [currentTestSuite, setCurrentTestSuite] = useState<TestSuite | undefined>(undefined);
     const [testSuiteName, setTestSuiteName] = useState('');
     const [testSuiteDescription, setTestSuiteDescription] = useState('');
     const [testSuiteErrorMsg, setTestSuiteErrorMsg] = useState('');
@@ -22,7 +35,7 @@ export function Management(props: any) {
 
     useEffect(() => {
         dispatch(ManagementDataSrv.getTestSuiteList());
-    }, [dispatch])
+    }, [dispatch]);
 
     const onFieldChange = useCallback(
         (element: ElementType, newValue?: string) => {
@@ -40,9 +53,22 @@ export function Management(props: any) {
 
     const managementState = useSelector((state: AppState) => state.management);
 
-    const dialogContentProps = {
+    const installDialogContentProps: TestSuiteManagementDialogContentProps = {
+        kind: 'Install',
         type: DialogType.normal,
-        title: 'Install Test Suite',
+        title: 'Install Test Suite'
+    };
+
+    const updateDialogContentProps: TestSuiteManagementDialogContentProps = {
+        kind: 'Update',
+        type: DialogType.normal,
+        title: 'Update Test Suite'
+    };
+
+    const removeDialogContentProps: TestSuiteManagementDialogContentProps = {
+        kind: 'Remove',
+        type: DialogType.normal,
+        title: 'Remove Test Suite'
     };
 
     const modalProps = {
@@ -53,9 +79,9 @@ export function Management(props: any) {
             closeMenuItemText: 'Close',
             menu: ContextualMenu,
         }
-    }
+    };
 
-    const onConfigurationCreate = () => {
+    const onTestSuiteInstall = () => {
         if (testSuiteName && file) {
             dispatch(ManagementDataSrv.installTestSuite({
                 TestSuiteName: testSuiteName,
@@ -63,44 +89,95 @@ export function Management(props: any) {
                 Package: file!.File
             }, () => {
                 toggleHideDialog();
+                setCurrentTestSuite(undefined);
                 setTestSuiteName('');
                 setTestSuiteDescription('');
                 setTestSuiteErrorMsg('');
                 dispatch(ManagementDataSrv.getTestSuiteList());
-            }))
+            }));
         } else {
             if (!testSuiteName) {
-                setTestSuiteErrorMsg(`TestSuite Name can't be null`)
+                setTestSuiteErrorMsg(`TestSuite Name can't be null`);
                 return;
             }
             if (!file) {
-                setTestSuiteErrorMsg(`TestSuite package can't be null`)
+                setTestSuiteErrorMsg(`TestSuite package can't be null`);
                 return;
             }
-            setTestSuiteErrorMsg('')
+            setTestSuiteErrorMsg('');
         }
-    }
+    };
 
-    const getCurrentConfigure = (id: number) => {
-        const findedConfigure = managementState.displayList.find((value) => value.Id === id);
-        return findedConfigure;
-    }
+    const onTestSuiteUpdate = () => {
+        if (currentTestSuite !== undefined && testSuiteName && file) {
+            dispatch(ManagementDataSrv.updateTestSuite(currentTestSuite.Id, {
+                TestSuiteName: testSuiteName,
+                Description: testSuiteDescription,
+                Package: file!.File
+            }, () => {
+                toggleHideDialog();
+                setCurrentTestSuite(undefined);
+                setTestSuiteName('');
+                setTestSuiteDescription('');
+                setTestSuiteErrorMsg('');
+                dispatch(ManagementDataSrv.getTestSuiteList());
+            }));
+        } else {
+            if (!testSuiteName) {
+                setTestSuiteErrorMsg(`TestSuite Name can't be null`);
+                return;
+            }
+            if (!file) {
+                setTestSuiteErrorMsg(`TestSuite package can't be null`);
+                return;
+            }
+            setTestSuiteErrorMsg('');
+        }
+    };
 
-    const columns = getConfigurationGridColumns({
-        onReRun: (id => {
-            const findedConfigure = getCurrentConfigure(id);
-            if (findedConfigure) {
-                //dispatch(ManagementActions.setSelectedConfigurationAction(findedConfigure));
+    const onTestSuiteRemove = () => {
+        if (currentTestSuite !== undefined) {
+            dispatch(ManagementDataSrv.removeTestSuite(currentTestSuite.Id,
+                () => {
+                    toggleHideDialog();
+                    setCurrentTestSuite(undefined);
+                    setTestSuiteName('');
+                    setTestSuiteDescription('');
+                    setTestSuiteErrorMsg('');
+                    dispatch(ManagementDataSrv.getTestSuiteList());
+                }));
+        }
+    };
+
+    const getCurrentTestSuite = (id: number) => managementState.displayList.find((value) => value.Id === id);
+
+    const columns = getTestSuiteGridColumns({
+        onRerun: ((id: number) => {
+            const foundTestSuite = getCurrentTestSuite(id);
+            if (foundTestSuite) {
+                dispatch(TestSuiteActions.setSelectedTestSuiteAction(foundTestSuite));
+                dispatch(() => history.push('/Tasks/NewRun#SelectConfiguration', { from: 'Management' }));
             }
         }),
-        onUpdate: (id => {
-            const findedConfigure = getCurrentConfigure(id);
-            if (findedConfigure) {
-                //dispatch(ManagementActions.setSelectedConfigurationAction(findedConfigure));
+        onUpdate: ((id: number) => {
+            const foundTestSuite = getCurrentTestSuite(id);
+            if (foundTestSuite) {
+                setCurrentTestSuite(foundTestSuite);
+                setTestSuiteName(foundTestSuite.Name);
+                setTestSuiteDescription(foundTestSuite.Description ?? '');
+                setDialogContentProps(updateDialogContentProps);
+                toggleHideDialog();
             }
         }),
-        onRemove: (id => {
-
+        onRemove: ((id: number) => {
+            const foundTestSuite = getCurrentTestSuite(id);
+            if (foundTestSuite) {
+                setCurrentTestSuite(foundTestSuite);
+                setTestSuiteName(foundTestSuite.Name);
+                setTestSuiteDescription(foundTestSuite.Description ?? '');
+                setDialogContentProps(removeDialogContentProps);
+                toggleHideDialog();
+            }
         })
     });
 
@@ -112,17 +189,20 @@ export function Management(props: any) {
         if (files.length > 0) {
             setFile(files[0]);
         }
-    }
+    };
 
     return (
         <div>
             <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 10 }} tokens={StackGap10}>
                 <SearchBox placeholder="Search" onSearch={onSearchChanged} />
-                <PrimaryButton iconProps={{ iconName: 'Add' }} allowDisabledFocus onClick={() => {
-                    toggleHideDialog();
-                }}>
-                    Install Test Suite
-                </PrimaryButton>
+                <PrimaryButton
+                    iconProps={{ iconName: 'Add' }}
+                    allowDisabledFocus
+                    text='Install Test Suite'
+                    onClick={() => {
+                        setDialogContentProps(installDialogContentProps);
+                        toggleHideDialog();
+                    }} />
             </Stack>
             <hr style={{ border: "1px solid #d9d9d9" }} />
             <div style={{ padding: 10 }}>
@@ -132,48 +212,86 @@ export function Management(props: any) {
                     columns={columns}
                     selectionMode={SelectionMode.none}
                     layoutMode={DetailsListLayoutMode.justified}
-                    isHeaderVisible={true}
-                />
+                    isHeaderVisible={true} />
             </div>
             <Dialog
                 hidden={hideDialog}
                 onDismiss={toggleHideDialog}
                 dialogContentProps={dialogContentProps}
-                modalProps={modalProps}
-            >
-                <Stack tokens={StackGap10}>
-                    <TextField
-                        label="Test Suite Name"
-                        value={testSuiteName}
-                        onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Name, newValue) }}
-                    />
-                    <FileUploader
-                        label="Package"
-                        onSuccess={onFileUploadSuccess}
-                        maxFileCount={1} suffix={['.zip', '.gz']}
-                        placeholder="Please click to upload test suite package"
-                    />
-                    <TextField
-                        label="Description"
-                        multiline={true}
-                        value={testSuiteDescription}
-                        errorMessage={testSuiteErrorMsg}
-                        onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Description, newValue) }}
-                    />
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={onConfigurationCreate} text={managementState.isInstalling ? "Installing" : "Create"} disabled={managementState.isInstalling} />
-                    <DefaultButton onClick={toggleHideDialog} text="Close" disabled={managementState.isInstalling} />
-                </DialogFooter>
+                modalProps={modalProps}>
+                {
+                    dialogContentProps !== undefined && dialogContentProps.kind !== 'Remove'
+                        ? <Stack tokens={StackGap10}>
+                            <TextField
+                                label="Test Suite Name"
+                                value={testSuiteName}
+                                onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Name, newValue) }} />
+                            <FileUploader
+                                label="Package"
+                                onSuccess={onFileUploadSuccess}
+                                maxFileCount={1} suffix={['.zip', '.gz']}
+                                placeholder="Please click to upload test suite package" />
+                            <TextField
+                                label="Description"
+                                multiline={true}
+                                value={testSuiteDescription}
+                                errorMessage={testSuiteErrorMsg}
+                                onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Description, newValue) }} />
+                        </Stack>
+                        : <div style={{ fontSize: 'large' }}>
+                            <Stack horizontalAlign='start' tokens={StackGap5}>
+                                <Label>Do you want to remove the following test suite?</Label>
+                                <Stack horizontal><div style={{ paddingRight: 5 }}>ID:</div>{currentTestSuite?.Id}</Stack>
+                                <Stack horizontal><div style={{ paddingRight: 5 }}>TestSuite:</div>{testSuiteName + ' ' + currentTestSuite?.Version}</Stack>
+                                <Stack horizontal><div style={{ paddingRight: 5 }}>Description:</div>{testSuiteDescription}</Stack>
+                            </Stack>
+                        </div>
+                }
+                {
+                    dialogContentProps !== undefined
+                        ? <DialogFooter>
+                            {
+                                dialogContentProps.kind === 'Install'
+                                    ? <PrimaryButton
+                                        onClick={onTestSuiteInstall}
+                                        text={managementState.isProcessing ? "Installing" : "Install"}
+                                        disabled={managementState.isProcessing} />
+                                    : null
+                            }
+                            {
+                                dialogContentProps.kind === 'Update'
+                                    ? <PrimaryButton
+                                        onClick={onTestSuiteUpdate}
+                                        text={managementState.isProcessing ? "Updating" : "Update"}
+                                        disabled={managementState.isProcessing} />
+                                    : null
+                            }
+                            <DefaultButton
+                                onClick={toggleHideDialog}
+                                text="Close"
+                                disabled={managementState.isProcessing} />
+                            {
+                                dialogContentProps.kind === 'Remove'
+                                    ? <PrimaryButton
+                                        onClick={onTestSuiteRemove}
+                                        style={{ backgroundColor: '#ff4949' }}
+                                        text={managementState.isProcessing ? "Removing" : "Remove"}
+                                        disabled={managementState.isProcessing}
+                                    />
+                                    : null
+                            }
+                        </DialogFooter>
+                        : null
+                }
             </Dialog>
         </div>
     )
 };
 
-function getConfigurationGridColumns(props: {
-    onReRun: (configureId: number) => void,
-    onUpdate: (configureId: number) => void,
-    onRemove: (configureId: number) => void,
+function getTestSuiteGridColumns(props: {
+    onRerun: (id: number) => void,
+    onUpdate: (id: number) => void,
+    onRemove: (id: number) => void,
 }): IColumn[] {
     return [
         {
@@ -216,9 +334,9 @@ function getConfigurationGridColumns(props: {
             isPadded: true,
             onRender: (item: TestSuite, index, column) => {
                 return <Stack horizontal tokens={StackGap10}>
-                    <CommandBarButton iconProps={{ iconName: 'Rerun' }} text="ReRun" disabled={true} onClick={() => { props.onReRun(item.Id!) }} />
-                    <CommandBarButton iconProps={{ iconName: 'UpgradeAnalysis' }} text="Update" disabled={true} onClick={() => { props.onUpdate(item.Id!) }} />
-                    <CommandBarButton iconProps={{ iconName: 'RemoveFromTrash' }} text="Remove" disabled={true} onClick={() => { props.onRemove(item.Id!) }} />
+                    <CommandBarButton iconProps={{ iconName: 'Rerun' }} text="Rerun" onClick={() => { props.onRerun(item.Id) }} />
+                    <CommandBarButton iconProps={{ iconName: 'UpgradeAnalysis' }} text="Update" onClick={() => { props.onUpdate(item.Id) }} />
+                    <CommandBarButton iconProps={{ iconName: 'RemoveFromTrash' }} text="Remove" onClick={() => { props.onRemove(item.Id) }} />
                 </Stack>
             }
         }

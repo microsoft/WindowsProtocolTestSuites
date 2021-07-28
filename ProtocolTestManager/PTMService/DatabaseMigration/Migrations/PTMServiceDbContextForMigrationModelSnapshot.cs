@@ -99,6 +99,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.DatabaseMigration.Migration
                     b.Property<string>("Path")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Removed")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Version")
                         .HasColumnType("TEXT");
 

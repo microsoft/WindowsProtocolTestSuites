@@ -6,8 +6,8 @@ import { useBoolean, useConst, useForceUpdate } from '@uifabric/react-hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { TestCaseResultActions } from '../actions/TestCaseResultActions';
-import { TestResultsActions } from '../actions/TestResultsActions';
+import { TestCaseResultActions } from '../actions/TestCaseResultAction';
+import { TestResultsActions } from '../actions/TestResultsAction';
 import { FullWidthPanel } from '../components/FullWidthPanel';
 import { StackGap10, StackGap5 } from '../components/StackStyle';
 import { useWindowSize } from '../components/UseWindowSize';
@@ -525,26 +525,32 @@ export function TestResultDetail(props: any) {
                                     : null
                         }
                         {
-                            testResults.selectedTestResult === undefined
-                                ? null
-                                : testResults.selectedTestResult.Overview.Status !== 'Created' && testResults.selectedTestResult.Overview.Status !== 'Running'
-                                    ? <RerunContextualMenu
-                                        testResult={testResults.selectedTestResult}
-                                        selectedItems={selectedItems}
-                                        onRerun={onRerunClick} />
-                                    : null
-                        }
-                        {
-                            testResults.selectedTestResult === undefined
-                                ? null
-                                : testResults.selectedTestResult.Overview.Status === 'Failed' || testResults.selectedTestResult.Overview.Status === 'Finished'
-                                    ? <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden}>Export Report</PrimaryButton>
-                                    : null
-                        }
-                        {
-                            testResults.selectedTestResult === undefined
-                                ? null
-                                : <PrimaryButton onClick={onExportProfile}>Export Profile</PrimaryButton>
+                            testResults.selectedTestResultSummary !== undefined && !testResults.selectedTestResultSummary.TestSuite.Removed
+                                ? <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
+                                    {
+                                        testResults.selectedTestResult === undefined
+                                            ? null
+                                            : testResults.selectedTestResult.Overview.Status !== 'Created' && testResults.selectedTestResult.Overview.Status !== 'Running'
+                                                ? <RerunContextualMenu
+                                                    testResult={testResults.selectedTestResult}
+                                                    selectedItems={selectedItems}
+                                                    onRerun={onRerunClick} />
+                                                : null
+                                    }
+                                    {
+                                        testResults.selectedTestResult === undefined
+                                            ? null
+                                            : testResults.selectedTestResult.Overview.Status === 'Failed' || testResults.selectedTestResult.Overview.Status === 'Finished'
+                                                ? <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden}>Export Report</PrimaryButton>
+                                                : null
+                                    }
+                                    {
+                                        testResults.selectedTestResult === undefined
+                                            ? null
+                                            : <PrimaryButton onClick={onExportProfile}>Export Profile</PrimaryButton>
+                                    }
+                                </Stack>
+                                : null
                         }
                         <PrimaryButton onClick={onGoBackClick}>Go Back</PrimaryButton>
                     </Stack>

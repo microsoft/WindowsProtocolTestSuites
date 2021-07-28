@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { FetchService, RequestMethod } from '.';
-import { SelectedTestCasesActions, SelectedTestCasesActionTypes } from '../actions/SelectedTestCasesActions';
+import { SelectedTestCasesActions, SelectedTestCasesActionTypes } from '../actions/SelectedTestCasesAction';
 import { RunRequest } from '../model/RunRequest';
 import { AppThunkAction } from '../store/configureStore';
 

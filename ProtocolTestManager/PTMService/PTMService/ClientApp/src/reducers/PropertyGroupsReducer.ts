@@ -12,7 +12,7 @@ import {
     SET_PROPERTYGROUPS_SUCCESS,
     SET_PROPERTYGROUPS_FAILURE,
     PropertyGroupsActionTypes,
-} from '../actions/PropertyGroupsActions';
+} from '../actions/PropertyGroupsAction';
 import { Property } from '../model/Property';
 import { PropertyGroup } from '../model/PropertyGroup';
 

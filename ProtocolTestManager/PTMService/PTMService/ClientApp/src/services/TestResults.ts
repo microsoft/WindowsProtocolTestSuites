@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { FetchService, RequestMethod } from '.';
-import { TestResultsActions, TestResultsActionTypes } from '../actions/TestResultsActions';
+import { TestResultsActions, TestResultsActionTypes } from '../actions/TestResultsAction';
 import { ReportFormat, ReportRequest, TestResult } from '../model/TestResult';
 import { AppThunkAction } from '../store/configureStore';
 
@@ -65,10 +65,13 @@ export const TestResultsDataSrv = {
 
         const pageSize = state.testResults.pageSize;
         const pageNumber = state.testResults.pageNumber;
+        const showAll = state.testResults.showRemovedTestSuites;
         const query = state.testResults.query;
 
         await FetchService({
-            url: `api/testresult?pageSize=${pageSize}&pageNumber=${pageNumber}` + (query === undefined ? "" : `&query=${query}`),
+            url: `api/testresult?pageSize=${pageSize}&pageNumber=${pageNumber}` +
+                (query === undefined ? "" : `&query=${query}`) +
+                (showAll === false ? "" : `&showAll=${showAll}`),
             method: RequestMethod.GET,
             dispatch,
             onRequest: TestResultsActions.listTestResultsAction_Request,

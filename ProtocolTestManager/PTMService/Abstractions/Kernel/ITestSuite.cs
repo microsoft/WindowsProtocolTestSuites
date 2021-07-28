@@ -33,6 +33,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         string Description { get; set; }
 
         /// <summary>
+        /// Whether the test suite is removed.
+        /// </summary>
+        bool Removed { get; set; }
+
+        /// <summary>
         /// The install method of test suite.
         /// </summary>
         TestSuiteInstallMethod InstallMethod { get; }

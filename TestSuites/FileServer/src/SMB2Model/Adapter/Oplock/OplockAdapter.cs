@@ -1,13 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
 {
@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
         private string uncSharePath;
         private OplockConfig oplockConfig;
         private Smb2FunctionalClient testClient;
+        private Stack<Smb2FunctionalClient> usedTestClients;
         private DialectRevision negotiatedDialect;
         private uint treeId;
         private FILEID fileId;
@@ -34,22 +35,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
+
+            usedTestClients = new Stack<Smb2FunctionalClient>();
         }
 
         public override void Reset()
         {
-            try
+            while (usedTestClients.Count > 0)
             {
-                testClient.LogOff();
-                testClient.Disconnect();
+                try
+                {
+                    var client = usedTestClients.Pop();
+                    client.LogOff();
+                    client.Disconnect();
+                }
+                catch
+                {
+                }
             }
-            catch
-            {
-            }
-            finally
-            {
-                testClient = null;
-            }
+
+            testClient = null;
+            usedTestClients = new Stack<Smb2FunctionalClient>();
 
             base.Reset();
         }
@@ -163,6 +169,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                     }
                 });
 
+            usedTestClients.Push(testClient);
         }
 
         public void RequestOplockAndOperateFileRequest(
@@ -200,7 +207,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
 
         public void OplockBreakAcknowledgementRequest(OplockVolatilePortion volatilePortion, OplockPersistentPortion persistentPortion, OplockLevel_Values oplockLevel)
         {
-
             bool volatilePortionFound = volatilePortion == OplockVolatilePortion.VolatilePortionFound;
             bool persistentMatchesDurableFileId = persistentPortion == OplockPersistentPortion.PersistentMatchesDurableFileId;
             FILEID fileIdRequest = fileId;
@@ -216,7 +222,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             }
 
             OPLOCK_BREAK_Response? oplockBreakResponse = null;
-            uint status = testClient.OplockAcknowledgement(treeId, fileIdRequest, (OPLOCK_BREAK_Acknowledgment_OplockLevel_Values)oplockLevel, (header, response) => { oplockBreakResponse = response; });
+            uint status = testClient.OplockAcknowledgement(
+                treeId,
+                fileIdRequest,
+                (OPLOCK_BREAK_Acknowledgment_OplockLevel_Values)oplockLevel,
+                (header, response) => oplockBreakResponse = response);
 
             OplockBreakResponse((ModelSmb2Status)status, oplockBreakResponse.Value.OplockLevel, oplockLevelOnOpen);
         }
@@ -295,6 +305,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                 clientForAnotherOpen.Write(treeIdForAnotherOpen, fileIdForAnotherOpen, writeContent);
             }
 
+            usedTestClients.Push(clientForAnotherOpen);
         }
 
         #endregion

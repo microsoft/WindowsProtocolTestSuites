@@ -56,9 +56,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <param name="pageSize">Maximum count per page.</param>
         /// <param name="pageNumber">Page number.</param>
         /// <param name="query">The query phrase to search the test resutls.</param>
+        /// <param name="showAll">Whether to show test results of all test suties including removed test suites.</param>
         /// <returns>The list response.</returns>
         [HttpGet]
-        public ListResponse List(int pageSize, int pageNumber, string query)
+        public ListResponse List(int pageSize, int pageNumber, string query = "", bool showAll = false)
         {
             if (pageSize <= 0)
             {
@@ -72,22 +73,42 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 
             Func<TestResult, bool> queryFunc = query switch
             {
-                null or "" => (_) => true,
-                _ => (result) =>
+                null or "" => (TestResult result) =>
                 {
+                    if (showAll)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        var configuration = PTMKernelService.GetConfiguration(result.TestSuiteConfigurationId);
+                        var testSuite = PTMKernelService.GetTestSuite(configuration.TestSuite.Id);
+                        return true && !testSuite.Removed;
+                    }
+                },
+                _ => (TestResult result) =>
+                {
+                    var containingQuery = false;
                     var configuration = PTMKernelService.GetConfiguration(result.TestSuiteConfigurationId);
                     if (configuration.Name.ToLower().Contains(query.ToLower()))
                     {
-                        return true;
+                        containingQuery = true;
                     }
 
                     var testSuite = PTMKernelService.GetTestSuite(configuration.TestSuite.Id);
                     if (testSuite.Name.ToLower().Contains(query.ToLower()))
                     {
-                        return true;
+                        containingQuery = true;
                     }
 
-                    return false;
+                    if (showAll)
+                    {
+                        return containingQuery;
+                    }
+                    else
+                    {
+                        return containingQuery && !testSuite.Removed;
+                    }
                 }
             };
 

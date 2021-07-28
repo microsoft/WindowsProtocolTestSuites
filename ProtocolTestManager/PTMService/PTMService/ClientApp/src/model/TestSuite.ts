@@ -8,5 +8,6 @@ export interface TestSuite {
     Name: string;
     Version: string;
     Description?: string;
+    Removed: boolean;
     TestCases?: TestCase[];
 }

@@ -5,7 +5,7 @@ import { Link, PrimaryButton, Stack } from '@fluentui/react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
-import { PropertyGroupsActions } from '../actions/PropertyGroupsActions';
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction';
 import { LoadingPanel } from '../components/LoadingPanel';
 import { PropertyGroupView } from '../components/PropertyGroupView';
 import { StepPanel } from '../components/StepPanel';

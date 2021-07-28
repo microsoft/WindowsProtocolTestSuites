@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Xml;
 using Rule = Microsoft.Protocols.TestManager.Kernel.Rule;
 using RuleGroup = Microsoft.Protocols.TestManager.PTMService.Common.Types.RuleGroup;
@@ -29,6 +30,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             Description = testSuiteInstallation.Description;
 
+            Removed = testSuiteInstallation.Removed;
+
             InstallMethod = testSuiteInstallation.InstallMethod;
 
             Version = testSuiteInstallation.Version;
@@ -45,6 +48,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             this.TestSuiteConfigFilePath = configXmlPath;
         }
 
+        private static object syncRoot = new object();
+
         private string TestEnginePath { get; init; }
 
         private string TestSuiteConfigFilePath { get; init; }
@@ -58,6 +63,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public bool Removed { get; set; }
 
         public IStorageNode StorageRoot { get; private init; }
 
@@ -116,6 +123,69 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var node = storagePool.OpenNode(testSuiteInstallation.Path);
 
             var result = new TestSuite(testEnginePath, testSuiteInstallation, node);
+
+            return result;
+        }
+
+        public static ITestSuite Update(string testEnginePath, TestSuiteInstallation testSuiteInstallation, string packageName, Stream package, IStoragePool storagePool)
+        {
+            int id = testSuiteInstallation.Id;
+
+            var updatingNode = storagePool.GetKnownNode(KnownStorageNodeNames.TestSuite).CreateNode($"{id}_Updating_{Guid.NewGuid()}");
+
+            testSuiteInstallation.Path = updatingNode.AbsolutePath;
+
+            string packageExtension = "";
+
+            string nameWithoutExtension = packageName;
+
+            while (true)
+            {
+                string extension = Path.GetExtension(nameWithoutExtension);
+
+                nameWithoutExtension = Path.GetFileNameWithoutExtension(nameWithoutExtension);
+
+                if (string.IsNullOrEmpty(extension))
+                {
+                    break;
+                }
+
+                packageExtension = extension + packageExtension;
+            }
+
+            Utility.ExtractArchive(packageExtension, package, testSuiteInstallation.Path);
+
+            var binNode = updatingNode.GetNode(TestSuiteConsts.Bin);
+
+            using var versionFile = binNode.ReadFile(TestSuiteConsts.VersionFile);
+
+            using var rs = new StreamReader(versionFile);
+
+            testSuiteInstallation.Version = rs.ReadLine();
+
+            IStorageNode node = null;
+            string oldNodePath = "";
+            lock (syncRoot)
+            {
+                node = storagePool.GetKnownNode(KnownStorageNodeNames.TestSuite).GetNode($"{id}");
+                oldNodePath = Path.Combine(node.Parent.AbsolutePath, $"{id}_Old_{Guid.NewGuid()}");
+
+                Directory.Move(node.AbsolutePath, oldNodePath);
+                Directory.Move(updatingNode.AbsolutePath, node.AbsolutePath);
+
+                testSuiteInstallation.Path = node.AbsolutePath;
+            }
+
+            var result = new TestSuite(testEnginePath, testSuiteInstallation, node);
+
+            ThreadPool.QueueUserWorkItem(_ =>
+            {
+                if (Directory.Exists(oldNodePath))
+                {
+                    var flagFilePath = Path.Combine(oldNodePath, "updated");
+                    File.WriteAllText(flagFilePath, $"Updated at {DateTime.Now}");
+                }
+            });
 
             return result;
         }
@@ -185,7 +255,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 AddItems(ruleGroup.Rules, group);
                 ruleGroups.Add(ruleGroup);
             }
-            
+
             return ruleGroups.ToArray();
         }
 

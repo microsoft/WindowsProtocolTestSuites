@@ -9,6 +9,8 @@ export const LIST_TESTRESULTS_REQUEST = 'TESTRESULTS/LIST_TESTRESULTS_REQUEST';
 export const LIST_TESTRESULTS_SUCCESS = 'TESTRESULTS/LIST_TESTRESULTS_SUCCESS';
 export const LIST_TESTRESULTS_FAILURE = 'TESTRESULTS/LIST_TESTRESULTS_FAILURE';
 
+export const SET_SHOWREMOVEDTESTSUITES = 'TESTRESULTS/SET_SHOWREMOVEDTESTSUITES';
+
 export const SET_PAGENUMBER = 'TESTRESULTS/SET_PAGENUMBER';
 export const SET_QUERY = 'TESTRESULTS/SET_QUERY';
 
@@ -28,6 +30,8 @@ interface ListTestResultsActionRequestType { type: typeof LIST_TESTRESULTS_REQUE
 interface ListTestResultsActionSuccessType { type: typeof LIST_TESTRESULTS_SUCCESS; payload: ListResponse; }
 interface ListTestResultsActionFailureType { type: typeof LIST_TESTRESULTS_FAILURE; errorMsg: string; }
 
+interface SetShowRemovedTestSuitesActionType { type: typeof SET_SHOWREMOVEDTESTSUITES; payload: boolean; }
+
 interface SetPageNumberActionType { type: typeof SET_PAGENUMBER; payload: number; }
 interface SetQueryActionType { type: typeof SET_QUERY; payload: string | undefined; }
 
@@ -46,6 +50,7 @@ export type TestResultsActionTypes =
     ListTestResultsActionRequestType |
     ListTestResultsActionSuccessType |
     ListTestResultsActionFailureType |
+    SetShowRemovedTestSuitesActionType |
     SetPageNumberActionType |
     SetQueryActionType |
     SetSelectedTestResultActionType |
@@ -75,6 +80,12 @@ export const TestResultsActions = {
         return {
             type: LIST_TESTRESULTS_FAILURE,
             errorMsg: error
+        };
+    },
+    setShowRemovedTestSuitesAction: (shown: boolean): TestResultsActionTypes => {
+        return {
+            type: SET_SHOWREMOVEDTESTSUITES,
+            payload: shown
         };
     },
     setPageNumberAction: (pageNumber: number): TestResultsActionTypes => {

@@ -22,5 +22,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Entities
         public string Description { get; set; }
 
         public string Path { get; set; }
+
+        public bool Removed { get; set; }
     }
 }

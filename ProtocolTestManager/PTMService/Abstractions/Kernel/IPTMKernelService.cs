@@ -43,6 +43,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <returns>The Id of test suite.</returns>
         int InstallTestSuite(string name, string packageName, Stream package, string description);
 
+        /// <summary>
+        /// Update test suite by package.
+        /// </summary>
+        /// <param name="id">The ID of the test suite.</param>
+        /// <param name="name">The name of test suite.</param>
+        /// <param name="packageName">The package name.</param>
+        /// <param name="package">The package.</param>
+        /// <param name="description">The description to test suite.</param>
+        void UpdateTestSuite(int id, string name, string packageName, Stream package, string description);
+
+        /// <summary>
+        /// Remove test suite.
+        /// </summary>
+        /// <param name="id">The ID of the test suite.</param>
+        void RemoveTestSuite(int id);
+
         #endregion
 
         #region Configuration related members.

@@ -6,7 +6,6 @@ import { ManagementActions, ManagementActionTypes } from "../actions/ManagementA
 import { InstallRequest } from "../model/InstallRequest";
 import { AppThunkAction } from "../store/configureStore";
 
-
 export const ManagementDataSrv = {
     getTestSuiteList: (): AppThunkAction<ManagementActionTypes> => async (dispatch) => {
         await FetchService({
@@ -30,11 +29,41 @@ export const ManagementDataSrv = {
             url: 'api/management/testsuite',
             method: RequestMethod.POST,
             body: postData,
-            headers: { },
+            headers: {},
             dispatch,
-            onRequest: ManagementActions.installTestSuite_Request,
-            onComplete: ManagementActions.installTestSuite_Success,
-            onError: ManagementActions.installTestSuite_Failure,
+            onRequest: ManagementActions.installTestSuiteAction_Request,
+            onComplete: ManagementActions.installTestSuiteAction_Success,
+            onError: ManagementActions.installTestSuiteAction_Failure,
         }).then(callback);
     },
+    updateTestSuite: (id: number, request: InstallRequest, callback: () => void): AppThunkAction<ManagementActionTypes> => async (dispatch) => {
+        const postData = new FormData();
+        postData.append('Package', request.Package);
+        postData.append('TestSuiteName', request.TestSuiteName);
+        if (request.Description) {
+            postData.append('Description', request.Description);
+        }
+
+        await FetchService({
+            url: `api/management/testsuite/${id}`,
+            method: RequestMethod.POST,
+            body: postData,
+            headers: {},
+            dispatch,
+            onRequest: ManagementActions.updateTestSuiteAction_Request,
+            onComplete: ManagementActions.updateTestSuiteAction_Success,
+            onError: ManagementActions.updateTestSuiteAction_Failure,
+        }).then(callback);
+    },
+    removeTestSuite: (id: number, callback: () => void): AppThunkAction<ManagementActionTypes> => async (dispatch) => {
+        await FetchService({
+            url: `api/management/testsuite/${id}`,
+            method: RequestMethod.DELETE,
+            headers: {},
+            dispatch,
+            onRequest: ManagementActions.removeTestSuiteAction_Request,
+            onComplete: ManagementActions.removeTestSuiteAction_Success,
+            onError: ManagementActions.removeTestSuiteAction_Failure,
+        }).then(callback);
+    }
 };

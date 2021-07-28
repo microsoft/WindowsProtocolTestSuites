@@ -1,13 +1,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, PrimaryButton, SearchBox, SelectionMode, Spinner, SpinnerSize, Stack } from '@fluentui/react';
+import { DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, PrimaryButton, SearchBox, SelectionMode, Spinner, SpinnerSize, Stack, Toggle } from '@fluentui/react';
 import { Pagination } from '@uifabric/experiments';
 import { useBoolean } from '@uifabric/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { TestResultsActions } from '../actions/TestResultsActions';
+import { TestResultsActions } from '../actions/TestResultsAction';
 import { FullWidthPanel } from '../components/FullWidthPanel';
 import { StackGap10, StackGap5 } from '../components/StackStyle';
 import { useWindowSize } from '../components/UseWindowSize';
@@ -21,9 +21,11 @@ import { TestSuitesDataSrv } from '../services/TestSuites';
 import { ProfileDataSrv } from '../services/ProfileService';
 import { AppState } from '../store/configureStore';
 
-function getDict<TItem extends Extract<{ [P in keyof TItem]: any }, { [P in keyof TItem]: number }>>(items: TItem[], keyName: keyof TItem) {
+type NumberValueKeysOf<T> = { [P in keyof T]-?: T[P] extends number ? P : never }[keyof T];
+
+function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>>(items: TItem[], keyName: NumberValueKeysOf<TItem>) {
     return items.reduce((dict: { [key: number]: TItem }, item) => {
-        const keyValue = item[keyName];
+        const keyValue: number = item[keyName];
         dict[keyValue] = item;
         return dict;
     }, {});
@@ -32,6 +34,7 @@ function getDict<TItem extends Extract<{ [P in keyof TItem]: any }, { [P in keyo
 type ListColumnsProps = {
     onRenderId: (testResultId: number) => JSX.Element,
     onRenderTestSuite: (configurationId: number) => JSX.Element,
+    isTestSuiteRemoved: (configurationId: number) => boolean,
     onRenderConfiguration: (configurationId: number) => JSX.Element,
     onRenderStatus: (status: TestResultState) => JSX.Element,
     onRenderCount: (kind: TestCaseState | 'Total', count: number | undefined) => JSX.Element,
@@ -151,8 +154,15 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
                                 : null
                         }
                         {
-                            item.Status !== 'Created' && item.Status !== 'Running'
-                                ? <PrimaryButton onClick={() => { props.onRerun(item.Id, item.ConfigurationId) }}>Rerun</PrimaryButton>
+                            !props.isTestSuiteRemoved(item.ConfigurationId)
+                                ? <Stack horizontal tokens={StackGap10}>
+                                    {
+                                        item.Status !== 'Created' && item.Status !== 'Running'
+                                            ? <PrimaryButton onClick={() => { props.onRerun(item.Id, item.ConfigurationId) }}>Rerun</PrimaryButton>
+                                            : null
+                                    }
+                                    <PrimaryButton onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
+                                </Stack>
                                 : null
                         }
                         {
@@ -160,7 +170,6 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
                                 ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
                                 : null
                         }
-                        <PrimaryButton onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
                     </Stack>
                 );
             }
@@ -280,9 +289,24 @@ export function TaskHistory(props: any) {
         }
 
         const testSuite = testSuiteDict[configurationDict[configurationId].TestSuiteId];
-        return <div style={{ fontSize: 'large' }}>
-            {`${testSuite.Name} ${testSuite.Version}`}
-        </div>
+        if (testSuite.Removed) {
+            return <div style={{ color: 'rgba(0, 0, 0, 0.5)', fontSize: 'large', textDecorationLine: 'line-through' }}>
+                {`${testSuite.Name} ${testSuite.Version}`}
+            </div>
+        }
+        else {
+            return <div style={{ fontSize: 'large' }}>
+                {`${testSuite.Name} ${testSuite.Version}`}
+            </div>
+        }
+    }, [testSuiteDict, configurationDict]);
+
+    const isTestSuiteRemoved = useCallback((configurationId: number) => {
+        if (configurationDict[configurationId] === undefined) {
+            return true;
+        }
+
+        return testSuiteDict[configurationDict[configurationId].TestSuiteId].Removed;
     }, [testSuiteDict, configurationDict]);
 
     const renderConfiguration = useCallback((configurationId: number) => {
@@ -324,6 +348,7 @@ export function TaskHistory(props: any) {
     const columns = getListColumns({
         onRenderId: renderId,
         onRenderTestSuite: renderTestSuite,
+        isTestSuiteRemoved: isTestSuiteRemoved,
         onRenderConfiguration: renderConfiguration,
         onRenderStatus: renderStatus,
         onRenderCount: renderCount,
@@ -363,9 +388,17 @@ export function TaskHistory(props: any) {
     return (
         <div>
             <FullWidthPanel isLoading={testResults.isLoading} errorMsg={testResults.errorMsg} >
-                <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10 }} tokens={StackGap10}>
+                <Toggle
+                    label="Show results of removed test suites"
+                    inlineLabel
+                    checked={testResults.showRemovedTestSuites}
+                    onChange={(_, checked) => {
+                        dispatch(TestResultsActions.setShowRemovedTestSuitesAction(checked ?? false));
+                        dispatch(TestResultsDataSrv.listTestResults());
+                    }} />
+                <Stack horizontal horizontalAlign="end" style={{ marginTop: -34, paddingRight: 10 }} tokens={StackGap10}>
                     <SearchBox
-                        style={{ minWidth: 360 }}
+                        style={{ minWidth: 300, }}
                         placeholder="Input your query phrase..."
                         onChange={(_, newValue) => setTempQuery(newValue)}
                         onSearch={onSearchChanged}

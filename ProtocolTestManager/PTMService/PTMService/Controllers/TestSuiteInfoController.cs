@@ -45,6 +45,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 Name = item.Name,
                 Version = item.Version,
                 Description = item.Description,
+                Removed = item.Removed
             }).ToArray();
 
             return result;
@@ -60,6 +61,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public TestSuite GetTestSuiteDetail(int id)
         {
             var testSuite = PTMKernelService.GetTestSuite(id);
+
+            if (testSuite.Removed)
+            {
+                throw new InvalidOperationException($"The test suite with the ID {id} is removed.");
+            }
 
             var testCases = testSuite.GetTestCases(null);
 
@@ -88,7 +94,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             string profileLocation = PTMKernelService.SaveProfileSettingsByTestResult(testResultId);
 
             var profileStream = new FileStream(profileLocation, FileMode.Open, FileAccess.Read, FileShare.Read);
-            
+
             return new FileStreamResult(profileStream, System.Net.Mime.MediaTypeNames.Text.Xml)
             {
                 FileDownloadName = Path.GetFileName(profileLocation)
@@ -110,7 +116,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             string profileLocation = PTMKernelService.SaveProfileSettings(request);
 
             var profileStream = new FileStream(profileLocation, FileMode.Open, FileAccess.Read, FileShare.Read);
-            
+
             return new FileStreamResult(profileStream, System.Net.Mime.MediaTypeNames.Text.Xml)
             {
                 FileDownloadName = Path.GetFileName(profileLocation)
@@ -155,7 +161,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public IActionResult InitializeDetector(int configurationId)
         {
             PTMKernelService.CreateAutoDetector(configurationId);
-            
+
             return Ok();
         }
 
@@ -213,7 +219,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public IActionResult StartAutoDetection(List<Property> properties, int configurationId)
         {
             var setPrerequisite = PTMKernelService.SetPrerequisites(properties, configurationId);
-
             if (setPrerequisite)
             {
                 PTMKernelService.StartDetection(configurationId, (o) => { });
@@ -223,8 +228,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             else
             {
                 return BadRequest("There's errors when set prerequisites");
-            }
-                       
+            }              
         }
 
         /// <summary>
@@ -236,7 +240,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public IActionResult StopAutoDetection(int configurationId)
         {
-            PTMKernelService.StopDetection(configurationId, () => {});
+            PTMKernelService.StopDetection(configurationId, () => { });
 
             return Ok();
         }
