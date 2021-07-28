@@ -18,7 +18,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public const string VersionFile = ".version";
 
-        public const string ConfigXml = "config.xml";
+        public const string PluginFolderName = "Plugin";
+
+        public const string PluginConfigXml = "config.xml";
 
         public const string DllFileNames = "DllFileNames";
 
@@ -29,6 +31,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string ProfileExtension = ".ptm";
 
         public const string AutoDetectionDllName = "AutoDetectionDllName";
+
+        public const string Adapters = "Adapters";
     }
 
     public static class ConfigurationConsts

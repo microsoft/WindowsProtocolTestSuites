@@ -1,5 +1,21 @@
 <!--  TODO:   Update TestListName, AutoDetectionDllName -->
 <Config>
+  <Adapters>
+    <Adapter displayname="SUT Protocol control adapter" name="ISutProtocolControlAdapter">
+      <Adapter type="managed" name="ISutProtocolControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutProtocolControlAdapter" />
+      <Adapter type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutProtocolControlAdapter"/>
+    </Adapter>
+    <Adapter displayname="Common SUT control adapter" name="ISutCommonControlAdapter">
+      <Adapter type="managed" name="ISutCommonControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutCommonControlAdapter"/>
+      <Adapter type="powershell" name="ISutCommonControlAdapter" scriptdir=".\SutCommonControlAdapter" />
+    </Adapter>
+    <Adapter  displayname="Failover SUT control adapter" name="ISutControlAdapter">
+      <Adapter type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
+      <Adapter type="shell" name="ISutControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutControlAdapter"/>
+    </Adapter>
+  </Adapters>
   <PtfFileNames>
     <PtfFileName>CommonTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>CommonTestSuite.ptfconfig</PtfFileName>
@@ -335,6 +351,12 @@
           </Rule>
           <Rule name = "HVRS (Hyper-V Remote Storage)">
             <Category name = "HVRS-FSA"/>
+          </Rule>
+          <Rule name = "FileAccess">
+            <Category name = "FileAccess"/>
+          </Rule>
+          <Rule name = "CommonAlgorithm">
+            <Category name = "CommonAlgorithm"/>
           </Rule>
         </Rule>
       </Rule>

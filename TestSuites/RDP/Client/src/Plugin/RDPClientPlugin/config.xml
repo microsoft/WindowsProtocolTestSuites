@@ -1,8 +1,4 @@
 <Config>
-  <ConfigFilePath>
-    <PtfFileName>Bin\RDP_ClientTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\RDP_ClientTestSuite.ptfconfig</PtfFileName>
-  </ConfigFilePath>
   <Adapters>
     <Adapter displayname="Basic RDP SUT Control Adapter" name="IRdpSutControlAdapter">
       <Adapter type="powershell" name="IRdpSutControlAdapter" scriptdir=".\"/>
@@ -26,7 +22,7 @@
     <PtfFileName>RDP_ClientTestSuite.ptfconfig</PtfFileName>
   </PtfFileNames>
   <DllFileNames>
-    <DllFileName>Bin\RDP_ClientTestSuite.dll</DllFileName>
+    <DllFileName>RDP_ClientTestSuite.dll</DllFileName>
   </DllFileNames>
   <AutoDetectionDllName>RDPClientPlugin.dll</AutoDetectionDllName>
 
@@ -120,5 +116,4 @@
       </Rule>
     </Group>
   </ConfigCaseRule>
-  <TestSetting>Bin\ClientLocal.TestSettings</TestSetting>
 </Config>

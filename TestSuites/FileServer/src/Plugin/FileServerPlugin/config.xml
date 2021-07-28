@@ -1,24 +1,14 @@
 <!--  TODO:   Update TestListName, AutoDetectionDllName -->
 <Config>
-  <ConfigFilePath>
-    <PtfFileName>Bin\CommonTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\CommonTestSuite.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\ServerFailoverTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\ServerFailoverTestSuite.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-DFSC_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-FSA_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-FSAModel_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-FSRVP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-RSVD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-SQOS_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\Auth_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-SMB2_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-    <PtfFileName>Bin\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig</PtfFileName>
-  </ConfigFilePath>
   <Adapters>
-    <Adapter  displayname="Common SUT control adapter" name="ISutProtocolControlAdapter">
+    <Adapter displayname="SUT Protocol control adapter" name="ISutProtocolControlAdapter">
+      <Adapter type="managed" name="ISutProtocolControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutProtocolControlAdapter" />
       <Adapter type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
       <Adapter type="interactive" name="ISutProtocolControlAdapter"/>
+    </Adapter>
+    <Adapter displayname="Common SUT control adapter" name="ISutCommonControlAdapter">
+      <Adapter type="managed" name="ISutCommonControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutCommonControlAdapter"/>
+      <Adapter type="powershell" name="ISutCommonControlAdapter" scriptdir=".\SutCommonControlAdapter" />
     </Adapter>
     <Adapter  displayname="Failover SUT control adapter" name="ISutControlAdapter">
       <Adapter type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
@@ -42,16 +32,16 @@
     <PtfFileName>MS-SMB2Model_ServerTestSuite.deployment.ptfconfig</PtfFileName>
   </PtfFileNames>
   <DllFileNames>
-    <DllFileName>Bin\ServerFailoverTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-DFSC_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-FSA_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-FSAModel_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-FSRVP_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-RSVD_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-SQOS_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\Auth_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-SMB2_ServerTestSuite.dll</DllFileName>
-    <DllFileName>Bin\MS-SMB2Model_ServerTestSuite.dll</DllFileName>
+    <DllFileName>ServerFailoverTestSuite.dll</DllFileName>
+    <DllFileName>MS-DFSC_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-FSA_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-FSAModel_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-FSRVP_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-RSVD_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-SQOS_ServerTestSuite.dll</DllFileName>
+    <DllFileName>Auth_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-SMB2_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-SMB2Model_ServerTestSuite.dll</DllFileName>
   </DllFileNames>
   <AutoDetectionDllName>FileServerPlugin.dll</AutoDetectionDllName>
   <ConfigCaseRule>
@@ -417,7 +407,4 @@
       -->
     </Config>
   </FeatureMapping>
-
-  <TestCategories>TestCategories.xml</TestCategories>
-  <TestSetting>Bin\ServerLocalTestRun.testrunconfig</TestSetting>
 </Config>

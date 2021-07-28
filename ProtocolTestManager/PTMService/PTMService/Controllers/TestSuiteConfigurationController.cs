@@ -158,9 +158,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         {
             var configuration = PTMKernelService.GetConfiguration(id);
 
-            var result = configuration.Adapters.ToArray();
+            var ptfAdapters = configuration.Adapters;
+            var pluginAdapters = configuration.TestSuite.GetPluginAdapters();
+            List<Adapter> result = new List<Adapter>();
+            foreach (var pluginAdapter in pluginAdapters)
+            {
+                var item = ptfAdapters.Where(i => i.Name == pluginAdapter.Name).FirstOrDefault();
+                if (item != null)
+                {
+                    item.DisplayName = pluginAdapter.DisplayName;
+                    if (item.AdapterType == null) item.AdapterType = pluginAdapter.AdapterType;
+                    item.ScriptDirectory = pluginAdapter.ScriptDirectory;
+                    item.SupportedKinds = pluginAdapter.SupportedKinds;
+                    item.ShellScriptDirectory = pluginAdapter.ShellScriptDirectory;
+                    result.Add(item);
+                }
+            }
 
-            return result;
+            return result.ToArray();
         }
 
         /// <summary>

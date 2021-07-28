@@ -46,7 +46,16 @@ export function ConfigureAdapter(props: StepWizardProps) {
     }
 
     const adapterList = adapters.adapterList.map((item, index) => {
-        return <AdapterItem key={index} Title={item.Name} AdapterType={item.AdapterType} Kind={item.Kind} ScriptDirectory={item.ScriptDirectory} onChange={onAdapterChanged} />
+        return <AdapterItem
+            key={index}
+            Name={item.Name}
+            DisplayName={item.DisplayName}
+            AdapterType={item.AdapterType}
+            Kind={item.Kind}
+            ScriptDirectory={item.ScriptDirectory}
+            SupportedKinds={item.SupportedKinds}
+            ShellScriptDirectory={item.ShellScriptDirectory}
+            onChange={onAdapterChanged} />
     })
 
     const onNextStepClicked = () => {
@@ -76,7 +85,7 @@ export function ConfigureAdapter(props: StepWizardProps) {
         <div>
             <StepPanel leftNav={wizard} isLoading={adapters.isLoading} errorMsg={adapters.errorMsg} >
                 <div style={{ height: winSize.height - HeaderMenuHeight - 45, overflowY: 'scroll' }}>
-                    {adapterList}
+                    {adapterList.length > 0 ? adapterList:<h1>There is no Adapter for current test suite, just click Next button to continue.</h1>}
                 </div>
                 <div className='buttonPanel'>
                     <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
@@ -90,51 +99,72 @@ export function ConfigureAdapter(props: StepWizardProps) {
 };
 
 interface AdapterItemProp {
-    Title: string;
+    Name: string;
+    DisplayName: string;
     AdapterType: string;
     Kind: AdapterKind;
     ScriptDirectory: string;
+    SupportedKinds: AdapterKind[];
+    ShellScriptDirectory: string;
     onChange: (event: AdapterChangedEvent) => void;
 }
 
 function AdapterItem(props: AdapterItemProp) {
     const INITIAL_OPTIONS: IComboBoxOption[] = [];
-    const [adapterType, setAdapterType] = useState<string | number | undefined>(props.Kind ? props.Kind : "");
-    const [paramAdatperType, setParamAdapterType] = useState<string>(props.AdapterType ? props.AdapterType : "");
+    const [adapterKind, setAdapterKind] = useState<AdapterKind>(props.Kind);
+    const [paramAdapterType, setParamAdapterType] = useState<string>(props.AdapterType ? props.AdapterType : "");
     const [paramScriptDirectory, setParamScriptDirectory] = useState<string>(props.ScriptDirectory ? props.ScriptDirectory : "");
+    const [paramShellScriptDirectory, setParamShellScriptDirectory] = useState<string>(props.ShellScriptDirectory ? props.ShellScriptDirectory : "");
     const [errorMsg, setErrorMsg] = useState('');
 
-    for (const [propertyKey, propertyValue] of Object.entries(AdapterKind)) {
-        if (!Number.isNaN(Number(propertyKey))) {
-            continue;
+    // Add all supported kinds of plugin to INITIAL_OPTIONS
+    if (props.SupportedKinds.length > 0) {
+        for (let key in props.SupportedKinds) {
+            let value = props.SupportedKinds[key];
+            INITIAL_OPTIONS.push({ key: value, text: value });
         }
+        // The PTFCONFIG file's adapterKind is not in INITIAL_OPTIONS which are the adapter kinds supported by plugin, so we use INITIAL_OPTIONS[0] as default selected adapter kind.
+        if (INITIAL_OPTIONS.filter((x) => x.key === ('' + adapterKind)).length === 0) {
+            if (INITIAL_OPTIONS.length > 0) {
+                setAdapterKind(AdapterKind[INITIAL_OPTIONS[0].key as keyof typeof AdapterKind]);
+            }
+        }
+    }
+    else {
+        // Plugin doesn't show any adapter kind, so we list all adapter types for current AdapterItem.
+        for (const [propertyKey, propertyValue] of Object.entries(AdapterKind)) {
+            if (!Number.isNaN(Number(propertyKey))) {
+                continue;
+            }
 
-        INITIAL_OPTIONS.push({ key: propertyValue, text: propertyKey });
+            INITIAL_OPTIONS.push({ key: propertyValue, text: propertyKey });
+        }
     }
 
     const onChange = React.useCallback(
         (ev: React.FormEvent<IComboBox>, option?: IComboBoxOption): void => {
-            setAdapterType(option?.key);
-            checkRequiredField('' + option?.key, paramAdatperType, paramScriptDirectory);
+            let kind = AdapterKind[option?.key as keyof typeof AdapterKind];
+            setAdapterKind(kind);
+            checkRequiredField(kind, paramAdapterType, paramScriptDirectory, paramShellScriptDirectory);
             props.onChange({
                 Field: ChangedField.AdapterKind,
                 NewValue: option?.key,
-                Adapter: props.Title
+                Adapter: props.Name
             });
         },
-        [setAdapterType, props],
+        [setAdapterKind, props],
     );
 
-    const onChangeParamAdatperType = React.useCallback(
+    const onChangeParamManagedAdatperType = React.useCallback(
         (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
             setParamAdapterType(newValue || '');
 
-            checkRequiredField('' + adapterType, newValue!, paramScriptDirectory);
+            checkRequiredField(adapterKind, newValue!, paramScriptDirectory, paramShellScriptDirectory);
 
             props.onChange({
                 Field: ChangedField.AdapterType,
                 NewValue: newValue,
-                Adapter: props.Title
+                Adapter: props.Name
             });
         },
         [props],
@@ -144,21 +174,36 @@ function AdapterItem(props: AdapterItemProp) {
         (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
             setParamScriptDirectory(newValue || '');
 
-            checkRequiredField('' + adapterType, paramAdatperType!, newValue!);
+            checkRequiredField(adapterKind, paramAdapterType, newValue!, '');
 
             props.onChange({
                 Field: ChangedField.ScriptDirectory,
                 NewValue: newValue,
-                Adapter: props.Title
+                Adapter: props.Name
             });
         },
         [props],
     );
 
-    const checkRequiredField = (_adapterType: string, _paramAdapterType: string, _paramScriptDirectory: string) => {
-        if ((_adapterType === AdapterKind.Managed) && (!_paramAdapterType)) {
+    const onChangeParamShellScriptDirectory = React.useCallback(
+        (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
+            setParamShellScriptDirectory(newValue || '');
+
+            checkRequiredField(adapterKind, paramAdapterType, '', newValue!);
+
+            props.onChange({
+                Field: ChangedField.ShellScriptDirectory,
+                NewValue: newValue,
+                Adapter: props.Name
+            });
+        },
+        [props],
+    );
+
+    const checkRequiredField = (_adapterKind: AdapterKind, _paramAdapterType: string, _paramScriptDirectory: string, _paramShellScriptDirectory: string) => {
+        if ((_adapterKind === AdapterKind.Managed) && (!_paramAdapterType)) {
             setErrorMsg('Adapter Type Can\'t be null');
-        } else if ((_adapterType === AdapterKind.Shell || _adapterType === AdapterKind.PowerShell) && (!_paramScriptDirectory)) {
+        } else if ((_adapterKind === AdapterKind.PowerShell && !_paramScriptDirectory) || (_adapterKind === AdapterKind.Shell && !_paramShellScriptDirectory)) {
             setErrorMsg('Script Directory Can\'t be null');
         } else {
             setErrorMsg('');
@@ -167,7 +212,7 @@ function AdapterItem(props: AdapterItemProp) {
 
     let description = undefined;
     let paramsDiv = undefined;
-    switch (adapterType) {
+    switch (adapterKind) {
         case AdapterKind.Interactive:
             description = <div>
                 <div>Interactive Adapter pops up a dialog when one of the following method is called.</div>
@@ -183,7 +228,7 @@ function AdapterItem(props: AdapterItemProp) {
             paramsDiv = <div>
                 <Stack horizontalAlign="start" horizontal tokens={StackGap10}>
                     <div style={{ fontWeight: 'bold' }}>Adapter Type: </div>
-                    <TextField value={paramAdatperType} className='input' onChange={onChangeParamAdatperType} errorMessage={errorMsg} />
+                    <TextField value={paramAdapterType} className='input' onChange={onChangeParamManagedAdatperType} errorMessage={errorMsg} />
                 </Stack>
             </div>;
             break;
@@ -209,7 +254,7 @@ function AdapterItem(props: AdapterItemProp) {
                 <div>You need to configure the location of the scripts.</div>
                 <Stack horizontalAlign="start" horizontal tokens={StackGap10}>
                     <div style={{ fontWeight: 'bold' }}>Script Directory: </div>
-                    <TextField value={paramScriptDirectory} className='input' onChange={onChangeParamScriptDirectory} errorMessage={errorMsg} />
+                    <TextField value={paramShellScriptDirectory} className='input' onChange={onChangeParamShellScriptDirectory} errorMessage={errorMsg} />
                 </Stack>
             </div>;
             break;
@@ -219,13 +264,13 @@ function AdapterItem(props: AdapterItemProp) {
     };
 
     useEffect(() => {
-        checkRequiredField('' + adapterType, paramAdatperType, paramScriptDirectory);
+        checkRequiredField(adapterKind, paramAdapterType, paramScriptDirectory, paramShellScriptDirectory);
     }, []);
 
     return (<div className="adapterItem">
         <Stack tokens={StackGap5}>
             <div className='title'>
-                {props.Title}
+                {props.DisplayName}
             </div>
             <Stack horizontalAlign="start" horizontal>
                 <div>Type:</div>
@@ -233,7 +278,7 @@ function AdapterItem(props: AdapterItemProp) {
                     allowFreeform={false}
                     autoComplete={'on'}
                     options={INITIAL_OPTIONS}
-                    selectedKey={adapterType}
+                    selectedKey={adapterKind}
                     onChange={onChange}
                 />
             </Stack>

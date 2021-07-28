@@ -60,6 +60,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         IEnumerable<string> GetTestAssemblies();
 
         /// <summary>
+        /// Get plugin adpaters.
+        /// </summary>
+        /// <returns>The plugin adpaters.</returns>
+        IEnumerable<Adapter> GetPluginAdapters();
+
+        /// <summary>
         /// Get test cases.
         /// </summary>
         /// <param name="filter">The optional filter expression.</param>
