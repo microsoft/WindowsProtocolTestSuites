@@ -39,11 +39,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             StorageRoot = storageRoot;
 
             // check if config.xml can be found in TestSuite, if not then copy from etc folder.
-            string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, TestSuiteConsts.ConfigXml);
+            string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.PluginFolderName).AbsolutePath, TestSuiteConsts.PluginConfigXml);
             if (!File.Exists(configXmlPath))
             {
-                // TODO: Plugin files will add into TestSuite
-                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"etc//FileServer//{TestSuiteConsts.ConfigXml}"), configXmlPath);
+                throw new Exception($"TestSuite requires plugin xml:{configXmlPath}!");
             }
             this.TestSuiteConfigFilePath = configXmlPath;
         }
@@ -227,6 +226,84 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return result;
         }
 
+        public IEnumerable<Adapter> GetPluginAdapters()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(this.TestSuiteConfigFilePath);
+            XmlNode AdapterNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.Adapters);
+            var adapterList = new List<Adapter>();
+            if (AdapterNode != null && AdapterNode.ChildNodes.Count > 0)
+            {
+                foreach (XmlNode xn in AdapterNode.SelectNodes("Adapter"))
+                {
+                    var nameAttribute = xn.Attributes["name"];
+                    if (nameAttribute != null)
+                    {
+                        string name = nameAttribute.Value;
+                        string scriptdir = string.Empty;
+                        string shellscriptdir = string.Empty;
+                        string adaptertype = string.Empty;
+                        AdapterKind kind = AdapterKind.Managed;
+                        List<AdapterKind> supportedKinds = new List<AdapterKind>();
+                        foreach (XmlNode ixn in xn.SelectNodes("Adapter"))
+                        {
+                            var typeAttribute = ixn.Attributes["type"];
+                            if (typeAttribute != null)
+                            {
+                                string type = typeAttribute.Value;
+                                kind = (AdapterKind)Enum.Parse(kind.GetType(), type, true);
+                                supportedKinds.Add(kind);
+
+                                if (kind == AdapterKind.PowerShell)
+                                {
+                                    var scriptdirAttribute = ixn.Attributes["scriptdir"];
+                                    if (scriptdirAttribute != null)
+                                    {
+                                        scriptdir = scriptdirAttribute.Value;
+                                    }
+                                }
+                                else if (kind == AdapterKind.Shell)
+                                {
+                                    var shellscriptdirAttribute = ixn.Attributes["scriptdir"];
+                                    if (shellscriptdirAttribute != null)
+                                    {
+                                        shellscriptdir = shellscriptdirAttribute.Value;
+                                    }
+                                }
+                                else if (kind == AdapterKind.Managed)
+                                {
+                                    var adaptertypeAttribute = ixn.Attributes["adaptertype"];
+                                    if (adaptertypeAttribute != null)
+                                    {
+                                        adaptertype = adaptertypeAttribute.Value;
+                                    }
+                                }
+                            }
+                        }
+                        var displaynameAttribute = xn.Attributes["displayname"];
+                        string displayname = string.Empty;
+                        if (displaynameAttribute != null)
+                        {
+                            displayname = displaynameAttribute.Value;
+                        }
+
+                        adapterList.Add(new Adapter()
+                        {
+                            Name = name,
+                            DisplayName = string.IsNullOrEmpty(displayname) ? name : displayname,
+                            AdapterType = adaptertype,
+                            Kind = supportedKinds.Count > 0 ? supportedKinds[0] : kind,
+                            ScriptDirectory = scriptdir,
+                            SupportedKinds = supportedKinds.ToArray(),
+                            ShellScriptDirectory = shellscriptdir
+                        });
+                    }
+                }
+            }
+
+            return adapterList;
+        }
+
         public RuleGroup[] LoadTestCaseFilter()
         {
             TestCaseFilter filter = new TestCaseFilter();
@@ -262,7 +339,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public string GetDetectorAssembly()
         {
             string detectorAssembly = null;
-            string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, TestSuiteConsts.ConfigXml);
+            string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.PluginFolderName).AbsolutePath, TestSuiteConsts.PluginConfigXml);
             XmlDocument doc = new XmlDocument();
             doc.Load(configXmlPath);
             XmlNode autoDetectionDllNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.AutoDetectionDllName);

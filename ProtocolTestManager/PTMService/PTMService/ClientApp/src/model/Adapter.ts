@@ -4,12 +4,18 @@
 export interface Adapter {
     // Adapter name
     Name: string;
+    // Adapter displayname
+    DisplayName: string;
     // Customize Adapter implementation type, only 
     AdapterType: string;
+    // Supported Kinds
+    SupportedKinds: AdapterKind[];
     // Adapter Kind
     Kind: AdapterKind;
-    // Managed adapter
+    // PowerShell adapter Script Directory
     ScriptDirectory: string;
+    // Shell adapter Script Directory
+    ShellScriptDirectory: string;
 }
 
 export enum AdapterKind {
@@ -19,10 +25,12 @@ export enum AdapterKind {
     Interactive = 'Interactive',
 }
 
+
 export enum ChangedField {
     AdapterKind,
     AdapterType,
-    ScriptDirectory
+    ScriptDirectory,
+    ShellScriptDirectory
 }
 
 export interface AdapterChangedEvent {

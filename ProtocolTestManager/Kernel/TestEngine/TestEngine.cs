@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Common;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -448,11 +450,25 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>The loaded test cases.</returns>
         private IEnumerable<TestCase> LoadDlls(string[] dllPath)
         {
+            if (dllPath.Length == 0) throw new Exception("TestEngine LoadDlls failed due to no dllPath.");
             var _testCaseList = new List<TestCase>();
+
+            // We use individual AssemblyLoadContext for each testsuite, so we can isolate different versions of assemblies with the same name in different testsuites without exceptions.
+            // e.g. the version of Microsoft.Protocols.TestTools.dll is 2.1.0.0 in RDPServer testsuite, but its version is 2.2.0.0 in FileServer testsuite.
+            // After we got the assemblies information, we can unload the assemblies in current AssemblyLoadContext.
+            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext();
+            string assembleDirPath = Directory.GetParent(dllPath[0]).FullName;
+            alc.Resolving += (context, assembleName) =>
+            {
+                string assemblyPath = Path.Combine(assembleDirPath, $"{assembleName.Name}.dll");
+                if (assemblyPath != null)
+                    return context.LoadFromAssemblyPath(assemblyPath);
+                return null;
+            };
 
             foreach (string DllFileName in dllPath)
             {
-                Assembly assembly = Assembly.LoadFrom(DllFileName);
+                Assembly assembly = alc.LoadFromAssemblyPath(DllFileName);
                 Type[] types = assembly.GetTypes();
 
                 foreach (Type type in types)
@@ -556,8 +572,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         }
                     }
                 }
-
             }
+
+            alc.Unload();
 
             return _testCaseList;
         }
@@ -612,7 +629,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
-                if(vstestProcess.HasExited && vstestProcess.ExitCode != 0)
+                if (vstestProcess.HasExited && vstestProcess.ExitCode != 0)
                 {
                     string errorContent = vstestProcess.StandardError.ReadToEnd();
                     Directory.Delete(tempPath, true);

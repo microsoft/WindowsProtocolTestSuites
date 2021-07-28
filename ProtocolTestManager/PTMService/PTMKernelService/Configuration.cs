@@ -174,6 +174,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     var adapter = new Adapter
                     {
                         Name = name,
+                        DisplayName = name,
+                        SupportedKinds = Array.Empty<AdapterKind>()
                     };
 
                     switch (type)
@@ -185,6 +187,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                 adapter.AdapterType = node.Attributes[ConfigurationConsts.AdapterTypeAttributeName].Value;
 
                                 adapter.ScriptDirectory = null;
+
+                                adapter.ShellScriptDirectory = null;
                             }
                             break;
 
@@ -195,6 +199,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                 adapter.AdapterType = null;
 
                                 adapter.ScriptDirectory = node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value;
+
+                                adapter.ShellScriptDirectory = null;
                             }
                             break;
 
@@ -204,7 +210,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                                 adapter.AdapterType = null;
 
-                                adapter.ScriptDirectory = node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value;
+                                adapter.ScriptDirectory = null;
+
+                                adapter.ShellScriptDirectory = node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value;
                             }
                             break;
 
@@ -215,6 +223,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                 adapter.AdapterType = null;
 
                                 adapter.ScriptDirectory = null;
+
+                                adapter.ShellScriptDirectory = null;
                             }
                             break;
 
@@ -242,25 +252,25 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     {
                         case AdapterKind.Managed:
                             {
-                                config = new ManagedAdapterNode(adapter.Name, adapter.Name, adapter.AdapterType);
+                                config = new ManagedAdapterNode(adapter.Name, adapter.DisplayName, adapter.AdapterType);
                             }
                             break;
 
                         case AdapterKind.PowerShell:
                             {
-                                config = new PowerShellAdapterNode(adapter.Name, adapter.Name, adapter.ScriptDirectory);
+                                config = new PowerShellAdapterNode(adapter.Name, adapter.DisplayName, adapter.ScriptDirectory);
                             }
                             break;
 
                         case AdapterKind.Shell:
                             {
-                                config = new ShellAdapterNode(adapter.Name, adapter.Name, adapter.ScriptDirectory);
+                                config = new ShellAdapterNode(adapter.Name, adapter.DisplayName, adapter.ShellScriptDirectory);
                             }
                             break;
 
                         case AdapterKind.Interactive:
                             {
-                                config = new InteractiveAdapterNode(adapter.Name, adapter.Name);
+                                config = new InteractiveAdapterNode(adapter.Name, adapter.DisplayName);
                             }
                             break;
 
