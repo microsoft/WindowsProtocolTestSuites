@@ -3,11 +3,7 @@
 using System;
 using System.Net;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -142,8 +138,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         // Number of received packets not ack yet, this value only be changed in Lock(inPacketDic) block so as to sync
         private int sourceNumNotAcked = 0;
         private DateTime ReceiveTimeForFirstNotACKSource;
-
-        public const DumpLevel DumpLevel_LayerTLS = (DumpLevel)10;
 
         #endregion Private variables
 
@@ -410,9 +404,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             StackPacket stackPacket = new RdpeudpBasePacket(data);
             packetSender(remoteEndPoint, stackPacket);
 
-            // ETW Provider Dump Message
-            string messageName = "RDPEUDP:SentPDU";
-            ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, data);
         }
 
         public RdpeudpPacket ExpectPacket(TimeSpan timeout)
@@ -715,9 +706,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 return;
             }
 
-            // ETW Provider Dump Message
-            string messageName = "RDPEUDP:ReceivedPDU";
-            ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, eudpPacket.GetType().Name, packetBytes);
 
             ReceivePacket(eudpPacket);
         }

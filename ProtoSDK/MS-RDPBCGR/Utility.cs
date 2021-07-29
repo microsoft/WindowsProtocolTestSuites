@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,45 +29,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             random.NextBytes(clientRandom);
             return clientRandom;
         }
-
-        // Dump Level layer definition for ETW Provider
-        public const DumpLevel DumpLevel_Layer0 = (DumpLevel)0;
-        public const DumpLevel DumpLevel_Layer1 = (DumpLevel)1;
-        public const DumpLevel DumpLevel_Layer2 = (DumpLevel)2;
-        public const DumpLevel DumpLevel_Layer3 = (DumpLevel)3;
-        public const DumpLevel DumpLevel_LayerTLS = (DumpLevel)10;
-
-        /// <summary>
-        /// ETW provider dump messages
-        /// </summary>
-        /// <param name="TypeName">Message Name</param>
-        /// <param name="EncodeBytes">Encrypted or original bytes</param>
-        /// <param name="isRDPStandardSecurity">Whether it is RDP Standard Security</param>
-        /// <param name="decryptedBytes">Decrypted part of message</param>
-        public static void ETWProviderDump(String TypeName, byte[] EncodeBytes, bool isRDPStandardSecurity = false, byte[] decryptedBytes = null)
-        {
-            // ETW Provider Dump Code
-            string messageName;
-            if (ConstValue.SLOW_PATH_PDU_INDICATOR_VALUE == EncodeBytes[ConstValue.SLOW_PATH_PDU_INDICATOR_INDEX])
-            {
-                // Slow-Path
-                messageName = "RDPBCGR:SentSlowPathPDU";
-            }
-            else
-            {
-                // Fast-Path
-                messageName = "RDPBCGR:SentFastPathPDU";
-            }
-            ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer0, TypeName, EncodeBytes);
-            // Dump decrypted structure
-            if (isRDPStandardSecurity)
-            {
-                // RDP Standard Security
-                messageName = "RDPBCGR:" + TypeName;
-                ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_Layer3, TypeName, decryptedBytes);
-            }
-        }
-
 
 
         /// <summary>

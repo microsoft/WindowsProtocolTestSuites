@@ -675,10 +675,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = totalBuffer.ToArray();
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
-
             return encodedBytes;
         }
 
@@ -767,10 +763,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             }
 
             byte[] encodedBytes = totalBuffer.ToArray();
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
 
             return encodedBytes;
         }
@@ -1854,10 +1846,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
-
             return encodedBytes;
         }
 
@@ -2382,10 +2370,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
-
             return encodedBytes;
         }
 
@@ -2544,10 +2528,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeDomainMcsPdu(totalBuffer, mcsDomain);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
 
             return encodedBytes;
         }
@@ -3857,11 +3837,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -4262,11 +4237,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, demandData, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, demandData);
 
             return encodedBytes;
         }
@@ -5786,11 +5756,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -6085,11 +6050,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -6216,11 +6176,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
 
             return encodedBytes;
         }
@@ -8604,11 +8559,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
-
-
             return encodedBytes;
         }
 
@@ -8792,11 +8742,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -8889,11 +8834,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
 
             return encodedBytes;
         }
@@ -8998,11 +8938,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
 
             return encodedBytes;
         }
@@ -9258,11 +9193,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
     }
@@ -9383,11 +9313,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
 
             return encodedBytes;
         }
@@ -10252,10 +10177,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, channelBuffer.ToArray(), serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
 
             return encodedBytes;
         }
@@ -15023,11 +14944,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -15174,11 +15090,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
 
             return encodedBytes;
         }
@@ -15375,11 +15286,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, inputPduData, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, inputPduData);
 
             return encodedBytes;
         }
@@ -16508,11 +16414,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeBytes(totalBuffer, encryptedData);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, fpOutputdata);
 
             return totalBuffer.ToArray();
         }
@@ -17911,11 +17812,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -18086,11 +17982,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
 
@@ -18236,10 +18127,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeStructure(dataBuffer, (uint)this.authorizationResult);
 
             byte[] encodedBytes = dataBuffer.ToArray();
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes);
 
             return encodedBytes;
         }
@@ -20120,11 +20007,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
     }
@@ -20258,11 +20140,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
 
         }
@@ -20335,11 +20212,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, dataBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
 
             return encodedBytes;
 
@@ -20494,11 +20366,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
 
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, dataBuffer);
-
             return encodedBytes;
         }
     }
@@ -20580,11 +20447,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             RdpbcgrEncoder.EncodeSlowPathPdu(totalBuffer, commonHeader, byteBuffer, serverSessionContext);
 
             byte[] encodedBytes = RdpbcgrUtility.ToBytes(totalBuffer);
-
-            // ToDo: Ugly dump message code here
-            // ETW Provider Dump Code
-            bool isEncrypted = serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_NONE && serverSessionContext.RdpEncryptionLevel != EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            RdpbcgrUtility.ETWProviderDump(this.GetType().Name, encodedBytes, isEncrypted, byteBuffer);
 
             return encodedBytes;
         }

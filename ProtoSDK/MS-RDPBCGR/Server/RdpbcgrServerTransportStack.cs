@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using Microsoft.Protocols.TestTools.ExtendedLogging;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cssp;
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System;
@@ -292,7 +291,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 if (receivedBufferIndex + headerLength + length == receivedBuffer.Count)
                 {
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_LayerTLS, "TLS Received Data", receivedBuffer.ToArray());
                     receivedBuffer.Clear();
                     receivedBufferIndex = 0;
                 }
@@ -332,7 +330,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                 }
                 if (sentBufferIndex + headerLength + length == sentBuffer.Count)
                 {
-                    ExtendedLogger.DumpMessage(messageName, RdpbcgrUtility.DumpLevel_LayerTLS, "TLS Sent Data", sentBuffer.ToArray());
                     sentBuffer.Clear();
                     sentBufferIndex = 0;
                 }
