@@ -119,7 +119,7 @@ function Read-UserDefinedValue {
 }
 
 $storageRootPath = Read-UserDefinedValue -Name "PTMServiceStorageRoot" -DefaultValue $storagePath
-$storageDatabasePath = "$storageRootPath\ptmservice.db"
+$storageDatabasePath = "$storageRootPath/ptmservice.db"
 if (-not (Test-Path $storageDatabasePath)) {
     Write-Host "Copy the initial database file to $storageDatabasePath."
     Copy-Item $databasePath $storageDatabasePath

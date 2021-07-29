@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             StorageRoot = storageRoot;
 
-            // check if config.xml can be found in TestSuite, if not then copy from etc folder.
+            // check if Plugin/config.xml can be found in TestSuite, if not then throw a new exception.
             string configXmlPath = Path.Combine(StorageRoot.GetNode(TestSuiteConsts.PluginFolderName).AbsolutePath, TestSuiteConsts.PluginConfigXml);
             if (!File.Exists(configXmlPath))
             {
