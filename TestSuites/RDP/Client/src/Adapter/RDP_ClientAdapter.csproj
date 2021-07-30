@@ -85,6 +85,9 @@
     <None Update="SUTControlAdapter\Check-PSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SUTControlAdapter\EditFileWithPSRemoting.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SUTControlAdapter\RDPConnectWithDirectCredSSP.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -98,6 +101,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SUTControlAdapter\Run-TaskWithPSRemoting.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\SetCompressionValue.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SUTControlAdapter\TriggerClientAutoReconnect.ps1">
