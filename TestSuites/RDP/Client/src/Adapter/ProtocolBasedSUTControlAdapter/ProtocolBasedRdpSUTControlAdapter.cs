@@ -218,6 +218,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         /// <summary>
+        /// This method is used to enable compression, always return successful since CS managed adapter would generated RDP file directly with the compression flag
+        /// </summary>
+        /// <param name="isCompressionEnable">If enable compression</param>
+        /// <returns>Always return successful since CS managed adapter would generated RDP file directly with the compression flag</returns>
+        public int SetCompressionValue(bool isCompressionEnable)
+        {
+            return 1;
+        }
+
+        /// <summary>
         /// Initialize this adapter
         /// </summary>
         /// <param name="testSite"></param>
