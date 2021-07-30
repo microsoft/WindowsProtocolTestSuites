@@ -42,6 +42,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isClientSupportSoftSync = true;
         protected bool isClientSupportTunnelingStaticVCTraffic = true;
         protected bool isClientSupportEmptyRdpNegData;
+        protected bool supportCompression = false;
         protected static Image image_64X64; //Defined to static for reuse across test cases
         protected static Image imageForVideoMode;
         protected uint maxRequestSize = 0x50002A; //The MaxReqestSize field of  Multifragment Update Capability Set. Just for test.
@@ -119,6 +120,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     DropConnectionForInvalidRequest = false; //A switch to avoid waiting till timeout. 
                 }
+            }
+
+            var result = this.sutControlAdapter.SetCompressionValue(supportCompression);
+            if (result < 0)
+            {
+                TestSite.Assume.Inconclusive("The compression value didn't set propery as supportCompression");
             }
 
             CheckPlatformCompatibility();
@@ -479,7 +486,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 isClientSupportTunnelingStaticVCTraffic = false; //if property not found, set to false as default value
             }
-
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.SupportCompression, out supportCompression))
+            {
+                supportCompression = false; //if property not found, set to false as default value
+            }
             if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RDPClientSupportRdpNegDataEmpty, out isClientSupportEmptyRdpNegData))
             {
                 isClientSupportEmptyRdpNegData = false; //if property not found, set to false as default value
