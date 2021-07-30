@@ -201,11 +201,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <returns>List of detecting steps including steps required for auto detection.</returns>
         [Route("{configurationId}/autodetect/detectionsteps")]
         [HttpGet]
-        public List<DetectingItem> GetDetectionSteps(int configurationId)
+        public IActionResult GetDetectionSteps(int configurationId)
         {
-            var response = PTMKernelService.GetDetectedSteps(configurationId);
-
-            return response;
+            var detectResult = PTMKernelService.GetDetectionOutcome(configurationId);
+            return Ok(new
+            {
+                Result = new
+                {
+                    Status = detectResult.Status,
+                    Exception = detectResult.Exception == null ? string.Empty : detectResult.Exception.ToString(),
+                },
+                DetectionSteps = PTMKernelService.GetDetectedSteps(configurationId)
+            });
         }
 
         /// <summary>
@@ -228,7 +235,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             else
             {
                 return BadRequest("There's errors when set prerequisites");
-            }              
+            }
         }
 
         /// <summary>

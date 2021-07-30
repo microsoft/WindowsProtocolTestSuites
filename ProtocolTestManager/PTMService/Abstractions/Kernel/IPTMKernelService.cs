@@ -203,6 +203,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <returns>A list of the detection steps.</returns>
         List<DetectingItem> GetDetectedSteps(int configurationId);
 
+        DetectionOutcome GetDetectionOutcome(int configurationId);
+
         /// <summary>
         /// Begins the auto-detection.
         /// </summary>

@@ -37,6 +37,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private bool taskCanceled = false;
 
+        private DetectionOutcome detectionResult = new DetectionOutcome(DetectionStatus.NotStart, null);
+
         /// <summary>
         /// Delegate of logging.
         /// </summary>
@@ -71,6 +73,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 if (DetectLogCallback != null) DetectLogCallback(message, style);
             };
+            detectionResult = new DetectionOutcome(DetectionStatus.NotStart, null);
         }
 
         /// <summary>
@@ -102,16 +105,16 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public void InitializeDetector(int testSuiteId)
         {
-            var ptfconfig = LoadPtfconfig(testSuiteId);
+            var ptfconfig = LoadPtfconfig();
 
-            Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertyValue = (string name) =>
+            UtilCallBackFunctions.GetPropertyValue = (string name) =>
             {
                 var property = ptfconfig.GetPropertyNodeByName(name);
                 if (property != null) return property.Value;
                 return null;
             };
 
-            Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertiesByFile = (filename) =>
+            UtilCallBackFunctions.GetPropertiesByFile = (filename) =>
             {
                 if (!ptfconfig.FileProperties.ContainsKey(filename))
                     return null;
@@ -196,6 +199,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 cacheLock.ExitWriteLock();
             }
+        }
+
+        public DetectionOutcome GetDetectionOutcome()
+        {
+            return detectionResult;
         }
 
         //public 
@@ -310,6 +318,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 logWriter = null;
             }
             stepIndex = 0;
+            detectionResult.Status = DetectionStatus.Finished;
         }
 
         /// <summary>
@@ -321,7 +330,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return GetDetectionSummaryInValueDetectorAssembly();
         }
 
-        private PtfConfig LoadPtfconfig(int testSuiteId)
+        private PtfConfig LoadPtfconfig()
         {
             try
             {
@@ -347,12 +356,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private DetectionOutcome RunDetectionInValueDetectorAssembly()
         {
+            detectionResult.Status = DetectionStatus.InProgress;
             try
             {
-                valueDetector.RunDetection();
+                detectionResult.Status = valueDetector.RunDetection() ? DetectionStatus.Finished : DetectionStatus.Error;
             }
             catch (Exception exception)
             {
+                detectionResult.Status = DetectionStatus.Error;
+                detectionResult.Exception = exception;
                 return new DetectionOutcome(DetectionStatus.Error, exception);
             }
             return new DetectionOutcome(DetectionStatus.Finished, null);

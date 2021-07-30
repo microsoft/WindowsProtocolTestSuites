@@ -37,9 +37,6 @@ export function AutoDetection(props: StepWizardProps) {
     }, [dispatch]);
 
     useEffect(() => {
-        console.log('useEffect');
-        console.log(detectingTimes);
-
         if (detectingTimes === -999 || isAutoDetectFinished()) {
             return;
         }

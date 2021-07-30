@@ -20,6 +20,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         List<DetectingItem> GetDetectedSteps(bool resetSteps = false);
 
+        DetectionOutcome GetDetectionOutcome();
+
         void StartDetection(DetectionCallback callback);
 
         void StopDetection(Action callback);

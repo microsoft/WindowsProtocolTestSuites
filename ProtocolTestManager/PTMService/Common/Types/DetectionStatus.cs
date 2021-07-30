@@ -9,6 +9,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Types
     public enum DetectionStatus 
     { 
         /// <summary>
+        /// Detection not start.
+        /// </summary>
+        NotStart,
+
+        /// <summary>
         /// Detection in progress.
         /// </summary>
         InProgress, 

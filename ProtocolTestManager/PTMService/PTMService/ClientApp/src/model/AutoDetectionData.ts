@@ -28,6 +28,16 @@ export interface DetectionStepsResponse {
     DetectingStatus: string;
 }
 
+export interface DetectionResult {
+    Status: DetectionStatus;
+    Exception: string;
+}
+
+export interface DetectionResultResponse{
+    Result: DetectionResult;
+    DetectionSteps: DetectionStepsResponse[];
+}
+
 export interface DetectionSteps {
     DetectingItems: DetectingItem[];
     LogFileName: string;
@@ -43,6 +53,38 @@ export interface StartDetectorRequest {
 
 //GetDetectionResult: api/testsuite/${configurationId}/autodetect/summary
 export interface DetectionSummary {
-    
 
+
+}
+
+export enum DetectionStatus {
+    /// <summary>
+    /// Detection not start.
+    /// </summary>
+    NotStart,
+
+    /// <summary>
+    /// Detection in progress.
+    /// </summary>
+    InProgress,
+
+    /// <summary>
+    /// Detection finished.
+    /// </summary>
+    Finished,
+
+    /// <summary>
+    /// Detection step skipped.
+    /// </summary>
+    Skipped,
+
+    /// <summary>
+    /// Detection step not found.
+    /// </summary>
+    NotFound,
+
+    /// <summary>
+    /// Error occured running detection step
+    /// </summary>
+    Error
 }

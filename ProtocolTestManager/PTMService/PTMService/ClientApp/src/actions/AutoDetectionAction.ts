@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Prerequisite, DetectionSteps, DetectionStepsResponse } from "../model/AutoDetectionData";
+import { Prerequisite, DetectionSteps, DetectionStepsResponse, DetectionResultResponse } from "../model/AutoDetectionData";
 import { Property } from "../model/Property";
 
 export const GET_PREREQUISITE_REQUEST = 'AUTO_DETECT/GET_PREREQUISITE_REQUEST';
@@ -103,11 +103,11 @@ export const AutoDetectActions = {
         }
     },
 
-    GetAutoDetectStepsAction_Success: (data: DetectionStepsResponse[]): TestSuiteAutoDetectionActionTypes => {
+    GetAutoDetectStepsAction_Success: (data: DetectionResultResponse): TestSuiteAutoDetectionActionTypes => {
         const detectionSteps = {} as DetectionSteps;
         detectionSteps.DetectingItems = [];
 
-        data.map(step => {
+        data.DetectionSteps.map(step => {
             detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus });
         })
         return {

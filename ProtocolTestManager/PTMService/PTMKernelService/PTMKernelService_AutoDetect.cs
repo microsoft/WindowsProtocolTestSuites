@@ -82,6 +82,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return detector.GetDetectedSteps();
         }
 
+        public DetectionOutcome GetDetectionOutcome(int configurationId)
+        {
+            var detector = GetAutoDetection(configurationId);
+
+            return detector.GetDetectionOutcome();
+        }
+
         public void StartDetection(int configurationId, DetectionCallback callback)
         {
             var detector = GetAutoDetection(configurationId);
