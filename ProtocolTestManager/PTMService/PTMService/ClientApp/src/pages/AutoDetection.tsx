@@ -15,10 +15,14 @@ import { useEffect, useState } from 'react';
 import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities';
 import { AutoDetectActions } from '../actions/AutoDetectionAction';
+import { DetectionStatus } from '../model/AutoDetectionData';
+import { finished } from 'node:stream';
 
 export function AutoDetection(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
     const testSuites = useSelector((state: AppState) => state.testsuites);
+    const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result;
+
     const prerequisite = useSelector((state: AppState) => state.autoDetection);
     const navSteps = getNavSteps(wizardProps);
     const wizard = WizardNavBar(wizardProps, navSteps);
@@ -37,7 +41,7 @@ export function AutoDetection(props: StepWizardProps) {
     }, [dispatch]);
 
     useEffect(() => {
-        if (detectingTimes === -999 || isAutoDetectFinished()) {
+        if (detectingTimes === -999 || isAutoDetectShouldStop()) {
             return;
         }
 
@@ -58,32 +62,29 @@ export function AutoDetection(props: StepWizardProps) {
         dispatch(AutoDetectActions.updateAUtoDetectionPrerequisiteAction(updatedProperty));
     };
 
-    const isAutoDetectStarted = () => {
-        const isStarted = prerequisite.detectionSteps?.DetectingItems.some(item => {
-            if (item.Status != 'Pending') {
-                return true;
-            }
-            return false;
-        })
-        return isStarted;
-    }
+    // This function is to determine if detection status is suitable for running.
+    const isAutoDetectShouldStop = () => {
+        const statusToStop = autoDetectionStepsResult?.Status === DetectionStatus.Finished ||
+            autoDetectionStepsResult?.Status === DetectionStatus.Error ||
+            autoDetectionStepsResult?.Status === DetectionStatus.NotStart;
 
-    const isAutoDetectFinished = () => {
-        const hasPending = prerequisite.detectionSteps?.DetectingItems.some(item => {
-            if (item.Status === 'Pending') {
-                return true;
-            }
+        // We should get steps for 10 times no matter the status.
+        if (detectingTimes >= 90) {
             return false;
-        })
-        return !hasPending;
+        }
+
+        return statusToStop
     }
 
     const onNextButtonClick = () => {
-        if (isAutoDetectFinished()) {
+        if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
             // Next page
             wizardProps.nextStep();
         }
-        else if (isAutoDetectStarted()) {
+    };
+
+    const onDetectButtonClick = () => {
+        if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
             // Cancel
             dispatch(TestSuitesDataSrv.stopAutoDetection());
             setDetectingTimes(-999);
@@ -96,7 +97,7 @@ export function AutoDetection(props: StepWizardProps) {
     };
 
     const isPreviousButtonDisabled = () => {
-        if (isAutoDetectStarted()) {
+        if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
             return true;
         }
         else {
@@ -104,18 +105,25 @@ export function AutoDetection(props: StepWizardProps) {
         }
     };
 
-    const isNextButtonDisabled = () => { return false };
-    const getNextButtonText = () => {
-        if (isAutoDetectFinished()) {
-            return 'Next';
+    const isDetectButtonDisabled = () => {
+        return false;
+    };
+
+    const isNextButtonDisabled = () => {
+        if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
+            return false;
         }
-        else if (isAutoDetectStarted()) {
+
+        return true;
+    };
+
+    const getDetectButtonText = () => {
+        if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
             return 'Cancel';
         }
         else {
             return 'Detect';
         }
-        
     };
 
     const StepColumns = (): IColumn[] => {
@@ -306,7 +314,8 @@ export function AutoDetection(props: StepWizardProps) {
                     <div className='buttonPanel'>
                         <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
                             <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
-                            <PrimaryButton text={getNextButtonText()} onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
+                            <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
+                            <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
                         </Stack>
                     </div>
                 </Stack>

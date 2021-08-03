@@ -33,7 +33,6 @@ export const getAutoDetectReducer = (state = initialAutoDetectState, action: Tes
                 prerequisite: undefined
             }
         case GET_PREREQUISITE_SUCCESS:
-            console.log(action.payload);
             action.payload.Properties.map(p => {
                 p.Value = p.Choices[0];
             })
@@ -50,7 +49,6 @@ export const getAutoDetectReducer = (state = initialAutoDetectState, action: Tes
                     return item;
                 }
             });
-            console.log(state);
             return {
                 ...state,
                 isPrerequisiteLoading: false,

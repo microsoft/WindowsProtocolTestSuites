@@ -110,6 +110,8 @@ export const AutoDetectActions = {
         data.DetectionSteps.map(step => {
             detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus });
         })
+        detectionSteps.Result = data.Result;
+
         return {
             type: GET_DETECTION_STEPS_SUCCESS,
             payload: detectionSteps

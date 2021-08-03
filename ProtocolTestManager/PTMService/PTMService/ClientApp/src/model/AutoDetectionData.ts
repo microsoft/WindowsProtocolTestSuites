@@ -41,6 +41,7 @@ export interface DetectionResultResponse{
 export interface DetectionSteps {
     DetectingItems: DetectingItem[];
     LogFileName: string;
+    Result: DetectionResult;
 }
 
 
@@ -61,30 +62,30 @@ export enum DetectionStatus {
     /// <summary>
     /// Detection not start.
     /// </summary>
-    NotStart,
+    NotStart = "NotStart",
 
     /// <summary>
     /// Detection in progress.
     /// </summary>
-    InProgress,
+    InProgress = "InProgress",
 
     /// <summary>
     /// Detection finished.
     /// </summary>
-    Finished,
+    Finished = "Finished",
 
     /// <summary>
     /// Detection step skipped.
     /// </summary>
-    Skipped,
+    Skipped = "Skipped",
 
     /// <summary>
     /// Detection step not found.
     /// </summary>
-    NotFound,
+    NotFound = "NotFound",
 
     /// <summary>
     /// Error occured running detection step
     /// </summary>
-    Error
+    Error = "Error"
 }
