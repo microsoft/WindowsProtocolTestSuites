@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, Dropdown, IColumn, Label, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react';
+import { ContextualMenu, DefaultButton, DetailsList, Dialog, DialogFooter, DialogType, Dropdown, IColumn, Label, Modal, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react';
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
 import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
@@ -11,18 +11,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useWindowSize } from '../components/UseWindowSize';
 import { LoadingPanel } from '../components/LoadingPanel';
 import { Property } from '../model/Property';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TestSuitesDataSrv } from '../services/TestSuites';
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities';
 import { AutoDetectActions } from '../actions/AutoDetectionAction';
 import { DetectionStatus } from '../model/AutoDetectionData';
 import { finished } from 'node:stream';
+import { useBoolean } from '@uifabric/react-hooks';
 
 export function AutoDetection(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
     const testSuites = useSelector((state: AppState) => state.testsuites);
     const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result;
-
+    const [hideAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(false);
     const prerequisite = useSelector((state: AppState) => state.autoDetection);
     const navSteps = getNavSteps(wizardProps);
     const wizard = WizardNavBar(wizardProps, navSteps);
@@ -42,6 +43,10 @@ export function AutoDetection(props: StepWizardProps) {
 
     useEffect(() => {
         if (detectingTimes === -999 || isAutoDetectShouldStop()) {
+            if (autoDetectionStepsResult?.Status === DetectionStatus.Error) {
+                toggleAutoDetectWarningDialog();
+            }
+
             return;
         }
 
@@ -261,8 +266,6 @@ export function AutoDetection(props: StepWizardProps) {
         );
     }
 
-
-
     return (
         <div>
             <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={''} >
@@ -320,6 +323,17 @@ export function AutoDetection(props: StepWizardProps) {
                     </div>
                 </Stack>
             </StepPanel>
+
+            <Modal
+                isOpen={hideAutoDetectWarningDialog}
+            >
+                <Stack>
+                    <div>{autoDetectionStepsResult?.Exception}</div>
+                </Stack>
+                <DialogFooter>
+                    <PrimaryButton onClick={toggleAutoDetectWarningDialog} text={"Yes"} />
+                </DialogFooter>
+            </Modal>
         </div>
     )
 };
