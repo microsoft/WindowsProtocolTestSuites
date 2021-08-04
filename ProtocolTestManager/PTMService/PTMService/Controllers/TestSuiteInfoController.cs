@@ -180,21 +180,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
-        /// Set auto detection prerequisites.
-        /// </summary>
-        /// <param name="configurationId">Test suite configuration Id.</param>
-        /// <param name="prerequisitProperties">List of PrerequisitProperty.</param>
-        /// <returns>bool indicating properties were set or not.</returns>
-        [Route("{configurationId}/autodetect/prerequisites")]
-        [HttpPost]
-        public bool SetPrerequisites(List<PrerequisiteProperty> prerequisitProperties, int configurationId)
-        {
-            var response = PTMKernelService.SetPrerequisites(prerequisitProperties, configurationId);
-
-            return response;
-        }
-
-        /// <summary>
         /// Get auto detection steps.
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>
@@ -225,6 +210,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public IActionResult StartAutoDetection(List<Property> properties, int configurationId)
         {
+            PTMKernelService.Reset(configurationId);
             var setPrerequisite = PTMKernelService.SetPrerequisites(properties, configurationId);
             if (setPrerequisite)
             {

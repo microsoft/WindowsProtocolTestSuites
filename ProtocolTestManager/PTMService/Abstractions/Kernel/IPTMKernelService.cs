@@ -183,14 +183,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <summary>
         /// Sets the property values required for auto-detection.
         /// </summary>
-        /// <param name="prerequisiteProperties">List of PrerequisiteProperty.</param>
-        /// <param name="configurationId">Test suite configuration id.</param>
-        /// <returns>Returns true if succeeded, otherwise false.</returns>
-        bool SetPrerequisites(List<PrerequisiteProperty> prerequisiteProperties, int configurationId);
-
-        /// <summary>
-        /// Sets the property values required for auto-detection.
-        /// </summary>
         /// <param name="Property">List of Property.</param>
         /// <param name="configurationId">Test suite configuration id.</param>
         /// <returns>Returns true if succeeded, otherwise false.</returns>
@@ -204,6 +196,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         List<DetectingItem> GetDetectedSteps(int configurationId);
 
         DetectionOutcome GetDetectionOutcome(int configurationId);
+
+        /// <summary>
+        /// Reset AutoDetection
+        /// </summary>
+        /// <param name="configurationId"></param>
+        void Reset(int configurationId);
 
         /// <summary>
         /// Begins the auto-detection.

@@ -61,13 +61,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return prerequisitView;
         }
 
-        public bool SetPrerequisites(List<PrerequisiteProperty> prerequisitProperties, int configurationId)
-        {
-            var detector = GetAutoDetection(configurationId);
-
-            return detector.SetPrerequisits(prerequisitProperties);
-        }
-
         public bool SetPrerequisites(List<Property> prerequisitProperties, int configurationId)
         {
             var detector = GetAutoDetection(configurationId);
@@ -87,6 +80,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var detector = GetAutoDetection(configurationId);
 
             return detector.GetDetectionOutcome();
+        }
+
+        public void Reset(int configurationId)
+        {
+            var detector = GetAutoDetection(configurationId);
+
+            detector.Reset();
         }
 
         public void StartDetection(int configurationId, DetectionCallback callback)
