@@ -883,7 +883,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
-                TestSetting = appConfig.TestSetting,
                 ResultOutputFolder = "HtmlTestResults",
                 PtfConfigDirectory = ptfconfigDirectory,
                 RunSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}.runsettings"),

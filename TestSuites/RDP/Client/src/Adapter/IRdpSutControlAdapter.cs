@@ -114,5 +114,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [DefaultValue("0")]
         int CaptureScreenShot(string caseName, string filePath);
 
+        /// <summary>
+        /// This method is used to enable compression in PS adapter, CS managed adapter would generated RDP file directly with the compression flag
+        /// </summary>
+        /// <param name="isCompressionEnable">If enable compression</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("This method is used to enable compression in PS adapter, protocol-based SUT control adapter would generated RDP file directly with the compression flag.\r\n\r\n")]
+        [DefaultValue("0")]
+        int SetCompressionValue(bool isCompressionEnable);
     }
 }

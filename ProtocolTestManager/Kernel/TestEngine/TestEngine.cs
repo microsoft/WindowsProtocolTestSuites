@@ -21,7 +21,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private TestSuiteLogManager tsLogManager;
         public string PipeName { get; set; }
         public List<string> TestAssemblies { get; set; }
-        public string TestSetting { get; set; }
         public string WorkingDirectory { get; set; }
         public string ResultOutputFolder { get; set; }
 

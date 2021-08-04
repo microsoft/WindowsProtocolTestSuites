@@ -28,6 +28,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public const string RDPClientSupportRdpNegDataEmpty = "SupportRdpNegDataEmpty";
         public const string MSRDPRFX_Image = "RDPRFXImage";
         public const string MSRDPRFX_VideoModeImage = "RDPRFXVideoModeImage";
+        public const string SupportCompression = "SupportCompression";
     }
 
     public class RdpPtfGroupNames
