@@ -76,6 +76,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 prerequisiteView.Properties.Add(new Property()
                 {
                     Name = i.Key,
+                    Value = ((i.Value != null) && (i.Value.Count == 1)) ? i.Value[0] : null,
                     Choices = i.Value
                 });
             }
@@ -214,6 +215,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return detectionResult;
         }
 
+        /// <summary>
+        /// Reset AutoDetection settings
+        /// </summary>
         public void Reset()
         {
             stepIndex = 0;
@@ -307,7 +311,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     stepsLocker.ExitWriteLock();
                 }
-                
+
                 logWriter.WriteLine("[{0}] {1}", DateTime.Now.ToString(), msg);
                 logWriter.Flush();
             };
@@ -322,7 +326,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     stepsLocker.ExitReadLock();
                 }
-                
+
                 callback(outcome);
                 logWriter.Close();
                 logWriter = null;
@@ -345,7 +349,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 stepsLocker.ExitWriteLock();
             }
-            
+
             StopAndCancelDetection(callback);
 
             stepsLocker.EnterReadLock();
@@ -357,7 +361,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 stepsLocker.ExitReadLock();
             }
-            
+
             if (logWriter != null)
             {
                 logWriter.Close();
@@ -435,7 +439,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 taskCanceled = true;
             });
 
-            detectTask = Task.Factory.StartNew(() => 
+            detectTask = Task.Factory.StartNew(() =>
             {
                 token.ThrowIfCancellationRequested();
 
