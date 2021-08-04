@@ -996,7 +996,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 if (encryptionAlgs != null)
                 {
                     BaseTestSite.Assert.IsTrue(
-                        TestConfig.SupportedEncryptionAlgorithmList.Contains(client.SelectedCipherID),
+                        TestConfig.SutSupportedEncryptionAlgorithmList.Contains(client.SelectedCipherID),
                         "[MS-SMB2] 3.3.5.4 The server MUST set Connection.CipherId to one of the ciphers in the client's " +
                         "SMB2_ENCRYPTION_CAPABILITIES Ciphers array in an implementation-specific manner.");
                 }

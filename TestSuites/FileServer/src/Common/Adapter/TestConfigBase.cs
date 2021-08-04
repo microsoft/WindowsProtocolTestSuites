@@ -422,7 +422,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
-        public List<EncryptionAlgorithm> SupportedEncryptionAlgorithmList;
+        public List<EncryptionAlgorithm> SutSupportedEncryptionAlgorithmList;
 
         public List<CompressionAlgorithm> SupportedCompressionAlgorithmList;
 
@@ -458,7 +458,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             MaxSmbVersionClientSupported = ParsePropertyToEnum<DialectRevision>(GetProperty("MaxSmbVersionClientSupported"), "MaxSmbVersionClientSupported");
 
-            SupportedEncryptionAlgorithmList = ParsePropertyToList<EncryptionAlgorithm>("SupportedEncryptionAlgorithms");
+            SutSupportedEncryptionAlgorithmList = ParsePropertyToList<EncryptionAlgorithm>("SutSupportedEncryptionAlgorithms");
 
             SupportedCompressionAlgorithmList = ParsePropertyToList<CompressionAlgorithm>("SupportedCompressionAlgorithms");
 
@@ -694,7 +694,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public void CheckEncryptionAlgorithm(EncryptionAlgorithm cipherId)
         {
-            if (!SupportedEncryptionAlgorithmList.Contains(cipherId))
+            if (!SutSupportedEncryptionAlgorithmList.Contains(cipherId))
             {
                 Site.Assert.Inconclusive("Test case is applicable for the server that supports {0}", cipherId);
             }
