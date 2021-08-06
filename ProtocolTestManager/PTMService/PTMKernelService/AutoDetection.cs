@@ -19,6 +19,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     {
         private ReaderWriterLockSlim stepsLocker = new ReaderWriterLockSlim();
         private ReaderWriterLockSlim prerequisitesLocker = new ReaderWriterLockSlim();
+        private ReaderWriterLockSlim detectorLocker = new ReaderWriterLockSlim();
 
         private StreamWriter logWriter;
 
@@ -93,11 +94,30 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         {
             get
             {
-                if (valueDetector == null)
+                detectorLocker.EnterUpgradeableReadLock();
+                try
                 {
-                    // Create an instance
-                    Assembly assembly = Assembly.LoadFrom(detectorAssembly);
-                    valueDetector = assembly.CreateInstance(detectorInstanceTypeName) as IValueDetector;
+                    if (valueDetector == null)
+                    {
+                        detectorLocker.EnterWriteLock();
+                        try
+                        {
+                            if(valueDetector == null)
+                            {
+                                // Create an instance
+                                Assembly assembly = Assembly.LoadFrom(detectorAssembly);
+                                valueDetector = assembly.CreateInstance(detectorInstanceTypeName) as IValueDetector;
+                            }
+                        }
+                        finally
+                        {
+                            detectorLocker.ExitWriteLock();
+                        }
+                    }
+                }
+                finally
+                {
+                    detectorLocker.ExitUpgradeableReadLock();
                 }
 
                 return valueDetector;

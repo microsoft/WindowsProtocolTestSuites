@@ -195,12 +195,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <returns>A list of the detection steps.</returns>
         List<DetectingItem> GetDetectedSteps(int configurationId);
 
+        /// <summary>
+        /// Get detection status
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Detection Status</returns>
         DetectionOutcome GetDetectionOutcome(int configurationId);
 
         /// <summary>
         /// Reset AutoDetection
         /// </summary>
-        /// <param name="configurationId"></param>
+        /// <param name="configurationId">Test suite configuration id.</param>
         void Reset(int configurationId);
 
         /// <summary>
