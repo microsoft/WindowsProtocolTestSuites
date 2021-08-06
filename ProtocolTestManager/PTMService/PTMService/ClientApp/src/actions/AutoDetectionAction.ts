@@ -24,6 +24,10 @@ export const GET_DETECTION_SUMMARY_REQUEST = 'AUTO_DETECT/GET_DETECTION_SUMMARY_
 export const GET_DETECTION_SUMMARY_SUCCESS = 'AUTO_DETECT/GET_DETECTION_SUMMARY_SUCCESS';
 export const GET_DETECTION_SUMMARY_FAILURE = 'AUTO_DETECT/GET_DETECTION_SUMMARY_FAILURE';
 
+export const APPLY_DETECTION_RESULT_REQUEST = 'AUTO_DETECT/APPLY_DETECTION_RESULT_REQUEST';
+export const APPLY_DETECTION_RESULT_SUCCESS = 'AUTO_DETECT/APPLY_DETECTION_RESULT_SUCCESS';
+export const APPLY_DETECTION_RESULT_FAILURE = 'AUTO_DETECT/APPLY_DETECTION_RESULT_FAILURE';
+
 export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE';
 //export const UPDATE_PREREQUISITE_SUCCESS = 'AUTO_DETECT/UPDATE_PREREQUISITE';
 //export const UPDATE_PREREQUISITE_FAIL = 'AUTO_DETECT/UPDATE_PREREQUISITE';
@@ -51,6 +55,10 @@ interface StopAutoDetectionActionRequestType { type: typeof STOP_AUTO_DETECTION_
 interface StopAutoDetectionActionSuccessType { type: typeof STOP_AUTO_DETECTION_SUCCESS; }
 interface StopAutoDetectionActionFailureType { type: typeof STOP_AUTO_DETECTION_FAILURE; errorMsg: string; }
 
+interface ApplyDetectionResultActionRequestType { type: typeof APPLY_DETECTION_RESULT_REQUEST; }
+interface ApplyDetectionResultActionSuccessType { type: typeof APPLY_DETECTION_RESULT_SUCCESS; }
+interface ApplyDetectionResultActionFailureType { type: typeof APPLY_DETECTION_RESULT_FAILURE; errorMsg: string; }
+
 interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Property };
 
 interface StopPolling { type: typeof STOP_POLLING };
@@ -75,6 +83,9 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
     | StopPolling
     | StartPollingSuccess
     | StartPollingFailure
+    | ApplyDetectionResultActionRequestType
+    | ApplyDetectionResultActionSuccessType
+    | ApplyDetectionResultActionFailureType
 
 // define actions
 export const AutoDetectActions = {
@@ -200,5 +211,24 @@ export const AutoDetectActions = {
             type: UPDATE_PREREQUISITE,
             payload: property
         };
+    },
+
+    ApplyDetectionResult_Request: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: APPLY_DETECTION_RESULT_REQUEST
+        }
+    },
+
+    ApplyDetectionResult_Success: (): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: APPLY_DETECTION_RESULT_SUCCESS
+        }
+    },
+
+    ApplyDetectionResult_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+        return {
+            type: APPLY_DETECTION_RESULT_FAILURE,
+            errorMsg: error
+        }
     },
 }

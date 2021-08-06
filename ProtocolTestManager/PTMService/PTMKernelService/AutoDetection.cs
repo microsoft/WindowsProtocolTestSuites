@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestManager.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using Microsoft.Protocols.TestManager.Kernel;
-using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -379,6 +379,29 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public object GetDetectionSummary()
         {
             return GetDetectionSummaryInValueDetectorAssembly();
+        }
+
+        public void ApplyDetectionResult()
+        {
+            ApplyDetectedRules();
+            ApplyDetectedValues();
+        }
+
+        /// <summary>
+        /// Apply the test case selection rules detected by the plug-in.
+        /// </summary>
+        private void ApplyDetectedRules()
+        {
+            var ruleGroups = TestSuite.LoadTestCaseFilter();
+            foreach (var rule in ValueDetector.GetSelectedRules())
+            {
+                
+            }
+        }
+
+        private void ApplyDetectedValues()
+        {
+            var detectedValues = GetDetectedPropertyInValueDetectorAssembly();
         }
 
         private PtfConfig LoadPtfconfig()

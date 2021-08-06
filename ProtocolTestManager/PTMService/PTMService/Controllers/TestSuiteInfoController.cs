@@ -239,6 +239,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
+        /// Apply auto detection result.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration Id.</param>
+        /// <returns>Action result.</returns>
+        [Route("{configurationId}/autodetect/apply")]
+        [HttpPost]
+        public IActionResult ApplyAutoDetectionResult(int configurationId)
+        {
+            PTMKernelService.ApplyDetectionResult(configurationId);
+
+            return Ok();
+        }
+
+        /// <summary>
         /// Get auto detection summary.
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>

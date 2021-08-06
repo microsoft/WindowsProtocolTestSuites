@@ -109,4 +109,17 @@ export const TestSuitesDataSrv = {
             onError: AutoDetectActions.GetAutoDetectStepsAction_Failure
         });
     },
+    applyDetectionResult: (completeCallback?: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+        console.log('applyDetectionResult');
+        const state = getState();
+        const configurationId = state.configurations.selectedConfiguration?.Id;
+        await FetchService({
+            url: `api/testsuite/${configurationId}/autodetect/apply`,
+            method: RequestMethod.POST,
+            dispatch,
+            onRequest: AutoDetectActions.ApplyDetectionResult_Request,
+            onComplete: AutoDetectActions.ApplyDetectionResult_Success,
+            onError: AutoDetectActions.ApplyDetectionResult_Failure
+        }).then(completeCallback);
+    },
 };

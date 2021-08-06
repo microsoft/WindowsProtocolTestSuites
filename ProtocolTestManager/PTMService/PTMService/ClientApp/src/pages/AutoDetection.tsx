@@ -82,9 +82,12 @@ export function AutoDetection(props: StepWizardProps) {
     }
 
     const onNextButtonClick = () => {
+        dispatch(TestSuitesDataSrv.applyDetectionResult());
         if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
-            // Next page
-            wizardProps.nextStep();
+            dispatch(TestSuitesDataSrv.applyDetectionResult(()=>{
+                // Next page
+                wizardProps.nextStep();
+            }));
         }
     };
 
