@@ -46,7 +46,7 @@ export function AutoDetection(props: StepWizardProps) {
             if (autoDetectionStepsResult?.Status === DetectionStatus.Error) {
                 toggleAutoDetectWarningDialog();
             }
-
+            setDetecting(false);
             return;
         }
 
@@ -73,8 +73,8 @@ export function AutoDetection(props: StepWizardProps) {
             autoDetectionStepsResult?.Status === DetectionStatus.Error ||
             autoDetectionStepsResult?.Status === DetectionStatus.NotStart;
 
-        // We should get steps for 10 times no matter the status.
-        if (detectingTimes >= 90) {
+        // We should get steps for 3 times no matter the status.
+        if (detectingTimes >= 98) {
             return false;
         }
 
@@ -92,15 +92,17 @@ export function AutoDetection(props: StepWizardProps) {
     };
 
     const onDetectButtonClick = () => {
-        if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
+        if (detecting) {
             // Cancel
             dispatch(TestSuitesDataSrv.stopAutoDetection());
             setDetectingTimes(-999);
+            setDetecting(false);
         }
         else {
             // Start detect
             dispatch(TestSuitesDataSrv.startAutoDetection());
             setDetectingTimes(100);
+            setDetecting(true);
         }
     };
 
@@ -126,7 +128,7 @@ export function AutoDetection(props: StepWizardProps) {
     };
 
     const getDetectButtonText = () => {
-        if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
+        if (detecting) {
             return 'Cancel';
         }
         else {
@@ -334,7 +336,7 @@ export function AutoDetection(props: StepWizardProps) {
                     <div>{autoDetectionStepsResult?.Exception}</div>
                 </Stack>
                 <DialogFooter>
-                    <PrimaryButton onClick={toggleAutoDetectWarningDialog} text={"Yes"} />
+                    <PrimaryButton onClick={toggleAutoDetectWarningDialog} text={"OK"} />
                 </DialogFooter>
             </Modal>
         </div>
