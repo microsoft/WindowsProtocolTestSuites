@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,7 +60,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddPTMServiceDbContext(Configuration.GetConnectionString("Database"));
+            var PTMServiceStorageRoot = Configuration.GetSection("PTMServiceStorageRoot").Get<string>();
+            var connectionString = Configuration.GetConnectionString("Database");
+            if (string.IsNullOrEmpty(PTMServiceStorageRoot))
+            {
+                // Use the app's directory as the default; useful for debugging purposes
+                var builder = new SqliteConnectionStringBuilder(connectionString);
+                builder.DataSource = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, builder.DataSource));
+                connectionString = builder.ToString();
+            }
+
+            services.AddPTMServiceDbContext(connectionString);
 
             services.AddRepositoryPool();
 
