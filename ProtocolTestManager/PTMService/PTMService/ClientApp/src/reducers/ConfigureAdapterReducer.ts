@@ -55,6 +55,9 @@ export const getAdapterReducer = (state = initialAdapterState, action: TestSuite
                     case ChangedField.ScriptDirectory:
                         changedAdapter.ScriptDirectory = '' + action.changedEvent.NewValue;
                         break;
+                    case ChangedField.ShellScriptDirectory:
+                        changedAdapter.ShellScriptDirectory = '' + action.changedEvent.NewValue;
+                        break;
                 }
             }
             return {

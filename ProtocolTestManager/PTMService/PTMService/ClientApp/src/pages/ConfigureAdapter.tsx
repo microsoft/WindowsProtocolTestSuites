@@ -73,7 +73,7 @@ export function ConfigureAdapter(props: StepWizardProps) {
         for (const item of adapters.adapterList) {
             if ((item.Kind === AdapterKind.Managed) && (!item.AdapterType)) {
                 return false;
-            } else if ((item.Kind === AdapterKind.Shell || item.Kind === AdapterKind.PowerShell) && (!item.ScriptDirectory)) {
+            } else if ((item.Kind === AdapterKind.Shell && (!item.ShellScriptDirectory)) || (item.Kind === AdapterKind.PowerShell && (!item.ScriptDirectory))) {
                 return false;
             }
         }

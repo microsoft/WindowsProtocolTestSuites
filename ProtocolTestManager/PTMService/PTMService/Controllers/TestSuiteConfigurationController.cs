@@ -167,10 +167,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 if (item != null)
                 {
                     item.DisplayName = pluginAdapter.DisplayName;
-                    if (item.AdapterType == null) item.AdapterType = pluginAdapter.AdapterType;
-                    item.ScriptDirectory = pluginAdapter.ScriptDirectory;
+                    if (string.IsNullOrEmpty(item.AdapterType)) item.AdapterType = pluginAdapter.AdapterType;
+                    if (string.IsNullOrEmpty(item.ScriptDirectory)) item.ScriptDirectory = pluginAdapter.ScriptDirectory;
                     item.SupportedKinds = pluginAdapter.SupportedKinds;
-                    item.ShellScriptDirectory = pluginAdapter.ShellScriptDirectory;
+                    if (string.IsNullOrEmpty(item.ShellScriptDirectory)) item.ShellScriptDirectory = pluginAdapter.ShellScriptDirectory;
                     result.Add(item);
                 }
             }
