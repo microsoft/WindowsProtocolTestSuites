@@ -4,6 +4,7 @@
 import StepWizard from "react-step-wizard";
 import React from 'react';
 import { SelectTestSuite } from "./SelectTestSuite";
+import { TestSuiteIntroduction } from "./TestSuiteIntroduction";
 import { SelectConfiguration } from "./SelectConfiguration";
 import { ConfigureMethod } from "./ConfigureMethod";
 import { AutoDetection } from "./AutoDetection";
@@ -21,6 +22,7 @@ export function TestSuiteRunWizard() {
                 isLazyMount
             >
                 <SelectTestSuite hashKey={'SelectTestSuite'} />
+                <TestSuiteIntroduction hashKey={'TestSuiteIntroduction'} />
                 <SelectConfiguration hashKey={'SelectConfiguration'} />
                 <ConfigureMethod hashKey={'ConfigureMethod'} />
                 <AutoDetection hashKey={'AutoDetection'} />

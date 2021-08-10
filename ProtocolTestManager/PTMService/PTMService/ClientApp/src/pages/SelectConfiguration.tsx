@@ -17,7 +17,7 @@ import { AppState } from '../store/configureStore';
 
 export function SelectConfiguration(props: any) {
     const dispatch = useDispatch();
-    const testSuiteInfo = useSelector((state: AppState) => state.testsuites);
+    const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo);
     const configurations = useSelector((state: AppState) => state.configurations);
     const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
     const [configureName, setConfigureName] = useState('');

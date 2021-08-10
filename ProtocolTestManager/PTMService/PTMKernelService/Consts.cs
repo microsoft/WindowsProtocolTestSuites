@@ -33,6 +33,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string AutoDetectionDllName = "AutoDetectionDllName";
 
         public const string Adapters = "Adapters";
+
+        public const string UserGuideFolderName = "doc";
     }
 
     public static class ConfigurationConsts

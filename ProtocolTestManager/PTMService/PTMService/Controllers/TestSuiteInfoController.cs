@@ -52,6 +52,55 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
+        /// Check User Guide of a specific test suite.
+        /// </summary>
+        /// <param name="testSuiteId">The test suite Id.</param>
+        /// <returns>The action result.</returns>
+        [Route("{testSuiteId}/userguide")]
+        [HttpGet]
+        public IActionResult GetTestSuiteDocs(int testSuiteId)
+        {
+            var testSuite = PTMKernelService.GetTestSuite(testSuiteId);
+            string sourceUserGudiePath = Path.Combine(testSuite.StorageRoot.AbsolutePath, TestSuiteConsts.PluginFolderName, TestSuiteConsts.UserGuideFolderName);
+            DirectoryInfo dir = new DirectoryInfo(sourceUserGudiePath);
+            if (!dir.Exists)
+            {
+                return BadRequest("Missing user guide in package.");
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Get User Guide of a specific test suite.
+        /// </summary>
+        /// <param name="testSuiteId">The test suite Id.</param>
+        /// <param name="fileName">file.</param>
+        /// <returns>The action result.</returns>
+        [Route("{testSuiteId}/userguide/{fileName}")]
+        [HttpGet]
+        public IActionResult GetTestSuiteDocs(int testSuiteId, string fileName)
+        {
+            var testSuite = PTMKernelService.GetTestSuite(testSuiteId);            
+            string sourceUserGudiePath = Path.Combine(testSuite.StorageRoot.AbsolutePath, TestSuiteConsts.PluginFolderName, TestSuiteConsts.UserGuideFolderName);          
+
+            var file = Path.Combine(sourceUserGudiePath, fileName);
+            var fileInfo = new FileInfo(file);
+            var extension = fileInfo.Extension;
+
+            string GetMIMEType(string fileExtension)
+            {
+                return fileExtension switch
+                {
+                    ".html" => "text/html",
+                    ".png" => "image/png"
+                };
+            }
+
+            return File(System.IO.File.ReadAllBytes(file), GetMIMEType(extension));            
+        }
+
+        /// <summary>
         /// Get detail of a specific test suite.
         /// </summary>
         /// <param name="id">The test suite Id.</param>

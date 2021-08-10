@@ -11,9 +11,11 @@ import { getConfigureMethodReducer } from "./ConfigureMethodReducer";
 import { getFilterTestCaseReducer } from "./FilterTestCaseReducer";
 import { getTestCaseResultReducer } from "./TestCaseResultReducer";
 import { getTestResultsReducer } from "./TestResultsReducer";
+import { getTestSuiteInfoReducer } from "./TestSuiteInfoReducer";
 
 export const appReducers = {
     testsuites: getTestSuitesReducer,
+    testSuiteInfo: getTestSuiteInfoReducer,
     configurations: getConfigurationReducer,
     configureMethod: getConfigureMethodReducer,
     // autoDetection:

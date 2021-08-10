@@ -4,6 +4,8 @@
 import { RequestMethod, FetchService } from ".";
 import { TestSuiteActions, TestSuitesActionTypes } from "../actions/TestSuitesAction";
 import { FilterTestCaseActions, FilterTestCaseActionTypes } from "../actions/FilterTestCaseAction";
+import { TestSuiteInfoActions, TestSuiteInfoActionTypes } from "../actions/TestSuiteInfoAction";
+
 import { AppThunkAction } from "../store/configureStore";
 
 export const TestSuitesDataSrv = {
@@ -20,7 +22,7 @@ export const TestSuitesDataSrv = {
     },
     getTestSuiteTestCases: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
         const state = getState();
-        const testsuiteId = state.testsuites.selectedTestSuite?.Id
+        const testsuiteId = state.testSuiteInfo.selectedTestSuite?.Id
         await FetchService({
             url: `api/testsuite/${testsuiteId}`,
             method: RequestMethod.GET,
@@ -29,5 +31,17 @@ export const TestSuitesDataSrv = {
             onComplete: FilterTestCaseActions.getTestSuiteTestCasesAction_Success,
             onError: FilterTestCaseActions.getTestSuiteTestCasesAction_Failure
         });
-    }
+    },
+    getTestSuiteIntroduction: (): AppThunkAction<TestSuiteInfoActionTypes> => async (dispatch, getState) => {
+        const state = getState();
+        const testsuiteId = state.testSuiteInfo.selectedTestSuite?.Id
+        await FetchService({
+            url: `api/testsuite/${testsuiteId}/userguide`,            
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: TestSuiteInfoActions.getTestSuiteInfoAction_Request,
+            onComplete: TestSuiteInfoActions.getTestSuiteInfoAction_Success,
+            onError: TestSuiteInfoActions.getTestSuiteInfoAction_Failure
+        });
+    },
 };

@@ -31,7 +31,7 @@ const getHeaders = () => {
 export const ProfileDataSrv = {
     saveProfile: (selectedTestCases: string[]): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch, getState) => {
         const state = getState();
-        const testsuiteId = state.testsuites.selectedTestSuite?.Id;
+        const testsuiteId = state.testSuiteInfo.selectedTestSuite?.Id;
         const configurationId = state.configurations.selectedConfiguration?.Id
 
         const request: ProfileExportRequest = {

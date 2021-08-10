@@ -35,9 +35,13 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
                     }
             });
             if (response.status >= 400 && response.status < 600) {
+                const data = await parseJson(response);
+                if (data != "") {
+                    throw new Error(data);
+                }
                 throw new Error("Bad response from server");
             }
-            
+
             const jsonHeader = response.headers.get('Content-Type');
             if (jsonHeader !== null && jsonHeader.indexOf('application/json') > -1) {
                 const data = await parseJson(response);

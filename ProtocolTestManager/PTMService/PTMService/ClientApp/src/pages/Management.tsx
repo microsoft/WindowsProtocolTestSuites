@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ManagementActions } from '../actions/ManagementAction';
-import { TestSuiteActions } from '../actions/TestSuitesAction';
+import { TestSuiteInfoActions } from '../actions/TestSuiteInfoAction';
 import { FileUploader, IFile } from '../components/FileUploader';
 import { StackGap10, StackGap5 } from '../components/StackStyle';
 import { TestSuite } from '../model/TestSuite';
@@ -155,7 +155,7 @@ export function Management(props: any) {
         onRerun: ((id: number) => {
             const foundTestSuite = getCurrentTestSuite(id);
             if (foundTestSuite) {
-                dispatch(TestSuiteActions.setSelectedTestSuiteAction(foundTestSuite));
+                dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(foundTestSuite));
                 dispatch(() => history.push('/Tasks/NewRun#SelectConfiguration', { from: 'Management' }));
             }
         }),

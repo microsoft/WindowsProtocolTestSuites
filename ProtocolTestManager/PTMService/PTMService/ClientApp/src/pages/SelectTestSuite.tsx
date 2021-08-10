@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { StepWizardChildProps } from 'react-step-wizard';
-import { TestSuiteActions } from '../actions/TestSuitesAction';
+import { TestSuiteInfoActions } from '../actions/TestSuiteInfoAction';
 import { StepPanel } from '../components/StepPanel';
 import { TestSuiteInfo } from '../components/TestSuiteInfo';
 import { WizardNavBar } from '../components/WizardNavBar';
@@ -31,7 +31,7 @@ export function SelectTestSuite(props: any) {
     const testSuites = useSelector((state: AppState) => state.testsuites);
 
     const onSelectTestSuite = (testSuite: TestSuite) => {
-        dispatch(TestSuiteActions.setSelectedTestSuiteAction(testSuite));
+        dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(testSuite));
         wizardProps.nextStep();
     }
 

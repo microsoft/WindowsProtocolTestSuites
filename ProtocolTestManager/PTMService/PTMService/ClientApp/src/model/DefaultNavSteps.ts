@@ -8,14 +8,15 @@ import { StepNavItemInfo } from "./StepNavItemInfo";
 
 export const RunSteps = {
     SELECT_TEST_SUITE: 1,
-    SELECT_CONFIGURATION: 2,
-    CONFIGURE_METHOD: 3,
-    AUTO_DETECTION: 4,
-    DETECTION_RESULT: 5,
-    FILTERTESTCASE: 6,
-    CONFIGURE_TEST_CASE: 7,
-    CONFIGURE_ADAPTER: 8,
-    RUN_SELECTED_TEST_CASE: 9,
+    TEST_SUITE_INTRODUCTION:2,
+    SELECT_CONFIGURATION: 3,
+    CONFIGURE_METHOD: 4,
+    AUTO_DETECTION: 5,
+    DETECTION_RESULT: 6,
+    FILTERTESTCASE: 7,
+    CONFIGURE_TEST_CASE: 8,
+    CONFIGURE_ADAPTER: 9,
+    RUN_SELECTED_TEST_CASE: 10,
 }
 
 const DefaultNavSteps: StepNavItemInfo[] = [
@@ -24,6 +25,11 @@ const DefaultNavSteps: StepNavItemInfo[] = [
         TargetStep: RunSteps.SELECT_TEST_SUITE,
         IsEnabled: true,
         IsActive: true
+    },
+    {
+        Caption: 'Test Suite Introduction',
+        TargetStep: RunSteps.TEST_SUITE_INTRODUCTION,
+        IsEnabled: false,
     },
     {
         Caption: 'Select Configuration',

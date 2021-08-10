@@ -5,7 +5,6 @@ import {
     GET_TESTSUITES_FAILURE,
     GET_TESTSUITES_REQUEST,
     GET_TESTSUITES_SUCCESS,
-    SET_SELECTED_TESTSUITE,
     TestSuitesActionTypes
 } from "../actions/TestSuitesAction";
 import { TestSuite } from "../model/TestSuite";
@@ -13,15 +12,14 @@ import { TestSuite } from "../model/TestSuite";
 export interface TestSuitesState {
     isLoading: boolean;
     errorMsg?: string;
-    testSuiteList: TestSuite[];
-    selectedTestSuite?: TestSuite;
+    testSuiteList: TestSuite[];    
 }
 
 const initialTestSuitesState: TestSuitesState = {
     isLoading: false,
     errorMsg: undefined,
     testSuiteList: [],
-    selectedTestSuite: undefined
+    
 };
 
 export const getTestSuitesReducer = (state = initialTestSuitesState, action: TestSuitesActionTypes): TestSuitesState => {
@@ -48,13 +46,7 @@ export const getTestSuitesReducer = (state = initialTestSuitesState, action: Tes
                 testSuiteList: [],
                 errorMsg: action.errorMsg
             };
-
-        case SET_SELECTED_TESTSUITE:
-            return {
-                ...state,
-                selectedTestSuite: action.selectedTestSuite,
-            };
-
+        
         default:
             return state;
     }

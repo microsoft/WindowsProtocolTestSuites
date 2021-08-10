@@ -61,7 +61,7 @@ export function ConfigureMethod(props: StepWizardProps) {
 
     const configureMethod = useSelector((state: AppState) => state.configureMethod);
     const configurations = useSelector((state: AppState) => state.configurations);
-    const testsuites = useSelector((state: AppState) => state.testsuites);
+    const testsuites = useSelector((state: AppState) => state.testSuiteInfo);
 
     const dialogContentProps = {
         type: DialogType.normal,
