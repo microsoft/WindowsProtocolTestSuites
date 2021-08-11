@@ -21,4 +21,10 @@
     <ProjectReference Include="..\Storage\Storage.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ptmservice.test.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
