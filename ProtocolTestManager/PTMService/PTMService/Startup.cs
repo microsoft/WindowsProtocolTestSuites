@@ -28,6 +28,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
     {
         public Startup(IConfiguration configuration)
         {
+            // If PTMServiceStorageRoot is unspecified, set the storage root and connection string to the app directory
+            // This provides reasonable out-of-box and debugging experience
+
+            var PTMServiceStorageRoot = configuration["PTMServiceStorageRoot"];
+            if (string.IsNullOrEmpty(PTMServiceStorageRoot))
+            {
+                // override the storage root path
+                configuration["PTMServiceStorageRoot"] = AppDomain.CurrentDomain.BaseDirectory;
+                // override the db path
+                var builder = new SqliteConnectionStringBuilder(configuration.GetConnectionString("Database"));
+                builder.DataSource = Path.GetFullPath(Path.Combine(configuration["PTMServiceStorageRoot"], builder.DataSource));
+                configuration.GetSection("ConnectionStrings")["Database"] = builder.ToString();
+            }
+
             Configuration = configuration;
         }
 
@@ -60,17 +74,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
                 c.IncludeXmlComments(xmlPath);
             });
 
-            var PTMServiceStorageRoot = Configuration.GetSection("PTMServiceStorageRoot").Get<string>();
-            var connectionString = Configuration.GetConnectionString("Database");
-            if (string.IsNullOrEmpty(PTMServiceStorageRoot))
-            {
-                // Use the app's directory as the default; useful for debugging purposes
-                var builder = new SqliteConnectionStringBuilder(connectionString);
-                builder.DataSource = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, builder.DataSource));
-                connectionString = builder.ToString();
-            }
-
-            services.AddPTMServiceDbContext(connectionString);
+            services.AddPTMServiceDbContext(Configuration.GetConnectionString("Database"));
 
             services.AddRepositoryPool();
 
@@ -78,7 +82,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 
             services.Configure<StoragePoolOptions>(options =>
             {
-                var storageRoot = Configuration.GetSection("PTMServiceStorageRoot").Get<string>();
+                var storageRoot = Configuration["PTMServiceStorageRoot"];
                 var items = new string[]
                 {
                     KnownStorageNodeNames.TestSuite,
@@ -93,7 +97,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 
             services.Configure<PTMKernelServiceOptions>(options =>
             {
-                options.TestEnginePath = Configuration.GetSection("TestEnginePath").Value;
+                options.TestEnginePath = Configuration["TestEnginePath"];
             });
 
             services.AddPTMKernelService();
