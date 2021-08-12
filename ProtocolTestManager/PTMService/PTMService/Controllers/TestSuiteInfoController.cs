@@ -265,5 +265,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Get Auto Detection Log
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration Id.</param>
+        /// <returns>Auto Detection Log</returns>
+        [Route("{configurationId}/autodetect/log")]
+        [HttpGet]
+        public IActionResult GetDetectionLog(int configurationId)
+        {
+            var response = PTMKernelService.GetDetectionLog(configurationId);
+
+            return Ok(response);
+        }
     }
 }

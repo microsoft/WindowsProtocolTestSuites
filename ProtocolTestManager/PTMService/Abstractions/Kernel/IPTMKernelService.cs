@@ -236,6 +236,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="configurationId">Test suite configuration id.</param>
         void ApplyDetectionResult(int configurationId);
 
+        /// <summary>
+        /// Get AutoDetection Log Content
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>AutoDetection Log Content</returns>
+        string GetDetectionLog(int configurationId);
+
         #endregion
     }
 }

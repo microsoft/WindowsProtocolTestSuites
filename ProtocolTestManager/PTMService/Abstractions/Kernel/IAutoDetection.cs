@@ -29,5 +29,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         void Reset();
 
         void ApplyDetectionResult();
+
+        string GetDetectionLog();
     }
 }

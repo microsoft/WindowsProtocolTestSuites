@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ContextualMenu, DefaultButton, DetailsList, Dialog, DialogFooter, DialogType, Dropdown, IColumn, Label, Modal, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react';
+import { DetailsList, DialogFooter, Dropdown, IColumn, Label, Modal, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react';
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
 import { StepPanel } from '../components/StepPanel';
 import { WizardNavBar } from '../components/WizardNavBar';
@@ -11,17 +11,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useWindowSize } from '../components/UseWindowSize';
 import { LoadingPanel } from '../components/LoadingPanel';
 import { Property } from '../model/Property';
-import React, { useEffect, useState } from 'react';
-import { TestSuitesDataSrv } from '../services/TestSuites';
+import { useEffect, useState } from 'react';
+import { AutoDetectionDataSrv } from '../services/AutoDetection';
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities';
 import { AutoDetectActions } from '../actions/AutoDetectionAction';
 import { DetectionStatus } from '../model/AutoDetectionData';
-import { finished } from 'node:stream';
 import { useBoolean } from '@uifabric/react-hooks';
 
 export function AutoDetection(props: StepWizardProps) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const testSuites = useSelector((state: AppState) => state.testsuites);
     const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result;
     const [hideAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(false);
     const prerequisite = useSelector((state: AppState) => state.autoDetection);
@@ -34,11 +32,11 @@ export function AutoDetection(props: StepWizardProps) {
     const [detecting, setDetecting] = useState(false);
 
     useEffect(() => {
-        dispatch(TestSuitesDataSrv.getAutoDetectionPrerequisite());
+        dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite());
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(TestSuitesDataSrv.getAutoDetectionSteps());
+        dispatch(AutoDetectionDataSrv.getAutoDetectionSteps());
     }, [dispatch]);
 
     useEffect(() => {
@@ -52,7 +50,7 @@ export function AutoDetection(props: StepWizardProps) {
 
         const timer = setTimeout(() => {
             setDetectingTimes(detectingTimes - 1);
-            dispatch(TestSuitesDataSrv.pullAutoDetectionSteps());
+            dispatch(AutoDetectionDataSrv.pullAutoDetectionSteps());
             }, 1000);
        
         return () => clearTimeout(timer);
@@ -82,9 +80,9 @@ export function AutoDetection(props: StepWizardProps) {
     }
 
     const onNextButtonClick = () => {
-        dispatch(TestSuitesDataSrv.applyDetectionResult());
+        dispatch(AutoDetectionDataSrv.applyDetectionResult());
         if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
-            dispatch(TestSuitesDataSrv.applyDetectionResult(()=>{
+            dispatch(AutoDetectionDataSrv.applyDetectionResult(()=>{
                 // Next page
                 wizardProps.nextStep();
             }));
@@ -94,13 +92,13 @@ export function AutoDetection(props: StepWizardProps) {
     const onDetectButtonClick = () => {
         if (detecting) {
             // Cancel
-            dispatch(TestSuitesDataSrv.stopAutoDetection());
+            dispatch(AutoDetectionDataSrv.stopAutoDetection());
             setDetectingTimes(-999);
             setDetecting(false);
         }
         else {
             // Start detect
-            dispatch(TestSuitesDataSrv.startAutoDetection());
+            dispatch(AutoDetectionDataSrv.startAutoDetection());
             setDetectingTimes(100);
             setDetecting(true);
         }

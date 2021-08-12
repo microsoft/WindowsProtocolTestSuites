@@ -54,67 +54,52 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public PrerequisiteView GetPrerequisites(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            var prerequisitView = detector.GetPrerequisites();
-
-            return prerequisitView;
+            return GetAutoDetection(configurationId).GetPrerequisites();
         }
 
         public bool SetPrerequisites(List<Property> prerequisitProperties, int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            return detector.SetPrerequisits(prerequisitProperties);
+            return GetAutoDetection(configurationId).SetPrerequisits(prerequisitProperties);
         }
 
         public List<DetectingItem> GetDetectedSteps(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            return detector.GetDetectedSteps();
+            return GetAutoDetection(configurationId).GetDetectedSteps();
         }
 
         public DetectionOutcome GetDetectionOutcome(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            return detector.GetDetectionOutcome();
+            return GetAutoDetection(configurationId).GetDetectionOutcome();
         }
 
         public void Reset(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            detector.Reset();
+            GetAutoDetection(configurationId).Reset();
         }
 
         public void StartDetection(int configurationId, DetectionCallback callback)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            detector.StartDetection(callback);
+            GetAutoDetection(configurationId).StartDetection(callback);
         }
 
         public void StopDetection(int configurationId, Action callback)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            detector.StopDetection(callback);
+            GetAutoDetection(configurationId).StopDetection(callback);
         }
 
         public void ApplyDetectionResult(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            detector.ApplyDetectionResult();
+            GetAutoDetection(configurationId).ApplyDetectionResult();
         }
 
         public object GetDetectionSummary(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
+            return GetAutoDetection(configurationId).GetDetectionSummary();
+        }
 
-            return detector.GetDetectionSummary();
+        public string GetDetectionLog(int configurationId)
+        {
+            return GetAutoDetection(configurationId).GetDetectionLog();
         }
     }
 }
