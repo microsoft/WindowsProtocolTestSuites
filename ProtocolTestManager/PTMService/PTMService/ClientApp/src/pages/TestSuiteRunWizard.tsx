@@ -12,13 +12,27 @@ import { FilterTestCase } from "./FilterTestCase";
 import { ConfigureTestCase } from "./ConfigureTestCase";
 import { RunSelectedCase } from "./RunSelectedCase";
 import { ConfigureAdapter } from "./ConfigureAdapter";
+import { useDispatch, useSelector } from 'react-redux';
+import { WizardNavBarActions } from '../actions/WizardNavBarAction';
+import { AppState } from '../store/configureStore';
 
 export function TestSuiteRunWizard() {
+    const wizardMethod = useSelector((state: AppState) => state.wizard);
+    const dispatch = useDispatch();
+    const onStepChange = (stepChange: {
+        previousStep: number
+        activeStep: number
+      }) => {
+        if(wizardMethod.lastStep<stepChange.activeStep) {
+            dispatch(WizardNavBarActions.setWizardNavBarAction(stepChange.activeStep))
+        }
+    }
     return (
         <div>
             <StepWizard
                 isHashEnabled={true}
                 isLazyMount
+                onStepChange={onStepChange}
             >
                 <SelectTestSuite hashKey={'SelectTestSuite'} />
                 <TestSuiteIntroduction hashKey={'TestSuiteIntroduction'} />

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { StepWizardChildProps } from 'react-step-wizard';
 import { TestSuiteInfoActions } from '../actions/TestSuiteInfoAction';
+import { WizardNavBarActions } from '../actions/WizardNavBarAction';
 import { StepPanel } from '../components/StepPanel';
 import { TestSuiteInfo } from '../components/TestSuiteInfo';
 import { WizardNavBar } from '../components/WizardNavBar';
@@ -17,7 +18,7 @@ import { AppState } from '../store/configureStore';
 
 export function SelectTestSuite(props: any) {
     const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-
+    const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo);
     const navSteps = getNavSteps(wizardProps);
     const wizard = WizardNavBar(wizardProps, navSteps);
 
@@ -31,7 +32,10 @@ export function SelectTestSuite(props: any) {
     const testSuites = useSelector((state: AppState) => state.testsuites);
 
     const onSelectTestSuite = (testSuite: TestSuite) => {
-        dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(testSuite));
+        dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(testSuite));       
+        if (testSuite.Id !== testSuiteInfo.selectedTestSuite?.Id) {
+            dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep));
+        }
         wizardProps.nextStep();
     }
 
@@ -49,7 +53,7 @@ export function SelectTestSuite(props: any) {
             {
                 (testSuitesList.length === 0) ? <div>
                     No test suite found, please go to <Link onClick={() => history.push('/Management')}>Management</Link> page to install test suite
-                    </div> : testSuitesList
+                </div> : testSuitesList
             }
         </StepPanel>
     )

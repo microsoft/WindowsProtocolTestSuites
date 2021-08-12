@@ -5,12 +5,20 @@ import styled from '@emotion/styled';
 import { StepWizardChildProps } from "react-step-wizard";
 import { StepNavItemInfo } from '../model/StepNavItemInfo';
 import { useWindowSize } from './UseWindowSize';
+import { useSelector } from 'react-redux';
+import { AppState } from '../store/configureStore';
+import { RunSteps } from '../model/DefaultNavSteps';
 
 export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
+    const wizardState = useSelector((state: AppState) => state.wizard);
     const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
+        let isEnabledStep = item.TargetStep <= wizardState.lastStep;
+        if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
+            isEnabledStep = item.IsEnabled
+        }
         if (item.IsActive) {
             return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
-        } else if (item.IsEnabled) {
+        } else if (isEnabledStep) {
             return <CompleteStep color={"#389e0d"} key={index} onClick={() => wizardProps.goToStep(item.TargetStep)}>{item.Caption}</CompleteStep>
         }
         else {
