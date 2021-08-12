@@ -16,9 +16,16 @@ type TreePanelProps = {
 
 const getGroup = (rules: Rule[], parent: string): Node[] => {
     return rules.map(rule => {
-        let curr = parent ? parent + "." + rule.Name : rule.Name
+        const curr = parent ? `${parent}.${rule.Name}` : rule.Name
         if (rule.Rules) {
             return { className: "treeNode", value: curr, label: rule.DisplayName, categories: rule.Categories, children: getGroup(rule.Rules, curr) }
+        }
+        if(rule.MappingRules) {
+            const hiddenNodes= rule.MappingRules.map(node=>{
+                const hiddenNode = `${curr}%${node}`
+                return{ className: "treeNodeHidden", value: hiddenNode, label: node, categories: node, disabled: false }
+            });
+            return { className: "treeNodeLeaf", value: curr, label: rule.DisplayName, categories: rule.Categories, children:hiddenNodes }
         }
         return { className: "treeNode", value: curr, label: rule.DisplayName, categories: rule.Categories }
     })
@@ -28,7 +35,7 @@ const createGroupItems = (rules: Rule[]): any[] => {
     const groups: any[] = getGroup(rules, AllNode.value)
     return [
         {
-            value: AllNode.value, label: AllNode.lable, children: groups
+            value: AllNode.value, label: AllNode.label, children: groups
         }
     ]
 }
@@ -36,7 +43,7 @@ const createGroupItems = (rules: Rule[]): any[] => {
 const getItems = (rules: Rule[], parent: string): string[] => {
     const results: string[] = []
     rules.forEach(rule => {
-        let curr = parent ? parent + "." + rule.Name : rule.Name
+        const curr = parent ? `${parent}.${rule.Name}` : rule.Name
         if (rule.Rules) {
 
             results.push(...getItems(rule.Rules, curr))
@@ -65,7 +72,9 @@ export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
 
     useEffect(() => {
         if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
-            setChecked(props.checked);
+            setChecked(props.checked);    
+            const data = { Name: props.groupName, Selected: props.checked }
+            props.selectAction(data);
         }
     }, [props.checked])
 

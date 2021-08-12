@@ -83,5 +83,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// </summary>
         /// <returns>Auto-detection file name</returns>
         string GetDetectorAssembly();
+
+        /// <summary>
+        /// Load feature mapping config from given xml node
+        /// </summary>
+        /// <param name="targetFilterIndex"></param>
+        /// <param name="mappingFilterIndex"></param>
+        void LoadFeatureMappingFromXml(out int targetFilterIndex, out int mappingFilterIndex);
     }
 }

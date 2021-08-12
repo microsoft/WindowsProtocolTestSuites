@@ -7,36 +7,36 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
     text-align: center;
 }
 
-.home .center {
-    display: flex;
-    justify-content: space-around;
-}
+    .home .center {
+        display: flex;
+        justify-content: space-around;
+    }
 
-.home .title {
-    font-size: 4rem;
-    margin-top: 40px;
-    margin-bottom: 20px;
-}
+    .home .title {
+        font-size: 4rem;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
 
-.home .subTitle {
-    font-size: 1.3rem;
-}
+    .home .subTitle {
+        font-size: 1.3rem;
+    }
 
-.home .buttons {
-    float: "left";
-    width: 1280px;
-    min-width: 1280px;
-    height: 270px;
-    overflow-x: "auto";
-}
+    .home .buttons {
+        float: "left";
+        width: 1280px;
+        min-width: 1280px;
+        height: 270px;
+        overflow-x: "auto";
+    }
 
-.home .panel {
-    display: flex;
-    overflow: auto;
-    width: 600px;
-    height: 270px;
-    margin-top: 30px;
-}
+    .home .panel {
+        display: flex;
+        overflow: auto;
+        width: 600px;
+        height: 270px;
+        margin-top: 30px;
+    }
 
 #run-panel {
     background: #5cdbd3;
@@ -50,19 +50,19 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
     margin-left: 15px;
 }
 
-#record-panel ::after {
-    clear: both;
-}
+    #record-panel ::after {
+        clear: both;
+    }
 
-.home .panel{
+.home .panel {
     border-radius: 1rem;
 }
 
-.home .panel .content {
-    display: block;
-    text-align: start;
-    font-size: small;
-}
+    .home .panel .content {
+        display: block;
+        text-align: start;
+        font-size: small;
+    }
 
 #run-panel .content {
     margin-left: 30px;
@@ -132,9 +132,9 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
 @font-face {
     font-family: 'FabricMDL2Icons-0';
     src: url('./fabric-icons-0-7bf4f0ea.woff') format('woff');
-  }
-  
-  .ms-Icon {
+}
+
+.ms-Icon {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     display: inline-block;
@@ -142,14 +142,32 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
     font-style: normal;
     font-weight: normal;
     speak: none;
-  }
-  
-  .ms-Icon--CheckboxIndeterminateCombo:before { content: "\F16E"; }
+}
 
-  .treeNode {
-    white-space:nowrap;
+.ms-Icon--CheckboxIndeterminateCombo:before {
+    content: "\F16E";
+}
+
+.treeNode {
+    white-space: nowrap;
     padding-top: 1px;
-  }
-  .react-checkbox-tree {
-      overflow: auto;
-  }
+}
+
+.react-checkbox-tree {
+    overflow: auto;
+}
+
+.treeNodeHidden {
+    white-space: nowrap;
+    padding-top: 1px;
+    display: none;
+}
+
+.treeNodeLeaf {
+    padding-left: 24px;
+}
+
+.treeNodeLeaf .rct-collapse-btn {
+    display: none;
+    padding-left: 24px;
+}

@@ -55,16 +55,16 @@ export function FilterTestCase(props: any) {
         <StepPanel leftNav={wizard} isLoading={filterInfo.isRulesLoading || filterInfo.isCasesLoading} errorMsg={filterInfo.errorMsg} >
             <div>
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
-                    <div style={{ width: winSize.width * 0.25, }}>Filter</div>
+                    <div style={{ width: winSize.width * 0.30, }}>Filter</div>
                     <div>Selected Test Cases {filterInfo.listSelectedCases?.length}</div>
                 </Stack>
                 <hr style={{ border: "1px solid #d9d9d9" }} />
                 <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }}>
-                    <Stack style={{ minWidth: winSize.width * 0.25, }} tokens={StackGap10}>
+                    <Stack style={{ minWidth: winSize.width * 0.30, }} tokens={StackGap10}>
                         <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
                     </Stack>
                     <div style={{ width: 25 }} />
-                    <Stack style={{ height: winSize.height - HeaderMenuHeight - 82, width: 100 + '%', overflowY: 'auto' }}>
+                    <Stack style={{ height: winSize.height - HeaderMenuHeight - 90, width: 100 + '%', overflowY: 'auto' }}>
                         {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
                     </Stack>
                 </Stack>

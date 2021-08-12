@@ -42,6 +42,30 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         public IEnumerable<RuleGroup> Rules { get; set; }
 
         /// <summary>
+        /// The index of Target Filter.
+        /// </summary>
+        public int TargetFilterIndex { get; }
+
+        /// <summary>
+        /// The index of Mapping Filter.
+        /// </summary>
+        public int MappingFilterIndex { get; }
+
+        /// <summary>
+        /// A table which helps lookup rules in mapping filter by category name in target filter
+        /// Key: category name of a rule in target filter
+        /// Value: list of rules in mapping filter
+        /// </summary>
+        public Dictionary<string, List<Rule>> FeatureMappingTable { get; }
+
+        /// <summary>
+        /// A table which helps lookup rules in target filter by category name in mapping filter
+        /// Key: category name of a rule in mapping filter
+        /// Value: list of rules in target filter
+        /// </summary>
+        public Dictionary<string, List<Rule>> ReverseMappingTable { get; }
+
+        /// <summary>
         /// Selected rules
         /// </summary>
         public IEnumerable<RuleGroup> SelectedRules { get; }

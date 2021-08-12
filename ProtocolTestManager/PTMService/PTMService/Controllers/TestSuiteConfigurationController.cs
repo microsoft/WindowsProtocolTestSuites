@@ -71,11 +71,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         {
             var configuration = PTMKernelService.GetConfiguration(id);
             var groups = RuleGroup.FromKernalRuleGroups(configuration.Rules);
+            groups = RuleGroup.UpdateByMappingTable(groups, configuration.TargetFilterIndex, configuration.FeatureMappingTable);
+            groups = RuleGroup.UpdateByMappingTable(groups, configuration.MappingFilterIndex, configuration.ReverseMappingTable);
 
             return new TestSuiteRules()
             {
                 AllRules = groups,
-                SelectedRules = RuleGroup.FromKernalRuleGroups(configuration.SelectedRules)
+                SelectedRules = RuleGroup.FromKernalRuleGroups(configuration.SelectedRules),
+                TargetFilterIndex = configuration.TargetFilterIndex,
+                MappingFilterIndex = configuration.MappingFilterIndex
             };
         }
 

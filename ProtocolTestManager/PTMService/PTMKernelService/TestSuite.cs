@@ -336,6 +336,54 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return ruleGroups.ToArray();
         }
 
+
+        public void LoadFeatureMappingFromXml(out int targetFilterIndex, out int mappingFilterIndex)
+        {
+            targetFilterIndex = -1;
+            mappingFilterIndex = -1;
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(this.TestSuiteConfigFilePath);
+            XmlNode configCaseRule = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.ConfigCaseRule);
+            var groups = configCaseRule.SelectNodes("Group");
+
+            XmlNode featureMappingNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.FeatureMapping);
+            if(featureMappingNode == null)
+            {                
+                return;
+            }
+
+            // Parse Config section
+            var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
+            Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
+            if(configTable.TryGetValue("targetFilterIndex", out int _targetFilterIndex) && configTable.TryGetValue("mappingFilterIndex", out int _mappingFilterIndex))
+            {
+                if ((_targetFilterIndex == _mappingFilterIndex) ||
+                (_targetFilterIndex >= groups.Count || _mappingFilterIndex >= groups.Count))
+                {
+                    return;
+                }
+                targetFilterIndex = _targetFilterIndex;
+                mappingFilterIndex = _mappingFilterIndex;
+            }            
+        }
+
+        /// <summary>
+        /// Create a config table from a given xml node
+        /// </summary>
+        /// <param name="featureMappingConfig"></param>
+        /// <returns>A feature mapping config table</returns>
+        private Dictionary<string, int> GetFeatureMappingConfigFromXmlNode(XmlNode featureMappingConfig)
+        {
+            Dictionary<string, int> featureMappingConfigTable = new Dictionary<string, int>();
+            var configs = featureMappingConfig.SelectNodes("Config");
+            foreach (XmlNode config in configs)
+            {
+                featureMappingConfigTable.Add(config.Attributes[0].Value, Convert.ToInt32(config.Attributes[1].Value));
+            }
+            return featureMappingConfigTable;
+        }
+
         public string GetDetectorAssembly()
         {
             string detectorAssembly = null;

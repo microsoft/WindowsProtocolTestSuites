@@ -28,6 +28,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public const string ConfigCaseRule = "ConfigCaseRule";
 
+        public const string FeatureMapping = "FeatureMapping";
+
         public const string ProfileExtension = ".ptm";
 
         public const string AutoDetectionDllName = "AutoDetectionDllName";

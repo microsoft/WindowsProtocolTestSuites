@@ -14,7 +14,7 @@ export const SelectedTestCasesDataSrv = {
             dispatch(SelectedTestCasesActions.getAllTestCasesAction_Request());
         }
         else {
-            dispatch(SelectedTestCasesActions.getAllTestCasesAction_Success(state.filterInfo.listFilteredTestCases.map(e => e.FullName)));
+            dispatch(SelectedTestCasesActions.getAllTestCasesAction_Success(state.filterInfo.listSelectedCases||[]));
         }
     },
 

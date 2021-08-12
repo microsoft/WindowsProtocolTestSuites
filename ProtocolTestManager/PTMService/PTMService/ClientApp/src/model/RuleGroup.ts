@@ -2,12 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 export const AllNode = {
     value: 'All',
-    lable: '(Select all)'
+    label: '(Select all)'
 };
 
 export interface RuleData {
     AllRules: RuleGroup[];
-    SelectedRules: Rule[]
+    SelectedRules: Rule[];
+    TargetFilterIndex: number;
+    MappingFilterIndex: number;
 }
 
 export interface RuleGroup {
@@ -25,6 +27,7 @@ export interface Rule {
 
     Rules?: Rule[];
     Categories?: string[]
+    MappingRules?: string[]
 }
 
 export interface SelectedRuleGroup {

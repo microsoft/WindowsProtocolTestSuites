@@ -5,6 +5,7 @@ using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
@@ -45,6 +46,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public string[] Categories { get; set; }
 
         public Rule[]? Rules { get; set; }
+
+        public string[]? MappingRules { get; set; }
     }
 
     public class RuleGroup
@@ -75,6 +78,30 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                         rg.Rules = drList.ToArray();
                     }
                     groups.Add(rg);
+                }
+            }
+
+            return groups.ToArray();
+        }
+
+        public static RuleGroup[] UpdateByMappingTable(RuleGroup[] ruleGroups, int mappingIndex,  Dictionary<string, List<Common.Types.Rule>> mappingTable)
+        {
+            if(mappingIndex == -1)
+            {
+                return ruleGroups;
+            }
+
+            List<RuleGroup> groups = new List<RuleGroup>();
+            if (ruleGroups != null)
+            {
+                for (int i = 0; i < ruleGroups.Count(); i++)
+                {
+                    var g = ruleGroups.ElementAt(i);
+                    if (i == mappingIndex)
+                    {
+                        UpdateRulesByMappingTable(g.Rules, mappingTable);
+                    }
+                    groups.Add(g);
                 }
             }
 
@@ -127,6 +154,31 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             }
         }
 
+        private static void UpdateRulesByMappingTable(IList<Rule> rules, Dictionary<string, List<Common.Types.Rule>> mappingTable)
+        {
+            if (rules == null)
+            {
+                return;
+            }
+
+            foreach (var r in rules)
+            {
+                if (r.Categories == null)
+                {
+                    continue;
+                }
+                if (r.Categories.Length > 0 && mappingTable.ContainsKey(r.Categories.FirstOrDefault()))
+                {
+                    var hiddenNodes = mappingTable.GetValueOrDefault(r.Categories.FirstOrDefault()).Select(x => x.Name).Distinct();
+                    r.MappingRules = hiddenNodes.ToArray();
+                }
+                if (r.Rules != null)
+                {
+                    UpdateRulesByMappingTable(r.Rules, mappingTable);
+                }
+            }
+        }
+
         private static void AddKernalRules(IList<Rule> rules, List<Common.Types.Rule> kernalRules)
         {
             foreach (var r in rules)
@@ -154,6 +206,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public RuleGroup[] AllRules { get; set; }
 
         public RuleGroup[] SelectedRules { get; set; }
+
+        public int TargetFilterIndex { get; set; }
+        public int MappingFilterIndex { get; set; }
     }
 
     public class PropertyGetItem

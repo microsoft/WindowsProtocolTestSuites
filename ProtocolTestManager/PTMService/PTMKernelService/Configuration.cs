@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
@@ -12,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
+using Rule = Microsoft.Protocols.TestManager.PTMService.Common.Types.Rule;
 using RuleGroup = Microsoft.Protocols.TestManager.PTMService.Common.Types.RuleGroup;
 using RuleSelectStatus = Microsoft.Protocols.TestManager.PTMService.Common.Types.RuleSelectStatus;
 
@@ -30,9 +32,16 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             Description = testSuiteConfiguration.Description;
 
             StorageRoot = storageRoot;
+
+            LoadFeatureMappingFromXml();
         }
 
         private IEnumerable<RuleGroup> selectedRules;
+
+        private int targetFilterIndex = -1;
+        private int mappingFilterIndex = -1;
+        private Dictionary<string, List<Rule>> featureMappingTable = new Dictionary<string, List<Rule>>();
+        private Dictionary<string, List<Rule>> reverseMappingTable = new Dictionary<string, List<Rule>>();
 
         public int Id { get; private init; }
 
@@ -50,6 +59,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                         LoadSelectedRules(ruleGroups, query.First());
                     }
                 }
+
+                // create mapping table
+                CreateMappingTable(ruleGroups);
 
                 return ruleGroups;
             }
@@ -94,6 +106,107 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             get { return this.selectedRules; }
         }
 
+        public int TargetFilterIndex 
+        { 
+            get { return this.targetFilterIndex; } 
+        }
+
+        public int MappingFilterIndex
+        {
+            get { return this.mappingFilterIndex; }
+        }
+
+        public Dictionary<string, List<Rule>> FeatureMappingTable
+        {
+            get { return this.featureMappingTable; }
+        }
+
+        public Dictionary<string, List<Rule>> ReverseMappingTable
+        {
+            get { return this.reverseMappingTable; }
+        }
+
+        private void LoadFeatureMappingFromXml()
+        {
+            TestSuite.LoadFeatureMappingFromXml(out targetFilterIndex, out mappingFilterIndex);
+        }
+
+        private void CreateMappingTable(RuleGroup[] ruleGroups)
+        {
+            featureMappingTable = new Dictionary<string, List<Rule>>();
+            reverseMappingTable = new Dictionary<string, List<Rule>>();
+            RuleGroup targetFilterGroup = ruleGroups[targetFilterIndex];
+            RuleGroup mappingFilterGroup = ruleGroups[mappingFilterIndex];
+            Dictionary<string, Rule> mappingRuleTable = CreateRuleTableFromRuleGroup(mappingFilterGroup);
+            Dictionary<string, Rule> targetRuleTable = CreateRuleTableFromRuleGroup(targetFilterGroup);
+
+            var testCaseList = TestSuite.GetTestCases(null);
+
+            foreach (TestCaseInfo testCase in testCaseList)
+            {
+                List<string> categories = testCase.Category.ToList();
+                foreach (string target in targetRuleTable.Keys)
+                {
+                    if (categories.Contains(target))
+                    {
+                        Rule currentRule;
+                        foreach (string category in categories)
+                        {
+                            if (!category.Equals(target))
+                            {
+                                mappingRuleTable.TryGetValue(category, out currentRule);
+                                if (currentRule == null)
+                                {
+                                    continue;
+                                }
+                                updateMappingTable(featureMappingTable, target, currentRule);
+                                // Add item to reverse mapping table
+                                updateMappingTable(reverseMappingTable, category, targetRuleTable[target]);                                
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void updateMappingTable(Dictionary<string, List<Rule>> mappingTable, string target, Rule currentRule)
+        {
+            if (mappingTable.ContainsKey(target))
+            {
+                if (!mappingTable[target].Contains(currentRule))
+                {
+                    mappingTable[target].Add(currentRule);
+                }
+            }
+            else
+            {
+                mappingTable[target] = new List<Rule> { currentRule };
+            }
+        }
+
+        /// <summary>
+        /// Create a dictionary (key: rule name, value: rule) to store rules from a given ruleGroup to speedup rule lookup performance
+        /// </summary>
+        /// <param name="ruleGroup">A rule group</param>
+        /// <returns>A rule table</returns>
+        private Dictionary<string, Rule> CreateRuleTableFromRuleGroup(RuleGroup ruleGroup)
+        {
+            Dictionary<string, Rule> ruleTable = new Dictionary<string, Rule>();
+            Stack<Rule> ruleStack = new Stack<Rule>();
+            foreach (Rule r in ruleGroup.Rules) ruleStack.Push(r);
+            while (ruleStack.Count > 0)
+            {
+                Rule r = ruleStack.Pop();
+                if (r.Categories.Length > 0 &&
+                    !ruleTable.ContainsKey(r.Categories[0]))
+                {
+                    ruleTable.Add(r.Categories[0], r);
+                }
+                foreach (Rule childRule in r) ruleStack.Push(childRule);
+            }
+            return ruleTable;
+        }
         public IEnumerable<PropertyGroup> Properties
         {
             get
@@ -352,7 +465,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     foreach (XmlNode ruleNode in ruleGroupNode.SelectNodes("Rule"))
                     {
                         string ruleName = ruleNode.Attributes["name"].Value;
-                        Common.Types.Rule rule = FindRuleByName(ruleGroups, ruleName);
+                        string searchRuleName = ruleName.Contains('%') ?
+                            ruleName.Split('%')[0] :
+                            ruleName;
+
+                        Common.Types.Rule rule = FindRuleByName(ruleGroups, searchRuleName);
                         if (rule != null)
                         {
                             rule.SelectStatus = RuleSelectStatus.Selected;
