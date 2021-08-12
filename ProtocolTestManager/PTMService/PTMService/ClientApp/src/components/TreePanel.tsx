@@ -73,8 +73,6 @@ export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
     useEffect(() => {
         if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
             setChecked(props.checked);    
-            const data = { Name: props.groupName, Selected: props.checked }
-            props.selectAction(data);
         }
     }, [props.checked])
 
