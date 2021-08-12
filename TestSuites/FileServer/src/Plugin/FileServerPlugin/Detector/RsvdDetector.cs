@@ -313,8 +313,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private string GetVhdSourcePath()
         {
             string res = string.Empty;
-            string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            string vhdxPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(assemblyPath), @"data\" + testSuiteName + @"\" + vhdName);
+            string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string vhdxPath = System.IO.Path.Combine(System.IO.Directory.GetParent(assemblyPath).FullName, "Plugin", "data", vhdName);
             if (System.IO.File.Exists(vhdxPath))
             {
                 res = vhdxPath;
