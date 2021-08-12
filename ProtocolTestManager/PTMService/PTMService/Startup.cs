@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +28,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
     {
         public Startup(IConfiguration configuration)
         {
+            // If PTMServiceStorageRoot is unspecified, set the storage root and connection string to the app directory
+            // This provides reasonable out-of-box and debugging experience
+
+            var PTMServiceStorageRoot = configuration["PTMServiceStorageRoot"];
+            if (string.IsNullOrEmpty(PTMServiceStorageRoot))
+            {
+                // override the storage root path
+                configuration["PTMServiceStorageRoot"] = AppDomain.CurrentDomain.BaseDirectory;
+                // override the db path
+                var builder = new SqliteConnectionStringBuilder(configuration.GetConnectionString("Database"));
+                builder.DataSource = Path.GetFullPath(Path.Combine(configuration["PTMServiceStorageRoot"], builder.DataSource));
+                configuration.GetSection("ConnectionStrings")["Database"] = builder.ToString();
+            }
+
             Configuration = configuration;
         }
 
@@ -67,7 +82,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 
             services.Configure<StoragePoolOptions>(options =>
             {
-                var storageRoot = Configuration.GetSection("PTMServiceStorageRoot").Get<string>();
+                var storageRoot = Configuration["PTMServiceStorageRoot"];
                 var items = new string[]
                 {
                     KnownStorageNodeNames.TestSuite,
@@ -82,7 +97,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
 
             services.Configure<PTMKernelServiceOptions>(options =>
             {
-                options.TestEnginePath = Configuration.GetSection("TestEnginePath").Value;
+                options.TestEnginePath = Configuration["TestEnginePath"];
             });
 
             services.AddPTMKernelService();

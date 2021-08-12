@@ -36,11 +36,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            File.Copy("ptmservice.db", "ptmservice.test.db", true);
+            File.Copy("ptmservice.test.db", "ptmservice.test.running.db", true);
 
             var services = new ServiceCollection();
 
-            services.AddPTMServiceDbContext("Data Source = ptmservice.test.db");
+            services.AddPTMServiceDbContext("Data Source = ptmservice.test.running.db");
 
             services.AddRepositoryPool();
 
