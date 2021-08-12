@@ -6,76 +6,100 @@ using System.Collections.Generic;
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal partial class PTMKernelService
     {
+        private ReaderWriterLockSlim cacheLock = new ReaderWriterLockSlim();
+
         public int CreateAutoDetector(int configurationId)
         {
             var configuration = GetConfiguration(configurationId);
 
             var testSuite = configuration.TestSuite;
 
-            var autoDetector = AutoDetection.Create(testSuite);
-
-            AutoDetectionPool.AddOrUpdate(configurationId, _ => autoDetector, (_, _) => autoDetector);
+            cacheLock.EnterWriteLock();
+            try
+            {
+                var autoDetector = AutoDetection.Create(testSuite);
+                AutoDetectionPool.AddOrUpdate(configurationId, _ => autoDetector, (_, _) => autoDetector);
+            }
+            finally
+            {
+                cacheLock.ExitWriteLock();
+            }
 
             return configurationId;
         }
 
         public IAutoDetection GetAutoDetection(int configurationId)
         {
-            if (!AutoDetectionPool.ContainsKey(configurationId))
+            cacheLock.EnterUpgradeableReadLock();
+            try
             {
-                CreateAutoDetector(configurationId);
-            }
+                if (!AutoDetectionPool.ContainsKey(configurationId))
+                {
+                    CreateAutoDetector(configurationId);
+                }
 
-            return AutoDetectionPool[configurationId];
+                return AutoDetectionPool[configurationId];
+            }
+            finally
+            {
+                cacheLock.ExitUpgradeableReadLock();
+            }
         }
 
         public PrerequisiteView GetPrerequisites(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            var prerequisitView = detector.GetPrerequisites();
-
-            return prerequisitView;
+            return GetAutoDetection(configurationId).GetPrerequisites();
         }
 
-        public bool SetPrerequisites(List<PrerequisiteProperty> prerequisitProperties, int configurationId)
+        public bool SetPrerequisites(List<Property> prerequisitProperties, int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            return detector.SetPrerequisits(prerequisitProperties);
+            return GetAutoDetection(configurationId).SetPrerequisits(prerequisitProperties);
         }
 
         public List<DetectingItem> GetDetectedSteps(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
+            return GetAutoDetection(configurationId).GetDetectedSteps();
+        }
 
-            return detector.GetDetectedSteps();
+        public DetectionOutcome GetDetectionOutcome(int configurationId)
+        {
+            return GetAutoDetection(configurationId).GetDetectionOutcome();
+        }
+
+        public void Reset(int configurationId)
+        {
+            GetAutoDetection(configurationId).Reset();
         }
 
         public void StartDetection(int configurationId, DetectionCallback callback)
         {
-            var detector = GetAutoDetection(configurationId);
-
-            detector.StartDetection(callback);
+            GetAutoDetection(configurationId).StartDetection(callback);
         }
 
         public void StopDetection(int configurationId, Action callback)
         {
-            var detector = GetAutoDetection(configurationId);
+            GetAutoDetection(configurationId).StopDetection(callback);
+        }
 
-            detector.StopDetection(callback);
+        public void ApplyDetectionResult(int configurationId)
+        {
+            GetAutoDetection(configurationId).ApplyDetectionResult();
         }
 
         public object GetDetectionSummary(int configurationId)
         {
-            var detector = GetAutoDetection(configurationId);
+            return GetAutoDetection(configurationId).GetDetectionSummary();
+        }
 
-            return detector.GetDetectionSummary();
+        public string GetDetectionLog(int configurationId)
+        {
+            return GetAutoDetection(configurationId).GetDetectionLog();
         }
     }
 }

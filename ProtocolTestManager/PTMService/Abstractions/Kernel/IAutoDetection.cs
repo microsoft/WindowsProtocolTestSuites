@@ -14,14 +14,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         PrerequisiteView GetPrerequisites();
 
-        bool SetPrerequisits(List<PrerequisiteProperty> prerequisitProperties);
+        bool SetPrerequisits(List<Property> prerequisitProperties);
 
         List<DetectingItem> GetDetectedSteps();
+
+        DetectionOutcome GetDetectionOutcome();
 
         void StartDetection(DetectionCallback callback);
 
         void StopDetection(Action callback);
 
         object GetDetectionSummary();
+
+        void Reset();
+
+        void ApplyDetectionResult();
+
+        string GetDetectionLog();
     }
 }

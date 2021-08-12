@@ -1,24 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Microsoft.Protocols.TestManager.Detector</RootNamespace>
-    <AssemblyName>Microsoft.Protocols.TestManager.Detector</AssemblyName>
-    <TargetFramework>net5.0</TargetFramework>
-    <DocumentationFile>Microsoft.Protocols.TestManager.Detector.xml</DocumentationFile>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<AssemblyName>PropertyValueDetector</AssemblyName>
+		<RootNamespace>Microsoft.Protocols.TestManager.Detector</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="5.0.0" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.0" />
-    <PackageReference Include="System.Management" Version="5.0.0" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="System.DirectoryServices" Version="5.0.0" />
+		<PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.0" />
+		<PackageReference Include="System.Management" Version="5.0.0" />
+	</ItemGroup>
 </Project>

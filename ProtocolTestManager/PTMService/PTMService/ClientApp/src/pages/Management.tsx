@@ -3,7 +3,7 @@
 
 import { CommandBarButton, ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, Label, PrimaryButton, SearchBox, SelectionMode, Stack, TextField } from '@fluentui/react';
 import { useBoolean } from '@uifabric/react-hooks';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ManagementActions } from '../actions/ManagementAction';

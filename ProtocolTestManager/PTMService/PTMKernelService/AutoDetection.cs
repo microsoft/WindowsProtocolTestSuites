@@ -1,39 +1,53 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestManager.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using Microsoft.Protocols.TestManager.Kernel;
-using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
-    public class AutoDetection: IAutoDetection
+    public class AutoDetection : IAutoDetection
     {
-        private StreamWriter logWriter;
+        private ReaderWriterLockSlim stepsLocker = new ReaderWriterLockSlim();
+        private ReaderWriterLockSlim prerequisitesLocker = new ReaderWriterLockSlim();
+        private ReaderWriterLockSlim detectorLocker = new ReaderWriterLockSlim();
+        private ReaderWriterLockSlim statusLocker = new ReaderWriterLockSlim();
 
-        private int stepIndex;
-
-        //private Detector detector = null;
+        private Dictionary<int, int> detectStepIndexes = new Dictionary<int, int>();
+        private Dictionary<int, StreamWriter> logStreams = new Dictionary<int, StreamWriter>();
+        private Exception detectedException = null;
 
         private List<DetectingItem> detectSteps;
 
         private ITestSuite TestSuite { get; set; }
 
-        private CancellationTokenSource cts = new CancellationTokenSource();
+        private CancellationTokenSource cts = null;
 
         private IValueDetector valueDetector = null;
+
+        private PrerequisiteView prerequisiteView = null;
 
         private Task detectTask = null;
 
         private bool taskCanceled = false;
+
+        private string detectorAssembly = string.Empty;
+
+        private string detectorInstanceTypeName = string.Empty;
+
+        private DetectionStatus detectionStatus = DetectionStatus.NotStart;
+
+        private string latestLogPath = string.Empty;
 
         /// <summary>
         /// Delegate of logging.
@@ -52,6 +66,25 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             TestSuite = testSuite;
 
             InitializeDetector(TestSuite.Id);
+
+            detectSteps = ValueDetector.GetDetectionSteps();
+
+            Prerequisites p = GetPrerequisitsInValueDetectorAssembly();
+            prerequisiteView = new PrerequisiteView()
+            {
+                Summary = p.Summary,
+                Title = p.Title,
+                Properties = new List<Property>()
+            };
+            foreach (var i in p.Properties)
+            {
+                prerequisiteView.Properties.Add(new Property()
+                {
+                    Name = i.Key,
+                    Value = ((i.Value != null) && (i.Value.Count == 1)) ? i.Value[0] : null,
+                    Choices = i.Value
+                });
+            }
         }
 
         public static AutoDetection Create(ITestSuite testSuite)
@@ -61,14 +94,38 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return instance;
         }
 
-        public void Reset()
+        protected IValueDetector ValueDetector
         {
-            if (valueDetector != null) valueDetector.Dispose();
-            valueDetector = null;
-            UtilCallBackFunctions.WriteLog = (message, newline, style) =>
+            get
             {
-                if (DetectLogCallback != null) DetectLogCallback(message, style);
-            };
+                detectorLocker.EnterUpgradeableReadLock();
+                try
+                {
+                    if (valueDetector == null)
+                    {
+                        detectorLocker.EnterWriteLock();
+                        try
+                        {
+                            if (valueDetector == null)
+                            {
+                                // Create an instance
+                                Assembly assembly = Assembly.LoadFrom(detectorAssembly);
+                                valueDetector = assembly.CreateInstance(detectorInstanceTypeName) as IValueDetector;
+                            }
+                        }
+                        finally
+                        {
+                            detectorLocker.ExitWriteLock();
+                        }
+                    }
+                }
+                finally
+                {
+                    detectorLocker.ExitUpgradeableReadLock();
+                }
+
+                return valueDetector;
+            }
         }
 
         /// <summary>
@@ -77,8 +134,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <param name="detectorAssembly">File name</param>
         public void Load(string detectorAssembly)
         {
-            Reset();
-
             // Get CustomerInterface
             Type interfaceType = typeof(IValueDetector);
 
@@ -91,35 +146,36 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 if (type.IsClass && interfaceType.IsAssignableFrom(type) == true)
                 {
-                    // Create an instance
-                    valueDetector = assembly.CreateInstance(type.FullName) as IValueDetector;
+                    detectorInstanceTypeName = type.FullName;
+                    break;
                 }
             }
-            if (valueDetector == null) throw new Exception(AutoDetectionConsts.LoadingAutoDetectorFailed);
         }
 
         public void InitializeDetector(int testSuiteId)
         {
-            var ptfconfig = LoadPtfconfig(testSuiteId);
+            var ptfconfig = LoadPtfconfig();
 
-            Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertyValue = (string name) =>
+            UtilCallBackFunctions.GetPropertyValue = (string name) =>
             {
                 var property = ptfconfig.GetPropertyNodeByName(name);
                 if (property != null) return property.Value;
                 return null;
             };
 
-            Microsoft.Protocols.TestManager.Detector.UtilCallBackFunctions.GetPropertiesByFile = (filename) =>
+            UtilCallBackFunctions.GetPropertiesByFile = (filename) =>
             {
                 if (!ptfconfig.FileProperties.ContainsKey(filename))
                     return null;
                 return ptfconfig.FileProperties[filename];
             };
 
-            string detectorAssembly = TestSuite.GetDetectorAssembly();
+            detectorAssembly = TestSuite.GetDetectorAssembly();
 
             Load(detectorAssembly);
         }
+
+        #region Get/Set Prerequisites
 
         /// <summary>
         /// Gets the properties required for auto-detection.
@@ -127,39 +183,43 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>Prerequisites object.</returns>
         public PrerequisiteView GetPrerequisites()
         {
-            Prerequisites p = GetPrerequisitsInValueDetectorAssembly();
-
-            var prerequisites = new PrerequisiteView()
+            prerequisitesLocker.EnterReadLock();
+            try
             {
-                Summary = p.Summary,
-                Title = p.Title,
-                Properties = new List<Property>()
-            };
-            foreach (var i in p.Properties)
-            {
-                prerequisites.Properties.Add(new Property()
-                {
-                    Name = i.Key,
-                    Choices = i.Value
-                });
+                return prerequisiteView;
             }
-
-            return prerequisites;
+            finally
+            {
+                prerequisitesLocker.ExitReadLock();
+            }
         }
 
         /// <summary>
         /// Sets the property values required for auto-detection.
         /// </summary>
         /// <returns>Returns true if succeeded, otherwise false.</returns>
-        public bool SetPrerequisits(List<PrerequisiteProperty> prerequisitProperties)
+        public bool SetPrerequisits(List<Property> prerequisitProperties)
         {
             Dictionary<string, string> properties = new Dictionary<string, string>();
             foreach (var p in prerequisitProperties)
             {
-                properties.Add(p.PropertyName, p.Value);
+                properties.Add(p.Name, p.Value);
             };
+
+            prerequisitesLocker.EnterWriteLock();
+            try
+            {
+                prerequisiteView.Properties = prerequisitProperties;
+            }
+            finally
+            {
+                prerequisitesLocker.ExitWriteLock();
+            }
+
             return SetPrerequisitesInValueDetectorAssembly(properties);
         }
+
+        #endregion
 
         /// <summary>
         /// Gets a list of the detection steps.
@@ -167,7 +227,74 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>A list of the detection steps.</returns>
         public List<DetectingItem> GetDetectedSteps()
         {
-            return GetDetectStepsInValueDetectorAssembly();
+            stepsLocker.EnterReadLock();
+            try
+            {
+                return detectSteps;
+            }
+            finally
+            {
+                stepsLocker.ExitReadLock();
+            }
+        }
+
+        public DetectionOutcome GetDetectionOutcome()
+        {
+            return new DetectionOutcome(GetDetectionStatus(), detectedException);
+        }
+
+        public string GetDetectionLog()
+        {
+            if(!string.IsNullOrEmpty(latestLogPath) && File.Exists(latestLogPath))
+            {
+                return File.ReadAllText(latestLogPath);
+            }
+            return string.Empty;
+        }
+
+        #region Detection
+        /// <summary>
+        /// Reset AutoDetection settings
+        /// </summary>
+        public void Reset()
+        {
+            CloseLogger();
+
+            if (detectTask != null)
+            {
+                detectTask.Wait(5000); // wait 2 seconds to check if it can completed
+                detectTask = null;
+            }
+
+            if (valueDetector != null)
+            {
+                valueDetector.Dispose();
+                valueDetector = null;
+            }
+
+            if (cts != null)
+            {
+                cts.Dispose();
+            }
+            
+            UtilCallBackFunctions.WriteLog = (message, newline, style) =>
+            {
+                if (DetectLogCallback != null) DetectLogCallback(message, style);
+            };
+            
+            stepsLocker.EnterWriteLock();
+            try
+            {
+                detectSteps = ValueDetector.GetDetectionSteps();
+                detectStepIndexes.Clear();
+            }
+            finally
+            {
+                stepsLocker.ExitWriteLock();
+            }
+            SetDetectionStatus(DetectionStatus.NotStart);
+            taskCanceled = false;
+            detectedException = null;
         }
 
         /// <summary>
@@ -176,54 +303,16 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <param name="DetectionEvent">Callback function when the detection finished.</param>
         public void StartDetection(DetectionCallback callback)
         {
-            stepIndex = 0;
-            detectSteps = GetDetectedSteps();
-            string detectorLog = Path.Combine(TestSuite.StorageRoot.AbsolutePath, "Detector_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
-            logWriter = new StreamWriter(detectorLog);
-            DetectLogCallback = (msg, style) => 
+            if (GetDetectionStatus() == DetectionStatus.InProgress)
             {
-                if (stepIndex == detectSteps.Count) return;
-                var item = detectSteps[stepIndex];
-                item.Style = style;
-                switch(style)
-                {
-                    case LogStyle.Default:
-                        detectSteps[stepIndex].DetectingStatus = DetectingStatus.Detecting;
-                        break;
-                    case LogStyle.Error:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Error;
-                        break;
-                    case LogStyle.StepFailed:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Failed;
-                        break;
-                    case LogStyle.StepSkipped:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Skipped;
-                        break;
-                    case LogStyle.StepNotFound:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.NotFound;
-                        break;
-                    case LogStyle.StepPassed:
-                        stepIndex++;
-                        item.DetectingStatus = DetectingStatus.Finished;
-                        break;
-                    default:
-                        item.DetectingStatus = DetectingStatus.Pending;
-                        break;
-                }
-                logWriter.WriteLine("[{0}] {1}", DateTime.Now.ToString(), msg);
-                logWriter.Flush();
-            };
-            BeginDetection((outcome) => 
-            {
-                if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
-                callback(outcome);
-                logWriter.Close();
-                logWriter = null;
-            });
+                return;
+            }
+
+            // attach detect log callback to update detect step status
+            AttachDetectLogCallback();
+
+            // start detection
+            StartDetection();
         }
 
         /// <summary>
@@ -231,22 +320,23 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         public void StopDetection(Action callback)
         {
-            DetectLogCallback = null;
-
-            detectSteps[stepIndex].DetectingStatus = DetectingStatus.Canceling;
-
-            StopAndCancelDetection(callback);
-            
-            if (stepIndex < detectSteps.Count) detectSteps[stepIndex].DetectingStatus = DetectingStatus.Pending;
-            
-            if (logWriter != null)
+            stepsLocker.EnterWriteLock();
+            try
             {
-                logWriter.Close();
-                logWriter.Dispose();
-                logWriter = null;
+                detectSteps[StepIndex].DetectingStatus = DetectingStatus.Canceling;
             }
-            stepIndex = 0;
+            finally
+            {
+                stepsLocker.ExitWriteLock();
+            }
+
+            //StopAndCancelDetection(callback);
+            StopDetection();
+
+            CloseLogger();
         }
+
+        #endregion
 
         /// <summary>
         /// Gets an object represents the detection summary.
@@ -254,15 +344,44 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>An object</returns>
         public object GetDetectionSummary()
         {
-            return GetDetectionSummaryInValueDetectorAssembly();
+            return ValueDetector.GetSUTSummary();
         }
 
-        private PtfConfig LoadPtfconfig(int testSuiteId)
+        #region Apply Detection Summary to xml
+
+        public void ApplyDetectionResult()
+        {
+            ApplyDetectedRules();
+            ApplyDetectedValues();
+        }
+
+        private void ApplyDetectedRules()
+        {
+            var ruleGroups = TestSuite.LoadTestCaseFilter();
+            foreach (var rule in ValueDetector.GetSelectedRules())
+            {
+
+            }
+        }
+
+        private void ApplyDetectedValues()
+        {
+            Dictionary<string, List<string>> detectedValues;
+            ValueDetector.GetDetectedProperty(out detectedValues);
+        }
+
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Apply the test case selection rules detected by the plug-in.
+        /// </summary>
+
+        private PtfConfig LoadPtfconfig()
         {
             try
             {
                 var ptfConfigFiles = TestSuite.GetConfigurationFiles().ToList();
-                
                 var ptfconfig = new PtfConfig(ptfConfigFiles);
 
                 return ptfconfig;
@@ -279,85 +398,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>Prerequisites object.</returns>
         private Prerequisites GetPrerequisitsInValueDetectorAssembly()
         {
-            return valueDetector.GetPrerequisites();
-        }
-
-        /// <summary>
-        /// Gets a list of the detection steps.
-        /// </summary>
-        /// <returns>A list fo the detection steps.</returns>
-        private List<DetectingItem> GetDetectStepsInValueDetectorAssembly()
-        {
-            return valueDetector.GetDetectionSteps();
-        }
-
-        private DetectionOutcome RunDetectionInValueDetectorAssembly()
-        {
-            try
-            {
-                valueDetector.RunDetection();
-            }
-            catch (Exception exception)
-            {
-                return new DetectionOutcome(DetectionStatus.Error, exception);
-            }
-            return new DetectionOutcome(DetectionStatus.Finished, null);
-        }
-
-        /// <summary>
-        /// Begins the auto-detection.
-        /// </summary>
-        /// <param name="DetectionEvent">Callback function when the detection finished.</param>
-        private void BeginDetection(DetectionCallback DetectionEvent)
-        {
-            if (detectTask != null)
-            {
-                return;
-            }
-
-            var token = cts.Token;
-
-            token.Register(() => {
-                taskCanceled = true;
-            });
-
-            detectTask = new Task(() =>
-            {
-                token.ThrowIfCancellationRequested();
-
-                var outcome = RunDetectionInValueDetectorAssembly();
-
-                if (DetectionEvent != null)
-                {
-                    DetectionEvent(outcome);
-                }
-            }, token);
-
-            detectTask.Start();
-        }
-
-        /// <summary>
-        /// Stop the auto-detection
-        /// </summary>
-        private void StopAndCancelDetection(Action callback)
-        {
-            if (detectTask != null)
-            {
-                cts.Cancel();
-                while (!taskCanceled)
-                {
-                    Thread.SpinWait(100);
-                }
-
-                if (callback != null)
-                {
-                    callback();
-                }
-
-                detectTask = null;
-            }
-
-            taskCanceled = false;
+            return ValueDetector.GetPrerequisites();
         }
 
         /// <summary>
@@ -367,16 +408,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>Returns true if provided values are enough, otherwise returns false.</returns>
         private bool SetPrerequisitesInValueDetectorAssembly(Dictionary<string, string> properties)
         {
-            return valueDetector.SetPrerequisiteProperties(properties);
-        }
-
-        /// <summary>
-        /// Gets an object represents the detection summary.
-        /// </summary>
-        /// <returns>An object</returns>
-        private object GetDetectionSummaryInValueDetectorAssembly()
-        {
-            return valueDetector.GetSUTSummary();
+            return ValueDetector.SetPrerequisiteProperties(properties);
         }
 
         /// <summary>
@@ -385,7 +417,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>A list of the rules</returns>
         private List<CaseSelectRule> GetRulesInValueDetectorAssembly()
         {
-            return valueDetector.GetSelectedRules();
+            return ValueDetector.GetSelectedRules();
         }
 
         /// <summary>
@@ -395,18 +427,225 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <returns>A list of properties to hide.</returns>
         private List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules)
         {
-            return valueDetector.GetHiddenProperties(rules);
+            return ValueDetector.GetHiddenProperties(rules);
         }
 
-        /// <summary>
-        /// Gets the property values detected by the detector.
-        /// </summary>
-        /// <returns>Name - value / values map.</returns>
-        private Dictionary<string, List<string>> GetDetectedPropertyInValueDetectorAssembly()
+        private void AttachDetectLogCallback()
         {
-            Dictionary<string, List<string>> dict;
-            valueDetector.GetDetectedProperty(out dict);
-            return dict;
+            DetectLogCallback = (msg, style) =>
+            {
+                stepsLocker.EnterWriteLock();
+                try
+                {
+                    if (StepIndex == detectSteps.Count) return;
+                    var item = detectSteps[StepIndex];
+                    item.Style = style;
+
+                    if(style != LogStyle.Default)
+                    {
+                        StepIndex++;
+                    }
+
+                    item.DetectingStatus = style switch
+                    {
+                        LogStyle.Default => DetectingStatus.Detecting,
+                        LogStyle.Error => DetectingStatus.Error,
+                        LogStyle.StepFailed => DetectingStatus.Failed,
+                        LogStyle.StepSkipped => DetectingStatus.Skipped,
+                        LogStyle.StepNotFound => DetectingStatus.NotFound,
+                        LogStyle.StepPassed => DetectingStatus.Finished,
+                        _ => DetectingStatus.Finished,
+                    };
+                }
+                finally
+                {
+                    stepsLocker.ExitWriteLock();
+                }
+
+                if (LogWriter != null)
+                {
+                    LogWriter.WriteLine("[{0}] {1}", DateTime.Now.ToString(), msg);
+                    LogWriter.Flush();
+                }
+            };
         }
+
+        private async void StartDetection()
+        {
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
+
+            token.Register(() =>
+            {
+                taskCanceled = true;
+            });
+
+            detectTask = new Task(() =>
+            {
+                token.ThrowIfCancellationRequested();
+
+                // mark detection status as InProgress
+                SetDetectionStatus(DetectionStatus.InProgress);
+                try
+                {
+                    var resultStatus = ValueDetector.RunDetection() ? DetectionStatus.Finished : DetectionStatus.Error;
+                    SetDetectionStatus(resultStatus);
+                }
+                catch (Exception ex)
+                {
+                    SetDetectionStatus(DetectionStatus.Error);
+                    detectedException = ex;
+                }
+
+                CloseLogger();
+            }, token);
+
+            StepIndex = 0;
+            latestLogPath = Path.Combine(TestSuite.StorageRoot.AbsolutePath, "Detector_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff") + ".log");
+            LogWriter = new StreamWriter(latestLogPath);
+
+            detectTask.Start();
+        }
+
+        private async void StopDetection()
+        {
+            if (detectTask != null)
+            {
+                cts.Cancel();
+                while (!taskCanceled)
+                {
+                    Thread.SpinWait(100);
+                }
+
+                detectTask = null;
+            }
+            
+            taskCanceled = false;
+        }
+
+        private void SetDetectionStatus(DetectionStatus status)
+        {
+            statusLocker.EnterWriteLock();
+            try
+            {
+                detectionStatus = status;
+            }
+            finally
+            {
+                statusLocker.ExitWriteLock();
+            }
+        }
+
+        private DetectionStatus GetDetectionStatus()
+        {
+            statusLocker.EnterReadLock();
+            try
+            {
+                return detectionStatus;
+            }
+            finally
+            {
+                statusLocker.ExitReadLock();
+            }
+        }
+
+        private void CloseLogger()
+        {
+            if (LogWriter != null)
+            {
+                LogWriter.Close();
+                LogWriter.Dispose();
+
+                if(detectTask!=null && logStreams.ContainsKey(detectTask.Id))
+                {
+                    logStreams.Remove(detectTask.Id);
+                }
+            }
+        }
+
+        private ReaderWriterLockSlim stepIndexLocker = new ReaderWriterLockSlim();
+        private int StepIndex
+        {
+            get
+            {
+                stepIndexLocker.EnterReadLock();
+                try
+                {
+                    if ((detectTask != null) && detectStepIndexes.ContainsKey(detectTask.Id))
+                    {
+                        return detectStepIndexes[detectTask.Id];
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                finally
+                {
+                    stepIndexLocker.ExitReadLock();
+                }
+            }
+            set
+            {
+                stepIndexLocker.EnterWriteLock();
+                try
+                {
+                    if ((detectTask != null) && detectStepIndexes.ContainsKey(detectTask.Id))
+                    {
+                        detectStepIndexes[detectTask.Id] = value;
+                    }
+                    else if (detectTask != null)
+                    {
+                        detectStepIndexes.Add(detectTask.Id, 0);
+                    }
+                }
+                finally
+                {
+                    stepIndexLocker.ExitWriteLock();
+                }
+            }
+        }
+
+        private ReaderWriterLockSlim logLocker = new ReaderWriterLockSlim();
+        private StreamWriter LogWriter
+        {
+            get
+            {
+                logLocker.EnterReadLock();
+                try
+                {
+                    if ((detectTask != null) && logStreams.ContainsKey(detectTask.Id))
+                    {
+                        return logStreams[detectTask.Id];
+                    }
+
+                    return null;
+                }
+                finally
+                {
+                    logLocker.ExitReadLock();
+                }
+            }
+            set
+            {
+                logLocker.EnterWriteLock();
+                try
+                {
+                    if ((detectTask != null) && logStreams.ContainsKey(detectTask.Id))
+                    {
+                        logStreams[detectTask.Id] = value;
+                    }
+                    else if (detectTask != null)
+                    {
+                        logStreams.Add(detectTask.Id, value);
+                    }
+                }
+                finally
+                {
+                    logLocker.ExitWriteLock();
+                }
+            }
+        }
+        #endregion
     }
 }

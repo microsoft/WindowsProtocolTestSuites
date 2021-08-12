@@ -7,6 +7,7 @@ import { FilterTestCaseActions, FilterTestCaseActionTypes } from "../actions/Fil
 import { Configuration } from "../model/Configuration";
 import { AppThunkAction } from "../store/configureStore";
 import { AllNode } from "../model/RuleGroup";
+
 export const ConfigurationsDataSrv = {
     getConfigurations: (testsuiteId: number): AppThunkAction<TestSuiteConfigurationActionTypes> => async (dispatch) => {
         // const state = getState();

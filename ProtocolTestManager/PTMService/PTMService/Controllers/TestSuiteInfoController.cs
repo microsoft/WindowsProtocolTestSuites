@@ -229,46 +229,48 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
-        /// Set auto detection prerequisites.
-        /// </summary>
-        /// <param name="configurationId">Test suite configuration Id.</param>
-        /// <param name="prerequisitProperties">List of PrerequisitProperty.</param>
-        /// <returns>bool indicating properties were set or not.</returns>
-        [Route("{configurationId}/autodetect/prerequisites")]
-        [HttpPost]
-        public bool SetPrerequisites(List<PrerequisiteProperty> prerequisitProperties, int configurationId)
-        {
-            var response = PTMKernelService.SetPrerequisites(prerequisitProperties, configurationId);
-
-            return response;
-        }
-
-        /// <summary>
         /// Get auto detection steps.
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>List of detecting steps including steps required for auto detection.</returns>
         [Route("{configurationId}/autodetect/detectionsteps")]
         [HttpGet]
-        public List<DetectingItem> GetDetectionSteps(int configurationId)
+        public IActionResult GetDetectionSteps(int configurationId)
         {
-            var response = PTMKernelService.GetDetectedSteps(configurationId);
-
-            return response;
+            var detectResult = PTMKernelService.GetDetectionOutcome(configurationId);
+            return Ok(new
+            {
+                Result = new
+                {
+                    Status = detectResult.Status,
+                    Exception = detectResult.Exception == null ? string.Empty : detectResult.Exception.ToString(),
+                },
+                DetectionSteps = PTMKernelService.GetDetectedSteps(configurationId)
+            });
         }
 
         /// <summary>
         /// Start auto detection.
         /// </summary>
+        /// <param name="properties">List of PrerequisitProperty.</param>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>The action result.</returns>
         [Route("{configurationId}/autodetect/start")]
         [HttpPost]
-        public IActionResult StartAutoDetection(int configurationId)
+        public IActionResult StartAutoDetection(List<Property> properties, int configurationId)
         {
-            PTMKernelService.StartDetection(configurationId, (o) => { });
+            PTMKernelService.Reset(configurationId);
+            var setPrerequisite = PTMKernelService.SetPrerequisites(properties, configurationId);
+            if (setPrerequisite)
+            {
+                PTMKernelService.StartDetection(configurationId, (o) => { });
 
-            return Ok();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("There's errors when set prerequisites");
+            }
         }
 
         /// <summary>
@@ -286,6 +288,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
+        /// Apply auto detection result.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration Id.</param>
+        /// <returns>Action result.</returns>
+        [Route("{configurationId}/autodetect/apply")]
+        [HttpPost]
+        public IActionResult ApplyAutoDetectionResult(int configurationId)
+        {
+            PTMKernelService.ApplyDetectionResult(configurationId);
+
+            return Ok();
+        }
+
+        /// <summary>
         /// Get auto detection summary.
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>
@@ -295,6 +311,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public IActionResult GetDetectionSummary(int configurationId)
         {
             var response = PTMKernelService.GetDetectionSummary(configurationId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get Auto Detection Log
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration Id.</param>
+        /// <returns>Auto Detection Log</returns>
+        [Route("{configurationId}/autodetect/log")]
+        [HttpGet]
+        public IActionResult GetDetectionLog(int configurationId)
+        {
+            var response = PTMKernelService.GetDetectionLog(configurationId);
 
             return Ok(response);
         }

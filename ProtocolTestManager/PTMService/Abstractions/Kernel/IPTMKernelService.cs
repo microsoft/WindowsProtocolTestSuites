@@ -183,10 +183,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <summary>
         /// Sets the property values required for auto-detection.
         /// </summary>
-        /// <param name="prerequisiteProperties">List of PrerequisiteProperty.</param>
+        /// <param name="Property">List of Property.</param>
         /// <param name="configurationId">Test suite configuration id.</param>
         /// <returns>Returns true if succeeded, otherwise false.</returns>
-        bool SetPrerequisites(List<PrerequisiteProperty> prerequisiteProperties, int configurationId);
+        bool SetPrerequisites(List<Property> prerequisiteProperties, int configurationId);
 
         /// <summary>
         /// Gets a list of the detection steps.
@@ -194,6 +194,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="configurationId">Test suite configuration id.</param>
         /// <returns>A list of the detection steps.</returns>
         List<DetectingItem> GetDetectedSteps(int configurationId);
+
+        /// <summary>
+        /// Get detection status
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>Detection Status</returns>
+        DetectionOutcome GetDetectionOutcome(int configurationId);
+
+        /// <summary>
+        /// Reset AutoDetection
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        void Reset(int configurationId);
 
         /// <summary>
         /// Begins the auto-detection.
@@ -216,6 +229,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="configurationId">Test suite configuration id.</param>
         /// <returns>An object</returns>
         object GetDetectionSummary(int configurationId);
+
+        /// <summary>
+        /// Apply Auto Detection Result
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        void ApplyDetectionResult(int configurationId);
+
+        /// <summary>
+        /// Get AutoDetection Log Content
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <returns>AutoDetection Log Content</returns>
+        string GetDetectionLog(int configurationId);
 
         #endregion
     }

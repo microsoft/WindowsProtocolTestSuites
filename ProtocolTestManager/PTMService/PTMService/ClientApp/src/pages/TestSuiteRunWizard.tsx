@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import StepWizard from "react-step-wizard";
-import React from 'react';
 import { SelectTestSuite } from "./SelectTestSuite";
 import { TestSuiteIntroduction } from "./TestSuiteIntroduction";
 import { SelectConfiguration } from "./SelectConfiguration";

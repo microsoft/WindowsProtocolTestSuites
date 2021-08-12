@@ -75,28 +75,29 @@ const DefaultNavSteps: StepNavItemInfo[] = [
 
 export function getNavSteps(wizardProps: StepWizardChildProps, configureMethod?: ConfigureMethodState) {
     return DefaultNavSteps.map(item => {
-        if ((configureMethod)
-            && (configureMethod.selectedMethod)
-            && (configureMethod.selectedMethod != ConfigureMethod_AutoDetection)
-            && (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT)) {
-            return {
-                ...item,
-                IsActive: false,
-                IsEnabled: false,
+        if (item.TargetStep < wizardProps.currentStep) {
+            if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
+                if (configureMethod && configureMethod.selectedMethod == ConfigureMethod_AutoDetection) {
+                    return {
+                        ...item,
+                        IsActive: false,
+                        IsEnabled: true
+                    }
+                }
+                else {
+                    return {
+                        ...item,
+                        IsActive: false,
+                        IsEnabled: false
+                    }
+                }
             }
-        }
-        else if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-            return {
-                ...item,
-                IsActive: false,
-                IsEnabled: false
-            }
-        }
-        else if (item.TargetStep < wizardProps.currentStep) {
-            return {
-                ...item,
-                IsActive: false,
-                IsEnabled: true
+            else {
+                return {
+                    ...item,
+                    IsActive: false,
+                    IsEnabled: true
+                }            
             }
         } else if (item.TargetStep === wizardProps.currentStep) {
             return {
