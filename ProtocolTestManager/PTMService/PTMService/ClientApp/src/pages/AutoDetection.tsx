@@ -50,7 +50,7 @@ export function AutoDetection (props: StepWizardProps) {
 
     const timer = setTimeout(() => {
       setDetectingTimes(detectingTimes - 1)
-      dispatch(AutoDetectionDataSrv.pullAutoDetectionSteps())
+      dispatch(AutoDetectionDataSrv.getAutoDetectionSteps())
     }, 1000)
 
     return () => clearTimeout(timer)

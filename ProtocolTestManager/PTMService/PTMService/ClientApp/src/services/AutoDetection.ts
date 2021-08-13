@@ -60,18 +60,6 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectActions.PostAutoDetectStop_Failure
     })
   },
-  pullAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
-    const state = getState()
-    const configurationId = state.configurations.selectedConfiguration?.Id
-    await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
-      method: RequestMethod.GET,
-      dispatch,
-      onRequest: AutoDetectActions.StartPolling,
-      onComplete: AutoDetectActions.GetAutoDetectStepsAction_Success,
-      onError: AutoDetectActions.GetAutoDetectStepsAction_Failure
-    })
-  },
   applyDetectionResult: (completeCallback?: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     console.log('applyDetectionResult')
     const state = getState()

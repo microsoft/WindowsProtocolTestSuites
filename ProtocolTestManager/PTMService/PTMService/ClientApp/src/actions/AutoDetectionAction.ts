@@ -30,7 +30,6 @@ export const APPLY_DETECTION_RESULT_FAILURE = 'AUTO_DETECT/APPLY_DETECTION_RESUL
 
 export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE'
 
-export const START_POLLING = 'START_POLLING'
 export const STOP_POLLING = 'STOP_POLLING'
 export const START_POLLING_Success = 'START_POLLING_Success'
 export const START_POLLING_Failure = 'START_POLLING_Failure'
@@ -59,7 +58,6 @@ interface ApplyDetectionResultActionFailureType { type: typeof APPLY_DETECTION_R
 interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Property };
 
 interface StopPolling { type: typeof STOP_POLLING };
-interface StartPolling { type: typeof START_POLLING };
 interface StartPollingSuccess { type: typeof START_POLLING_Success; payload: DetectionSteps; };
 interface StartPollingFailure { type: typeof START_POLLING_Failure; errorMsg: string;};
 
@@ -76,7 +74,6 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
     | StopAutoDetectionActionSuccessType
     | StopAutoDetectionActionFailureType
     | UpdateAutoDetectPrerequisiteActionType
-    | StartPolling
     | StopPolling
     | StartPollingSuccess
     | StartPollingFailure
@@ -168,12 +165,6 @@ export const AutoDetectActions = {
     return {
       type: STOP_AUTO_DETECTION_FAILURE,
       errorMsg: error
-    }
-  },
-
-  StartPolling: (): TestSuiteAutoDetectionActionTypes => {
-    return {
-      type: START_POLLING
     }
   },
 

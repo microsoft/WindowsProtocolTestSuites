@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { GET_DETECTION_STEPS_REQUEST, GET_DETECTION_STEPS_SUCCESS, GET_PREREQUISITE_REQUEST, GET_PREREQUISITE_SUCCESS, START_POLLING, START_POLLING_Failure, START_POLLING_Success, STOP_POLLING, TestSuiteAutoDetectionActionTypes, UPDATE_PREREQUISITE } from '../actions/AutoDetectionAction'
+import { GET_DETECTION_STEPS_REQUEST, GET_DETECTION_STEPS_SUCCESS, GET_PREREQUISITE_REQUEST, GET_PREREQUISITE_SUCCESS, START_POLLING_Failure, START_POLLING_Success, STOP_POLLING, TestSuiteAutoDetectionActionTypes, UPDATE_PREREQUISITE } from '../actions/AutoDetectionAction'
 import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
 
 export interface AutoDetectState {
@@ -68,13 +68,6 @@ export const getAutoDetectReducer = (state = initialAutoDetectState, action: Tes
         detectionSteps: action.payload
       }
 
-    case START_POLLING:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        errorMsg: undefined
-      }
-
     case START_POLLING_Success:
       return {
         ...state,
@@ -89,8 +82,6 @@ export const getAutoDetectReducer = (state = initialAutoDetectState, action: Tes
         errorMsg: action.errorMsg
       }
 
-    case START_POLLING:
-      return { ...state, isPolling: true }
     case STOP_POLLING:
       return { ...state, isPolling: false }
     default:
