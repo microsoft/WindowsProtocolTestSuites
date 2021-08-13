@@ -1,40 +1,39 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Prerequisite, DetectionSteps, DetectionStepsResponse, DetectionResultResponse } from "../model/AutoDetectionData";
-import { Property } from "../model/Property";
+import { Prerequisite, DetectionSteps, DetectionStepsResponse, DetectionResultResponse } from '../model/AutoDetectionData'
+import { Property } from '../model/Property'
 
-export const GET_PREREQUISITE_REQUEST = 'AUTO_DETECT/GET_PREREQUISITE_REQUEST';
-export const GET_PREREQUISITE_SUCCESS = 'AUTO_DETECT/GET_PREREQUISITE_SUCCESS';
-export const GET_PREREQUISITE_FAILURE = 'AUTO_DETECT/GET_PREREQUISITE_FAILURE';
+export const GET_PREREQUISITE_REQUEST = 'AUTO_DETECT/GET_PREREQUISITE_REQUEST'
+export const GET_PREREQUISITE_SUCCESS = 'AUTO_DETECT/GET_PREREQUISITE_SUCCESS'
+export const GET_PREREQUISITE_FAILURE = 'AUTO_DETECT/GET_PREREQUISITE_FAILURE'
 
-export const GET_DETECTION_STEPS_REQUEST = 'AUTO_DETECT/GET_DETECTION_STEPS_REQUEST';
-export const GET_DETECTION_STEPS_SUCCESS = 'AUTO_DETECT/GET_DETECTION_STEPS_SUCCESS';
-export const GET_DETECTION_STEPS_FAILURE = 'AUTO_DETECT/GET_DETECTION_STEPS_FAILURE';
+export const GET_DETECTION_STEPS_REQUEST = 'AUTO_DETECT/GET_DETECTION_STEPS_REQUEST'
+export const GET_DETECTION_STEPS_SUCCESS = 'AUTO_DETECT/GET_DETECTION_STEPS_SUCCESS'
+export const GET_DETECTION_STEPS_FAILURE = 'AUTO_DETECT/GET_DETECTION_STEPS_FAILURE'
 
-export const START_AUTO_DETECTION_REQUEST = 'AUTO_DETECT/START_AUTO_DETECTION_REQUEST';
-export const START_AUTO_DETECTION_SUCCESS = 'AUTO_DETECT/START_AUTO_DETECTION_SUCCESS';
-export const START_AUTO_DETECTION_FAILURE = 'AUTO_DETECT/START_AUTO_DETECTION_FAILURE';
+export const START_AUTO_DETECTION_REQUEST = 'AUTO_DETECT/START_AUTO_DETECTION_REQUEST'
+export const START_AUTO_DETECTION_SUCCESS = 'AUTO_DETECT/START_AUTO_DETECTION_SUCCESS'
+export const START_AUTO_DETECTION_FAILURE = 'AUTO_DETECT/START_AUTO_DETECTION_FAILURE'
 
-export const STOP_AUTO_DETECTION_REQUEST = 'AUTO_DETECT/STOP_AUTO_DETECTION_REQUEST';
-export const STOP_AUTO_DETECTION_SUCCESS = 'AUTO_DETECT/STOP_AUTO_DETECTION_SUCCESS';
-export const STOP_AUTO_DETECTION_FAILURE = 'AUTO_DETECT/STOP_AUTO_DETECTION_FAILURE';
+export const STOP_AUTO_DETECTION_REQUEST = 'AUTO_DETECT/STOP_AUTO_DETECTION_REQUEST'
+export const STOP_AUTO_DETECTION_SUCCESS = 'AUTO_DETECT/STOP_AUTO_DETECTION_SUCCESS'
+export const STOP_AUTO_DETECTION_FAILURE = 'AUTO_DETECT/STOP_AUTO_DETECTION_FAILURE'
 
-export const GET_DETECTION_SUMMARY_REQUEST = 'AUTO_DETECT/GET_DETECTION_SUMMARY_REQUEST';
-export const GET_DETECTION_SUMMARY_SUCCESS = 'AUTO_DETECT/GET_DETECTION_SUMMARY_SUCCESS';
-export const GET_DETECTION_SUMMARY_FAILURE = 'AUTO_DETECT/GET_DETECTION_SUMMARY_FAILURE';
+export const GET_DETECTION_SUMMARY_REQUEST = 'AUTO_DETECT/GET_DETECTION_SUMMARY_REQUEST'
+export const GET_DETECTION_SUMMARY_SUCCESS = 'AUTO_DETECT/GET_DETECTION_SUMMARY_SUCCESS'
+export const GET_DETECTION_SUMMARY_FAILURE = 'AUTO_DETECT/GET_DETECTION_SUMMARY_FAILURE'
 
-export const APPLY_DETECTION_RESULT_REQUEST = 'AUTO_DETECT/APPLY_DETECTION_RESULT_REQUEST';
-export const APPLY_DETECTION_RESULT_SUCCESS = 'AUTO_DETECT/APPLY_DETECTION_RESULT_SUCCESS';
-export const APPLY_DETECTION_RESULT_FAILURE = 'AUTO_DETECT/APPLY_DETECTION_RESULT_FAILURE';
+export const APPLY_DETECTION_RESULT_REQUEST = 'AUTO_DETECT/APPLY_DETECTION_RESULT_REQUEST'
+export const APPLY_DETECTION_RESULT_SUCCESS = 'AUTO_DETECT/APPLY_DETECTION_RESULT_SUCCESS'
+export const APPLY_DETECTION_RESULT_FAILURE = 'AUTO_DETECT/APPLY_DETECTION_RESULT_FAILURE'
 
-export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE';
+export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE'
 
-export const START_POLLING = 'START_POLLING';
-export const STOP_POLLING = 'STOP_POLLING';
-export const START_POLLING_Success = 'START_POLLING_Success';
-export const START_POLLING_Failure = 'START_POLLING_Failure';
-
+export const START_POLLING = 'START_POLLING'
+export const STOP_POLLING = 'STOP_POLLING'
+export const START_POLLING_Success = 'START_POLLING_Success'
+export const START_POLLING_Failure = 'START_POLLING_Failure'
 
 // define action types
 interface GetAutoDetectPrerequisiteActionRequestType { type: typeof GET_PREREQUISITE_REQUEST; }
@@ -87,146 +86,146 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
 
 // define actions
 export const AutoDetectActions = {
-    GetAutoDetectPrerequisiteAction_Request: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: GET_PREREQUISITE_REQUEST
-        }
-    },
-    GetAutoDetectPrerequisiteAction_Success: (data: Prerequisite): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: GET_PREREQUISITE_SUCCESS,
-            payload: data
-        }
-    },
-   
-    GetAutoDetectPrerequisiteAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: GET_PREREQUISITE_FAILURE,
-            errorMsg: error
-        }
-    },
+  GetAutoDetectPrerequisiteAction_Request: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: GET_PREREQUISITE_REQUEST
+    }
+  },
+  GetAutoDetectPrerequisiteAction_Success: (data: Prerequisite): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: GET_PREREQUISITE_SUCCESS,
+      payload: data
+    }
+  },
 
-    GetAutoDetectStepsAction_Request: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: GET_DETECTION_STEPS_REQUEST
-        }
-    },
+  GetAutoDetectPrerequisiteAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: GET_PREREQUISITE_FAILURE,
+      errorMsg: error
+    }
+  },
 
-    GetAutoDetectStepsAction_Success: (data: DetectionResultResponse): TestSuiteAutoDetectionActionTypes => {
-        const detectionSteps = {} as DetectionSteps;
-        detectionSteps.DetectingItems = [];
+  GetAutoDetectStepsAction_Request: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: GET_DETECTION_STEPS_REQUEST
+    }
+  },
 
-        data.DetectionSteps.map(step => {
-            detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus });
-        })
-        detectionSteps.Result = data.Result;
+  GetAutoDetectStepsAction_Success: (data: DetectionResultResponse): TestSuiteAutoDetectionActionTypes => {
+    const detectionSteps = {} as DetectionSteps
+    detectionSteps.DetectingItems = []
 
-        return {
-            type: GET_DETECTION_STEPS_SUCCESS,
-            payload: detectionSteps
-        }
-    },
+    data.DetectionSteps.map(step => {
+      detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus })
+    })
+    detectionSteps.Result = data.Result
 
-    GetAutoDetectStepsAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: GET_DETECTION_STEPS_FAILURE,
-            errorMsg: error
-        }
-    },
+    return {
+      type: GET_DETECTION_STEPS_SUCCESS,
+      payload: detectionSteps
+    }
+  },
 
-    PostAutoDetectStart_Request: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: START_AUTO_DETECTION_REQUEST
-        }
-    },
+  GetAutoDetectStepsAction_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: GET_DETECTION_STEPS_FAILURE,
+      errorMsg: error
+    }
+  },
 
-    PostAutoDetectStart_Success: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: START_AUTO_DETECTION_SUCCESS
-        }
-    },
+  PostAutoDetectStart_Request: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: START_AUTO_DETECTION_REQUEST
+    }
+  },
 
-    PostAutoDetectStart_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: START_AUTO_DETECTION_FAILURE,
-            errorMsg: error
-        }
-    },
+  PostAutoDetectStart_Success: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: START_AUTO_DETECTION_SUCCESS
+    }
+  },
 
-    PostAutoDetectStop_Request: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: STOP_AUTO_DETECTION_REQUEST
-        }
-    },
+  PostAutoDetectStart_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: START_AUTO_DETECTION_FAILURE,
+      errorMsg: error
+    }
+  },
 
-    PostAutoDetectStop_Success: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: STOP_AUTO_DETECTION_SUCCESS
-        }
-    },
+  PostAutoDetectStop_Request: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: STOP_AUTO_DETECTION_REQUEST
+    }
+  },
 
-    PostAutoDetectStop_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: STOP_AUTO_DETECTION_FAILURE,
-            errorMsg: error
-        }
-    },
+  PostAutoDetectStop_Success: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: STOP_AUTO_DETECTION_SUCCESS
+    }
+  },
 
-    StartPolling: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: START_POLLING
-        };
-    },
+  PostAutoDetectStop_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: STOP_AUTO_DETECTION_FAILURE,
+      errorMsg: error
+    }
+  },
 
-    StopPolling: () => {
-        return {
-            type: STOP_POLLING
-        };
-    },
+  StartPolling: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: START_POLLING
+    }
+  },
 
-    StartPolling_Success: (data: DetectionStepsResponse[]): TestSuiteAutoDetectionActionTypes => {
-        const detectionSteps = {} as DetectionSteps;
-        detectionSteps.DetectingItems = [];
+  StopPolling: () => {
+    return {
+      type: STOP_POLLING
+    }
+  },
 
-        data.map(step => {
-            detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus });
-        })
-        return {
-            type: START_POLLING_Success,
-            payload: detectionSteps
-        }
-    },
+  StartPolling_Success: (data: DetectionStepsResponse[]): TestSuiteAutoDetectionActionTypes => {
+    const detectionSteps = {} as DetectionSteps
+    detectionSteps.DetectingItems = []
 
-    StartPolling_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: START_POLLING_Failure,
-            errorMsg: error
-        }
-    },
+    data.map(step => {
+      detectionSteps.DetectingItems.push({ Name: step.DetectingContent, Status: step.DetectingStatus })
+    })
+    return {
+      type: START_POLLING_Success,
+      payload: detectionSteps
+    }
+  },
 
-    updateAUtoDetectionPrerequisiteAction: (property: Property): UpdateAutoDetectPrerequisiteActionType => {
-        return {
-            type: UPDATE_PREREQUISITE,
-            payload: property
-        };
-    },
+  StartPolling_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: START_POLLING_Failure,
+      errorMsg: error
+    }
+  },
 
-    ApplyDetectionResult_Request: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: APPLY_DETECTION_RESULT_REQUEST
-        }
-    },
+  updateAUtoDetectionPrerequisiteAction: (property: Property): UpdateAutoDetectPrerequisiteActionType => {
+    return {
+      type: UPDATE_PREREQUISITE,
+      payload: property
+    }
+  },
 
-    ApplyDetectionResult_Success: (): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: APPLY_DETECTION_RESULT_SUCCESS
-        }
-    },
+  ApplyDetectionResult_Request: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: APPLY_DETECTION_RESULT_REQUEST
+    }
+  },
 
-    ApplyDetectionResult_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
-        return {
-            type: APPLY_DETECTION_RESULT_FAILURE,
-            errorMsg: error
-        }
-    },
+  ApplyDetectionResult_Success: (): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: APPLY_DETECTION_RESULT_SUCCESS
+    }
+  },
+
+  ApplyDetectionResult_Failure: (error: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: APPLY_DETECTION_RESULT_FAILURE,
+      errorMsg: error
+    }
+  }
 }

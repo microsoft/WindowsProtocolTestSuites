@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Icon, IStackStyles } from '@fluentui/react';
-import { Stack } from 'office-ui-fabric-react';
-import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Icon, IStackStyles } from '@fluentui/react'
+import { Stack } from 'office-ui-fabric-react'
+import React from 'react'
+import { Link, NavLink } from 'react-router-dom'
 
-export function Header() {
+export function Header () {
   const headerStackTokens: IStackStyles = {
     root: {
       color: '#FFF'
     }
-  };
+  }
 
   return (
     <div className="header">
@@ -40,5 +40,5 @@ export function Header() {
         </Stack>
       </Stack>
     </div>
-  );
+  )
 }

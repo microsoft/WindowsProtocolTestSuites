@@ -1,39 +1,39 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { applyMiddleware, createStore, combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { appReducers } from '../reducers';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { createBrowserHistory } from 'history';
+import { applyMiddleware, createStore, combineReducers } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import { connectRouter, routerMiddleware } from 'connected-react-router'
+import { appReducers } from '../reducers'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { createBrowserHistory } from 'history'
 
-export const history = createBrowserHistory();
+export const history = createBrowserHistory()
 
 const rootReducer = combineReducers({
-    ...appReducers,
-    router: connectRouter(history)
-});
+  ...appReducers,
+  router: connectRouter(history)
+})
 
 export type AppState = ReturnType<typeof rootReducer>;
 
-export function configureStore(initialState?: AppState) {
-    const middleware = [
-        thunkMiddleware,
-        routerMiddleware(history)
-    ];
+export function configureStore (initialState?: AppState) {
+  const middleware = [
+    thunkMiddleware,
+    routerMiddleware(history)
+  ]
 
-    const enhancers = [];
-    const windowIfDefined = typeof window === 'undefined' ? null : window as any; // eslint-disable-line @typescript-eslint/no-explicit-any
-    if (windowIfDefined && windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__) {
-        enhancers.push(windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__());
-    }
+  const enhancers = []
+  const windowIfDefined = typeof window === 'undefined' ? null : window as any // eslint-disable-line @typescript-eslint/no-explicit-any
+  if (windowIfDefined && windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__) {
+    enhancers.push(windowIfDefined.__REDUX_DEVTOOLS_EXTENSION__())
+  }
 
-    return createStore(
-        rootReducer,
-        initialState,
-        composeWithDevTools(applyMiddleware(...middleware), ...enhancers)
-    );
+  return createStore(
+    rootReducer,
+    initialState,
+    composeWithDevTools(applyMiddleware(...middleware), ...enhancers)
+  )
 }
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are

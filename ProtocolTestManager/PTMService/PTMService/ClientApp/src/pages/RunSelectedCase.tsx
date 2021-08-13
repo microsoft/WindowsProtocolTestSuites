@@ -1,38 +1,38 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DetailsListLayoutMode, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react';
-import { useForceUpdate } from '@uifabric/react-hooks';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard';
-import { StackGap10 } from '../components/StackStyle';
-import { StepPanel } from '../components/StepPanel';
-import { useWindowSize } from '../components/UseWindowSize';
-import { WizardNavBar } from '../components/WizardNavBar';
-import { getNavSteps } from '../model/DefaultNavSteps';
-import { ConfigurationsDataSrv } from '../services/Configurations';
-import { TestSuitesDataSrv } from '../services/TestSuites';
-import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases';
-import { AppState } from '../store/configureStore';
+import { DetailsList, DetailsListLayoutMode, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react'
+import { useForceUpdate } from '@uifabric/react-hooks'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
+import { StackGap10 } from '../components/StackStyle'
+import { StepPanel } from '../components/StepPanel'
+import { useWindowSize } from '../components/UseWindowSize'
+import { WizardNavBar } from '../components/WizardNavBar'
+import { getNavSteps } from '../model/DefaultNavSteps'
+import { ConfigurationsDataSrv } from '../services/Configurations'
+import { TestSuitesDataSrv } from '../services/TestSuites'
+import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases'
+import { AppState } from '../store/configureStore'
 
 interface ListItem extends IObjectWithKey {
     Name: string;
 }
 
 const getListItems = (testCases: string[]): ListItem[] => {
-    return testCases.map(testCaseName => {
-        return {
-            key: testCaseName,
-            Name: testCaseName
-        };
-    });
-};
+  return testCases.map(testCaseName => {
+    return {
+      key: testCaseName,
+      Name: testCaseName
+    }
+  })
+}
 
-function copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
-    const key = columnKey as keyof T;
-    return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
+function copyAndSort<T> (items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  const key = columnKey as keyof T
+  return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
 }
 
 interface FilterByDropdownOption extends IDropdownOption {
@@ -41,33 +41,33 @@ interface FilterByDropdownOption extends IDropdownOption {
 }
 
 const isValidFilterPhrase = (filterPhrase: string | undefined) => {
-    return filterPhrase !== undefined && filterPhrase !== null && filterPhrase !== '';
-};
+  return filterPhrase !== undefined && filterPhrase !== null && filterPhrase !== ''
+}
 
 const filterByNameFunc = (filterPhrase: string | undefined) => (item: ListItem) => {
-    return isValidFilterPhrase(filterPhrase) ?
-        item.Name.toLocaleLowerCase().indexOf(filterPhrase!.toLocaleLowerCase()) >= 0
-        : true;
-};
+  return isValidFilterPhrase(filterPhrase)
+    ? item.Name.toLocaleLowerCase().indexOf(filterPhrase!.toLocaleLowerCase()) >= 0
+    : true
+}
 
 const filterByDropdownOptions: FilterByDropdownOption[] = [
-    {
-        key: 'Name',
-        text: 'Name',
-        filterFunc: filterByNameFunc,
-        filterPlaceholder: 'Filter by Name...'
-    }
-];
+  {
+    key: 'Name',
+    text: 'Name',
+    filterFunc: filterByNameFunc,
+    filterPlaceholder: 'Filter by Name...'
+  }
+]
 
 type FilterByDropdownProps = {
     options: FilterByDropdownOption[],
     onOptionChange: (newOption: FilterByDropdownOption) => void
 }
 
-function FilterByDropdown(props: FilterByDropdownProps) {
-    return (
-        props.options.length > 0
-            ? <Stack horizontal tokens={StackGap10}>
+function FilterByDropdown (props: FilterByDropdownProps) {
+  return (
+    props.options.length > 0
+      ? <Stack horizontal tokens={StackGap10}>
                 <Label style={{ alignSelf: 'center' }}>Filter By</Label>
                 <Dropdown
                     style={{ alignSelf: 'center', minWidth: 80 }}
@@ -76,162 +76,160 @@ function FilterByDropdown(props: FilterByDropdownProps) {
                     onChange={(_, newValue, __) => props.onOptionChange(newValue as FilterByDropdownOption)}
                 />
             </Stack>
-            : null
-    );
+      : null
+  )
 }
 
-export function RunSelectedCase(props: StepWizardProps) {
-    const dispatch = useDispatch();
+export function RunSelectedCase (props: StepWizardProps) {
+  const dispatch = useDispatch()
 
-    const filterInfo = useSelector((state: AppState) => state.filterInfo);
-    const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases);
-    const configureMethod = useSelector((state: AppState) => state.configureMethod);
+  const filterInfo = useSelector((state: AppState) => state.filterInfo)
+  const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases)
+  const configureMethod = useSelector((state: AppState) => state.configureMethod)
 
-    const [filterPhrase, setFilterPhrase] = useState<string | undefined>(undefined);
-    const [filterByDropdownOption, setFilterByDropdownOption] = useState<FilterByDropdownOption>(filterByDropdownOptions[0]);
-    const [filteredTestCases, setFilteredTestCases] = useState<ListItem[]>([]);
+  const [filterPhrase, setFilterPhrase] = useState<string | undefined>(undefined)
+  const [filterByDropdownOption, setFilterByDropdownOption] = useState<FilterByDropdownOption>(filterByDropdownOptions[0])
+  const [filteredTestCases, setFilteredTestCases] = useState<ListItem[]>([])
 
-    const [listColumns, setListColumns] = useState<IColumn[]>(() => [
-        {
-            key: 'Name',
-            name: 'Name',
-            fieldName: 'Name',
-            minWidth: 360,
-            isRowHeader: true,
-            isResizable: true,
-            isSorted: false,
-            isSortedDescending: false,
-            data: 'string',
-            onColumnClick: (_, column) => onColumnHeaderClick(column)
+  const [listColumns, setListColumns] = useState<IColumn[]>(() => [
+    {
+      key: 'Name',
+      name: 'Name',
+      fieldName: 'Name',
+      minWidth: 360,
+      isRowHeader: true,
+      isResizable: true,
+      isSorted: false,
+      isSortedDescending: false,
+      data: 'string',
+      onColumnClick: (_, column) => onColumnHeaderClick(column)
+    }
+  ])
+
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
+
+  const [selection, setSelection] = useState(() => {
+    const s: Selection<IObjectWithKey> = new Selection({
+      onSelectionChanged: () => {
+        setSelectedItems(s.getSelection().map(item => item.key as string))
+        setSelection(s)
+        forceUpdate()
+      }
+    })
+    s.setItems(filteredTestCases, true)
+    return s
+  })
+
+  const [runAllClicked, setRunAllClicked] = useState(false)
+  const [runSelectedClicked, setRunSelectedClicked] = useState(false)
+
+  const listColumnsRef = useRef<IColumn[]>()
+  listColumnsRef.current = listColumns
+
+  const filteredTestCasesRef = useRef<ListItem[]>()
+  filteredTestCasesRef.current = filteredTestCases
+
+  const allListItems = useMemo(() => getListItems(selectedTestCases.allTestCases), [selectedTestCases.allTestCases])
+  const forceUpdate = useForceUpdate()
+
+  const wizardProps: StepWizardChildProps = props as StepWizardChildProps
+  const navSteps = getNavSteps(wizardProps, configureMethod)
+  const wizard = WizardNavBar(wizardProps, navSteps)
+  const winSize = useWindowSize()
+
+  const history = useHistory()
+
+  useEffect(() => {
+    dispatch(ConfigurationsDataSrv.getRules())
+    dispatch(TestSuitesDataSrv.getTestSuiteTestCases())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(SelectedTestCasesDataSrv.getAllTestCases())
+  }, [filterInfo])
+
+  useEffect(() => {
+    if (!isValidFilterPhrase(filterPhrase)) {
+      setFilteredTestCases(allListItems)
+    }
+  }, [filterPhrase, allListItems])
+
+  const onColumnHeaderClick = useCallback((column: IColumn) => {
+    const currColumn: IColumn = listColumnsRef.current!.filter(currCol => column.key === currCol.key)[0]
+    const newColumns = listColumnsRef.current!.map((newCol: IColumn) => {
+      if (newCol.key === currColumn.key) {
+        return {
+          ...currColumn,
+          isSorted: true,
+          isSortedDescending: !currColumn.isSortedDescending
         }
-    ]);
-
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
-    const [selection, setSelection] = useState(() => {
-        const s: Selection<IObjectWithKey> = new Selection({
-            onSelectionChanged: () => {
-                setSelectedItems(s.getSelection().map(item => item.key as string));
-                setSelection(s);
-                forceUpdate();
-            }
-        });
-        s.setItems(filteredTestCases, true);
-        return s;
-    });
-
-    const [runAllClicked, setRunAllClicked] = useState(false);
-    const [runSelectedClicked, setRunSelectedClicked] = useState(false);
-
-    const listColumnsRef = useRef<IColumn[]>();
-    listColumnsRef.current = listColumns;
-
-    const filteredTestCasesRef = useRef<ListItem[]>();
-    filteredTestCasesRef.current = filteredTestCases;
-
-    const allListItems = useMemo(() => getListItems(selectedTestCases.allTestCases), [selectedTestCases.allTestCases]);
-    const forceUpdate = useForceUpdate();
-
-    const wizardProps: StepWizardChildProps = props as StepWizardChildProps;
-    const navSteps = getNavSteps(wizardProps, configureMethod);
-    const wizard = WizardNavBar(wizardProps, navSteps);
-    const winSize = useWindowSize();
-
-    const history = useHistory();
-
-    useEffect(() => {
-        dispatch(ConfigurationsDataSrv.getRules());
-        dispatch(TestSuitesDataSrv.getTestSuiteTestCases());
-    }, [dispatch])
-
-    useEffect(() => {
-        dispatch(SelectedTestCasesDataSrv.getAllTestCases());
-    }, [filterInfo]);
-
-    useEffect(() => {
-        if (!isValidFilterPhrase(filterPhrase)) {
-            setFilteredTestCases(allListItems);
+      } else {
+        return {
+          ...newCol,
+          isSorted: false,
+          isSortedDescending: true
         }
-    }, [filterPhrase, allListItems]);
+      }
+    })
 
-    const onColumnHeaderClick = useCallback((column: IColumn) => {
-        const currColumn: IColumn = listColumnsRef.current!.filter(currCol => column.key === currCol.key)[0]
-        const newColumns = listColumnsRef.current!.map((newCol: IColumn) => {
-            if (newCol.key === currColumn.key) {
-                return {
-                    ...currColumn,
-                    isSorted: true,
-                    isSortedDescending: !currColumn.isSortedDescending,
-                };
-            } else {
-                return {
-                    ...newCol,
-                    isSorted: false,
-                    isSortedDescending: true
-                };
-            }
-        });
+    const newItems = copyAndSort(filteredTestCasesRef.current!, currColumn.fieldName!, !currColumn.isSortedDescending)
+    setListColumns(newColumns)
+    setFilteredTestCases(newItems)
+  }, [])
 
-        const newItems = copyAndSort(filteredTestCasesRef.current!, currColumn.fieldName!, !currColumn.isSortedDescending);
-        setListColumns(newColumns);
-        setFilteredTestCases(newItems);
-    }, []);
+  const onFilterPhraseChanged = (filterPhrase: string | undefined) => {
+    setFilterPhrase(filterPhrase)
+    selection.setAllSelected(false)
 
-    const onFilterPhraseChanged = (filterPhrase: string | undefined) => {
-        setFilterPhrase(filterPhrase);
-        selection.setAllSelected(false);
+    setFilteredTestCases(allListItems.filter(filterByDropdownOption.filterFunc(filterPhrase)))
+  }
 
-        setFilteredTestCases(allListItems.filter(filterByDropdownOption.filterFunc(filterPhrase)));
-    };
+  const onFilterPhraseClear = () => {
+    setFilterPhrase(undefined)
+    selection.setAllSelected(false)
 
-    const onFilterPhraseClear = () => {
-        setFilterPhrase(undefined);
-        selection.setAllSelected(false);
+    setFilteredTestCases(allListItems)
+  }
 
-        setFilteredTestCases(allListItems);
-    };
-
-    const onRunAllCasesClick = () => {
-        if (selectedTestCases.allTestCases.length === 0) {
-            return;
-        }
-
-        setRunAllClicked(true);
-        dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedTestCases.allTestCases, undefined, () => {
-            history.push('/Tasks/History', { from: 'RunSelectedCase' });
-        }));
-    };
-
-    const getRunAllButtonText = () => {
-        if (runAllClicked && selectedTestCases.isPosting) {
-            return "Processing...";
-        }
-        else {
-            return "Run all cases";
-        }
+  const onRunAllCasesClick = () => {
+    if (selectedTestCases.allTestCases.length === 0) {
+      return
     }
 
-    const onRunSelectedCasesClick = () => {
-        if (selectedItems.length === 0) {
-            return;
-        }
+    setRunAllClicked(true)
+    dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedTestCases.allTestCases, undefined, () => {
+      history.push('/Tasks/History', { from: 'RunSelectedCase' })
+    }))
+  }
 
-        setRunSelectedClicked(true);
-        dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedItems, undefined, () => {
-            history.push('/Tasks/History', { from: 'RunSelectedCase' });
-        }));
-    };
+  const getRunAllButtonText = () => {
+    if (runAllClicked && selectedTestCases.isPosting) {
+      return 'Processing...'
+    } else {
+      return 'Run all cases'
+    }
+  }
 
-    const getRunSelectedButtonText = () => {
-        if (runSelectedClicked && selectedTestCases.isPosting) {
-            return "Processing..."
-        }
-        else {
-            return `Run selected cases (${selectedItems.length}/${selectedTestCases.allTestCases.length})`;
-        }
+  const onRunSelectedCasesClick = () => {
+    if (selectedItems.length === 0) {
+      return
     }
 
-    return (
+    setRunSelectedClicked(true)
+    dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedItems, undefined, () => {
+      history.push('/Tasks/History', { from: 'RunSelectedCase' })
+    }))
+  }
+
+  const getRunSelectedButtonText = () => {
+    if (runSelectedClicked && selectedTestCases.isPosting) {
+      return 'Processing...'
+    } else {
+      return `Run selected cases (${selectedItems.length}/${selectedTestCases.allTestCases.length})`
+    }
+  }
+
+  return (
         <StepPanel leftNav={wizard} isLoading={selectedTestCases.isLoading} errorMsg={selectedTestCases.errorMsg}>
             <Stack style={{ paddingLeft: 10 }}>
                 <Fabric>
@@ -247,11 +245,11 @@ export function RunSelectedCase(props: StepWizardProps) {
                         />
                         {
                             !isValidFilterPhrase(filterPhrase)
-                                ? null
-                                : <Label>{`Number of test cases after filter applied: ${filteredTestCases.length}`}</Label>
+                              ? null
+                              : <Label>{`Number of test cases after filter applied: ${filteredTestCases.length}`}</Label>
                         }
                     </Stack>
-                    <hr style={{ border: "1px solid #d9d9d9" }} />
+                    <hr style={{ border: '1px solid #d9d9d9' }} />
                     <div style={{ height: winSize.height - 170, overflowY: 'auto' }}>
                         <MarqueeSelection selection={selection}>
                             <DetailsList
@@ -275,5 +273,5 @@ export function RunSelectedCase(props: StepWizardProps) {
                 </div>
             </Stack>
         </StepPanel>
-    );
+  )
 };

@@ -1,14 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Link, PrimaryButton } from '@fluentui/react';
-import * as React from 'react';
-import { FixedActionBar } from '../components/FixedActionBar';
-import '../css/home.css';
-import { useHistory } from 'react-router-dom';
+import { Link, PrimaryButton } from '@fluentui/react'
+import * as React from 'react'
+import { FixedActionBar } from '../components/FixedActionBar'
+import '../css/home.css'
+import { useHistory } from 'react-router-dom'
 
 const HomePage: React.FC = () => {
-  const history = useHistory();
+  const history = useHistory()
 
   return (
     <div className="ms-Grid home">
@@ -79,4 +79,4 @@ const HomePage: React.FC = () => {
   )
 }
 
-export default HomePage;
+export default HomePage

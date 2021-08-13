@@ -7,22 +7,21 @@ export interface PrerequisitProperty {
     Choices: string[];
 }
 
-//GetPrerequisitesRequest: api/testsuite/${configurationId}/autodetect/prerequisites
-//GetPrerequisitesResponse:
+// GetPrerequisitesRequest: api/testsuite/${configurationId}/autodetect/prerequisites
+// GetPrerequisitesResponse:
 export interface Prerequisite {
     Title: string;
     Summary: string;
     Properties: PrerequisitProperty[];
 }
 
-
 export interface DetectingItem {
     Name: string;
     Status: string;
 }
 
-//GetDetectionStepsRequest:api/testsuite/${configurationId}/autodetect/detectionsteps
-//GetDetectionStepsResponse:
+// GetDetectionStepsRequest:api/testsuite/${configurationId}/autodetect/detectionsteps
+// GetDetectionStepsResponse:
 export interface DetectionStepsResponse {
     DetectingContent: string;
     DetectingStatus: string;
@@ -44,17 +43,15 @@ export interface DetectionSteps {
     Result: DetectionResult;
 }
 
-
-//StartAutoDetection: api/testsuite/${configurationId}/autodetect/start
+// StartAutoDetection: api/testsuite/${configurationId}/autodetect/start
 export interface StartDetectorRequest {
-    //Prerequisites: Prerequisites;
+    // Prerequisites: Prerequisites;
 }
 
-//StopAutoDetection: api/testsuite/${configurationId}/autodetect/stop
+// StopAutoDetection: api/testsuite/${configurationId}/autodetect/stop
 
-//GetDetectionResult: api/testsuite/${configurationId}/autodetect/summary
+// GetDetectionResult: api/testsuite/${configurationId}/autodetect/summary
 export interface DetectionSummary {
-
 
 }
 
@@ -62,30 +59,30 @@ export enum DetectionStatus {
     /// <summary>
     /// Detection not start.
     /// </summary>
-    NotStart = "NotStart",
+    NotStart = 'NotStart',
 
     /// <summary>
     /// Detection in progress.
     /// </summary>
-    InProgress = "InProgress",
+    InProgress = 'InProgress',
 
     /// <summary>
     /// Detection finished.
     /// </summary>
-    Finished = "Finished",
+    Finished = 'Finished',
 
     /// <summary>
     /// Detection step skipped.
     /// </summary>
-    Skipped = "Skipped",
+    Skipped = 'Skipped',
 
     /// <summary>
     /// Detection step not found.
     /// </summary>
-    NotFound = "NotFound",
+    NotFound = 'NotFound',
 
     /// <summary>
     /// Error occured running detection step
     /// </summary>
-    Error = "Error"
+    Error = 'Error'
 }

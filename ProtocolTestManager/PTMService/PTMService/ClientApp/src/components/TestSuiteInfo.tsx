@@ -1,5 +1,5 @@
-import { PrimaryButton, Stack } from '@fluentui/react';
-import './../css/index.css';
+import { PrimaryButton, Stack } from '@fluentui/react'
+import './../css/index.css'
 
 export interface TestSuiteInfoProp {
     TestSuiteName: string;
@@ -8,8 +8,8 @@ export interface TestSuiteInfoProp {
     OnSelect: () => void;
 }
 
-export function TestSuiteInfo(props: TestSuiteInfoProp) {
-    return (<div className="card">
+export function TestSuiteInfo (props: TestSuiteInfoProp) {
+  return (<div className="card">
         <Stack className="container">
             <div>
                 <div className="subject">{`${props.TestSuiteName} - (${props.Version})`}</div>
@@ -20,5 +20,5 @@ export function TestSuiteInfo(props: TestSuiteInfoProp) {
             </Stack>
         </Stack>
 
-    </div>);
+    </div>)
 }
