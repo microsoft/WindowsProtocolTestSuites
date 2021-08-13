@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { TestCaseOverview } from './TestCaseResult'
-import { TestSuite } from './TestSuite';
+import { TestSuite } from './TestSuite'
 
 export type TestResultState = 'Created' | 'Running' | 'Failed' | 'Finished';
 

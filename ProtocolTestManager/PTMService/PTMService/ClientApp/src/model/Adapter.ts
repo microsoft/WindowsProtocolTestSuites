@@ -6,7 +6,7 @@ export interface Adapter {
     Name: string;
     // Adapter displayname
     DisplayName: string;
-    // Customize Adapter implementation type, only 
+    // Customize Adapter implementation type, only
     AdapterType: string;
     // Supported Kinds
     SupportedKinds: AdapterKind[];
@@ -24,7 +24,6 @@ export enum AdapterKind {
     Shell = 'Shell',
     Interactive = 'Interactive',
 }
-
 
 export enum ChangedField {
     AdapterKind,

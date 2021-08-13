@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 export const AllNode = {
-    value: 'All',
-    label: '(Select all)'
-};
+  value: 'All',
+  label: '(Select all)'
+}
 
 export interface RuleData {
     AllRules: RuleGroup[];

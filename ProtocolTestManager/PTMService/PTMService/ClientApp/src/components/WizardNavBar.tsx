@@ -1,44 +1,43 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import styled from '@emotion/styled';
-import { StepWizardChildProps } from "react-step-wizard";
-import { StepNavItemInfo } from '../model/StepNavItemInfo';
-import { useWindowSize } from './UseWindowSize';
-import { useSelector } from 'react-redux';
-import { AppState } from '../store/configureStore';
-import { RunSteps } from '../model/DefaultNavSteps';
+import styled from '@emotion/styled'
+import { StepWizardChildProps } from 'react-step-wizard'
+import { StepNavItemInfo } from '../model/StepNavItemInfo'
+import { useWindowSize } from './UseWindowSize'
+import { useSelector } from 'react-redux'
+import { AppState } from '../store/configureStore'
+import { RunSteps } from '../model/DefaultNavSteps'
 
-export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
-    const wizardState = useSelector((state: AppState) => state.wizard);
-    const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
-        let isEnabledStep = item.TargetStep <= wizardState.lastStep;
-        if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-            isEnabledStep = item.IsEnabled
-        }
-        if (item.IsActive) {
-            return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
-        } else if (isEnabledStep) {
-            return <CompleteStep color={"#389e0d"} key={index} onClick={() => wizardProps.goToStep(item.TargetStep)}>{item.Caption}</CompleteStep>
-        }
-        else {
-            return <NotStartStep color="#bfbfbf" key={index} >{item.Caption}</NotStartStep>
-        }
-    });
+export function WizardNavBar (wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
+  const wizardState = useSelector((state: AppState) => state.wizard)
+  const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
+    let isEnabledStep = item.TargetStep <= wizardState.lastStep
+    if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
+      isEnabledStep = item.IsEnabled
+    }
+    if (item.IsActive) {
+      return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
+    } else if (isEnabledStep) {
+      return <CompleteStep color={'#389e0d'} key={index} onClick={() => wizardProps.goToStep(item.TargetStep)}>{item.Caption}</CompleteStep>
+    } else {
+      return <NotStartStep color="#bfbfbf" key={index} >{item.Caption}</NotStartStep>
+    }
+  })
 
-    const winSize = useWindowSize();
+  const winSize = useWindowSize()
 
-    return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
+  return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
         <Wizard>
             <VLine tabIndex={navStepItems.length} />
             {navStepItems}
         </Wizard>
-    </LeftPanel>);
+    </LeftPanel>)
 }
 
-export const LeftPanelWidth = 250;
+export const LeftPanelWidth = 250
 // header height 50 + 20 padding
-export const HeaderMenuHeight = 72;
+export const HeaderMenuHeight = 72
 
 export const LeftPanel = styled.div`
     float: left;
@@ -52,7 +51,7 @@ export const LeftPanel = styled.div`
     background-color: #f1f1f1;
     font-size:larger;
     font-weight: 500;
-`;
+`
 
 export const RightPanel = styled.div`
     padding-Top: 20px;
@@ -64,12 +63,12 @@ export const RightPanel = styled.div`
     &::after {
         clear: "both";
     }
-`;
+`
 
 export const Wizard = styled.div`
     margin-left: 40px;
     position: relative;
-`;
+`
 
 export const VLine = styled.div`
     width: 3px;
@@ -77,7 +76,7 @@ export const VLine = styled.div`
     position: absolute;
     margin-left: -21px;
     height: ${props => (props.tabIndex! - 1) * 56}px;
-    `;
+    `
 
 export const CompleteStep = styled.div`
         padding-Bottom: 30px;
@@ -96,7 +95,7 @@ export const CompleteStep = styled.div`
             position: absolute;
             margin-left:-35px;
           }
-    `;
+    `
 
 export const RunningStep = styled.div`
     padding-Bottom: 30px;
@@ -114,7 +113,7 @@ export const RunningStep = styled.div`
         position: absolute;
         margin-left:-35px;
       }
-`;
+`
 
 export const NotStartStep = styled.div`
     padding-Bottom: 30px;
@@ -131,4 +130,4 @@ export const NotStartStep = styled.div`
         position: absolute;
         margin-left:-35px;
       }
-`;
+`
