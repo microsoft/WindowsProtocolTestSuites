@@ -1,27 +1,25 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es2021: true
   },
   extends: [
-    'plugin:@fluentui/react',
     'plugin:react/recommended',
-    'standard',
-    'eslint:recommended',
+    'standard'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true,
+      jsx: true
     },
     ecmaVersion: 12,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: [
     'react',
     '@typescript-eslint',
-    'only-warn',
+    'only-warn'
   ],
   rules: {
-  },
-};
+  }
+}
