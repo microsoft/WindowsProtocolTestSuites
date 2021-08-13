@@ -4,8 +4,10 @@ module.exports = {
     es2021: true,
   },
   extends: [
+    'plugin:@fluentui/react',
     'plugin:react/recommended',
-    'airbnb',
+    'standard',
+    'eslint:recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
