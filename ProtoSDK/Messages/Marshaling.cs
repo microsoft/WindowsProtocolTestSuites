@@ -1339,12 +1339,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling
 
         public int GetSize(Marshaler marshaler, MarshalingDescriptor desc, object value)
         {
-            return IntPtr.Size;
+            return marshaler.GetIntPtrSize();
         }
 
         public int GetAlignment(Marshaler marshaler, MarshalingDescriptor desc)
         {
-            return IntPtr.Size;
+            return marshaler.GetIntPtrSize();
         }
 
         public Type GetNativeType(Marshaler marshaler, MarshalingDescriptor desc)

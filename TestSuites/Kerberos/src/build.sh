@@ -50,7 +50,7 @@ done
 cp $TestSuiteRoot/TestSuites/Kerberos/src/Deploy/LICENSE.rtf $OutDir/LICENSE.rtf -f
 
 mkdir -p $OutDir/Bin
-Cmd="dotnet publish \"$TestSuiteRoot/TestSuites/Kerberos/src/Kerberos_Server.sln\" -c $Configuration -o $OutDir/Bin"
+Cmd="dotnet publish \"$TestSuiteRoot/TestSuites/Kerberos/src/Kerberos_Server.sln\" -c $Configuration -p:Platform=x86 -o $OutDir/Bin"
 
 eval $Cmd
 

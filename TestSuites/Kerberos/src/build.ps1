@@ -35,7 +35,7 @@ foreach ($curr in $CommonScripts) {
 }
 
 Copy-Item  "$TestSuiteRoot/TestSuites/Kerberos/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
-dotnet publish "$TestSuiteRoot/TestSuites/Kerberos/src/Kerberos_Server.sln" -c $Configuration -o $OutDir/Bin
+dotnet publish "$TestSuiteRoot/TestSuites/Kerberos/src/Kerberos_Server.sln" -c $Configuration -p:Platform=x86 -o $OutDir/Bin
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build Kerberos test suite"

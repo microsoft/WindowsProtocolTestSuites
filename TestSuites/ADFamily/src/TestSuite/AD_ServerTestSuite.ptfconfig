@@ -22,23 +22,23 @@
     <Adapter xsi:type="managed" name="IMS_ADTS_TDOAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security.MS_ADTS_TDOAdapter, AD_ServerAdapter" />
     <!--MS_DRSR-->
 
-    <Adapter xsi:type="powershell" name="IDrsrSutControlAdapter" scriptdir="." />
+    <Adapter xsi:type="powershell" name="IDrsrSutControlAdapter" scriptdir=".\MS-DRSR\SUTControlAdapter\" />
     <Adapter xsi:type="managed" name="ILdapAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Drsr.LdapAdapter, AD_ServerAdapter" />
     <!--MS_LSAD-->
     <Adapter xsi:type="managed" name="ILsadManagedAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Lsad.LsadManagedAdapter, AD_ServerAdapter" />
-    <Adapter xsi:type="powershell" name="ILsadSutControlAdapter" scriptdir=".\Adapter\MS-LSAD\SUTControlAdapter\" />
+    <Adapter xsi:type="powershell" name="ILsadSutControlAdapter" scriptdir=".\MS-LSAD\SUTControlAdapter\" />
     <!--MS_LSAT-->
     <Adapter xsi:type="managed" name="ILsatAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Lsat.LsatAdapter, AD_ServerAdapter" />
     <!--MS_NRPC-->
     <Adapter xsi:type="managed" name="INrpcServerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Nrpc.NrpcServerAdapter, AD_ServerAdapter" />
-    <Adapter xsi:type="powershell" name="INrpcServerSutControlAdapter" scriptdir=".\Adapter\MS-NRPC\SUTControlAdapter\" />
+    <Adapter xsi:type="powershell" name="INrpcServerSutControlAdapter" scriptdir=".\MS-NRPC\SUTControlAdapter\" />
     <!--MS_FRS2-->
     <Adapter xsi:type="managed" name="IConfigStoreInitializerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.MS_FRS2.FRS2ConfigStoreInitializer" />
     <Adapter xsi:type="managed" name="IFRS2ManagedAdapter" adaptertype="Microsoft.Protocols.TestSuites.MS_FRS2.FRS2ManagedAdapter" />
     <Adapter xsi:type="managed" name="IFRS2ServerControllerAdapter" adaptertype="Microsoft.Protocols.TestSuites.MS_FRS2.FRS2ServerControllerAdapter" />
     <!--MS_APDS-->
     <Adapter xsi:type="managed" name="IApdsServerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Apds.IApdsServerAdapter, AD_ServerAdapter" />
-    <Adapter xsi:type="powershell" name="IApdsSutControlAdapter" scriptdir=".\Adapter\MS-APDS\SUTControlAdapter\" />
+    <Adapter xsi:type="powershell" name="IApdsSutControlAdapter" scriptdir=".\MS-APDS\SUTControlAdapter\" />
   </Adapters>
   <TestLog defaultprofile="Verbose">
     <Sinks>
