@@ -601,11 +601,10 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// Get a summary of the detect result.
         /// </summary>
         /// <returns>Detect result.</returns>
-        public object GetSUTSummary()
+        public List<ResultItemMap> GetSUTSummary()
         {
             DetectionResultControl SUTSummaryControl = new DetectionResultControl();
-            SUTSummaryControl.LoadDetectionInfo(detectionInfo);
-            return SUTSummaryControl;
+            return SUTSummaryControl.LoadDetectionInfo(detectionInfo);
         }
 
         /// <summary>

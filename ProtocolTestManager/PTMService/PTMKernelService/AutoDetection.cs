@@ -342,7 +342,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Gets an object represents the detection summary.
         /// </summary>
         /// <returns>An object</returns>
-        public object GetDetectionSummary()
+        public List<ResultItemMap> GetDetectionSummary()
         {
             return ValueDetector.GetSUTSummary();
         }

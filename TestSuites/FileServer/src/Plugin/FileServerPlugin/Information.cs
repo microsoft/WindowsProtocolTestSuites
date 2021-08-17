@@ -10,19 +10,10 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Protocols.TestManager.Detector;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
-    /// <summary>
-    /// Result enumeration.
-    /// </summary>
-    public enum DetectResult
-    {
-        DetectFail,
-        Supported,
-        UnSupported,
-    }
-
     /// <summary>
     /// Platform type of the SUT
     /// </summary>

@@ -24,7 +24,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         void StopDetection(Action callback);
 
-        object GetDetectionSummary();
+        List<ResultItemMap> GetDetectionSummary();
 
         void Reset();
 

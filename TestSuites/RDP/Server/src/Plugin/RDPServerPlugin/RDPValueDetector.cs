@@ -224,11 +224,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// Get a summary of the detection result.
         /// </summary>
         /// <returns>Detection result.</returns>
-        public object GetSUTSummary()
+        public List<ResultItemMap> GetSUTSummary()
         {
             DetectionResultControl SUTSummaryControl = new DetectionResultControl();
-            SUTSummaryControl.LoadDetectionInfo(detectionInfo);
-            return SUTSummaryControl;
+            return SUTSummaryControl.LoadDetectionInfo(detectionInfo);
         }
 
         /// <summary>

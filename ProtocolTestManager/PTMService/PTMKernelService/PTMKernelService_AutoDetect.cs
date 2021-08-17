@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             GetAutoDetection(configurationId).ApplyDetectionResult();
         }
 
-        public object GetDetectionSummary(int configurationId)
+        public List<ResultItemMap> GetDetectionSummary(int configurationId)
         {
             return GetAutoDetection(configurationId).GetDetectionSummary();
         }

@@ -319,7 +319,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             return caseList;
         }
 
-        public object GetSUTSummary()
+        public List<ResultItemMap> GetSUTSummary()
         {
             SUTSummary sutSummary = new SUTSummary();
             var detectionSummary = sutSummary.LoadDetectionInfo(detectionInfo);

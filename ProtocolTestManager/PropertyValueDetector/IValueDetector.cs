@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// Gets a summary of the detect result.
         /// </summary>
         /// <returns>Detect result.</returns>
-        object GetSUTSummary();
+        List<ResultItemMap> GetSUTSummary();
 
         /// <summary>
         /// Gets the list of properties that will be hidder in the configure page.

@@ -81,8 +81,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpGet]
         public IActionResult GetTestSuiteDocs(int testSuiteId, string fileName)
         {
-            var testSuite = PTMKernelService.GetTestSuite(testSuiteId);            
-            string sourceUserGudiePath = Path.Combine(testSuite.StorageRoot.AbsolutePath, TestSuiteConsts.PluginFolderName, TestSuiteConsts.UserGuideFolderName);          
+            var testSuite = PTMKernelService.GetTestSuite(testSuiteId);
+            string sourceUserGudiePath = Path.Combine(testSuite.StorageRoot.AbsolutePath, TestSuiteConsts.PluginFolderName, TestSuiteConsts.UserGuideFolderName);
 
             var file = Path.Combine(sourceUserGudiePath, fileName);
             var fileInfo = new FileInfo(file);
@@ -97,7 +97,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 };
             }
 
-            return File(System.IO.File.ReadAllBytes(file), GetMIMEType(extension));            
+            return File(System.IO.File.ReadAllBytes(file), GetMIMEType(extension));
         }
 
         /// <summary>
@@ -312,7 +312,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         {
             var response = PTMKernelService.GetDetectionSummary(configurationId);
 
-            return Ok(response);
+            return Ok(new
+            {
+                ResultItemMapList = response
+            });
         }
 
         /// <summary>
