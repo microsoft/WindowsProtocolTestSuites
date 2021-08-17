@@ -38,20 +38,21 @@ export async function FetchService<T> (requestOption: FetchOption<T>) {
       })
       if (response.status >= 400 && response.status < 600) {
         const data = await parseJson(response)
-        if (data != '') {
+        if (data !== '') {
           throw new Error(data)
         }
         throw new Error('Bad response from server')
       }
 
       const jsonHeader = response.headers.get('Content-Type')
-      if (jsonHeader !== null && jsonHeader.includes('application/json')) {
+      if (jsonHeader?.includes('application/json') ?? false) {
         const data = await parseJson(response)
         requestOption.dispatch(requestOption.onComplete(data))
 
         return data
       }
 
+      // TODO: Find out how to pass in a useful onComplete callback when the response isn't json
       requestOption.dispatch(requestOption.onComplete())
       return await response.blob()
     }

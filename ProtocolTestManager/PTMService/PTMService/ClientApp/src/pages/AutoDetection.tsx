@@ -1,7 +1,24 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DialogFooter, Dropdown, IColumn, Label, Modal, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react'
+import {
+  IIconProps,
+  IButtonStyles,
+  IconButton,
+  getTheme,
+  FontWeights,
+  mergeStyleSets,
+  DetailsList,
+  Dropdown,
+  IColumn,
+  Label,
+  Modal,
+  PrimaryButton,
+  Stack,
+  TextField,
+  TooltipDelay,
+  TooltipHost
+} from '@fluentui/react'
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { StepPanel } from '../components/StepPanel'
 import { WizardNavBar } from '../components/WizardNavBar'
@@ -21,8 +38,9 @@ import { useBoolean } from '@uifabric/react-hooks'
 export function AutoDetection (props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result
-  const [showAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(false)
-  const [showAutoDetectLogDialog, { toggle: toggleAutoDetectLogDialog }] = useBoolean(false)
+  const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
+  const autoDetectionLog = useSelector((state: AppState) => state.autoDetection.log)
+  const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
   const prerequisite = useSelector((state: AppState) => state.autoDetection)
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
@@ -43,7 +61,7 @@ export function AutoDetection (props: StepWizardProps) {
   useEffect(() => {
     if (detectingTimes === -999 || isAutoDetectShouldStop()) {
       if (autoDetectionStepsResult?.Status === DetectionStatus.Error) {
-        toggleAutoDetectWarningDialog()
+        showAutoDetectionWarningDialog()
       }
       setDetecting(false)
       return
@@ -132,6 +150,11 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const StepColumns = (): IColumn[] => {
+    const onStatusClick = (status: string) => async () => {
+      if (status === 'Failed') {
+        dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+      }
+    }
     return [{
       key: 'DetectingContent',
       name: 'DetectingContent',
@@ -142,7 +165,7 @@ export function AutoDetection (props: StepWizardProps) {
       onRender: (item: Property, index: number | undefined) => {
         return (
                     <Label>
-                        <div style={{ paddingLeft: 5 }}>{item.Name}</div>
+                        <div style={{ paddingLeft: 5 }} >{item.Name}</div>
                     </Label>
         )
       }
@@ -166,7 +189,7 @@ export function AutoDetection (props: StepWizardProps) {
         }
         return (
                         <Label>
-                            <div style={ style }>{item.Status}</div>
+                            <div style={ style } onClick={ onStatusClick(item.Status) }>{item.Status}</div>
                         </Label>
         )
       }
@@ -322,15 +345,84 @@ export function AutoDetection (props: StepWizardProps) {
             </StepPanel>
 
             <Modal
-                isOpen={showAutoDetectWarningDialog}
+                isOpen={isAutoDetectionWarningDialogOpen}
+                containerClassName={contentStyles.container}
             >
-                <Stack>
-                    <div>{autoDetectionStepsResult?.Exception}</div>
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={toggleAutoDetectWarningDialog} text={'OK'} />
-                </DialogFooter>
+              <div className={contentStyles.header}>
+                <span>Warning</span>
+                <IconButton
+                  styles={iconButtonStyles}
+                  iconProps={cancelIcon}
+                  onClick={hideAutoDetectionWarningDialog}
+                />
+              </div>
+              <div className={contentStyles.body}>
+                  <TextField multiline readOnly autoAdjustHeight defaultValue={autoDetectionStepsResult?.Exception} />
+              </div>
+            </Modal>
+
+            <Modal
+                isOpen={isAutoDetectionLogDialogOpen}
+                containerClassName={contentStyles.container}
+            >
+              <div className={contentStyles.header}>
+                <span>Log</span>
+                <IconButton
+                  styles={iconButtonStyles}
+                  iconProps={cancelIcon}
+                  onClick={hideAutoDetectionLogDialog}
+                />
+              </div>
+              <div className={contentStyles.body}>
+                  <TextField multiline readOnly autoAdjustHeight defaultValue={autoDetectionLog} />
+              </div>
             </Modal>
         </div>
   )
 };
+
+const theme = getTheme()
+const contentStyles = mergeStyleSets({
+  container: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'stretch',
+    minWidth: '50%'
+  },
+  header: [
+    theme.fonts.xxLarge,
+    {
+      flex: '1 1 auto',
+      borderTop: `4px solid ${theme.palette.themePrimary}`,
+      color: theme.palette.neutralPrimary,
+      display: 'flex',
+      alignItems: 'center',
+      fontWeight: FontWeights.semibold,
+      padding: '12px 12px 14px 24px'
+    }
+  ],
+  body: {
+    flex: '4 4 auto',
+    padding: '0 24px 24px 24px',
+    overflowY: 'hidden',
+    selectors: {
+      p: { margin: '14px 0' },
+      'p:first-child': { marginTop: 0 },
+      'p:last-child': { marginBottom: 0 }
+    }
+  }
+})
+
+const cancelIcon: IIconProps = { iconName: 'Cancel' }
+
+const iconButtonStyles: Partial<IButtonStyles> = {
+  root: {
+    color: theme.palette.neutralPrimary,
+    marginLeft: 'auto',
+    marginTop: '4px',
+    marginRight: '2px'
+  },
+  rootHovered: {
+    color: theme.palette.neutralDark
+  }
+}
