@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
+  Link,
   IIconProps,
   IButtonStyles,
   IconButton,
@@ -28,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useWindowSize } from '../components/UseWindowSize'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { Property } from '../model/Property'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, CSSProperties, ReactElement } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
 import { AutoDetectActions } from '../actions/AutoDetectionAction'
@@ -121,7 +122,7 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isPreviousButtonDisabled = () => {
+  const isPreviousButtonDisabled = (): boolean => {
     if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
       return true
     } else {
@@ -129,11 +130,11 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isDetectButtonDisabled = () => {
+  const isDetectButtonDisabled = (): boolean => {
     return false
   }
 
-  const isNextButtonDisabled = () => {
+  const isNextButtonDisabled = (): boolean => {
     if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
       return false
     }
@@ -141,7 +142,7 @@ export function AutoDetection (props: StepWizardProps) {
     return true
   }
 
-  const getDetectButtonText = () => {
+  const getDetectButtonText = (): string => {
     if (detecting) {
       return 'Cancel'
     } else {
@@ -150,11 +151,49 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const StepColumns = (): IColumn[] => {
-    const onStatusClick = (status: string) => async () => {
+    const onFailClick = async (): Promise<ReturnType<typeof dispatch>> => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+
+    const getStyle = (status: string): CSSProperties => {
       if (status === 'Failed') {
-        dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+        return { paddingLeft: 5, color: 'red' }
+      } else if (status === 'Finished') {
+        return { paddingLeft: 5, color: 'green' }
+      } else {
+        return { paddingLeft: 5 }
       }
     }
+
+    const DetectingContent = (item: Property, index: number | undefined): ReactElement => {
+      return (
+                <Label>
+                    <div style={{ paddingLeft: 5 }} >{item.Name}</div>
+                </Label>
+      )
+    }
+
+    const DetectingStatus = (item: any): ReactElement => {
+      return (
+                <Label>
+                    <div style={ getStyle(item.Status) } >
+                      {
+                        ((status: string) => {
+                          if (status === 'Failed') {
+                            return (<Link
+                                      underline
+                                      style={getStyle(status)}
+                                      onClick={onFailClick} >
+                                      {status}
+                                    </Link>)
+                          } else {
+                            return (<div style={getStyle(status)}>{status}</div>)
+                          }
+                        })(item.Status)
+                      }
+                    </div>
+                </Label>
+      )
+    }
+
     return [{
       key: 'DetectingContent',
       name: 'DetectingContent',
@@ -162,13 +201,7 @@ export function AutoDetection (props: StepWizardProps) {
       minWidth: 240,
       isRowHeader: true,
       isResizable: true,
-      onRender: (item: Property, index: number | undefined) => {
-        return (
-                    <Label>
-                        <div style={{ paddingLeft: 5 }} >{item.Name}</div>
-                    </Label>
-        )
-      }
+      onRender: DetectingContent
     },
     {
       key: 'DetectingStatus',
@@ -177,22 +210,7 @@ export function AutoDetection (props: StepWizardProps) {
       minWidth: 480,
       isResizable: true,
       isPadded: true,
-      onRender: (item: any) => {
-        let style = { }
-
-        if (item.Status === 'Failed') {
-          style = { paddingLeft: 5, color: 'red' }
-        } else if (item.Status === 'Finished') {
-          style = { paddingLeft: 5, color: 'green' }
-        } else {
-          style = { paddingLeft: 5 }
-        }
-        return (
-                        <Label>
-                            <div style={ style } onClick={ onStatusClick(item.Status) }>{item.Status}</div>
-                        </Label>
-        )
-      }
+      onRender: DetectingStatus
     }]
   }
 
