@@ -4,7 +4,7 @@ import {
 } from '../actions/WizardNavBarAction'
 
 export interface WizardNavBarState {
-    lastStep: number;
+  lastStep: number
 }
 
 const initialWizardNavBarState: WizardNavBarState = {

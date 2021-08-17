@@ -17,14 +17,14 @@ import { Property } from '../model/Property'
 import { PropertyGroup } from '../model/PropertyGroup'
 
 export interface PropertyGroupsState {
-    isLoading: boolean;
-    errorMsg?: string;
-    updated: boolean;
-    isPosting: boolean;
-    latestPropertyGroups: PropertyGroup[];
-    propertyGroups: PropertyGroup[];
-    editingPropertyGroupIndex: number;
-    editingPropertyGroup: PropertyGroup | undefined;
+  isLoading: boolean
+  errorMsg?: string
+  updated: boolean
+  isPosting: boolean
+  latestPropertyGroups: PropertyGroup[]
+  propertyGroups: PropertyGroup[]
+  editingPropertyGroupIndex: number
+  editingPropertyGroup: PropertyGroup | undefined
 }
 
 const initialPropertyGroupsState: PropertyGroupsState = {

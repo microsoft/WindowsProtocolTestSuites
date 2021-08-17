@@ -6,48 +6,48 @@ export const AllNode = {
 }
 
 export interface RuleData {
-    AllRules: RuleGroup[];
-    SelectedRules: Rule[];
-    TargetFilterIndex: number;
-    MappingFilterIndex: number;
+  AllRules: RuleGroup[]
+  SelectedRules: Rule[]
+  TargetFilterIndex: number
+  MappingFilterIndex: number
 }
 
 export interface RuleGroup {
-    DisplayName?: string;
+  DisplayName?: string
 
-    Name: string;
+  Name: string
 
-    Rules: Rule[]
+  Rules: Rule[]
 }
 
 export interface Rule {
-    DisplayName?: string;
+  DisplayName?: string
 
-    Name: string;
+  Name: string
 
-    Rules?: Rule[];
-    Categories?: string[]
-    MappingRules?: string[]
+  Rules?: Rule[]
+  Categories?: string[]
+  MappingRules?: string[]
 }
 
 export interface SelectedRuleGroup {
-    Name: string;
+  Name: string
 
-    Selected: string[]
+  Selected: string[]
 }
 
 export interface GroupItem {
-    key: string;
+  key: string
 
-    name: string;
+  name: string
 
-    rules: Rule[];
+  rules: Rule[]
 
-    checked: string[];
+  checked: string[]
 
-    action: (data: any) => void;
+  action: (data: any) => void
 }
 
 export interface MapItem {
-    [key: string]: string[] | undefined
+  [key: string]: string[] | undefined
 }

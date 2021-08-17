@@ -7,17 +7,17 @@ import { AllNode, RuleGroup, SelectedRuleGroup, Rule, MapItem } from '../model/R
 import { TestCase } from '../model/TestCase'
 
 export interface FilterTestCaseState {
-    isCasesLoading: boolean;
-    isRulesLoading: boolean;
-    isPosting: boolean;
-    errorMsg?: string;
-    ruleGroup: RuleGroup[];
-    listTestCases: TestCase[];
-    selectedConfiguration?: Configuration;
-    listSelectedCases?: string[];
-    selectedRules: SelectedRuleGroup[];
-    targetFilterIndex: number;
-    mappingFilterIndex: number;
+  isCasesLoading: boolean
+  isRulesLoading: boolean
+  isPosting: boolean
+  errorMsg?: string
+  ruleGroup: RuleGroup[]
+  listTestCases: TestCase[]
+  selectedConfiguration?: Configuration
+  listSelectedCases?: string[]
+  selectedRules: SelectedRuleGroup[]
+  targetFilterIndex: number
+  mappingFilterIndex: number
 }
 
 const initialFilterTestCaseState: FilterTestCaseState = {
@@ -46,7 +46,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
     case GET_FILTERTESTCASE_RULES_SUCCESS:
       const initialSelected = action.payload.AllRules.map(group => {
         const selectedRules = action.payload.SelectedRules.find(x => x.Name == group.Name)
-        const currSelected = selectedRules?.Rules?.map(s => s.Name.replace(group.Name, AllNode.value)) || []
+        const currSelected = ((selectedRules?.Rules?.map(s => s.Name.replace(group.Name, AllNode.value))) != null) || []
         return { Name: group.Name, Selected: currSelected }
       })
       return {
@@ -149,7 +149,7 @@ function getMapCategories (rules: Rule[] | undefined, parent: string): MapItem {
   if (rules !== undefined) {
     return rules.reduce((dict: MapItem, rule) => {
       const curr = parent ? `${parent}.${rule.Name}` : rule.Name
-      if (rule.Rules) {
+      if (rule.Rules != null) {
         return { ...dict, ...getMapCategories(rule.Rules, curr) }
       } else {
         dict[curr] = rule.Categories
@@ -175,7 +175,7 @@ function getFilteredTestCases (currSelectedRules: SelectedRuleGroup[], ruleGroup
     })
     const unique = [...new Set(cleanSelected)]
     unique.forEach(s => {
-      match.push(...mapitems[s] || [])
+      match.push(...(mapitems[s] != null) || [])
     })
 
     filteredCases = filteredCases.filter(x => {
@@ -190,10 +190,10 @@ function getItems (rules: Rule[], parent: string): string[] {
   const results: string[] = []
   rules.forEach(rule => {
     const curr = parent ? `${parent}.${rule.Name}` : rule.Name
-    if (rule.Rules) {
+    if (rule.Rules != null) {
       results.push(...getItems(rule.Rules, curr))
     }
-    if (rule.MappingRules) {
+    if (rule.MappingRules != null) {
       rule.MappingRules.map(c => { results.push(`${curr}%${c}`) })
     }
     results.push(curr)

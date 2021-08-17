@@ -71,7 +71,7 @@ export const TestResultsDataSrv = {
     await FetchService({
       url: `api/testresult?pageSize=${pageSize}&pageNumber=${pageNumber}` +
                 (query === undefined ? '' : `&query=${query}`) +
-                (showAll === false ? '' : `&showAll=${showAll}`),
+                (!showAll ? '' : `&showAll=${showAll}`),
       method: RequestMethod.GET,
       dispatch,
       onRequest: TestResultsActions.listTestResultsAction_Request,

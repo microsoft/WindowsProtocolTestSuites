@@ -2,21 +2,21 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export enum RequestMethod {
-    GET = 'GET',
-    POST = 'POST',
-    PUT = 'PUT',
-    DELETE = 'DELETE'
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE'
 }
 
 export interface FetchOption<T> {
-    url: string;
-    method: RequestMethod;
-    body?: BodyInit;
-    headers?: HeadersInit;
-    dispatch: (action: T) => void;
-    onRequest?: Function;
-    onComplete?: Function;
-    onError?: Function;
+  url: string
+  method: RequestMethod
+  body?: BodyInit
+  headers?: HeadersInit
+  dispatch: (action: T) => void
+  onRequest?: Function
+  onComplete?: Function
+  onError?: Function
 }
 
 export async function FetchService<T> (requestOption: FetchOption<T>) {
@@ -29,7 +29,7 @@ export async function FetchService<T> (requestOption: FetchOption<T>) {
       const response = await fetch(requestOption.url, {
         method: requestOption.method,
         body: requestOption.body,
-        headers: requestOption.headers
+        headers: (requestOption.headers != null)
           ? requestOption.headers
           : {
               Accept: 'application/json',
@@ -45,7 +45,7 @@ export async function FetchService<T> (requestOption: FetchOption<T>) {
       }
 
       const jsonHeader = response.headers.get('Content-Type')
-      if (jsonHeader !== null && jsonHeader.indexOf('application/json') > -1) {
+      if (jsonHeader !== null && jsonHeader.includes('application/json')) {
         const data = await parseJson(response)
         requestOption.dispatch(requestOption.onComplete(data))
 
@@ -53,7 +53,7 @@ export async function FetchService<T> (requestOption: FetchOption<T>) {
       }
 
       requestOption.dispatch(requestOption.onComplete())
-      return response.blob()
+      return await response.blob()
     }
   } catch (errorMsg) {
     console.error(errorMsg)

@@ -2,11 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 export interface Configuration {
-    Id?: number;
+  Id?: number
 
-    Name: string;
+  Name: string
 
-    TestSuiteId: number;
+  TestSuiteId: number
 
-    Description: string;
+  Description: string
 }

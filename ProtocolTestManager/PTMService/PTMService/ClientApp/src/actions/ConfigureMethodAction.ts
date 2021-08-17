@@ -12,17 +12,17 @@ export const IMPORT_PROFILE_SUCCESS = 'TESTRESULTS/IMPORT_PROFILE_SUCCESS'
 export const IMPORT_PROFILE_FAILURE = 'TESTRESULTS/IMPORT_PROFILE_FAILURE'
 
 // define action types
-interface SetTSConfigureMethodType { type: typeof SET_CONFIGUREMETHOD_REQUEST; selectedMethod: string; }
+interface SetTSConfigureMethodType { type: typeof SET_CONFIGUREMETHOD_REQUEST, selectedMethod: string }
 
 // save profile actions
-interface SetSaveProfileActionRequestType { type: typeof SAVE_PROFILE_REQUEST; payload: number; }
-interface SetSaveProfileActionSuccessType { type: typeof SAVE_PROFILE_SUCCESS; payload: string; }
-interface SetSaveProfileActionFailureType { type: typeof SAVE_PROFILE_FAILURE; errorMsg: string; }
+interface SetSaveProfileActionRequestType { type: typeof SAVE_PROFILE_REQUEST, payload: number }
+interface SetSaveProfileActionSuccessType { type: typeof SAVE_PROFILE_SUCCESS, payload: string }
+interface SetSaveProfileActionFailureType { type: typeof SAVE_PROFILE_FAILURE, errorMsg: string }
 
 // import profile actions
-interface ImportProfileActionRequestType { type: typeof IMPORT_PROFILE_REQUEST; filename: string; testSuiteId: number; }
-interface ImportProfileActionSuccessType { type: typeof IMPORT_PROFILE_SUCCESS; payload: boolean; }
-interface ImportProfileActionFailureType { type: typeof IMPORT_PROFILE_FAILURE; errorMsg: string; }
+interface ImportProfileActionRequestType { type: typeof IMPORT_PROFILE_REQUEST, filename: string, testSuiteId: number }
+interface ImportProfileActionSuccessType { type: typeof IMPORT_PROFILE_SUCCESS, payload: boolean }
+interface ImportProfileActionFailureType { type: typeof IMPORT_PROFILE_FAILURE, errorMsg: string }
 
 export type TestSuiteConfigureMethodActionTypes =
     SetTSConfigureMethodType |
@@ -31,7 +31,7 @@ export type TestSuiteConfigureMethodActionTypes =
     SetSaveProfileActionFailureType |
     ImportProfileActionRequestType |
     ImportProfileActionSuccessType |
-    ImportProfileActionFailureType;
+    ImportProfileActionFailureType
 
 // define actions
 export const ConfigureMethodActions = {

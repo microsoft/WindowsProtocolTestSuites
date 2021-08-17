@@ -5,8 +5,8 @@
 export const SET_SELECTED_STEP = 'WIZARDNAVBAR/SET_SELECTED_STEP'
 
 // define action types
-interface SetWizardNavBarActionType { type: typeof SET_SELECTED_STEP; activeStep: number }
-export type WizardNavBarActionTypes = SetWizardNavBarActionType;
+interface SetWizardNavBarActionType { type: typeof SET_SELECTED_STEP, activeStep: number }
+export type WizardNavBarActionTypes = SetWizardNavBarActionType
 
 // define actions
 export const WizardNavBarActions = {

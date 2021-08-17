@@ -47,21 +47,21 @@ import { TestResult, TestResultOverview, TestResultSummary } from '../model/Test
 import { TestSuite } from '../model/TestSuite'
 
 export interface TestResultsState {
-    isLoading: boolean;
-    isPosting: boolean;
-    isDownloading: boolean;
-    errorMsg?: string;
-    allTestSuites: TestSuite[];
-    showRemovedTestSuites: boolean;
-    allConfigurations: Required<Configuration>[];
-    pageNumber: number;
-    pageCount: number;
-    currentPageResults: TestResultOverview[];
-    pageSize: 15;
-    query: string | undefined;
-    selectedTestResultId: number | undefined;
-    selectedTestResultSummary: TestResultSummary | undefined;
-    selectedTestResult: TestResult | undefined;
+  isLoading: boolean
+  isPosting: boolean
+  isDownloading: boolean
+  errorMsg?: string
+  allTestSuites: TestSuite[]
+  showRemovedTestSuites: boolean
+  allConfigurations: Array<Required<Configuration>>
+  pageNumber: number
+  pageCount: number
+  currentPageResults: TestResultOverview[]
+  pageSize: 15
+  query: string | undefined
+  selectedTestResultId: number | undefined
+  selectedTestResultSummary: TestResultSummary | undefined
+  selectedTestResult: TestResult | undefined
 }
 
 const initialTestResultsState: TestResultsState = {
@@ -82,7 +82,7 @@ const initialTestResultsState: TestResultsState = {
   selectedTestResult: undefined
 }
 
-const getUpdatedRequiredConfigurations = (state: TestResultsState, newConfigurations: Configuration[]): Required<Configuration>[] => {
+const getUpdatedRequiredConfigurations = (state: TestResultsState, newConfigurations: Configuration[]): Array<Required<Configuration>> => {
   if (state.allConfigurations.length === 0) {
     return newConfigurations.map(item => {
       return {

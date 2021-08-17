@@ -65,7 +65,7 @@ export function FilterTestCase (props: any) {
                     </Stack>
                     <div style={{ width: 25 }} />
                     <Stack style={{ height: winSize.height - HeaderMenuHeight - 90, width: 100 + '%', overflowY: 'auto' }}>
-                        {filterInfo.listSelectedCases && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
+                        {(filterInfo.listSelectedCases != null) && filterInfo.listSelectedCases.map(curr => <div key={curr}>{curr}</div>)}
                     </Stack>
                 </Stack>
             </div>

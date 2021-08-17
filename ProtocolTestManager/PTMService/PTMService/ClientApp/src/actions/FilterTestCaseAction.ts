@@ -21,30 +21,30 @@ export const SET_RULES_FAILURE = 'FILTERTESTCASE/SET_RULES_FAILURE'
 export const SET_SELECTED_RULES = 'FILTERTESTCASE/SET_SELECTED_RULES'
 
 // define action types
-interface GetTSRulesActionRequestType { type: typeof GET_FILTERTESTCASE_RULES_REQUEST; }
-interface GetTSRulesActionSuccessType { type: typeof GET_FILTERTESTCASE_RULES_SUCCESS; payload: RuleData; }
-interface GetTSRulesActionFailureType { type: typeof GET_FILTERTESTCASE_RULES_FAILURE; errorMsg: string; }
+interface GetTSRulesActionRequestType { type: typeof GET_FILTERTESTCASE_RULES_REQUEST }
+interface GetTSRulesActionSuccessType { type: typeof GET_FILTERTESTCASE_RULES_SUCCESS, payload: RuleData }
+interface GetTSRulesActionFailureType { type: typeof GET_FILTERTESTCASE_RULES_FAILURE, errorMsg: string }
 
-interface GetTestSuiteTestCasesActionRequestType { type: typeof GET_TESTSUITETESTCASES_REQUEST; }
-interface GetTestSuiteTestCasesActionSuccessType { type: typeof GET_TESTSUITETESTCASES_SUCCESS; payload: TestCase[]; }
-interface GetTestSuiteTestCasesActionFailureType { type: typeof GET_TESTSUITETESTCASES_FAILURE; errorMsg: string; }
+interface GetTestSuiteTestCasesActionRequestType { type: typeof GET_TESTSUITETESTCASES_REQUEST }
+interface GetTestSuiteTestCasesActionSuccessType { type: typeof GET_TESTSUITETESTCASES_SUCCESS, payload: TestCase[] }
+interface GetTestSuiteTestCasesActionFailureType { type: typeof GET_TESTSUITETESTCASES_FAILURE, errorMsg: string }
 
-interface SetTSRulesActionRequestType { type: typeof SET_RULES_REQUEST; }
-interface SetTSRulesActionSuccessType { type: typeof SET_RULES_SUCCESS; }
-interface SetTSRulesActionFailureType { type: typeof SET_RULES_FAILURE; errorMsg: string; }
+interface SetTSRulesActionRequestType { type: typeof SET_RULES_REQUEST }
+interface SetTSRulesActionSuccessType { type: typeof SET_RULES_SUCCESS }
+interface SetTSRulesActionFailureType { type: typeof SET_RULES_FAILURE, errorMsg: string }
 
-interface SetSelectedRulesActionType { type: typeof SET_SELECTED_RULES; payload: SelectedRuleGroup; }
+interface SetSelectedRulesActionType { type: typeof SET_SELECTED_RULES, payload: SelectedRuleGroup }
 
 export type FilterTestCaseActionTypes = GetTSRulesActionRequestType
-    | GetTSRulesActionSuccessType
-    | GetTSRulesActionFailureType
-    | GetTestSuiteTestCasesActionRequestType
-    | GetTestSuiteTestCasesActionSuccessType
-    | GetTestSuiteTestCasesActionFailureType
-    | SetTSRulesActionRequestType
-    | SetTSRulesActionSuccessType
-    | SetTSRulesActionFailureType
-    | SetSelectedRulesActionType;
+| GetTSRulesActionSuccessType
+| GetTSRulesActionFailureType
+| GetTestSuiteTestCasesActionRequestType
+| GetTestSuiteTestCasesActionSuccessType
+| GetTestSuiteTestCasesActionFailureType
+| SetTSRulesActionRequestType
+| SetTSRulesActionSuccessType
+| SetTSRulesActionFailureType
+| SetSelectedRulesActionType
 
 // define actions
 export const FilterTestCaseActions = {
@@ -73,7 +73,7 @@ export const FilterTestCaseActions = {
   getTestSuiteTestCasesAction_Success: (testSuite: TestSuite): FilterTestCaseActionTypes => {
     return {
       type: GET_TESTSUITETESTCASES_SUCCESS,
-      payload: testSuite.TestCases || []
+      payload: (testSuite.TestCases != null) || []
     }
   },
   getTestSuiteTestCasesAction_Failure: (error: string): FilterTestCaseActionTypes => {

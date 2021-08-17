@@ -28,7 +28,7 @@ export function TestSuiteIntroduction (props: any) {
   const [homeDocTitle, setHomeDocTitle] = useState('')
 
   useEffect(() => {
-    if (testSuiteInfo.selectedTestSuite) {
+    if (testSuiteInfo.selectedTestSuite != null) {
       dispatch(TestSuitesDataSrv.getTestSuiteIntroduction())
     }
   }, [dispatch])
@@ -57,7 +57,7 @@ export function TestSuiteIntroduction (props: any) {
 
   const pageLoaded = () => {
     const docUserGuide = document.getElementById('UserGuide')
-    if (isIFrame(docUserGuide) && docUserGuide.contentWindow) {
+    if (isIFrame(docUserGuide) && (docUserGuide.contentWindow != null)) {
       const currTitle = docUserGuide.contentDocument?.title || ''
       setDocumentTitle(currTitle)
       if (homeDocTitle == '') {

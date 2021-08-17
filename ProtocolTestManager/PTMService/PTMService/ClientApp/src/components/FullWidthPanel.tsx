@@ -7,11 +7,11 @@ import { FunctionComponent, useEffect, useState } from 'react'
 import { LoadingPanel } from './LoadingPanel'
 import { useWindowSize } from './UseWindowSize'
 
-type FullWidthPanelProps = {
-    isLoading?: boolean,
-    infoMsg?: string,
-    warningMsg?: string,
-    errorMsg?: string,
+interface FullWidthPanelProps {
+  isLoading?: boolean
+  infoMsg?: string
+  warningMsg?: string
+  errorMsg?: string
 }
 
 export const ViewPanel = styled.div`
@@ -76,14 +76,14 @@ export const FullWidthPanel: FunctionComponent<FullWidthPanelProps> = (props) =>
     setShowMsg(true)
   }, [props.errorMsg, props.infoMsg, props.warningMsg])
 
-  const showMessageBar = (((errorMessageBar || warningMessageBar || infoMessageBar) !== undefined) && showMsg)
+  const showMessageBar = ((((errorMessageBar != null) || warningMessageBar || infoMessageBar) !== undefined) && showMsg)
   return (
         <div>
             <ViewPanel>
                 <div>
                     {
                         showMessageBar
-                          ? <div>{errorMessageBar || warningMessageBar || infoMessageBar}</div>
+                          ? <div>{(errorMessageBar != null) || warningMessageBar || infoMessageBar}</div>
                           : undefined
                     }
                     {

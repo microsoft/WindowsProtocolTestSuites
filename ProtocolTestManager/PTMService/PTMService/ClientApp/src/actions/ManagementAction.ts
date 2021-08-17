@@ -23,37 +23,37 @@ export const REMOVE_TESTSUITE_FAILURE = 'MANAGEMENT/REMOVE_TESTSUITE_FAILURE'
 export const SET_SEARCHTEXT = 'MANAGEMENT/SET_SEARCHTEXT'
 
 // define action types
-interface GetTestSuitesActionRequestType { type: typeof GET_TESTSUITES_REQUEST; }
-interface GetTestSuitesActionSuccessType { type: typeof GET_TESTSUITES_SUCCESS; payload: TestSuite[]; }
-interface GetTestSuitesActionFailureType { type: typeof GET_TESTSUITES_FAILURE; errorMsg: string; }
+interface GetTestSuitesActionRequestType { type: typeof GET_TESTSUITES_REQUEST }
+interface GetTestSuitesActionSuccessType { type: typeof GET_TESTSUITES_SUCCESS, payload: TestSuite[] }
+interface GetTestSuitesActionFailureType { type: typeof GET_TESTSUITES_FAILURE, errorMsg: string }
 
-interface InstallTestSuiteActionRequestType { type: typeof INSTALL_TESTSUITE_REQUEST; }
-interface InstallTestSuiteActionSuccessType { type: typeof INSTALL_TESTSUITE_SUCCESS; payload: number; }
-interface InstallTestSuiteActionFailureType { type: typeof INSTALL_TESTSUITE_FAILURE; errorMsg: string; }
+interface InstallTestSuiteActionRequestType { type: typeof INSTALL_TESTSUITE_REQUEST }
+interface InstallTestSuiteActionSuccessType { type: typeof INSTALL_TESTSUITE_SUCCESS, payload: number }
+interface InstallTestSuiteActionFailureType { type: typeof INSTALL_TESTSUITE_FAILURE, errorMsg: string }
 
-interface UpdateTestSuiteActionRequestType { type: typeof UPDATE_TESTSUITE_REQUEST; }
-interface UpdateTestSuiteActionSuccessType { type: typeof UPDATE_TESTSUITE_SUCCESS; }
-interface UpdateTestSuiteActionFailureType { type: typeof UPDATE_TESTSUITE_FAILURE; errorMsg: string; }
+interface UpdateTestSuiteActionRequestType { type: typeof UPDATE_TESTSUITE_REQUEST }
+interface UpdateTestSuiteActionSuccessType { type: typeof UPDATE_TESTSUITE_SUCCESS }
+interface UpdateTestSuiteActionFailureType { type: typeof UPDATE_TESTSUITE_FAILURE, errorMsg: string }
 
-interface RemoveTestSuiteActionRequestType { type: typeof REMOVE_TESTSUITE_REQUEST; }
-interface RemoveTestSuiteActionSuccessType { type: typeof REMOVE_TESTSUITE_SUCCESS; }
-interface RemoveTestSuiteActionFailureType { type: typeof REMOVE_TESTSUITE_FAILURE; errorMsg: string; }
+interface RemoveTestSuiteActionRequestType { type: typeof REMOVE_TESTSUITE_REQUEST }
+interface RemoveTestSuiteActionSuccessType { type: typeof REMOVE_TESTSUITE_SUCCESS }
+interface RemoveTestSuiteActionFailureType { type: typeof REMOVE_TESTSUITE_FAILURE, errorMsg: string }
 
-interface SetSearchTextActionType { type: typeof SET_SEARCHTEXT; searchText: string }
+interface SetSearchTextActionType { type: typeof SET_SEARCHTEXT, searchText: string }
 
 export type ManagementActionTypes = GetTestSuitesActionRequestType
-    | GetTestSuitesActionSuccessType
-    | GetTestSuitesActionFailureType
-    | InstallTestSuiteActionRequestType
-    | InstallTestSuiteActionSuccessType
-    | InstallTestSuiteActionFailureType
-    | UpdateTestSuiteActionRequestType
-    | UpdateTestSuiteActionSuccessType
-    | UpdateTestSuiteActionFailureType
-    | RemoveTestSuiteActionRequestType
-    | RemoveTestSuiteActionSuccessType
-    | RemoveTestSuiteActionFailureType
-    | SetSearchTextActionType;
+| GetTestSuitesActionSuccessType
+| GetTestSuitesActionFailureType
+| InstallTestSuiteActionRequestType
+| InstallTestSuiteActionSuccessType
+| InstallTestSuiteActionFailureType
+| UpdateTestSuiteActionRequestType
+| UpdateTestSuiteActionSuccessType
+| UpdateTestSuiteActionFailureType
+| RemoveTestSuiteActionRequestType
+| RemoveTestSuiteActionSuccessType
+| RemoveTestSuiteActionFailureType
+| SetSearchTextActionType
 
 // define actions
 export const ManagementActions = {

@@ -5,13 +5,13 @@ import { CREATE_TESTSUITE_CONFIGURATION_FAILURE, CREATE_TESTSUITE_CONFIGURATION_
 import { Configuration } from '../model/Configuration'
 
 export interface ConfigurationState {
-    isLoading: boolean;
-    errorMsg?: string;
-    searchText?: string;
-    configurationList: Configuration[];
-    displayList: Configuration[];
-    selectedConfiguration?: Configuration;
-    lastCreateId?: number;
+  isLoading: boolean
+  errorMsg?: string
+  searchText?: string
+  configurationList: Configuration[]
+  displayList: Configuration[]
+  selectedConfiguration?: Configuration
+  lastCreateId?: number
 }
 
 const initialConfigurationState: ConfigurationState = {
@@ -83,9 +83,9 @@ function filterConfiguration (orignalList: Configuration[], searchText?: string)
   }
 
   const newList: Configuration[] = []
-  const lowerSearchText = searchText!.toLowerCase()
+  const lowerSearchText = searchText.toLowerCase()
   orignalList.map((item) => {
-    if ((item.Name.toLowerCase().indexOf(lowerSearchText!) >= 0) || (item.Description.toLowerCase().indexOf(lowerSearchText!)) >= 0) {
+    if ((item.Name.toLowerCase().includes(lowerSearchText)) || (item.Description.toLowerCase().includes(lowerSearchText))) {
       newList.push(item)
     }
   })

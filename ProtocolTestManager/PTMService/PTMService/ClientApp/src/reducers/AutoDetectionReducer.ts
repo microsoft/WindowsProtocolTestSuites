@@ -5,12 +5,12 @@ import { GET_DETECTION_STEPS_REQUEST, GET_DETECTION_STEPS_SUCCESS, GET_PREREQUIS
 import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
 
 export interface AutoDetectState {
-    isPrerequisiteLoading: boolean;
-    isDetectionStepsLoading: boolean;
-    errorMsg?: string;
-    prerequisite?: Prerequisite;
-    detectionSteps?: DetectionSteps;
-    isPolling: boolean;
+  isPrerequisiteLoading: boolean
+  isDetectionStepsLoading: boolean
+  errorMsg?: string
+  prerequisite?: Prerequisite
+  detectionSteps?: DetectionSteps
+  isPolling: boolean
 }
 
 const initialAutoDetectState: AutoDetectState = {

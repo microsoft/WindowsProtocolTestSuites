@@ -11,17 +11,17 @@ export const GET_TESTCASERESULT_FAILURE = 'TESTCASERESULT/GET_TESTCASERESULT_FAI
 export const CLEAR_SELECTEDTESTCASERESULT = 'TESTCASERESULT/CLEAR_SELECTEDTESTCASERESULT'
 
 // define action types
-interface GetTestCaseResultActionRequestType { type: typeof GET_TESTCASERESULT_REQUEST; payload: string; }
-interface GetTestCaseResultActionSuccessType { type: typeof GET_TESTCASERESULT_SUCCESS; payload: TestCaseResult; }
-interface GetTestCaseResultActionFailureType { type: typeof GET_TESTCASERESULT_FAILURE; errorMsg: string; }
+interface GetTestCaseResultActionRequestType { type: typeof GET_TESTCASERESULT_REQUEST, payload: string }
+interface GetTestCaseResultActionSuccessType { type: typeof GET_TESTCASERESULT_SUCCESS, payload: TestCaseResult }
+interface GetTestCaseResultActionFailureType { type: typeof GET_TESTCASERESULT_FAILURE, errorMsg: string }
 
-interface ClearSelectedTestCaseResultActionType { type: typeof CLEAR_SELECTEDTESTCASERESULT; }
+interface ClearSelectedTestCaseResultActionType { type: typeof CLEAR_SELECTEDTESTCASERESULT }
 
 export type TestCaseResultActionTypes =
     GetTestCaseResultActionRequestType |
     GetTestCaseResultActionSuccessType |
     GetTestCaseResultActionFailureType |
-    ClearSelectedTestCaseResultActionType;
+    ClearSelectedTestCaseResultActionType
 
 // define actions
 export const TestCaseResultActions = {

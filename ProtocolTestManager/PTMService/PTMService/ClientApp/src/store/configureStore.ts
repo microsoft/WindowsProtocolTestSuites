@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   router: connectRouter(history)
 })
 
-export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = ReturnType<typeof rootReducer>
 
 export function configureStore (initialState?: AppState) {
   const middleware = [
@@ -38,6 +38,4 @@ export function configureStore (initialState?: AppState) {
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
 // correctly typed to match your store.
-export interface AppThunkAction<TAction> {
-    (dispatch: (action: TAction) => void, getState: () => AppState): void;
-}
+export type AppThunkAction<TAction> = (dispatch: (action: TAction) => void, getState: () => AppState) => void

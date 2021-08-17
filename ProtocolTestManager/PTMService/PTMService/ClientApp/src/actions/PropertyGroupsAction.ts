@@ -18,17 +18,17 @@ export const SET_PROPERTYGROUPS_SUCCESS = 'PROPERTYGROUPS/SET_PROPERTYGROUPS_SUC
 export const SET_PROPERTYGROUPS_FAILURE = 'PROPERTYGROUPS/SET_PROPERTYGROUPS_FAILURE'
 
 // define action types
-interface GetPropertyGroupsActionRequestType { type: typeof GET_PROPERTYGROUPS_REQUEST; }
-interface GetPropertyGroupsActionSuccessType { type: typeof GET_PROPERTYGROUPS_SUCCESS; payload: PropertyGroup[]; }
-interface GetPropertyGroupsActionFailureType { type: typeof GET_PROPERTYGROUPS_FAILURE; errorMsg: string; }
+interface GetPropertyGroupsActionRequestType { type: typeof GET_PROPERTYGROUPS_REQUEST }
+interface GetPropertyGroupsActionSuccessType { type: typeof GET_PROPERTYGROUPS_SUCCESS, payload: PropertyGroup[] }
+interface GetPropertyGroupsActionFailureType { type: typeof GET_PROPERTYGROUPS_FAILURE, errorMsg: string }
 
-interface UpdateEditingPropertyGroupActionType { type: typeof UPDATE_EDITINGPROPERTYGROUP; payload: Property };
-interface SetEditingPropertyGroupActionType { type: typeof SET_EDITINGPROPERTYGROUP; payload: number; }
-interface UpdatePropertyGroupsActionType { type: typeof UPDATE_PROPERTYGROUPS; }
+interface UpdateEditingPropertyGroupActionType { type: typeof UPDATE_EDITINGPROPERTYGROUP, payload: Property };
+interface SetEditingPropertyGroupActionType { type: typeof SET_EDITINGPROPERTYGROUP, payload: number }
+interface UpdatePropertyGroupsActionType { type: typeof UPDATE_PROPERTYGROUPS }
 
-interface SetPropertyGroupsActionRequestType { type: typeof SET_PROPERTYGROUPS_REQUEST; }
-interface SetPropertyGroupsActionSuccessType { type: typeof SET_PROPERTYGROUPS_SUCCESS; }
-interface SetPropertyGroupsActionFailureType { type: typeof SET_PROPERTYGROUPS_FAILURE; errorMsg: string; }
+interface SetPropertyGroupsActionRequestType { type: typeof SET_PROPERTYGROUPS_REQUEST }
+interface SetPropertyGroupsActionSuccessType { type: typeof SET_PROPERTYGROUPS_SUCCESS }
+interface SetPropertyGroupsActionFailureType { type: typeof SET_PROPERTYGROUPS_FAILURE, errorMsg: string }
 
 export type PropertyGroupsActionTypes =
     GetPropertyGroupsActionRequestType |
@@ -39,7 +39,7 @@ export type PropertyGroupsActionTypes =
     UpdatePropertyGroupsActionType |
     SetPropertyGroupsActionRequestType |
     SetPropertyGroupsActionSuccessType |
-    SetPropertyGroupsActionFailureType;
+    SetPropertyGroupsActionFailureType
 
 // define actions
 export const PropertyGroupsActions = {

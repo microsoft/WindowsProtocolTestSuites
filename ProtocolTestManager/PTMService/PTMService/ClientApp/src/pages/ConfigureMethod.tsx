@@ -102,7 +102,7 @@ export function ConfigureMethod (props: StepWizardProps) {
   }
 
   const onConfigurationCreate = () => {
-    if (file) {
+    if (file != null) {
       setImportErrMsg('')
       const testsuiteId = testsuites.selectedTestSuite?.Id
       const configId = configurations.selectedConfiguration?.Id
@@ -193,11 +193,11 @@ export function ConfigureMethod (props: StepWizardProps) {
 };
 
 interface MethodItemProp {
-    Title: string;
-    Key: string;
-    Description: string;
-    Disabled?: boolean;
-    onClick?: () => void;
+  Title: string
+  Key: string
+  Description: string
+  Disabled?: boolean
+  onClick?: () => void
 }
 
 function MethodItem (props: MethodItemProp) {

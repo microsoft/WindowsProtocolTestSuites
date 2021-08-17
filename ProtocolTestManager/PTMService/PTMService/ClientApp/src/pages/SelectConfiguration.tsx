@@ -26,8 +26,8 @@ export function SelectConfiguration (props: any) {
   const [descriptionErrorMsg, setDescriptionErrorMsg] = useState('')
 
   useEffect(() => {
-    if (testSuiteInfo.selectedTestSuite) {
-      dispatch(ConfigurationsDataSrv.getConfigurations(testSuiteInfo.selectedTestSuite!.Id))
+    if (testSuiteInfo.selectedTestSuite != null) {
+      dispatch(ConfigurationsDataSrv.getConfigurations(testSuiteInfo.selectedTestSuite.Id))
     }
   }, [dispatch, configurations.lastCreateId, testSuiteInfo.selectedTestSuite])
 
@@ -109,7 +109,7 @@ export function SelectConfiguration (props: any) {
   const columns = getConfigurationGridColumns({
     onRun: id => {
       const findedConfigure = getCurrentConfigure(id)
-      if (findedConfigure) {
+      if (findedConfigure != null) {
         dispatch(ConfigurationActions.setSelectedConfigurationAction(findedConfigure))
         // go to run step
         wizardProps.goToStep(RunSteps.RUN_SELECTED_TEST_CASE)
@@ -117,7 +117,7 @@ export function SelectConfiguration (props: any) {
     },
     onEdit: id => {
       const findedConfigure = getCurrentConfigure(id)
-      if (findedConfigure) {
+      if (findedConfigure != null) {
         dispatch(ConfigurationActions.setSelectedConfigurationAction(findedConfigure))
         // go to next step
         wizardProps.nextStep()
@@ -182,8 +182,8 @@ export function SelectConfiguration (props: any) {
 };
 
 function getConfigurationGridColumns (props: {
-    onRun: (configureId: number) => void,
-    onEdit: (configureId: number) => void
+  onRun: (configureId: number) => void
+  onEdit: (configureId: number) => void
 }): IColumn[] {
   return [
     {
@@ -224,6 +224,6 @@ function getConfigurationGridColumns (props: {
 }
 
 enum ElementType {
-    Name,
-    Description,
+  Name,
+  Description,
 }

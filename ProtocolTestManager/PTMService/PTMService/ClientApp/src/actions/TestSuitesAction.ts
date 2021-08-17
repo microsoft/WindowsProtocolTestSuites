@@ -9,10 +9,10 @@ export const GET_TESTSUITES_SUCCESS = 'TESTSUITEINFO/GET_TESTSUITES_SUCCESS'
 export const GET_TESTSUITES_FAILURE = 'TESTSUITEINFO/GET_TESTSUITES_FAILURE'
 
 // define action types
-interface GetTestSuitesActionRequestType { type: typeof GET_TESTSUITES_REQUEST; }
-interface GetTestSuitesActionSuccessType { type: typeof GET_TESTSUITES_SUCCESS; payload: TestSuite[]; }
-interface GetTestSuitesActionFailureType { type: typeof GET_TESTSUITES_FAILURE; errorMsg: string; }
-export type TestSuitesActionTypes = GetTestSuitesActionRequestType | GetTestSuitesActionSuccessType | GetTestSuitesActionFailureType;
+interface GetTestSuitesActionRequestType { type: typeof GET_TESTSUITES_REQUEST }
+interface GetTestSuitesActionSuccessType { type: typeof GET_TESTSUITES_SUCCESS, payload: TestSuite[] }
+interface GetTestSuitesActionFailureType { type: typeof GET_TESTSUITES_FAILURE, errorMsg: string }
+export type TestSuitesActionTypes = GetTestSuitesActionRequestType | GetTestSuitesActionSuccessType | GetTestSuitesActionFailureType
 
 // define actions
 export const TestSuiteActions = {

@@ -35,51 +35,51 @@ export const START_POLLING_Success = 'START_POLLING_Success'
 export const START_POLLING_Failure = 'START_POLLING_Failure'
 
 // define action types
-interface GetAutoDetectPrerequisiteActionRequestType { type: typeof GET_PREREQUISITE_REQUEST; }
-interface GetAutoDetectPrerequisiteActionSuccessType { type: typeof GET_PREREQUISITE_SUCCESS; payload: Prerequisite; }
-interface GetAutoDetectPrerequisiteActionFailureType { type: typeof GET_PREREQUISITE_FAILURE; errorMsg: string; }
+interface GetAutoDetectPrerequisiteActionRequestType { type: typeof GET_PREREQUISITE_REQUEST }
+interface GetAutoDetectPrerequisiteActionSuccessType { type: typeof GET_PREREQUISITE_SUCCESS, payload: Prerequisite }
+interface GetAutoDetectPrerequisiteActionFailureType { type: typeof GET_PREREQUISITE_FAILURE, errorMsg: string }
 
-interface GetAutoDetectionStepsActionRequestType { type: typeof GET_DETECTION_STEPS_REQUEST; }
-interface GetAutoDetectionStepsActionSuccessType { type: typeof GET_DETECTION_STEPS_SUCCESS; payload: DetectionSteps; }
-interface GetAutoDetectionStepsActionFailureType { type: typeof GET_DETECTION_STEPS_FAILURE; errorMsg: string; }
+interface GetAutoDetectionStepsActionRequestType { type: typeof GET_DETECTION_STEPS_REQUEST }
+interface GetAutoDetectionStepsActionSuccessType { type: typeof GET_DETECTION_STEPS_SUCCESS, payload: DetectionSteps }
+interface GetAutoDetectionStepsActionFailureType { type: typeof GET_DETECTION_STEPS_FAILURE, errorMsg: string }
 
-interface StartAutoDetectionActionRequestType { type: typeof START_AUTO_DETECTION_REQUEST; }
-interface StartAutoDetectionActionSuccessType { type: typeof START_AUTO_DETECTION_SUCCESS; }
-interface StartAutoDetectionActionFailureType { type: typeof START_AUTO_DETECTION_FAILURE; errorMsg: string; }
+interface StartAutoDetectionActionRequestType { type: typeof START_AUTO_DETECTION_REQUEST }
+interface StartAutoDetectionActionSuccessType { type: typeof START_AUTO_DETECTION_SUCCESS }
+interface StartAutoDetectionActionFailureType { type: typeof START_AUTO_DETECTION_FAILURE, errorMsg: string }
 
-interface StopAutoDetectionActionRequestType { type: typeof STOP_AUTO_DETECTION_REQUEST; }
-interface StopAutoDetectionActionSuccessType { type: typeof STOP_AUTO_DETECTION_SUCCESS; }
-interface StopAutoDetectionActionFailureType { type: typeof STOP_AUTO_DETECTION_FAILURE; errorMsg: string; }
+interface StopAutoDetectionActionRequestType { type: typeof STOP_AUTO_DETECTION_REQUEST }
+interface StopAutoDetectionActionSuccessType { type: typeof STOP_AUTO_DETECTION_SUCCESS }
+interface StopAutoDetectionActionFailureType { type: typeof STOP_AUTO_DETECTION_FAILURE, errorMsg: string }
 
-interface ApplyDetectionResultActionRequestType { type: typeof APPLY_DETECTION_RESULT_REQUEST; }
-interface ApplyDetectionResultActionSuccessType { type: typeof APPLY_DETECTION_RESULT_SUCCESS; }
-interface ApplyDetectionResultActionFailureType { type: typeof APPLY_DETECTION_RESULT_FAILURE; errorMsg: string; }
+interface ApplyDetectionResultActionRequestType { type: typeof APPLY_DETECTION_RESULT_REQUEST }
+interface ApplyDetectionResultActionSuccessType { type: typeof APPLY_DETECTION_RESULT_SUCCESS }
+interface ApplyDetectionResultActionFailureType { type: typeof APPLY_DETECTION_RESULT_FAILURE, errorMsg: string }
 
-interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE; payload: Property };
+interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE, payload: Property };
 
 interface StopPolling { type: typeof STOP_POLLING };
-interface StartPollingSuccess { type: typeof START_POLLING_Success; payload: DetectionSteps; };
-interface StartPollingFailure { type: typeof START_POLLING_Failure; errorMsg: string;};
+interface StartPollingSuccess { type: typeof START_POLLING_Success, payload: DetectionSteps };
+interface StartPollingFailure { type: typeof START_POLLING_Failure, errorMsg: string};
 
 export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionRequestType
-    | GetAutoDetectPrerequisiteActionSuccessType
-    | GetAutoDetectPrerequisiteActionFailureType
-    | GetAutoDetectionStepsActionRequestType
-    | GetAutoDetectionStepsActionSuccessType
-    | GetAutoDetectionStepsActionFailureType
-    | StartAutoDetectionActionRequestType
-    | StartAutoDetectionActionSuccessType
-    | StartAutoDetectionActionFailureType
-    | StopAutoDetectionActionRequestType
-    | StopAutoDetectionActionSuccessType
-    | StopAutoDetectionActionFailureType
-    | UpdateAutoDetectPrerequisiteActionType
-    | StopPolling
-    | StartPollingSuccess
-    | StartPollingFailure
-    | ApplyDetectionResultActionRequestType
-    | ApplyDetectionResultActionSuccessType
-    | ApplyDetectionResultActionFailureType
+| GetAutoDetectPrerequisiteActionSuccessType
+| GetAutoDetectPrerequisiteActionFailureType
+| GetAutoDetectionStepsActionRequestType
+| GetAutoDetectionStepsActionSuccessType
+| GetAutoDetectionStepsActionFailureType
+| StartAutoDetectionActionRequestType
+| StartAutoDetectionActionSuccessType
+| StartAutoDetectionActionFailureType
+| StopAutoDetectionActionRequestType
+| StopAutoDetectionActionSuccessType
+| StopAutoDetectionActionFailureType
+| UpdateAutoDetectPrerequisiteActionType
+| StopPolling
+| StartPollingSuccess
+| StartPollingFailure
+| ApplyDetectionResultActionRequestType
+| ApplyDetectionResultActionSuccessType
+| ApplyDetectionResultActionFailureType
 
 // define actions
 export const AutoDetectActions = {
