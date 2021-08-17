@@ -21,7 +21,8 @@ import { useBoolean } from '@uifabric/react-hooks'
 export function AutoDetection (props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result
-  const [hideAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(false)
+  const [showAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(false)
+  const [showAutoDetectLogDialog, { toggle: toggleAutoDetectLogDialog }] = useBoolean(false)
   const prerequisite = useSelector((state: AppState) => state.autoDetection)
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
@@ -61,7 +62,7 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const onPropertyValueChange = (updatedProperty: Property) => {
-    dispatch(AutoDetectActions.updateAUtoDetectionPrerequisiteAction(updatedProperty))
+    dispatch(AutoDetectActions.updateAutoDetectionPrerequisiteAction(updatedProperty))
   }
 
   // This function is to determine if detection status is suitable for running.
@@ -321,7 +322,7 @@ export function AutoDetection (props: StepWizardProps) {
             </StepPanel>
 
             <Modal
-                isOpen={hideAutoDetectWarningDialog}
+                isOpen={showAutoDetectWarningDialog}
             >
                 <Stack>
                     <div>{autoDetectionStepsResult?.Exception}</div>

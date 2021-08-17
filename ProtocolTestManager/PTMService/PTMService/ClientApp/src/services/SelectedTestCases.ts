@@ -13,7 +13,7 @@ export const SelectedTestCasesDataSrv = {
     if (state.filterInfo.isRulesLoading || state.filterInfo.isCasesLoading) {
       dispatch(SelectedTestCasesActions.getAllTestCasesAction_Request())
     } else {
-      dispatch(SelectedTestCasesActions.getAllTestCasesAction_Success((state.filterInfo.listSelectedCases != null) || []))
+      dispatch(SelectedTestCasesActions.getAllTestCasesAction_Success(state.filterInfo.listSelectedCases ?? []))
     }
   },
 

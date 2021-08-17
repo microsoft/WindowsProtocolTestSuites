@@ -31,7 +31,7 @@ const onRenderHeader = (props?: IGroupHeaderProps): JSX.Element => {
 export const RuleListPanel: FunctionComponent<RuleListPanelProps> = (props) => {
   const winSize = useWindowSize()
   const groups: IGroup[] = props.ruleGroups.map((group, index) => { return { key: group.Name, name: group.DisplayName || group.Name, startIndex: index, count: 1, level: 0 } })
-  const items: GroupItem[] = props.ruleGroups.map(group => { return { key: group.Name, name: group.Name, rules: group.Rules, checked: ((props.selected.find(e => e.Name == group.Name)?.Selected) != null) || [], action: props.checkedAction } })
+  const items: GroupItem[] = props.ruleGroups.map(group => { return { key: group.Name, name: group.Name, rules: group.Rules, checked: (props.selected.find(e => e.Name === group.Name)?.Selected ?? []), action: props.checkedAction } })
   return (
         <div style={{ height: winSize.height - HeaderMenuHeight - 90, overflowY: 'auto', overflowX: 'hidden' }}>
             <GroupedList items={items} onRenderCell={onRenderCell} groupProps={{ onRenderHeader }} groups={groups} />

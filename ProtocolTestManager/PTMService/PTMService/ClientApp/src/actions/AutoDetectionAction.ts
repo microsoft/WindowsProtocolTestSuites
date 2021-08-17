@@ -29,6 +29,7 @@ export const APPLY_DETECTION_RESULT_SUCCESS = 'AUTO_DETECT/APPLY_DETECTION_RESUL
 export const APPLY_DETECTION_RESULT_FAILURE = 'AUTO_DETECT/APPLY_DETECTION_RESULT_FAILURE'
 
 export const UPDATE_PREREQUISITE = 'AUTO_DETECT/UPDATE_PREREQUISITE'
+export const UPDATE_LOG = 'AUTO_DETECT/UPDATE_LOG'
 
 export const STOP_POLLING = 'STOP_POLLING'
 export const START_POLLING_Success = 'START_POLLING_Success'
@@ -55,7 +56,8 @@ interface ApplyDetectionResultActionRequestType { type: typeof APPLY_DETECTION_R
 interface ApplyDetectionResultActionSuccessType { type: typeof APPLY_DETECTION_RESULT_SUCCESS }
 interface ApplyDetectionResultActionFailureType { type: typeof APPLY_DETECTION_RESULT_FAILURE, errorMsg: string }
 
-interface UpdateAutoDetectPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE, payload: Property };
+interface UpdateAutoDetectionPrerequisiteActionType { type: typeof UPDATE_PREREQUISITE, payload: Property };
+interface UpdateAutoDetectionLogActionType { type: typeof UPDATE_LOG, payload: string };
 
 interface StopPolling { type: typeof STOP_POLLING };
 interface StartPollingSuccess { type: typeof START_POLLING_Success, payload: DetectionSteps };
@@ -73,7 +75,8 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectPrerequisiteActionR
 | StopAutoDetectionActionRequestType
 | StopAutoDetectionActionSuccessType
 | StopAutoDetectionActionFailureType
-| UpdateAutoDetectPrerequisiteActionType
+| UpdateAutoDetectionPrerequisiteActionType
+| UpdateAutoDetectionLogActionType
 | StopPolling
 | StartPollingSuccess
 | StartPollingFailure
@@ -194,10 +197,17 @@ export const AutoDetectActions = {
     }
   },
 
-  updateAUtoDetectionPrerequisiteAction: (property: Property): UpdateAutoDetectPrerequisiteActionType => {
+  updateAutoDetectionPrerequisiteAction: (property: Property): UpdateAutoDetectionPrerequisiteActionType => {
     return {
       type: UPDATE_PREREQUISITE,
       payload: property
+    }
+  },
+
+  updateAutoDetectionLogAction: (log: string): UpdateAutoDetectionLogActionType => {
+    return {
+      type: UPDATE_LOG,
+      payload: log
     }
   },
 

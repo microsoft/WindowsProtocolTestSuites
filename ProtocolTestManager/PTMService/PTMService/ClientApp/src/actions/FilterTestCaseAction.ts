@@ -73,7 +73,7 @@ export const FilterTestCaseActions = {
   getTestSuiteTestCasesAction_Success: (testSuite: TestSuite): FilterTestCaseActionTypes => {
     return {
       type: GET_TESTSUITETESTCASES_SUCCESS,
-      payload: (testSuite.TestCases != null) || []
+      payload: testSuite.TestCases ?? []
     }
   },
   getTestSuiteTestCasesAction_Failure: (error: string): FilterTestCaseActionTypes => {
