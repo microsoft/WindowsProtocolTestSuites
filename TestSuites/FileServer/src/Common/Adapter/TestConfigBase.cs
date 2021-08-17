@@ -178,6 +178,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public bool DisableEncryptionOverSecureTransport
+        {
+            get
+            {
+                return Boolean.Parse(GetProperty("DisableEncryptionOverSecureTransport"));
+            }
+        }
+
         public DialectRevision[] RequestDialects
         {
             get
