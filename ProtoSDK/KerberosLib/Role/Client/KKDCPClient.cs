@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 {
                     clientHandler.ClientCertificates.Add(config.TlsClientCertificate);
                 }
-                clientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
                 HttpClient client = new HttpClient(clientHandler);
 
                 //send message
