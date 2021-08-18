@@ -64,13 +64,13 @@ export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
     setShowMsg(true)
   }, [props.errorMsg, props.infoMsg, props.warningMsg])
 
-  const showMessageBar = ((((errorMessageBar != null) || warningMessageBar || infoMessageBar) !== undefined) && showMsg)
+  const showMessageBar = (((errorMessageBar ?? warningMessageBar ?? infoMessageBar) !== undefined) && showMsg)
   return (
         <div>
             {props.leftNav}
             <RightPanel>
                 {
-                    showMessageBar ? <div>{(errorMessageBar != null) || warningMessageBar || infoMessageBar}</div> : undefined
+                    showMessageBar ? <div>{errorMessageBar ?? warningMessageBar ?? infoMessageBar}</div> : undefined
                 }
                 {
                     < div >
