@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 prerequisiteView.Properties.Add(new Property()
                 {
                     Name = i.Key,
-                    Value = ((i.Value != null) && (i.Value.Count == 1)) ? i.Value[0] : null,
+                    Value = ((i.Value != null) && (i.Value.Count > 0)) ? i.Value[0] : null,
                     Choices = i.Value
                 });
             }
@@ -320,20 +320,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         public void StopDetection(Action callback)
         {
-            stepsLocker.EnterWriteLock();
-            try
-            {
-                detectSteps[StepIndex].DetectingStatus = DetectingStatus.Canceling;
-            }
-            finally
-            {
-                stepsLocker.ExitWriteLock();
-            }
+            SetDetectStepCurrentStatus(DetectingStatus.Failed);
 
-            //StopAndCancelDetection(callback);
             StopDetection();
 
+            DetectLogCallback = null;
+
             CloseLogger();
+
+            detectTask = null;
         }
 
         #endregion
@@ -434,32 +429,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         {
             DetectLogCallback = (msg, style) =>
             {
-                stepsLocker.EnterWriteLock();
-                try
-                {
-                    if (StepIndex == detectSteps.Count) return;
-                    var item = detectSteps[StepIndex];
-                    item.Style = style;
+                if (StepIndex == detectSteps.Count) return;
 
-                    if(style != LogStyle.Default)
-                    {
-                        StepIndex++;
-                    }
-
-                    item.DetectingStatus = style switch
-                    {
-                        LogStyle.Default => DetectingStatus.Detecting,
-                        LogStyle.Error => DetectingStatus.Error,
-                        LogStyle.StepFailed => DetectingStatus.Failed,
-                        LogStyle.StepSkipped => DetectingStatus.Skipped,
-                        LogStyle.StepNotFound => DetectingStatus.NotFound,
-                        LogStyle.StepPassed => DetectingStatus.Finished,
-                        _ => DetectingStatus.Finished,
-                    };
-                }
-                finally
+                var status = style switch
                 {
-                    stepsLocker.ExitWriteLock();
+                    LogStyle.Default => DetectingStatus.Detecting,
+                    LogStyle.Error => DetectingStatus.Error,
+                    LogStyle.StepFailed => DetectingStatus.Failed,
+                    LogStyle.StepSkipped => DetectingStatus.Skipped,
+                    LogStyle.StepNotFound => DetectingStatus.NotFound,
+                    LogStyle.StepPassed => DetectingStatus.Finished,
+                    _ => DetectingStatus.Finished,
+                };
+
+                SetDetectStepCurrentStatus(status);
+
+                if (style != LogStyle.Default)
+                {
+                    StepIndex++;
                 }
 
                 if (LogWriter != null)
@@ -470,7 +457,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             };
         }
 
-        private async void StartDetection()
+        private void StartDetection()
         {
             cts = new CancellationTokenSource();
             var token = cts.Token;
@@ -490,14 +477,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     var resultStatus = ValueDetector.RunDetection() ? DetectionStatus.Finished : DetectionStatus.Error;
                     SetDetectionStatus(resultStatus);
+                    detectedException = null;
                 }
                 catch (Exception ex)
                 {
                     SetDetectionStatus(DetectionStatus.Error);
                     detectedException = ex;
+                    StopDetection();
                 }
 
+                DetectLogCallback = null;
                 CloseLogger();
+
+                if (detectedException != null && StepIndex < GetDetectedSteps().Count)
+                {
+                    SetDetectStepCurrentStatus(DetectingStatus.Pending);
+                }
+
+                detectTask = null;
             }, token);
 
             StepIndex = 0;
@@ -507,7 +504,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             detectTask.Start();
         }
 
-        private async void StopDetection()
+        private void StopDetection()
         {
             if (detectTask != null)
             {
@@ -516,8 +513,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     Thread.SpinWait(100);
                 }
-
-                detectTask = null;
             }
             
             taskCanceled = false;
@@ -644,6 +639,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     logLocker.ExitWriteLock();
                 }
+            }
+        }
+
+        private void SetDetectStepCurrentStatus(DetectingStatus detectingStatus)
+        {
+            stepsLocker.EnterWriteLock();
+            try
+            {
+                detectSteps[StepIndex].DetectingStatus = detectingStatus;
+            }
+            finally
+            {
+                stepsLocker.ExitWriteLock();
             }
         }
         #endregion
