@@ -8,13 +8,23 @@ import { useWindowSize } from './UseWindowSize'
 import { useSelector } from 'react-redux'
 import { AppState } from '../store/configureStore'
 import { RunSteps } from '../model/DefaultNavSteps'
+import * as ConfigureMethod from '../pages/ConfigureMethod'
 
 export function WizardNavBar (wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
   const wizardState = useSelector((state: AppState) => state.wizard)
+  const configureMethod = useSelector((state: AppState) => state.configureMethod)
   const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
     let isEnabledStep = item.TargetStep <= wizardState.lastStep
     if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-      isEnabledStep = item.IsEnabled
+      if ((wizardProps.currentStep === RunSteps.CONFIGURE_METHOD || wizardProps.currentStep === RunSteps.AUTO_DETECTION) &&
+            wizardProps.currentStep < wizardState.lastStep &&
+            configureMethod &&
+            configureMethod.selectedMethod &&
+            configureMethod.selectedMethod === ConfigureMethod.ConfigureMethod_AutoDetection) {
+        isEnabledStep = true
+      } else {
+        isEnabledStep = item.IsEnabled
+      }
     }
     if (item.IsActive) {
       return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
