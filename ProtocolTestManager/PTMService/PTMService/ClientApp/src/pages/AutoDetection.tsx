@@ -321,7 +321,7 @@ export function AutoDetection (props: StepWizardProps) {
                                         <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
                                             <DetailsList
                                                 columns={listColumns}
-                                                items={((prerequisite.prerequisite?.Properties) != null) ? prerequisite.prerequisite?.Properties : []}
+                                                items={prerequisite.prerequisite?.Properties ?? []}
                                                 compact
                                                 selectionMode={SelectionMode.none}
                                                 isHeaderVisible={false}
@@ -341,7 +341,7 @@ export function AutoDetection (props: StepWizardProps) {
                                         <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
                                             <DetailsList
                                                 columns={StepColumns()}
-                                                items={((prerequisite.detectionSteps?.DetectingItems) != null) ? prerequisite.detectionSteps?.DetectingItems : []}
+                                                items={prerequisite.detectionSteps?.DetectingItems ?? []}
                                                 compact
                                                 selectionMode={SelectionMode.none}
                                                 isHeaderVisible={false}
