@@ -16,28 +16,31 @@ import { ConfigurationsDataSrv } from '../services/Configurations'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases'
 import { AppState } from '../store/configureStore'
+import { TestCase } from '../model/TestCase'
 
 interface ListItem extends IObjectWithKey {
-    Name: string;
+  Name: string;
+  FullName: string
 }
 
-const getListItems = (testCases: string[]): ListItem[] => {
-  return testCases.map(testCaseName => {
+const getListItems = (testCases: TestCase[]): ListItem[] => {
+  return testCases.map(testCase => {
     return {
-      key: testCaseName,
-      Name: testCaseName
+      key: testCase.FullName,
+      Name: testCase.Name,
+      FullName: testCase.FullName
     }
   })
 }
 
-function copyAndSort<T> (items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+function copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
   const key = columnKey as keyof T
   return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
 }
 
 interface FilterByDropdownOption extends IDropdownOption {
-    filterFunc: (filterPhrase: string | undefined) => (item: ListItem) => boolean;
-    filterPlaceholder: string;
+  filterFunc: (filterPhrase: string | undefined) => (item: ListItem) => boolean;
+  filterPlaceholder: string;
 }
 
 const isValidFilterPhrase = (filterPhrase: string | undefined) => {
@@ -60,27 +63,27 @@ const filterByDropdownOptions: FilterByDropdownOption[] = [
 ]
 
 type FilterByDropdownProps = {
-    options: FilterByDropdownOption[],
-    onOptionChange: (newOption: FilterByDropdownOption) => void
+  options: FilterByDropdownOption[],
+  onOptionChange: (newOption: FilterByDropdownOption) => void
 }
 
-function FilterByDropdown (props: FilterByDropdownProps) {
+function FilterByDropdown(props: FilterByDropdownProps) {
   return (
     props.options.length > 0
       ? <Stack horizontal tokens={StackGap10}>
-                <Label style={{ alignSelf: 'center' }}>Filter By</Label>
-                <Dropdown
-                    style={{ alignSelf: 'center', minWidth: 80 }}
-                    defaultSelectedKey={props.options[0].key}
-                    options={props.options}
-                    onChange={(_, newValue, __) => props.onOptionChange(newValue as FilterByDropdownOption)}
-                />
-            </Stack>
+        <Label style={{ alignSelf: 'center' }}>Filter By</Label>
+        <Dropdown
+          style={{ alignSelf: 'center', minWidth: 80 }}
+          defaultSelectedKey={props.options[0].key}
+          options={props.options}
+          onChange={(_, newValue, __) => props.onOptionChange(newValue as FilterByDropdownOption)}
+        />
+      </Stack>
       : null
   )
 }
 
-export function RunSelectedCase (props: StepWizardProps) {
+export function RunSelectedCase(props: StepWizardProps) {
   const dispatch = useDispatch()
 
   const filterInfo = useSelector((state: AppState) => state.filterInfo)
@@ -129,7 +132,7 @@ export function RunSelectedCase (props: StepWizardProps) {
   const filteredTestCasesRef = useRef<ListItem[]>()
   filteredTestCasesRef.current = filteredTestCases
 
-  const allListItems = useMemo(() => getListItems(selectedTestCases.allTestCases), [selectedTestCases.allTestCases])
+  const allListItems = useMemo(() => getListItems(filterInfo.listSelectedCases), [filterInfo.listSelectedCases])
   const forceUpdate = useForceUpdate()
 
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
@@ -143,10 +146,6 @@ export function RunSelectedCase (props: StepWizardProps) {
     dispatch(ConfigurationsDataSrv.getRules())
     dispatch(TestSuitesDataSrv.getTestSuiteTestCases())
   }, [dispatch])
-
-  useEffect(() => {
-    dispatch(SelectedTestCasesDataSrv.getAllTestCases())
-  }, [filterInfo])
 
   useEffect(() => {
     if (!isValidFilterPhrase(filterPhrase)) {
@@ -192,12 +191,12 @@ export function RunSelectedCase (props: StepWizardProps) {
   }
 
   const onRunAllCasesClick = () => {
-    if (selectedTestCases.allTestCases.length === 0) {
+    if (filterInfo.listSelectedCases.length === 0) {
       return
     }
 
     setRunAllClicked(true)
-    dispatch(SelectedTestCasesDataSrv.createRunRequest(selectedTestCases.allTestCases, undefined, () => {
+    dispatch(SelectedTestCasesDataSrv.createRunRequest(filterInfo.listSelectedCases.map(e => e.FullName), undefined, () => {
       history.push('/Tasks/History', { from: 'RunSelectedCase' })
     }))
   }
@@ -225,53 +224,53 @@ export function RunSelectedCase (props: StepWizardProps) {
     if (runSelectedClicked && selectedTestCases.isPosting) {
       return 'Processing...'
     } else {
-      return `Run selected cases (${selectedItems.length}/${selectedTestCases.allTestCases.length})`
+      return `Run selected cases (${selectedItems.length}/${filterInfo.listSelectedCases.length})`
     }
   }
 
   return (
-        <StepPanel leftNav={wizard} isLoading={selectedTestCases.isLoading} errorMsg={selectedTestCases.errorMsg}>
-            <Stack style={{ paddingLeft: 10 }}>
-                <Fabric>
-                    <Stack horizontal tokens={StackGap10}>
-                        <FilterByDropdown
-                            options={filterByDropdownOptions}
-                            onOptionChange={(newValue) => setFilterByDropdownOption(newValue)} />
-                        <SearchBox
-                            style={{ width: 280 }}
-                            placeholder={filterByDropdownOption.filterPlaceholder}
-                            onChange={(_, newValue) => onFilterPhraseChanged(newValue)}
-                            onReset={onFilterPhraseClear}
-                        />
-                        {
-                            !isValidFilterPhrase(filterPhrase)
-                              ? null
-                              : <Label>{`Number of test cases after filter applied: ${filteredTestCases.length}`}</Label>
-                        }
-                    </Stack>
-                    <hr style={{ border: '1px solid #d9d9d9' }} />
-                    <div style={{ height: winSize.height - 170, overflowY: 'auto' }}>
-                        <MarqueeSelection selection={selection}>
-                            <DetailsList
-                                items={filteredTestCases}
-                                setKey="set"
-                                columns={listColumns}
-                                layoutMode={DetailsListLayoutMode.justified}
-                                selection={selection}
-                                selectionPreservedOnEmptyClick={true}
-                                compact
-                            />
-                        </MarqueeSelection>
-                    </div>
-                </Fabric>
-                <div className='buttonPanel'>
-                    <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
-                        <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || selectedTestCases.allTestCases.length === 0} onClick={onRunAllCasesClick} />
-                        <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
-                        <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
-                    </Stack>
-                </div>
-            </Stack>
-        </StepPanel>
+    <StepPanel leftNav={wizard} isLoading={selectedTestCases.isLoading} errorMsg={selectedTestCases.errorMsg}>
+      <Stack style={{ paddingLeft: 10 }}>
+        <Fabric>
+          <Stack horizontal tokens={StackGap10}>
+            <FilterByDropdown
+              options={filterByDropdownOptions}
+              onOptionChange={(newValue) => setFilterByDropdownOption(newValue)} />
+            <SearchBox
+              style={{ width: 280 }}
+              placeholder={filterByDropdownOption.filterPlaceholder}
+              onChange={(_, newValue) => onFilterPhraseChanged(newValue)}
+              onReset={onFilterPhraseClear}
+            />
+            {
+              !isValidFilterPhrase(filterPhrase)
+                ? null
+                : <Label>{`Number of test cases after filter applied: ${filteredTestCases.length}`}</Label>
+            }
+          </Stack>
+          <hr style={{ border: '1px solid #d9d9d9' }} />
+          <div style={{ height: winSize.height - 170, overflowY: 'auto' }}>
+            <MarqueeSelection selection={selection}>
+              <DetailsList
+                items={filteredTestCases}
+                setKey="set"
+                columns={listColumns}
+                layoutMode={DetailsListLayoutMode.justified}
+                selection={selection}
+                selectionPreservedOnEmptyClick={true}
+                compact
+              />
+            </MarqueeSelection>
+          </div>
+        </Fabric>
+        <div className='buttonPanel'>
+          <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
+            <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || filterInfo.listSelectedCases.length === 0} onClick={onRunAllCasesClick} />
+            <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
+            <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
+          </Stack>
+        </div>
+      </Stack>
+    </StepPanel>
   )
 };

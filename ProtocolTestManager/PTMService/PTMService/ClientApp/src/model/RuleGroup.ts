@@ -5,6 +5,20 @@ export const AllNode = {
   label: '(Select all)'
 }
 
+export interface Rule {
+    DisplayName?: string;
+    Name: string;
+    Rules?: Rule[];
+    Categories?: string[]
+    MappingRules?: string[]
+}
+
+export interface RuleGroup {
+    DisplayName?: string;
+    Name: string;
+    Rules: Rule[]
+}
+
 export interface RuleData {
     AllRules: RuleGroup[];
     SelectedRules: Rule[];
@@ -12,42 +26,15 @@ export interface RuleData {
     MappingFilterIndex: number;
 }
 
-export interface RuleGroup {
-    DisplayName?: string;
-
-    Name: string;
-
-    Rules: Rule[]
-}
-
-export interface Rule {
-    DisplayName?: string;
-
-    Name: string;
-
-    Rules?: Rule[];
-    Categories?: string[]
-    MappingRules?: string[]
-}
-
 export interface SelectedRuleGroup {
     Name: string;
-
     Selected: string[]
 }
 
 export interface GroupItem {
     key: string;
-
     name: string;
-
     rules: Rule[];
-
     checked: string[];
-
     action: (data: any) => void;
-}
-
-export interface MapItem {
-    [key: string]: string[] | undefined
 }

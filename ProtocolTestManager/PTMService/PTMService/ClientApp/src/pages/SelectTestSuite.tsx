@@ -29,7 +29,7 @@ export function SelectTestSuite (props: any) {
     dispatch(TestSuitesDataSrv.getTestSuiteList())
   }, [dispatch])
 
-  const testSuites = useSelector((state: AppState) => state.testsuites)
+  const testSuites = useSelector((state: AppState) => state.testSuites)
 
   const onSelectTestSuite = (testSuite: TestSuite) => {
     dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(testSuite))
