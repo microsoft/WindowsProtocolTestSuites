@@ -215,7 +215,7 @@ function getConfigurationGridColumns (props: {
       isPadded: true,
       onRender: (item: Configuration, index, column) => {
         return <Stack horizontal tokens={StackGap10}>
-                    <PrimaryButton onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
+                    <PrimaryButton disabled={!item.IsConfigured} onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
                     <PrimaryButton onClick={() => { props.onEdit(item.Id!) }}>Edit</PrimaryButton>
                 </Stack>
       }

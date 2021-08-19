@@ -33,6 +33,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public int TestSuiteId { get; set; }
 
         public string Description { get; set; }
+
+        public bool IsConfigured { get; set; }
     }
 
     public class Rule

@@ -85,5 +85,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// </summary>
         /// <returns>All the applicable test cases.</returns>
         public IEnumerable<string> GetApplicableTestCases();
+
+        /// <summary>
+        /// Indicate whether current configuration has been configured.
+        /// </summary>
+        public bool IsConfigured { get; }
     }
 }

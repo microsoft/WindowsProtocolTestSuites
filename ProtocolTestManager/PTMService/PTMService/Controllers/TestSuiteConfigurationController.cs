@@ -42,6 +42,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 Name = configuration.Name,
                 TestSuiteId = configuration.TestSuite.Id,
                 Description = configuration.Description,
+                IsConfigured = configuration.IsConfigured,
             });
 
             return result.ToArray();

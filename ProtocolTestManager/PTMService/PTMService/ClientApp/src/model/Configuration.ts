@@ -9,4 +9,6 @@ export interface Configuration {
   TestSuiteId: number
 
   Description: string
+
+  IsConfigured: boolean
 }
