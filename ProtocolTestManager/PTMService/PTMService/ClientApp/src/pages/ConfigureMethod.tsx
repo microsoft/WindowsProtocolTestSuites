@@ -44,16 +44,16 @@ export function ConfigureMethod (props: StepWizardProps) {
   }]
 
   const onItemClicked = (key: string) => {
-    dispatch(ConfigureMethodActions.setConfigureMethod(key))
-
     switch (key) {
       case ConfigureMethod_AutoDetection:
         toggleAutoDetectWarningDialog()
         return
       case ConfigureMethod_Manual:
+        dispatch(ConfigureMethodActions.setConfigureMethod(key))
         wizardProps.goToStep(RunSteps.FILTERTESTCASE)
         return
       case ConfigureMethod_Profile:
+        dispatch(ConfigureMethodActions.setConfigureMethod(key))
         toggleHideDialog()
     }
   }
@@ -98,6 +98,7 @@ export function ConfigureMethod (props: StepWizardProps) {
   }
 
   const onRunAutoDetection = () => {
+    dispatch(ConfigureMethodActions.setConfigureMethod(ConfigureMethod_AutoDetection))
     wizardProps.goToStep(RunSteps.AUTO_DETECTION)
   }
 
