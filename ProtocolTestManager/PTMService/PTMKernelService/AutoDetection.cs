@@ -198,10 +198,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Sets the property values required for auto-detection.
         /// </summary>
         /// <returns>Returns true if succeeded, otherwise false.</returns>
-        public bool SetPrerequisits(List<Property> prerequisitProperties)
+        public bool SetPrerequisits(List<Property> prerequisiteProperties)
         {
             Dictionary<string, string> properties = new Dictionary<string, string>();
-            foreach (var p in prerequisitProperties)
+            foreach (var p in prerequisiteProperties)
             {
                 properties.Add(p.Name, p.Value);
             };
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             prerequisitesLocker.EnterWriteLock();
             try
             {
-                prerequisiteView.Properties = prerequisitProperties;
+                prerequisiteView.Properties = prerequisiteProperties;
             }
             finally
             {

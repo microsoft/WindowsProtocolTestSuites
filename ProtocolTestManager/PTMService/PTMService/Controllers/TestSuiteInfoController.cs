@@ -252,7 +252,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <summary>
         /// Start auto detection.
         /// </summary>
-        /// <param name="properties">List of PrerequisitProperty.</param>
+        /// <param name="properties">List of PrerequisiteProperty.</param>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>The action result.</returns>
         [Route("{configurationId}/autodetect/start")]

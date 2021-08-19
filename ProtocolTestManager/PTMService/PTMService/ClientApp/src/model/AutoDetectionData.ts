@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export interface PrerequisitProperty {
+export interface PrerequisiteProperty {
     Name: string;
     Value: string;
     Choices: string[];
@@ -12,7 +12,7 @@ export interface PrerequisitProperty {
 export interface Prerequisite {
     Title: string;
     Summary: string;
-    Properties: PrerequisitProperty[];
+    Properties: PrerequisiteProperty[];
 }
 
 export interface DetectingItem {
