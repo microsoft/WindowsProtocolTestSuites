@@ -15,9 +15,9 @@ import { ConfigurationsDataSrv } from '../services/Configurations'
 import { FilterTestCaseActions } from '../actions/FilterTestCaseAction'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
-
 import { PrimaryButton, Stack } from '@fluentui/react'
 import { ConfigureMethod_AutoDetection } from './ConfigureMethod'
+
 export function FilterTestCase(props: any) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
 
