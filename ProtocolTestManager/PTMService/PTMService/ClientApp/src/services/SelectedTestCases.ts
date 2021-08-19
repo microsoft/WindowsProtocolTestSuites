@@ -7,16 +7,6 @@ import { RunRequest } from '../model/RunRequest'
 import { AppThunkAction } from '../store/configureStore'
 
 export const SelectedTestCasesDataSrv = {
-  getAllTestCases: (): AppThunkAction<SelectedTestCasesActionTypes> => (dispatch, getState) => {
-    const state = getState()
-
-    if (state.filterInfo.isRulesLoading || state.filterInfo.isCasesLoading) {
-      dispatch(SelectedTestCasesActions.getAllTestCasesAction_Request())
-    } else {
-      dispatch(SelectedTestCasesActions.getAllTestCasesAction_Success(state.filterInfo.listSelectedCases ?? []))
-    }
-  },
-
   createRunRequest: (requestedTestCases: string[], configurationId?: number, completeCallback?: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
     const state = getState()
 

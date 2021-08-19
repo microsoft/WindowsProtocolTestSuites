@@ -3,21 +3,21 @@
 
 import { FilterTestCaseActionTypes, GET_FILTERTESTCASE_RULES_REQUEST, GET_FILTERTESTCASE_RULES_SUCCESS, GET_FILTERTESTCASE_RULES_FAILURE, SET_SELECTED_RULES, GET_TESTSUITETESTCASES_REQUEST, GET_TESTSUITETESTCASES_SUCCESS, GET_TESTSUITETESTCASES_FAILURE, SET_RULES_REQUEST, SET_RULES_SUCCESS, SET_RULES_FAILURE } from '../actions/FilterTestCaseAction'
 import { Configuration } from '../model/Configuration'
-import { AllNode, RuleGroup, SelectedRuleGroup, Rule, MapItem } from '../model/RuleGroup'
+import { AllNode, RuleGroup, SelectedRuleGroup, Rule } from '../model/RuleGroup'
 import { TestCase } from '../model/TestCase'
 
 export interface FilterTestCaseState {
-  isCasesLoading: boolean
-  isRulesLoading: boolean
-  isPosting: boolean
-  errorMsg?: string
-  ruleGroup: RuleGroup[]
-  listTestCases: TestCase[]
-  selectedConfiguration?: Configuration
-  listSelectedCases?: string[]
-  selectedRules: SelectedRuleGroup[]
-  targetFilterIndex: number
-  mappingFilterIndex: number
+  isCasesLoading: boolean;
+  isRulesLoading: boolean;
+  isPosting: boolean;
+  errorMsg?: string;
+  ruleGroup: RuleGroup[];
+  listTestCases: TestCase[];
+  selectedConfiguration?: Configuration;
+  listSelectedCases: TestCase[];
+  selectedRules: SelectedRuleGroup[];
+  targetFilterIndex: number;
+  mappingFilterIndex: number;
 }
 
 const initialFilterTestCaseState: FilterTestCaseState = {
@@ -73,7 +73,6 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
         listTestCases: []
       }
     case GET_TESTSUITETESTCASES_SUCCESS:
-
       return {
         ...state,
         isCasesLoading: false,
@@ -93,12 +92,11 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
           ? action.payload
           : item
       )
-
       if (state.targetFilterIndex !== -1 && state.mappingFilterIndex !== -1) {
         const targetFilterName = state.ruleGroup[state.targetFilterIndex].Name
         if (action.payload.Name === targetFilterName) {
           const tmp = currSelectedRules[state.targetFilterIndex].Selected.map(x => x.substring(x.indexOf('%') + 1))
-          const features = getItems(state.ruleGroup[state.mappingFilterIndex].Rules, AllNode.value)
+          const features = getFeatures(state.ruleGroup[state.mappingFilterIndex].Rules, AllNode.value)
           const selectedFeature = features.filter(x => {
             return tmp.some(t => { return x.includes(t) })
           })
@@ -108,10 +106,10 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
         if (action.payload.Name === mappingFilterName) {
           const tmp = currSelectedRules[state.mappingFilterIndex].Selected.map(x => {
             const curr = x.substring(0, x.indexOf('%')).split('.').pop()
-            const fkey = x.substring(x.indexOf('%') + 1)
-            return `${fkey}%${curr}`
+            const fKey = x.substring(x.indexOf('%') + 1)
+            return `${fKey}%${curr}`
           })
-          const features = getItems(state.ruleGroup[state.targetFilterIndex].Rules, AllNode.value)
+          const features = getFeatures(state.ruleGroup[state.targetFilterIndex].Rules, AllNode.value)
           const selectedFeature = features.filter(x => {
             return tmp.some(t => { return x.includes(t) })
           })
@@ -145,12 +143,12 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
   }
 }
 
-function getMapCategories (rules: Rule[] | undefined, parent: string): MapItem {
+function getMappedCategories(rules: Rule[] | undefined, parent: string): { [key: string]: string[] | undefined } {
   if (rules !== undefined) {
-    return rules.reduce((dict: MapItem, rule) => {
+    return rules.reduce((dict: { [key: string]: string[] | undefined }, rule) => {
       const curr = parent ? `${parent}.${rule.Name}` : rule.Name
-      if (rule.Rules != null) {
-        return { ...dict, ...getMapCategories(rule.Rules, curr) }
+      if (rule.Rules) {
+        return { ...dict, ...getMappedCategories(rule.Rules, curr) }
       } else {
         dict[curr] = rule.Categories
         return dict
@@ -160,12 +158,10 @@ function getMapCategories (rules: Rule[] | undefined, parent: string): MapItem {
   return {}
 }
 
-function getFilteredTestCases (currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]): string[] {
-  let filteredCases = listTestCases
-  currSelectedRules.forEach(g => {
-    const match: string[] = []
+function getFilteredTestCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]): TestCase[] {
+  return currSelectedRules.reduce((filteredCases, g) => {
     const currRule = ruleGroup.find(o => o.Name === g.Name)?.Rules
-    const mapitems = getMapCategories(currRule, AllNode.value)
+    const ruleDict = getMappedCategories(currRule, AllNode.value)
     const cleanSelected = g.Selected.map(e => {
       if (e.indexOf('%') > 0) {
         return e.substring(0, e.indexOf('%'))
@@ -173,28 +169,23 @@ function getFilteredTestCases (currSelectedRules: SelectedRuleGroup[], ruleGroup
         return e
       }
     })
-    const unique = [...new Set(cleanSelected)]
-    unique.forEach(s => {
-      match.push(...(mapitems[s] ?? []))
+    const uniqueRules = [...new Set(cleanSelected)]
+    const matchedCategories = uniqueRules.flatMap(s => ruleDict[s])
+    return filteredCases.filter(x => {
+      return x.Category && x.Category.some(r => matchedCategories.includes(r))
     })
-
-    filteredCases = filteredCases.filter(x => {
-      return x.Category && x.Category.some(r => match.includes(r))
-    })
-  })
-
-  return filteredCases.map(e => { return e.Name })
+  }, listTestCases)
 }
 
-function getItems (rules: Rule[], parent: string): string[] {
+function getFeatures(rules: Rule[], parent: string): string[] {
   const results: string[] = []
   rules.forEach(rule => {
     const curr = parent ? `${parent}.${rule.Name}` : rule.Name
-    if (rule.Rules != null) {
-      results.push(...getItems(rule.Rules, curr))
+    if (rule.Rules) {
+      results.push(...getFeatures(rule.Rules, curr))
     }
-    if (rule.MappingRules != null) {
-      rule.MappingRules.map(c => { results.push(`${curr}%${c}`) })
+    if (rule.MappingRules) {
+      rule.MappingRules.forEach(c => { results.push(`${curr}%${c}`) })
     }
     results.push(curr)
   })
