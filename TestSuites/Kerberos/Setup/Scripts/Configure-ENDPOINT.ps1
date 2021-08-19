@@ -44,6 +44,8 @@ $SignalFileFullPath      = "$WorkingPath\Configure-ENDPOINT.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
+$DataFile2                = "$WorkingPath\Scripts\Protocol.xml"
+[xml]$KrbParams2          = $null
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -106,6 +108,14 @@ Function Read-ConfigParameters()
     else
     {
         Write-ConfigLog "$DataFile not found. Will keep the default setting of all the test context info..."
+	}
+	if(Test-Path -Path $DataFile2)
+    {
+        [xml]$Script:KrbParams2 = Get-Content -Path $DataFile2
+    }
+    else
+    {
+        Write-ConfigLog "$DataFile2 not found. Will keep the default setting of all the test context info..."
     }
 }
 
@@ -978,6 +988,16 @@ Function Main
     # Update ParamConfig.xml
 	UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 	
+	# Import Certificate
+	if(Test-Path -Path $DataFile2)
+    {
+		[xml]$configFile2 = Get-Content -Path $DataFile2
+		$hostname=$configFile2.SelectNodes("lab/servers/vm[name='PROXY01']/name").InnerText
+		$domainName=$configFile2.SelectNodes("lab/servers/vm[name='PROXY01']/domain").InnerText
+		$certificatFile="\\$hostname\c$\$hostname.$domainName.cer"
+		Import-Certificate -FilePath $certificatFile  -CertStoreLocation 'Cert:\LocalMachine\Root'
+    }
+
 	Config-Driver
 	
 	Complete-Configure

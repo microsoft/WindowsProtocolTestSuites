@@ -45,6 +45,8 @@ $SignalFileFullPath      = "$WorkingPath\Configure-PROXY.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
+$DataFile2                = "$WorkingPath\Scripts\Protocol.xml"
+[xml]$KrbParams2          = $null
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -108,6 +110,14 @@ Function Read-ConfigParameters()
     else
     {
         Write-ConfigLog "$DataFile not found. Will keep the default setting of all the test context info..."
+    }
+    if(Test-Path -Path $DataFile2)
+    {
+        [xml]$Script:KrbParams2 = Get-Content -Path $DataFile2
+    }
+    else
+    {
+        Write-ConfigLog "$DataFile2 not found. Will keep the default setting of all the test context info..."
     }
 }
 
@@ -203,15 +213,24 @@ Function Config-Proxy()
 
 	#-----------------------------------------------------------------------------------------------
 	# Create self-signed certificate and bind
-	#-----------------------------------------------------------------------------------------------
+    #-----------------------------------------------------------------------------------------------
+    $hostname=hostname
+    if(Test-Path -Path $dataFile2)
+	{
+        [xml]$configFile = Get-Content -Path $dataFile2
+        $domainName=$configFile.SelectNodes("lab/servers/vm[role='PROXY01']/domain").InnerText
+    }
+    $DnsName=$hostname+"."+$domainName
+    $FilePath="c:\$DnsName.cer"
 	Write-ConfigLog "Create self-signed certificate and bind" -ForegroundColor Yellow
 	Import-Module WebAdministration
-	$cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation cert:\LocalMachine\My
+	$cert = New-SelfSignedCertificate -DnsName $DnsName -CertStoreLocation cert:\LocalMachine\My
 	Push-Location IIS:\SslBindings
 	$IP = "*"
 	$certhash = $cert.GetCertHashString()
 	New-WebBinding -Name "Default Web Site" -IP $IP -Port 443 -Protocol https
-	Get-Item cert:\LocalMachine\MY\$certhash | new-item $IP!443
+    Get-Item cert:\LocalMachine\MY\$certhash | new-item $IP!443
+    Export-Certificate -Cert $cert -FilePath $FilePath
 	Pop-Location
 }
 
