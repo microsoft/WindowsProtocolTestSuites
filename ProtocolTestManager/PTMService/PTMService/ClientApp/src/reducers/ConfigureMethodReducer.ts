@@ -13,13 +13,13 @@ import {
 } from '../actions/ConfigureMethodAction'
 
 export interface ConfigureMethodState {
-    isLoading: boolean;
-    errorMsg?: string;
-    selectedMethod?: string;
-    isPosting: boolean;
-    isProfileImport: boolean;
-    isProfileUploading: boolean;
-    profileLocation?: any;
+  isLoading: boolean
+  errorMsg?: string
+  selectedMethod?: string
+  isPosting: boolean
+  isProfileImport: boolean
+  isProfileUploading: boolean
+  profileLocation?: any
 }
 
 const initialConfigureMethodState: ConfigureMethodState = {

@@ -45,8 +45,8 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
       }
     case GET_FILTERTESTCASE_RULES_SUCCESS:
       const initialSelected = action.payload.AllRules.map(group => {
-        const selectedRules = action.payload.SelectedRules.find(x => x.Name == group.Name)
-        const currSelected = selectedRules?.Rules?.map(s => s.Name.replace(group.Name, AllNode.value)) || []
+        const selectedRules = action.payload.SelectedRules.find(x => x.Name === group.Name)
+        const currSelected = (selectedRules?.Rules?.map(s => s.Name.replace(group.Name, AllNode.value))) ?? []
         return { Name: group.Name, Selected: currSelected }
       })
       return {

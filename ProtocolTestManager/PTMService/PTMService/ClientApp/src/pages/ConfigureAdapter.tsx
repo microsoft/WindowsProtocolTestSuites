@@ -23,8 +23,8 @@ export function ConfigureAdapter (props: StepWizardProps) {
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
 
   useEffect(() => {
-    if (configuration.selectedConfiguration) {
-      dispatch(AdapterDataSrv.getAdapters(configuration.selectedConfiguration!.Id!))
+    if (configuration.selectedConfiguration != null) {
+      dispatch(AdapterDataSrv.getAdapters(configuration.selectedConfiguration.Id!))
     }
   }, [dispatch, configuration.selectedConfiguration])
 
@@ -99,14 +99,14 @@ export function ConfigureAdapter (props: StepWizardProps) {
 };
 
 interface AdapterItemProp {
-    Name: string;
-    DisplayName: string;
-    AdapterType: string;
-    Kind: AdapterKind;
-    ScriptDirectory: string;
-    SupportedKinds: AdapterKind[];
-    ShellScriptDirectory: string;
-    onChange: (event: AdapterChangedEvent) => void;
+  Name: string
+  DisplayName: string
+  AdapterType: string
+  Kind: AdapterKind
+  ScriptDirectory: string
+  SupportedKinds: AdapterKind[]
+  ShellScriptDirectory: string
+  onChange: (event: AdapterChangedEvent) => void
 }
 
 function AdapterItem (props: AdapterItemProp) {

@@ -15,9 +15,9 @@ interface CreateRunRequestActionRequestType { type: typeof CREATE_RUNREQUEST_REQ
 interface CreateRunRequestActionSuccessType { type: typeof CREATE_RUNREQUEST_SUCCESS; payload: number; }
 interface CreateRunRequestActionFailureType { type: typeof CREATE_RUNREQUEST_FAILURE; errorMsg: string; }
 
-interface AbortRunRequestActionRequestType { type: typeof ABORT_RUNREQUEST_REQUEST; payload: number; }
-interface AbortRunRequestActionSuccessType { type: typeof ABORT_RUNREQUEST_SUCCESS; }
-interface AbortRunRequestActionFailureType { type: typeof ABORT_RUNREQUEST_FAILURE; errorMsg: string; }
+interface AbortRunRequestActionRequestType { type: typeof ABORT_RUNREQUEST_REQUEST, payload: number }
+interface AbortRunRequestActionSuccessType { type: typeof ABORT_RUNREQUEST_SUCCESS }
+interface AbortRunRequestActionFailureType { type: typeof ABORT_RUNREQUEST_FAILURE, errorMsg: string }
 
 export type SelectedTestCasesActionTypes =
   CreateRunRequestActionRequestType |

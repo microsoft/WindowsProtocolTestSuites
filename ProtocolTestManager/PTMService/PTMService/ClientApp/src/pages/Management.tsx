@@ -14,13 +14,13 @@ import { TestSuite } from '../model/TestSuite'
 import { ManagementDataSrv } from '../services/Management'
 import { AppState } from '../store/configureStore'
 
-type TestSuiteManagementDialogKind = 'Install' | 'Update' | 'Remove';
+type TestSuiteManagementDialogKind = 'Install' | 'Update' | 'Remove'
 
-type TestSuiteManagementDialogContentProps = {
-    kind: TestSuiteManagementDialogKind,
-    type: DialogType,
-    title: string
-};
+interface TestSuiteManagementDialogContentProps {
+  kind: TestSuiteManagementDialogKind
+  type: DialogType
+  title: string
+}
 
 export function Management (props: any) {
   const history = useHistory()
@@ -82,11 +82,11 @@ export function Management (props: any) {
   }
 
   const onTestSuiteInstall = () => {
-    if (testSuiteName && file) {
+    if (testSuiteName && (file != null)) {
       dispatch(ManagementDataSrv.installTestSuite({
         TestSuiteName: testSuiteName,
         Description: testSuiteDescription,
-        Package: file!.File
+        Package: file.File
       }, () => {
         toggleHideDialog()
         setCurrentTestSuite(undefined)
@@ -100,7 +100,7 @@ export function Management (props: any) {
         setTestSuiteErrorMsg('TestSuite Name can\'t be null')
         return
       }
-      if (!file) {
+      if (file == null) {
         setTestSuiteErrorMsg('TestSuite package can\'t be null')
         return
       }
@@ -109,11 +109,11 @@ export function Management (props: any) {
   }
 
   const onTestSuiteUpdate = () => {
-    if (currentTestSuite !== undefined && testSuiteName && file) {
+    if (currentTestSuite !== undefined && testSuiteName && (file != null)) {
       dispatch(ManagementDataSrv.updateTestSuite(currentTestSuite.Id, {
         TestSuiteName: testSuiteName,
         Description: testSuiteDescription,
-        Package: file!.File
+        Package: file.File
       }, () => {
         toggleHideDialog()
         setCurrentTestSuite(undefined)
@@ -127,7 +127,7 @@ export function Management (props: any) {
         setTestSuiteErrorMsg('TestSuite Name can\'t be null')
         return
       }
-      if (!file) {
+      if (file == null) {
         setTestSuiteErrorMsg('TestSuite package can\'t be null')
         return
       }
@@ -154,14 +154,14 @@ export function Management (props: any) {
   const columns = getTestSuiteGridColumns({
     onRerun: (id: number) => {
       const foundTestSuite = getCurrentTestSuite(id)
-      if (foundTestSuite) {
+      if (foundTestSuite != null) {
         dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(foundTestSuite))
         dispatch(() => history.push('/Tasks/NewRun#SelectConfiguration', { from: 'Management' }))
       }
     },
     onUpdate: (id: number) => {
       const foundTestSuite = getCurrentTestSuite(id)
-      if (foundTestSuite) {
+      if (foundTestSuite != null) {
         setCurrentTestSuite(foundTestSuite)
         setTestSuiteName(foundTestSuite.Name)
         setTestSuiteDescription(foundTestSuite.Description ?? '')
@@ -171,7 +171,7 @@ export function Management (props: any) {
     },
     onRemove: (id: number) => {
       const foundTestSuite = getCurrentTestSuite(id)
-      if (foundTestSuite) {
+      if (foundTestSuite != null) {
         setCurrentTestSuite(foundTestSuite)
         setTestSuiteName(foundTestSuite.Name)
         setTestSuiteDescription(foundTestSuite.Description ?? '')
@@ -289,9 +289,9 @@ export function Management (props: any) {
 };
 
 function getTestSuiteGridColumns (props: {
-    onRerun: (id: number) => void,
-    onUpdate: (id: number) => void,
-    onRemove: (id: number) => void,
+  onRerun: (id: number) => void
+  onUpdate: (id: number) => void
+  onRemove: (id: number) => void
 }): IColumn[] {
   return [
     {
@@ -344,6 +344,6 @@ function getTestSuiteGridColumns (props: {
 }
 
 enum ElementType {
-    Name,
-    Description,
+  Name,
+  Description,
 }

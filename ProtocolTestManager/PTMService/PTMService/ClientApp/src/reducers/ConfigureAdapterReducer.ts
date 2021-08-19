@@ -5,10 +5,10 @@ import { GET_ADAPTERS_FAILURE, GET_ADAPTERS_REQUEST, GET_ADAPTERS_SUCCESS, ON_AD
 import { Adapter, AdapterKind, ChangedField } from '../model/Adapter'
 
 export interface AdapterState {
-    isLoading: boolean;
-    isPosting: boolean;
-    errorMsg?: string;
-    adapterList: Adapter[];
+  isLoading: boolean
+  isPosting: boolean
+  errorMsg?: string
+  adapterList: Adapter[]
 }
 
 const initialAdapterState: AdapterState = {

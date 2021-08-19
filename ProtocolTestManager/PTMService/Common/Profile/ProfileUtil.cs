@@ -92,13 +92,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Profile
         /// <summary>
         /// Verifies the test suite name and version of the profile.
         /// </summary>
-        /// <param name="testSuiteName">The name of the test suite</param>
         /// <param name="version">The version of the test suite</param>
         /// <returns>Returns true if the version and test suite name matches. If the package does not contains the version information returns false.</returns>
-        public bool VerifyVersion(string testSuiteName, string version)
+        public bool VerifyVersion(string version)
         {
             if (Info == null) return false;
-            if (Info.Version == version && Info.TestSuiteName == testSuiteName) return true;
+            if (Info.Version == version) return true;
             return false;
         }
 

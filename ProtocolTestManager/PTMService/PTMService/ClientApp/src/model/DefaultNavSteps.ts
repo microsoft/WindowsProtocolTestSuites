@@ -77,7 +77,7 @@ export function getNavSteps (wizardProps: StepWizardChildProps, configureMethod?
   return DefaultNavSteps.map(item => {
     if (item.TargetStep < wizardProps.currentStep) {
       if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-        if (configureMethod && configureMethod.selectedMethod === ConfigureMethod_AutoDetection) {
+        if (configureMethod?.selectedMethod === ConfigureMethod_AutoDetection) {
           return {
             ...item,
             IsActive: false,

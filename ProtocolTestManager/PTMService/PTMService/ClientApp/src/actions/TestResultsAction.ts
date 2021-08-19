@@ -26,25 +26,25 @@ export const GET_TESTRUNREPORT_SUCCESS = 'TESTRESULTS/GET_TESTRUNREPORT_SUCCESS'
 export const GET_TESTRUNREPORT_FAILURE = 'TESTRESULTS/GET_TESTRUNREPORT_FAILURE'
 
 // define action types
-interface ListTestResultsActionRequestType { type: typeof LIST_TESTRESULTS_REQUEST; payload: number; }
-interface ListTestResultsActionSuccessType { type: typeof LIST_TESTRESULTS_SUCCESS; payload: ListResponse; }
-interface ListTestResultsActionFailureType { type: typeof LIST_TESTRESULTS_FAILURE; errorMsg: string; }
+interface ListTestResultsActionRequestType { type: typeof LIST_TESTRESULTS_REQUEST, payload: number }
+interface ListTestResultsActionSuccessType { type: typeof LIST_TESTRESULTS_SUCCESS, payload: ListResponse }
+interface ListTestResultsActionFailureType { type: typeof LIST_TESTRESULTS_FAILURE, errorMsg: string }
 
-interface SetShowRemovedTestSuitesActionType { type: typeof SET_SHOWREMOVEDTESTSUITES; payload: boolean; }
+interface SetShowRemovedTestSuitesActionType { type: typeof SET_SHOWREMOVEDTESTSUITES, payload: boolean }
 
-interface SetPageNumberActionType { type: typeof SET_PAGENUMBER; payload: number; }
-interface SetQueryActionType { type: typeof SET_QUERY; payload: string | undefined; }
+interface SetPageNumberActionType { type: typeof SET_PAGENUMBER, payload: number }
+interface SetQueryActionType { type: typeof SET_QUERY, payload: string | undefined }
 
-interface SetSelectedTestResultActionType { type: typeof SET_SELECTEDTESTRESULT; testResultId: number; summary: TestResultSummary; }
-interface ClearSelectedTestResultActionType { type: typeof CLEAR_SELECTEDTESTRESULT; }
+interface SetSelectedTestResultActionType { type: typeof SET_SELECTEDTESTRESULT, testResultId: number, summary: TestResultSummary }
+interface ClearSelectedTestResultActionType { type: typeof CLEAR_SELECTEDTESTRESULT }
 
-interface GetTestResultDetailActionRequestType { type: typeof GET_TESTRESULTDETAIL_REQUEST; payload: number; }
-interface GetTestResultDetailActionSuccessType { type: typeof GET_TESTRESULTDETAIL_SUCCESS; payload: TestResult; }
-interface GetTestResultDetailActionFailureType { type: typeof GET_TESTRESULTDETAIL_FAILURE; errorMsg: string; }
+interface GetTestResultDetailActionRequestType { type: typeof GET_TESTRESULTDETAIL_REQUEST, payload: number }
+interface GetTestResultDetailActionSuccessType { type: typeof GET_TESTRESULTDETAIL_SUCCESS, payload: TestResult }
+interface GetTestResultDetailActionFailureType { type: typeof GET_TESTRESULTDETAIL_FAILURE, errorMsg: string }
 
-interface GetTestRunReportActionRequestType { type: typeof GET_TESTRUNREPORT_REQUEST; testResultId: number; reportRequest: ReportRequest; }
-interface GetTestRunReportActionSuccessType { type: typeof GET_TESTRUNREPORT_SUCCESS; }
-interface GetTestRunReportActionFailureType { type: typeof GET_TESTRUNREPORT_FAILURE; errorMsg: string; }
+interface GetTestRunReportActionRequestType { type: typeof GET_TESTRUNREPORT_REQUEST, testResultId: number, reportRequest: ReportRequest }
+interface GetTestRunReportActionSuccessType { type: typeof GET_TESTRUNREPORT_SUCCESS }
+interface GetTestRunReportActionFailureType { type: typeof GET_TESTRUNREPORT_FAILURE, errorMsg: string }
 
 export type TestResultsActionTypes =
     ListTestResultsActionRequestType |
@@ -60,7 +60,7 @@ export type TestResultsActionTypes =
     GetTestResultDetailActionFailureType |
     GetTestRunReportActionRequestType |
     GetTestRunReportActionSuccessType |
-    GetTestRunReportActionFailureType;
+    GetTestRunReportActionFailureType
 
 // define actions
 export const TestResultsActions = {

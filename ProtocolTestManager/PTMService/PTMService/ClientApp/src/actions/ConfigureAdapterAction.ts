@@ -15,25 +15,25 @@ export const ON_ADAPTERS_CHANGED = 'ADAPTER/ON_ADAPTERS_CHANGED'
 export const SET_ERROR_MESSAGE = 'ADAPTER/SET_ERROR_MESSAGE'
 
 // define action types
-interface GetTSAdaptersActionRequestType { type: typeof GET_ADAPTERS_REQUEST; configureId: number }
-interface GetTSAdaptersActionSuccessType { type: typeof GET_ADAPTERS_SUCCESS; payload: Adapter[]; }
-interface GetTSAdaptersActionFailureType { type: typeof GET_ADAPTERS_FAILURE; errorMsg: string; }
+interface GetTSAdaptersActionRequestType { type: typeof GET_ADAPTERS_REQUEST, configureId: number }
+interface GetTSAdaptersActionSuccessType { type: typeof GET_ADAPTERS_SUCCESS, payload: Adapter[] }
+interface GetTSAdaptersActionFailureType { type: typeof GET_ADAPTERS_FAILURE, errorMsg: string }
 
-interface SetTSAdaptersActionRequestType { type: typeof SET_ADAPTERS_REQUEST; }
-interface SetTSAdaptersActionSuccessType { type: typeof SET_ADAPTERS_SUCCESS; }
-interface SetTSAdaptersActionFailureType { type: typeof SET_ADAPTERS_FAILURE; errorMsg: string; }
+interface SetTSAdaptersActionRequestType { type: typeof SET_ADAPTERS_REQUEST }
+interface SetTSAdaptersActionSuccessType { type: typeof SET_ADAPTERS_SUCCESS }
+interface SetTSAdaptersActionFailureType { type: typeof SET_ADAPTERS_FAILURE, errorMsg: string }
 
-interface OnAdapterChangedActionType { type: typeof ON_ADAPTERS_CHANGED; changedEvent: AdapterChangedEvent; }
-interface SetErrorMessageActionType { type: typeof SET_ERROR_MESSAGE; errorMsg?: string; }
+interface OnAdapterChangedActionType { type: typeof ON_ADAPTERS_CHANGED, changedEvent: AdapterChangedEvent }
+interface SetErrorMessageActionType { type: typeof SET_ERROR_MESSAGE, errorMsg?: string }
 
 export type TestSuiteAdapterActionTypes = GetTSAdaptersActionRequestType
-    | GetTSAdaptersActionSuccessType
-    | GetTSAdaptersActionFailureType
-    | SetTSAdaptersActionRequestType
-    | SetTSAdaptersActionSuccessType
-    | SetTSAdaptersActionFailureType
-    | OnAdapterChangedActionType
-    | SetErrorMessageActionType;
+| GetTSAdaptersActionSuccessType
+| GetTSAdaptersActionFailureType
+| SetTSAdaptersActionRequestType
+| SetTSAdaptersActionSuccessType
+| SetTSAdaptersActionFailureType
+| OnAdapterChangedActionType
+| SetErrorMessageActionType
 
 // define actions
 export const AdapterActions = {

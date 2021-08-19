@@ -49,7 +49,7 @@ const isValidFilterPhrase = (filterPhrase: string | undefined) => {
 
 const filterByNameFunc = (filterPhrase: string | undefined) => (item: ListItem) => {
   return isValidFilterPhrase(filterPhrase)
-    ? item.Name.toLocaleLowerCase().indexOf(filterPhrase!.toLocaleLowerCase()) >= 0
+    ? item.Name.toLocaleLowerCase().includes(filterPhrase!.toLocaleLowerCase())
     : true
 }
 

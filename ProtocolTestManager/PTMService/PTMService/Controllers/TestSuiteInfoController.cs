@@ -6,12 +6,10 @@ using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System.Linq;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
-using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
@@ -252,7 +250,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <summary>
         /// Start auto detection.
         /// </summary>
-        /// <param name="properties">List of PrerequisitProperty.</param>
+        /// <param name="properties">List of PrerequisiteProperty.</param>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>The action result.</returns>
         [Route("{configurationId}/autodetect/start")]
@@ -288,7 +286,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
-        /// Apply auto detection result.
+        /// Apply auto detection result into profile rules and ptfconfig files.
         /// </summary>
         /// <param name="configurationId">Test suite configuration Id.</param>
         /// <returns>Action result.</returns>
@@ -296,6 +294,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public IActionResult ApplyAutoDetectionResult(int configurationId)
         {
+            // Apply Detection Result.
             PTMKernelService.ApplyDetectionResult(configurationId);
 
             return Ok();

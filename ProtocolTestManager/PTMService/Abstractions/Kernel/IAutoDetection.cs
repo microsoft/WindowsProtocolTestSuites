@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         PrerequisiteView GetPrerequisites();
 
-        bool SetPrerequisits(List<Property> prerequisitProperties);
+        bool SetPrerequisits(List<Property> prerequisiteProperties);
 
         List<DetectingItem> GetDetectedSteps();
 
@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         void Reset();
 
-        void ApplyDetectionResult();
+        void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties);
 
         string GetDetectionLog();
     }

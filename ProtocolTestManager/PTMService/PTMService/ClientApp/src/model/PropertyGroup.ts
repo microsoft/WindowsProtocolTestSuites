@@ -4,6 +4,6 @@
 import { Property } from './Property'
 
 export interface PropertyGroup {
-    Name: string;
-    Items: Property[];
+  Name: string
+  Items: Property[]
 }

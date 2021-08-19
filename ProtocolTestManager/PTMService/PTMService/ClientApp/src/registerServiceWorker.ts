@@ -24,7 +24,7 @@ const isLocalhost = Boolean(
 export default function register () {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const url = process.env.PUBLIC_URL as string
+    const url = process.env.PUBLIC_URL
     const publicUrl = new URL(url, window.location.toString())
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
@@ -55,7 +55,7 @@ function registerValidSW (swUrl: string) {
         const installingWorker = registration.installing as ServiceWorker
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
+            if (navigator.serviceWorker.controller != null) {
               // At this point, the old content will have been purged and
               // the fresh content will have been added to the cache.
               // It's the perfect time to display a "New content is
@@ -82,7 +82,7 @@ function checkValidServiceWorker (swUrl: string) {
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
       const contentType = response.headers.get('content-type')
-      if (response.status === 404 || (contentType && contentType.indexOf('javascript') === -1)) {
+      if (response.status === 404 || (contentType && !contentType.includes('javascript'))) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {

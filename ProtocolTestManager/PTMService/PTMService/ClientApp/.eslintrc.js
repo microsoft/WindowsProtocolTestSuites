@@ -1,11 +1,13 @@
+const path = require('path');
+
 module.exports = {
   env: {
     browser: true,
     es2021: true
   },
   extends: [
+    'standard-with-typescript',
     'plugin:react/recommended',
-    'standard'
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -13,7 +15,8 @@ module.exports = {
       jsx: true
     },
     ecmaVersion: 12,
-    sourceType: 'module'
+    sourceType: 'module',
+    project: path.join(__dirname, 'tsconfig.json')
   },
   plugins: [
     'react',
@@ -21,5 +24,12 @@ module.exports = {
     'only-warn'
   ],
   rules: {
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off'
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
   }
 }

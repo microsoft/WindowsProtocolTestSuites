@@ -20,9 +20,9 @@ export function TestSuiteRunWizard () {
   const wizardMethod = useSelector((state: AppState) => state.wizard)
   const dispatch = useDispatch()
   const onStepChange = (stepChange: {
-        previousStep: number
-        activeStep: number
-      }) => {
+    previousStep: number
+    activeStep: number
+  }) => {
     if (wizardMethod.lastStep < stepChange.activeStep) {
       dispatch(WizardNavBarActions.setWizardNavBarAction(stepChange.activeStep))
     }
