@@ -7,12 +7,14 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { ManagementActions } from '../actions/ManagementAction'
+import { WizardNavBarActions } from '../actions/WizardNavBarAction'
 import { TestSuiteInfoActions } from '../actions/TestSuiteInfoAction'
 import { FileUploader, IFile } from '../components/FileUploader'
 import { StackGap10, StackGap5 } from '../components/StackStyle'
 import { TestSuite } from '../model/TestSuite'
 import { ManagementDataSrv } from '../services/Management'
 import { AppState } from '../store/configureStore'
+import { RunSteps } from '../model/DefaultNavSteps'
 
 type TestSuiteManagementDialogKind = 'Install' | 'Update' | 'Remove'
 
@@ -156,6 +158,7 @@ export function Management (props: any) {
       const foundTestSuite = getCurrentTestSuite(id)
       if (foundTestSuite != null) {
         dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(foundTestSuite))
+        dispatch(WizardNavBarActions.setWizardNavBarAction(RunSteps.SELECT_CONFIGURATION))
         dispatch(() => history.push('/Tasks/NewRun#SelectConfiguration', { from: 'Management' }))
       }
     },

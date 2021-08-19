@@ -27,6 +27,10 @@ export function SelectTestSuite (props: any) {
 
   useEffect(() => {
     dispatch(TestSuitesDataSrv.getTestSuiteList())
+    let curr = history;
+    if(curr.action === 'PUSH') {
+      dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+    }    
   }, [dispatch])
 
   const testSuites = useSelector((state: AppState) => state.testSuites)

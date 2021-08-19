@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StepWizardChildProps } from 'react-step-wizard'
 import { ConfigurationActions } from '../actions/TestSuiteConfigurationAction'
+import { WizardNavBarActions } from '../actions/WizardNavBarAction'
 import { StackGap10 } from '../components/StackStyle'
 import { StepPanel } from '../components/StepPanel'
 import { WizardNavBar } from '../components/WizardNavBar'
@@ -111,6 +112,9 @@ export function SelectConfiguration (props: any) {
       const findedConfigure = getCurrentConfigure(id)
       if (findedConfigure != null) {
         dispatch(ConfigurationActions.setSelectedConfigurationAction(findedConfigure))
+        if(id !== configurations.selectedConfiguration?.Id){
+          dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+        }
         // go to run step
         wizardProps.goToStep(RunSteps.RUN_SELECTED_TEST_CASE)
       }
@@ -119,6 +123,9 @@ export function SelectConfiguration (props: any) {
       const findedConfigure = getCurrentConfigure(id)
       if (findedConfigure != null) {
         dispatch(ConfigurationActions.setSelectedConfigurationAction(findedConfigure))
+        if( id!== configurations.selectedConfiguration?.Id){
+          dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+        }        
         // go to next step
         wizardProps.nextStep()
       }
