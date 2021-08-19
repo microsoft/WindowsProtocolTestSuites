@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             using (ProfileUtil profile = ProfileUtil.LoadProfile(fullName))
             {
-                if (!profile.VerifyVersion(testSuite.Name, testSuite.Version))
+                if (!profile.VerifyVersion(testSuite.Version))
                 {
                     if (profile.Info != null)
                     {

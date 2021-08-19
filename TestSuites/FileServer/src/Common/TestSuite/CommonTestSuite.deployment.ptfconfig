@@ -327,6 +327,14 @@
           Set to true if SUT supports chained compression, otherwise set it to false.
         </Description>
       </Property>
+
+      <Property name="DisableEncryptionOverSecureTransport" value="false">
+        <Choice>true,false</Choice>
+        <Description>
+          Set to true if SUT supports a secured transport protocol like QUIC.
+          Windows 10 v21H1 OS and Windows Server 2022 set this to TRUE
+        </Description>
+      </Property>
     </Group>
   </Properties>
 </TestSite>

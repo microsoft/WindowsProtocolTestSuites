@@ -9,13 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Protocols.TestManager.Detector;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
 
     public class DetectionResultControl
     {
-        public void LoadDetectionInfo(DetectionInfo detectionInfo)
+        public List<ResultItemMap> LoadDetectionInfo(DetectionInfo detectionInfo)
         {
             this.info = detectionInfo;
 
@@ -82,8 +83,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             resultItemMapList.Add(rsvdItems);
             resultItemMapList.Add(sqosItems);
 
-            // ResultMapList is used in wpf.
-            // ResultMapList.ItemsSource = resultItemMapList;
+            return resultItemMapList;
         }
 
         #region Properties

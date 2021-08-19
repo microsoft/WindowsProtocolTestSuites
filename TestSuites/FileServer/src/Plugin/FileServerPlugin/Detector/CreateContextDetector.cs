@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestManager.Detector;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {

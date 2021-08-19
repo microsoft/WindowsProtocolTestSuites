@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Detector;
 using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.RDPServerPlugin
@@ -51,7 +52,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         #endregion
 
-        public void LoadDetectionInfo(DetectionInfo detectionInfo)
+        public List<ResultItemMap> LoadDetectionInfo(DetectionInfo detectionInfo)
         {
             this.info = detectionInfo;
 
@@ -65,11 +66,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             AddResultItem(ref featureItems, "Auto Reconnect", detectionInfo.IsSupportAutoReconnect);
             AddResultItem(ref featureItems, "FastPath Input", detectionInfo.IsSupportFastPathInput);
 
-            this.resultItemMapList.Add(protocolItems);
-            this.resultItemMapList.Add(featureItems);
-
-            // ResultMapList is used in wpf.
-            // ResultMapList.ItemsSource = resultItemMapList;
+            resultItemMapList.Add(protocolItems);
+            resultItemMapList.Add(featureItems);
+            return resultItemMapList;
         }
     }
 }

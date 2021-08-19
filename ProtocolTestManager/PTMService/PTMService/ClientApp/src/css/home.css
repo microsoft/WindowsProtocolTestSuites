@@ -171,3 +171,16 @@ Licensed under the MIT license. See LICENSE file in the project root for full li
     display: none;
     padding-left: 24px;
 }
+
+.iNavGroupContent-Item {
+    margin-bottom: 0px;
+}
+
+.iNavLink {
+    height: 30px;
+    font-size: 16px;
+}
+
+.iNavChevronButton {
+    font-weight: bold;
+}

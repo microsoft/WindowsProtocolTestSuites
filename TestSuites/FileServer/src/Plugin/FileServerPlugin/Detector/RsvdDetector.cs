@@ -13,7 +13,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
 using System.Security.Principal;
 using System.Diagnostics;
 using System.IO;
-
+using Microsoft.Protocols.TestManager.Detector;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {

@@ -93,10 +93,9 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const onNextButtonClick = () => {
-    dispatch(AutoDetectionDataSrv.applyDetectionResult())
     if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
       dispatch(AutoDetectionDataSrv.applyDetectionResult(() => {
-        // Next page
+      // Next page
         wizardProps.nextStep()
       }))
     }

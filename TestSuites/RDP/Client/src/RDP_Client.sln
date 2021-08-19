@@ -60,6 +60,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\..\ProtoSD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KerberosLib", "..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj", "{B7102886-4EA8-426D-98C1-D805955DAE2B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPClientPlugin", "Plugin\RDPClientPlugin\RDPClientPlugin.csproj", "{98C7F789-754A-48FF-892D-376978DF992F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyValueDetector", "..\..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj", "{07291094-D1EE-4187-BA9E-E02E35CFBC7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -276,6 +280,22 @@ Global
 		{B7102886-4EA8-426D-98C1-D805955DAE2B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7102886-4EA8-426D-98C1-D805955DAE2B}.Release|x64.ActiveCfg = Release|Any CPU
 		{B7102886-4EA8-426D-98C1-D805955DAE2B}.Release|x64.Build.0 = Release|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Debug|x64.Build.0 = Debug|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Release|x64.ActiveCfg = Release|Any CPU
+		{98C7F789-754A-48FF-892D-376978DF992F}.Release|x64.Build.0 = Release|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Debug|x64.Build.0 = Debug|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Release|x64.ActiveCfg = Release|Any CPU
+		{07291094-D1EE-4187-BA9E-E02E35CFBC7D}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

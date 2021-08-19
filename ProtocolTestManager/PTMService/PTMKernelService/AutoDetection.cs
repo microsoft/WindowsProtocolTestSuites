@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 prerequisiteView.Properties.Add(new Property()
                 {
                     Name = i.Key,
-                    Value = ((i.Value != null) && (i.Value.Count == 1)) ? i.Value[0] : null,
+                    Value = ((i.Value != null) && (i.Value.Count > 0)) ? i.Value[0] : null,
                     Choices = i.Value
                 });
             }
@@ -198,10 +198,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Sets the property values required for auto-detection.
         /// </summary>
         /// <returns>Returns true if succeeded, otherwise false.</returns>
-        public bool SetPrerequisits(List<Property> prerequisitProperties)
+        public bool SetPrerequisits(List<Property> prerequisiteProperties)
         {
             Dictionary<string, string> properties = new Dictionary<string, string>();
-            foreach (var p in prerequisitProperties)
+            foreach (var p in prerequisiteProperties)
             {
                 properties.Add(p.Name, p.Value);
             };
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             prerequisitesLocker.EnterWriteLock();
             try
             {
-                prerequisiteView.Properties = prerequisitProperties;
+                prerequisiteView.Properties = prerequisiteProperties;
             }
             finally
             {
@@ -320,20 +320,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         public void StopDetection(Action callback)
         {
-            stepsLocker.EnterWriteLock();
-            try
-            {
-                detectSteps[StepIndex].DetectingStatus = DetectingStatus.Canceling;
-            }
-            finally
-            {
-                stepsLocker.ExitWriteLock();
-            }
+            SetDetectStepCurrentStatus(DetectingStatus.Failed);
 
-            //StopAndCancelDetection(callback);
             StopDetection();
 
+            DetectLogCallback = null;
+
             CloseLogger();
+
+            detectTask = null;
         }
 
         #endregion
@@ -342,32 +337,133 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Gets an object represents the detection summary.
         /// </summary>
         /// <returns>An object</returns>
-        public object GetDetectionSummary()
+        public List<ResultItemMap> GetDetectionSummary()
         {
             return ValueDetector.GetSUTSummary();
         }
 
         #region Apply Detection Summary to xml
 
-        public void ApplyDetectionResult()
+        /// <summary>
+        /// Apply Detection Result
+        /// </summary>
+        /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules</param>
+        /// <param name="properties">The ptfconfig properties.</param>
+        public void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties)
         {
-            ApplyDetectedRules();
-            ApplyDetectedValues();
+            ApplyDetectedRules(out ruleGroupsBySelectedRules);
+            ApplyDetectedValues(ref properties);
         }
 
-        private void ApplyDetectedRules()
+        /// <summary>
+        /// Apply the test case selection rules detected by the plug-in.
+        /// </summary>
+        /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules.</param>
+        private void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules)
         {
             var ruleGroups = TestSuite.LoadTestCaseFilter();
-            foreach (var rule in ValueDetector.GetSelectedRules())
+            var selectedRules = ValueDetector.GetSelectedRules();
+            var tempRuleGroups = new List<Common.Types.RuleGroup>();
+            foreach (var ruleGroup in ruleGroups)
             {
-
+                List<Common.Types.Rule> rules = GetSelectedRules(ruleGroup.Name, ruleGroup.Rules.ToList(), selectedRules.Where(i => i.Status == RuleStatus.Selected).ToList());
+                if (rules.Count > 0)
+                {
+                    tempRuleGroups.Add(new Common.Types.RuleGroup
+                    {
+                        DisplayName = ruleGroup.DisplayName,
+                        Name = ruleGroup.Name,
+                        Rules = rules.ToArray(),
+                    });
+                }
             }
+            ruleGroupsBySelectedRules = tempRuleGroups.ToArray();
         }
 
-        private void ApplyDetectedValues()
+        private List<Common.Types.Rule> GetSelectedRules(string ruleGroupName, List<Common.Types.Rule> rules, List<CaseSelectRule> selectedRules)
         {
-            Dictionary<string, List<string>> detectedValues;
-            ValueDetector.GetDetectedProperty(out detectedValues);
+            List<Common.Types.Rule> myRules = new List<Common.Types.Rule>();
+            foreach (var rule in rules)
+            {
+                Common.Types.Rule myRule = new Common.Types.Rule()
+                {
+                    Name = rule.Name,
+                    DisplayName = rule.DisplayName,
+                    Categories = rule.Categories,
+                    SelectStatus = rule.SelectStatus
+                };
+                string ruleName = ruleGroupName + '.' + myRule.Name;
+                if (rule.Count > 0)
+                {
+                    // myRule.Rules is not null means it is parent rule and contains sub rules,
+                    var selectedRulesList = GetSelectedRules(ruleName, rule.ToList(), selectedRules);
+                    myRule.Clear();
+                    foreach (var s in selectedRulesList)
+                    {
+                        myRule.Add(s);
+                    }
+                    if (selectedRules.Where(i => ruleName.Contains(i.Name) || i.Name.Contains(ruleName)).Count() > 0)
+                    {
+                        // 1. ruleName is sub rule of selectedRules: ruleName.Contains(i.Name)
+                        // e.g. ruleName:Priority.Non-BVT.Negative, i.Name: Priority.Non-BVT
+                        // 2. ruleName is parent rule of selectedRules: i.Name.Contains(ruleName)
+                        // e.g. ruleName:SMB Dialect (Please select all supported dialects).SMB Dialects, i.Name: SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 202
+
+                        // If rule.Count > myRule.Count means its sub rules contains unselected item(s),
+                        // so 'myRule' is partial selected, and set IsSelected to null; otherwise set IsSelected to true.
+                        myRule.SelectStatus = rule.Count > myRule.Count ? Common.Types.RuleSelectStatus.Partial : Common.Types.RuleSelectStatus.Selected;
+                        myRules.Add(myRule);
+                    }
+                }
+                else
+                {
+                    // myRule.Rules is null means it has no sub rules, if ruleName's parent rule is in selectedRules then set IsSelected to true.
+                    // e.g. ruleName:Priority.Non-BVT.Positive,i.Name: Priority.Non-BVT
+                    if (selectedRules.Where(i => ruleName.Contains(i.Name)).Count() > 0)
+                    {
+                        myRule.SelectStatus = Common.Types.RuleSelectStatus.Selected;
+                        myRules.Add(myRule);
+                    }
+                }
+            }
+            return myRules;
+        }
+
+        private void ApplyDetectedValues(ref IEnumerable<PropertyGroup> properties)
+        {
+            Dictionary<string, List<string>> propertiesByDetector;
+            ValueDetector.GetDetectedProperty(out propertiesByDetector);
+            List<PropertyGroup> updatedPropertyGroupList = new List<PropertyGroup>();
+            foreach (var ptfconfigProperty in properties)
+            {
+                PropertyGroup newPropertyGroup = new PropertyGroup()
+                {
+                    Name = ptfconfigProperty.Name,
+                    Items = ptfconfigProperty.Items,
+                };
+
+                foreach (var item in ptfconfigProperty.Items)
+                {
+                    var propertyFromDetctor = propertiesByDetector.Where(i => i.Key == item.Key);
+                    if (propertyFromDetctor.Count() > 0)
+                    {
+                        var detectorPropertyValue = propertyFromDetctor.FirstOrDefault().Value;
+                        var newProperty = newPropertyGroup.Items.Where(i => i.Key == item.Key).FirstOrDefault();
+                        if (detectorPropertyValue.Count() == 1)
+                        {
+                            newProperty.Value = detectorPropertyValue[0];
+                        }
+                        else if (detectorPropertyValue.Count() > 0)
+                        {
+                            newProperty.Choices = detectorPropertyValue;
+                            newProperty.Value = detectorPropertyValue[0];
+                        }
+                    }
+                }
+
+                updatedPropertyGroupList.Add(newPropertyGroup);
+            }
+            properties = updatedPropertyGroupList.ToArray();
         }
 
         #endregion
@@ -434,32 +530,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         {
             DetectLogCallback = (msg, style) =>
             {
-                stepsLocker.EnterWriteLock();
-                try
-                {
-                    if (StepIndex == detectSteps.Count) return;
-                    var item = detectSteps[StepIndex];
-                    item.Style = style;
+                if (StepIndex == detectSteps.Count) return;
 
-                    if(style != LogStyle.Default)
-                    {
-                        StepIndex++;
-                    }
-
-                    item.DetectingStatus = style switch
-                    {
-                        LogStyle.Default => DetectingStatus.Detecting,
-                        LogStyle.Error => DetectingStatus.Error,
-                        LogStyle.StepFailed => DetectingStatus.Failed,
-                        LogStyle.StepSkipped => DetectingStatus.Skipped,
-                        LogStyle.StepNotFound => DetectingStatus.NotFound,
-                        LogStyle.StepPassed => DetectingStatus.Finished,
-                        _ => DetectingStatus.Finished,
-                    };
-                }
-                finally
+                var status = style switch
                 {
-                    stepsLocker.ExitWriteLock();
+                    LogStyle.Default => DetectingStatus.Detecting,
+                    LogStyle.Error => DetectingStatus.Error,
+                    LogStyle.StepFailed => DetectingStatus.Failed,
+                    LogStyle.StepSkipped => DetectingStatus.Skipped,
+                    LogStyle.StepNotFound => DetectingStatus.NotFound,
+                    LogStyle.StepPassed => DetectingStatus.Finished,
+                    _ => DetectingStatus.Finished,
+                };
+
+                SetDetectStepCurrentStatus(status);
+
+                if (style != LogStyle.Default)
+                {
+                    StepIndex++;
                 }
 
                 if (LogWriter != null)
@@ -470,7 +558,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             };
         }
 
-        private async void StartDetection()
+        private void StartDetection()
         {
             cts = new CancellationTokenSource();
             var token = cts.Token;
@@ -490,14 +578,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     var resultStatus = ValueDetector.RunDetection() ? DetectionStatus.Finished : DetectionStatus.Error;
                     SetDetectionStatus(resultStatus);
+                    detectedException = null;
                 }
                 catch (Exception ex)
                 {
                     SetDetectionStatus(DetectionStatus.Error);
                     detectedException = ex;
+                    StopDetection();
                 }
 
+                DetectLogCallback = null;
                 CloseLogger();
+
+                if (detectedException != null && StepIndex < GetDetectedSteps().Count)
+                {
+                    SetDetectStepCurrentStatus(DetectingStatus.Pending);
+                }
+
+                detectTask = null;
             }, token);
 
             StepIndex = 0;
@@ -507,7 +605,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             detectTask.Start();
         }
 
-        private async void StopDetection()
+        private void StopDetection()
         {
             if (detectTask != null)
             {
@@ -516,8 +614,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     Thread.SpinWait(100);
                 }
-
-                detectTask = null;
             }
             
             taskCanceled = false;
@@ -644,6 +740,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     logLocker.ExitWriteLock();
                 }
+            }
+        }
+
+        private void SetDetectStepCurrentStatus(DetectingStatus detectingStatus)
+        {
+            stepsLocker.EnterWriteLock();
+            try
+            {
+                detectSteps[StepIndex].DetectingStatus = detectingStatus;
+            }
+            finally
+            {
+                stepsLocker.ExitWriteLock();
             }
         }
         #endregion

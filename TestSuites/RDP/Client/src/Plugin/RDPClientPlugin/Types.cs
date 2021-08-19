@@ -4,27 +4,6 @@ using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
-    /// <summary>
-    /// DetectResult 
-    /// </summary>
-    public enum DetectResult
-    {
-        /// <summary>
-        /// Detected result is supported
-        /// </summary>
-        Supported,
-
-        /// <summary>
-        /// Detected result is not supported
-        /// </summary>
-        UnSupported,
-
-        /// <summary>
-        /// Detection failed
-        /// </summary>
-        DetectFail,
-    }
-
     public enum TriggerMethod
     {
         Powershell,
@@ -68,56 +47,5 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public bool? IsSupportRDPEMT;
 
         public string RdpVersion;
-    }
-
-    /// <summary>
-    /// ResultItem
-    /// </summary>
-    public class ResultItem
-    {
-        /// <summary>
-        /// DetectedResult status
-        /// </summary>
-        public DetectResult DetectedResult { get; set; }
-
-        /// <summary>
-        /// ResultItem name
-        /// </summary>
-        public string Name { get; set; }
-    }
-
-    /// <summary>
-    /// ResultItemMap
-    /// </summary>
-    public class ResultItemMap
-    {
-        private List<ResultItem> resultItemList;
-
-        /// <summary>
-        /// ResultItemList
-        /// </summary>
-        public List<ResultItem> ResultItemList
-        {
-            get { return resultItemList; }
-            set { resultItemList = value; }
-        }
-
-        /// <summary>
-        /// ResultItemMap header.
-        /// </summary>
-        public string Header { get; set; }
-
-        /// <summary>
-        /// ResultItemMap description.
-        /// </summary>
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Create new instance of ResultItemMap
-        /// </summary>
-        public ResultItemMap()
-        {
-            resultItemList = new List<ResultItem>();
-        }
     }
 }

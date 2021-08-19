@@ -84,9 +84,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             return groups.ToArray();
         }
 
-        public static RuleGroup[] UpdateByMappingTable(RuleGroup[] ruleGroups, int mappingIndex,  Dictionary<string, List<Common.Types.Rule>> mappingTable)
+        public static RuleGroup[] UpdateByMappingTable(RuleGroup[] ruleGroups, int mappingIndex, Dictionary<string, List<Common.Types.Rule>> mappingTable, IEnumerable<Common.Types.RuleGroup> selectedRules = null)
         {
-            if(mappingIndex == -1)
+            if (mappingIndex == -1)
             {
                 return ruleGroups;
             }
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                     var g = ruleGroups.ElementAt(i);
                     if (i == mappingIndex)
                     {
-                        UpdateRulesByMappingTable(g.Rules, mappingTable);
+                        UpdateRulesByMappingTable(g.Name, g.Rules, mappingTable, selectedRules);
                     }
                     groups.Add(g);
                 }
@@ -154,7 +154,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             }
         }
 
-        private static void UpdateRulesByMappingTable(IList<Rule> rules, Dictionary<string, List<Common.Types.Rule>> mappingTable)
+        private static void UpdateRulesByMappingTable(string groupName, IList<Rule> rules, Dictionary<string, List<Common.Types.Rule>> mappingTable, IEnumerable<Common.Types.RuleGroup> selectedRules = null)
         {
             if (rules == null)
             {
@@ -169,12 +169,40 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 }
                 if (r.Categories.Length > 0 && mappingTable.ContainsKey(r.Categories.FirstOrDefault()))
                 {
-                    var hiddenNodes = mappingTable.GetValueOrDefault(r.Categories.FirstOrDefault()).Select(x => x.Name).Distinct();
+                    var mappingValues = mappingTable.GetValueOrDefault(r.Categories.FirstOrDefault());
+                    var hiddenNodes = mappingValues.Select(x => x.Name).Distinct();
                     r.MappingRules = hiddenNodes.ToArray();
+                    // Make it be compatible to PTMGUI exported profile.xml
+                    var newSelectedHiddenNodes = mappingValues.Where(i => i.SelectStatus == RuleSelectStatus.Selected).Select(x => x.Name).Distinct();
+                    if (newSelectedHiddenNodes.Count() > 0 && !r.Name.Contains('%') && selectedRules != null)
+                    {
+                        var selectedRule = selectedRules.Where(i => i.Name == groupName).FirstOrDefault();
+                        if (selectedRule != null)
+                        {
+                            var originalRules = selectedRule.Rules;
+                            var rule = selectedRule.Rules.Where(i => (i.Name.Contains('.') ? i.Name.Remove(0,i.Name.LastIndexOf('.')+1) : i.Name) == r.Name).FirstOrDefault();
+                            if (rule != null)
+                            {
+                                originalRules.Remove(rule);
+                                foreach (var mapRule in newSelectedHiddenNodes)
+                                {
+                                    Common.Types.Rule newRule = new Common.Types.Rule()
+                                    {
+                                        Name = rule.Name,
+                                        DisplayName = rule.DisplayName,
+                                        Categories = rule.Categories,
+                                        SelectStatus = rule.SelectStatus
+                                    };
+                                    newRule.Name = rule.Name + '%' + mapRule;
+                                    originalRules.Add(newRule);
+                                }
+                            }
+                        }
+                    }
                 }
                 if (r.Rules != null)
                 {
-                    UpdateRulesByMappingTable(r.Rules, mappingTable);
+                    UpdateRulesByMappingTable(groupName, r.Rules, mappingTable, selectedRules);
                 }
             }
         }
@@ -188,6 +216,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                     DisplayName = r.DisplayName,
                     Name = r.Name,
                     Categories = r.Categories,
+                    SelectStatus = r.IsSelected == null ? RuleSelectStatus.Partial : r.IsSelected == true ? RuleSelectStatus.Selected : RuleSelectStatus.UnSelected,
                 };
                 if (r.Rules != null && r.Rules.Length > 0)
                 {
