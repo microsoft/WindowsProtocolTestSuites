@@ -4,6 +4,7 @@
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
