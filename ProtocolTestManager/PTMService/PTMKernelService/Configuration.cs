@@ -72,21 +72,44 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                 XmlDocument xmlDoc = new XmlDocument();
                 var rootElement = xmlDoc.CreateElement("RuleGroups");
-                foreach(var group in value)
+                foreach (var group in value)
                 {
                     var ruleGroupEle = xmlDoc.CreateElement("RuleGroup");
                     ruleGroupEle.SetAttribute("name", group.Name);
 
-                    if(group.Rules!=null && group.Rules.Count > 0)
+                    if (group.Rules != null && group.Rules.Count > 0)
                     {
+                        Stack<KeyValuePair<Common.Types.Rule,string>> ruleStack = new Stack<KeyValuePair<Common.Types.Rule, string>>();
                         foreach (var rule in group.Rules)
                         {
-                            var ruleEle = xmlDoc.CreateElement("Rule");
-                            ruleEle.SetAttribute("name", rule.Name);
-                            ruleGroupEle.AppendChild(ruleEle);
+                            ruleStack.Push(new KeyValuePair<Common.Types.Rule, string>(rule,group.Name));
+                        }
+                        while (ruleStack.Count > 0)
+                        {
+                            var ruleStackItem = ruleStack.Pop();
+                            Common.Types.Rule myRule = ruleStackItem.Key;
+                            string parentPath = ruleStackItem.Value;
+                            if (myRule.SelectStatus != RuleSelectStatus.UnSelected && myRule.Count == 0)
+                            {
+                                var ruleEle = xmlDoc.CreateElement("Rule");
+                                // When parent name is already in rule name, we needn't to add it again.
+                                if (myRule.Name.Contains(parentPath))
+                                {
+                                    ruleEle.SetAttribute("name", myRule.Name);
+                                }
+                                else
+                                {
+                                    ruleEle.SetAttribute("name", parentPath + '.' + myRule.Name);
+                                }
+                                ruleGroupEle.AppendChild(ruleEle);
+                            }
+                            foreach (var childRule in myRule)
+                            {
+                                ruleStack.Push(new KeyValuePair<Common.Types.Rule, string>(childRule, parentPath + '.' + myRule.Name));
+                            }
                         }
                     }
-                    
+
                     rootElement.AppendChild(ruleGroupEle);
                 }
 

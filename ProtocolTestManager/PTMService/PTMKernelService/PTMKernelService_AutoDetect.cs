@@ -89,7 +89,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public void ApplyDetectionResult(int configurationId)
         {
-            GetAutoDetection(configurationId).ApplyDetectionResult();
+            var configuration = GetConfiguration(configurationId);
+            var detector = GetAutoDetection(configurationId);
+
+            IEnumerable<RuleGroup> ruleGroupsBySelectedRules;
+            IEnumerable<PropertyGroup> properties = configuration.Properties;
+
+            // Get ruleGroupsBySelectedRules and ptfconfig properties values by detector.
+            detector.ApplyDetectionResult(out ruleGroupsBySelectedRules, ref properties);
+
+            // Save profile.xml
+            configuration.Rules = ruleGroupsBySelectedRules;
+
+            // Save ptfconfig files.
+            configuration.Properties = properties;
         }
 
         public List<ResultItemMap> GetDetectionSummary(int configurationId)
