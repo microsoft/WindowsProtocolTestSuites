@@ -16,25 +16,25 @@ export const SET_SELECTED_TESTSUITE_CONFIGURATION = 'CONFIGURATION/SET_SELECTED_
 export const SET_SEARCHTEXT = 'CONFIGURATION/SET_SEARCHTEXT'
 
 // define action types
-interface GetTSConfigurationsActionRequestType { type: typeof GET_TESTSUITE_CONFIGURATIONS_REQUEST; }
-interface GetTSConfigurationsActionSuccessType { type: typeof GET_TESTSUITE_CONFIGURATIONS_SUCCESS; payload: Configuration[]; }
-interface GetTSConfigurationsActionFailureType { type: typeof GET_TESTSUITE_CONFIGURATIONS_FAILURE; errorMsg: string; }
+interface GetTSConfigurationsActionRequestType { type: typeof GET_TESTSUITE_CONFIGURATIONS_REQUEST }
+interface GetTSConfigurationsActionSuccessType { type: typeof GET_TESTSUITE_CONFIGURATIONS_SUCCESS, payload: Configuration[] }
+interface GetTSConfigurationsActionFailureType { type: typeof GET_TESTSUITE_CONFIGURATIONS_FAILURE, errorMsg: string }
 
-interface CreateTSConfigurationActionRequestType { type: typeof CREATE_TESTSUITE_CONFIGURATION_REQUEST; }
-interface CreateTSConfigurationActionSuccessType { type: typeof CREATE_TESTSUITE_CONFIGURATION_SUCCESS; payload: number; }
-interface CreateTSConfigurationActionFailureType { type: typeof CREATE_TESTSUITE_CONFIGURATION_FAILURE; errorMsg: string; }
+interface CreateTSConfigurationActionRequestType { type: typeof CREATE_TESTSUITE_CONFIGURATION_REQUEST }
+interface CreateTSConfigurationActionSuccessType { type: typeof CREATE_TESTSUITE_CONFIGURATION_SUCCESS, payload: number }
+interface CreateTSConfigurationActionFailureType { type: typeof CREATE_TESTSUITE_CONFIGURATION_FAILURE, errorMsg: string }
 
-interface SetTSConfigurationActionType { type: typeof SET_SELECTED_TESTSUITE_CONFIGURATION; selectedConfiguration: Configuration }
-interface SetSearchTextActionType { type: typeof SET_SEARCHTEXT; searchText: string }
+interface SetTSConfigurationActionType { type: typeof SET_SELECTED_TESTSUITE_CONFIGURATION, selectedConfiguration: Configuration }
+interface SetSearchTextActionType { type: typeof SET_SEARCHTEXT, searchText: string }
 
 export type TestSuiteConfigurationActionTypes = GetTSConfigurationsActionRequestType
-    | GetTSConfigurationsActionSuccessType
-    | GetTSConfigurationsActionFailureType
-    | SetTSConfigurationActionType
-    | SetSearchTextActionType
-    | CreateTSConfigurationActionRequestType
-    | CreateTSConfigurationActionSuccessType
-    | CreateTSConfigurationActionFailureType;
+| GetTSConfigurationsActionSuccessType
+| GetTSConfigurationsActionFailureType
+| SetTSConfigurationActionType
+| SetSearchTextActionType
+| CreateTSConfigurationActionRequestType
+| CreateTSConfigurationActionSuccessType
+| CreateTSConfigurationActionFailureType
 
 // define actions
 export const ConfigurationActions = {

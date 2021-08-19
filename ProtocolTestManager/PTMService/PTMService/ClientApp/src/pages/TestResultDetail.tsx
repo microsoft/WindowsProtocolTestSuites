@@ -19,10 +19,10 @@ import { TestResultsDataSrv } from '../services/TestResults'
 import { ProfileDataSrv } from '../services/ProfileService'
 import { AppState } from '../store/configureStore'
 
-type GroupKeys = {
-    KeyName: string,
-    Keys: { key: string, name: string }[],
-    KeyComparer: (result: TestCaseOverview, key: string) => boolean
+interface GroupKeys {
+  KeyName: string
+  Keys: Array<{ key: string, name: string }>,
+  KeyComparer: (result: TestCaseOverview, key: string) => boolean
 }
 
 const groupByTestCaseStateKeys: GroupKeys = {
@@ -58,11 +58,11 @@ const isValidFilterPhrase = (filterPhrase: string | undefined) => {
 
 const filterByNameFunc = (filterPhrase: string | undefined) => (item: TestCaseOverview) => {
   return isValidFilterPhrase(filterPhrase)
-    ? item.FullName.toLocaleLowerCase().indexOf(filterPhrase!.toLocaleLowerCase()) >= 0
+    ? item.FullName.toLocaleLowerCase().includes(filterPhrase!.toLocaleLowerCase())
     : true
 }
 
-type SelectionItem = TestCaseOverview & IObjectWithKey;
+type SelectionItem = TestCaseOverview & IObjectWithKey
 
 const getSelectionItems = (testCaseResults: TestCaseOverview[]) => {
   return testCaseResults.map((result: TestCaseOverview) => {
@@ -79,9 +79,9 @@ const hasFailedCases = (results: TestCaseOverview[]) => {
     : results.some(item => item.State === 'Failed')
 }
 
-type TestCaseResultViewProps = {
-    winSize: { width: number, height: number },
-    result: TestCaseResult | undefined
+interface TestCaseResultViewProps {
+  winSize: { width: number, height: number },
+  result: TestCaseResult | undefined
 }
 
 const lineHeader = /\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(?<kind>\w+)\]/g
@@ -132,9 +132,9 @@ function TestCaseResultView (props: TestCaseResultViewProps) {
   )
 }
 
-type SelectedTestCasesViewProps = {
-    winSize: { width: number, height: number },
-    results: TestCaseOverview[]
+interface SelectedTestCasesViewProps {
+  winSize: { width: number, height: number },
+  results: TestCaseOverview[]
 }
 
 function SelectedTestCasesView (props: SelectedTestCasesViewProps) {
@@ -155,10 +155,10 @@ function SelectedTestCasesView (props: SelectedTestCasesViewProps) {
   )
 }
 
-type RerunContextualMenuProps = {
-    testResult: TestResult,
-    selectedItems: TestCaseOverview[] | undefined,
-    onRerun: (kind: 'All' | 'Failed' | 'Selected') => () => void
+interface RerunContextualMenuProps {
+  testResult: TestResult
+  selectedItems: TestCaseOverview[] | undefined
+  onRerun: (kind: 'All' | 'Failed' | 'Selected') => () => void
 }
 
 function RerunContextualMenu (props: RerunContextualMenuProps) {

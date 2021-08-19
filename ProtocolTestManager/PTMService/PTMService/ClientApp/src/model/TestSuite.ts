@@ -4,10 +4,10 @@
 import { TestCase } from './TestCase'
 
 export interface TestSuite {
-    Id: number;
-    Name: string;
-    Version: string;
-    Description?: string;
-    Removed: boolean;
-    TestCases?: TestCase[];
+  Id: number
+  Name: string
+  Version: string
+  Description?: string
+  Removed: boolean
+  TestCases?: TestCase[]
 }

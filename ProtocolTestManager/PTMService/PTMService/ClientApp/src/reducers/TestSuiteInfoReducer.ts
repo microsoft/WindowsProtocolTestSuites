@@ -5,10 +5,10 @@ import { GET_TESTSUITEINFO_FAILURE, GET_TESTSUITEINFO_REQUEST, GET_TESTSUITEINFO
 import { TestSuite } from '../model/TestSuite'
 
 export interface TestSuiteInfoState {
-    isLoading: boolean;
-    errorMsg?: string;
-    selectedTestSuite?: TestSuite;
-    pageDate: any;
+  isLoading: boolean
+  errorMsg?: string
+  selectedTestSuite?: TestSuite
+  pageDate: any
 }
 
 const initialTestSuitesState: TestSuiteInfoState = {

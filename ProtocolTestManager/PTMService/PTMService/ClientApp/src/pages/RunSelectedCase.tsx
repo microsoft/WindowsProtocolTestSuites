@@ -18,7 +18,7 @@ import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases'
 import { AppState } from '../store/configureStore'
 
 interface ListItem extends IObjectWithKey {
-    Name: string;
+  Name: string
 }
 
 const getListItems = (testCases: string[]): ListItem[] => {
@@ -36,8 +36,8 @@ function copyAndSort<T> (items: T[], columnKey: string, isSortedDescending?: boo
 }
 
 interface FilterByDropdownOption extends IDropdownOption {
-    filterFunc: (filterPhrase: string | undefined) => (item: ListItem) => boolean;
-    filterPlaceholder: string;
+  filterFunc: (filterPhrase: string | undefined) => (item: ListItem) => boolean
+  filterPlaceholder: string
 }
 
 const isValidFilterPhrase = (filterPhrase: string | undefined) => {
@@ -46,7 +46,7 @@ const isValidFilterPhrase = (filterPhrase: string | undefined) => {
 
 const filterByNameFunc = (filterPhrase: string | undefined) => (item: ListItem) => {
   return isValidFilterPhrase(filterPhrase)
-    ? item.Name.toLocaleLowerCase().indexOf(filterPhrase!.toLocaleLowerCase()) >= 0
+    ? item.Name.toLocaleLowerCase().includes(filterPhrase!.toLocaleLowerCase())
     : true
 }
 
@@ -59,9 +59,9 @@ const filterByDropdownOptions: FilterByDropdownOption[] = [
   }
 ]
 
-type FilterByDropdownProps = {
-    options: FilterByDropdownOption[],
-    onOptionChange: (newOption: FilterByDropdownOption) => void
+interface FilterByDropdownProps {
+  options: FilterByDropdownOption[]
+  onOptionChange: (newOption: FilterByDropdownOption) => void
 }
 
 function FilterByDropdown (props: FilterByDropdownProps) {

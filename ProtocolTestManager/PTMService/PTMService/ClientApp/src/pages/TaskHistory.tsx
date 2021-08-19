@@ -21,7 +21,7 @@ import { TestSuitesDataSrv } from '../services/TestSuites'
 import { ProfileDataSrv } from '../services/ProfileService'
 import { AppState } from '../store/configureStore'
 
-type NumberValueKeysOf<T> = { [P in keyof T]-?: T[P] extends number ? P : never }[keyof T];
+type NumberValueKeysOf<T> = { [P in keyof T]-?: T[P] extends number ? P : never }[keyof T]
 
 function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>> (items: TItem[], keyName: NumberValueKeysOf<TItem>) {
   return items.reduce((dict: { [key: number]: TItem }, item) => {
@@ -31,17 +31,17 @@ function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>> (items: TI
   }, {})
 }
 
-type ListColumnsProps = {
-    onRenderId: (testResultId: number) => JSX.Element,
-    onRenderTestSuite: (configurationId: number) => JSX.Element,
-    isTestSuiteRemoved: (configurationId: number) => boolean,
-    onRenderConfiguration: (configurationId: number) => JSX.Element,
-    onRenderStatus: (status: TestResultState) => JSX.Element,
-    onRenderCount: (kind: TestCaseState | 'Total', count: number | undefined) => JSX.Element,
-    onAbort: (testResultId: number) => void,
-    onRerun: (testResultId: number, configurationId: number) => void,
-    onViewResult: (testResultId: number) => void,
-    onExportProfile: (testResultId: number) => void
+interface ListColumnsProps {
+  onRenderId: (testResultId: number) => JSX.Element
+  onRenderTestSuite: (configurationId: number) => JSX.Element
+  isTestSuiteRemoved: (configurationId: number) => boolean
+  onRenderConfiguration: (configurationId: number) => JSX.Element
+  onRenderStatus: (status: TestResultState) => JSX.Element
+  onRenderCount: (kind: TestCaseState | 'Total', count: number | undefined) => JSX.Element,
+  onAbort: (testResultId: number) => void
+  onRerun: (testResultId: number, configurationId: number) => void,
+  onViewResult: (testResultId: number) => void
+  onExportProfile: (testResultId: number) => void
 }
 
 const getListColumns = (props: ListColumnsProps): IColumn[] => {

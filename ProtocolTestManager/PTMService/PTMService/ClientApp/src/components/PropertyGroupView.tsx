@@ -6,11 +6,11 @@ import { FunctionComponent } from 'react'
 import { Property } from '../model/Property'
 import { PropertyGroup } from '../model/PropertyGroup'
 
-type PropertyGroupViewProps = {
-    winSize: { width: number, height: number },
-    latestPropertyGroup: PropertyGroup,
-    propertyGroup: PropertyGroup,
-    onValueChange: (property: Property) => void
+interface PropertyGroupViewProps {
+  winSize: { width: number, height: number },
+  latestPropertyGroup: PropertyGroup
+  propertyGroup: PropertyGroup
+  onValueChange: (property: Property) => void
 }
 
 const getListColumns = (props: { onRenderName: (prop: Property, index: number) => JSX.Element, onRenderValue: (prop: Property) => JSX.Element }): IColumn[] => {

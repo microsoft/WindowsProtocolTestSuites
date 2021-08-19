@@ -32,10 +32,10 @@ import {
 import { TestCaseResult } from '../model/TestCaseResult'
 
 export interface TestCaseResultState {
-    isLoading: boolean;
-    isPosting: boolean;
-    errorMsg?: string;
-    selectedTestCaseResult: TestCaseResult | undefined;
+  isLoading: boolean
+  isPosting: boolean
+  errorMsg?: string
+  selectedTestCaseResult: TestCaseResult | undefined
 }
 
 const initialTestCaseResultState: TestCaseResultState = {

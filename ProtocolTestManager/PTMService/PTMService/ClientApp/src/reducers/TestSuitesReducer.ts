@@ -10,9 +10,9 @@ import {
 import { TestSuite } from '../model/TestSuite'
 
 export interface TestSuitesState {
-    isLoading: boolean;
-    errorMsg?: string;
-    testSuiteList: TestSuite[];
+  isLoading: boolean
+  errorMsg?: string
+  testSuiteList: TestSuite[]
 }
 
 const initialTestSuitesState: TestSuitesState = {

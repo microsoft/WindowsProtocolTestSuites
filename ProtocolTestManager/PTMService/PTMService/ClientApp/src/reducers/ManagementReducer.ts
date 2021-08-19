@@ -20,13 +20,13 @@ import {
 import { TestSuite } from '../model/TestSuite'
 
 export interface TestSuitesState {
-    isLoading: boolean;
-    isProcessing: boolean;
-    errorMsg?: string;
-    testSuiteList: TestSuite[];
-    displayList: TestSuite[];
-    selectedTestSuite?: TestSuite;
-    searchText?: string;
+  isLoading: boolean
+  isProcessing: boolean
+  errorMsg?: string
+  testSuiteList: TestSuite[]
+  displayList: TestSuite[]
+  selectedTestSuite?: TestSuite
+  searchText?: string
 }
 
 const initialTestSuitesState: TestSuitesState = {
@@ -112,10 +112,10 @@ function filterTestSuites (originalList: TestSuite[], searchText?: string): Test
     return originalList.filter(t => !t.Removed)
   }
 
-  const lowerSearchText = searchText!.toLowerCase()
+  const lowerSearchText = searchText.toLowerCase()
   const newList = originalList.reduce((prevList: TestSuite[], curr) => {
     if (!curr.Removed) {
-      if (curr.Name.toLowerCase().indexOf(lowerSearchText!) >= 0) {
+      if (curr.Name.toLowerCase().includes(lowerSearchText)) {
         return [...prevList, curr]
       } else {
         return prevList

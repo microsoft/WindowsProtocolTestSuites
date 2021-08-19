@@ -4,6 +4,6 @@
 import { TestResultOverview } from './TestResult'
 
 export interface ListResponse {
-    PageCount: number;
-    TestResults: TestResultOverview[];
+  PageCount: number
+  TestResults: TestResultOverview[]
 }

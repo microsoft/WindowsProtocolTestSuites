@@ -90,7 +90,7 @@ export function ConfigureTestCase (props: StepWizardProps) {
                                   : <PropertyGroupView
                                         winSize={winSize}
                                         latestPropertyGroup={propertyGroups.latestPropertyGroups[propertyGroups.editingPropertyGroupIndex]}
-                                        propertyGroup={propertyGroups.editingPropertyGroup!}
+                                        propertyGroup={propertyGroups.editingPropertyGroup}
                                         onValueChange={onPropertyValueChange}
                                     />
                             }

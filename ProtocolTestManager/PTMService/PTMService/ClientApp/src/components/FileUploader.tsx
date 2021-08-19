@@ -7,20 +7,20 @@ import { StackGap5 } from './StackStyle'
 import React, { useRef, useState } from 'react'
 
 export interface IFile {
-    FileName: string;
-    File: Blob;
+  FileName: string
+  File: Blob
 }
 
 export interface FileUploaderProp {
-    onSuccess: (files: IFile[]) => void;
-    label?: string;
-    suffix?: string[];
-    iconName?: string;
-    className?: string;
-    disabled?: boolean;
-    placeholder?: string;
-    maxFileCount?: number;
-    onProcess?: (percentage: number) => void;
+  onSuccess: (files: IFile[]) => void
+  label?: string
+  suffix?: string[]
+  iconName?: string
+  className?: string
+  disabled?: boolean
+  placeholder?: string
+  maxFileCount?: number
+  onProcess?: (percentage: number) => void
 }
 
 export function FileUploader (props: FileUploaderProp) {
@@ -35,20 +35,20 @@ export function FileUploader (props: FileUploaderProp) {
   const fileRef = useRef<HTMLInputElement>(null)
 
   const _onIconClicked = (): void => {
-    if (fileRef.current) {
+    if (fileRef.current != null) {
       fileRef.current.click()
     }
   }
 
   const _generateErrorMessag = (): string => {
-    if (!props.suffix || props.suffix.length === 0) {
+    if ((props.suffix == null) || props.suffix.length === 0) {
       return ''
     }
     return 'Document must end with "' + props.suffix.join(', ') + '"'
   }
 
   const checkFileType = (files: IFile[]): boolean => {
-    if (!props.suffix || props.suffix.length === 0) {
+    if ((props.suffix == null) || props.suffix.length === 0) {
       return true
     }
     if (props.suffix === undefined || props.suffix === null || props.suffix.length === 0) {
@@ -58,10 +58,10 @@ export function FileUploader (props: FileUploaderProp) {
     let flag: boolean = true
     files.forEach((file) => {
       let fileEndWithSuffix = false
-            props.suffix!.forEach((itemSuffix: string) => {
-              fileEndWithSuffix = file.FileName.endsWith(itemSuffix) || fileEndWithSuffix
-            })
-            flag = flag && fileEndWithSuffix
+      props.suffix!.forEach((itemSuffix: string) => {
+        fileEndWithSuffix = file.FileName.endsWith(itemSuffix) || fileEndWithSuffix
+      })
+      flag = flag && fileEndWithSuffix
     })
 
     return flag
@@ -82,7 +82,7 @@ export function FileUploader (props: FileUploaderProp) {
 
   const _onFileChange = (): void => {
     let successSelectedFiles: IFile[] = []
-    if (fileRef.current && fileRef.current.files) {
+    if ((fileRef.current != null) && (fileRef.current.files != null)) {
       // Select none files
       if (fileRef.current.files.length <= 0) {
         return
@@ -117,7 +117,7 @@ export function FileUploader (props: FileUploaderProp) {
                     <Stack horizontal wrap tokens={StackGap5}>
                         <div style={{ marginTop: 8, marginBottom: 8, paddingLeft: 6 }}>
                             {
-                                (files && files.length > 0)
+                                ((files != null) && files.length > 0)
                                   ? files.map((file, index) => {
                                     return <span key={index}>
                                             {file.FileName}{(index === (files.length - 1)) ? '' : ';'}&nbsp;&nbsp;

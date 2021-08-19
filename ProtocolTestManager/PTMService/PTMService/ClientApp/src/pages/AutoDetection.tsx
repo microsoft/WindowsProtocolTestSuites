@@ -1,8 +1,20 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DialogFooter, Dropdown, IColumn, Label, Modal, PrimaryButton, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react'
+import {
+  Link,
+  DetailsList,
+  Dropdown,
+  IColumn,
+  Label,
+  PrimaryButton,
+  Stack,
+  TextField,
+  TooltipDelay,
+  TooltipHost
+} from '@fluentui/react'
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
+import { PopupModal } from '../components/PopupModal'
 import { StepPanel } from '../components/StepPanel'
 import { WizardNavBar } from '../components/WizardNavBar'
 import { getNavSteps } from '../model/DefaultNavSteps'
@@ -11,7 +23,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useWindowSize } from '../components/UseWindowSize'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { Property } from '../model/Property'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, CSSProperties, ReactElement } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
 import { AutoDetectActions } from '../actions/AutoDetectionAction'
@@ -21,7 +33,9 @@ import { useBoolean } from '@uifabric/react-hooks'
 export function AutoDetection (props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result
-  const [hideAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(false)
+  const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
+  const autoDetectionLog = useSelector((state: AppState) => state.autoDetection.log)
+  const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
   const prerequisite = useSelector((state: AppState) => state.autoDetection)
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
@@ -42,7 +56,7 @@ export function AutoDetection (props: StepWizardProps) {
   useEffect(() => {
     if (detectingTimes === -999 || isAutoDetectShouldStop()) {
       if (autoDetectionStepsResult?.Status === DetectionStatus.Error) {
-        toggleAutoDetectWarningDialog()
+        showAutoDetectionWarningDialog()
       }
       setDetecting(false)
       return
@@ -50,7 +64,7 @@ export function AutoDetection (props: StepWizardProps) {
 
     const timer = setTimeout(() => {
       setDetectingTimes(detectingTimes - 1)
-      dispatch(AutoDetectionDataSrv.pullAutoDetectionSteps())
+      dispatch(AutoDetectionDataSrv.getAutoDetectionSteps())
     }, 1000)
 
     return () => clearTimeout(timer)
@@ -61,7 +75,7 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const onPropertyValueChange = (updatedProperty: Property) => {
-    dispatch(AutoDetectActions.updateAUtoDetectionPrerequisiteAction(updatedProperty))
+    dispatch(AutoDetectActions.updateAutoDetectionPrerequisiteAction(updatedProperty))
   }
 
   // This function is to determine if detection status is suitable for running.
@@ -101,7 +115,7 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isPreviousButtonDisabled = () => {
+  const isPreviousButtonDisabled = (): boolean => {
     if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
       return true
     } else {
@@ -109,11 +123,11 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isDetectButtonDisabled = () => {
+  const isDetectButtonDisabled = (): boolean => {
     return false
   }
 
-  const isNextButtonDisabled = () => {
+  const isNextButtonDisabled = (): boolean => {
     if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
       return false
     }
@@ -121,7 +135,7 @@ export function AutoDetection (props: StepWizardProps) {
     return true
   }
 
-  const getDetectButtonText = () => {
+  const getDetectButtonText = (): string => {
     if (detecting) {
       return 'Cancel'
     } else {
@@ -130,6 +144,49 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const StepColumns = (): IColumn[] => {
+    const onFailClick = async (): Promise<ReturnType<typeof dispatch>> => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+
+    const getStyle = (status: string): CSSProperties => {
+      if (status === 'Failed') {
+        return { paddingLeft: 5, color: 'red' }
+      } else if (status === 'Finished') {
+        return { paddingLeft: 5, color: 'green' }
+      } else {
+        return { paddingLeft: 5 }
+      }
+    }
+
+    const DetectingContent = (item: Property, index: number | undefined): ReactElement => {
+      return (
+                <Label>
+                    <div style={{ paddingLeft: 5 }} >{item.Name}</div>
+                </Label>
+      )
+    }
+
+    const DetectingStatus = (item: any): ReactElement => {
+      return (
+                <Label>
+                    <div style={ getStyle(item.Status) } >
+                      {
+                        ((status: string) => {
+                          if (status === 'Failed') {
+                            return (<Link
+                                      underline
+                                      style={getStyle(status)}
+                                      onClick={onFailClick} >
+                                      {status}
+                                    </Link>)
+                          } else {
+                            return (<div style={getStyle(status)}>{status}</div>)
+                          }
+                        })(item.Status)
+                      }
+                    </div>
+                </Label>
+      )
+    }
+
     return [{
       key: 'DetectingContent',
       name: 'DetectingContent',
@@ -137,13 +194,7 @@ export function AutoDetection (props: StepWizardProps) {
       minWidth: 240,
       isRowHeader: true,
       isResizable: true,
-      onRender: (item: Property, index: number | undefined) => {
-        return (
-                    <Label>
-                        <div style={{ paddingLeft: 5 }}>{item.Name}</div>
-                    </Label>
-        )
-      }
+      onRender: DetectingContent
     },
     {
       key: 'DetectingStatus',
@@ -152,22 +203,7 @@ export function AutoDetection (props: StepWizardProps) {
       minWidth: 480,
       isResizable: true,
       isPadded: true,
-      onRender: (item: any) => {
-        let style = { }
-
-        if (item.Status === 'Failed') {
-          style = { paddingLeft: 5, color: 'red' }
-        } else if (item.Status === 'Finished') {
-          style = { paddingLeft: 5, color: 'green' }
-        } else {
-          style = { paddingLeft: 5 }
-        }
-        return (
-                        <Label>
-                            <div style={ style }>{item.Status}</div>
-                        </Label>
-        )
-      }
+      onRender: DetectingStatus
     }]
   }
 
@@ -278,7 +314,7 @@ export function AutoDetection (props: StepWizardProps) {
                                         <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
                                             <DetailsList
                                                 columns={listColumns}
-                                                items={prerequisite.prerequisite?.Properties ? prerequisite.prerequisite?.Properties : []}
+                                                items={prerequisite.prerequisite?.Properties ?? []}
                                                 compact
                                                 selectionMode={SelectionMode.none}
                                                 isHeaderVisible={false}
@@ -298,7 +334,7 @@ export function AutoDetection (props: StepWizardProps) {
                                         <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
                                             <DetailsList
                                                 columns={StepColumns()}
-                                                items={prerequisite.detectionSteps?.DetectingItems ? prerequisite.detectionSteps?.DetectingItems : []}
+                                                items={prerequisite.detectionSteps?.DetectingItems ?? []}
                                                 compact
                                                 selectionMode={SelectionMode.none}
                                                 isHeaderVisible={false}
@@ -319,16 +355,8 @@ export function AutoDetection (props: StepWizardProps) {
                 </Stack>
             </StepPanel>
 
-            <Modal
-                isOpen={hideAutoDetectWarningDialog}
-            >
-                <Stack>
-                    <div>{autoDetectionStepsResult?.Exception}</div>
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={toggleAutoDetectWarningDialog} text={'OK'} />
-                </DialogFooter>
-            </Modal>
+            <PopupModal isOpen={isAutoDetectionWarningDialogOpen} header={'Warning'} onClose={hideAutoDetectionWarningDialog} text={autoDetectionStepsResult?.Exception} />
+            <PopupModal isOpen={isAutoDetectionLogDialogOpen} header={'Log'} onClose={hideAutoDetectionLogDialog} text={autoDetectionLog} />
         </div>
   )
 };

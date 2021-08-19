@@ -3,7 +3,7 @@
 
 import { RequestMethod, FetchService } from '.'
 import { FilterTestCaseActionTypes } from '../actions/FilterTestCaseAction'
-import { AutoDetectActions, TestSuiteAutoDetectionActionTypes } from '../actions/AutoDetectionAction'
+import { AutoDetectActions, TestSuiteAutoDetectionActionTypes, UPDATE_LOG } from '../actions/AutoDetectionAction'
 import { AppThunkAction } from '../store/configureStore'
 
 export const AutoDetectionDataSrv = {
@@ -33,6 +33,23 @@ export const AutoDetectionDataSrv = {
     })
   },
 
+  getAutoDetectionLog: (callback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+    const state = getState()
+    const configurationId = state.configurations.selectedConfiguration?.Id
+    const blob: Blob = await FetchService({
+      url: `api/testsuite/${configurationId}/autodetect/log`,
+      method: RequestMethod.GET,
+      dispatch,
+      // This is a placeholder callback; the true payload is written by the dispatch() call after blob.text()
+      // TODO: We need to change FetchService's function signature so that we don't need this workaround
+      onComplete: () => { return { type: UPDATE_LOG, payload: '' } },
+      headers: { 'Content-Type': 'text/plain' }
+    })
+    const text = await blob.text()
+    dispatch(AutoDetectActions.updateAutoDetectionLogAction(text))
+    callback()
+  },
+
   startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
@@ -60,18 +77,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectActions.PostAutoDetectStop_Failure
     })
   },
-  pullAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
-    const state = getState()
-    const configurationId = state.configurations.selectedConfiguration?.Id
-    await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
-      method: RequestMethod.GET,
-      dispatch,
-      onRequest: AutoDetectActions.StartPolling,
-      onComplete: AutoDetectActions.GetAutoDetectStepsAction_Success,
-      onError: AutoDetectActions.GetAutoDetectStepsAction_Failure
-    })
-  },
+
   applyDetectionResult: (completeCallback?: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     console.log('applyDetectionResult')
     const state = getState()

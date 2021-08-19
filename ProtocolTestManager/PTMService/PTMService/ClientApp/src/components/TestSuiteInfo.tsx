@@ -2,10 +2,10 @@ import { PrimaryButton, Stack } from '@fluentui/react'
 import './../css/index.css'
 
 export interface TestSuiteInfoProp {
-    TestSuiteName: string;
-    Description?: string;
-    Version?: string;
-    OnSelect: () => void;
+  TestSuiteName: string
+  Description?: string
+  Version?: string
+  OnSelect: () => void
 }
 
 export function TestSuiteInfo (props: TestSuiteInfoProp) {

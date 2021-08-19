@@ -15,17 +15,17 @@ export const ABORT_RUNREQUEST_SUCCESS = 'SELECTEDTESTCASES/ABORT_RUNREQUEST_SUCC
 export const ABORT_RUNREQUEST_FAILURE = 'SELECTEDTESTCASES/ABORT_RUNREQUEST_FAILURE'
 
 // define action types
-interface GetAllTestCasesActionRequestType { type: typeof GET_ALLTESTCASES_REQUEST; }
-interface GetAllTestCasesActionSuccessType { type: typeof GET_ALLTESTCASES_SUCCESS; payload: string[]; }
-interface GetAllTestCasesActionFailureType { type: typeof GET_ALLTESTCASES_FAILURE; errorMsg: string; }
+interface GetAllTestCasesActionRequestType { type: typeof GET_ALLTESTCASES_REQUEST }
+interface GetAllTestCasesActionSuccessType { type: typeof GET_ALLTESTCASES_SUCCESS, payload: string[] }
+interface GetAllTestCasesActionFailureType { type: typeof GET_ALLTESTCASES_FAILURE, errorMsg: string }
 
-interface CreateRunRequestActionRequestType { type: typeof CREATE_RUNREQUEST_REQUEST; }
-interface CreateRunRequestActionSuccessType { type: typeof CREATE_RUNREQUEST_SUCCESS; payload: number; }
-interface CreateRunRequestActionFailureType { type: typeof CREATE_RUNREQUEST_FAILURE; errorMsg: string; }
+interface CreateRunRequestActionRequestType { type: typeof CREATE_RUNREQUEST_REQUEST }
+interface CreateRunRequestActionSuccessType { type: typeof CREATE_RUNREQUEST_SUCCESS, payload: number }
+interface CreateRunRequestActionFailureType { type: typeof CREATE_RUNREQUEST_FAILURE, errorMsg: string }
 
-interface AbortRunRequestActionRequestType { type: typeof ABORT_RUNREQUEST_REQUEST; payload: number; }
-interface AbortRunRequestActionSuccessType { type: typeof ABORT_RUNREQUEST_SUCCESS; }
-interface AbortRunRequestActionFailureType { type: typeof ABORT_RUNREQUEST_FAILURE; errorMsg: string; }
+interface AbortRunRequestActionRequestType { type: typeof ABORT_RUNREQUEST_REQUEST, payload: number }
+interface AbortRunRequestActionSuccessType { type: typeof ABORT_RUNREQUEST_SUCCESS }
+interface AbortRunRequestActionFailureType { type: typeof ABORT_RUNREQUEST_FAILURE, errorMsg: string }
 
 export type SelectedTestCasesActionTypes =
     GetAllTestCasesActionRequestType |
@@ -36,7 +36,7 @@ export type SelectedTestCasesActionTypes =
     CreateRunRequestActionFailureType |
     AbortRunRequestActionRequestType |
     AbortRunRequestActionSuccessType |
-    AbortRunRequestActionFailureType;
+    AbortRunRequestActionFailureType
 
 // define actions
 export const SelectedTestCasesActions = {

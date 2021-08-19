@@ -7,20 +7,20 @@ import CheckboxTree, { Node } from 'react-checkbox-tree'
 import 'react-checkbox-tree/lib/react-checkbox-tree.css'
 import { Icon } from '@fluentui/react/lib/Icon'
 
-type TreePanelProps = {
-    groupName: string
-    rules: Rule[]
-    checked: string[]
-    selectAction: (data: SelectedRuleGroup) => void;
+interface TreePanelProps {
+  groupName: string
+  rules: Rule[]
+  checked: string[]
+  selectAction: (data: SelectedRuleGroup) => void
 }
 
 const getGroup = (rules: Rule[], parent: string): Node[] => {
   return rules.map(rule => {
     const curr = parent ? `${parent}.${rule.Name}` : rule.Name
-    if (rule.Rules) {
+    if (rule.Rules != null) {
       return { className: 'treeNode', value: curr, label: rule.DisplayName, categories: rule.Categories, children: getGroup(rule.Rules, curr) }
     }
-    if (rule.MappingRules) {
+    if (rule.MappingRules != null) {
       const hiddenNodes = rule.MappingRules.map(node => {
         const hiddenNode = `${curr}%${node}`
         return { className: 'treeNodeHidden', value: hiddenNode, label: node, categories: node, disabled: false }
@@ -44,7 +44,7 @@ const getItems = (rules: Rule[], parent: string): string[] => {
   const results: string[] = []
   rules.forEach(rule => {
     const curr = parent ? `${parent}.${rule.Name}` : rule.Name
-    if (rule.Rules) {
+    if (rule.Rules != null) {
       results.push(...getItems(rule.Rules, curr))
     }
     results.push(curr)
@@ -59,8 +59,8 @@ const getExpanded = (rules: Rule[]): string[] => {
 export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
   const data = createGroupItems(props.rules)
   const expandedNode = getExpanded(props.rules)
-  const [checked, setChecked] = useState<Array<string>>(props.checked)
-  const [expanded, setExpanded] = useState<Array<string>>(expandedNode)
+  const [checked, setChecked] = useState<string[]>(props.checked)
+  const [expanded, setExpanded] = useState<string[]>(expandedNode)
 
   useEffect(() => {
     if (JSON.stringify(checked) != JSON.stringify(props.checked)) {

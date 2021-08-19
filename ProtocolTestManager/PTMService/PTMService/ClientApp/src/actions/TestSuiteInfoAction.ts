@@ -11,15 +11,15 @@ export const GET_TESTSUITEINFO_FAILURE = 'TESTSUITEINFO/GET_TESTSUITEINFO_FAILUR
 export const SET_SELECTED_TESTSUITE = 'TESTSUITEINFO/SET_SELECTED_TESTSUITE'
 
 // define action types
-interface GetTestSuiteInfoActionRequestType { type: typeof GET_TESTSUITEINFO_REQUEST; }
-interface GetTestSuiteInfoActionSuccessType { type: typeof GET_TESTSUITEINFO_SUCCESS; }
-interface GetTestSuiteInfoActionFailureType { type: typeof GET_TESTSUITEINFO_FAILURE; errorMsg: string; }
-interface SetSelectedTestSuiteActionType { type: typeof SET_SELECTED_TESTSUITE; selectedTestSuite: TestSuite }
+interface GetTestSuiteInfoActionRequestType { type: typeof GET_TESTSUITEINFO_REQUEST }
+interface GetTestSuiteInfoActionSuccessType { type: typeof GET_TESTSUITEINFO_SUCCESS }
+interface GetTestSuiteInfoActionFailureType { type: typeof GET_TESTSUITEINFO_FAILURE, errorMsg: string }
+interface SetSelectedTestSuiteActionType { type: typeof SET_SELECTED_TESTSUITE, selectedTestSuite: TestSuite }
 
 export type TestSuiteInfoActionTypes = GetTestSuiteInfoActionRequestType
-    | GetTestSuiteInfoActionSuccessType
-    | GetTestSuiteInfoActionFailureType
-    | SetSelectedTestSuiteActionType;
+| GetTestSuiteInfoActionSuccessType
+| GetTestSuiteInfoActionFailureType
+| SetSelectedTestSuiteActionType
 
 // define actions
 export const TestSuiteInfoActions = {
