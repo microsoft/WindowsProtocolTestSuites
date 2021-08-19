@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         PrerequisiteView GetPrerequisites();
 
-        bool SetPrerequisits(List<Property> prerequisitProperties);
+        bool SetPrerequisits(List<Property> prerequisiteProperties);
 
         List<DetectingItem> GetDetectedSteps();
 

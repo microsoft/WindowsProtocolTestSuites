@@ -2,15 +2,15 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { GET_DETECTION_STEPS_REQUEST, GET_DETECTION_STEPS_SUCCESS, GET_PREREQUISITE_REQUEST, GET_PREREQUISITE_SUCCESS, START_POLLING, START_POLLING_Failure, START_POLLING_Success, STOP_POLLING, TestSuiteAutoDetectionActionTypes, UPDATE_PREREQUISITE } from '../actions/AutoDetectionAction'
-import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
+import { Prerequisite, DetectionSteps, PrerequisiteProperty } from '../model/AutoDetectionData'
 
 export interface AutoDetectState {
-    isPrerequisiteLoading: boolean;
-    isDetectionStepsLoading: boolean;
-    errorMsg?: string;
-    prerequisite?: Prerequisite;
-    detectionSteps?: DetectionSteps;
-    isPolling: boolean;
+  isPrerequisiteLoading: boolean;
+  isDetectionStepsLoading: boolean;
+  errorMsg?: string;
+  prerequisite?: Prerequisite;
+  detectionSteps?: DetectionSteps;
+  isPolling: boolean;
 }
 
 const initialAutoDetectState: AutoDetectState = {
@@ -32,9 +32,13 @@ export const getAutoDetectReducer = (state = initialAutoDetectState, action: Tes
         prerequisite: undefined
       }
     case GET_PREREQUISITE_SUCCESS:
-      action.payload.Properties.map(p => {
-        p.Value = p.Choices[0]
+      action.payload.Properties.map((p: PrerequisiteProperty) => {
+        if (p.Value === undefined && p.Choices && p.Choices.length > 0) {
+          p.Value = p.Choices[0]
+        }
+        return p
       })
+
       return {
         ...state,
         isPrerequisiteLoading: false,
