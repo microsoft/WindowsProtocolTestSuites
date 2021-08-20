@@ -130,8 +130,6 @@ export function AutoDetection(props: StepWizardProps) {
 
   const isPreviousButtonDisabled = (): boolean => detecting
 
-  const isDetectButtonDisabled = (): boolean => autoDetection.detectionSteps?.Result.Status === DetectionStatus.InProgress
-
   const isNextButtonDisabled = (): boolean => autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
   const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
@@ -252,10 +250,10 @@ export function AutoDetection(props: StepWizardProps) {
                 </div>
             }
           </div>
-          <div className='buttonPanel' style={{ position: 'fixed', left: LeftPanelWidth + 20, bottom: 10, right: 0 }}>
+          <div className='buttonPanel' style={{ position: 'fixed', left: LeftPanelWidth + 20, bottom: 5, right: 0 }}>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
+              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} />
               <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
-              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
               <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
             </Stack>
           </div>
