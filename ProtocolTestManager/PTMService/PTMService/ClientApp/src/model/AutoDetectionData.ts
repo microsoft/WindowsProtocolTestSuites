@@ -9,7 +9,7 @@ export interface Prerequisite {
   Properties: Property[]
 }
 
-export type DetectionStepStatus = 'Pending' | 'Finished' | 'Failed'
+export type DetectionStepStatus = 'Pending' | 'Detecting' | 'Finished' | 'Failed'
 
 export interface DetectingItem {
   Name: string

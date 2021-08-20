@@ -13,8 +13,10 @@ import {
   UPDATE_AUTO_DETECTION_STEPS_FAILURE,
   START_AUTO_DETECTION_REQUEST,
   START_AUTO_DETECTION_FAILURE,
+  START_AUTO_DETECTION_SUCCESS,
   STOP_AUTO_DETECTION_REQUEST,
   STOP_AUTO_DETECTION_FAILURE,
+  STOP_AUTO_DETECTION_SUCCESS,
   APPLY_AUTO_DETECTION_RESULT_REQUEST,
   APPLY_AUTO_DETECTION_RESULT_FAILURE,
   UPDATE_AUTO_DETECTION_PREREQUISITE,
@@ -22,7 +24,7 @@ import {
   GET_AUTO_DETECTION_LOG_FAILURE,
   SET_AUTO_DETECTION_LOG,
   SET_SHOW_WARNING,
-  TestSuiteAutoDetectionActionTypes,
+  TestSuiteAutoDetectionActionTypes
 } from '../actions/AutoDetectionAction'
 import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
 
@@ -97,6 +99,28 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
 
     case START_AUTO_DETECTION_REQUEST:
     case STOP_AUTO_DETECTION_REQUEST:
+      return {
+        ...state,
+        isDetectionStepsLoading: true,
+        errorMsg: undefined
+      }
+
+    case START_AUTO_DETECTION_SUCCESS:
+    case STOP_AUTO_DETECTION_SUCCESS:
+      return {
+        ...state,
+        isDetectionStepsLoading: false,
+        errorMsg: undefined
+      }
+
+    case START_AUTO_DETECTION_FAILURE:
+    case STOP_AUTO_DETECTION_FAILURE:
+      return {
+        ...state,
+        isDetectionStepsLoading: false,
+        errorMsg: action.errorMsg
+      }
+
     case APPLY_AUTO_DETECTION_RESULT_REQUEST:
     case GET_AUTO_DETECTION_LOG_REQUEST:
       return {
@@ -104,8 +128,6 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
         errorMsg: undefined
       }
 
-    case START_AUTO_DETECTION_FAILURE:
-    case STOP_AUTO_DETECTION_FAILURE:
     case APPLY_AUTO_DETECTION_RESULT_FAILURE:
     case GET_AUTO_DETECTION_LOG_FAILURE:
       return {

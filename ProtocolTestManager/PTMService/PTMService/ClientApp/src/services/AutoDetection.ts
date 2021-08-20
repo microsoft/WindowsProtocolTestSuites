@@ -57,7 +57,7 @@ export const AutoDetectionDataSrv = {
     })
     const logText = await logBlob.text();
     dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
-    completeCallback();
+    completeCallback()
   },
   startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
     const state = getState()

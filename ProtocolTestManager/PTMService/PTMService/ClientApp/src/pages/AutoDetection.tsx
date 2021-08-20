@@ -14,7 +14,7 @@ import {
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { PopupModal } from '../components/PopupModal'
 import { StepPanel } from '../components/StepPanel'
-import { WizardNavBar } from '../components/WizardNavBar'
+import { HeaderMenuHeight, LeftPanelWidth, WizardNavBar } from '../components/WizardNavBar'
 import { getNavSteps } from '../model/DefaultNavSteps'
 import { AppState } from '../store/configureStore'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,7 +26,7 @@ import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
 import { AutoDetectionActions } from '../actions/AutoDetectionAction'
 import { DetectingItem, DetectionStatus } from '../model/AutoDetectionData'
-import { useBoolean } from '@uifabric/react-hooks'
+import { useBoolean, useForceUpdate } from '@uifabric/react-hooks'
 import { useRef } from 'react'
 import { useMemo } from 'react'
 import { PropertyGroupView } from '../components/PropertyGroupView'
@@ -48,7 +48,9 @@ export function AutoDetection(props: StepWizardProps) {
   const [detectingTimes, setDetectingTimes] = useState(-999)
   const [detecting, setDetecting] = useState(false)
   const prerequisiteSummaryRef = useRef<HTMLDivElement>(null)
-  const [prerequisiteSummaryHeight, setPrerequisiteSummaryHeight] = useState<number>(180);
+  const [headerHeight, setHeaderHeight] = useState<number>(HeaderMenuHeight)
+
+  const forceUpdate = useForceUpdate()
 
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
@@ -76,10 +78,17 @@ export function AutoDetection(props: StepWizardProps) {
   }, [dispatch, autoDetection, detectingTimes])
 
   useEffect(() => {
-    if (prerequisiteSummaryRef.current) {
-      setPrerequisiteSummaryHeight(prerequisiteSummaryRef.current.offsetHeight)
-    }
-  }, [prerequisiteSummaryRef])
+    const timer = setTimeout(() => {
+      if (prerequisiteSummaryRef.current !== null) {
+        setHeaderHeight(prerequisiteSummaryRef.current.offsetHeight + HeaderMenuHeight)
+        if (autoDetection.prerequisite?.Summary && prerequisiteSummaryRef.current.offsetHeight === 0) {
+          forceUpdate()
+        }
+      }
+    })
+
+    return () => clearTimeout(timer)
+  }, [autoDetection, prerequisiteSummaryRef])
 
   const onPreviousButtonClick = () => {
     wizardProps.previousStep()
@@ -175,7 +184,7 @@ export function AutoDetection(props: StepWizardProps) {
                       {status}
                     </Link>
                   )
-                } else if (status === 'Pending' && detecting) {
+                } else if ((status === 'Pending' || status === 'Detecting') && detecting) {
                   return (
                     <Stack horizontal>
                       <Spinner size={SpinnerSize.medium} />
@@ -218,22 +227,21 @@ export function AutoDetection(props: StepWizardProps) {
         <Stack style={{ paddingLeft: 10 }}>
           <div ref={prerequisiteSummaryRef}>
             <Stack style={{ paddingLeft: 10 }}>
-              {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p>{line.trim()}</p>)}
+              {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
             </Stack>
           </div>
-
-          <div style={{ paddingLeft: 30, maxHeight: (winSize.height - prerequisiteSummaryHeight) / 2, overflowY: 'auto' }}>
+          <div style={{ paddingLeft: 30, maxHeight: (winSize.height - headerHeight) / 2, overflowY: 'auto' }}>
             {
               autoDetection.isPrerequisiteLoading
                 ? <LoadingPanel />
                 : <PropertyGroupView
-                  winSize={{ ...winSize, height: (winSize.height - prerequisiteSummaryHeight) / 2 }}
+                  winSize={{ ...winSize, height: (winSize.height - headerHeight) / 2 }}
                   latestPropertyGroup={prerequisitePropertyGroup}
                   propertyGroup={prerequisitePropertyGroup}
                   onValueChange={onPropertyValueChange} />
             }
           </div>
-          <div style={{ paddingLeft: 30, paddingTop: 20, maxHeight: (winSize.height - prerequisiteSummaryHeight) / 2 - 40, overflowY: 'auto' }}>
+          <div style={{ paddingLeft: 30, paddingTop: 20, maxHeight: (winSize.height - headerHeight) / 2, overflowY: 'auto' }}>
             {
               autoDetection.isDetectionStepsLoading
                 ? <LoadingPanel />
@@ -252,7 +260,7 @@ export function AutoDetection(props: StepWizardProps) {
                 </div>
             }
           </div>
-          <div className='buttonPanel'>
+          <div className='buttonPanel' style={{ position: 'fixed', left: LeftPanelWidth + 20, bottom: 10, right: 0 }}>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
               <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
               <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
@@ -263,6 +271,6 @@ export function AutoDetection(props: StepWizardProps) {
       </StepPanel>
       <PopupModal isOpen={isAutoDetectionWarningDialogOpen} header={'Warning'} onClose={onCloseAutoDetectionWarningDialogClick} text={autoDetection.detectionSteps?.Result.Exception} />
       <PopupModal isOpen={isAutoDetectionLogDialogOpen} header={'Log'} onClose={hideAutoDetectionLogDialog} text={autoDetectionLog} />
-    </div>
+    </div >
   )
 };
