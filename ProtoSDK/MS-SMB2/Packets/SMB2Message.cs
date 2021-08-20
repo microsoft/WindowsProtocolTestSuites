@@ -2780,6 +2780,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ENCRYPTION_NONE = 0,
         ENCRYPTION_AES128_CCM = 0x0001,
         ENCRYPTION_AES128_GCM = 0x0002,
+        ENCRYPTION_AES256_CCM = 0x0003,
+        ENCRYPTION_AES256_GCM = 0x0004,
         ENCRYPTION_INVALID = 0xFFFF
     }
 
