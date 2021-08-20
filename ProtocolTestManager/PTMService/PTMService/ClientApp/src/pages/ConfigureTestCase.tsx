@@ -20,10 +20,6 @@ export function ConfigureTestCase(props: StepWizardProps) {
   const dispatch = useDispatch()
   const propertyGroups = useSelector((state: AppState) => state.propertyGroups)
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
-  useEffect(() => {
-    dispatch(PropertyGroupsDataSrv.getPropertyGroups())
-  }, [dispatch])
-
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const navSteps = getNavSteps(wizardProps, configureMethod)
   const wizard = WizardNavBar(wizardProps, navSteps)
@@ -90,7 +86,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                   : <PropertyGroupView
                     winSize={winSize}
                     latestPropertyGroup={propertyGroups.latestPropertyGroups[propertyGroups.editingPropertyGroupIndex]}
-                    propertyGroup={propertyGroups.editingPropertyGroup!}
+                    propertyGroup={propertyGroups.editingPropertyGroup}
                     onValueChange={onPropertyValueChange}
                   />
               }
