@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         {
             get
             {
-                return File.Exists(Path.Combine(this.StorageRoot.AbsolutePath, @"config\profile.xml"));
+                return File.Exists(Path.Combine(this.StorageRoot.AbsolutePath, "config", "profile.xml"));
             }
         }
 
