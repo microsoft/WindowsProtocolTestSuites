@@ -74,27 +74,20 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case UPDATE_AUTO_DETECTION_PREREQUISITE:
-      if (state.prerequisite) {
-        const updatedProperties = state.prerequisite?.Properties.map((item) => {
+      if (state.prerequisite !== undefined) {
+        const updatedProperties = state.prerequisite.Properties.map((item) => {
           if (item.Name === action.payload.Name) {
-            item.Value = action.payload.Value
             return { ...item, Value: action.payload.Value }
-          }
-          else {
+          } else {
             return item
           }
         })
         return {
           ...state,
-          isPrerequisiteLoading: false,
           prerequisite: { ...state.prerequisite, Properties: updatedProperties }
         }
-      }
-      else {
-        return {
-          ...state,
-          isPrerequisiteLoading: false
-        }
+      } else {
+        return state
       }
 
     case START_AUTO_DETECTION_REQUEST:

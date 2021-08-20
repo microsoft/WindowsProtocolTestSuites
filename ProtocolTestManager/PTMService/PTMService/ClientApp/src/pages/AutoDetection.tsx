@@ -21,14 +21,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useWindowSize } from '../components/UseWindowSize'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { Property } from '../model/Property'
-import { useEffect, useState, CSSProperties, ReactElement } from 'react'
+import { useEffect, useMemo, useRef, useState, CSSProperties, ReactElement } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
 import { AutoDetectionActions } from '../actions/AutoDetectionAction'
 import { DetectingItem, DetectionStatus } from '../model/AutoDetectionData'
-import { useBoolean, useForceUpdate } from '@uifabric/react-hooks'
-import { useRef } from 'react'
-import { useMemo } from 'react'
+import { useBoolean } from '@uifabric/react-hooks'
 import { PropertyGroupView } from '../components/PropertyGroupView'
 import { PropertyGroup } from '../model/PropertyGroup'
 
@@ -49,8 +47,6 @@ export function AutoDetection(props: StepWizardProps) {
   const [detecting, setDetecting] = useState(false)
   const prerequisiteSummaryRef = useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = useState<number>(HeaderMenuHeight)
-
-  const forceUpdate = useForceUpdate()
 
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
@@ -81,9 +77,6 @@ export function AutoDetection(props: StepWizardProps) {
     const timer = setTimeout(() => {
       if (prerequisiteSummaryRef.current !== null) {
         setHeaderHeight(prerequisiteSummaryRef.current.offsetHeight + HeaderMenuHeight)
-        if (autoDetection.prerequisite?.Summary && prerequisiteSummaryRef.current.offsetHeight === 0) {
-          forceUpdate()
-        }
       }
     })
 
@@ -98,7 +91,7 @@ export function AutoDetection(props: StepWizardProps) {
     dispatch(AutoDetectionActions.updateAutoDetectionPrerequisiteAction(updatedProperty))
   }
 
-  // This function is to determine if detection status is suitable for running.
+  // This function is to determine whether detection status is suitable for running.
   const shouldAutoDetectionStop = () => {
     const statusToStop = autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished ||
       autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error ||
@@ -128,7 +121,7 @@ export function AutoDetection(props: StepWizardProps) {
       setDetectingTimes(-999)
       setDetecting(false)
     } else {
-      // Start detect
+      // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection())
       setDetectingTimes(100)
       setDetecting(true)
@@ -143,7 +136,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
 
-  const onFailClick = () => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+  const onFailedClick = () => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
 
   const onCloseAutoDetectionWarningDialogClick = () => {
     dispatch(AutoDetectionActions.setShowWarningAction(false))
@@ -180,7 +173,7 @@ export function AutoDetection(props: StepWizardProps) {
                     <Link
                       underline
                       style={getStyle(status)}
-                      onClick={onFailClick}>
+                      onClick={onFailedClick}>
                       {status}
                     </Link>
                   )
@@ -226,7 +219,7 @@ export function AutoDetection(props: StepWizardProps) {
       <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={autoDetection.errorMsg} >
         <Stack style={{ paddingLeft: 10 }}>
           <div ref={prerequisiteSummaryRef}>
-            <Stack style={{ paddingLeft: 10 }}>
+            <Stack style={{ paddingLeft: 30 }}>
               {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
             </Stack>
           </div>
@@ -236,7 +229,6 @@ export function AutoDetection(props: StepWizardProps) {
                 ? <LoadingPanel />
                 : <PropertyGroupView
                   winSize={{ ...winSize, height: (winSize.height - headerHeight) / 2 }}
-                  latestPropertyGroup={prerequisitePropertyGroup}
                   propertyGroup={prerequisitePropertyGroup}
                   onValueChange={onPropertyValueChange} />
             }
