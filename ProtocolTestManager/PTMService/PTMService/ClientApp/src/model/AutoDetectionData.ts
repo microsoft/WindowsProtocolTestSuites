@@ -1,30 +1,24 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export interface PrerequisiteProperty {
-  Name: string
-  Value: string
-  Choices: string[]
-}
+import { Property } from "./Property";
 
-// GetPrerequisitesRequest: api/testsuite/${configurationId}/autodetect/prerequisites
-// GetPrerequisitesResponse:
 export interface Prerequisite {
   Title: string
   Summary: string
-  Properties: PrerequisiteProperty[]
+  Properties: Property[]
 }
+
+export type DetectionStepStatus = 'Pending' | 'Finished' | 'Failed'
 
 export interface DetectingItem {
   Name: string
-  Status: string
+  Status: DetectionStepStatus
 }
 
-// GetDetectionStepsRequest:api/testsuite/${configurationId}/autodetect/detectionsteps
-// GetDetectionStepsResponse:
 export interface DetectionStepsResponse {
   DetectingContent: string
-  DetectingStatus: string
+  DetectingStatus: DetectionStepStatus
 }
 
 export interface DetectionResult {
@@ -32,7 +26,7 @@ export interface DetectionResult {
   Exception: string
 }
 
-export interface DetectionResultResponse{
+export interface DetectionResultResponse {
   Result: DetectionResult
   DetectionSteps: DetectionStepsResponse[]
 }
@@ -43,46 +37,22 @@ export interface DetectionSteps {
   Result: DetectionResult
 }
 
-// StartAutoDetection: api/testsuite/${configurationId}/autodetect/start
-export interface StartDetectorRequest {
-  // Prerequisites: Prerequisites;
-}
-
-// StopAutoDetection: api/testsuite/${configurationId}/autodetect/stop
-
-// GetDetectionResult: api/testsuite/${configurationId}/autodetect/summary
-export interface DetectionSummary {
-
-}
-
 export enum DetectionStatus {
-  /// <summary>
-  /// Detection not start.
-  /// </summary>
+  // Detection not start.
   NotStart = 'NotStart',
 
-  /// <summary>
-  /// Detection in progress.
-  /// </summary>
+  // Detection in progress.
   InProgress = 'InProgress',
 
-  /// <summary>
-  /// Detection finished.
-  /// </summary>
+  // Detection finished.
   Finished = 'Finished',
 
-  /// <summary>
-  /// Detection step skipped.
-  /// </summary>
+  // Detection step skipped.
   Skipped = 'Skipped',
 
-  /// <summary>
-  /// Detection step not found.
-  /// </summary>
+  // Detection step not found.
   NotFound = 'NotFound',
 
-  /// <summary>
-  /// Error occured running detection step
-  /// </summary>
+  // Error occurred running detection step.
   Error = 'Error'
 }

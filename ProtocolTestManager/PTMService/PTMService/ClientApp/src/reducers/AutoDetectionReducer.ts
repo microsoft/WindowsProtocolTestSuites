@@ -1,99 +1,173 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { GET_DETECTION_STEPS_REQUEST, GET_DETECTION_STEPS_SUCCESS, GET_PREREQUISITE_REQUEST, GET_PREREQUISITE_SUCCESS, START_POLLING_Failure, START_POLLING_Success, STOP_POLLING, TestSuiteAutoDetectionActionTypes, UPDATE_LOG, UPDATE_PREREQUISITE } from '../actions/AutoDetectionAction'
-import { Prerequisite, DetectionSteps, PrerequisiteProperty } from '../model/AutoDetectionData'
+import {
+  GET_AUTO_DETECTION_PREREQUISITE_REQUEST,
+  GET_AUTO_DETECTION_PREREQUISITE_SUCCESS,
+  GET_AUTO_DETECTION_PREREQUISITE_FAILURE,
+  GET_AUTO_DETECTION_STEPS_REQUEST,
+  GET_AUTO_DETECTION_STEPS_SUCCESS,
+  GET_AUTO_DETECTION_STEPS_FAILURE,
+  UPDATE_AUTO_DETECTION_STEPS_REQUEST,
+  UPDATE_AUTO_DETECTION_STEPS_SUCCESS,
+  UPDATE_AUTO_DETECTION_STEPS_FAILURE,
+  START_AUTO_DETECTION_REQUEST,
+  START_AUTO_DETECTION_FAILURE,
+  STOP_AUTO_DETECTION_REQUEST,
+  STOP_AUTO_DETECTION_FAILURE,
+  APPLY_AUTO_DETECTION_RESULT_REQUEST,
+  APPLY_AUTO_DETECTION_RESULT_FAILURE,
+  UPDATE_AUTO_DETECTION_PREREQUISITE,
+  GET_AUTO_DETECTION_LOG_REQUEST,
+  GET_AUTO_DETECTION_LOG_FAILURE,
+  SET_AUTO_DETECTION_LOG,
+  SET_SHOW_WARNING,
+  TestSuiteAutoDetectionActionTypes,
+} from '../actions/AutoDetectionAction'
+import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
 
-export interface AutoDetectState {
+export interface AutoDetectionState {
   isPrerequisiteLoading: boolean
   isDetectionStepsLoading: boolean
   errorMsg?: string
+  showWarning: boolean
   log?: string
   prerequisite?: Prerequisite
   detectionSteps?: DetectionSteps
-  isPolling: boolean
 }
 
-const initialAutoDetectState: AutoDetectState = {
+const initialAutoDetectionState: AutoDetectionState = {
   isPrerequisiteLoading: false,
   isDetectionStepsLoading: false,
   errorMsg: undefined,
+  showWarning: false,
   log: undefined,
   prerequisite: undefined,
-  detectionSteps: undefined,
-  isPolling: false
+  detectionSteps: undefined
 }
 
-export const getAutoDetectReducer = (state = initialAutoDetectState, action: TestSuiteAutoDetectionActionTypes): AutoDetectState => {
+export const getAutoDetectionReducer = (state = initialAutoDetectionState, action: TestSuiteAutoDetectionActionTypes): AutoDetectionState => {
   switch (action.type) {
-    case GET_PREREQUISITE_REQUEST:
+    case GET_AUTO_DETECTION_PREREQUISITE_REQUEST:
       return {
         ...state,
         isPrerequisiteLoading: true,
         errorMsg: undefined,
         prerequisite: undefined
       }
-    case GET_PREREQUISITE_SUCCESS:
-      action.payload.Properties.map((p: PrerequisiteProperty) => {
-        if (p.Value === undefined && p.Choices && p.Choices.length > 0) {
-          p.Value = p.Choices[0]
-        }
-        return p
-      })
 
+    case GET_AUTO_DETECTION_PREREQUISITE_SUCCESS:
       return {
         ...state,
         isPrerequisiteLoading: false,
         errorMsg: undefined,
         prerequisite: action.payload
       }
-    case UPDATE_PREREQUISITE:
-      const updatedItems = state.prerequisite?.Properties.map((item) => {
-        if (item.Name === action.payload.Name) {
-          item.Value = action.payload.Value
-          return item
+
+    case GET_AUTO_DETECTION_PREREQUISITE_FAILURE:
+      return {
+        ...state,
+        isPrerequisiteLoading: false,
+        errorMsg: action.errorMsg
+      }
+
+    case UPDATE_AUTO_DETECTION_PREREQUISITE:
+      if (state.prerequisite) {
+        const updatedProperties = state.prerequisite?.Properties.map((item) => {
+          if (item.Name === action.payload.Name) {
+            item.Value = action.payload.Value
+            return { ...item, Value: action.payload.Value }
+          }
+          else {
+            return item
+          }
+        })
+        return {
+          ...state,
+          isPrerequisiteLoading: false,
+          prerequisite: { ...state.prerequisite, Properties: updatedProperties }
         }
-      })
-      return {
-        ...state,
-        isPrerequisiteLoading: false
       }
-    case UPDATE_LOG:
-      return {
-        ...state,
-        log: action.payload
+      else {
+        return {
+          ...state,
+          isPrerequisiteLoading: false
+        }
       }
-    case GET_DETECTION_STEPS_REQUEST:
+
+    case START_AUTO_DETECTION_REQUEST:
+    case STOP_AUTO_DETECTION_REQUEST:
+    case APPLY_AUTO_DETECTION_RESULT_REQUEST:
+    case GET_AUTO_DETECTION_LOG_REQUEST:
       return {
         ...state,
-        isDetectionStepsLoading: true,
         errorMsg: undefined
       }
 
-    case GET_DETECTION_STEPS_SUCCESS:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        errorMsg: undefined,
-        detectionSteps: action.payload
-      }
-
-    case START_POLLING_Success:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        errorMsg: undefined,
-        detectionSteps: action.payload
-      }
-
-    case START_POLLING_Failure:
+    case START_AUTO_DETECTION_FAILURE:
+    case STOP_AUTO_DETECTION_FAILURE:
+    case APPLY_AUTO_DETECTION_RESULT_FAILURE:
+    case GET_AUTO_DETECTION_LOG_FAILURE:
       return {
         ...state,
         errorMsg: action.errorMsg
       }
 
-    case STOP_POLLING:
-      return { ...state, isPolling: false }
+    case SET_AUTO_DETECTION_LOG:
+      return {
+        ...state,
+        log: action.payload
+      }
+
+    case SET_SHOW_WARNING:
+      return {
+        ...state,
+        showWarning: action.payload
+      }
+
+    case GET_AUTO_DETECTION_STEPS_REQUEST:
+      return {
+        ...state,
+        isDetectionStepsLoading: true,
+        errorMsg: undefined,
+        showWarning: false
+      }
+
+    case GET_AUTO_DETECTION_STEPS_SUCCESS:
+      return {
+        ...state,
+        isDetectionStepsLoading: false,
+        errorMsg: undefined,
+        detectionSteps: action.payload
+      }
+
+    case GET_AUTO_DETECTION_STEPS_FAILURE:
+      return {
+        ...state,
+        isDetectionStepsLoading: false,
+        errorMsg: action.errorMsg
+      }
+
+    case UPDATE_AUTO_DETECTION_STEPS_REQUEST:
+      return {
+        ...state,
+        errorMsg: undefined,
+        showWarning: true
+      }
+
+    case UPDATE_AUTO_DETECTION_STEPS_SUCCESS:
+      return {
+        ...state,
+        errorMsg: undefined,
+        detectionSteps: action.payload
+      }
+
+    case UPDATE_AUTO_DETECTION_STEPS_FAILURE:
+      return {
+        ...state,
+        errorMsg: action.errorMsg
+      }
+
     default:
       return state
   }

@@ -3,7 +3,7 @@
 
 import { RequestMethod, FetchService } from '.'
 import { FilterTestCaseActionTypes } from '../actions/FilterTestCaseAction'
-import { AutoDetectActions, TestSuiteAutoDetectionActionTypes, UPDATE_LOG } from '../actions/AutoDetectionAction'
+import { AutoDetectionActions, TestSuiteAutoDetectionActionTypes } from '../actions/AutoDetectionAction'
 import { AppThunkAction } from '../store/configureStore'
 
 export const AutoDetectionDataSrv = {
@@ -14,12 +14,11 @@ export const AutoDetectionDataSrv = {
       url: `api/testsuite/${configurationId}/autodetect/prerequisites`,
       method: RequestMethod.GET,
       dispatch,
-      onRequest: AutoDetectActions.GetAutoDetectPrerequisiteAction_Request,
-      onComplete: AutoDetectActions.GetAutoDetectPrerequisiteAction_Success,
-      onError: AutoDetectActions.GetAutoDetectPrerequisiteAction_Failure
+      onRequest: AutoDetectionActions.getAutoDetectionPrerequisiteAction_Request,
+      onComplete: AutoDetectionActions.getAutoDetectionPrerequisiteAction_Success,
+      onError: AutoDetectionActions.getAutoDetectionPrerequisiteAction_Failure
     })
   },
-
   getAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
@@ -27,29 +26,39 @@ export const AutoDetectionDataSrv = {
       url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
       method: RequestMethod.GET,
       dispatch,
-      onRequest: AutoDetectActions.GetAutoDetectStepsAction_Request,
-      onComplete: AutoDetectActions.GetAutoDetectStepsAction_Success,
-      onError: AutoDetectActions.GetAutoDetectStepsAction_Failure
+      onRequest: AutoDetectionActions.getAutoDetectionStepsAction_Request,
+      onComplete: AutoDetectionActions.getAutoDetectionStepsAction_Success,
+      onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
     })
   },
-
-  getAutoDetectionLog: (callback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  updateAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
-    const blob: Blob = await FetchService({
+    await FetchService({
+      url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
+      method: RequestMethod.GET,
+      dispatch,
+      onRequest: AutoDetectionActions.updateAutoDetectionStepsAction_Request,
+      onComplete: AutoDetectionActions.updateAutoDetectionStepsAction_Success,
+      onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
+    })
+  },
+  getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+    const state = getState()
+    const configurationId = state.configurations.selectedConfiguration?.Id
+    const logBlob: Blob = await FetchService({
       url: `api/testsuite/${configurationId}/autodetect/log`,
       method: RequestMethod.GET,
       dispatch,
-      // This is a placeholder callback; the true payload is written by the dispatch() call after blob.text()
-      // TODO: We need to change FetchService's function signature so that we don't need this workaround
-      onComplete: () => { return { type: UPDATE_LOG, payload: '' } },
+      onRequest: AutoDetectionActions.getAutoDetectionLogAction_Request,
+      onComplete: AutoDetectionActions.getAutoDetectionLogAction_Success,
+      onError: AutoDetectionActions.getAutoDetectionLogAction_Failure,
       headers: { 'Content-Type': 'text/plain' }
     })
-    const text = await blob.text()
-    dispatch(AutoDetectActions.updateAutoDetectionLogAction(text))
-    callback()
+    const logText = await logBlob.text();
+    dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
+    completeCallback();
   },
-
   startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
@@ -58,13 +67,12 @@ export const AutoDetectionDataSrv = {
       url: `api/testsuite/${configurationId}/autodetect/start`,
       method: RequestMethod.POST,
       dispatch,
-      onRequest: AutoDetectActions.PostAutoDetectStart_Request,
-      onComplete: AutoDetectActions.PostAutoDetectStart_Success,
-      onError: AutoDetectActions.PostAutoDetectStart_Failure,
+      onRequest: AutoDetectionActions.startAutoDetectionAction_Request,
+      onComplete: AutoDetectionActions.startAutoDetectionAction_Success,
+      onError: AutoDetectionActions.startAutoDetectionAction_Failure,
       body: JSON.stringify(body)
     })
   },
-
   stopAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
@@ -72,12 +80,11 @@ export const AutoDetectionDataSrv = {
       url: `api/testsuite/${configurationId}/autodetect/stop`,
       method: RequestMethod.POST,
       dispatch,
-      onRequest: AutoDetectActions.PostAutoDetectStop_Request,
-      onComplete: AutoDetectActions.PostAutoDetectStop_Success,
-      onError: AutoDetectActions.PostAutoDetectStop_Failure
+      onRequest: AutoDetectionActions.stopAutoDetectionAction_Request,
+      onComplete: AutoDetectionActions.stopAutoDetectionAction_Success,
+      onError: AutoDetectionActions.stopAutoDetectionAction_Failure
     })
   },
-
   applyDetectionResult: (completeCallback?: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     console.log('applyDetectionResult')
     const state = getState()
@@ -86,9 +93,9 @@ export const AutoDetectionDataSrv = {
       url: `api/testsuite/${configurationId}/autodetect/apply`,
       method: RequestMethod.POST,
       dispatch,
-      onRequest: AutoDetectActions.ApplyDetectionResult_Request,
-      onComplete: AutoDetectActions.ApplyDetectionResult_Success,
-      onError: AutoDetectActions.ApplyDetectionResult_Failure
+      onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
+      onComplete: AutoDetectionActions.applyAutoDetectionResultAction_Success,
+      onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure
     }).then(completeCallback)
   }
 }

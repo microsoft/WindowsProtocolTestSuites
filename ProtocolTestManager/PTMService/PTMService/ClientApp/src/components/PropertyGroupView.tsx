@@ -84,7 +84,7 @@ export const PropertyGroupView: FunctionComponent<PropertyGroupViewProps> = (pro
   function PropertyView(viewProps: PropertyViewProps) {
     const property = viewProps.property
 
-    return property.Choices?.length
+    return property.Choices?.length && property.Choices.length > 1
       ? <ChoosableProperty property={property} />
       : <CommonProperty property={property} />
   }

@@ -4,14 +4,12 @@
 import {
   Link,
   DetailsList,
-  Dropdown,
   IColumn,
   Label,
   PrimaryButton,
   Stack,
-  TextField,
-  TooltipDelay,
-  TooltipHost
+  Spinner,
+  SpinnerSize
 } from '@fluentui/react'
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { PopupModal } from '../components/PopupModal'
@@ -26,24 +24,31 @@ import { Property } from '../model/Property'
 import { useEffect, useState, CSSProperties, ReactElement } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
-import { AutoDetectActions } from '../actions/AutoDetectionAction'
-import { DetectionStatus } from '../model/AutoDetectionData'
+import { AutoDetectionActions } from '../actions/AutoDetectionAction'
+import { DetectingItem, DetectionStatus } from '../model/AutoDetectionData'
 import { useBoolean } from '@uifabric/react-hooks'
+import { useRef } from 'react'
+import { useMemo } from 'react'
+import { PropertyGroupView } from '../components/PropertyGroupView'
+import { PropertyGroup } from '../model/PropertyGroup'
 
-export function AutoDetection (props: StepWizardProps) {
+export function AutoDetection(props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
-  const autoDetectionStepsResult = useSelector((state: AppState) => state.autoDetection).detectionSteps?.Result
+
   const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
-  const autoDetectionLog = useSelector((state: AppState) => state.autoDetection.log)
   const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
-  const prerequisite = useSelector((state: AppState) => state.autoDetection)
+  const autoDetection = useSelector((state: AppState) => state.autoDetection)
+  const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
+  const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
   const dispatch = useDispatch()
-  const autoDetection = useSelector((state: AppState) => state.autoDetection)
+
   const winSize = useWindowSize()
   const [detectingTimes, setDetectingTimes] = useState(-999)
   const [detecting, setDetecting] = useState(false)
+  const prerequisiteSummaryRef = useRef<HTMLDivElement>(null)
+  const [prerequisiteSummaryHeight, setPrerequisiteSummaryHeight] = useState<number>(180);
 
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
@@ -54,8 +59,8 @@ export function AutoDetection (props: StepWizardProps) {
   }, [dispatch])
 
   useEffect(() => {
-    if (detectingTimes === -999 || isAutoDetectShouldStop()) {
-      if (autoDetectionStepsResult?.Status === DetectionStatus.Error) {
+    if (detectingTimes === -999 || shouldAutoDetectionStop()) {
+      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error && autoDetection.showWarning) {
         showAutoDetectionWarningDialog()
       }
       setDetecting(false)
@@ -64,25 +69,31 @@ export function AutoDetection (props: StepWizardProps) {
 
     const timer = setTimeout(() => {
       setDetectingTimes(detectingTimes - 1)
-      dispatch(AutoDetectionDataSrv.getAutoDetectionSteps())
+      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [detectingTimes])
+  }, [dispatch, autoDetection, detectingTimes])
+
+  useEffect(() => {
+    if (prerequisiteSummaryRef.current) {
+      setPrerequisiteSummaryHeight(prerequisiteSummaryRef.current.offsetHeight)
+    }
+  }, [prerequisiteSummaryRef])
 
   const onPreviousButtonClick = () => {
     wizardProps.previousStep()
   }
 
   const onPropertyValueChange = (updatedProperty: Property) => {
-    dispatch(AutoDetectActions.updateAutoDetectionPrerequisiteAction(updatedProperty))
+    dispatch(AutoDetectionActions.updateAutoDetectionPrerequisiteAction(updatedProperty))
   }
 
   // This function is to determine if detection status is suitable for running.
-  const isAutoDetectShouldStop = () => {
-    const statusToStop = autoDetectionStepsResult?.Status === DetectionStatus.Finished ||
-            autoDetectionStepsResult?.Status === DetectionStatus.Error ||
-            autoDetectionStepsResult?.Status === DetectionStatus.NotStart
+  const shouldAutoDetectionStop = () => {
+    const statusToStop = autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished ||
+      autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error ||
+      autoDetection.detectionSteps?.Result.Status === DetectionStatus.NotStart
 
     // We should get steps for 3 times no matter the status.
     if (detectingTimes >= 98) {
@@ -93,9 +104,9 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const onNextButtonClick = () => {
-    if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
+    if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished) {
       dispatch(AutoDetectionDataSrv.applyDetectionResult(() => {
-      // Next page
+        // Next page
         wizardProps.nextStep()
       }))
     }
@@ -115,37 +126,22 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isPreviousButtonDisabled = (): boolean => {
-    if (autoDetectionStepsResult?.Status === DetectionStatus.InProgress) {
-      return true
-    } else {
-      return false
-    }
+  const isPreviousButtonDisabled = (): boolean => detecting
+
+  const isDetectButtonDisabled = (): boolean => autoDetection.detectionSteps?.Result.Status === DetectionStatus.InProgress
+
+  const isNextButtonDisabled = (): boolean => autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
+
+  const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
+
+  const onFailClick = () => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+
+  const onCloseAutoDetectionWarningDialogClick = () => {
+    dispatch(AutoDetectionActions.setShowWarningAction(false))
+    hideAutoDetectionWarningDialog()
   }
 
-  const isDetectButtonDisabled = (): boolean => {
-    return false
-  }
-
-  const isNextButtonDisabled = (): boolean => {
-    if (autoDetectionStepsResult?.Status === DetectionStatus.Finished) {
-      return false
-    }
-
-    return true
-  }
-
-  const getDetectButtonText = (): string => {
-    if (detecting) {
-      return 'Cancel'
-    } else {
-      return 'Detect'
-    }
-  }
-
-  const StepColumns = (): IColumn[] => {
-    const onFailClick = async (): Promise<ReturnType<typeof dispatch>> => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
-
+  const getStepColumns = (): IColumn[] => {
     const getStyle = (status: string): CSSProperties => {
       if (status === 'Failed') {
         return { paddingLeft: 5, color: 'red' }
@@ -156,34 +152,43 @@ export function AutoDetection (props: StepWizardProps) {
       }
     }
 
-    const DetectingContent = (item: Property, index: number | undefined): ReactElement => {
+    const renderDetectingContent = (item: Property, index: number | undefined): ReactElement => {
       return (
-                <Label>
-                    <div style={{ paddingLeft: 5 }} >{item.Name}</div>
-                </Label>
+        <Label>
+          <div style={{ paddingLeft: 5 }} >{item.Name}</div>
+        </Label>
       )
     }
 
-    const DetectingStatus = (item: any): ReactElement => {
+    const renderDetectingStatus = (item: DetectingItem): ReactElement => {
       return (
-                <Label>
-                    <div style={ getStyle(item.Status) } >
-                      {
-                        ((status: string) => {
-                          if (status === 'Failed') {
-                            return (<Link
-                                      underline
-                                      style={getStyle(status)}
-                                      onClick={onFailClick} >
-                                      {status}
-                                    </Link>)
-                          } else {
-                            return (<div style={getStyle(status)}>{status}</div>)
-                          }
-                        })(item.Status)
-                      }
-                    </div>
-                </Label>
+        <Label>
+          <div style={getStyle(item.Status)} >
+            {
+              ((status) => {
+                if (status === 'Failed') {
+                  return (
+                    <Link
+                      underline
+                      style={getStyle(status)}
+                      onClick={onFailClick}>
+                      {status}
+                    </Link>
+                  )
+                } else if (status === 'Pending' && detecting) {
+                  return (
+                    <Stack horizontal>
+                      <Spinner size={SpinnerSize.medium} />
+                      <div style={getStyle(status)}>{status}</div>
+                    </Stack>
+                  )
+                } else {
+                  return (<div style={getStyle(status)}>{status}</div>)
+                }
+              })(item.Status)
+            }
+          </div>
+        </Label>
       )
     }
 
@@ -194,7 +199,7 @@ export function AutoDetection (props: StepWizardProps) {
       minWidth: 240,
       isRowHeader: true,
       isResizable: true,
-      onRender: DetectingContent
+      onRender: renderDetectingContent
     },
     {
       key: 'DetectingStatus',
@@ -203,160 +208,61 @@ export function AutoDetection (props: StepWizardProps) {
       minWidth: 480,
       isResizable: true,
       isPadded: true,
-      onRender: DetectingStatus
+      onRender: renderDetectingStatus
     }]
-  }
-
-  const getListColumns = (props: { onRenderName: (prop: Property, index: number) => JSX.Element, onRenderValue: (prop: Property) => JSX.Element }): IColumn[] => {
-    return [{
-      key: 'Name',
-      name: 'Name',
-      fieldName: 'Name',
-      minWidth: 240,
-      isRowHeader: true,
-      isResizable: true,
-      onRender: (item: Property, index: number | undefined) => props.onRenderName(item, index!)
-    },
-    {
-      key: 'Value',
-      name: 'Value',
-      fieldName: 'Value',
-      minWidth: 480,
-      isResizable: true,
-      isPadded: true,
-      onRender: (item: Property) => props.onRenderValue(item)
-    }]
-  }
-
-  const listColumns = getListColumns({
-    onRenderName: (item: Property, index: number) => {
-      const latestProperty = prerequisite.prerequisite?.Properties[index]
-      if (latestProperty?.Value === item.Value) {
-        return (
-                    <Label>
-                        <div style={{ paddingLeft: 5 }}>{item.Name}</div>
-                    </Label>
-        )
-      } else {
-        return (
-                    <Label style={{ backgroundSize: '120', backgroundColor: '#004578', color: 'white' }}>
-                        <div style={{ paddingLeft: 5 }}>{item.Name}*</div>
-                    </Label>
-        )
-      }
-    },
-    onRenderValue: (item: Property) => item.Choices?.length && item.Choices?.length > 1 ? RenderChoosableProperty(item)! : RenderCommonProperty(item)
-  })
-
-  function RenderChoosableProperty (property: Property) {
-    if (property.Choices === undefined) {
-      return
-    }
-
-    const dropdownOptions = property.Choices.map(choice => {
-      return {
-        key: choice.toLowerCase(),
-        text: choice
-      }
-    })
-
-    return (
-            <TooltipHost
-                style={{ alignSelf: 'center' }}
-                key={prerequisite.prerequisite?.Title + property.Key + property.Name}
-                content={property.Description}
-                delay={TooltipDelay.zero}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                    <Dropdown
-                        style={{ alignSelf: 'center', minWidth: 360 }}
-                        placeholder='Select an option'
-                        defaultSelectedKey={property.Value?.toLowerCase()}
-                        options={dropdownOptions}
-                        onChange={(_, newValue, __) => onPropertyValueChange({ ...property, Value: newValue?.text! })}
-                    />
-                </Stack>
-            </TooltipHost>
-    )
-  }
-
-  function RenderCommonProperty (property: Property) {
-    return (
-            <TooltipHost
-                style={{ alignSelf: 'center' }}
-                key={prerequisite.prerequisite?.Title + property.Key + property.Name}
-                content={property.Description}
-                delay={TooltipDelay.zero}>
-                <Stack horizontal tokens={{ childrenGap: 10 }}>
-                    <TextField
-                        style={{ alignSelf: 'stretch', minWidth: 360 }}
-                        value={property.Value}
-                        onChange={(_, newValue) => onPropertyValueChange({ ...property, Value: newValue! })}
-                    />
-                </Stack>
-            </TooltipHost>
-    )
   }
 
   return (
-        <div>
-            <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={''} >
-                <Stack style={{ paddingLeft: 10 }}>
-                    <Stack>
-                        {prerequisite.prerequisite?.Summary}
-                    </Stack>
+    <div>
+      <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={autoDetection.errorMsg} >
+        <Stack style={{ paddingLeft: 10 }}>
+          <div ref={prerequisiteSummaryRef}>
+            <Stack style={{ paddingLeft: 10 }}>
+              {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p>{line.trim()}</p>)}
+            </Stack>
+          </div>
 
-                    <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height / 2 - 180, overflowY: 'auto' }}>
-                        {
-                            prerequisite.isPrerequisiteLoading
-                              ? <LoadingPanel />
-                              : <div>
-                                    <Stack horizontal style={{ paddingTop: 20 }} horizontalAlign='start' tokens={{ childrenGap: 10 }}>
-                                        <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
-                                            <DetailsList
-                                                columns={listColumns}
-                                                items={prerequisite.prerequisite?.Properties ?? []}
-                                                compact
-                                                selectionMode={SelectionMode.none}
-                                                isHeaderVisible={false}
-                                            />
-                                        </div>
-                                    </Stack>
-                                </div>
-
-                        }
+          <div style={{ paddingLeft: 30, maxHeight: (winSize.height - prerequisiteSummaryHeight) / 2, overflowY: 'auto' }}>
+            {
+              autoDetection.isPrerequisiteLoading
+                ? <LoadingPanel />
+                : <PropertyGroupView
+                  winSize={{ ...winSize, height: (winSize.height - prerequisiteSummaryHeight) / 2 }}
+                  latestPropertyGroup={prerequisitePropertyGroup}
+                  propertyGroup={prerequisitePropertyGroup}
+                  onValueChange={onPropertyValueChange} />
+            }
+          </div>
+          <div style={{ paddingLeft: 30, paddingTop: 20, maxHeight: (winSize.height - prerequisiteSummaryHeight) / 2 - 40, overflowY: 'auto' }}>
+            {
+              autoDetection.isDetectionStepsLoading
+                ? <LoadingPanel />
+                : <div>
+                  <Stack horizontal style={{ paddingTop: 20 }} horizontalAlign='start' tokens={{ childrenGap: 10 }}>
+                    <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
+                      <DetailsList
+                        columns={getStepColumns()}
+                        items={autoDetection.detectionSteps?.DetectingItems ?? []}
+                        compact
+                        selectionMode={SelectionMode.none}
+                        isHeaderVisible={false}
+                      />
                     </div>
-                    <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height / 2, overflowY: 'auto' }}>
-                        {
-                            prerequisite.isDetectionStepsLoading
-                              ? <LoadingPanel />
-                              : <div>
-                                    <Stack horizontal style={{ paddingTop: 20 }} horizontalAlign='start' tokens={{ childrenGap: 10 }}>
-                                        <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
-                                            <DetailsList
-                                                columns={StepColumns()}
-                                                items={prerequisite.detectionSteps?.DetectingItems ?? []}
-                                                compact
-                                                selectionMode={SelectionMode.none}
-                                                isHeaderVisible={false}
-                                            />
-                                        </div>
-                                    </Stack>
-                                </div>
-
-                        }
-                    </div>
-                    <div className='buttonPanel'>
-                        <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
-                            <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
-                            <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
-                            <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
-                        </Stack>
-                    </div>
-                </Stack>
-            </StepPanel>
-
-            <PopupModal isOpen={isAutoDetectionWarningDialogOpen} header={'Warning'} onClose={hideAutoDetectionWarningDialog} text={autoDetectionStepsResult?.Exception} />
-            <PopupModal isOpen={isAutoDetectionLogDialogOpen} header={'Log'} onClose={hideAutoDetectionLogDialog} text={autoDetectionLog} />
-        </div>
+                  </Stack>
+                </div>
+            }
+          </div>
+          <div className='buttonPanel'>
+            <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
+              <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
+              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
+              <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
+            </Stack>
+          </div>
+        </Stack>
+      </StepPanel>
+      <PopupModal isOpen={isAutoDetectionWarningDialogOpen} header={'Warning'} onClose={onCloseAutoDetectionWarningDialogClick} text={autoDetection.detectionSteps?.Result.Exception} />
+      <PopupModal isOpen={isAutoDetectionLogDialogOpen} header={'Log'} onClose={hideAutoDetectionLogDialog} text={autoDetectionLog} />
+    </div>
   )
 };
