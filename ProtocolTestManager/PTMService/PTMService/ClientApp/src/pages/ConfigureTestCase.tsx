@@ -29,7 +29,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
     if (!propertyGroups.updated) {
       dispatch(PropertyGroupsDataSrv.getPropertyGroups())
     }
-  }, [dispatch, propertyGroups.updated])
+  })
 
   const onPropertyValueChange = (updatedProperty: Property) => {
     dispatch(PropertyGroupsActions.updatedEditingPropertyGroupAction(updatedProperty))

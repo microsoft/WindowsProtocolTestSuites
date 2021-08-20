@@ -75,14 +75,10 @@ export function AutoDetection(props: StepWizardProps) {
   }, [dispatch, autoDetection, detectingTimes])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (prerequisiteSummaryRef.current !== null) {
-        setHeaderHeight(prerequisiteSummaryRef.current.offsetHeight + HeaderMenuHeight)
-      }
-    })
-
-    return () => clearTimeout(timer)
-  }, [autoDetection, prerequisiteSummaryRef])
+    if (prerequisiteSummaryRef.current !== null) {
+      setHeaderHeight(prerequisiteSummaryRef.current.offsetHeight + HeaderMenuHeight)
+    }
+  })
 
   const onPreviousButtonClick = () => {
     wizardProps.previousStep()
