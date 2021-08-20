@@ -29,6 +29,7 @@ import { DetectingItem, DetectionStatus } from '../model/AutoDetectionData'
 import { useBoolean } from '@uifabric/react-hooks'
 import { PropertyGroupView } from '../components/PropertyGroupView'
 import { PropertyGroup } from '../model/PropertyGroup'
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 
 export function AutoDetection(props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
@@ -107,6 +108,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   const onNextButtonClick = () => {
     if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished) {
+      dispatch(PropertyGroupsActions.setUpdatedAction(false))
       dispatch(AutoDetectionDataSrv.applyDetectionResult(() => {
         // Next page
         wizardProps.nextStep()

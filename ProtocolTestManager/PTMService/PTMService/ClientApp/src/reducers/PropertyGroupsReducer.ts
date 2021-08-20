@@ -8,6 +8,7 @@ import {
   UPDATE_EDITINGPROPERTYGROUP,
   SET_EDITINGPROPERTYGROUP,
   UPDATE_PROPERTYGROUPS,
+  SET_UPDATED,
   SET_PROPERTYGROUPS_REQUEST,
   SET_PROPERTYGROUPS_SUCCESS,
   SET_PROPERTYGROUPS_FAILURE,
@@ -110,6 +111,12 @@ export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, act
         ...state,
         updated: true,
         propertyGroups: getUpdatedPropertyGroups(state)
+      }
+
+    case SET_UPDATED:
+      return {
+        ...state,
+        updated: action.payload
       }
 
     case SET_PROPERTYGROUPS_REQUEST:
