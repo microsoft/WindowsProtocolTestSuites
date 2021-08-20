@@ -17,7 +17,7 @@ import { DetectionResultSrv } from '../services/DetectionResult'
 
 const getDetectionSummary = (detectionSummary: DetectionSummary) => {
   const currentDate = new Date()
-  let pageHTML = '<head><meta charset="utf-8"><style>table,th,td {border: 1px solid #333;}thead,tfoot {color: black;}</style></head><h1>Auto Detection Result Report-' + currentDate + '</h1><table><thead><tr><th>Detection Category</th><th>Detection Item</th><th>Detection Result</th></tr></thead><tbody>'
+  let pageHTML = '<head><meta charset="utf-8"><style>table,th,td {border: 1px solid #333;}td{background-color:#e3ebf1;line-height:20px;color:#121111;font-size:16px;vertical-align:middle;}thead,tfoot {background-color:#0275d8;line-height:20px;color:#fff;font-size:16px;vertical-align:middle;text-align:center;}</style></head><h1>Auto Detection Result Report-' + currentDate.toISOString().replace('T', '/').replace('Z', '') + '</h1><table><thead><tr><th>Detection Category</th><th>Detection Item</th><th>Detection Result</th></tr></thead><tbody>'
   detectionSummary.ResultItemMapList.forEach((resultItemMap) => {
     pageHTML += '<tr><td width="300px" rowspan="' + resultItemMap.ResultItemList.length + '"><b>' + resultItemMap.Header + '</b><br/>Detect Description:' + resultItemMap.Description + '</td>'
     let i = 0
