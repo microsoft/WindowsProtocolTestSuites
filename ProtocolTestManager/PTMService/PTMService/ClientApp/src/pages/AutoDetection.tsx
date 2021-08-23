@@ -217,17 +217,17 @@ export function AutoDetection(props: StepWizardProps) {
               {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
             </Stack>
           </div>
-          <div style={{ paddingLeft: 30, maxHeight: (winSize.height - headerHeight) / 2, overflowY: 'auto' }}>
+          <div style={{ paddingLeft: 30, height: (winSize.height - headerHeight) * 0.46, overflowY: 'auto' }}>
             {
               autoDetection.isPrerequisiteLoading
                 ? <LoadingPanel />
                 : <PropertyGroupView
-                  winSize={{ ...winSize, height: (winSize.height - headerHeight) / 2 }}
+                  winSize={{ ...winSize, height: (winSize.height - headerHeight) * 0.46 }}
                   propertyGroup={prerequisitePropertyGroup}
                   onValueChange={onPropertyValueChange} />
             }
           </div>
-          <div style={{ paddingLeft: 30, paddingTop: 20, maxHeight: (winSize.height - headerHeight) / 2, overflowY: 'auto' }}>
+          <div style={{ paddingTop: 10, paddingLeft: 30, height: (winSize.height - headerHeight) * 0.54 - 55, overflowY: 'auto' }}>
             {
               autoDetection.isDetectionStepsLoading
                 ? <LoadingPanel />
@@ -248,8 +248,8 @@ export function AutoDetection(props: StepWizardProps) {
           </div>
           <div className='buttonPanel'>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
-              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} />
               <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
+              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} />
               <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
             </Stack>
           </div>
