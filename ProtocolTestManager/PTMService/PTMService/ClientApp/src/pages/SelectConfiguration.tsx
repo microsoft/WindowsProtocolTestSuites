@@ -23,7 +23,6 @@ export function SelectConfiguration (props: any) {
   const [configureName, setConfigureName] = useState('')
   const [configureDescription, setConfigureDescription] = useState('')
   const [configureErrorMsg, setConfigureErrorMsg] = useState('')
-  const [descriptionErrorMsg, setDescriptionErrorMsg] = useState('')
 
   useEffect(() => {
     if (testSuiteInfo.selectedTestSuite != null) {
@@ -79,23 +78,18 @@ export function SelectConfiguration (props: any) {
       dispatch(ConfigurationsDataSrv.createConfiguration({
         Name: configureName,
         Description: configureDescription,
-        TestSuiteId: testSuiteInfo.selectedTestSuite!.Id
+        TestSuiteId: testSuiteInfo.selectedTestSuite!.Id,
+        IsConfigured: false,
       }))
       toggleHideDialog()
       setConfigureName('')
       setConfigureDescription('')
       setConfigureErrorMsg('')
-      setDescriptionErrorMsg('')
     } else {
       if (configureName) {
         setConfigureErrorMsg('')
       } else {
         setConfigureErrorMsg('Configuration Name can\'t be null')
-      }
-      if (configureDescription) {
-        setDescriptionErrorMsg('')
-      } else {
-        setDescriptionErrorMsg('Description can\'t be null')
       }
     }
   }
@@ -167,7 +161,6 @@ export function SelectConfiguration (props: any) {
                         label="Description"
                         multiline={true}
                         value={configureDescription}
-                        errorMessage={descriptionErrorMsg}
                         onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Description, newValue) }}
                     />
                 </Stack>
@@ -215,7 +208,7 @@ function getConfigurationGridColumns (props: {
       isPadded: true,
       onRender: (item: Configuration, index, column) => {
         return <Stack horizontal tokens={StackGap10}>
-                    <PrimaryButton onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
+                    <PrimaryButton disabled={!item.IsConfigured} onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
                     <PrimaryButton onClick={() => { props.onEdit(item.Id!) }}>Edit</PrimaryButton>
                 </Stack>
       }
