@@ -246,7 +246,7 @@ export function AutoDetection(props: StepWizardProps) {
                 </div>
             }
           </div>
-          <div className='buttonPanel' style={{ position: 'fixed', left: LeftPanelWidth + 20, bottom: 5, right: 0 }}>
+          <div className='buttonPanel'>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
               <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} />
               <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
