@@ -218,7 +218,8 @@ Function Config-Proxy()
     if(Test-Path -Path $dataFile2)
 	{
         [xml]$configFile = Get-Content -Path $dataFile2
-        $domainName=$configFile.SelectNodes("lab/servers/vm[role='PROXY01']/domain").InnerText
+        $proxyNode=$configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
+        $domainName=$proxyNode.domain
     }
     $DnsName=$hostname+"."+$domainName
     $FilePath="c:\$DnsName.cer"
