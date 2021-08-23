@@ -14,7 +14,7 @@ import {
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { PopupModal } from '../components/PopupModal'
 import { StepPanel } from '../components/StepPanel'
-import { HeaderMenuHeight, LeftPanelWidth, WizardNavBar } from '../components/WizardNavBar'
+import { HeaderMenuHeight, WizardNavBar } from '../components/WizardNavBar'
 import { getNavSteps } from '../model/DefaultNavSteps'
 import { AppState } from '../store/configureStore'
 import { useDispatch, useSelector } from 'react-redux'
