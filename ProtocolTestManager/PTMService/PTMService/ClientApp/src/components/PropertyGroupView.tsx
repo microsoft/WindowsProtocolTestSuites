@@ -102,10 +102,10 @@ export const PropertyGroupView: FunctionComponent<PropertyGroupViewProps> = (pro
               backgroundColor: index % 2 === 0 ? '#EEEEEE' : 'none',
               flexDirection: 'row'
             }} >
-            <div style={{ flex: '30em' }}>
+            <div style={{ flex: '1 2 20%' }}>
               <PropertyName latestProperty={props.latestPropertyGroup?.Items[index]} property={item} />
             </div>
-            <div style={{ flex: '80em', paddingLeft: 20, paddingRight: 60 }}>
+            <div style={{ flex: '5 1 80%', paddingLeft: 20, paddingRight: props.winSize.width * 0.1 }}>
               {
                 item.Choices !== undefined && item.Choices !== null && item.Choices.length > 1
                   ? <ChoosableProperty property={{ ...item, Choices: item.Choices }} onValueChange={props.onValueChange} />
