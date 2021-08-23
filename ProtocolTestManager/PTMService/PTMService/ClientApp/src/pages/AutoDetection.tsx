@@ -146,7 +146,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   const isPreviousButtonDisabled = (): boolean => detecting
 
-  const isNextButtonDisabled = (): boolean => autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
+  const isNextButtonDisabled = (): boolean => detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
   const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
 
