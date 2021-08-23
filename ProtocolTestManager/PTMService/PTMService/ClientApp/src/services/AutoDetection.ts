@@ -46,7 +46,7 @@ export const AutoDetectionDataSrv = {
   getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
-    const logBlob: Blob = await FetchService({
+    await FetchService({
       url: `api/testsuite/${configurationId}/autodetect/log`,
       method: RequestMethod.GET,
       dispatch,
@@ -54,10 +54,11 @@ export const AutoDetectionDataSrv = {
       onComplete: AutoDetectionActions.getAutoDetectionLogAction_Success,
       onError: AutoDetectionActions.getAutoDetectionLogAction_Failure,
       headers: { 'Content-Type': 'text/plain' }
+    }).then(async (logBlob: Blob) => {
+      const logText = await logBlob.text()
+      dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
+      completeCallback()
     })
-    const logText = await logBlob.text()
-    dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
-    completeCallback()
   },
   startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
     const state = getState()
