@@ -55,7 +55,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionLogAction_Failure,
       headers: { 'Content-Type': 'text/plain' }
     })
-    const logText = await logBlob.text();
+    const logText = await logBlob.text()
     dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
     completeCallback()
   },

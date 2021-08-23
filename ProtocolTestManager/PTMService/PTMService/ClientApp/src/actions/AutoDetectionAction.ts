@@ -38,8 +38,6 @@ export const SET_AUTO_DETECTION_LOG = 'AUTO_DETECTION/SET_AUTO_DETECTION_LOG'
 
 export const SET_SHOW_WARNING = "AUTO_DETECTION/SET_SHOW_WARNING"
 
-export const SET_DETECTING = "AUTO_DETECTION/SET_DETECTING"
-
 // define action types
 interface GetAutoDetectionPrerequisiteActionRequestType { type: typeof GET_AUTO_DETECTION_PREREQUISITE_REQUEST }
 interface GetAutoDetectionPrerequisiteActionSuccessType { type: typeof GET_AUTO_DETECTION_PREREQUISITE_SUCCESS, payload: Prerequisite }
