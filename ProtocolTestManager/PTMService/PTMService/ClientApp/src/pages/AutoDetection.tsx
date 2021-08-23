@@ -21,15 +21,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useWindowSize } from '../components/UseWindowSize'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { Property } from '../model/Property'
-import { useEffect, useMemo, useRef, useState, CSSProperties, ReactElement } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, CSSProperties, ReactElement } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
 import { AutoDetectionActions } from '../actions/AutoDetectionAction'
-import { DetectingItem, DetectionStatus } from '../model/AutoDetectionData'
+import { DetectingItem, DetectionStatus, DetectionStepStatus } from '../model/AutoDetectionData'
 import { useBoolean } from '@uifabric/react-hooks'
 import { PropertyGroupView } from '../components/PropertyGroupView'
 import { PropertyGroup } from '../model/PropertyGroup'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
+
+const getStyle = (status: DetectionStepStatus): CSSProperties => {
+  if (status === 'Failed') {
+    return { paddingLeft: 5, color: 'red' }
+  } else if (status === 'Finished') {
+    return { paddingLeft: 5, color: 'green' }
+  } else {
+    return { paddingLeft: 5 }
+  }
+}
+
+const renderDetectingContent = (item: Property): ReactElement => {
+  return (
+    <Label>
+      <div style={{ paddingLeft: 5 }} >{item.Name}</div>
+    </Label>
+  )
+}
 
 export function AutoDetection(props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
@@ -132,83 +150,63 @@ export function AutoDetection(props: StepWizardProps) {
 
   const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
 
-  const onFailedClick = () => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog))
+  const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
 
   const onCloseAutoDetectionWarningDialogClick = () => {
     dispatch(AutoDetectionActions.setShowWarningAction(false))
     hideAutoDetectionWarningDialog()
   }
 
-  const getStepColumns = (): IColumn[] => {
-    const getStyle = (status: string): CSSProperties => {
-      if (status === 'Failed') {
-        return { paddingLeft: 5, color: 'red' }
-      } else if (status === 'Finished') {
-        return { paddingLeft: 5, color: 'green' }
-      } else {
-        return { paddingLeft: 5 }
-      }
-    }
+  const renderDetectingStatus = useCallback((item: DetectingItem): ReactElement => {
+    return (
+      <Label>
+        <div style={getStyle(item.Status)} >
+          {
+            ((status) => {
+              if (status === 'Failed') {
+                return (
+                  <Link
+                    underline
+                    style={getStyle(status)}
+                    onClick={onFailedClick}>
+                    {status}
+                  </Link>
+                )
+              } else if ((status === 'Pending' || status === 'Detecting') && detecting) {
+                return (
+                  <Stack horizontal>
+                    <Spinner size={SpinnerSize.medium} />
+                    <div style={getStyle(status)}>{status}</div>
+                  </Stack>
+                )
+              } else {
+                return (<div style={getStyle(status)}>{status}</div>)
+              }
+            })(item.Status)
+          }
+        </div>
+      </Label>
+    )
+  }, [detecting, onFailedClick])
 
-    const renderDetectingContent = (item: Property, index: number | undefined): ReactElement => {
-      return (
-        <Label>
-          <div style={{ paddingLeft: 5 }} >{item.Name}</div>
-        </Label>
-      )
-    }
-
-    const renderDetectingStatus = (item: DetectingItem): ReactElement => {
-      return (
-        <Label>
-          <div style={getStyle(item.Status)} >
-            {
-              ((status) => {
-                if (status === 'Failed') {
-                  return (
-                    <Link
-                      underline
-                      style={getStyle(status)}
-                      onClick={onFailedClick}>
-                      {status}
-                    </Link>
-                  )
-                } else if ((status === 'Pending' || status === 'Detecting') && detecting) {
-                  return (
-                    <Stack horizontal>
-                      <Spinner size={SpinnerSize.medium} />
-                      <div style={getStyle(status)}>{status}</div>
-                    </Stack>
-                  )
-                } else {
-                  return (<div style={getStyle(status)}>{status}</div>)
-                }
-              })(item.Status)
-            }
-          </div>
-        </Label>
-      )
-    }
-
-    return [{
-      key: 'DetectingContent',
-      name: 'DetectingContent',
-      fieldName: 'DetectingContent',
-      minWidth: 240,
-      isRowHeader: true,
-      isResizable: true,
-      onRender: renderDetectingContent
-    },
-    {
-      key: 'DetectingStatus',
-      name: 'DetectingStatus',
-      fieldName: 'DetectingStatus',
-      minWidth: 480,
-      isResizable: true,
-      isPadded: true,
-      onRender: renderDetectingStatus
-    }]
-  }
+  const stepColumns = useMemo<IColumn[]>(() => [{
+    key: 'DetectingContent',
+    name: 'DetectingContent',
+    fieldName: 'DetectingContent',
+    minWidth: 240,
+    isRowHeader: true,
+    isResizable: true,
+    onRender: renderDetectingContent
+  },
+  {
+    key: 'DetectingStatus',
+    name: 'DetectingStatus',
+    fieldName: 'DetectingStatus',
+    minWidth: 480,
+    isResizable: true,
+    isPadded: true,
+    onRender: renderDetectingStatus
+  }], [renderDetectingStatus])
 
   return (
     <div>
@@ -237,7 +235,7 @@ export function AutoDetection(props: StepWizardProps) {
                   <Stack horizontal style={{ paddingTop: 20 }} horizontalAlign='start' tokens={{ childrenGap: 10 }}>
                     <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
                       <DetailsList
-                        columns={getStepColumns()}
+                        columns={stepColumns}
                         items={autoDetection.detectionSteps?.DetectingItems ?? []}
                         compact
                         selectionMode={SelectionMode.none}
