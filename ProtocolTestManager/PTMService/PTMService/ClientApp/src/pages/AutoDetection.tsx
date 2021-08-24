@@ -77,21 +77,21 @@ export function AutoDetection(props: StepWizardProps) {
     dispatch(AutoDetectionDataSrv.getAutoDetectionSteps())
   }, [dispatch])
 
+  const autoDetectionUpdateCallback = useCallback((currState: AutoDetectionState) => {
+    if (shouldAutoDetectionStop(currState)) {
+      if (currState.detectionSteps?.Result.Status === DetectionStatus.Error && currState.showWarning) {
+        showAutoDetectionWarningDialog()
+      }
+    }
+  }, [showAutoDetectionWarningDialog])
+
   useEffect(() => {
     if (!autoDetection.detecting) {
       return
     }
 
-    const completeCallback = (currState: AutoDetectionState) => {
-      if (shouldAutoDetectionStop(currState)) {
-        if (currState.detectionSteps?.Result.Status === DetectionStatus.Error && currState.showWarning) {
-          showAutoDetectionWarningDialog()
-        }
-      }
-    }
-
     const timer = setTimeout(() => {
-      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(completeCallback))
+      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionUpdateCallback))
     }, 1000)
 
     return () => clearTimeout(timer)
@@ -140,7 +140,7 @@ export function AutoDetection(props: StepWizardProps) {
     } else {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
-        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
+        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionUpdateCallback))
       }))
     }
   }

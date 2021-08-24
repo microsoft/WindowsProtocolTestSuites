@@ -32,7 +32,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
     })
   },
-  updateAutoDetectionSteps: (completeCallback?: (currState: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  updateAutoDetectionSteps: (completeCallback: (currState: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -44,9 +44,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
     }).then(() => {
       const currState = getState().autoDetection
-      if (completeCallback !== undefined) {
-        completeCallback(currState)
-      }
+      completeCallback(currState)
     })
   },
   getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
