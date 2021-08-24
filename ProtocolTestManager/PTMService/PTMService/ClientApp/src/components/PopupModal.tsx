@@ -34,7 +34,7 @@ export function PopupModal (props: PopupModalProp): ReactElement {
                 />
               </div>
               <div className={contentStyles.body}>
-                  <TextField multiline readOnly autoAdjustHeight defaultValue={props.text} />
+                  <TextField multiline readOnly autoAdjustHeight resizable={false} defaultValue={props.text} />
               </div>
             </Modal>)
 }
