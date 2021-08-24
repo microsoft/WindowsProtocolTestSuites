@@ -1247,7 +1247,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     out header,
                     out negotiateResponse,
                     preauthHashAlgs: preauthIntegrityHashIDArray,
-                    encryptionAlgs: encryptionAlgorithmArray));
+                    encryptionAlgs: encryptionAlgorithmArray
+                 ));
 
             negotiatedDialect = selectedDialect;
 

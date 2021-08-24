@@ -434,6 +434,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         public List<CompressionAlgorithm> SupportedCompressionAlgorithmList;
 
+        public List<SigningAlgorithm> SupportedSigningAlgorithmList;
+
         public bool IsChainedCompressionSupported
         {
             get
@@ -469,6 +471,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SutSupportedEncryptionAlgorithmList = ParsePropertyToList<EncryptionAlgorithm>("SutSupportedEncryptionAlgorithms");
 
             SupportedCompressionAlgorithmList = ParsePropertyToList<CompressionAlgorithm>("SupportedCompressionAlgorithms");
+
+            SupportedSigningAlgorithmList = ParsePropertyToList<SigningAlgorithm>("SupportedSigningAlgorithms");
 
             SendSignedRequest = Boolean.Parse(GetProperty("SendSignedRequest"));
 
@@ -708,6 +712,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public void CheckSigningAlgorithm(SigningAlgorithm? signingAlgorithm = null)
+        {
+            if (SupportedSigningAlgorithmList.Count == 0)
+            {
+                Site.Assert.Inconclusive("SUT does not support signing!");
+            }
+
+            if (signingAlgorithm != null)
+            {
+                if (!SupportedSigningAlgorithmList.Contains(signingAlgorithm.Value))
+                {
+                    Site.Assert.Inconclusive("The specified signing algorithm {0} is not supported by SUT", signingAlgorithm);
+                }
+               
+            }
+        }
+
         public bool IsCompressionSupported()
         {
             if (SupportedCompressionAlgorithmList.Count == 0
@@ -775,6 +796,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 {
                     Site.Assert.Fail("The server Should not response a SMB2_COMPRESSION_CAPABILITIES as it's not sent in request.");
                 }
+                if ((smb2Request.NegotiateContext_SIGNING == null) && (response.NegotiateContext_SIGNING != null))
+                {
+                    Site.Assert.Fail("The server Should not response a SMB2_SIGNING_CAPABILITIES as it's not sent in request.");
+                }
 
                 if (response.NegotiateContext_ENCRYPTION != null)
                 {
@@ -785,6 +810,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             {
                 Site.Assert.IsNull(response.NegotiateContext_ENCRYPTION, "The server Should not response a SMB2_ENCRYPTION_CAPABILITIES as request is SmbNegotiateRequestPacket.");
                 Site.Assert.IsNull(response.NegotiateContext_COMPRESSION, "The server Should not response a SMB2_COMPRESSION_CAPABILITIES as request is SmbNegotiateRequestPacket.");
+                Site.Assert.IsNull(response.NegotiateContext_SIGNING, "The server Should not response a SMB2_SIGNING_CAPABILITIES as request is SmbNegotiateRequestPacket.");
             }
         }
         #endregion

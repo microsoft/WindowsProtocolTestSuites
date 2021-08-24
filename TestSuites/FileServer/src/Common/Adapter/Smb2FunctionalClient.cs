@@ -302,6 +302,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         /// <summary>
+        /// The server selected signing algorithm
+        /// </summary>
+        public SigningAlgorithm SelectedSigningId
+        {
+            get
+            {
+                return client.SelectedSigningId;
+            }
+        }
+
+        /// <summary>
         /// The server selected hash ID for Preauth Integrity.
         /// </summary>
         public PreauthIntegrityHashID SelectedPreauthIntegrityHashID
@@ -635,7 +646,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
             bool addDefaultEncryption = false,
-            bool addNetNameContextId = false
+            bool addNetNameContextId = false,
+            SigningAlgorithm[] signingAlgorithms = null
             )
         {
             SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null;
@@ -696,7 +708,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                compressionAlgorithms: compressionAlgorithms,
                compressionFlags: compressionFlags,
                addDefaultEncryption: addDefaultEncryption,
-               netNameContext: netNameContext
+               netNameContext: netNameContext,
+               signingAlgorithms: signingAlgorithms
                );
 
             if (!ifHandleRejectUnencryptedAccessSeparately)

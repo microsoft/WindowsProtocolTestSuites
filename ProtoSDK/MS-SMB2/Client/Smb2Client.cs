@@ -202,6 +202,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         protected Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable = new Dictionary<ulong, Smb2CryptoInfo>();
         private Smb2CompressionInfo compressionInfo;
+        private SigningAlgorithm signingId;
         private Smb2Decoder decoder;
 
         private bool disposed;
@@ -345,6 +346,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 return compressionInfo;
             }
         }
+
+        public SigningAlgorithm SelectedSigningId
+        {
+            get
+            {
+                return signingId;
+            }
+        }
         #endregion
 
         #region Constructor
@@ -362,6 +371,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             hashId = PreauthIntegrityHashID.HashAlgorithm_NONE;
 
             cipherId = EncryptionAlgorithm.ENCRYPTION_NONE;
+
+            signingId = SigningAlgorithm.HMAC_SHA256;
         }
 
         #endregion
@@ -1099,7 +1110,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              CompressionAlgorithm[] compressionAlgorithms = null,
              SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
-             bool addDefaultEncryption = false
+             bool addDefaultEncryption = false,
+             SigningAlgorithm[] signingAlgorithms = null
          )
         {
             request = new Smb2NegotiateRequestPacket();
@@ -1167,6 +1179,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 request.PayLoad.NegotiateContextCount++;
             }
 
+            if (signingAlgorithms != null)
+            {
+                SMB2_SIGNING_CAPABILITIES signingCapabilities = new SMB2_SIGNING_CAPABILITIES();
+                signingCapabilities.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_SIGNING_CAPABILITIES;
+                signingCapabilities.SigningAlgorithmCount = (ushort)signingAlgorithms.Length;
+                signingCapabilities.SigningAlgorithms = signingAlgorithms;
+                signingCapabilities.Header.DataLength = (ushort)(signingCapabilities.GetDataLength());
+                request.NegotiateContext_SIGNING = signingCapabilities;
+
+                request.PayLoad.NegotiateContextCount++;
+            }
+
             if (request.PayLoad.NegotiateContextCount > 0)
             {
                 request.PayLoad.NegotiateContextOffset = (uint)(64 + // Header
@@ -1197,6 +1221,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 if (response.NegotiateContext_COMPRESSION != null)
                 {
                     UpdateNegotiateContext(compressionAlgorithms, response);
+                }
+                if (response.NegotiateContext_SIGNING != null)
+                {
+                    if (response.NegotiateContext_SIGNING.Value.SigningAlgorithmCount > 1)
+                    {
+                        throw new InvalidOperationException("Algorithm count is more than expected");
+                    } else
+                    {
+                        this.signingId = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
+                    }
                 }
 
                 // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
@@ -1235,13 +1269,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              CompressionAlgorithm[] compressionAlgorithms = null,
              SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
-             bool addDefaultEncryption = false
+             bool addDefaultEncryption = false,
+             SigningAlgorithm[] signingAlgorithms = null
          )
         {
             Smb2NegotiateRequestPacket request;
             Smb2NegotiateResponsePacket response;
             Negotiate(creditCharge, creditRequest, flags, messageId, dialects, securityMode, capabilities, clientGuid, out selectedDialect, out gssToken, out request, out response,
-                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, compressionFlags, netNameContext, addDefaultEncryption);
+                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, compressionFlags, netNameContext, addDefaultEncryption, signingAlgorithms);
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;

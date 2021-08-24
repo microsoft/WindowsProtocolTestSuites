@@ -943,6 +943,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
 
         /// <summary>
+        /// Initialize the 12 byte of initialization vector
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <returns></returns>
+        private byte[] computeNonce(Smb2SinglePacket packet)
+        {
+            var initializationVector = new byte[16];
+            BitConverter.GetBytes(packet.Header.MessageId).CopyTo(initializationVector, 0);
+
+            // Set least significant bit to 0 if sender is a client or otherwise
+            if (this.decodeRole.Equals(Smb2Role.Server)) {
+                initializationVector[12] = 1;
+            }
+            // If the message is SMB2 CANCEL request, the penultimate bit is set to 1
+            if (packet.Header.Command.Equals(Smb2Command.CANCEL))
+            {
+                initializationVector[11] = 1; 
+            }
+
+            return initializationVector;
+        }
+
+        /// <summary>
         /// Verify the signature of a Smb2SinglePacket
         /// </summary>
         /// <param name="packet">The packet to be verified</param>
@@ -973,12 +996,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     //[MS-SMB2] 3.1.5.1   
                     //If Session.Connection.Dialect belongs to the SMB 3.x dialect family, 
-                    //the receiver MUST compute a 16-byte hash by using AES-128-CMAC over the entire message, 
-                    //beginning with the SMB2 Header from step 2, and using the key provided. 
-                    //The AES-128-CMAC is specified in [RFC4493].
+                    //the receiver MUST compute a 16-byte hash by using either AES-GMAC or AES-128-CMAC
+                    //over the entire message, beginning with the SMB2 Header from step 2, and using the key provided. 
+                    //The AES-GMAC is specified in [RFC4543] while The AES-128-CMAC is specified in [RFC4493].
 
                     //TD has mentioned to use Session.SigningKey for SESSION_SETUP Response and Channel.SigningKey for other responses
                     //In the current SDK, the SigningKey is the Channel.SigningKey
+
+                    // TODO 3a: Check if SigningAlgorithmId is not empty and is AES-GMAC and compute hash
+                    //var initializationVector = computeNonce(packet);
+                    //computedSignature = AesGmac128.ComputeHash(cryptoInfo.SigningKey, initializationVector);
+                    // TODO 3b: Wrap next line into an else statement
                     computedSignature = AesCmac128.ComputeHash(cryptoInfo.SigningKey, bytesToCompute);
                 }
                 else
