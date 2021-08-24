@@ -51,7 +51,7 @@ export function ConfigureMethod(props: StepWizardProps) {
         return
       case ConfigurationMethod_Manual:
         dispatch(ConfigureMethodActions.setConfigurationMethodAction(key))
-        wizardProps.goToStep(RunSteps.FILTERTESTCASE)
+        wizardProps.goToStep(RunSteps.FILTER_TEST_CASE)
         return
       case ConfigurationMethod_Profile:
         dispatch(PropertyGroupsActions.setUpdatedAction(false))

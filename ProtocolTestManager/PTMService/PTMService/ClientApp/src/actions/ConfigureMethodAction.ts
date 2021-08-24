@@ -41,10 +41,10 @@ export const ConfigureMethodActions = {
       selectedMethod: key
     }
   },
-  saveProfileAction_Request: (testsuiteId: number): TestSuiteConfigureMethodActionTypes => {
+  saveProfileAction_Request: (testSuiteId: number): TestSuiteConfigureMethodActionTypes => {
     return {
       type: SAVE_PROFILE_REQUEST,
-      payload: testsuiteId
+      payload: testSuiteId
     }
   },
   saveProfileAction_Success: (fileLocation: string): TestSuiteConfigureMethodActionTypes => {
