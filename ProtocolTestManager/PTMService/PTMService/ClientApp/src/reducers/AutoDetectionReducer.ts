@@ -180,7 +180,7 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
         errorMsg: undefined,
         detectionSteps: action.payload,
         detecting: action.payload.Result.Status === DetectionStatus.InProgress,
-        canceling: action.payload.Result.Status !== DetectionStatus.InProgress
+        canceling: action.payload.Result.Status === DetectionStatus.InProgress
       }
 
     case GET_AUTO_DETECTION_STEPS_FAILURE:
