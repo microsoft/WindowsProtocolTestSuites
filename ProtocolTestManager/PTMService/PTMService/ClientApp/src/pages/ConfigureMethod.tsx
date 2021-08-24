@@ -14,16 +14,17 @@ import { FileUploader, IFile } from '../components/FileUploader'
 import { getNavSteps, RunSteps } from '../model/DefaultNavSteps'
 import { AppState } from '../store/configureStore'
 import { ProfileDataSrv } from '../services/ProfileService'
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 
 export const ConfigureMethod_AutoDetection = 'AutoDetection'
 export const ConfigureMethod_Manual = 'Manual'
 export const ConfigureMethod_Profile = 'Profile'
 
-export function ConfigureMethod (props: StepWizardProps) {
+export function ConfigureMethod(props: StepWizardProps) {
   const dispatch = useDispatch()
 
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
-  const [hideAutoDetectWarningDialog, { toggle: toggleAutoDetectWarningDialog }] = useBoolean(true)
+  const [hideAutoDetectionWarningDialog, { toggle: toggleAutoDetectionWarningDialog }] = useBoolean(true)
   const [importErrMsg, setImportErrMsg] = useState('')
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const navSteps = getNavSteps(wizardProps)
@@ -46,13 +47,14 @@ export function ConfigureMethod (props: StepWizardProps) {
   const onItemClicked = (key: string) => {
     switch (key) {
       case ConfigureMethod_AutoDetection:
-        toggleAutoDetectWarningDialog()
+        toggleAutoDetectionWarningDialog()
         return
       case ConfigureMethod_Manual:
         dispatch(ConfigureMethodActions.setConfigureMethod(key))
         wizardProps.goToStep(RunSteps.FILTERTESTCASE)
         return
       case ConfigureMethod_Profile:
+        dispatch(PropertyGroupsActions.setUpdatedAction(false))
         dispatch(ConfigureMethodActions.setConfigureMethod(key))
         toggleHideDialog()
     }
@@ -60,14 +62,14 @@ export function ConfigureMethod (props: StepWizardProps) {
 
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
   const configurations = useSelector((state: AppState) => state.configurations)
-  const testsuites = useSelector((state: AppState) => state.testSuiteInfo)
+  const testSuites = useSelector((state: AppState) => state.testSuiteInfo)
 
   const dialogContentProps = {
     type: DialogType.normal,
     title: 'Load Profile'
   }
 
-  const autoDetectDialgContentProps = {
+  const autoDetectDialogContentProps = {
     type: DialogType.normal,
     title: 'Warning: '
   }
@@ -105,14 +107,14 @@ export function ConfigureMethod (props: StepWizardProps) {
   const onConfigurationCreate = () => {
     if (file != null) {
       setImportErrMsg('')
-      const testsuiteId = testsuites.selectedTestSuite?.Id
+      const testSuiteId = testSuites.selectedTestSuite?.Id
       const configId = configurations.selectedConfiguration?.Id
       dispatch(ProfileDataSrv.importProfile({
         Package: file.File,
-        TestSuiteId: testsuiteId ?? 0,
+        TestSuiteId: testSuiteId ?? 0,
         ConfigurationId: configId ?? 0
       }, (data: boolean) => {
-        if (data === undefined && configureMethod.errorMsg == undefined) {
+        if (data === undefined && configureMethod.errorMsg === undefined) {
           setImportErrMsg('Profile did not work. Try again.')
         }
 
@@ -130,66 +132,66 @@ export function ConfigureMethod (props: StepWizardProps) {
   }
 
   return (
-        <div>
-            <StepPanel leftNav={WizardNavBar(wizardProps, navSteps)} >
-                <Stack style={{ padding: 10 }}>
-                    {
-                        items.map((item, index) => {
-                          return <div key={index} style={{ paddingBottom: 50 }}>
-                                <MethodItem
-                                    Title={item.Title}
-                                    Key={item.Key}
-                                    Description={item.Description}
-                                    Disabled={item.Disabled}
-                                    onClick={() => { onItemClicked(item.Key) }}
-                                ></MethodItem>
-                            </div>
-                        })
-                    }
-                    <Stack horizontal horizontalAlign="end" tokens={StackGap10} >
-                        <PrimaryButton text="Previous" onClick={() => wizardProps.previousStep()} />
-                    </Stack>
-                </Stack>
-            </StepPanel>
+    <div>
+      <StepPanel leftNav={WizardNavBar(wizardProps, navSteps)} >
+        <Stack style={{ padding: 10 }}>
+          {
+            items.map((item, index) => {
+              return <div key={index} style={{ paddingBottom: 50 }}>
+                <MethodItem
+                  Title={item.Title}
+                  Key={item.Key}
+                  Description={item.Description}
+                  Disabled={item.Disabled}
+                  onClick={() => { onItemClicked(item.Key) }}
+                ></MethodItem>
+              </div>
+            })
+          }
+          <Stack horizontal horizontalAlign="end" tokens={StackGap10} >
+            <PrimaryButton text="Previous" onClick={() => wizardProps.previousStep()} />
+          </Stack>
+        </Stack>
+      </StepPanel>
 
-            <Dialog
-                hidden={hideDialog}
-                onDismiss={toggleHideDialog}
-                dialogContentProps={dialogContentProps}
-                modalProps={modalProps}
-            >
-                <Stack tokens={StackGap10}>
-                    <p style={{ color: 'red', padding: 3 }}>{importErrMsg}</p>
-                    <FileUploader
-                        label="Package"
-                        onSuccess={onFileUploadSuccess}
-                        maxFileCount={1}
-                        suffix={['.ptm']}
-                        placeholder="Select .ptm file"
-                    />
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={onConfigurationCreate} text={configureMethod.isProfileUploading ? 'Uploading...' : 'Load Profile'} disabled={configureMethod.isProfileUploading} />
-                    <DefaultButton onClick={toggleHideDialog} text="Close" disabled={configureMethod.isProfileUploading} />
-                </DialogFooter>
-            </Dialog>
+      <Dialog
+        hidden={hideDialog}
+        onDismiss={toggleHideDialog}
+        dialogContentProps={dialogContentProps}
+        modalProps={modalProps}
+      >
+        <Stack tokens={StackGap10}>
+          <p style={{ color: 'red', padding: 3 }}>{importErrMsg}</p>
+          <FileUploader
+            label="Package"
+            onSuccess={onFileUploadSuccess}
+            maxFileCount={1}
+            suffix={['.ptm']}
+            placeholder="Select .ptm file"
+          />
+        </Stack>
+        <DialogFooter>
+          <PrimaryButton onClick={onConfigurationCreate} text={configureMethod.isProfileUploading ? 'Uploading...' : 'Load Profile'} disabled={configureMethod.isProfileUploading} />
+          <DefaultButton onClick={toggleHideDialog} text="Close" disabled={configureMethod.isProfileUploading} />
+        </DialogFooter>
+      </Dialog>
 
-            <Dialog
-                hidden={hideAutoDetectWarningDialog}
-                onDismiss={toggleAutoDetectWarningDialog}
-                dialogContentProps={autoDetectDialgContentProps}
-                modalProps={autoDetectWarningModalProps}
-            >
-                <Stack>
-                    <div>Run Auto-Detection may have impact to SUT's states (PTM may create directories or files, may establish connections with SUT and send packets, etc).</div>
-                    <div>Do you want to continue?</div>
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={onRunAutoDetection} text={'Yes'}/>
-                    <DefaultButton onClick={toggleAutoDetectWarningDialog} text="No"/>
-                </DialogFooter>
-            </Dialog>
-        </div>
+      <Dialog
+        hidden={hideAutoDetectionWarningDialog}
+        onDismiss={toggleAutoDetectionWarningDialog}
+        dialogContentProps={autoDetectDialogContentProps}
+        modalProps={autoDetectWarningModalProps}
+      >
+        <Stack>
+          <div>Run Auto-Detection may have impact to SUT's states (PTM may create directories or files, may establish connections with SUT and send packets, etc).</div>
+          <div>Do you want to continue?</div>
+        </Stack>
+        <DialogFooter>
+          <PrimaryButton onClick={onRunAutoDetection} text={'Yes'} />
+          <DefaultButton onClick={toggleAutoDetectionWarningDialog} text="No" />
+        </DialogFooter>
+      </Dialog>
+    </div>
   )
 };
 
@@ -201,16 +203,16 @@ interface MethodItemProp {
   onClick?: () => void
 }
 
-function MethodItem (props: MethodItemProp) {
+function MethodItem(props: MethodItemProp) {
   const divStyle: CSSProperties | undefined = props.Disabled ? { color: 'grey' } : { cursor: 'pointer' }
   const divOnClicked = props.Disabled ? undefined : props.onClick
 
   return (<div className="card" style={divStyle}>
-        <Stack className="container" tokens={StackGap10} onClick={divOnClicked}>
-            <div>
-                <div className="subject">{props.Title}</div>
-                <div className="description">{props.Description}</div>
-            </div>
-        </Stack>
-    </div>)
+    <Stack className="container" tokens={StackGap10} onClick={divOnClicked}>
+      <div>
+        <div className="subject">{props.Title}</div>
+        <div className="description">{props.Description}</div>
+      </div>
+    </Stack>
+  </div>)
 }
