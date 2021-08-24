@@ -115,6 +115,7 @@ export function SelectConfiguration(props: any) {
     onEdit: id => {
       const foundConfiguration = getCurrentConfiguration(id)
       if (foundConfiguration != null) {
+        dispatch(PropertyGroupsActions.setUpdatedAction(false))
         dispatch(ConfigurationActions.setSelectedConfigurationAction(foundConfiguration))
         if (id !== configurations.selectedConfiguration?.Id) {
           dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))

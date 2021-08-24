@@ -16,46 +16,46 @@ import { AppState } from '../store/configureStore'
 import { ProfileDataSrv } from '../services/ProfileService'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 
-export const ConfigureMethod_AutoDetection = 'AutoDetection'
-export const ConfigureMethod_Manual = 'Manual'
-export const ConfigureMethod_Profile = 'Profile'
+export const ConfigurationMethod_AutoDetection = 'AutoDetection'
+export const ConfigurationMethod_Manual = 'Manual'
+export const ConfigurationMethod_Profile = 'Profile'
 
 export function ConfigureMethod(props: StepWizardProps) {
   const dispatch = useDispatch()
 
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
   const [hideAutoDetectionWarningDialog, { toggle: toggleAutoDetectionWarningDialog }] = useBoolean(true)
-  const [importErrMsg, setImportErrMsg] = useState('')
+  const [importingErrMsg, setImportingErrMsg] = useState('')
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const navSteps = getNavSteps(wizardProps)
   const [file, setFile] = useState<IFile>()
 
   const items: MethodItemProp[] = [{
     Title: 'Run Auto-Detection',
-    Key: ConfigureMethod_AutoDetection,
+    Key: ConfigurationMethod_AutoDetection,
     Description: 'Run Auto-Detection to retrieve capabilities of System Under Test(SUT) which are used to configure the test suite and select test cases automatically.'
   }, {
     Title: 'Do Manual Configuration',
-    Key: ConfigureMethod_Manual,
+    Key: ConfigurationMethod_Manual,
     Description: 'Don\'t run Auto-Detection. Configure the test suite and select test cases manually'
   }, {
     Title: 'Load Profile',
-    Key: ConfigureMethod_Profile,
+    Key: ConfigurationMethod_Profile,
     Description: 'Protocol Test Manager Profile contains information about configuration of test suite and selected test cases.\r\n You could load an existing profile to get the saved configuration'
   }]
 
   const onItemClicked = (key: string) => {
     switch (key) {
-      case ConfigureMethod_AutoDetection:
+      case ConfigurationMethod_AutoDetection:
         toggleAutoDetectionWarningDialog()
         return
-      case ConfigureMethod_Manual:
-        dispatch(ConfigureMethodActions.setConfigureMethod(key))
+      case ConfigurationMethod_Manual:
+        dispatch(ConfigureMethodActions.setConfigurationMethodAction(key))
         wizardProps.goToStep(RunSteps.FILTERTESTCASE)
         return
-      case ConfigureMethod_Profile:
+      case ConfigurationMethod_Profile:
         dispatch(PropertyGroupsActions.setUpdatedAction(false))
-        dispatch(ConfigureMethodActions.setConfigureMethod(key))
+        dispatch(ConfigureMethodActions.setConfigurationMethodAction(key))
         toggleHideDialog()
     }
   }
@@ -69,7 +69,7 @@ export function ConfigureMethod(props: StepWizardProps) {
     title: 'Load Profile'
   }
 
-  const autoDetectDialogContentProps = {
+  const autoDetectionDialogContentProps = {
     type: DialogType.normal,
     title: 'Warning: '
   }
@@ -84,7 +84,7 @@ export function ConfigureMethod(props: StepWizardProps) {
     }
   }
 
-  const autoDetectWarningModalProps = {
+  const autoDetectionWarningModalProps = {
     isBlocking: true,
     dragOptions: {
       moveMenuItemText: 'Move',
@@ -100,13 +100,13 @@ export function ConfigureMethod(props: StepWizardProps) {
   }
 
   const onRunAutoDetection = () => {
-    dispatch(ConfigureMethodActions.setConfigureMethod(ConfigureMethod_AutoDetection))
+    dispatch(ConfigureMethodActions.setConfigurationMethodAction(ConfigurationMethod_AutoDetection))
     wizardProps.goToStep(RunSteps.AUTO_DETECTION)
   }
 
   const onConfigurationCreate = () => {
     if (file != null) {
-      setImportErrMsg('')
+      setImportingErrMsg('')
       const testSuiteId = testSuites.selectedTestSuite?.Id
       const configId = configurations.selectedConfiguration?.Id
       dispatch(ProfileDataSrv.importProfile({
@@ -115,19 +115,19 @@ export function ConfigureMethod(props: StepWizardProps) {
         ConfigurationId: configId ?? 0
       }, (data: boolean) => {
         if (data === undefined && configureMethod.errorMsg === undefined) {
-          setImportErrMsg('Profile did not work. Try again.')
+          setImportingErrMsg('Profile did not work. Try again.')
         }
 
         if (configureMethod.errorMsg) {
-          setImportErrMsg(configureMethod.errorMsg)
+          setImportingErrMsg(configureMethod.errorMsg)
         } else if (data) {
-          setImportErrMsg('')
+          setImportingErrMsg('')
           toggleHideDialog()
           wizardProps.goToStep(RunSteps.RUN_SELECTED_TEST_CASE)
         }
       }))
     } else {
-      setImportErrMsg('Profile file cannot be empty')
+      setImportingErrMsg('Profile file cannot be empty')
     }
   }
 
@@ -161,7 +161,7 @@ export function ConfigureMethod(props: StepWizardProps) {
         modalProps={modalProps}
       >
         <Stack tokens={StackGap10}>
-          <p style={{ color: 'red', padding: 3 }}>{importErrMsg}</p>
+          <p style={{ color: 'red', padding: 3 }}>{importingErrMsg}</p>
           <FileUploader
             label="Package"
             onSuccess={onFileUploadSuccess}
@@ -179,8 +179,8 @@ export function ConfigureMethod(props: StepWizardProps) {
       <Dialog
         hidden={hideAutoDetectionWarningDialog}
         onDismiss={toggleAutoDetectionWarningDialog}
-        dialogContentProps={autoDetectDialogContentProps}
-        modalProps={autoDetectWarningModalProps}
+        dialogContentProps={autoDetectionDialogContentProps}
+        modalProps={autoDetectionWarningModalProps}
       >
         <Stack>
           <div>Run Auto-Detection may have impact to SUT's states (PTM may create directories or files, may establish connections with SUT and send packets, etc).</div>
