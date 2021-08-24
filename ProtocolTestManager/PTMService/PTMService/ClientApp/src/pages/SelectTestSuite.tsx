@@ -16,7 +16,7 @@ import { TestSuite } from '../model/TestSuite'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { AppState } from '../store/configureStore'
 
-export function SelectTestSuite (props: any) {
+export function SelectTestSuite(props: any) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
   const navSteps = getNavSteps(wizardProps)
@@ -27,6 +27,9 @@ export function SelectTestSuite (props: any) {
 
   useEffect(() => {
     dispatch(TestSuitesDataSrv.getTestSuiteList())
+    if (history.action === 'PUSH') {
+      dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+    }
   }, [dispatch])
 
   const testSuites = useSelector((state: AppState) => state.testSuites)
@@ -41,22 +44,22 @@ export function SelectTestSuite (props: any) {
 
   const testSuitesList = testSuites.testSuiteList.map((item, index) => {
     return <TestSuiteInfo
-            key={index}
-            TestSuiteName={item.Name}
-            Description={item.Description}
-            Version={item.Version}
-            OnSelect={() => onSelectTestSuite(item)} />
+      key={index}
+      TestSuiteName={item.Name}
+      Description={item.Description}
+      Version={item.Version}
+      OnSelect={() => onSelectTestSuite(item)} />
   })
 
   return (
-        <StepPanel leftNav={wizard} isLoading={testSuites.isLoading} errorMsg={testSuites.errorMsg}>
-            {
-                (testSuitesList.length === 0)
-                  ? <div>
-                    No test suite found, please go to <Link onClick={() => history.push('/Management')}>Management</Link> page to install test suite
-                </div>
-                  : testSuitesList
-            }
-        </StepPanel>
+    <StepPanel leftNav={wizard} isLoading={testSuites.isLoading} errorMsg={testSuites.errorMsg}>
+      {
+        (testSuitesList.length === 0)
+          ? <div>
+            No test suite found, please go to <Link onClick={() => history.push('/Management')}>Management</Link> page to install test suite
+          </div>
+          : testSuitesList
+      }
+    </StepPanel>
   )
 };
