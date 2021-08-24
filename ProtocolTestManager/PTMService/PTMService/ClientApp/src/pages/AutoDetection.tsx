@@ -58,7 +58,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
   const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
-  const [isCanceling, setIsCanceling] = useState(false)
+  const [canceling, setCanceling] = useState(false)
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
   const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
@@ -90,7 +90,7 @@ export function AutoDetection(props: StepWizardProps) {
           showAutoDetectionWarningDialog()
         }
         setDetecting(false)
-        setIsCanceling(false)
+        setCanceling(false)
       }
     }
 
@@ -141,7 +141,7 @@ export function AutoDetection(props: StepWizardProps) {
     if (detecting) {
       // Cancel
       dispatch(AutoDetectionDataSrv.stopAutoDetection())
-      setIsCanceling(true)
+      setCanceling(true)
     } else {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection())
@@ -153,7 +153,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   const isNextButtonDisabled = (): boolean => detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
-  const isDetectButtonDisabled = (): boolean => isCanceling
+  const isDetectButtonDisabled = (): boolean => canceling
 
   const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
 
