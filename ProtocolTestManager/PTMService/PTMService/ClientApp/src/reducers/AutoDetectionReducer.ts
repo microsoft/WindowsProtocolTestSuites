@@ -37,6 +37,7 @@ export interface AutoDetectionState {
   prerequisite?: Prerequisite
   detectionSteps?: DetectionSteps
   detecting: boolean
+  canceling: boolean
 }
 
 const initialAutoDetectionState: AutoDetectionState = {
@@ -47,7 +48,8 @@ const initialAutoDetectionState: AutoDetectionState = {
   log: undefined,
   prerequisite: undefined,
   detectionSteps: undefined,
-  detecting: false
+  detecting: false,
+  canceling: false
 }
 
 export const getAutoDetectionReducer = (state = initialAutoDetectionState, action: TestSuiteAutoDetectionActionTypes): AutoDetectionState => {
@@ -93,7 +95,6 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case START_AUTO_DETECTION_REQUEST:
-    case STOP_AUTO_DETECTION_REQUEST:
       return {
         ...state,
         isDetectionStepsLoading: true,
@@ -101,7 +102,6 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case START_AUTO_DETECTION_SUCCESS:
-    case STOP_AUTO_DETECTION_SUCCESS:
       return {
         ...state,
         isDetectionStepsLoading: false,
@@ -109,11 +109,34 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case START_AUTO_DETECTION_FAILURE:
-    case STOP_AUTO_DETECTION_FAILURE:
       return {
         ...state,
         isDetectionStepsLoading: false,
         errorMsg: action.errorMsg
+      }
+
+    case STOP_AUTO_DETECTION_REQUEST:
+      return {
+        ...state,
+        isDetectionStepsLoading: true,
+        canceling: true,
+        errorMsg: undefined
+      }
+
+    case STOP_AUTO_DETECTION_SUCCESS:
+      return {
+        ...state,
+        isDetectionStepsLoading: true,
+        canceling: true,
+        errorMsg: undefined
+      }
+
+    case STOP_AUTO_DETECTION_FAILURE:
+      return {
+        ...state,
+        isDetectionStepsLoading: true,
+        canceling: false,
+        errorMsg: undefined
       }
 
     case APPLY_AUTO_DETECTION_RESULT_REQUEST:
@@ -178,7 +201,8 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
         ...state,
         errorMsg: undefined,
         detectionSteps: action.payload,
-        detecting: action.payload.Result.Status === DetectionStatus.InProgress
+        detecting: action.payload.Result.Status === DetectionStatus.InProgress,
+        canceling: state.canceling ? action.payload.Result.Status === DetectionStatus.InProgress : state.canceling
       }
 
     case UPDATE_AUTO_DETECTION_STEPS_FAILURE:
