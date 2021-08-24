@@ -58,6 +58,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
   const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
+  const [isCanceling, setIsCanceling] = useState(false)
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
   const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
@@ -89,6 +90,7 @@ export function AutoDetection(props: StepWizardProps) {
           showAutoDetectionWarningDialog()
         }
         setDetecting(false)
+        setIsCanceling(false)
       }
     }
 
@@ -139,7 +141,7 @@ export function AutoDetection(props: StepWizardProps) {
     if (detecting) {
       // Cancel
       dispatch(AutoDetectionDataSrv.stopAutoDetection())
-      setDetecting(false)
+      setIsCanceling(true)
     } else {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection())
@@ -150,6 +152,8 @@ export function AutoDetection(props: StepWizardProps) {
   const isPreviousButtonDisabled = (): boolean => detecting
 
   const isNextButtonDisabled = (): boolean => detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
+
+  const isDetectButtonDisabled = (): boolean => isCanceling
 
   const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
 
@@ -250,7 +254,7 @@ export function AutoDetection(props: StepWizardProps) {
           <div className='buttonPanel'>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
               <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
-              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} />
+              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
               <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
             </Stack>
           </div>
