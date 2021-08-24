@@ -997,7 +997,7 @@ Function Main
 	if(Test-Path -Path $DataFile2)
     {
 		[xml]$configFile2 = Get-Content -Path $DataFile2
-		$proxyNode = $configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
+		$proxyNode = $configFile2.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
 		$hostname = $proxyNode.name
 		$domainName = $proxyNode.domain
 		$remotePassword = $proxyNode.password
