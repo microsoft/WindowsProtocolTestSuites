@@ -145,7 +145,7 @@ export function AutoDetection(props: StepWizardProps) {
     }
   }
 
-  const isNextButtonDisabled = (): boolean => autoDetection.detecting
+  const isNextButtonDisabled = (): boolean => autoDetection.detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
   const isDetectButtonDisabled = (): boolean => autoDetection.canceling
 
