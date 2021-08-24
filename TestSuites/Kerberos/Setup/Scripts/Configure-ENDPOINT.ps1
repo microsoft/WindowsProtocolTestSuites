@@ -174,8 +174,8 @@ Function Complete-Configure
 
 Function Config-Driver
 {
-	$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\Kerberos\Server-Endpoint"
-	$version = Get-ChildItem $endPointPath | where {$_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1        
+	$endPointPath = "$env:SystemDrive\Kerberos-TestSuite-ServerEP"
+	#$version = Get-ChildItem $endPointPath | where {$_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1        
 	$dataFile = "$WorkingPath\Scripts\ParamConfig.xml"
 
 	#-----------------------------------------------------------------------------------------------
@@ -474,7 +474,7 @@ Function Config-Driver
 	#-----------------------------------------------------------------------------------------------
 	# Modify PTF Config File
 	#-----------------------------------------------------------------------------------------------
-	$binPath = "$endPointPath\$version\Bin"
+	$binPath = "$endPointPath\Bin"
 	$DepPtfConfig = "$binPath\Kerberos_ServerTestSuite.deployment.ptfconfig"
 
 	Write-ConfigLog "TurnOff FileReadonly for $DepPtfConfig..."
@@ -956,7 +956,7 @@ Function Config-Driver
 	#-----------------------------------------------------------------------------------------------
 	# Copy updated ptfconfig file to TestSuite folder
 	#-----------------------------------------------------------------------------------------------
-	$ptfPath="$endPointPath\$version\Source\Server\TestCode\TestSuite"
+	$ptfPath="$endPointPath\Source\Server\TestCode\TestSuite"
 	Write-ConfigLog "Copy the updated ptfconfig file to $ptfPath" -ForegroundColor Yellow
 	copy $DepPtfConfig $ptfPath
 
@@ -989,19 +989,19 @@ Function Main
 	UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 	
 	# Import Certificate
-	#if(Test-Path -Path $DataFile2)
-    #{
-	#	[xml]$configFile2 = Get-Content -Path $DataFile2
-	#	$proxyNode = $configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
-	#	$hostname = $proxyNode.name
-	#	$domainName = $proxyNode.domain
-	#	$remotePassword = $proxyNode.password
-	#	$userName = $proxyNode.username
-	#	$remoteUserName = $hostname + "\" + $userName
-	#	net use "\\$hostname\C$" $remotePassword /User:$remoteUserName
-	#	$certificatFile = "\\$hostname\c$\$hostname.$domainName.cer"
-	#	Import-Certificate -FilePath $certificatFile  -CertStoreLocation 'Cert:\LocalMachine\Root'
-    #}
+	if(Test-Path -Path $DataFile2)
+    {
+		[xml]$configFile2 = Get-Content -Path $DataFile2
+		$proxyNode = $configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
+		$hostname = $proxyNode.name
+		$domainName = $proxyNode.domain
+		$remotePassword = $proxyNode.password
+		$userName = $proxyNode.username
+		$remoteUserName = $hostname + "\" + $userName
+		net use "\\$hostname\C$" $remotePassword /User:$remoteUserName
+		$certificatFile = "\\$hostname\c$\$hostname.$domainName.cer"
+		Import-Certificate -FilePath $certificatFile  -CertStoreLocation 'Cert:\LocalMachine\Root'
+    }
 
 	Config-Driver
 	
