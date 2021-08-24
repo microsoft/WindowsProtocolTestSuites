@@ -7,6 +7,7 @@ import {
   IColumn,
   Label,
   PrimaryButton,
+  SelectionMode,
   Stack,
   Spinner,
   SpinnerSize
@@ -21,15 +22,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useWindowSize } from '../components/UseWindowSize'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { Property } from '../model/Property'
-import { useCallback, useEffect, useMemo, useRef, useState, CSSProperties, ReactElement } from 'react'
+import { CSSProperties, ReactElement, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
-import { SelectionMode } from '@uifabric/experiments/lib/Utilities'
 import { AutoDetectionActions } from '../actions/AutoDetectionAction'
 import { DetectingItem, DetectionStatus, DetectionStepStatus } from '../model/AutoDetectionData'
 import { useBoolean } from '@uifabric/react-hooks'
 import { PropertyGroupView } from '../components/PropertyGroupView'
 import { PropertyGroup } from '../model/PropertyGroup'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
+import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
+
+// This function is to determine whether detection status is suitable for running.
+const shouldAutoDetectionStop = (autoDetection: AutoDetectionState) => autoDetection.detectionSteps?.Result.Status !== DetectionStatus.InProgress
 
 const getStyle = (status: DetectionStepStatus): CSSProperties => {
   if (status === 'Failed') {
@@ -62,10 +66,9 @@ export function AutoDetection(props: StepWizardProps) {
   const dispatch = useDispatch()
 
   const winSize = useWindowSize()
-  const [detectingTimes, setDetectingTimes] = useState(-999)
   const [detecting, setDetecting] = useState(false)
-  const prerequisiteSummaryRef = useRef<HTMLDivElement>(null)
-  const [headerHeight, setHeaderHeight] = useState<number>(HeaderMenuHeight)
+  const [headerHeight, setHeaderHeight] = useState<number>(0)
+  const [prerequisitePropertiesHeight, setPrerequisitePropertiesHeight] = useState<number>(0)
 
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
@@ -76,27 +79,43 @@ export function AutoDetection(props: StepWizardProps) {
   }, [dispatch])
 
   useEffect(() => {
-    if (detectingTimes === -999 || shouldAutoDetectionStop()) {
-      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error && autoDetection.showWarning) {
-        showAutoDetectionWarningDialog()
-      }
-      setDetecting(false)
+    if (!detecting) {
       return
     }
 
+    const completeCallback = (currState: AutoDetectionState) => {
+      if (shouldAutoDetectionStop(currState)) {
+        if (currState.detectionSteps?.Result.Status === DetectionStatus.Error && currState.showWarning) {
+          showAutoDetectionWarningDialog()
+        }
+        setDetecting(false)
+      }
+    }
+
     const timer = setTimeout(() => {
-      setDetectingTimes(detectingTimes - 1)
-      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
+      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(completeCallback))
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [dispatch, autoDetection, detectingTimes])
+  }, [dispatch, autoDetection])
 
-  useEffect(() => {
-    if (prerequisiteSummaryRef.current !== null) {
-      setHeaderHeight(prerequisiteSummaryRef.current.offsetHeight + HeaderMenuHeight)
+  useLayoutEffect(() => {
+    if (autoDetection.prerequisite?.Summary !== undefined) {
+      const lineCount = autoDetection.prerequisite.Summary.split('\n').length
+      const summaryHeight = 43 * lineCount
+
+      setHeaderHeight(HeaderMenuHeight + summaryHeight)
     }
-  })
+  }, [autoDetection])
+
+  useLayoutEffect(() => {
+    if (autoDetection.prerequisite?.Properties !== undefined) {
+      const initialHeight = (winSize.height - headerHeight) * 0.45
+      const calculatedHeight = 48 * autoDetection.prerequisite.Properties.length
+
+      setPrerequisitePropertiesHeight(Math.min(initialHeight, calculatedHeight))
+    }
+  }, [autoDetection])
 
   const onPreviousButtonClick = () => {
     wizardProps.previousStep()
@@ -104,20 +123,6 @@ export function AutoDetection(props: StepWizardProps) {
 
   const onPropertyValueChange = (updatedProperty: Property) => {
     dispatch(AutoDetectionActions.updateAutoDetectionPrerequisiteAction(updatedProperty))
-  }
-
-  // This function is to determine whether detection status is suitable for running.
-  const shouldAutoDetectionStop = () => {
-    const statusToStop = autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished ||
-      autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error ||
-      autoDetection.detectionSteps?.Result.Status === DetectionStatus.NotStart
-
-    // We should get steps for 3 times no matter the status.
-    if (detectingTimes >= 98) {
-      return false
-    }
-
-    return statusToStop
   }
 
   const onNextButtonClick = () => {
@@ -134,12 +139,10 @@ export function AutoDetection(props: StepWizardProps) {
     if (detecting) {
       // Cancel
       dispatch(AutoDetectionDataSrv.stopAutoDetection())
-      setDetectingTimes(-999)
       setDetecting(false)
     } else {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection())
-      setDetectingTimes(100)
       setDetecting(true)
     }
   }
@@ -212,22 +215,20 @@ export function AutoDetection(props: StepWizardProps) {
     <div>
       <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={autoDetection.errorMsg} >
         <Stack style={{ paddingLeft: 10 }}>
-          <div ref={prerequisiteSummaryRef}>
-            <Stack style={{ paddingLeft: 30 }}>
-              {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
-            </Stack>
-          </div>
-          <div style={{ paddingLeft: 30, height: (winSize.height - headerHeight) * 0.46, overflowY: 'auto' }}>
+          <Stack style={{ paddingLeft: 30 }}>
+            {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
+          </Stack>
+          <div style={{ paddingLeft: 30, height: prerequisitePropertiesHeight, overflowY: 'auto' }}>
             {
               autoDetection.isPrerequisiteLoading
                 ? <LoadingPanel />
                 : <PropertyGroupView
-                  winSize={{ ...winSize, height: (winSize.height - headerHeight) * 0.46 }}
+                  winSize={{ ...winSize, height: prerequisitePropertiesHeight }}
                   propertyGroup={prerequisitePropertyGroup}
                   onValueChange={onPropertyValueChange} />
             }
           </div>
-          <div style={{ paddingTop: 10, paddingLeft: 30, height: (winSize.height - headerHeight) * 0.54 - 55, overflowY: 'auto' }}>
+          <div style={{ paddingTop: 10, paddingLeft: 30, height: winSize.height - (headerHeight + prerequisitePropertiesHeight) - 55, overflowY: 'auto' }}>
             {
               autoDetection.isDetectionStepsLoading
                 ? <LoadingPanel />

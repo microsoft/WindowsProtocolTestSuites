@@ -5,6 +5,7 @@ import { RequestMethod, FetchService } from '.'
 import { FilterTestCaseActionTypes } from '../actions/FilterTestCaseAction'
 import { AutoDetectionActions, TestSuiteAutoDetectionActionTypes } from '../actions/AutoDetectionAction'
 import { AppThunkAction } from '../store/configureStore'
+import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 
 export const AutoDetectionDataSrv = {
   getAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
@@ -31,7 +32,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
     })
   },
-  updateAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  updateAutoDetectionSteps: (completeCallback: (currState: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -41,6 +42,9 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.updateAutoDetectionStepsAction_Request,
       onComplete: AutoDetectionActions.updateAutoDetectionStepsAction_Success,
       onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
+    }).then(() => {
+      const currState = getState().autoDetection
+      completeCallback(currState)
     })
   },
   getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
