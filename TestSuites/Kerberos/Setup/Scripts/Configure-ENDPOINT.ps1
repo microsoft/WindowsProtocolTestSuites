@@ -958,6 +958,11 @@ Function Config-Driver
 	#-----------------------------------------------------------------------------------------------
 	$ptfPath="$endPointPath\Source\Server\TestCode\TestSuite"
 	Write-ConfigLog "Copy the updated ptfconfig file to $ptfPath" -ForegroundColor Yellow
+	# Check test result directory
+    if(!(Test-Path -Path $ptfPath))
+    {
+        md $ptfPath
+    }
 	copy $DepPtfConfig $ptfPath
 
 	#-----------------------------------------------------------------------------------------------
@@ -998,8 +1003,13 @@ Function Main
 		$remotePassword = $proxyNode.password
 		$userName = $proxyNode.username
 		$remoteUserName = $hostname + "\" + $userName
+		Write-ConfigLog "`$hostname = $hostname"
+		Write-ConfigLog "`$remotePassword = $remotePassword"
+		Write-ConfigLog "`$remoteUserName = $remoteUserName"
+		Write-ConfigLog "`$domainName = $domainName"
 		net use "\\$hostname\C$" $remotePassword /User:$remoteUserName
 		$certificatFile = "\\$hostname\c$\$hostname.$domainName.cer"
+		Write-ConfigLog "`$certificatFile = $certificatFile"
 		Import-Certificate -FilePath $certificatFile  -CertStoreLocation 'Cert:\LocalMachine\Root'
     }
 
