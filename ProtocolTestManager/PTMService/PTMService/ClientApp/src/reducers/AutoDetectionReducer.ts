@@ -26,7 +26,7 @@ import {
   SET_SHOW_WARNING,
   TestSuiteAutoDetectionActionTypes
 } from '../actions/AutoDetectionAction'
-import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
+import { Prerequisite, DetectionSteps, DetectionStatus } from '../model/AutoDetectionData'
 
 export interface AutoDetectionState {
   isPrerequisiteLoading: boolean
@@ -36,6 +36,7 @@ export interface AutoDetectionState {
   log?: string
   prerequisite?: Prerequisite
   detectionSteps?: DetectionSteps
+  detecting: boolean
 }
 
 const initialAutoDetectionState: AutoDetectionState = {
@@ -45,7 +46,8 @@ const initialAutoDetectionState: AutoDetectionState = {
   showWarning: false,
   log: undefined,
   prerequisite: undefined,
-  detectionSteps: undefined
+  detectionSteps: undefined,
+  detecting: false
 }
 
 export const getAutoDetectionReducer = (state = initialAutoDetectionState, action: TestSuiteAutoDetectionActionTypes): AutoDetectionState => {
@@ -153,7 +155,8 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
         ...state,
         isDetectionStepsLoading: false,
         errorMsg: undefined,
-        detectionSteps: action.payload
+        detectionSteps: action.payload,
+        detecting: action.payload.Result.Status === DetectionStatus.InProgress
       }
 
     case GET_AUTO_DETECTION_STEPS_FAILURE:
@@ -174,7 +177,8 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       return {
         ...state,
         errorMsg: undefined,
-        detectionSteps: action.payload
+        detectionSteps: action.payload,
+        detecting: action.payload.Result.Status === DetectionStatus.InProgress
       }
 
     case UPDATE_AUTO_DETECTION_STEPS_FAILURE:

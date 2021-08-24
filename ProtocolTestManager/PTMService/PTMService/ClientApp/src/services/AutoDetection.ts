@@ -32,7 +32,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
     })
   },
-  updateAutoDetectionSteps: (completeCallback: (currState: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  updateAutoDetectionSteps: (completeCallback?: (currState: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -44,7 +44,9 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
     }).then(() => {
       const currState = getState().autoDetection
-      completeCallback(currState)
+      if (completeCallback !== undefined) {
+        completeCallback(currState)
+      }
     })
   },
   getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
@@ -64,7 +66,7 @@ export const AutoDetectionDataSrv = {
       completeCallback()
     })
   },
-  startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+  startAutoDetection: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     const body = state.autoDetection.prerequisite?.Properties
@@ -76,9 +78,9 @@ export const AutoDetectionDataSrv = {
       onComplete: AutoDetectionActions.startAutoDetectionAction_Success,
       onError: AutoDetectionActions.startAutoDetectionAction_Failure,
       body: JSON.stringify(body)
-    })
+    }).then(completeCallback)
   },
-  stopAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+  stopAutoDetection: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
