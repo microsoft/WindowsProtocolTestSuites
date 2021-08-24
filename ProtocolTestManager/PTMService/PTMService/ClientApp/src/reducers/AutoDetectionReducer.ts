@@ -126,7 +126,7 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
     case STOP_AUTO_DETECTION_SUCCESS:
       return {
         ...state,
-        isDetectionStepsLoading: true,
+        isDetectionStepsLoading: false,
         canceling: true,
         errorMsg: undefined
       }
@@ -134,9 +134,9 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
     case STOP_AUTO_DETECTION_FAILURE:
       return {
         ...state,
-        isDetectionStepsLoading: true,
+        isDetectionStepsLoading: false,
         canceling: false,
-        errorMsg: undefined
+        errorMsg: action.errorMsg
       }
 
     case APPLY_AUTO_DETECTION_RESULT_REQUEST:
