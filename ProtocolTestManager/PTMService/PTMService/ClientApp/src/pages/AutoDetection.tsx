@@ -77,13 +77,13 @@ export function AutoDetection(props: StepWizardProps) {
     dispatch(AutoDetectionDataSrv.getAutoDetectionSteps())
   }, [dispatch])
 
-  const autoDetectionUpdateCallback = useCallback((currState: AutoDetectionState) => {
-    if (shouldAutoDetectionStop(currState)) {
-      if (currState.detectionSteps?.Result.Status === DetectionStatus.Error && currState.showWarning) {
+  useEffect(() => {
+    if (shouldAutoDetectionStop(autoDetection)) {
+      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error) {
         showAutoDetectionWarningDialog()
       }
     }
-  }, [showAutoDetectionWarningDialog])
+  }, [autoDetection])
 
   useEffect(() => {
     if (!autoDetection.detecting) {
@@ -91,7 +91,7 @@ export function AutoDetection(props: StepWizardProps) {
     }
 
     const timer = setTimeout(() => {
-      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionUpdateCallback))
+      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
     }, 1000)
 
     return () => clearTimeout(timer)
@@ -140,7 +140,7 @@ export function AutoDetection(props: StepWizardProps) {
     } else {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
-        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionUpdateCallback))
+        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
       }))
     }
   }
@@ -154,7 +154,6 @@ export function AutoDetection(props: StepWizardProps) {
   const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
 
   const onCloseAutoDetectionWarningDialogClick = () => {
-    dispatch(AutoDetectionActions.setShowWarningAction(false))
     hideAutoDetectionWarningDialog()
   }
 
@@ -247,8 +246,8 @@ export function AutoDetection(props: StepWizardProps) {
           </div>
           <div className='buttonPanel'>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
-              <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
               <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
+              <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
               <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
             </Stack>
           </div>
