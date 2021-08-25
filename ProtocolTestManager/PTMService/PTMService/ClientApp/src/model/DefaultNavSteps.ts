@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { StepWizardChildProps } from 'react-step-wizard'
-import { ConfigureMethod_AutoDetection } from '../pages/ConfigureMethod'
+import { ConfigurationMethod_AutoDetection } from '../pages/ConfigureMethod'
 import { ConfigureMethodState } from '../reducers/ConfigureMethodReducer'
 import { StepNavItemInfo } from './StepNavItemInfo'
 
@@ -13,7 +13,7 @@ export const RunSteps = {
   CONFIGURE_METHOD: 4,
   AUTO_DETECTION: 5,
   DETECTION_RESULT: 6,
-  FILTERTESTCASE: 7,
+  FILTER_TEST_CASE: 7,
   CONFIGURE_TEST_CASE: 8,
   CONFIGURE_ADAPTER: 9,
   RUN_SELECTED_TEST_CASE: 10
@@ -53,7 +53,7 @@ const DefaultNavSteps: StepNavItemInfo[] = [
   },
   {
     Caption: 'Filter Test Case',
-    TargetStep: RunSteps.FILTERTESTCASE,
+    TargetStep: RunSteps.FILTER_TEST_CASE,
     IsEnabled: false
   },
   {
@@ -77,7 +77,7 @@ export function getNavSteps (wizardProps: StepWizardChildProps, configureMethod?
   return DefaultNavSteps.map(item => {
     if (item.TargetStep < wizardProps.currentStep) {
       if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-        if (configureMethod?.selectedMethod === ConfigureMethod_AutoDetection) {
+        if (configureMethod?.selectedMethod === ConfigurationMethod_AutoDetection) {
           return {
             ...item,
             IsActive: false,

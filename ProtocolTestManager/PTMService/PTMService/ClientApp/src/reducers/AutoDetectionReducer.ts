@@ -23,29 +23,30 @@ import {
   GET_AUTO_DETECTION_LOG_REQUEST,
   GET_AUTO_DETECTION_LOG_FAILURE,
   SET_AUTO_DETECTION_LOG,
-  SET_SHOW_WARNING,
   TestSuiteAutoDetectionActionTypes
 } from '../actions/AutoDetectionAction'
-import { Prerequisite, DetectionSteps } from '../model/AutoDetectionData'
+import { Prerequisite, DetectionSteps, DetectionStatus } from '../model/AutoDetectionData'
 
 export interface AutoDetectionState {
   isPrerequisiteLoading: boolean
   isDetectionStepsLoading: boolean
   errorMsg?: string
-  showWarning: boolean
   log?: string
   prerequisite?: Prerequisite
   detectionSteps?: DetectionSteps
+  detecting: boolean
+  canceling: boolean
 }
 
 const initialAutoDetectionState: AutoDetectionState = {
   isPrerequisiteLoading: false,
   isDetectionStepsLoading: false,
   errorMsg: undefined,
-  showWarning: false,
   log: undefined,
   prerequisite: undefined,
-  detectionSteps: undefined
+  detectionSteps: undefined,
+  detecting: false,
+  canceling: false
 }
 
 export const getAutoDetectionReducer = (state = initialAutoDetectionState, action: TestSuiteAutoDetectionActionTypes): AutoDetectionState => {
@@ -91,7 +92,6 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case START_AUTO_DETECTION_REQUEST:
-    case STOP_AUTO_DETECTION_REQUEST:
       return {
         ...state,
         isDetectionStepsLoading: true,
@@ -99,7 +99,6 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case START_AUTO_DETECTION_SUCCESS:
-    case STOP_AUTO_DETECTION_SUCCESS:
       return {
         ...state,
         isDetectionStepsLoading: false,
@@ -107,10 +106,33 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case START_AUTO_DETECTION_FAILURE:
+      return {
+        ...state,
+        isDetectionStepsLoading: false,
+        errorMsg: action.errorMsg
+      }
+
+    case STOP_AUTO_DETECTION_REQUEST:
+      return {
+        ...state,
+        isDetectionStepsLoading: true,
+        canceling: true,
+        errorMsg: undefined
+      }
+
+    case STOP_AUTO_DETECTION_SUCCESS:
+      return {
+        ...state,
+        isDetectionStepsLoading: false,
+        canceling: true,
+        errorMsg: undefined
+      }
+
     case STOP_AUTO_DETECTION_FAILURE:
       return {
         ...state,
         isDetectionStepsLoading: false,
+        canceling: false,
         errorMsg: action.errorMsg
       }
 
@@ -134,18 +156,11 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
         log: action.payload
       }
 
-    case SET_SHOW_WARNING:
-      return {
-        ...state,
-        showWarning: action.payload
-      }
-
     case GET_AUTO_DETECTION_STEPS_REQUEST:
       return {
         ...state,
         isDetectionStepsLoading: true,
-        errorMsg: undefined,
-        showWarning: false
+        errorMsg: undefined
       }
 
     case GET_AUTO_DETECTION_STEPS_SUCCESS:
@@ -153,7 +168,9 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
         ...state,
         isDetectionStepsLoading: false,
         errorMsg: undefined,
-        detectionSteps: action.payload
+        detectionSteps: action.payload,
+        detecting: action.payload.Result.Status === DetectionStatus.InProgress,
+        canceling: state.canceling ? action.payload.Result.Status === DetectionStatus.InProgress : state.canceling
       }
 
     case GET_AUTO_DETECTION_STEPS_FAILURE:
@@ -166,15 +183,16 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
     case UPDATE_AUTO_DETECTION_STEPS_REQUEST:
       return {
         ...state,
-        errorMsg: undefined,
-        showWarning: true
+        errorMsg: undefined
       }
 
     case UPDATE_AUTO_DETECTION_STEPS_SUCCESS:
       return {
         ...state,
         errorMsg: undefined,
-        detectionSteps: action.payload
+        detectionSteps: action.payload,
+        detecting: action.payload.Result.Status === DetectionStatus.InProgress,
+        canceling: state.canceling ? action.payload.Result.Status === DetectionStatus.InProgress : state.canceling
       }
 
     case UPDATE_AUTO_DETECTION_STEPS_FAILURE:

@@ -2,10 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { RequestMethod, FetchService } from '.'
-import { FilterTestCaseActionTypes } from '../actions/FilterTestCaseAction'
 import { AutoDetectionActions, TestSuiteAutoDetectionActionTypes } from '../actions/AutoDetectionAction'
 import { AppThunkAction } from '../store/configureStore'
-import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 
 export const AutoDetectionDataSrv = {
   getAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
@@ -32,7 +30,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
     })
   },
-  updateAutoDetectionSteps: (completeCallback: (currState: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  updateAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -42,9 +40,6 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.updateAutoDetectionStepsAction_Request,
       onComplete: AutoDetectionActions.updateAutoDetectionStepsAction_Success,
       onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
-    }).then(() => {
-      const currState = getState().autoDetection
-      completeCallback(currState)
     })
   },
   getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
@@ -58,13 +53,15 @@ export const AutoDetectionDataSrv = {
       onComplete: AutoDetectionActions.getAutoDetectionLogAction_Success,
       onError: AutoDetectionActions.getAutoDetectionLogAction_Failure,
       headers: { 'Content-Type': 'text/plain' }
-    }).then(async (logBlob: Blob) => {
-      const logText = await logBlob.text()
-      dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
-      completeCallback()
+    }).then(async (logBlob: Blob | undefined) => {
+      if (logBlob !== undefined) {
+        const logText = await logBlob.text()
+        dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
+        completeCallback()
+      }
     })
   },
-  startAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+  startAutoDetection: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     const body = state.autoDetection.prerequisite?.Properties
@@ -76,9 +73,14 @@ export const AutoDetectionDataSrv = {
       onComplete: AutoDetectionActions.startAutoDetectionAction_Success,
       onError: AutoDetectionActions.startAutoDetectionAction_Failure,
       body: JSON.stringify(body)
+    }).then(() => {
+      const currState = getState()
+      if (currState.autoDetection.errorMsg === undefined) {
+        completeCallback()
+      }
     })
   },
-  stopAutoDetection: (): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch, getState) => {
+  stopAutoDetection: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -90,7 +92,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.stopAutoDetectionAction_Failure
     })
   },
-  applyDetectionResult: (completeCallback?: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  applyDetectionResult: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     console.log('applyDetectionResult')
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
@@ -101,6 +103,11 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
       onComplete: AutoDetectionActions.applyAutoDetectionResultAction_Success,
       onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure
-    }).then(completeCallback)
+    }).then(() => {
+      const currState = getState()
+      if (currState.autoDetection.errorMsg === undefined) {
+        completeCallback()
+      }
+    })
   }
 }

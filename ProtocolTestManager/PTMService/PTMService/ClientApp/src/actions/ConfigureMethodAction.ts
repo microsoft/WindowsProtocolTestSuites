@@ -1,18 +1,18 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-export const SET_CONFIGUREMETHOD_REQUEST = 'CONFIGUREMETHOD/SET_CONFIGUREMETHOD_REQUEST'
+export const SET_CONFIGURATION_METHOD = 'CONFIGUREMETHOD/SET_CONFIGURATION_METHOD'
 
-export const SAVE_PROFILE_REQUEST = 'TESTRESULTS/SAVE_PROFILE_REQUEST'
-export const SAVE_PROFILE_SUCCESS = 'TESTRESULTS/SAVE_PROFILE_SUCCESS'
-export const SAVE_PROFILE_FAILURE = 'TESTRESULTS/SAVE_PROFILE_FAILURE'
+export const SAVE_PROFILE_REQUEST = 'CONFIGUREMETHOD/SAVE_PROFILE_REQUEST'
+export const SAVE_PROFILE_SUCCESS = 'CONFIGUREMETHOD/SAVE_PROFILE_SUCCESS'
+export const SAVE_PROFILE_FAILURE = 'CONFIGUREMETHOD/SAVE_PROFILE_FAILURE'
 
-export const IMPORT_PROFILE_REQUEST = 'TESTRESULTS/IMPORT_PROFILE_REQUEST'
-export const IMPORT_PROFILE_SUCCESS = 'TESTRESULTS/IMPORT_PROFILE_SUCCESS'
-export const IMPORT_PROFILE_FAILURE = 'TESTRESULTS/IMPORT_PROFILE_FAILURE'
+export const IMPORT_PROFILE_REQUEST = 'CONFIGUREMETHOD/IMPORT_PROFILE_REQUEST'
+export const IMPORT_PROFILE_SUCCESS = 'CONFIGUREMETHOD/IMPORT_PROFILE_SUCCESS'
+export const IMPORT_PROFILE_FAILURE = 'CONFIGUREMETHOD/IMPORT_PROFILE_FAILURE'
 
 // define action types
-interface SetTSConfigureMethodType { type: typeof SET_CONFIGUREMETHOD_REQUEST, selectedMethod: string }
+interface SetConfigurationMethodType { type: typeof SET_CONFIGURATION_METHOD, selectedMethod: string }
 
 // save profile actions
 interface SetSaveProfileActionRequestType { type: typeof SAVE_PROFILE_REQUEST, payload: number }
@@ -25,26 +25,26 @@ interface ImportProfileActionSuccessType { type: typeof IMPORT_PROFILE_SUCCESS, 
 interface ImportProfileActionFailureType { type: typeof IMPORT_PROFILE_FAILURE, errorMsg: string }
 
 export type TestSuiteConfigureMethodActionTypes =
-    SetTSConfigureMethodType |
-    SetSaveProfileActionRequestType |
-    SetSaveProfileActionSuccessType |
-    SetSaveProfileActionFailureType |
-    ImportProfileActionRequestType |
-    ImportProfileActionSuccessType |
-    ImportProfileActionFailureType
+  SetConfigurationMethodType |
+  SetSaveProfileActionRequestType |
+  SetSaveProfileActionSuccessType |
+  SetSaveProfileActionFailureType |
+  ImportProfileActionRequestType |
+  ImportProfileActionSuccessType |
+  ImportProfileActionFailureType
 
 // define actions
 export const ConfigureMethodActions = {
-  setConfigureMethod: (key: string): TestSuiteConfigureMethodActionTypes => {
+  setConfigurationMethodAction: (key: string): TestSuiteConfigureMethodActionTypes => {
     return {
-      type: SET_CONFIGUREMETHOD_REQUEST,
+      type: SET_CONFIGURATION_METHOD,
       selectedMethod: key
     }
   },
-  saveProfileAction_Request: (testsuiteId: number): TestSuiteConfigureMethodActionTypes => {
+  saveProfileAction_Request: (testSuiteId: number): TestSuiteConfigureMethodActionTypes => {
     return {
       type: SAVE_PROFILE_REQUEST,
-      payload: testsuiteId
+      payload: testSuiteId
     }
   },
   saveProfileAction_Success: (fileLocation: string): TestSuiteConfigureMethodActionTypes => {

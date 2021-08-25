@@ -61,12 +61,12 @@ export function AutoDetection(props: StepWizardProps) {
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
   const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
+  const [showWarning, setShowWarning] = useState(true)
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
   const dispatch = useDispatch()
 
   const winSize = useWindowSize()
-  const [detecting, setDetecting] = useState(false)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [prerequisitePropertiesHeight, setPrerequisitePropertiesHeight] = useState<number>(0)
 
@@ -79,21 +79,20 @@ export function AutoDetection(props: StepWizardProps) {
   }, [dispatch])
 
   useEffect(() => {
-    if (!detecting) {
+    if (shouldAutoDetectionStop(autoDetection)) {
+      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error && showWarning) {
+        showAutoDetectionWarningDialog()
+      }
+    }
+  }, [autoDetection])
+
+  useEffect(() => {
+    if (!autoDetection.detecting) {
       return
     }
 
-    const completeCallback = (currState: AutoDetectionState) => {
-      if (shouldAutoDetectionStop(currState)) {
-        if (currState.detectionSteps?.Result.Status === DetectionStatus.Error && currState.showWarning) {
-          showAutoDetectionWarningDialog()
-        }
-        setDetecting(false)
-      }
-    }
-
     const timer = setTimeout(() => {
-      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(completeCallback))
+      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
     }, 1000)
 
     return () => clearTimeout(timer)
@@ -136,27 +135,28 @@ export function AutoDetection(props: StepWizardProps) {
   }
 
   const onDetectButtonClick = () => {
-    if (detecting) {
+    if (autoDetection.detecting) {
       // Cancel
       dispatch(AutoDetectionDataSrv.stopAutoDetection())
-      setDetecting(false)
     } else {
       // Start detection
-      dispatch(AutoDetectionDataSrv.startAutoDetection())
-      setDetecting(true)
+      dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
+        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
+        setShowWarning(true)
+      }))
     }
   }
 
-  const isPreviousButtonDisabled = (): boolean => detecting
+  const isNextButtonDisabled = (): boolean => autoDetection.detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
-  const isNextButtonDisabled = (): boolean => detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
+  const isDetectButtonDisabled = (): boolean => autoDetection.canceling
 
-  const getDetectButtonText = (): string => detecting ? 'Cancel' : 'Detect'
+  const getDetectButtonText = (): string => autoDetection.detecting ? 'Cancel' : 'Detect'
 
   const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
 
   const onCloseAutoDetectionWarningDialogClick = () => {
-    dispatch(AutoDetectionActions.setShowWarningAction(false))
+    setShowWarning(false)
     hideAutoDetectionWarningDialog()
   }
 
@@ -175,7 +175,7 @@ export function AutoDetection(props: StepWizardProps) {
                     {status}
                   </Link>
                 )
-              } else if ((status === 'Pending' || status === 'Detecting') && detecting) {
+              } else if ((status === 'Pending' || status === 'Detecting') && autoDetection.detecting) {
                 return (
                   <Stack horizontal>
                     <Spinner size={SpinnerSize.medium} />
@@ -190,7 +190,7 @@ export function AutoDetection(props: StepWizardProps) {
         </div>
       </Label>
     )
-  }, [detecting, onFailedClick])
+  }, [autoDetection.detecting, onFailedClick])
 
   const stepColumns = useMemo<IColumn[]>(() => [{
     key: 'DetectingContent',
@@ -249,8 +249,8 @@ export function AutoDetection(props: StepWizardProps) {
           </div>
           <div className='buttonPanel'>
             <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
-              <PrimaryButton text="Previous" onClick={onPreviousButtonClick} disabled={isPreviousButtonDisabled()} />
-              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} />
+              <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
+              <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
               <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
             </Stack>
           </div>

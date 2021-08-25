@@ -24,7 +24,7 @@ const getDetectionSummary = (detectionSummary: DetectionSummary) => {
     resultItemMap.ResultItemList.forEach((resultItem) => {
       if (i > 0) pageHTML += '<tr>'
       const emojiStr = (resultItem.DetectedResult === DetectedResult.Supported) ? '<span>&#10004;</span>' : ((resultItem.DetectedResult === DetectedResult.UnSupported) ? '<span>&#10060;</span>' : '<span>&#9888;</span>')
-      pageHTML += '<td>' + resultItem.Name + '</td><td>' + emojiStr + resultItem.DetectedResult+ '</td>'
+      pageHTML += '<td>' + resultItem.Name + '</td><td>' + emojiStr + resultItem.DetectedResult + '</td>'
       if (i > 0) pageHTML += '</tr>'
       i++
     })
@@ -44,7 +44,7 @@ const getDetectionSummary = (detectionSummary: DetectionSummary) => {
   link.click()
 }
 
-export function DetectionResult (props: StepWizardProps) {
+export function DetectionResult(props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
   const detectionResult = useSelector((state: AppState) => state.detectResult)
@@ -68,7 +68,7 @@ export function DetectionResult (props: StepWizardProps) {
   const winSize = useWindowSize()
 
   const onPreviousButtonClick = () => {
-    if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigureMethod.ConfigureMethod_AutoDetection) {
+    if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {
       wizardProps.previousStep()
     } else {
       wizardProps.goToStep(RunSteps.CONFIGURE_METHOD)
@@ -154,30 +154,30 @@ export function DetectionResult (props: StepWizardProps) {
   };
 
   return (
-      <div>
-            <StepPanel leftNav={wizard} isLoading={detectionResult.isDetectionResultLoading} errorMsg={detectionResult.errorMsg} >
-              <div style={{ height: winSize.height - HeaderMenuHeight - 45, overflowY: 'scroll' }}>
-              <Stack>
-                <Nav
-                  onLinkClick={onLinkClick}
-                  selectedKey={seletecdItem}
-                  onRenderGroupHeader={(props, defaultRender) => <div onMouseEnter={() => onMouseEnterGroupHeader(props)}>{defaultRender!(props)}</div>}
-                  groups={navLinkGroups}
-                  styles={navStyles}
-                />
-              </Stack>
-              <div>{description}</div>
-              </div>
-          <div className='buttonPanel'>
-            <Stack
-              horizontal
-              horizontalAlign="end" tokens={StackGap10}>
-              <PrimaryButton onClick={() => exportDetectionResult()}>Export Detection Result</PrimaryButton>
-              <PrimaryButton onClick={() => onPreviousButtonClick()}>Previous</PrimaryButton>
-              <PrimaryButton onClick={() => onNextButtonClick()}>Next</PrimaryButton>
-            </Stack>
-          </div>
-          </StepPanel>
-      </div>
+    <div>
+      <StepPanel leftNav={wizard} isLoading={detectionResult.isDetectionResultLoading} errorMsg={detectionResult.errorMsg} >
+        <div style={{ height: winSize.height - HeaderMenuHeight - 45, overflowY: 'scroll' }}>
+          <Stack>
+            <Nav
+              onLinkClick={onLinkClick}
+              selectedKey={seletecdItem}
+              onRenderGroupHeader={(props, defaultRender) => <div onMouseEnter={() => onMouseEnterGroupHeader(props)}>{defaultRender!(props)}</div>}
+              groups={navLinkGroups}
+              styles={navStyles}
+            />
+          </Stack>
+          <div>{description}</div>
+        </div>
+        <div className='buttonPanel'>
+          <Stack
+            horizontal
+            horizontalAlign="end" tokens={StackGap10}>
+            <PrimaryButton onClick={() => exportDetectionResult()}>Export Detection Result</PrimaryButton>
+            <PrimaryButton onClick={() => onPreviousButtonClick()}>Previous</PrimaryButton>
+            <PrimaryButton onClick={() => onNextButtonClick()}>Next</PrimaryButton>
+          </Stack>
+        </div>
+      </StepPanel>
+    </div>
   )
 }

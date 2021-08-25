@@ -36,8 +36,6 @@ export const GET_AUTO_DETECTION_LOG_FAILURE = 'AUTO_DETECTION/GET_AUTO_DETECTION
 
 export const SET_AUTO_DETECTION_LOG = 'AUTO_DETECTION/SET_AUTO_DETECTION_LOG'
 
-export const SET_SHOW_WARNING = "AUTO_DETECTION/SET_SHOW_WARNING"
-
 // define action types
 interface GetAutoDetectionPrerequisiteActionRequestType { type: typeof GET_AUTO_DETECTION_PREREQUISITE_REQUEST }
 interface GetAutoDetectionPrerequisiteActionSuccessType { type: typeof GET_AUTO_DETECTION_PREREQUISITE_SUCCESS, payload: Prerequisite }
@@ -71,8 +69,6 @@ interface GetAutoDetectionLogActionFailureType { type: typeof GET_AUTO_DETECTION
 
 interface SetAutoDetectionLogActionType { type: typeof SET_AUTO_DETECTION_LOG, payload: string }
 
-interface SetShowWarningActionType { type: typeof SET_SHOW_WARNING, payload: boolean }
-
 export type TestSuiteAutoDetectionActionTypes = GetAutoDetectionPrerequisiteActionRequestType
   | GetAutoDetectionPrerequisiteActionSuccessType
   | GetAutoDetectionPrerequisiteActionFailureType
@@ -96,7 +92,6 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectionPrerequisiteActi
   | GetAutoDetectionLogActionSuccessType
   | GetAutoDetectionLogActionFailureType
   | SetAutoDetectionLogActionType
-  | SetShowWarningActionType
 
 // define actions
 export const AutoDetectionActions = {
@@ -218,12 +213,6 @@ export const AutoDetectionActions = {
     return {
       type: SET_AUTO_DETECTION_LOG,
       payload: log
-    }
-  },
-  setShowWarningAction: (show: boolean): TestSuiteAutoDetectionActionTypes => {
-    return {
-      type: SET_SHOW_WARNING,
-      payload: show
     }
   },
   applyAutoDetectionResultAction_Request: (): TestSuiteAutoDetectionActionTypes => {
