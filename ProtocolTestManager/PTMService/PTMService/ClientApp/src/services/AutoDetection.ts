@@ -3,6 +3,7 @@
 
 import { RequestMethod, FetchService } from '.'
 import { AutoDetectionActions, TestSuiteAutoDetectionActionTypes } from '../actions/AutoDetectionAction'
+import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 import { AppThunkAction } from '../store/configureStore'
 
 export const AutoDetectionDataSrv = {
@@ -18,7 +19,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionPrerequisiteAction_Failure
     })
   },
-  getAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  getAutoDetectionSteps: (completeCallback: (autoDetection: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -28,9 +29,14 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.getAutoDetectionStepsAction_Request,
       onComplete: AutoDetectionActions.getAutoDetectionStepsAction_Success,
       onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
+    }).then(() => {
+      const currState = getState()
+      if (currState.autoDetection.errorMsg === undefined) {
+        completeCallback(currState.autoDetection)
+      }
     })
   },
-  updateAutoDetectionSteps: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+  updateAutoDetectionSteps: (completeCallback: (autoDetection: AutoDetectionState) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
@@ -40,6 +46,11 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.updateAutoDetectionStepsAction_Request,
       onComplete: AutoDetectionActions.updateAutoDetectionStepsAction_Success,
       onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
+    }).then(() => {
+      const currState = getState()
+      if (currState.autoDetection.errorMsg === undefined) {
+        completeCallback(currState.autoDetection)
+      }
     })
   },
   getAutoDetectionLog: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
