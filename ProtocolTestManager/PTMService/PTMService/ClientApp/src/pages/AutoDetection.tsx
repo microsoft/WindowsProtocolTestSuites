@@ -61,6 +61,7 @@ export function AutoDetection(props: StepWizardProps) {
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
   const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
+  const [showWarning, setShowWarning] = useState(true)
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
   const dispatch = useDispatch()
@@ -79,7 +80,7 @@ export function AutoDetection(props: StepWizardProps) {
 
   useEffect(() => {
     if (shouldAutoDetectionStop(autoDetection)) {
-      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error) {
+      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error && showWarning) {
         showAutoDetectionWarningDialog()
       }
     }
@@ -142,6 +143,7 @@ export function AutoDetection(props: StepWizardProps) {
       dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
         dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
       }))
+      setShowWarning(true)
     }
   }
 
@@ -154,6 +156,7 @@ export function AutoDetection(props: StepWizardProps) {
   const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
 
   const onCloseAutoDetectionWarningDialogClick = () => {
+    setShowWarning(false)
     hideAutoDetectionWarningDialog()
   }
 
