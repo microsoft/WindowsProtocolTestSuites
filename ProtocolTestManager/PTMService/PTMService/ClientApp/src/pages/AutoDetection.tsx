@@ -142,8 +142,8 @@ export function AutoDetection(props: StepWizardProps) {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
         dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
+        setShowWarning(true)
       }))
-      setShowWarning(true)
     }
   }
 
