@@ -2,8 +2,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Dropdown, Label, TextField, TooltipDelay, TooltipHost } from '@fluentui/react'
-import { FunctionComponent, ReactElement } from 'react'
+import { Dropdown, Label, Stack, TextField, TooltipDelay, TooltipHost } from '@fluentui/react'
+import { FunctionComponent, ReactElement, useLayoutEffect, useState } from 'react'
 import { Property } from '../model/Property'
 import { PropertyGroup } from '../model/PropertyGroup'
 
@@ -17,6 +17,7 @@ interface PropertyGroupViewProps {
 interface PropertyNameProps {
   latestProperty?: Property
   property: Property
+  width: number
 }
 
 interface CommonPropertyProps {
@@ -38,7 +39,7 @@ function CommonProperty(props: CommonPropertyProps): ReactElement {
       delay={TooltipDelay.zero}>
       <TextField
         key={props.property.Key ?? props.property.Name}
-        style={{ alignSelf: 'stretch', minWidth: 360 }}
+        style={{ alignSelf: 'stretch', minWidth: 480 }}
         value={props.property.Value}
         onChange={(_, newValue) => props.onValueChange({ ...props.property, Value: newValue! })}
       />
@@ -62,7 +63,7 @@ function ChoosableProperty(props: ChoosablePropertyProps): ReactElement {
       delay={TooltipDelay.zero}>
       <Dropdown
         key={props.property.Key ?? props.property.Name}
-        style={{ alignSelf: 'center', minWidth: 360 }}
+        style={{ alignSelf: 'center', minWidth: 480 }}
         placeholder='Select an option'
         defaultSelectedKey={props.property.Value?.toLowerCase()}
         options={dropdownOptions}
@@ -76,13 +77,13 @@ function PropertyName(props: PropertyNameProps): ReactElement {
   const { latestProperty, property } = props
   if (latestProperty === undefined || latestProperty.Value === property.Value) {
     return (
-      <Label>
+      <Label style={{ width: props.width }}>
         <div style={{ paddingLeft: 5 }}>{property.Name}</div>
       </Label>
     )
   } else {
     return (
-      <Label style={{ backgroundSize: '120', backgroundColor: '#004578', color: 'white' }}>
+      <Label style={{ width: props.width, backgroundSize: '120', backgroundColor: '#004578', color: 'white' }}>
         <div style={{ paddingLeft: 5 }}>{property.Name}*</div>
       </Label>
     )
@@ -90,29 +91,39 @@ function PropertyName(props: PropertyNameProps): ReactElement {
 }
 
 export const PropertyGroupView: FunctionComponent<PropertyGroupViewProps> = (props: PropertyGroupViewProps) => {
+  const [propertyNameLabelWidthMaximum, setPropertyNameLabelWidthMaximum] = useState<number>(0)
+
+  useLayoutEffect(() => {
+    const max = props.propertyGroup.Items.reduce((currMax, curr) => {
+      const calculatedWidth = (curr.Name.length + 1) * 7
+      return Math.max(calculatedWidth, currMax)
+    }, 0)
+
+    setPropertyNameLabelWidthMaximum(max)
+  }, [props])
+
   return (
     <div style={{ borderLeft: '2px solid #bae7ff', paddingLeft: 20, minHeight: props.winSize.height - 180 }}>
       {
         props.propertyGroup.Items.map((item, index) => {
-          return <div
+          return <Stack
+            horizontal
             key={item.Key ?? item.Name}
             style={{
               padding: 8,
-              display: 'flex',
-              backgroundColor: index % 2 === 0 ? '#EEEEEE' : 'none',
-              flexDirection: 'row'
-            }} >
-            <div style={{ flex: '1 2 20%' }}>
-              <PropertyName latestProperty={props.latestPropertyGroup?.Items[index]} property={item} />
-            </div>
-            <div style={{ flex: '5 1 80%', paddingLeft: 20, paddingRight: props.winSize.width * 0.1 }}>
-              {
-                item.Choices !== undefined && item.Choices !== null && item.Choices.length > 1
-                  ? <ChoosableProperty property={{ ...item, Choices: item.Choices }} onValueChange={props.onValueChange} />
-                  : <CommonProperty property={item} onValueChange={props.onValueChange} />
-              }
-            </div>
-          </div>
+              backgroundColor: `rgba(238, 238, 238, ${index % 2 === 1 ? 0 : 1})`
+            }}
+            tokens={{ childrenGap: 20 }}>
+            <PropertyName
+              latestProperty={props.latestPropertyGroup?.Items[index]}
+              property={item}
+              width={propertyNameLabelWidthMaximum} />
+            {
+              item.Choices !== undefined && item.Choices !== null && item.Choices.length > 1
+                ? <ChoosableProperty property={{ ...item, Choices: item.Choices }} onValueChange={props.onValueChange} />
+                : <CommonProperty property={item} onValueChange={props.onValueChange} />
+            }
+          </Stack>
         })
       }
     </div>
