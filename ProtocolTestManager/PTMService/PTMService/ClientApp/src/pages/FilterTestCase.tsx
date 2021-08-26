@@ -16,7 +16,7 @@ import { FilterTestCaseActions } from '../actions/FilterTestCaseAction'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
 import { PrimaryButton, Stack } from '@fluentui/react'
-import { ConfigureMethod_AutoDetection } from './ConfigureMethod'
+import { ConfigurationMethod_AutoDetection } from './ConfigureMethod'
 
 export function FilterTestCase(props: any) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
@@ -35,7 +35,7 @@ export function FilterTestCase(props: any) {
   }, [dispatch])
 
   const onPreviousButtonClick = () => {
-    if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigureMethod_AutoDetection) {
+    if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigurationMethod_AutoDetection) {
       wizardProps.previousStep()
     } else {
       wizardProps.goToStep(RunSteps.CONFIGURE_METHOD)

@@ -6,6 +6,7 @@ import { useBoolean } from '@uifabric/react-hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StepWizardChildProps } from 'react-step-wizard'
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { ConfigurationActions } from '../actions/TestSuiteConfigurationAction'
 import { WizardNavBarActions } from '../actions/WizardNavBarAction'
 import { StackGap10 } from '../components/StackStyle'
@@ -16,14 +17,14 @@ import { getNavSteps, RunSteps } from '../model/DefaultNavSteps'
 import { ConfigurationsDataSrv } from '../services/Configurations'
 import { AppState } from '../store/configureStore'
 
-export function SelectConfiguration (props: any) {
+export function SelectConfiguration(props: any) {
   const dispatch = useDispatch()
   const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
   const configurations = useSelector((state: AppState) => state.configurations)
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
-  const [configureName, setConfigureName] = useState('')
-  const [configureDescription, setConfigureDescription] = useState('')
-  const [configureErrorMsg, setConfigureErrorMsg] = useState('')
+  const [configurationName, setConfigurationName] = useState('')
+  const [configurationDescription, setConfigurationDescription] = useState('')
+  const [configurationErrorMsg, setConfigurationErrorMsg] = useState('')
 
   useEffect(() => {
     if (testSuiteInfo.selectedTestSuite != null) {
@@ -35,10 +36,10 @@ export function SelectConfiguration (props: any) {
     (element: ElementType, newValue?: string) => {
       switch (element) {
         case ElementType.Name:
-          setConfigureName(newValue!)
+          setConfigurationName(newValue!)
           break
         case ElementType.Description:
-          setConfigureDescription(newValue!)
+          setConfigurationDescription(newValue!)
           break
         default:
           break
@@ -51,13 +52,11 @@ export function SelectConfiguration (props: any) {
 
   if (testSuiteInfo.selectedTestSuite === undefined) {
     return (
-            <StepPanel leftNav={wizard} isLoading={false} >
-                <div>No Test Suite selected, please go to <Link onClick={() => { wizardProps.firstStep() }}>Start page</Link></div>
-            </StepPanel>
+      <StepPanel leftNav={wizard} isLoading={false} >
+        <div>No Test Suite selected, please go to <Link onClick={() => { wizardProps.firstStep() }}>Start page</Link></div>
+      </StepPanel>
     )
   }
-
-  // #region  Create New Configuration Dialog
 
   const dialogContentProps = {
     type: DialogType.normal,
@@ -75,38 +74,38 @@ export function SelectConfiguration (props: any) {
   }
 
   const onConfigurationCreate = () => {
-    if (configureName && configureDescription) {
+    if (configurationName && configurationDescription) {
       dispatch(ConfigurationsDataSrv.createConfiguration({
-        Name: configureName,
-        Description: configureDescription,
+        Name: configurationName,
+        Description: configurationDescription,
         TestSuiteId: testSuiteInfo.selectedTestSuite!.Id,
         IsConfigured: false,
       }))
       toggleHideDialog()
-      setConfigureName('')
-      setConfigureDescription('')
-      setConfigureErrorMsg('')
+      setConfigurationName('')
+      setConfigurationDescription('')
+      setConfigurationErrorMsg('')
     } else {
-      if (configureName) {
-        setConfigureErrorMsg('')
+      if (configurationName) {
+        setConfigurationErrorMsg('')
       } else {
-        setConfigureErrorMsg('Configuration Name can\'t be null')
+        setConfigurationErrorMsg('Configuration Name can\'t be null')
       }
     }
   }
-  // #endregion
 
-  const getCurrentConfigure = (id: number) => {
-    const findedConfigure = configurations.displayList.find((value) => value.Id === id)
-    return findedConfigure
+  const getCurrentConfiguration = (id: number) => {
+    const foundConfiguration = configurations.displayList.find((value) => value.Id === id)
+    return foundConfiguration
   }
 
   const columns = getConfigurationGridColumns({
     onRun: id => {
-      const findedConfigure = getCurrentConfigure(id)
-      if (findedConfigure != null) {
-        dispatch(ConfigurationActions.setSelectedConfigurationAction(findedConfigure))
-        if(id !== configurations.selectedConfiguration?.Id){
+      const foundConfiguration = getCurrentConfiguration(id)
+      if (foundConfiguration != null) {
+        dispatch(PropertyGroupsActions.setUpdatedAction(false))
+        dispatch(ConfigurationActions.setSelectedConfigurationAction(foundConfiguration))
+        if (id !== configurations.selectedConfiguration?.Id) {
           dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
         }
         // go to run step
@@ -114,12 +113,13 @@ export function SelectConfiguration (props: any) {
       }
     },
     onEdit: id => {
-      const findedConfigure = getCurrentConfigure(id)
-      if (findedConfigure != null) {
-        dispatch(ConfigurationActions.setSelectedConfigurationAction(findedConfigure))
-        if( id!== configurations.selectedConfiguration?.Id){
+      const foundConfiguration = getCurrentConfiguration(id)
+      if (foundConfiguration != null) {
+        dispatch(PropertyGroupsActions.setUpdatedAction(false))
+        dispatch(ConfigurationActions.setSelectedConfigurationAction(foundConfiguration))
+        if (id !== configurations.selectedConfiguration?.Id) {
           dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
-        }        
+        }
         // go to next step
         wizardProps.nextStep()
       }
@@ -131,57 +131,57 @@ export function SelectConfiguration (props: any) {
   }
 
   return (
-        <div>
-            <StepPanel leftNav={wizard} isLoading={configurations.isLoading} errorMsg={configurations.errorMsg} >
-                <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10 }} tokens={StackGap10}>
-                    <SearchBox placeholder="Search" onSearch={onSearchChanged} />
-                    <PrimaryButton iconProps={{ iconName: 'Add' }} allowDisabledFocus onClick={() => {
-                      toggleHideDialog()
-                    }}>
-                        New
-                </PrimaryButton>
-                </Stack>
-                <hr style={{ border: '1px solid #d9d9d9' }} />
-                <DetailsList
-                    items={configurations.displayList}
-                    compact={true}
-                    columns={columns}
-                    selectionMode={SelectionMode.none}
-                    layoutMode={DetailsListLayoutMode.justified}
-                    isHeaderVisible={true}
-                />
-            </StepPanel>
-            <Dialog
-                hidden={hideDialog}
-                onDismiss={toggleHideDialog}
-                dialogContentProps={dialogContentProps}
-                modalProps={modalProps}
-            >
-                <Stack tokens={StackGap10}>
-                    <TextField
-                        label="Configuration Name"
-                        value={configureName}
-                        errorMessage={configureErrorMsg}
-                        onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Name, newValue) }}
-                    />
-                    <TextField
-                        label="Description"
-                        multiline={true}
-                        value={configureDescription}
-                        onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Description, newValue) }}
-                    />
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={onConfigurationCreate} text="Create" />
-                    <DefaultButton onClick={toggleHideDialog} text="Close" />
-                </DialogFooter>
-            </Dialog>
-        </div>
+    <div>
+      <StepPanel leftNav={wizard} isLoading={configurations.isLoading} errorMsg={configurations.errorMsg} >
+        <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10 }} tokens={StackGap10}>
+          <SearchBox placeholder="Search" onSearch={onSearchChanged} />
+          <PrimaryButton iconProps={{ iconName: 'Add' }} allowDisabledFocus onClick={() => {
+            toggleHideDialog()
+          }}>
+            New
+          </PrimaryButton>
+        </Stack>
+        <hr style={{ border: '1px solid #d9d9d9' }} />
+        <DetailsList
+          items={configurations.displayList}
+          compact={true}
+          columns={columns}
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.justified}
+          isHeaderVisible={true}
+        />
+      </StepPanel>
+      <Dialog
+        hidden={hideDialog}
+        onDismiss={toggleHideDialog}
+        dialogContentProps={dialogContentProps}
+        modalProps={modalProps}
+      >
+        <Stack tokens={StackGap10}>
+          <TextField
+            label="Configuration Name"
+            value={configurationName}
+            errorMessage={configurationErrorMsg}
+            onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Name, newValue) }}
+          />
+          <TextField
+            label="Description"
+            multiline={true}
+            value={configurationDescription}
+            onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Description, newValue) }}
+          />
+        </Stack>
+        <DialogFooter>
+          <PrimaryButton onClick={onConfigurationCreate} text="Create" />
+          <DefaultButton onClick={toggleHideDialog} text="Close" />
+        </DialogFooter>
+      </Dialog>
+    </div>
 
   )
 };
 
-function getConfigurationGridColumns (props: {
+function getConfigurationGridColumns(props: {
   onRun: (configureId: number) => void
   onEdit: (configureId: number) => void
 }): IColumn[] {
@@ -215,9 +215,9 @@ function getConfigurationGridColumns (props: {
       isPadded: true,
       onRender: (item: Configuration, index, column) => {
         return <Stack horizontal tokens={StackGap10}>
-                    <PrimaryButton disabled={!item.IsConfigured} onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
-                    <PrimaryButton onClick={() => { props.onEdit(item.Id!) }}>Edit</PrimaryButton>
-                </Stack>
+          <PrimaryButton disabled={!item.IsConfigured} onClick={() => { props.onRun(item.Id!) }}>Run</PrimaryButton>
+          <PrimaryButton onClick={() => { props.onEdit(item.Id!) }}>Edit</PrimaryButton>
+        </Stack>
       }
     }
   ]

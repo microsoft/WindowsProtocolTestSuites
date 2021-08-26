@@ -20,7 +20,7 @@ export function WizardNavBar (wizardProps: StepWizardChildProps, navSteps: StepN
             wizardProps.currentStep < wizardState.lastStep &&
             configureMethod &&
             configureMethod.selectedMethod &&
-            configureMethod.selectedMethod === ConfigureMethod.ConfigureMethod_AutoDetection) {
+            configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {
         isEnabledStep = true
       } else {
         isEnabledStep = item.IsEnabled

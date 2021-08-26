@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
-  SET_CONFIGUREMETHOD_REQUEST,
+  SET_CONFIGURATION_METHOD,
   TestSuiteConfigureMethodActionTypes,
   SAVE_PROFILE_REQUEST,
   SAVE_PROFILE_SUCCESS,
@@ -34,7 +34,7 @@ const initialConfigureMethodState: ConfigureMethodState = {
 
 export const getConfigureMethodReducer = (state = initialConfigureMethodState, action: TestSuiteConfigureMethodActionTypes): ConfigureMethodState => {
   switch (action.type) {
-    case SET_CONFIGUREMETHOD_REQUEST:
+    case SET_CONFIGURATION_METHOD:
       return {
         ...state,
         isLoading: true,

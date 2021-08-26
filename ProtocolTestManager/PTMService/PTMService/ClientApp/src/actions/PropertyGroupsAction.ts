@@ -13,6 +13,8 @@ export const UPDATE_EDITINGPROPERTYGROUP = 'PROPERTYGROUPS/UPDATE_EDITINGPROPERT
 export const SET_EDITINGPROPERTYGROUP = 'PROPERTYGROUPS/SET_EDITINGPROPERTYGROUP'
 export const UPDATE_PROPERTYGROUPS = 'PROPERTYGROUPS/UPDATE_PROPERTYGROUPS'
 
+export const SET_UPDATED = 'PROPERTYGROUPS/SET_UPDATED'
+
 export const SET_PROPERTYGROUPS_REQUEST = 'PROPERTYGROUPS/SET_PROPERTYGROUPS_REQUEST'
 export const SET_PROPERTYGROUPS_SUCCESS = 'PROPERTYGROUPS/SET_PROPERTYGROUPS_SUCCESS'
 export const SET_PROPERTYGROUPS_FAILURE = 'PROPERTYGROUPS/SET_PROPERTYGROUPS_FAILURE'
@@ -26,20 +28,23 @@ interface UpdateEditingPropertyGroupActionType { type: typeof UPDATE_EDITINGPROP
 interface SetEditingPropertyGroupActionType { type: typeof SET_EDITINGPROPERTYGROUP, payload: number }
 interface UpdatePropertyGroupsActionType { type: typeof UPDATE_PROPERTYGROUPS }
 
+interface SetUpdatedActionType { type: typeof SET_UPDATED, payload: boolean }
+
 interface SetPropertyGroupsActionRequestType { type: typeof SET_PROPERTYGROUPS_REQUEST }
 interface SetPropertyGroupsActionSuccessType { type: typeof SET_PROPERTYGROUPS_SUCCESS }
 interface SetPropertyGroupsActionFailureType { type: typeof SET_PROPERTYGROUPS_FAILURE, errorMsg: string }
 
 export type PropertyGroupsActionTypes =
-    GetPropertyGroupsActionRequestType |
-    GetPropertyGroupsActionSuccessType |
-    GetPropertyGroupsActionFailureType |
-    UpdateEditingPropertyGroupActionType |
-    SetEditingPropertyGroupActionType |
-    UpdatePropertyGroupsActionType |
-    SetPropertyGroupsActionRequestType |
-    SetPropertyGroupsActionSuccessType |
-    SetPropertyGroupsActionFailureType
+  GetPropertyGroupsActionRequestType |
+  GetPropertyGroupsActionSuccessType |
+  GetPropertyGroupsActionFailureType |
+  UpdateEditingPropertyGroupActionType |
+  SetEditingPropertyGroupActionType |
+  UpdatePropertyGroupsActionType |
+  SetUpdatedActionType |
+  SetPropertyGroupsActionRequestType |
+  SetPropertyGroupsActionSuccessType |
+  SetPropertyGroupsActionFailureType
 
 // define actions
 export const PropertyGroupsActions = {
@@ -75,6 +80,12 @@ export const PropertyGroupsActions = {
   updatePropertyGroupsAction: (): PropertyGroupsActionTypes => {
     return {
       type: UPDATE_PROPERTYGROUPS
+    }
+  },
+  setUpdatedAction: (updated: boolean): PropertyGroupsActionTypes => {
+    return {
+      type: SET_UPDATED,
+      payload: updated
     }
   },
   setPropertyGroupsAction_Request: (): PropertyGroupsActionTypes => {

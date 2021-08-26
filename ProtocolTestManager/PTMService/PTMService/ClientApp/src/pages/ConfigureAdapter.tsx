@@ -154,7 +154,7 @@ function AdapterItem (props: AdapterItemProp) {
     [setAdapterKind, props]
   )
 
-  const onChangeParamManagedAdatperType = React.useCallback(
+  const onChangeParamManagedAdapterType = React.useCallback(
     (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
       setParamAdapterType(newValue || '')
 
@@ -227,7 +227,7 @@ function AdapterItem (props: AdapterItemProp) {
       paramsDiv = <div>
                 <Stack horizontalAlign="start" horizontal tokens={StackGap10}>
                     <div style={{ fontWeight: 'bold' }}>Adapter Type: </div>
-                    <TextField value={paramAdapterType} className='input' onChange={onChangeParamManagedAdatperType} errorMessage={errorMsg} />
+                    <TextField value={paramAdapterType} className='input' onChange={onChangeParamManagedAdapterType} errorMessage={errorMsg} />
                 </Stack>
             </div>
       break
