@@ -65,7 +65,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         #region Fields
         private DetectLogger logWriter = null;
-        private DetectContext context = null;
         private const string defautBasicShare = "SMBBasic";
         private const string vhdName = "plugin.vhdx";
         private const string fileNameSuffix = ":SharedVirtualDisk";
@@ -102,7 +101,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public FSDetector
             (DetectLogger logger,
-            DetectContext _context,
             string targetSUT,
             AccountCredential accountCredential,
             SecurityPackageType securityPackageType)
@@ -112,7 +110,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             SecurityPackageType = securityPackageType;
 
             logWriter = logger;
-            context = _context;
             logWriter.AddLog(DetectLogLevel.Information, string.Format("SutName: {0}", sutName));
             logWriter.AddLog(DetectLogLevel.Information, string.Format("DomainName: {0}", Credential.DomainName));
             logWriter.AddLog(DetectLogLevel.Information, string.Format("UserName: {0}", Credential.AccountName));

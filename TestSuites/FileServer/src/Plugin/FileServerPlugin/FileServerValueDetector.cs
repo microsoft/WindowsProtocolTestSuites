@@ -225,7 +225,6 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             FSDetector detector = new FSDetector
                 (logWriter,
-                context,
                 detectionInfo.targetSUT,
                 new AccountCredential(detectionInfo.domainName, detectionInfo.userName, detectionInfo.password),
                 detectionInfo.securityPackageType);
