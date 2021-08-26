@@ -979,7 +979,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
                     //TD has mentioned to use Session.SigningKey for SESSION_SETUP Response and Channel.SigningKey for other responses
                     //In the current SDK, the SigningKey is the Channel.SigningKey
-                    computedSignature = AesCmac128.ComputeHash(cryptoInfo.SigningKey, bytesToCompute);
+
+                    if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
+                    {
+                        var initializationVector = Smb2Utility.ComputeNonce(packet, this.decodeRole);
+                        computedSignature = AesGmac128.ComputeHash(cryptoInfo.SigningKey, initializationVector);
+                    }
+                    else
+                    {
+                        computedSignature = AesCmac128.ComputeHash(cryptoInfo.SigningKey, bytesToCompute);
+                    }
                 }
                 else
                 {

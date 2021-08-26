@@ -947,7 +947,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             DisableVerifySignature,
                             null,
                             preauthHashValue,
-                            cipherId));
+                            cipherId,
+                            signingId));
                 }
                 else
                 {
