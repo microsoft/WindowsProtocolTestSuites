@@ -17,6 +17,7 @@ using Microsoft.Protocols.TestManager.FileServerPlugin;
 using System.Windows;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.Detector
 {
@@ -33,8 +34,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private EnvironmentType env = EnvironmentType.Domain;
         private DetectionInfo detectionInfo = new DetectionInfo();
-
-        private Logger logWriter = new Logger();
+        private DetectLogger logWriter = new DetectLogger();
 
         private const string targetShareTitle = @"Target Basic Share";
         private const string clusterShareTitle = @"Target Cluster Share";
@@ -215,52 +215,98 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <summary>
         /// Run property autodetection.
         /// </summary>
+        /// <param name="context">Detection Context.</param>
         /// <returns>Return true if the function is succeeded.</returns>
-        public bool RunDetection()
+        public bool RunDetection(DetectContext context)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Start detecting =====");
+            logWriter.ApplyDetectContext(context);
+
+            logWriter.AddLog(DetectLogLevel.Information, "===== Start detecting =====");
 
             FSDetector detector = new FSDetector
                 (logWriter,
+                context,
                 detectionInfo.targetSUT,
                 new AccountCredential(detectionInfo.domainName, detectionInfo.userName, detectionInfo.password),
                 detectionInfo.securityPackageType);
+            logWriter.AddLog(DetectLogLevel.Information, "" + context.Token.IsCancellationRequested);
+
+            if (context.Token.IsCancellationRequested)
+                return false;
 
             // Terminate the whole detection if any exception happens in the following processes
             if (!DetectSUTConnection(detector))
                 return false;
 
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             if (!DetectLocalNetworkInfo(detector))
+                return false;
+
+            if (context.Token.IsCancellationRequested)
                 return false;
 
             if (!DetectSMB2Info(detector))
                 return false;
 
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             if (!CheckUsernamePassword(detector))
+                return false;
+
+            if (context.Token.IsCancellationRequested)
                 return false;
 
             // Do not interrupt auto-detection 
             // Even if detecting platform and useraccount failed
             DetectPlatformAndUserAccount(detector);
 
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             if (!DetectShareInfo(detector))
                 return false;
 
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             DetermineSymboliclink(detector);
-            
+
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             detectionInfo.detectExceptions = new Dictionary<string, string>();
 
             DetectClusterShare(detector);
 
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             // Detect IoctlCodes and Create Contexts
             // If any exceptions, just ignore
             DetectIoctlCodes(detector);
+
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             DetectCreateContexts(detector);
 
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             DetectRSVD(detector);
+
+            if (context.Token.IsCancellationRequested)
+                return false;
+
             DetectSQOS(detector);
 
-            logWriter.AddLog(LogLevel.Information, "===== End detecting =====");
+            if (context.Token.IsCancellationRequested)
+                return false;
+
+            logWriter.AddLog(DetectLogLevel.Information, "===== End detecting =====");
             return true;
         }
 
@@ -848,7 +894,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private bool DetectSUTConnection(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect Target SUT Connection=====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect Target SUT Connection=====");
 
             try
             {
@@ -856,24 +902,24 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(LogLevel.Error, ex.Message);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Error, ex.Message);
             }
 
             if (detectionInfo.networkInfo.SUTIpList.Count == 0)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                 return false;
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
             return true;
         }
 
         private bool DetectLocalNetworkInfo(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Fetch Network Info =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Fetch Network Info =====");
 
             try
             {
@@ -881,43 +927,43 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect network info failed: {0} \r\nPlease check Target SUT", ex.Message));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("Detect network info failed: {0} \r\nPlease check Target SUT", ex.Message));
             }
 
             if (detectionInfo.networkInfo == null)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return false;
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
-            logWriter.AddLog(LogLevel.Information, "Target SUT Network Info:");
-            logWriter.AddLog(LogLevel.Information, "Available IP Address:");
+            logWriter.AddLog(DetectLogLevel.Information, "Target SUT Network Info:");
+            logWriter.AddLog(DetectLogLevel.Information, "Available IP Address:");
             foreach (var item in detectionInfo.networkInfo.SUTIpList)
             {
-                logWriter.AddLog(LogLevel.Information, "\t" + item.ToString());
+                logWriter.AddLog(DetectLogLevel.Information, "\t" + item.ToString());
             }
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
-            logWriter.AddLog(LogLevel.Information, "Local Test Driver Network Info:");
-            logWriter.AddLog(LogLevel.Information, "Available IP Address:");
+            logWriter.AddLog(DetectLogLevel.Information, "Local Test Driver Network Info:");
+            logWriter.AddLog(DetectLogLevel.Information, "Available IP Address:");
             foreach (var item in detectionInfo.networkInfo.LocalIpList)
             {
-                logWriter.AddLog(LogLevel.Information, "\t" + item.ToString());
+                logWriter.AddLog(DetectLogLevel.Information, "\t" + item.ToString());
             }
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
             return true;
         }
 
         private bool CheckUsernamePassword(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Check the Credential =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Check the Credential =====");
 
             try
             {
@@ -926,34 +972,34 @@ namespace Microsoft.Protocols.TestManager.Detector
             catch (SspiException ex)
             {
                 Win32Exception winException = new Win32Exception((int)ex.ErrorCode);
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on\r\nError: 0x{0:x8} ({1})\r\nPlease check the credential", winException.NativeErrorCode, winException.Message));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("The User cannot log on\r\nError: 0x{0:x8} ({1})\r\nPlease check the credential", winException.NativeErrorCode, winException.Message));
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
             return true;
         }
 
         private void DetectPlatformAndUserAccount(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect SUT Platform and Useraccounts =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect SUT Platform and Useraccounts =====");
             detector.FetchPlatformAndUseraccounts(ref detectionInfo);
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
         }
 
         private bool DetectSMB2Info(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Fetch Smb2 Info =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Fetch Smb2 Info =====");
 
             try
             {
@@ -961,32 +1007,32 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect SUT SMB2 info failed: {0} \r\n", ex.Message));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("Detect SUT SMB2 info failed: {0} \r\n", ex.Message));
             }
 
             if (detectionInfo.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb2Unknown || detectionInfo.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb2Wildcard)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Error, string.Format("The DialectRevision in Negotiate response should not be {0}", detectionInfo.smb2Info.MaxSupportedDialectRevision));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("The DialectRevision in Negotiate response should not be {0}", detectionInfo.smb2Info.MaxSupportedDialectRevision));
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
-            logWriter.AddLog(LogLevel.Information, "Target SUT SMB2 Info:");
-            logWriter.AddLog(LogLevel.Information, string.Format("MaxSupportedDialectRevision: {0}", detectionInfo.smb2Info.MaxSupportedDialectRevision));
-            logWriter.AddLog(LogLevel.Information, string.Format("SupportedCapabilities: {0}", detectionInfo.smb2Info.SupportedCapabilities));
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Information, "Target SUT SMB2 Info:");
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("MaxSupportedDialectRevision: {0}", detectionInfo.smb2Info.MaxSupportedDialectRevision));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("SupportedCapabilities: {0}", detectionInfo.smb2Info.SupportedCapabilities));
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
             return true;
         }
 
         private bool DetectShareInfo(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Fetch Share Info =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Fetch Share Info =====");
 
             try
             {
@@ -994,25 +1040,25 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
-                logWriter.AddLog(LogLevel.Information, string.Format("FetchShareInfo failed, reason: {0}", ex.Message));
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.Message));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("FetchShareInfo failed, reason: {0}", ex.Message));
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("Detect share info failed. Cannot do further detection.", ex.Message));
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
             if (detectionInfo.shareInfo != null)
             {
-                logWriter.AddLog(LogLevel.Information, "Target SUT Share Info:");
+                logWriter.AddLog(DetectLogLevel.Information, "Target SUT Share Info:");
 
                 foreach (var item in detectionInfo.shareInfo)
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Share Name: {0}", item.ShareName));
-                    logWriter.AddLog(LogLevel.Information, string.Format("\tShare Type: {0}", item.ShareType));
-                    logWriter.AddLog(LogLevel.Information, string.Format("\tShare Flags: {0}", item.ShareFlags));
-                    logWriter.AddLog(LogLevel.Information, string.Format("\tShare Capabilities: {0}", item.ShareCapabilities));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Share Name: {0}", item.ShareName));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("\tShare Type: {0}", item.ShareType));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("\tShare Flags: {0}", item.ShareFlags));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("\tShare Capabilities: {0}", item.ShareCapabilities));
 
                     if (item.ShareType != ShareType_Values.SHARE_TYPE_DISK || item.ShareName.Contains("$"))
                         continue;
@@ -1041,7 +1087,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                         }
                     }
                 }
-                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
             }
             return true;
         }
@@ -1050,16 +1096,16 @@ namespace Microsoft.Protocols.TestManager.Detector
         {
             if(detector.DetectShareExistence(detectionInfo,detectionInfo.BasicShareName) != DetectResult.Supported)
             {
-                logWriter.AddLog(LogLevel.Information, string.Format("The share {0} does not exist.",detectionInfo.BasicShareName));
-                logWriter.AddLog(LogLevel.Information, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("The share {0} does not exist.",detectionInfo.BasicShareName));
+                logWriter.AddLog(DetectLogLevel.Information, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return;
             }
 
             string symboliclink = DetectorUtil.GetPropertyValue("SMB2.Symboliclink");
             if (string.IsNullOrEmpty(symboliclink))
             {
-                logWriter.AddLog(LogLevel.Information, "The property value of Symboliclink is empty.");
+                logWriter.AddLog(DetectLogLevel.Information, "The property value of Symboliclink is empty.");
             }
             else
             {
@@ -1072,7 +1118,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             string symboliclinkInSubFolder = DetectorUtil.GetPropertyValue("SMB2.SymboliclinkInSubFolder");
             if (string.IsNullOrEmpty(symboliclinkInSubFolder))
             {
-                logWriter.AddLog(LogLevel.Information, "The property value of SymboliclinkInSubFolder is empty.");
+                logWriter.AddLog(DetectLogLevel.Information, "The property value of SymboliclinkInSubFolder is empty.");
             }
             else
             {
@@ -1085,11 +1131,11 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private bool DetectIoctlCodes(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect Ioctl Codes =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect Ioctl Codes =====");
             detectionInfo.unsupportedIoctlCodes = new List<string>();
             detectionInfo.ResetDetectResult();
 
-            logWriter.AddLog(LogLevel.Information, string.Format("Check share existence {0} for IOCtl Codes detection.", detectionInfo.BasicShareName));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("Check share existence {0} for IOCtl Codes detection.", detectionInfo.BasicShareName));
             try
             {
                 if (detector.DetectShareExistence(detectionInfo, detectionInfo.BasicShareName) != DetectResult.Supported)
@@ -1100,14 +1146,14 @@ namespace Microsoft.Protocols.TestManager.Detector
                     detectionInfo.F_ValidateNegotiateInfo = DetectResult.DetectFail;
                     detectionInfo.F_ResilientHandle = DetectResult.DetectFail;
                     detectionInfo.F_IntegrityInfo = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
-                    logWriter.AddLog(LogLevel.Information, string.Format("Share {0} does not exist. All IOCTL will be marked as detect failed. Will exit the IOCtl Codes detection.", detectionInfo.BasicShareName));
-                    logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
-                    logWriter.AddLineToLog(LogLevel.Information);
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Share {0} does not exist. All IOCTL will be marked as detect failed. Will exit the IOCtl Codes detection.", detectionInfo.BasicShareName));
+                    logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                    logWriter.AddLineToLog(DetectLogLevel.Information);
                     return false;
                 }
                 else
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Share {0} exists. Will continue the IOCtl Codes detection.", detectionInfo.BasicShareName));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Share {0} exists. Will continue the IOCtl Codes detection.", detectionInfo.BasicShareName));
                 }
             }
             catch (Exception e)
@@ -1118,9 +1164,9 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_ValidateNegotiateInfo = DetectResult.DetectFail;
                 detectionInfo.F_ResilientHandle = DetectResult.DetectFail;
                 detectionInfo.F_IntegrityInfo = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
-                logWriter.AddLog(LogLevel.Information, string.Format("Exception was thrown out when check share {0} exsitence. All IOCTL will be marked as detect failed. Will exit IOCTL detection and return with all IOCTL unsupported.", detectionInfo.BasicShareName));
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);                
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("Exception was thrown out when check share {0} exsitence. All IOCTL will be marked as detect failed. Will exit IOCTL detection and return with all IOCTL unsupported.", detectionInfo.BasicShareName));
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);                
                 return false;
             }
 
@@ -1130,12 +1176,12 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_EnumerateSnapShots = detector.CheckIOCTL_EnumerateSnapShots(detectionInfo.BasicShareName, ref detectionInfo);
                 if (detectionInfo.F_EnumerateSnapShots == DetectResult.DetectFail)
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS failed since the share {0} does not exist.", detectionInfo.BasicShareName));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS failed since the share {0} does not exist.", detectionInfo.BasicShareName));
                     return false;
                 }
                 else
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS passed against the share {0}.", detectionInfo.BasicShareName));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect FSCTL_SRV_ENUMERATE_SNAPSHOTS passed against the share {0}.", detectionInfo.BasicShareName));
                 }
             }
             catch (Exception ex)
@@ -1261,26 +1307,26 @@ namespace Microsoft.Protocols.TestManager.Detector
                     detectionInfo.unsupportedIoctlCodes.Add(CtlCode_Values.FSCTL_SET_INTEGRITY_INFORMATION.ToString());
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
 
             return true;
         }
 
         private void DetectCreateContexts(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect Create Contexts =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect Create Contexts =====");
             detectionInfo.unsupportedCreateContexts = new List<string>();
 
             if (detector.DetectShareExistence(detectionInfo, detectionInfo.BasicShareName) != DetectResult.Supported)
             {
-                logWriter.AddLog(LogLevel.Information, string.Format("The share {0} does not exist.", detectionInfo.BasicShareName));
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("The share {0} does not exist.", detectionInfo.BasicShareName));
                 foreach (var context in Enum.GetNames(typeof(CreateContextTypeValue)))
                 {
                     detectionInfo.unsupportedCreateContexts.Add(context.ToString());
                 }
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(LogLevel.Information);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return; 
             }            
 
@@ -1432,13 +1478,13 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
             }
 
-            logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
         }
 
         private void DetectRSVD(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect RSVD =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect RSVD =====");
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
             {
                 try
@@ -1447,29 +1493,29 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
                 catch (Exception e)
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Detect RSVD failed: {0}", e.Message));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect RSVD failed: {0}", e.Message));
                     detectionInfo.RsvdSupport = DetectResult.DetectFail;
                     detectionInfo.detectExceptions.Add(@"SVHDX_OPEN_DEVICE_CONTEXT_V1\V2", string.Format("Detect RSVD failed: {0}", e.Message));
                 }
             }
 
-            logWriter.AddLog(LogLevel.Information, string.Format("Detect RSVD finished"));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect RSVD finished"));
 
             if (detectionInfo.RsvdSupport == DetectResult.DetectFail)
             {
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
             }
             else
             {
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
             }            
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
             return;
         }
 
         private void DetectSQOS(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect SQOS =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect SQOS =====");
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
             {
                 try
@@ -1478,30 +1524,30 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
                 catch (Exception e)
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Detect SQOS failed: {0}", e.Message));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect SQOS failed: {0}", e.Message));
                     detectionInfo.SqosSupport = DetectResult.DetectFail;
                     detectionInfo.detectExceptions.Add(CtlCode_Values.FSCTL_STORAGE_QOS_CONTROL.ToString(), string.Format("Detect SQOS failed: {0}", e.Message));
                 }
             }
             else
             {
-                logWriter.AddLog(LogLevel.Information, "Detect SQOS failed since dialect is less than SMB311.");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect SQOS failed since dialect is less than SMB311.");
                 detectionInfo.SqosSupport = DetectResult.UnSupported;
             }
             if (detectionInfo.SqosSupport == DetectResult.DetectFail)
             {
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
             }          
             else 
             {
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);                
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);                
             }
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
         }
 
         private void DetectClusterShare(FSDetector detector)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detect Cluster Share Existence =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect Cluster Share Existence =====");
             
             try
             {
@@ -1512,19 +1558,19 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
             catch (Exception e)
             {
-                logWriter.AddLog(LogLevel.Information, string.Format("Detect Cluster Share failed: {0}", e.Message));
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect Cluster Share failed: {0}", e.Message));
                 detectionInfo.ClusterSupport = DetectResult.DetectFail;                
             }
             
             if (detectionInfo.ClusterSupport == DetectResult.DetectFail)
             {
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
             }
             else
             {
-                logWriter.AddLog(LogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
             }
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLineToLog(DetectLogLevel.Information);
         }
 
 
@@ -1684,7 +1730,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private bool IsSymboliclink(string path)
         {
-            logWriter.AddLog(LogLevel.Information, "Start checking: " + path);
+            logWriter.AddLog(DetectLogLevel.Information, "Start checking: " + path);
             FileInfo fileInfo = new FileInfo(path);
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
 
@@ -1693,28 +1739,28 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             if (isFile)
             {
-                logWriter.AddLog(LogLevel.Information, path + " is a file.");
+                logWriter.AddLog(DetectLogLevel.Information, path + " is a file.");
                 if (fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
                 {
-                    logWriter.AddLog(LogLevel.Information, path + " is a symboliclink and its target is a file.");
+                    logWriter.AddLog(DetectLogLevel.Information, path + " is a symboliclink and its target is a file.");
                     return true;
                 }
             }
             else if (isDirectory)
             {
-                logWriter.AddLog(LogLevel.Information, path + " is a directory.");
+                logWriter.AddLog(DetectLogLevel.Information, path + " is a directory.");
                 if (directoryInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
                 {
-                    logWriter.AddLog(LogLevel.Information, path + " is a symboliclink and its target is a directory.");
+                    logWriter.AddLog(DetectLogLevel.Information, path + " is a symboliclink and its target is a directory.");
                     return true;
                 }
             }
             else
             {
-                logWriter.AddLog(LogLevel.Information, path + " is neither a file nor a directory.");
+                logWriter.AddLog(DetectLogLevel.Information, path + " is neither a file nor a directory.");
             }
 
-            logWriter.AddLog(LogLevel.Information, path + " is NOT a symboliclink.");
+            logWriter.AddLog(DetectLogLevel.Information, path + " is NOT a symboliclink.");
             return false;
         }
 

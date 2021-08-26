@@ -68,6 +68,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private EncryptedProtocol encryptedProtocol;
         private requestedProtocols_Values requestedProtocol;
         private TimeSpan timeout;
+        private DetectLogger logWriter = null;
         #endregion Variables
 
         #region Received Packets
@@ -78,9 +79,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private const string DYVNAME_RDPEDYC = "Microsoft::Windows::RDS::Geometry::v08.01";
 
         #region Constructor
-        public RDPDetector(DetectionInfo detectInfo)
+        public RDPDetector(DetectionInfo detectInfo, DetectLogger logger)
         {
             this.detectInfo = detectInfo;
+            this.logWriter = logger;
         }
         #endregion Constructor
 
@@ -94,7 +96,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         {
             try
             {
-                DetectorUtil.WriteLog("Establish RDP connection with SUT...");
+                logWriter.AddLog(DetectLogLevel.Information, "Establish RDP connection with SUT...");
 
                 Initialize(config);
                 ConnectRDPServer();
@@ -113,16 +115,18 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                         false);
                     if (!status)
                     {
-                        DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                        logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                         return false;
                     }
                 }
                 catch (Exception e)
                 {
-                    DetectorUtil.WriteLog("" + e.StackTrace);
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("ErrorMessage:{0}{1}StackTrace:{2}", e.Message, Environment.NewLine, e.StackTrace));
+                    logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                    return false;
                 }
 
-                DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
 
                 CheckSupportedFeatures();
 
@@ -136,14 +140,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             catch (Exception e)
             {
-                DetectorUtil.WriteLog("Exception occured when establishing RDP connection: " + e.Message);
-                DetectorUtil.WriteLog("" + e.StackTrace);
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("Exception occured when establishing RDP connection.{1} ErrorMessage:{0}{1}StackTrace:{2}", e.Message, Environment.NewLine, e.StackTrace));
+
                 if (e.InnerException != null)
                 {
-                    DetectorUtil.WriteLog("**" + e.InnerException.Message);
-                    DetectorUtil.WriteLog("**" + e.InnerException.StackTrace);
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("ErrorMessage:{0}{1}StackTrace:{2}", e.InnerException.Message, Environment.NewLine, e.InnerException.StackTrace));
                 }
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                 return false;
             }
 
@@ -152,7 +155,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             ClientInitiatedDisconnect();
             Disconnect();
 
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", true, LogStyle.StepPassed);
             return true;
         }
 
@@ -237,9 +240,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 Server_X_224_Negotiate_Failure_Pdu failurePdu = ExpectPacket<Server_X_224_Negotiate_Failure_Pdu>(waitTime);
                 if (failurePdu != null)
                 {
-                    DetectorUtil.WriteLog("Received a Server X224 Connection confirm with RDP_NEG_FAILURE structure.");
+                    logWriter.AddLog(DetectLogLevel.Information, "Received a Server X224 Connection confirm with RDP_NEG_FAILURE structure.");
                 }
-                DetectorUtil.WriteLog("Expecting a Server X224 Connection Confirm PDU.");
+
+                logWriter.AddLog(DetectLogLevel.Information, "Expecting a Server X224 Connection Confirm PDU.");
                 return false;
             }
 
@@ -344,13 +348,13 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         }
         private void CheckSupportedFeatures()
         {
-            DetectorUtil.WriteLog("Check specified features support...");
+            logWriter.AddLog(DetectLogLevel.Information, "Check specified features support...");
 
             detectInfo.IsSupportAutoReconnect = SupportAutoReconnect();
             detectInfo.IsSupportFastPathInput = SupportFastPathInput();
 
             // Notify the UI for detecting feature supported finished
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
         }
 
         private bool SupportAutoReconnect()
@@ -401,7 +405,8 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         private void CheckSupportedProtocols()
         {
             // Notify the UI for detecting protocol supported finished
-            DetectorUtil.WriteLog("Check specified protocols support...");
+            logWriter.AddLog(DetectLogLevel.Information, "Check specified protocols support...");
+
             bool serverSupportUDPFECR = false;
             bool serverSupportUDPFECL = false;
 
@@ -420,11 +425,11 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             if (detectInfo.IsSupportRDPEMT)
             {
-                DetectorUtil.WriteLog("Detect RDPEMT supported");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDPEMT supported");
             }
             else
             {
-                DetectorUtil.WriteLog("Detect RDPEMT unsupported");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDPEMT unsupported");
             }
 
             rdpedycClient = new RdpedycClient(rdpbcgrClient.Context, false);
@@ -447,35 +452,35 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
             if (detectInfo.IsSupportRDPEDYC)
             {
-                DetectorUtil.WriteLog("Detect RDPEDYC supported");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDPEDYC supported");
             }
             else
             {
-                DetectorUtil.WriteLog("Detect RDPEDYC unsupported");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDPEDYC unsupported");
             }
 
             if (detectInfo.IsSupportRDPELE)
             {
-                DetectorUtil.WriteLog("Detect RDPELE supported");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDPELE supported");
             }
             else
             {
-                DetectorUtil.WriteLog("Detect RDPELE unsupported");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDPELE unsupported");
             }
 
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
         }
 
         private void SetRdpVersion(Configs config)
         {
-            DetectorUtil.WriteLog("Detect RDP version...");
+            logWriter.AddLog(DetectLogLevel.Information, "Detect RDP version...");
 
             config.Version = DetectorUtil.GetPropertyValue("RDP.Version");
 
             if (connectResponsePdu.mcsCrsp.gccPdu.serverCoreData == null)
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Detect RDP version failed, serverCoreData in Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response does not exist!");
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDP version failed, serverCoreData in Server_MCS_Connect_Response_Pdu_with_GCC_Conference_Create_Response does not exist!");
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
 
             TS_UD_SC_CORE_version_Values rdpVersion = connectResponsePdu.mcsCrsp.gccPdu.serverCoreData.version;
@@ -525,14 +530,14 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Detect RDP version failed, unknown version detected!");
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Detect RDP version failed, unknown version detected!");
             }
 
             detectInfo.Version = connectResponsePdu.mcsCrsp.gccPdu.serverCoreData.version;
 
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
-            DetectorUtil.WriteLog("Detect RDP version finished.");
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLog(DetectLogLevel.Information, "Detect RDP version finished.");
         }
 
         private void SendClientX224ConnectionRequest(
@@ -707,15 +712,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                     // the server always sends a license error message with the error code STATUS_VALID_CLIENT and the state transition code ST_NO_TRANSITION. 
                     if (dwErrorCode_Values.STATUS_VALID_CLIENT != licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode)
                     {
-                        DetectorUtil.WriteLog($"A license error message with the error code STATUS_VALID_CLIENT should be received, but the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
+                        logWriter.AddLog(DetectLogLevel.Information, $"A license error message with the error code STATUS_VALID_CLIENT should be received, but the real error code is {licensePdu.LicensingMessage.LicenseError.Value.dwErrorCode}.");
                     }
                     return false;
                 }
 
-                DetectorUtil.WriteLog("Start RDP license procedure");
+                logWriter.AddLog(DetectLogLevel.Information, "Start RDP license procedure");
                 if (bMsgType_Values.LICENSE_REQUEST != licensePdu.preamble.bMsgType)
                 {
-                    DetectorUtil.WriteLog($"A LICENSE_REQUEST message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
+                    logWriter.AddLog(DetectLogLevel.Information, $"A LICENSE_REQUEST message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
                 }
 
                 rdpeleClient.SendClientNewLicenseRequest(
@@ -723,7 +728,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 licensePdu = rdpeleClient.ExpectPdu(timeout);
                 if (bMsgType_Values.PLATFORM_CHALLENGE != licensePdu.preamble.bMsgType)
                 {
-                    DetectorUtil.WriteLog($"A PLATFORM_CHALLENGE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
+                    logWriter.AddLog(DetectLogLevel.Information, $"A PLATFORM_CHALLENGE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
                     return false;
                 }
 
@@ -740,15 +745,15 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 licensePdu = rdpeleClient.ExpectPdu(timeout);
                 if (bMsgType_Values.NEW_LICENSE != licensePdu.preamble.bMsgType)
                 {
-                    DetectorUtil.WriteLog($"A NEW_LICENSE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
+                    logWriter.AddLog(DetectLogLevel.Information, $"A NEW_LICENSE message should be received from server, but the real message type is {licensePdu.preamble.bMsgType}");
                     return false;
                 }
-                DetectorUtil.WriteLog("End RDP license procedure");
+                logWriter.AddLog(DetectLogLevel.Information, "End RDP license procedure");
                 return true;
             }
             catch (Exception e)
             {
-                DetectorUtil.WriteLog("RDP license procedure throws exception: " + e.Message);
+                logWriter.AddLog(DetectLogLevel.Information, "RDP license procedure throws exception: " + e.Message);
                 return false;
             }
         }
@@ -866,7 +871,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                         }
                         else if (packet is ErrorPdu)
                         {
-                            DetectorUtil.WriteLog("Expect packste throws exception: " + string.Format(((ErrorPdu)packet).ErrorMessage));
+                            logWriter.AddLog(DetectLogLevel.Information, "Expect packste throws exception: " + string.Format(((ErrorPdu)packet).ErrorMessage));
                         }
                         else
                         {

@@ -30,6 +30,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         private int port = 3389;
         private EncryptedProtocol encryptedProtocol = EncryptedProtocol.Rdp;
         private TimeSpan timeout = new TimeSpan(0, 0, 20);
+        private DetectLogger logWriter = null;
 
         #region Received Packets
 
@@ -64,9 +65,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         #endregion Variables
         #region Constructor
 
-        public RDPDetector(DetectionInfo detectInfo)
+        public RDPDetector(DetectionInfo detectInfo, DetectLogger logger)
         {
             this.detectInfo = detectInfo;
+            this.logWriter = logger;
 
             string rdpClientRoute = Path.Combine("..", "etc", "RDP-Client");
 
@@ -87,7 +89,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             // Establish a RDP connection with RDP client
             try
             {
-                DetectorUtil.WriteLog("Establish RDP connection with SUT...");
+                logWriter.AddLog(DetectLogLevel.Information, "Establish RDP connection with SUT...");
 
                 StartRDPListening(detectInfo.RDPServerPort);
                 triggerClientRDPConnect(detectInfo.TriggerMethod);
@@ -102,14 +104,16 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             catch (Exception e)
             {
-                DetectorUtil.WriteLog("Exception occured when establishing RDP connection: " + e.Message);
-                DetectorUtil.WriteLog("" + e.StackTrace);
+                logWriter.AddLog(DetectLogLevel.Information, "Exception occured when establishing RDP connection: " + e.Message);
+                logWriter.AddLog(DetectLogLevel.Information, "" + e.StackTrace);
+                
                 if (e.InnerException != null)
                 {
-                    DetectorUtil.WriteLog("**" + e.InnerException.Message);
-                    DetectorUtil.WriteLog("**" + e.InnerException.StackTrace);
+                    logWriter.AddLog(DetectLogLevel.Information, "**" + e.InnerException.Message);
+                    logWriter.AddLog(DetectLogLevel.Information, "**" + e.InnerException.StackTrace);
                 }
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                 return false;
             }
             finally
@@ -130,17 +134,14 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
 
             // Notify the UI for establishing RDP connection successfully.
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
-
-
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
 
             return true;
         }
 
         private void CheckSupportedFeatures()
         {
-            DetectorUtil.WriteLog("Check specified features support...");
-
+            logWriter.AddLog(DetectLogLevel.Information, "Check specified features support...");
             // Set result according to messages during connection
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData != null && mscConnectionInitialPDU.mcsCi.gccPdu.clientCoreData.earlyCapabilityFlags != null)
             {
@@ -221,12 +222,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 }
             }
             // Notify the UI for detecting feature finished
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
         }
 
         private void CheckSupportedProtocols()
         {
-            DetectorUtil.WriteLog("Check specified protocols support...");
+            logWriter.AddLog(DetectLogLevel.Information, "Check specified protocols support...");
 
             detectInfo.IsSupportRDPEFS = false;
             if (mscConnectionInitialPDU.mcsCi.gccPdu.clientNetworkData != null && mscConnectionInitialPDU.mcsCi.gccPdu.clientNetworkData.channelCount > 0)
@@ -272,8 +273,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 detectInfo.IsSupportRDPEUDP = false;
             }
             // Notify the UI for detecting protocol supported finished
-            DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
-            DetectorUtil.WriteLog("Check specified protocols support finished.");
+            logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+            logWriter.AddLog(DetectLogLevel.Information, "Check specified protocols support finished.");
         }
 
         private void SetRdpVersion()
@@ -923,21 +924,21 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
-                        DetectorUtil.WriteLog("Parse the host name or the ip address as: " + ip.ToString());
+                        logWriter.AddLog(DetectLogLevel.Information, "Parse the host name or the ip address as: " + ip.ToString());
                         return ip;
                     }
                 }
             }
             catch (Exception e)
             {
-                DetectorUtil.WriteLog("Exception occured when parsing the host name or the ip address: " + e.Message);
-                DetectorUtil.WriteLog("" + e.StackTrace);
+                logWriter.AddLog(DetectLogLevel.Information, "Exception occured when parsing the host name or the ip address: " + e.Message);
+                logWriter.AddLog(DetectLogLevel.Information, "" + e.StackTrace);
                 if (e.InnerException != null)
                 {
-                    DetectorUtil.WriteLog("**" + e.InnerException.Message);
-                    DetectorUtil.WriteLog("**" + e.InnerException.StackTrace);
+                    logWriter.AddLog(DetectLogLevel.Information, "**" + e.InnerException.Message);
+                    logWriter.AddLog(DetectLogLevel.Information, "**" + e.InnerException.StackTrace);
                 }
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
             }
             return null;
 
