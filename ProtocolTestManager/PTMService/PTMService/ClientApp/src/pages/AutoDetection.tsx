@@ -32,14 +32,13 @@ import { PropertyGroup } from '../model/PropertyGroup'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 
-// This function is to determine whether detection status is suitable for running.
-const shouldAutoDetectionStop = (autoDetection: AutoDetectionState) => autoDetection.detectionSteps?.Result.Status !== DetectionStatus.InProgress
-
 const getStyle = (status: DetectionStepStatus): CSSProperties => {
   if (status === 'Failed') {
     return { paddingLeft: 5, color: 'red' }
   } else if (status === 'Finished') {
     return { paddingLeft: 5, color: 'green' }
+  } else if (status === 'Detecting' || status === 'Canceling') {
+    return { paddingLeft: 5, color: 'blue' }
   } else {
     return { paddingLeft: 5 }
   }
@@ -61,7 +60,6 @@ export function AutoDetection(props: StepWizardProps) {
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
   const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
-  const [showWarning, setShowWarning] = useState(true)
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
   const dispatch = useDispatch()
@@ -74,17 +72,19 @@ export function AutoDetection(props: StepWizardProps) {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
   }, [dispatch])
 
-  useEffect(() => {
-    dispatch(AutoDetectionDataSrv.getAutoDetectionSteps())
-  }, [dispatch])
-
-  useEffect(() => {
-    if (shouldAutoDetectionStop(autoDetection)) {
-      if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Error && showWarning) {
-        showAutoDetectionWarningDialog()
+  const autoDetectionStepsUpdateCallback = useCallback((currAutoDetection: AutoDetectionState) => {
+    if (currAutoDetection.detectionSteps?.Result.Status !== DetectionStatus.InProgress) {
+      if (currAutoDetection.detectionSteps?.Result.Status === DetectionStatus.Error) {
+        if (currAutoDetection.detectionSteps.Result.Exception !== null && currAutoDetection.detectionSteps.Result.Exception !== '') {
+          showAutoDetectionWarningDialog()
+        }
       }
     }
-  }, [autoDetection])
+  }, [showAutoDetectionWarningDialog])
+
+  useEffect(() => {
+    dispatch(AutoDetectionDataSrv.getAutoDetectionSteps(autoDetectionStepsUpdateCallback))
+  }, [dispatch])
 
   useEffect(() => {
     if (!autoDetection.detecting) {
@@ -92,7 +92,7 @@ export function AutoDetection(props: StepWizardProps) {
     }
 
     const timer = setTimeout(() => {
-      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
+      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionStepsUpdateCallback))
     }, 1000)
 
     return () => clearTimeout(timer)
@@ -141,8 +141,7 @@ export function AutoDetection(props: StepWizardProps) {
     } else {
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
-        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps())
-        setShowWarning(true)
+        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionStepsUpdateCallback))
       }))
     }
   }
@@ -156,7 +155,6 @@ export function AutoDetection(props: StepWizardProps) {
   const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
 
   const onCloseAutoDetectionWarningDialogClick = () => {
-    setShowWarning(false)
     hideAutoDetectionWarningDialog()
   }
 
