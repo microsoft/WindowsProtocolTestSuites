@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
@@ -33,6 +34,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public int InstallTestSuite(string name, string packageName, Stream package, string description)
         {
+            var extractNode = ExtractPackage(packageName, package, StoragePool);
+            var version = GetTestSuiteVersion(extractNode);
+
+            if (!CheckTestSuiteVersion(version))
+            {
+                throw new NotSupportedException($"PTMService only support version {TestSuiteConsts.SupportedMinVersion} or above version, you could try use PTMGUI to run previous versions");
+            }
+
             using var instance = ScopedServiceFactory.GetInstance();
 
             var pool = instance.ScopedServiceInstance;
@@ -44,27 +53,47 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 Name = name,
                 InstallMethod = TestSuiteInstallMethod.UploadPackage,
                 Description = description,
+                Version = version
             };
 
-            repo.Insert(testSuiteInstallation);
+            try
+            {
+                repo.Insert(testSuiteInstallation);
 
-            pool.Save().Wait();
+                pool.Save().Wait();
 
-            int id = testSuiteInstallation.Id;
+                int id = testSuiteInstallation.Id;
+                var testSuiteNode = StoragePool.GetKnownNode(KnownStorageNodeNames.TestSuite).CreateNode(id.ToString());
+                testSuiteNode.CopyFromNode(extractNode, true);
+                testSuiteInstallation.Path = testSuiteNode.AbsolutePath;
 
-            var testSuite = TestSuite.Create(Options.TestEnginePath, testSuiteInstallation, packageName, package, StoragePool);
+                var testSuite = TestSuite.Create(Options.TestEnginePath, testSuiteInstallation, testSuiteNode);
 
-            repo.Update(testSuiteInstallation);
+                repo.Update(testSuiteInstallation);
+                pool.Save().Wait();
 
-            pool.Save().Wait();
+                TestSuitePool.AddOrUpdate(id, _ => testSuite, (_, _) => testSuite);
 
-            TestSuitePool.AddOrUpdate(id, _ => testSuite, (_, _) => testSuite);
+                return id;
+            }
+            catch
+            {
+                repo.Remove(testSuiteInstallation);
+                pool.Save().Wait();
 
-            return id;
+                throw;
+            }
         }
 
         public void UpdateTestSuite(int id, string name, string packageName, Stream package, string description)
         {
+            var extractNode = ExtractPackage(packageName, package, StoragePool);
+            var version = GetTestSuiteVersion(extractNode);
+            if (!CheckTestSuiteVersion(version))
+            {
+                throw new NotSupportedException($"PTMService only support version {TestSuiteConsts.SupportedMinVersion} or above version, you could try use PTMGUI to run previous versions");
+            }
+
             using var instance = ScopedServiceFactory.GetInstance();
 
             var pool = instance.ScopedServiceInstance;
@@ -76,7 +105,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             testSuiteInstallation.InstallMethod = TestSuiteInstallMethod.UploadPackage;
             testSuiteInstallation.Description = description;
 
-            var testSuite = TestSuite.Update(Options.TestEnginePath, testSuiteInstallation, packageName, package, StoragePool);
+            var testSuite = TestSuite.Update(Options.TestEnginePath, testSuiteInstallation, extractNode, StoragePool, version);
 
             repo.Update(testSuiteInstallation);
 
@@ -140,6 +169,42 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
 
             return TestSuitePool[id];
+        }
+
+        private bool CheckTestSuiteVersion(string version)
+        {
+            Version currentVersion = new Version(version);
+            Version minSupportedVersion = new Version(TestSuiteConsts.SupportedMinVersion);
+            return (currentVersion >= minSupportedVersion);
+        }
+
+        private static IStorageNode ExtractPackage(string packageName, Stream package, IStoragePool storagePool)
+        {
+            string packageExtension = GetPackageExtension(packageName);
+            string tempFolder =Path.Combine(Path.GetTempPath(),Guid.NewGuid().ToString());
+            Utility.ExtractArchive(packageExtension, package, tempFolder);
+            var extractNode = storagePool.OpenNode(tempFolder);
+            return extractNode;
+        }
+
+        private static string GetPackageExtension(string packageName)
+        {
+            string packageExtension = (new FileInfo(packageName)).Extension;
+            if (packageExtension.Equals(".gz") && packageName.EndsWith(".tar.gz"))
+            {
+                packageExtension = ".tar.gz";
+            }
+
+            return packageExtension;
+        }
+
+        private static string GetTestSuiteVersion(IStorageNode testSuiteInstallNode)
+        {
+            var binNode = testSuiteInstallNode.GetNode(TestSuiteConsts.Bin);
+            using var versionFile = binNode.ReadFile(TestSuiteConsts.VersionFile);
+            using var rs = new StreamReader(versionFile);
+            var version = rs.ReadLine();
+            return version;
         }
     }
 }

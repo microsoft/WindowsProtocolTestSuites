@@ -66,6 +66,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
         void CreateFile(string name, Stream content);
 
         /// <summary>
+        /// Copy from another node
+        /// </summary>
+        /// <param name="extractNode">source node</param>
+        /// <param name="deleteSource">if need delete source directory</param>
+        void CopyFromNode(IStorageNode extractNode, bool deleteSource = false);
+
+        /// <summary>
         /// Read the content of a file.
         /// </summary>
         /// <param name="name">The name of file.</param>
