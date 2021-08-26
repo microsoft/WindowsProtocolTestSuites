@@ -245,11 +245,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public string GetDetectionLog()
         {
-            if(!string.IsNullOrEmpty(latestLogPath) && File.Exists(latestLogPath))
+            try
             {
-                return File.ReadAllText(latestLogPath);
+                if (!string.IsNullOrEmpty(latestLogPath) && File.Exists(latestLogPath))
+                {
+                    return File.ReadAllText(latestLogPath);
+                }
+                return string.Empty;
             }
-            return string.Empty;
+            catch (IOException)
+            {
+                return $"{latestLogPath} is being processed, please wait and try again.";
+            }
         }
 
         #region Detection
