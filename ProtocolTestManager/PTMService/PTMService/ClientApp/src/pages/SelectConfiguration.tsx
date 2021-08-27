@@ -74,7 +74,7 @@ export function SelectConfiguration(props: any) {
   }
 
   const onConfigurationCreate = () => {
-    if (configurationName && configurationDescription) {
+    if (configurationName != null) {
       dispatch(ConfigurationsDataSrv.createConfiguration({
         Name: configurationName,
         Description: configurationDescription,
