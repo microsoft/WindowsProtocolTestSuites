@@ -11,6 +11,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -201,7 +202,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public NetworkInfo FetchLocalNetworkInfo(DetectionInfo info)
         {
-            LogIPConfig();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                LogIPConfig();
+            }
 
             //Get the network information with SUTIpList
             NetworkInfo networkInfo = info.networkInfo;
