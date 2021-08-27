@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -140,7 +141,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             // Get CustomerInterface
             Type interfaceType = typeof(IValueDetector);
 
-            Assembly assembly = Assembly.LoadFrom(detectorAssembly);
+            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext();
+            string assembleDirPath = Directory.GetParent(detectorAssembly).FullName;
+            alc.Resolving += (context, assembleName) =>
+            {
+                string assemblyPath = Path.Combine(assembleDirPath, $"{assembleName.Name}.dll");
+                if (assemblyPath != null)
+                    return context.LoadFromAssemblyPath(assemblyPath);
+                return null;
+            };
+
+            Assembly assembly = alc.LoadFromAssemblyPath(detectorAssembly);
 
             Type[] types = assembly.GetTypes();
 
@@ -153,6 +164,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     break;
                 }
             }
+            alc.Unload(); 
         }
 
         public void InitializeDetector(int testSuiteId)
@@ -655,14 +667,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 stepIndexLocker.EnterReadLock();
                 try
                 {
-                    if (detectStepIndexes.ContainsKey(latestDetectorInstanceId))
-                    {
-                        return detectStepIndexes[latestDetectorInstanceId];
-                    }
-                    else
-                    {
-                        return -1;
-                    }
+                    int stepIndex = 0;
+                    detectStepIndexes.TryGetValue(latestDetectorInstanceId, out stepIndex); // if failed use default value.
+                    return stepIndex;
                 }
                 finally
                 {
@@ -674,14 +681,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 stepIndexLocker.EnterWriteLock();
                 try
                 {
-                    if (detectStepIndexes.ContainsKey(latestDetectorInstanceId))
-                    {
-                        detectStepIndexes[latestDetectorInstanceId] = value;
-                    }
-                    else
-                    {
-                        detectStepIndexes.Add(latestDetectorInstanceId, 0);
-                    }
+                    detectStepIndexes[latestDetectorInstanceId] = value;
                 }
                 finally
                 {

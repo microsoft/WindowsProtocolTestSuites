@@ -36,21 +36,15 @@ namespace Microsoft.Protocols.TestManager.Detector
             switch (level)
             {
                 case DetectLogLevel.Information:
+                    DetectorUtil.WriteLog(msg, startNewLine, style);
+                    break;
                 case DetectLogLevel.Warning:
                     if (this.DetectContext != null
                         && this.DetectContext.StepStatusChanged != null
                         && (!stepStatus.ContainsKey(StepIndex) || stepStatus[StepIndex] != style))
                     {
                         this.DetectContext.StepStatusChanged(this.DetectContext.Id, StepIndex, style);
-
-                        if (stepStatus.ContainsKey(StepIndex))
-                        {
-                            this.stepStatus[StepIndex] = style;
-                        }
-                        else
-                        {
-                            this.stepStatus.Add(StepIndex, style);
-                        }
+                        this.stepStatus[StepIndex] = style;
                     }
 
                     if (style != LogStyle.Default)
