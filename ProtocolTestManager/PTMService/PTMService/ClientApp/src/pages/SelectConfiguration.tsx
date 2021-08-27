@@ -74,7 +74,7 @@ export function SelectConfiguration(props: any) {
   }
 
   const onConfigurationCreate = () => {
-    if (configurationName != null) {
+    if (configurationName != null && configurationName !== '') {
       dispatch(ConfigurationsDataSrv.createConfiguration({
         Name: configurationName,
         Description: configurationDescription,
@@ -86,11 +86,7 @@ export function SelectConfiguration(props: any) {
       setConfigurationDescription('')
       setConfigurationErrorMsg('')
     } else {
-      if (configurationName) {
-        setConfigurationErrorMsg('')
-      } else {
-        setConfigurationErrorMsg('Configuration Name can\'t be null')
-      }
+      setConfigurationErrorMsg('Configuration Name can\'t be null')
     }
   }
 
