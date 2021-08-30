@@ -90,5 +90,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
         /// </summary>
         /// <returns>The name of all files.</returns>
         IEnumerable<string> GetFiles();
+
+        /// <summary>
+        /// Delete node.
+        /// </summary>
+        void DeleteNode();
     }
 }

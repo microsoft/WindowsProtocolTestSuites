@@ -39,7 +39,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             if (!CheckTestSuiteVersion(version))
             {
-                throw new NotSupportedException($"PTMService only support version {TestSuiteConsts.SupportedMinVersion} or above version, you could try use PTMGUI to run previous versions");
+                extractNode.DeleteNode();
+                throw new NotSupportedException($"PTMService only supports version {TestSuiteConsts.SupportedMinVersion} or above version, you could try use PTMGUI to run previous versions");
             }
 
             using var instance = ScopedServiceFactory.GetInstance();
@@ -91,7 +92,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var version = GetTestSuiteVersion(extractNode);
             if (!CheckTestSuiteVersion(version))
             {
-                throw new NotSupportedException($"PTMService only support version {TestSuiteConsts.SupportedMinVersion} or above version, you could try use PTMGUI to run previous versions");
+                extractNode.DeleteNode();
+                throw new NotSupportedException($"PTMService only supports version {TestSuiteConsts.SupportedMinVersion} or above version, you could try use PTMGUI to run previous versions");
             }
 
             using var instance = ScopedServiceFactory.GetInstance();
@@ -181,9 +183,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         private static IStorageNode ExtractPackage(string packageName, Stream package, IStoragePool storagePool)
         {
             string packageExtension = GetPackageExtension(packageName);
-            string tempFolder =Path.Combine(Path.GetTempPath(),Guid.NewGuid().ToString());
-            Utility.ExtractArchive(packageExtension, package, tempFolder);
-            var extractNode = storagePool.OpenNode(tempFolder);
+            var extractNode = storagePool.GetKnownNode(KnownStorageNodeNames.TestSuite).CreateNode(Guid.NewGuid().ToString());
+            Utility.ExtractArchive(packageExtension, package, extractNode.AbsolutePath);
             return extractNode;
         }
 

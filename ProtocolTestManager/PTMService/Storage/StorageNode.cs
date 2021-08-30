@@ -141,6 +141,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Storage
             return Directory.EnumerateFiles(AbsolutePath);
         }
 
+        public void DeleteNode()
+        {
+            Directory.Delete(AbsolutePath, true);
+        }
+
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
