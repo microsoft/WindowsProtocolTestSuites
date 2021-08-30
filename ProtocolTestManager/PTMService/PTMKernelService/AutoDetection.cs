@@ -715,14 +715,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 logLocker.EnterWriteLock();
                 try
                 {
-                    if (detectLogs.ContainsKey(latestDetectorInstanceId))
-                    {
-                        detectLogs[latestDetectorInstanceId] = value;
-                    }
-                    else
-                    {
-                        detectLogs.Add(latestDetectorInstanceId, value);
-                    }
+                    detectLogs[latestDetectorInstanceId] = value;
                 }
                 finally
                 {
