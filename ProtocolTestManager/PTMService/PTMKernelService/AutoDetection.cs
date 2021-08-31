@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
@@ -30,6 +31,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         private List<DetectingItem> detectSteps;
 
         private ITestSuite TestSuite { get; set; }
+
+        private IConfiguration Configuration { get; set; }
+
+        private PtfConfig PtfConfig { get; set; }
 
         private CancellationTokenSource cts = null;
 
@@ -61,11 +66,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         public DetectLog DetectLogCallback;
 
-        private AutoDetection(ITestSuite testSuite)
+        private AutoDetection(IConfiguration configuration)
         {
-            TestSuite = testSuite;
+            TestSuite = configuration.TestSuite;
+            Configuration = configuration;
 
-            InitializeDetector(TestSuite.Id);
+            InitializeDetector();
 
             detectSteps = ValueDetector.GetDetectionSteps();
 
@@ -87,9 +93,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        public static AutoDetection Create(ITestSuite testSuite)
+        public static AutoDetection Create(IConfiguration configuration)
         {
-            var instance = new AutoDetection(testSuite);
+            var instance = new AutoDetection(configuration);
 
             return instance;
         }
@@ -152,22 +158,23 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        public void InitializeDetector(int testSuiteId)
+        public void InitializeDetector()
         {
-            var ptfconfig = LoadPtfconfig();
+            var ptfConfigStorage = Configuration.StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
+            PtfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
 
             UtilCallBackFunctions.GetPropertyValue = (string name) =>
             {
-                var property = ptfconfig.GetPropertyNodeByName(name);
+                var property = this.PtfConfig.GetPropertyNodeByName(name);
                 if (property != null) return property.Value;
                 return null;
             };
 
             UtilCallBackFunctions.GetPropertiesByFile = (filename) =>
             {
-                if (!ptfconfig.FileProperties.ContainsKey(filename))
+                if (!this.PtfConfig.FileProperties.ContainsKey(filename))
                     return null;
-                return ptfconfig.FileProperties[filename];
+                return this.PtfConfig.FileProperties[filename];
             };
 
             detectorAssembly = TestSuite.GetDetectorAssembly();
@@ -283,12 +290,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 cts.Dispose();
             }
-            
+
             UtilCallBackFunctions.WriteLog = (message, newline, style) =>
             {
                 if (DetectLogCallback != null) DetectLogCallback(message, style);
             };
-            
+
             stepsLocker.EnterWriteLock();
             try
             {
@@ -347,6 +354,51 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public List<ResultItemMap> GetDetectionSummary()
         {
             return ValueDetector.GetSUTSummary();
+        }
+
+        public IEnumerable<PropertyGroup> ConfigurationProperties
+        {
+            get
+            {
+                var selectedRules = ValueDetector.GetSelectedRules();
+                var hiddenProperties = this.GetHiddenPropertiesInValueDetectorAssembly(selectedRules);
+
+                PtfPropertyView view = this.PtfConfig.CreatePtfPropertyView(hiddenProperties);
+
+                List<PropertyGroup> groups = new List<PropertyGroup>();
+                view.ForEach(item =>
+                {
+                    var group = new PropertyGroup() { Name = item.Name };
+
+                    var propertyList = new List<Property>();
+                    item.ForEach(child =>
+                    {
+                        propertyList.Add(new Property()
+                        {
+                            Key = string.Format("{0}.{1}", group.Name, child.Name),
+                            Name = child.Name,
+                            Choices = child.ChoiceItems,
+                            Description = child.Description,
+                            Value = child.Value,
+                        });
+                    });
+                    group.Items = propertyList;
+                    groups.Add(group);
+                });
+
+                return groups;
+            }
+            set
+            {
+                var properties = value.SelectMany(i => i.Items);
+
+                foreach (var property in properties)
+                {
+                    this.PtfConfig.SetPropertyValue(property.Key, property.Value);
+                }
+
+                this.PtfConfig.Save();
+            }
         }
 
         #region Apply Detection Summary to xml
@@ -480,21 +532,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Apply the test case selection rules detected by the plug-in.
         /// </summary>
 
-        private PtfConfig LoadPtfconfig()
-        {
-            try
-            {
-                var ptfConfigFiles = TestSuite.GetConfigurationFiles().ToList();
-                var ptfconfig = new PtfConfig(ptfConfigFiles);
-
-                return ptfconfig;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(string.Format(AutoDetectionConsts.LoadPtfconfigError, e.Message));
-            }
-        }
-
         /// <summary>
         /// Gets the properties required for auto-detection.
         /// </summary>
@@ -622,7 +659,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     Thread.SpinWait(100);
                 }
             }
-            
             taskCanceled = false;
         }
 
@@ -659,7 +695,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 LogWriter.Close();
                 LogWriter.Dispose();
 
-                if(detectTask!=null && logStreams.ContainsKey(detectTask.Id))
+                if (detectTask != null && logStreams.ContainsKey(detectTask.Id))
                 {
                     logStreams.Remove(detectTask.Id);
                 }
@@ -762,6 +798,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 stepsLocker.ExitWriteLock();
             }
         }
+
         #endregion
     }
 }

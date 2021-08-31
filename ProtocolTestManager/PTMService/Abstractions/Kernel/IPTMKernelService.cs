@@ -243,6 +243,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <returns>AutoDetection Log Content</returns>
         string GetDetectionLog(int configurationId);
 
+        IEnumerable<PropertyGroup> GetConfigurationProperties(int configurationId);
+
+        void SetConfigurationProperties(int configurationId, IEnumerable<PropertyGroup> propertyGroupes);
+
         #endregion
     }
 }

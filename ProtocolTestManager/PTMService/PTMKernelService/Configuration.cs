@@ -238,67 +238,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
             return ruleTable;
         }
-        public IEnumerable<PropertyGroup> Properties
-        {
-            get
-            {
-                var ptfConfigStorage = StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
-
-                var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
-
-                var result = ptfConfig.FileProperties.Values.SelectMany(property => property).Select(property =>
-                {
-                    var configItem = ptfConfig.GetPropertyNodeByName(property);
-
-                    return new Property
-                    {
-                        Key = property,
-                        Name = property.Split('.').Last(),
-                        Choices = configItem.ChoiceItems,
-                        Description = configItem.Description,
-                        Value = configItem.Value,
-                    };
-                }).GroupBy(property =>
-                {
-                    var parts = property.Key.Split('.');
-
-                    if (parts.Length == 1)
-                    {
-                        return ConfigurationConsts.DefaultGroup;
-                    }
-                    else
-                    {
-                        return parts.SkipLast(1).Last();
-                    }
-                }).Select(group =>
-                {
-                    return new PropertyGroup
-                    {
-                        Name = group.Key,
-                        Items = group,
-                    };
-                });
-
-                return result;
-            }
-
-            set
-            {
-                var ptfConfigStorage = StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
-
-                var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
-
-                var properties = value.SelectMany(i => i.Items);
-
-                foreach (var property in properties)
-                {
-                    ptfConfig.SetPropertyValue(property.Key, property.Value);
-                }
-
-                ptfConfig.Save();
-            }
-        }
-
+        
         public IEnumerable<Adapter> Adapters
         {
             get

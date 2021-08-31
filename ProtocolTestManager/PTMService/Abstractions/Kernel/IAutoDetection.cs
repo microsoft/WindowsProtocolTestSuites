@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
     public interface IAutoDetection
     {
-        void InitializeDetector(int testSuiteId);
+        void InitializeDetector();
 
         PrerequisiteView GetPrerequisites();
 
@@ -31,5 +31,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties);
 
         string GetDetectionLog();
+
+        IEnumerable<PropertyGroup> ConfigurationProperties { get; set; }
     }
 }
