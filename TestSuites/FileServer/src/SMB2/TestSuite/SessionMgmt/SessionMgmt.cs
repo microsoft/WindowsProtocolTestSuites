@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
                 SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 checker:(header, response) =>
                 {
-                    // <225> Section 3.3.5.5: Windows Vista SP1 and Windows Server 2008 servers fail the session setup request with STATUS_REQUEST_NOT_ACCEPTED.
+                    // <266> Section 3.3.5.5: Windows Vista SP1 and Windows Server 2008 servers fail the session setup request with STATUS_REQUEST_NOT_ACCEPTED.
                     if (TestConfig.Platform == Platform.WindowsServer2008)
                     {
                         BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_REQUEST_NOT_ACCEPTED, 
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
                     else if (header.Status != Smb2Status.STATUS_SUCCESS)
                     {
                         // 3.3.5.5   Receiving an SMB2 SESSION_SETUP Request
-                        // 6.	If Session.State is Valid, the server SHOULD<225> process the session setup request as specified in section 3.3.5.5.2.
+                        // 6.	If Session.State is Valid, the server SHOULD<266> process the session setup request as specified in section 3.3.5.5.2.
                         if (TestConfig.Platform == Platform.NonWindows)
                         {
                             BaseTestSite.Assert.Fail("Reauthentication is not supported in the server.");
@@ -204,25 +204,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
                 SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
                 SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
                 checker: (Packet_Header header, SESSION_SETUP_Response response) =>
-                {                    
-                    if (testConfig.IsWindowsPlatform && testConfig.Platform != Platform.WindowsServer2008R2)
-                    {
-                        BaseTestSite.Assert.AreEqual(
+                {
+                    BaseTestSite.Assert.AreEqual(
                             Smb2Status.STATUS_USER_SESSION_DELETED,
                             header.Status,
-                            "[MS-SMB2] 3.3.5.5.3 The server MUST look up all existing connections from the client in the global ConnectionList where Connection.ClientGuid matches Session.Connection.ClientGuid. " +
-                            "For any matching Connection, if Connection.Dialect is not the same as Session.Connection.Dialect, the server SHOULD<235> close the newly created Session, " +
-                            "as specified in section 3.3.4.12, by providing Session.SessionGlobalId as the input parameter, and fail the session setup request with STATUS_USER_SESSION_DELETED.");
-                    }
-                    else if (testConfig.Platform == Platform.NonWindows)
-                    {
-                        BaseTestSite.Assert.AreNotEqual(
-                            Smb2Status.STATUS_SUCCESS,
-                            header.Status,
-                            "[MS-SMB2] 3.3.5.5.3 The server MUST look up all existing connections from the client in the global ConnectionList where Connection.ClientGuid matches Session.Connection.ClientGuid. " +
-                            "For any matching Connection, if Connection.Dialect is not the same as Session.Connection.Dialect, the server SHOULD<235> close the newly created Session, " +
-                            "as specified in section 3.3.4.12, by providing Session.SessionGlobalId as the input parameter, and fail the session setup request with STATUS_USER_SESSION_DELETED.");
-                    }
+                            "[MS-SMB2] 3.3.5.5.3 the server MUST look up a client entry in GlobalClientTable using Session.Connection.ClientGuid. " +
+                            "If an entry is found and Client.Dialect is not equal to Session.Connection.Dialect, the server MUST close the newly created Session, as specified in section 3.3.4.12, " +
+                            "by providing Session.SessionGlobalId as the input parameter, and fail the session setup request with STATUS_USER_SESSION_DELETED.");
                 });
             #endregion
 

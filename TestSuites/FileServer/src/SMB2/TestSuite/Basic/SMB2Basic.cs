@@ -372,8 +372,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
              * by setting FileNameLength field to zero and FileName field
              * to an empty string.
              */
-            if ((testConfig.Platform >= Platform.WindowsServer2016) ||
-                (testConfig.Platform == Platform.NonWindows))
+            if (testConfig.Platform >= Platform.WindowsServer2016) 
             {
                 BaseTestSite.Assert.IsTrue(
                     0 == filenameInfo.FileNameLength,
@@ -391,7 +390,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
              * Windows Server 2012, Windows 8.1, and Windows Server 2012 R2
              * return an absolute path to the file name as part of FileNameInformation.
              */
-            else
+            else if (testConfig.Platform != Platform.NonWindows)
             {
                 string absoluteFilePath = "\\" + TestConfig.BasicFileShare + "\\" + fileName;
                 string filenameInFilenameInfo = Encoding.Unicode.GetString(filenameInfo.FileName);
@@ -403,6 +402,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     absoluteFilePath, filenameInFilenameInfo,
                     "FileName should be set as the absolute path to the file, actually server returns {0}.",
                     filenameInFilenameInfo);
+            }
+            else // not check for non-Windows, only print log
+            {
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "Actually server returns {0}.",
+                    Encoding.Unicode.GetString(filenameInfo.FileName));
             }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
@@ -1789,11 +1793,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             // MS-SMB2 3.3.5.19 Receiving an SMB2 CHANGE_NOTIFY request
-            BaseTestSite.Assert.AreEqual(
-                Smb2Status.STATUS_INVALID_PARAMETER,
-                receivedChangeNotifyHeader.Status,
-                "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
-                Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            if (TestConfig.Platform == Platform.NonWindows) // not check for non-Windows
+            {
+                BaseTestSite.Assert.AreNotEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    receivedChangeNotifyHeader.Status,
+                    "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
+                    Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
+            else
+            {
+                BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_INVALID_PARAMETER,
+                    receivedChangeNotifyHeader.Status,
+                    "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
+                    Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1836,11 +1851,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             // MS-SMB2 3.3.5.19 Receiving an SMB2 CHANGE_NOTIFY request
-            BaseTestSite.Assert.AreEqual(
+            if (TestConfig.Platform == Platform.NonWindows) // not check for non-Windows
+            {
+                BaseTestSite.Assert.AreNotEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    receivedChangeNotifyHeader.Status,
+                    "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
+                    Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
+            else
+            {
+                BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
                 receivedChangeNotifyHeader.Status,
                 "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1883,11 +1909,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             // MS-SMB2 3.3.5.19 Receiving an SMB2 CHANGE_NOTIFY request
-            BaseTestSite.Assert.AreEqual(
+            if (TestConfig.Platform == Platform.NonWindows) // not check for non-Windows
+            {
+                BaseTestSite.Assert.AreNotEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    receivedChangeNotifyHeader.Status,
+                    "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
+                    Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
+            else
+            {
+                BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
                 receivedChangeNotifyHeader.Status,
                 "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1930,11 +1967,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             // MS-SMB2 3.3.5.19 Receiving an SMB2 CHANGE_NOTIFY request
-            BaseTestSite.Assert.AreEqual(
+            if (TestConfig.Platform == Platform.NonWindows) // not check for non-Windows
+            {
+                BaseTestSite.Assert.AreNotEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    receivedChangeNotifyHeader.Status,
+                    "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
+                    Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
+            else
+            {
+                BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
                 receivedChangeNotifyHeader.Status,
                 "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
@@ -1977,11 +2025,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "CHANGE_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
 
             // MS-SMB2 3.3.5.19 Receiving an SMB2 CHANGE_NOTIFY request
-            BaseTestSite.Assert.AreEqual(
+            if (TestConfig.Platform == Platform.NonWindows) // not check for non-Windows
+            {
+                BaseTestSite.Assert.AreNotEqual(
+                    Smb2Status.STATUS_SUCCESS,
+                    receivedChangeNotifyHeader.Status,
+                    "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
+                    Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
+            else
+            {
+                BaseTestSite.Assert.AreEqual(
                 Smb2Status.STATUS_INVALID_PARAMETER,
                 receivedChangeNotifyHeader.Status,
                 "If OutputBufferLength is greater than Connection.MaxTransactSize, the server SHOULD fail the request with STATUS_INVALID_PARAMETER. Actually server returns {0}.",
                 Smb2Status.GetStatusCode(receivedChangeNotifyHeader.Status));
+            }
 
             BaseTestSite.Log.Add(
                 LogEntryKind.TestStep,
