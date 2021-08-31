@@ -7,6 +7,7 @@ import { CSSProperties, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { ConfigureMethodActions } from '../actions/ConfigureMethodAction'
+import { WizardNavBarActions } from '../actions/WizardNavBarAction'
 import { StackGap10 } from '../components/StackStyle'
 import { StepPanel } from '../components/StepPanel'
 import { WizardNavBar } from '../components/WizardNavBar'
@@ -50,6 +51,7 @@ export function ConfigureMethod(props: StepWizardProps) {
         toggleAutoDetectionWarningDialog()
         return
       case ConfigurationMethod_Manual:
+        dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
         dispatch(ConfigureMethodActions.setConfigurationMethodAction(key))
         wizardProps.goToStep(RunSteps.FILTER_TEST_CASE)
         return
@@ -100,6 +102,7 @@ export function ConfigureMethod(props: StepWizardProps) {
   }
 
   const onRunAutoDetection = () => {
+    dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
     dispatch(ConfigureMethodActions.setConfigurationMethodAction(ConfigurationMethod_AutoDetection))
     wizardProps.goToStep(RunSteps.AUTO_DETECTION)
   }

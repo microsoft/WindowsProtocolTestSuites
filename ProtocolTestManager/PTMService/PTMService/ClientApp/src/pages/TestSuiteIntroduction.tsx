@@ -76,7 +76,7 @@ export function TestSuiteIntroduction (props: any) {
                 <LoadingPanel />
             }
             {testSuiteInfo.errorMsg == undefined &&
-                <iframe id="UserGuide" style={{ border: 'aliceblue', height: winSize.height - 190, width: winSize.width * 0.765, overflowY: 'auto' }} src={iframeUrl} onLoad={pageLoaded} />
+                <iframe id="UserGuide" style={{ border: 'aliceblue', height: winSize.height - 190, width: 100 + '%', overflowY: 'auto' }} src={iframeUrl} onLoad={pageLoaded} />
             }
             {testSuiteInfo.errorMsg == undefined &&
                 <div className='buttonPanel'>
