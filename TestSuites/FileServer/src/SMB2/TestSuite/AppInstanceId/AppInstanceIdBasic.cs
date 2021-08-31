@@ -162,9 +162,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             #endregion
 
             // If Open.CreateGuid is NULL, and Open.TreeConnect.Share.IsCA is FALSE, the server
-            // SHOULD < 298 > close the open as specified in section 3.3.4.17.
-            // <298> Section 3.3.5.9.13: Windows Server 2012 and Windows Server 2012 R2 servers do not close the open.
-            var is2012Or2012R2 = TestConfig.Platform == Platform.WindowsServer2012 || 
+            // SHOULD <326 > close the open as specified in section 3.3.4.17.
+            // <326> Section 3.3.5.9.13: Windows Server 2012 and Windows Server 2012 R2 servers do not close the open.
+
+            var is2012Or2012R2 = TestConfig.Platform == Platform.WindowsServer2012 ||
                 TestConfig.Platform == Platform.WindowsServer2012R2;
 
             var expectedCreateResponseStatus = is2012Or2012R2 ?
@@ -176,10 +177,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 Smb2Status.STATUS_FILE_CLOSED;
 
             AppInstanceIdTest(
-                sameAppInstanceId: true, 
-                containCreateDurableContext: false,
-                expectedCreateResponseStatus: expectedCreateResponseStatus,
-                expectedInitialOpenStatusAfterReopen: expectedInitialOpenStatusAfterReopen);
+            sameAppInstanceId: true,
+            containCreateDurableContext: false,
+            expectedCreateResponseStatus: expectedCreateResponseStatus,
+            expectedInitialOpenStatusAfterReopen: expectedInitialOpenStatusAfterReopen);
         }
         private void AppInstanceIdTest(
             bool sameAppInstanceId, 
@@ -303,7 +304,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Assert.AreEqual(
                         expectedCreateResponseStatus,
                         header.Status,
-                        (expectedCreateResponseStatus == Smb2Status.STATUS_SUCCESS ?
+                        (expectedCreateResponseStatus == Smb2Status.STATUS_SUCCESS ? //non-Windows should also success
                         "The open will be closed. Create should succeed. Actually server returns with {0}."
                         : "The open cannot be closed. Create should not succeed. Actually server returns with {0}."),
                         Smb2Status.GetStatusCode(header.Status));
@@ -314,21 +315,35 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             clientForInitialOpen.Write(treeIdForInitialOpen, fileIdForInitialOpen, content,
                     checker: (header, response) =>
                     {
-                        BaseTestSite.Assert.AreEqual(
-                        expectedInitialOpenStatusAfterReopen,
-                        header.Status,
-                        (expectedInitialOpenStatusAfterReopen == Smb2Status.STATUS_SUCCESS ?
-                        "The initial open is not closed. Write should succeed. Actually server returns with {0}."
-                        : "The initial open is closed. Write should not succeed. Actually server returns with {0}."),
-                         Smb2Status.GetStatusCode(header.Status));
+                        if (TestConfig.Platform == Platform.NonWindows)
+                        {
+                            BaseTestSite.Assert.AreNotEqual(
+                            Smb2Status.STATUS_SUCCESS,
+                            header.Status,
+                            "The initial open is closed. Write should not succeed. Actually server returns with {0}.",
+                             Smb2Status.GetStatusCode(header.Status));
+                        }
+                        else
+                        {
+                            BaseTestSite.Assert.AreEqual(
+                            expectedInitialOpenStatusAfterReopen,
+                            header.Status,
+                            (expectedInitialOpenStatusAfterReopen == Smb2Status.STATUS_SUCCESS ?
+                            "The initial open is not closed. Write should succeed. Actually server returns with {0}."
+                            : "The initial open is closed. Write should not succeed. Actually server returns with {0}."),
+                             Smb2Status.GetStatusCode(header.Status));
+                        }
 
                         if(sameAppInstanceId && expectedCreateResponseStatus!= Smb2Status.STATUS_SHARING_VIOLATION)
                         {
-                            BaseTestSite.CaptureRequirementIfAreEqual(
-                                Smb2Status.STATUS_FILE_CLOSED,
-                                header.Status,
-                                RequirementCategory.STATUS_FILE_CLOSED.Id,
-                                RequirementCategory.STATUS_FILE_CLOSED.Description);
+                            if (TestConfig.Platform != Platform.NonWindows) //not check the specific error code for non-Windows
+                            {
+                                BaseTestSite.CaptureRequirementIfAreEqual(
+                                    Smb2Status.STATUS_FILE_CLOSED,
+                                    header.Status,
+                                    RequirementCategory.STATUS_FILE_CLOSED.Id,
+                                    RequirementCategory.STATUS_FILE_CLOSED.Description);
+                            }
                         }
                     });
 
