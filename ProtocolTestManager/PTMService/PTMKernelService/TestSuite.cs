@@ -76,45 +76,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return result;
         }
 
-        public static ITestSuite Create(string testEnginePath, TestSuiteInstallation testSuiteInstallation, string packageName, Stream package, IStoragePool storagePool)
+        public static ITestSuite Create(string testEnginePath, TestSuiteInstallation testSuiteInstallation,IStorageNode testSuiteNode)
         {
-            int id = testSuiteInstallation.Id;
-
-            var node = storagePool.GetKnownNode(KnownStorageNodeNames.TestSuite).CreateNode(id.ToString());
-
-            testSuiteInstallation.Path = node.AbsolutePath;
-
-            string packageExtension = "";
-
-            string nameWithoutExtension = packageName;
-
-            while (true)
-            {
-                string extension = Path.GetExtension(nameWithoutExtension);
-
-                nameWithoutExtension = Path.GetFileNameWithoutExtension(nameWithoutExtension);
-
-                if (String.IsNullOrEmpty(extension))
-                {
-                    break;
-                }
-
-                packageExtension = extension + packageExtension;
-            }
-
-            Utility.ExtractArchive(packageExtension, package, testSuiteInstallation.Path);
-
-            var binNode = node.GetNode(TestSuiteConsts.Bin);
-
-            using var versionFile = binNode.ReadFile(TestSuiteConsts.VersionFile);
-
-            using var rs = new StreamReader(versionFile);
-
-            testSuiteInstallation.Version = rs.ReadLine();
-
-            var result = new TestSuite(testEnginePath, testSuiteInstallation, node);
-
-            return result;
+            return new TestSuite(testEnginePath, testSuiteInstallation, testSuiteNode);
         }
 
         public static TestSuite Open(string testEnginePath, TestSuiteInstallation testSuiteInstallation, IStoragePool storagePool)
@@ -126,41 +90,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return result;
         }
 
-        public static ITestSuite Update(string testEnginePath, TestSuiteInstallation testSuiteInstallation, string packageName, Stream package, IStoragePool storagePool)
+        public static ITestSuite Update(string testEnginePath, TestSuiteInstallation testSuiteInstallation, IStorageNode extractNode, IStoragePool storagePool, string version)
         {
             int id = testSuiteInstallation.Id;
-
-            var updatingNode = storagePool.GetKnownNode(KnownStorageNodeNames.TestSuite).CreateNode($"{id}_Updating_{Guid.NewGuid()}");
-
-            testSuiteInstallation.Path = updatingNode.AbsolutePath;
-
-            string packageExtension = "";
-
-            string nameWithoutExtension = packageName;
-
-            while (true)
-            {
-                string extension = Path.GetExtension(nameWithoutExtension);
-
-                nameWithoutExtension = Path.GetFileNameWithoutExtension(nameWithoutExtension);
-
-                if (string.IsNullOrEmpty(extension))
-                {
-                    break;
-                }
-
-                packageExtension = extension + packageExtension;
-            }
-
-            Utility.ExtractArchive(packageExtension, package, testSuiteInstallation.Path);
-
-            var binNode = updatingNode.GetNode(TestSuiteConsts.Bin);
-
-            using var versionFile = binNode.ReadFile(TestSuiteConsts.VersionFile);
-
-            using var rs = new StreamReader(versionFile);
-
-            testSuiteInstallation.Version = rs.ReadLine();
 
             IStorageNode node = null;
             string oldNodePath = "";
@@ -170,9 +102,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 oldNodePath = Path.Combine(node.Parent.AbsolutePath, $"{id}_Old_{Guid.NewGuid()}");
 
                 Directory.Move(node.AbsolutePath, oldNodePath);
-                Directory.Move(updatingNode.AbsolutePath, node.AbsolutePath);
-
+                node.CopyFromNode(extractNode, true);
+                
                 testSuiteInstallation.Path = node.AbsolutePath;
+                testSuiteInstallation.Version = version;
             }
 
             var result = new TestSuite(testEnginePath, testSuiteInstallation, node);
@@ -416,5 +349,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 displayRules.Add(displayRule);
             }
         }
+
     }
 }

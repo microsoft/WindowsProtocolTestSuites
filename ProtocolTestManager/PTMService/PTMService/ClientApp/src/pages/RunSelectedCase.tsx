@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { DetailsList, DetailsListLayoutMode, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react'
-import { useForceUpdate } from '@uifabric/react-hooks'
+import { ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react'
+import { useBoolean, useForceUpdate } from '@uifabric/react-hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -17,6 +17,8 @@ import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedTestCasesDataSrv } from '../services/SelectedTestCases'
 import { AppState } from '../store/configureStore'
 import { TestCase } from '../model/TestCase'
+import { ContextualMenuControl, ContextualMenuItemProps } from '../components/ContextualMenuControl'
+import { FileUploader, IFile } from '../components/FileUploader'
 
 interface ListItem extends IObjectWithKey {
   Name: string;
@@ -83,6 +85,30 @@ function FilterByDropdown(props: FilterByDropdownProps) {
   )
 }
 
+const downloadPlaylist = (pageHTML: string) => {
+  const currentDate = new Date()
+  const blob = new Blob([pageHTML], { type: 'data:attachment/text' })
+  if (blob === undefined) {
+    return
+  }
+
+  const url = window.URL.createObjectURL(new Blob([blob]))
+  const link = document.createElement('a')
+  link.href = url
+  const dateStr = currentDate.toISOString().replace(/:/g, '-').replace('T', '-').replace('Z', '').replace('.', '-').replace(/ /g, '-')
+  link.setAttribute('download', 'ptmservice-' + dateStr + '.playlist')
+  link.click()
+}
+
+const exportPlaylist = (items: string[]) => {
+  let pageHTML: string = '<?xml version="1.0" encoding="utf-8"?><Playlist Version="1.0">'
+  items.forEach((item) => {
+    pageHTML += '<Add Test="' + item + '" />'
+  })
+  pageHTML += '</Playlist>'
+  downloadPlaylist(pageHTML)
+}
+
 export function RunSelectedCase(props: StepWizardProps) {
   const dispatch = useDispatch()
 
@@ -125,6 +151,68 @@ export function RunSelectedCase(props: StepWizardProps) {
 
   const [runAllClicked, setRunAllClicked] = useState(false)
   const [runSelectedClicked, setRunSelectedClicked] = useState(false)
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
+  const [isUploadingPlaylist, setIsUploadingPlaylist] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [importingErrMsg, setImportingErrMsg] = useState('')
+  const [file, setFile] = useState<IFile>()
+
+  const onFileUploadSuccess = (files: IFile[]): void => {
+    if (files.length > 0) {
+      setFile(files[0])
+    }
+  }
+
+  const onImportPlaylist = () => {
+    if (file != null) {
+      setIsUploadingPlaylist(true)
+      const reader = new FileReader()
+      const parser = new DOMParser()
+      reader.onloadend = (event) => {
+        const tests: string[] = []
+        const readerData = event.target?.result?.toString()
+        const playlistData = parser.parseFromString(readerData ?? '', 'text/xml')
+        playlistData.querySelectorAll('Add').forEach((i) => {
+          const selectedKey: string = i.getAttribute('Test')?.toString() ?? ''
+          if (selectedKey !== '') tests.push(selectedKey)
+        })
+        // Disable onSelectionChanged to avoid render long time.
+        selection.setChangeEvents(false, true)
+        // Select the imported items
+        const selectionItems = selection.getItems().map(item => item.key)
+        tests.forEach(test => { if (selectionItems.includes(test)) selection.setKeySelected(test, true, false); })
+        // Enable onSelectionChanged
+        selection.setChangeEvents(true, false)
+        // Update selection.
+        setSelectedItems(selection.getSelection().map(item => item.key as string))
+        setSelection(selection)
+        // Update states.
+        setShowSuccess(true)
+        setImportingErrMsg('')
+        setIsUploadingPlaylist(false)
+        // Force update.
+        forceUpdate()
+      }
+      reader.readAsText(file.File)
+    } else {
+      setImportingErrMsg('Playlist file cannot be empty')
+    }
+  }
+
+  const dialogContentProps = {
+    type: DialogType.normal,
+    title: 'Import Playlist'
+  }
+
+  const modalProps = {
+    isBlocking: true,
+    styles: { main: { innerWidth: 600, maxWidth: 650 } },
+    dragOptions: {
+      moveMenuItemText: 'Move',
+      closeMenuItemText: 'Close',
+      menu: ContextualMenu
+    }
+  }
 
   const listColumnsRef = useRef<IColumn[]>()
   listColumnsRef.current = listColumns
@@ -228,6 +316,51 @@ export function RunSelectedCase(props: StepWizardProps) {
     }
   }
 
+  const onShowImportDialog = () => {
+    setImportingErrMsg('')
+    setIsUploadingPlaylist(false)
+    setShowSuccess(false)
+    toggleHideDialog()
+    setFile(undefined)
+  }
+
+  const exportTestCases = () => {
+    if (filterInfo.listSelectedCases.length === 0) {
+      return
+    }
+    exportPlaylist(filterInfo.listSelectedCases.map(e => e.FullName))
+  }
+
+  const exportCheckedTestCases = () => {
+    if (selectedItems.length === 0) {
+      return
+    }
+    exportPlaylist(selectedItems)
+  }
+
+  const getMenuItems = (): ContextualMenuItemProps[] => {
+    return [
+      {
+        key: 'export_all',
+        text: 'Export All Test Cases to Playlist ...',
+        disabled: filterInfo.listSelectedCases.length === 0,
+        menuAction: exportTestCases
+      },
+      {
+        key: 'export_checked',
+        text: 'Export Checked Test Cases to Playlist ...',
+        disabled: selectedItems.length === 0,
+        menuAction: exportCheckedTestCases
+      },
+      {
+        key: 'import',
+        text: 'Import Playlist ...',
+        disabled: false,
+        menuAction: onShowImportDialog
+      }
+    ]
+  }
+
   return (
     <StepPanel leftNav={wizard} isLoading={selectedTestCases.isLoading} errorMsg={selectedTestCases.errorMsg}>
       <Stack style={{ paddingLeft: 10 }}>
@@ -267,10 +400,37 @@ export function RunSelectedCase(props: StepWizardProps) {
           <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
             <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || filterInfo.listSelectedCases.length === 0} onClick={onRunAllCasesClick} />
             <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
+            <ContextualMenuControl text="Import/Export" shouldFocusOnMount={true} menuItems={getMenuItems()} />
             <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
           </Stack>
         </div>
       </Stack>
+      <Dialog
+        hidden={hideDialog}
+        onDismiss={toggleHideDialog}
+        dialogContentProps={dialogContentProps}
+        modalProps={modalProps}
+      >
+        {
+          showSuccess
+            ? <div>Import playlist successfully!</div>
+            : <Stack tokens={StackGap10}>
+              <p style={{ color: 'red', padding: 3 }}>{importingErrMsg}</p>
+              <FileUploader
+                label="Package"
+                onSuccess={onFileUploadSuccess}
+                maxFileCount={1}
+                suffix={['.playlist']}
+                placeholder="Select .playlist file"
+              />
+            </Stack>
+        }
+        <DialogFooter>
+          {!showSuccess &&
+            <PrimaryButton onClick={onImportPlaylist} text={isUploadingPlaylist ? 'Uploading...' : 'Import Playlist'} disabled={isUploadingPlaylist} />}
+          <DefaultButton onClick={toggleHideDialog} text="Close" disabled={isUploadingPlaylist} />
+        </DialogFooter>
+      </Dialog>
     </StepPanel>
   )
 };

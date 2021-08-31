@@ -37,6 +37,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string Adapters = "Adapters";
 
         public const string UserGuideFolderName = "doc";
+
+        public const string SupportedMinVersion = "4.21.9.0";
     }
 
     public static class ConfigurationConsts
