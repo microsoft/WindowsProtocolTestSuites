@@ -36,6 +36,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         public bool IsRequireMessageSigning { get; set; }
 
         public CompressionAlgorithm[] SupportedCompressionAlgorithms { get; set; }
+        public EncryptionAlgorithm[] SutSupportedEncryptionAlgorithms { get; set; }
 
         public bool IsChainedCompressionSupported { get; set; }
     }
@@ -547,6 +548,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             FetchSmb2CompressionInfo(smb2Info);
 
+            FetchSmb2EncryptionInfo(smb2Info);
+
             return smb2Info;
         }
 
@@ -650,6 +653,78 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 }
             }
         }
+
+        private void FetchSmb2EncryptionInfo(Smb2Info smb2Info)
+        {
+            EncryptionAlgorithm[] excludedEncryptionAlogrithms;
+            if (smb2Info.MaxSupportedDialectRevision < DialectRevision.Smb311)
+            {
+                excludedEncryptionAlogrithms = new EncryptionAlgorithm[]
+                {
+                    EncryptionAlgorithm.ENCRYPTION_NONE,
+                    EncryptionAlgorithm.ENCRYPTION_INVALID,
+                    EncryptionAlgorithm.ENCRYPTION_AES256_CCM,
+                    EncryptionAlgorithm.ENCRYPTION_AES256_GCM
+                };
+            }
+            else
+            {
+                excludedEncryptionAlogrithms = new EncryptionAlgorithm[]
+                {
+                    EncryptionAlgorithm.ENCRYPTION_NONE,
+                    EncryptionAlgorithm.ENCRYPTION_INVALID
+                };
+            }
+
+            var possibleEncryptionAlogrithms = Enum.GetValues(typeof(EncryptionAlgorithm)).Cast<EncryptionAlgorithm>().Except(excludedEncryptionAlogrithms);
+
+            logWriter.AddLog(LogLevel.Information, $"Available EncryptionAlgorithms ==> {String.Join(";", possibleEncryptionAlogrithms.Select(encryptionAlgorithm => encryptionAlgorithm.ToString()))}");
+
+            // Iterate all the possible encryption algorithms since we get back only one encryption algorithm in response.
+            var result = possibleEncryptionAlogrithms.Where(encryptionAlgorithm =>
+            {
+                using (var client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+                {
+                    client.ConnectOverTCP(SUTIpAddress);
+
+                    DialectRevision selectedDialect;
+                    byte[] gssToken;
+                    Packet_Header responseHeader;
+                    NEGOTIATE_Response responsePayload;
+
+                    uint status = client.Negotiate(
+                        0,
+                        1,
+                        Packet_Header_Flags_Values.NONE,
+                        0,
+                        new DialectRevision[] { DialectRevision.Smb311 },
+                        SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                        Capabilities_Values.NONE,
+                        Guid.NewGuid(),
+                        out selectedDialect,
+                        out gssToken,
+                        out responseHeader,
+                        out responsePayload,
+                        preauthHashAlgs: new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                        encryptionAlgs: new EncryptionAlgorithm[] { encryptionAlgorithm }
+                        );
+
+                    if (status == Smb2Status.STATUS_SUCCESS && client.SelectedCipherID == encryptionAlgorithm)
+                    {
+                        logWriter.AddLog(LogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is supported by SUT.");
+                        return true;
+                    }
+                    else
+                    {
+                        logWriter.AddLog(LogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is not supported by SUT.");
+                        return false;
+                    }
+                }
+            });
+
+            smb2Info.SutSupportedEncryptionAlgorithms = result.ToArray();
+        }
+
         /// <summary>
         /// Detect the existence of a share with the detection info client
         /// </summary>
