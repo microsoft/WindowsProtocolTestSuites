@@ -9,11 +9,12 @@ import { getNavSteps, RunSteps } from '../model/DefaultNavSteps'
 import * as ConfigureMethod from './ConfigureMethod'
 import { DetectedResult, DetectionSummary, ResultItem, ResultItemMap } from '../model/DetectionResult'
 import { StackGap10 } from '../components/StackStyle'
-import { PrimaryButton, Stack, Nav, INavLink, INavLinkGroup, IIconProps, IRenderGroupHeaderProps, INavStyles } from '@fluentui/react'
+import { PrimaryButton, Stack, Nav, INavLink, INavLinkGroup, IIconProps, IRenderGroupHeaderProps, INavStyles, Link } from '@fluentui/react'
 import { AppState } from '../store/configureStore'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DetectionResultSrv } from '../services/DetectionResult'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 const getDetectionSummary = (detectionSummary: DetectionSummary) => {
   const currentDate = new Date()
@@ -46,6 +47,8 @@ const getDetectionSummary = (detectionSummary: DetectionSummary) => {
 
 export function DetectionResult(props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+  const configuration = useSelector((state: AppState) => state.configurations)
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
   const detectionResult = useSelector((state: AppState) => state.detectResult)
   const navSteps = getNavSteps(wizardProps, configureMethod)
@@ -64,6 +67,14 @@ export function DetectionResult(props: StepWizardProps) {
   useEffect(() => {
     dispatch(DetectionResultSrv.getDetectionResult())
   }, [dispatch])
+
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+        testSuite={testSuiteInfo.selectedTestSuite}
+        configuration={configuration.selectedConfiguration}
+        wizard={wizard}
+        wizardProps={wizardProps} />
+  }
 
   const winSize = useWindowSize()
 
