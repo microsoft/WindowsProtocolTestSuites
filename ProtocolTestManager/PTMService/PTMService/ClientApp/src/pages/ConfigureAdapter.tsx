@@ -15,9 +15,11 @@ import { AdapterDataSrv } from '../services/ConfigureAdapter'
 import { AppState } from '../store/configureStore'
 import '../css/configureAdapter.css'
 import { AdapterActions } from '../actions/ConfigureAdapterAction'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 export function ConfigureAdapter (props: StepWizardProps) {
   const dispatch = useDispatch()
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
   const configuration = useSelector((state: AppState) => state.configurations)
   const adapters = useSelector((state: AppState) => state.configureAdapter)
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
@@ -33,12 +35,12 @@ export function ConfigureAdapter (props: StepWizardProps) {
   const wizard = WizardNavBar(wizardProps, navSteps)
   const winSize = useWindowSize()
 
-  if (configuration.selectedConfiguration === undefined) {
-    return (
-            <StepPanel leftNav={wizard} isLoading={false} >
-                <div>No configuration selected, please go to <Link onClick={() => { wizardProps.firstStep() }}>Start page</Link></div>
-            </StepPanel>
-    )
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+        testSuite={testSuiteInfo.selectedTestSuite}
+        configuration={configuration.selectedConfiguration}
+        wizard={wizard}
+        wizardProps={wizardProps} />
   }
 
   const onAdapterChanged = (event: AdapterChangedEvent) => {

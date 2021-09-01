@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { PropertyGroupView } from '../components/PropertyGroupView'
 import { StepPanel } from '../components/StepPanel'
@@ -18,6 +19,8 @@ import { AppState } from '../store/configureStore'
 
 export function ConfigureTestCase(props: StepWizardProps) {
   const dispatch = useDispatch()
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+  const configuration = useSelector((state: AppState) => state.configurations)
   const propertyGroups = useSelector((state: AppState) => state.propertyGroups)
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
@@ -30,6 +33,14 @@ export function ConfigureTestCase(props: StepWizardProps) {
       dispatch(PropertyGroupsDataSrv.getPropertyGroups())
     }
   }, [dispatch])
+
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+        testSuite={testSuiteInfo.selectedTestSuite}
+        configuration={configuration.selectedConfiguration}
+        wizard={wizard}
+        wizardProps={wizardProps} />
+  }
 
   const onPropertyValueChange = (updatedProperty: Property) => {
     dispatch(PropertyGroupsActions.updatedEditingPropertyGroupAction(updatedProperty))

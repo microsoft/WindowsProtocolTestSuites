@@ -36,6 +36,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         public bool IsRequireMessageSigning { get; set; }
 
         public CompressionAlgorithm[] SupportedCompressionAlgorithms { get; set; }
+        public EncryptionAlgorithm[] SutSupportedEncryptionAlgorithms { get; set; }
 
         public bool IsChainedCompressionSupported { get; set; }
     }
@@ -65,7 +66,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         #endregion
 
         #region Fields
-        private Logger logWriter = null;
+        private DetectLogger logWriter = null;
         private const string defautBasicShare = "SMBBasic";
         private const string vhdName = "plugin.vhdx";
         private const string fileNameSuffix = ":SharedVirtualDisk";
@@ -92,15 +93,16 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     }
                     catch
                     {
-                        logWriter.AddLog(LogLevel.Information, "GetHostEntry failed");
+                        logWriter.AddLog(DetectLogLevel.Information, "GetHostEntry failed");
                     }
                 }
 
                 return sutName;
             }
         }
+
         public FSDetector
-            (Logger logger,
+            (DetectLogger logger,
             string targetSUT,
             AccountCredential accountCredential,
             SecurityPackageType securityPackageType)
@@ -110,12 +112,12 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             SecurityPackageType = securityPackageType;
 
             logWriter = logger;
-            logWriter.AddLog(LogLevel.Information, string.Format("SutName: {0}", sutName));
-            logWriter.AddLog(LogLevel.Information, string.Format("DomainName: {0}", Credential.DomainName));
-            logWriter.AddLog(LogLevel.Information, string.Format("UserName: {0}", Credential.AccountName));
-            logWriter.AddLog(LogLevel.Information, string.Format("UserPassword: {0}", Credential.Password));
-            logWriter.AddLog(LogLevel.Information, string.Format("SecurityPackageType: {0}", SecurityPackageType.ToString()));
-            logWriter.AddLineToLog(LogLevel.Information);
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("SutName: {0}", sutName));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("DomainName: {0}", Credential.DomainName));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("UserName: {0}", Credential.AccountName));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("UserPassword: {0}", Credential.Password));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("SecurityPackageType: {0}", SecurityPackageType.ToString()));
+            logWriter.AddLineToLog(DetectLogLevel.Information);
         }
 
         public NetworkInfo DetectSUTConnection()
@@ -138,14 +140,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     if (null == addList)
                     {
-                        logWriter.AddLog(LogLevel.Error, string.Format("The SUT name {0} is incorrect.", SUTName));
+                        logWriter.AddLog(DetectLogLevel.Error, string.Format("The SUT name {0} is incorrect.", SUTName));
                     }
 
                     networkInfo.SUTIpList = new List<IPAddress>();
-                    logWriter.AddLog(LogLevel.Information, "IP addresses returned from Dns.GetHostAddresses:");
+                    logWriter.AddLog(DetectLogLevel.Information, "IP addresses returned from Dns.GetHostAddresses:");
                     foreach (var item in addList)
                     {
-                        logWriter.AddLog(LogLevel.Information, item.ToString());
+                        logWriter.AddLog(DetectLogLevel.Information, item.ToString());
                         if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
                             networkInfo.SUTIpList.Add(item);
@@ -154,7 +156,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     if (networkInfo.SUTIpList.Count == 0)
                     {
-                        logWriter.AddLog(LogLevel.Error, string.Format("No available IP address resolved for target SUT {0}.", SUTName));
+                        logWriter.AddLog(DetectLogLevel.Error, string.Format("No available IP address resolved for target SUT {0}.", SUTName));
                     }
                 }
                 DetermineSUTIPAddress(networkInfo.SUTIpList.ToArray());
@@ -163,7 +165,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             catch
             {
-                logWriter.AddLog(LogLevel.Error, string.Format("Detect Target SUT connection failed with SUT name: {0}.", SUTName));
+                logWriter.AddLog(DetectLogLevel.Error, string.Format("Detect Target SUT connection failed with SUT name: {0}.", SUTName));
                 return null;
             }
         }
@@ -184,7 +186,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     catch (Exception ex)
                     {
                         canConnect = false;
-                        logWriter.AddLog(LogLevel.Information, string.Format("Connect to IP {0} failed, reason: {1}", ip, ex.Message));
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("Connect to IP {0} failed, reason: {1}", ip, ex.Message));
                     }
                     if (canConnect)
                     {
@@ -195,7 +197,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 if (!canConnect)
                 {
-                    logWriter.AddLog(LogLevel.Error, string.Format("Can not connect to {0}.\r\nPlease check Target SUT.", SUTName));
+                    logWriter.AddLog(DetectLogLevel.Error, string.Format("Can not connect to {0}.\r\nPlease check Target SUT.", SUTName));
                 }
             }
         }
@@ -238,7 +240,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                                 catch (Exception ex)
                                 {
                                     logWriter.AddLog(
-                                        LogLevel.Information,
+                                        DetectLogLevel.Information,
                                         string.Format("Connect from client IP {0} to SUT IP {1} failed, reason: {2}", ip.Address, SUTIpAddress, ex.Message));
                                 }
                             }
@@ -249,7 +251,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             if (networkInfo.LocalIpList.Count == 0)
             {
-                logWriter.AddLog(LogLevel.Error, "No available local IP address");
+                logWriter.AddLog(DetectLogLevel.Error, "No available local IP address");
             }
 
             #endregion
@@ -259,9 +261,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private void LogIPConfig()
         {
-            logWriter.AddLog(LogLevel.Information, "ipconfig /all");
+            logWriter.AddLog(DetectLogLevel.Information, "ipconfig /all");
             string result = logWriter.RunCmdAndGetOutput("ipconfig /all");
-            logWriter.AddLog(LogLevel.Information, result);
+            logWriter.AddLog(DetectLogLevel.Information, result);
         }
 
         /// <summary>
@@ -368,7 +370,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 catch (Exception e)
                 {
                     // Swallow all exceptions when cleaning up.
-                    logWriter.AddLog(LogLevel.Information, "Exception in Cleanup: " + e.Message);
+                    logWriter.AddLog(DetectLogLevel.Information, "Exception in Cleanup: " + e.Message);
                 }
             }
         }
@@ -384,7 +386,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         {
             messageId = 1;
             sessionId = 0;
-            logWriter.AddLog(LogLevel.Information, "Client connects to server");
+            logWriter.AddLog(DetectLogLevel.Information, "Client connects to server");
             client.ConnectOverTCP(SUTIpAddress);
 
             #region Negotiate
@@ -393,7 +395,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             byte[] gssToken;
             Packet_Header header;
             clientGuid = Guid.NewGuid();
-            logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
+            logWriter.AddLog(DetectLogLevel.Information, "Client sends multi-protocol Negotiate to server");
             MultiProtocolNegotiate(
                 client,
                 1,
@@ -437,7 +439,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             do
             {
-                logWriter.AddLog(LogLevel.Information, "Client sends SessionSetup to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends SessionSetup to server");
                 client.SessionSetup(
                     1,
                     64,
@@ -491,7 +493,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Information, "Detect platform failure. Reason: " + ex.Message);
+                logWriter.AddLog(DetectLogLevel.Information, "Detect platform failure. Reason: " + ex.Message);
             }
             try
             {
@@ -499,7 +501,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(LogLevel.Information, "Detect useraccounts failure. Reason: " + ex.Message);
+                logWriter.AddLog(DetectLogLevel.Information, "Detect useraccounts failure. Reason: " + ex.Message);
             }
         }
 
@@ -509,7 +511,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             using (Smb2Client smb2Client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
-                logWriter.AddLog(LogLevel.Information, "Client connects to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client connects to server");
                 smb2Client.ConnectOverTCP(SUTIpAddress);
 
                 DialectRevision selectedDialect;
@@ -517,7 +519,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 Packet_Header responseHeader;
                 NEGOTIATE_Response responsePayload;
                 ulong messageId = 1;
-                logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends multi-protocol Negotiate to server");
                 MultiProtocolNegotiate(
                     smb2Client,
                     0,
@@ -547,6 +549,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             FetchSmb2CompressionInfo(smb2Info);
 
+            FetchSmb2EncryptionInfo(smb2Info);
+
             return smb2Info;
         }
 
@@ -554,7 +558,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         {
             if (smb2Info.MaxSupportedDialectRevision < DialectRevision.Smb311)
             {
-                logWriter.AddLog(LogLevel.Information, "SMB dialect less than 3.1.1 does not support compression.");
+                logWriter.AddLog(DetectLogLevel.Information, "SMB dialect less than 3.1.1 does not support compression.");
                 smb2Info.SupportedCompressionAlgorithms = new CompressionAlgorithm[0];
                 smb2Info.IsChainedCompressionSupported = false;
                 return;
@@ -595,12 +599,12 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     if (status == Smb2Status.STATUS_SUCCESS && client.CompressionInfo.CompressionIds.Length == 1 && client.CompressionInfo.CompressionIds[0] == compressionAlgorithm)
                     {
-                        logWriter.AddLog(LogLevel.Information, $"Compression algorithm: {compressionAlgorithm} is supported by SUT.");
+                        logWriter.AddLog(DetectLogLevel.Information, $"Compression algorithm: {compressionAlgorithm} is supported by SUT.");
                         return true;
                     }
                     else
                     {
-                        logWriter.AddLog(LogLevel.Information, $"Compression algorithm: {compressionAlgorithm} is not supported by SUT.");
+                        logWriter.AddLog(DetectLogLevel.Information, $"Compression algorithm: {compressionAlgorithm} is not supported by SUT.");
                         return false;
                     }
                 }
@@ -638,18 +642,90 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 if (status == Smb2Status.STATUS_SUCCESS && client.CompressionInfo.SupportChainedCompression)
                 {
-                    logWriter.AddLog(LogLevel.Information, "Chained compression is supported by SUT.");
+                    logWriter.AddLog(DetectLogLevel.Information, "Chained compression is supported by SUT.");
 
                     smb2Info.IsChainedCompressionSupported = true;
                 }
                 else
                 {
-                    logWriter.AddLog(LogLevel.Information, "Chained compression is not supported by SUT.");
+                    logWriter.AddLog(DetectLogLevel.Information, "Chained compression is not supported by SUT.");
 
                     smb2Info.IsChainedCompressionSupported = false;
                 }
             }
         }
+
+        private void FetchSmb2EncryptionInfo(Smb2Info smb2Info)
+        {
+            EncryptionAlgorithm[] excludedEncryptionAlogrithms;
+            if (smb2Info.MaxSupportedDialectRevision < DialectRevision.Smb311)
+            {
+                excludedEncryptionAlogrithms = new EncryptionAlgorithm[]
+                {
+                    EncryptionAlgorithm.ENCRYPTION_NONE,
+                    EncryptionAlgorithm.ENCRYPTION_INVALID,
+                    EncryptionAlgorithm.ENCRYPTION_AES256_CCM,
+                    EncryptionAlgorithm.ENCRYPTION_AES256_GCM
+                };
+            }
+            else
+            {
+                excludedEncryptionAlogrithms = new EncryptionAlgorithm[]
+                {
+                    EncryptionAlgorithm.ENCRYPTION_NONE,
+                    EncryptionAlgorithm.ENCRYPTION_INVALID
+                };
+            }
+
+            var possibleEncryptionAlogrithms = Enum.GetValues(typeof(EncryptionAlgorithm)).Cast<EncryptionAlgorithm>().Except(excludedEncryptionAlogrithms);
+
+            logWriter.AddLog(DetectLogLevel.Information, $"Available EncryptionAlgorithms ==> {String.Join(";", possibleEncryptionAlogrithms.Select(encryptionAlgorithm => encryptionAlgorithm.ToString()))}");
+
+            // Iterate all the possible encryption algorithms since we get back only one encryption algorithm in response.
+            var result = possibleEncryptionAlogrithms.Where(encryptionAlgorithm =>
+            {
+                using (var client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+                {
+                    client.ConnectOverTCP(SUTIpAddress);
+
+                    DialectRevision selectedDialect;
+                    byte[] gssToken;
+                    Packet_Header responseHeader;
+                    NEGOTIATE_Response responsePayload;
+
+                    uint status = client.Negotiate(
+                        0,
+                        1,
+                        Packet_Header_Flags_Values.NONE,
+                        0,
+                        new DialectRevision[] { DialectRevision.Smb311 },
+                        SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                        Capabilities_Values.NONE,
+                        Guid.NewGuid(),
+                        out selectedDialect,
+                        out gssToken,
+                        out responseHeader,
+                        out responsePayload,
+                        preauthHashAlgs: new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                        encryptionAlgs: new EncryptionAlgorithm[] { encryptionAlgorithm }
+                        );
+
+                    if (status == Smb2Status.STATUS_SUCCESS && client.SelectedCipherID == encryptionAlgorithm)
+                    {
+                        logWriter.AddLog(DetectLogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is supported by SUT.");
+                        return true;
+                    }
+                    else
+                    {
+                        logWriter.AddLog(DetectLogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is not supported by SUT.");
+                        return false;
+                    }
+                }
+            });
+
+            smb2Info.SutSupportedEncryptionAlgorithms = result.ToArray();
+        }
+
         /// <summary>
         /// Detect the existence of a share with the detection info client
         /// </summary>
@@ -664,14 +740,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 uint treeId;
                 try
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", shareName));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Try to connect share {0}.", shareName));
                     ConnectToShare(shareName, info, client, out messageId, out sessionId, out treeId);
-                    logWriter.AddLog(LogLevel.Information, string.Format("Succeed to connect share {0}.", shareName));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Succeed to connect share {0}.", shareName));
                 }
                 catch (Exception e)
                 {
                     // Show error to user.
-                    logWriter.AddLog(LogLevel.Information, string.Format("Connect to share {0} failed with error message: {1}.", shareName, e.Message));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Connect to share {0} failed with error message: {1}.", shareName, e.Message));
                     return DetectResult.DetectFail;
                 }
             }
@@ -681,15 +757,17 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         {
             string[] shareList = null;
 
-            try
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                shareList = ServerHelper.EnumShares(SUTName, Credential.AccountName, Credential.DomainName, Credential.Password);
+                try
+                {
+                    shareList = ServerHelper.EnumShares(SUTName, Credential.AccountName, Credential.DomainName, Credential.Password);
+                }
+                catch (Exception ex)
+                {
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
+                }
             }
-            catch (Exception ex)
-            {
-                logWriter.AddLog(LogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
-            }
-
 
             if (shareList == null)
             {
@@ -702,14 +780,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     uint treeId;
                     try
                     {
-                        logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
                         ConnectToShare(info.BasicShareName, info, client, out messageId, out sessionId, out treeId);
                         shareList = new string[] { info.BasicShareName };
                     }
                     catch
                     {
                         // Show error to user.
-                        logWriter.AddLog(LogLevel.Error, "Did not find shares on SUT. Please check share setting and SUT password.");
+                        logWriter.AddLog(DetectLogLevel.Error, "Did not find shares on SUT. Please check the share setting and SUT password.");
                     }
                 }
             }
@@ -731,13 +809,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 uint treeId;
                 try
                 {
-                    logWriter.AddLog(LogLevel.Information, string.Format("Try to connect share {0}.", info.clusterShareFullPath));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Try to connect share {0}.", info.clusterShareFullPath));
                     ConnectToClusterShare(info, client, out messageId, out sessionId, out treeId);
                 }
                 catch
                 {
                     // Show error to user.
-                    logWriter.AddLog(LogLevel.Error, string.Format("Cannot connect to cluster share {0}. Please check share setting and SUT password.", info.clusterShareFullPath));
+                    logWriter.AddLog(DetectLogLevel.Error, string.Format("Cannot connect to cluster share {0}. Please check the share setting and SUT password.", info.clusterShareFullPath));
                     return false;
                 }
             }
@@ -771,7 +849,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                             smb2Client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
                         }
 
-                        logWriter.AddLog(LogLevel.Information, string.Format("Client sends TreeConnect to {0} to retrieve the share properties.", uncShare));
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("Client sends TreeConnect to {0} to retrieve the share properties.", uncShare));
                         smb2Client.TreeConnect(
                             1,
                             1,
@@ -818,7 +896,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     }
                     catch (Exception ex)
                     {
-                        logWriter.AddLog(LogLevel.Information, string.Format("Exception when retrieving share properties: " + ex.Message));
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("Exception when retrieving share properties: " + ex.Message));
                         // Swallow all exceptions when cleaning up.
                     }
                 }
@@ -829,7 +907,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private void LogFailedStatus(string operation, uint status)
         {
-            logWriter.AddLog(LogLevel.Information, string.Format(operation + " failed, status: {0}", Smb2Status.GetStatusCode(status)));
+            logWriter.AddLog(DetectLogLevel.Information, string.Format(operation + " failed, status: {0}", Smb2Status.GetStatusCode(status)));
         }
 
         /// <summary>
@@ -854,7 +932,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             TREE_CONNECT_Response treeConnectResp;
             string uncSharePath = Smb2Utility.GetUncPath(info.targetSUT, sharename);
-            logWriter.AddLog(LogLevel.Information, "Client sends TreeConnect to server");
+            logWriter.AddLog(DetectLogLevel.Information, "Client sends TreeConnect to server");
             if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) // When dialect is 3.11, TreeConnect must be signed or encrypted.
             {
                 client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
@@ -907,7 +985,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             TREE_CONNECT_Response treeConnectResp;
             string uncSharePath = info.clusterShareFullPath;
-            logWriter.AddLog(LogLevel.Information, "Client sends TreeConnect to server");
+            logWriter.AddLog(DetectLogLevel.Information, "Client sends TreeConnect to server");
             if (info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) // When dialect is 3.11, TreeConnect must be signed or encrypted.
             {
                 client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
@@ -946,7 +1024,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             foreach (ManagementObject result in resultCollection)
             {
                 info.platform = ConvertPlatform(result["Version"].ToString(), result["BuildNumber"].ToString());
-                logWriter.AddLog(LogLevel.Information, "Platform: " + info.platform);
+                logWriter.AddLog(DetectLogLevel.Information, "Platform: " + info.platform);
                 break;
             }
         }
@@ -1042,10 +1120,10 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 info.nonadminUserAccounts.Add(userAccount);
             }
-            logWriter.AddLog(LogLevel.Information, "Nonadmin Useraccounts: ");
+            logWriter.AddLog(DetectLogLevel.Information, "Nonadmin Useraccounts: ");
             foreach (string account in info.nonadminUserAccounts)
             {
-                logWriter.AddLog(LogLevel.Information, "\t" + account);
+                logWriter.AddLog(DetectLogLevel.Information, "\t" + account);
             }
         }
 

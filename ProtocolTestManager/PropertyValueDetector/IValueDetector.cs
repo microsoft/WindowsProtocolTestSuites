@@ -107,8 +107,9 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <summary>
         /// Runs property autodetection.
         /// </summary>
+        /// <param name="context">Detection Context.</param>
         /// <returns>Return true if the function is succeeded.</returns>
-        bool RunDetection();
+        bool RunDetection(DetectContext context);
 
         /// <summary>
         /// Gets the detect result.
