@@ -32,6 +32,7 @@ import { PropertyGroupView } from '../components/PropertyGroupView'
 import { PropertyGroup } from '../model/PropertyGroup'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 const getStyle = (status: DetectionStepStatus): CSSProperties => {
   if (status === 'Failed') {
@@ -58,6 +59,8 @@ export function AutoDetection(props: StepWizardProps) {
 
   const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
   const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+  const configuration = useSelector((state: AppState) => state.configurations)
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
   const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
@@ -72,6 +75,14 @@ export function AutoDetection(props: StepWizardProps) {
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
   }, [dispatch])
+
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+            testSuite={testSuiteInfo.selectedTestSuite}
+            configuration={configuration.selectedConfiguration}
+            wizard={wizard}
+            wizardProps={wizardProps} />
+  }
 
   const autoDetectionStepsUpdateCallback = useCallback((currAutoDetection: AutoDetectionState) => {
     if (currAutoDetection.detectionSteps?.Result.Status !== DetectionStatus.InProgress) {

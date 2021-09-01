@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react'
+import { ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, Dropdown, Fabric, IColumn, IDropdownOption, IObjectWithKey, Label, Link, MarqueeSelection, PrimaryButton, SearchBox, Selection, Stack } from '@fluentui/react'
 import { useBoolean, useForceUpdate } from '@uifabric/react-hooks'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,6 +19,7 @@ import { AppState } from '../store/configureStore'
 import { TestCase } from '../model/TestCase'
 import { ContextualMenuControl, ContextualMenuItemProps } from '../components/ContextualMenuControl'
 import { FileUploader, IFile } from '../components/FileUploader'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 interface ListItem extends IObjectWithKey {
   Name: string;
@@ -112,6 +113,8 @@ const exportPlaylist = (items: string[]) => {
 export function RunSelectedCase(props: StepWizardProps) {
   const dispatch = useDispatch()
 
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+  const configuration = useSelector((state: AppState) => state.configurations)
   const filterInfo = useSelector((state: AppState) => state.filterInfo)
   const selectedTestCases = useSelector((state: AppState) => state.selectedTestCases)
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
@@ -240,6 +243,14 @@ export function RunSelectedCase(props: StepWizardProps) {
       setFilteredTestCases(allListItems)
     }
   }, [filterPhrase, allListItems])
+
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+        testSuite={testSuiteInfo.selectedTestSuite}
+        configuration={configuration.selectedConfiguration}
+        wizard={wizard}
+        wizardProps={wizardProps} />
+  }
 
   const onColumnHeaderClick = useCallback((column: IColumn) => {
     const currColumn: IColumn = listColumnsRef.current!.filter(currCol => column.key === currCol.key)[0]

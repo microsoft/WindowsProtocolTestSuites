@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { PrimaryButton, Stack, Dialog, DialogFooter, DefaultButton, DialogType, ContextualMenu } from '@fluentui/react'
+import { PrimaryButton, Stack, Dialog, DialogFooter, DefaultButton, DialogType, ContextualMenu, Link } from '@fluentui/react'
 import { useBoolean } from '@uifabric/react-hooks'
 import { CSSProperties, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,6 +16,7 @@ import { getNavSteps, RunSteps } from '../model/DefaultNavSteps'
 import { AppState } from '../store/configureStore'
 import { ProfileDataSrv } from '../services/ProfileService'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 export const ConfigurationMethod_AutoDetection = 'AutoDetection'
 export const ConfigurationMethod_Manual = 'Manual'
@@ -23,13 +24,23 @@ export const ConfigurationMethod_Profile = 'Profile'
 
 export function ConfigureMethod(props: StepWizardProps) {
   const dispatch = useDispatch()
-
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+  const configuration = useSelector((state: AppState) => state.configurations)
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
   const [hideAutoDetectionWarningDialog, { toggle: toggleAutoDetectionWarningDialog }] = useBoolean(true)
   const [importingErrMsg, setImportingErrMsg] = useState('')
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const navSteps = getNavSteps(wizardProps)
+  const wizard = WizardNavBar(wizardProps, navSteps)
   const [file, setFile] = useState<IFile>()
+
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+        testSuite={testSuiteInfo.selectedTestSuite}
+        configuration={configuration.selectedConfiguration}
+        wizard={wizard}
+        wizardProps={wizardProps} />
+  }
 
   const items: MethodItemProp[] = [{
     Title: 'Run Auto-Detection',
