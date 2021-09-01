@@ -175,7 +175,6 @@ Function Complete-Configure
 Function Config-Driver
 {
 	$endPointPath = "$env:SystemDrive\Kerberos-TestSuite-ServerEP"
-	#$version = Get-ChildItem $endPointPath | where {$_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1        
 	$dataFile = "$WorkingPath\Scripts\ParamConfig.xml"
 
 	#-----------------------------------------------------------------------------------------------
@@ -961,7 +960,7 @@ Function Config-Driver
 	# Check test result directory
     if(!(Test-Path -Path $ptfPath))
     {
-        md $ptfPath
+        mkdir $ptfPath
     }
 	copy $DepPtfConfig $ptfPath
 
