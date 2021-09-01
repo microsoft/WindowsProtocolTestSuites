@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
     {
         public DetectResult[] CheckIOCTL_CopyOffload(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting IOCTL CopyOffload =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting IOCTL CopyOffload =====");
 
             #region Initialization
 
@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 #endregion
 
                 #region Create
-                logWriter.AddLog(LogLevel.Information, "Client creates a file with specified length as for offload copy.");
+                logWriter.AddLog(DetectLogLevel.Information, "Client creates a file with specified length as for offload copy.");
                 Smb2CreateContextResponse[] serverCreateContexts;
                 FILEID fileIdSrc;
                 CREATE_Response createResponse;
@@ -120,7 +120,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 #endregion
 
                 #region IOCTL OFFLOAD_READ
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "Client sends IOCTL request with FSCTL_OFFLOAD_READ to ask server to generate the token of the content for offload copy.");
                 STORAGE_OFFLOAD_TOKEN token;
                 ulong fileOffsetToRead = 0; //FileOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
@@ -166,11 +166,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 else
                 {
                     result[0] = DetectResult.Supported;
-                    logWriter.AddLog(LogLevel.Information, "FSCTL_OFFLOAD_READ is supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "FSCTL_OFFLOAD_READ is supported");
 
                     #region IOCTL OFFLOAD_WRITE
 
-                    logWriter.AddLog(LogLevel.Information, "Client creates another file as the destination of offload copy.");
+                    logWriter.AddLog(DetectLogLevel.Information, "Client creates another file as the destination of offload copy.");
 
                     // Create another file as the destination of offload copy.
                     FILEID fileIdDes;
@@ -255,7 +255,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                         token = new STORAGE_OFFLOAD_TOKEN();
                     }
 
-                    logWriter.AddLog(LogLevel.Information,
+                    logWriter.AddLog(DetectLogLevel.Information,
                         "Client sends IOCTL request with FSCTL_OFFLOAD_WRITE to ask server to copy the content from source to destination.");
                     ulong fileOffsetToWrite = 0; //FileOffset should be aligned to logical sector boundary on the volume, e.g. 512 bytes
                     ulong copyLengthToWrite = (ulong)contentLength * 1024; //CopyLength should be aligned to logical sector boundary on the volume, e.g. 512 bytes
@@ -292,7 +292,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     if (Smb2Status.STATUS_SUCCESS == header.Status)
                     {
                         result[1] = DetectResult.Supported;
-                        logWriter.AddLog(LogLevel.Information, "FSCTL_OFFLOAD_WRITE is supported");
+                        logWriter.AddLog(DetectLogLevel.Information, "FSCTL_OFFLOAD_WRITE is supported");
                     }
                     else
                     {
@@ -369,7 +369,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckIOCTL_FileLevelTrim(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting FSCTL_FILE_LEVEL_TRIM =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting FSCTL_FILE_LEVEL_TRIM =====");
             string content = Smb2Utility.CreateRandomString(32);
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
@@ -380,7 +380,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 ConnectToShare(sharename, info, client, out messageId, out sessionId, out treeId);
 
                 #region Create
-                logWriter.AddLog(LogLevel.Information, "Client creates a file to prepare for the trimming");
+                logWriter.AddLog(DetectLogLevel.Information, "Client creates a file to prepare for the trimming");
                 Smb2CreateContextResponse[] serverCreateContexts;
                 FILEID fileId;
                 CREATE_Response createResponse;
@@ -518,7 +518,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 IOCTL_Response ioCtlResponse;
                 byte[] respInput = new byte[1024];
-                logWriter.AddLog(LogLevel.Information, "Client sends FSCTL_FILE_LEVEL_TRIM to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends FSCTL_FILE_LEVEL_TRIM to server");
                 client.IoCtl(
                     1,
                     1,
@@ -544,7 +544,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 if (header.Status == Smb2Status.STATUS_SUCCESS)
                 {
                     result = DetectResult.Supported;
-                    logWriter.AddLog(LogLevel.Information, "FSCTL_FILE_LEVEL_TRIM is supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "FSCTL_FILE_LEVEL_TRIM is supported");
                 }
                 else
                 {
@@ -598,7 +598,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckIOCTL_ValidateNegotiateInfo(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting IOCTL ValidateNegotiateInfo =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting IOCTL ValidateNegotiateInfo =====");
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -610,7 +610,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 bool encryptionRequired = false;
                 DialectRevision[] preferredDialects;
 
-                logWriter.AddLog(LogLevel.Information, "Client connects to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client connects to server");
                 client.ConnectOverTCP(SUTIpAddress);
 
                 if (info.CheckHigherDialect(info.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb311))
@@ -629,7 +629,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 byte[] gssToken;
                 Packet_Header header;
                 clientGuid = Guid.NewGuid();
-                logWriter.AddLog(LogLevel.Information, "Client sends multi-protocol Negotiate to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends multi-protocol Negotiate to server");
                 MultiProtocolNegotiate(
                     client,
                     1,
@@ -674,7 +674,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 do
                 {
-                    logWriter.AddLog(LogLevel.Information, "Client sends SessionSetup to server");
+                    logWriter.AddLog(DetectLogLevel.Information, "Client sends SessionSetup to server");
                     client.SessionSetup(
                         1,
                         64,
@@ -721,7 +721,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 TREE_CONNECT_Response treeConnectResp;
                 string uncShare = string.Format(@"\\{0}\{1}", SUTName, sharename);
 
-                logWriter.AddLog(LogLevel.Information, "Client sends TreeConnect to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends TreeConnect to server");
                 client.TreeConnect(
                     1,
                     1,
@@ -764,7 +764,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 ioCtlFileId.Persistent = 0xFFFFFFFFFFFFFFFF;
                 ioCtlFileId.Volatile = 0xFFFFFFFFFFFFFFFF;
 
-                logWriter.AddLog(LogLevel.Information, "Client sends FSCTL_VALIDATE_NEGOTIATE_INFO to server");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends FSCTL_VALIDATE_NEGOTIATE_INFO to server");
 
                 // Validate Negotiate Info Request should be signed.
                 client.EnableSessionSigningAndEncryption(sessionId, true, encryptionRequired);
@@ -798,26 +798,26 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     if ((Capabilities_Values)negotiateResponse.Capabilities != validateNegotiateInfoResp.Capabilities)
                     {
-                        logWriter.AddLog(LogLevel.Information, "Capabilities returned in ValidateNegotiateInfo response doesn't eaqual to server capabilities in original Negotiate response");
+                        logWriter.AddLog(DetectLogLevel.Information, "Capabilities returned in ValidateNegotiateInfo response doesn't eaqual to server capabilities in original Negotiate response");
                     }
 
                     if (negotiateResponse.ServerGuid != validateNegotiateInfoResp.Guid)
                     {
-                        logWriter.AddLog(LogLevel.Information, "ServerGuid returned in ValidateNegotiateInfo response doesn't eaqual to server ServerGuid in original Negotiate response");
+                        logWriter.AddLog(DetectLogLevel.Information, "ServerGuid returned in ValidateNegotiateInfo response doesn't eaqual to server ServerGuid in original Negotiate response");
                     }
 
                     if ((SecurityMode_Values)negotiateResponse.SecurityMode != validateNegotiateInfoResp.SecurityMode)
                     {
-                        logWriter.AddLog(LogLevel.Information, "SecurityMode returned in ValidateNegotiateInfo response doesn't eaqual to server SecurityMode in original Negotiate response");
+                        logWriter.AddLog(DetectLogLevel.Information, "SecurityMode returned in ValidateNegotiateInfo response doesn't eaqual to server SecurityMode in original Negotiate response");
                     }
 
                     if (negotiateResponse.DialectRevision != validateNegotiateInfoResp.Dialect)
                     {
-                        logWriter.AddLog(LogLevel.Information, "Validation failed for dialect supported on server");
+                        logWriter.AddLog(DetectLogLevel.Information, "Validation failed for dialect supported on server");
                     }
 
                     result = DetectResult.Supported;
-                    logWriter.AddLog(LogLevel.Information, "FSCTL_VALIDATE_NEGOTIATE_INFO is supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "FSCTL_VALIDATE_NEGOTIATE_INFO is supported");
                 }
 
                 #endregion
@@ -850,7 +850,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckIOCTL_ResilientHandle(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting IOCTL ResilientHandle =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting IOCTL ResilientHandle =====");
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -865,7 +865,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 FILEID fileId;
                 CREATE_Response createResponse;
                 Packet_Header header;
-                logWriter.AddLog(LogLevel.Information, "Client opens a file");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens a file");
                 client.Create(
                     1,
                     1,
@@ -920,7 +920,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     Array.Copy(resiliencyRequestBytes, buffer, resiliencyRequestBytes.Length);
                 }
 
-                logWriter.AddLog(LogLevel.Information, "Client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request.");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request.");
                 client.IoCtl(
                     1,
                     1,
@@ -948,7 +948,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 else
                 {
                     result = DetectResult.Supported;
-                    logWriter.AddLog(LogLevel.Information, "FSCTL_LMR_REQUEST_RESILIENCY is supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "FSCTL_LMR_REQUEST_RESILIENCY is supported");
                 }
 
                 #endregion
@@ -1001,8 +1001,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult[] CheckIOCTL_IntegrityInfo(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting IOCTL IntegrityInfo =====");
-            logWriter.AddLog(LogLevel.Information, "Share name: " + sharename);
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting IOCTL IntegrityInfo =====");
+            logWriter.AddLog(DetectLogLevel.Information, "Share name: " + sharename);
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -1017,7 +1017,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 FILEID fileId;
                 CREATE_Response createResponse;
                 Packet_Header header;
-                logWriter.AddLog(LogLevel.Information, "Client opens a file");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens a file");
                 client.Create(
                     1,
                     1,
@@ -1050,7 +1050,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                 #region IOCTL GET IntegrityInfo
 
-                logWriter.AddLog(LogLevel.Information, "Client sends IOCTL request with FSCTL_GET_INTEGRITY_INFORMATION.");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends IOCTL request with FSCTL_GET_INTEGRITY_INFORMATION.");
                 FSCTL_GET_INTEGRITY_INFO_OUTPUT getIntegrityInfo;
                 IOCTL_Response ioCtlResponse;
                 byte[] buffer = new byte[1024];
@@ -1089,13 +1089,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFO_OUTPUT>(respOutput);
 
                 result[0] = DetectResult.Supported;
-                logWriter.AddLog(LogLevel.Information, "FSCTL_GET_INTEGRITY_INFORMATION is supported");
+                logWriter.AddLog(DetectLogLevel.Information, "FSCTL_GET_INTEGRITY_INFORMATION is supported");
 
                 #endregion
 
                 #region IOCTL SET IntegrityInfo
 
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "Client sends IOCTL request with FSCTL_SET_INTEGRITY_INFORMATION after changed the value of the following fields in FSCTL_SET_INTEGRIY_INFO_INPUT: "
                     + "ChecksumAlgorithm, Flags, Reserved.");
                 FSCTL_SET_INTEGRIY_INFO_INPUT setIntegrityInfo;
@@ -1139,7 +1139,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     buffer = new byte[1024];
                     respInput = new byte[1024];
                     respOutput = new byte[1024];
-                    logWriter.AddLog(LogLevel.Information, "Client sends second FSCTL_GET_INTEGRITY_INFORMATION.");
+                    logWriter.AddLog(DetectLogLevel.Information, "Client sends second FSCTL_GET_INTEGRITY_INFORMATION.");
                     client.IoCtl(
                         1,
                         1,
@@ -1168,11 +1168,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     if ((ushort)setIntegrityInfo.ChecksumAlgorithm != (ushort)getIntegrityInfo.ChecksumAlgorithm)
                     {
-                        logWriter.AddLog(LogLevel.Information, "Failed to set the ChecksumAlgorithm field to value " + setIntegrityInfo.ChecksumAlgorithm);
+                        logWriter.AddLog(DetectLogLevel.Information, "Failed to set the ChecksumAlgorithm field to value " + setIntegrityInfo.ChecksumAlgorithm);
                     }
 
                     result[1] = DetectResult.Supported;
-                    logWriter.AddLog(LogLevel.Information, "FSCTL_SET_INTEGRITY_INFORMATION is supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "FSCTL_SET_INTEGRITY_INFORMATION is supported");
 
                     #endregion
                 }
@@ -1225,8 +1225,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckIOCTL_EnumerateSnapShots(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting IOCTL FSCTL_SRV_ENUMERATE_SNAPSHOTS =====");
-            logWriter.AddLog(LogLevel.Information, "Share name: " + sharename);
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting IOCTL FSCTL_SRV_ENUMERATE_SNAPSHOTS =====");
+            logWriter.AddLog(DetectLogLevel.Information, "Share name: " + sharename);
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -1241,7 +1241,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 FILEID fileId;
                 CREATE_Response createResponse;
                 Packet_Header header;
-                logWriter.AddLog(LogLevel.Information, "Client opens a file");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens a file");
                 client.Create(
                     1,
                     1,
@@ -1271,14 +1271,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 }
                 else
                 {
-                    logWriter.AddLog(LogLevel.Information, "Client successfully opens a file before checking FSCTL_SRV_ENUMERATE_SNAPSHOTS IOCTL.");
+                    logWriter.AddLog(DetectLogLevel.Information, "Client successfully opens a file before checking FSCTL_SRV_ENUMERATE_SNAPSHOTS IOCTL.");
                 }
 
                 #endregion
 
                 #region IOCTL FSCTL_SRV_ENUMERATE_SNAPSHOTS
 
-                logWriter.AddLog(LogLevel.Information, "Client sends IOCTL request with FSCTL_SRV_ENUMERATE_SNAPSHOTS.");
+                logWriter.AddLog(DetectLogLevel.Information, "Client sends IOCTL request with FSCTL_SRV_ENUMERATE_SNAPSHOTS.");
                 IOCTL_Response ioCtlResponse;
                 byte[] buffer = new byte[1024];
                 byte[] respInput = new byte[1024];
@@ -1313,7 +1313,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 }
 
                 result = DetectResult.Supported;
-                logWriter.AddLog(LogLevel.Information, "FSCTL_SRV_ENUMERATE_SNAPSHOTS is supported");
+                logWriter.AddLog(DetectLogLevel.Information, "FSCTL_SRV_ENUMERATE_SNAPSHOTS is supported");
 
                 #endregion
 

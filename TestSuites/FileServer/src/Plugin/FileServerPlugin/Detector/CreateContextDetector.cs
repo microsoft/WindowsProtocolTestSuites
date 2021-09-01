@@ -1,13 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System;
+using System.Text;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -24,14 +20,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// <returns>Returns a DetectResult instance</returns>
         public DetectResult CheckCreateContexts_AppInstanceId(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context AppInstanceId =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context AppInstanceId =====");
             using (Smb2Client clientForInitialOpen = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)),
                 clientForReOpen = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageIdInitial;
                 ulong sessionIdInitial;
                 uint treeIdInitial;
-                logWriter.AddLog(LogLevel.Information, "Start first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
+                logWriter.AddLog(DetectLogLevel.Information, "Start first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
                 ConnectToShare(sharename, info, clientForInitialOpen, out messageIdInitial, out sessionIdInitial, out treeIdInitial);
 
                 #region client 1 connect to server
@@ -41,7 +37,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 Packet_Header header;
                 Smb2CreateContextResponse[] serverCreateContexts;
                 string fileName = "AppInstanceId_" + Guid.NewGuid() + ".txt";
-                logWriter.AddLog(LogLevel.Information, "The first client opens a file with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and SMB2_CREATE_APP_INSTANCE_ID.");
+                logWriter.AddLog(DetectLogLevel.Information, "The first client opens a file with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and SMB2_CREATE_APP_INSTANCE_ID.");
                 uint status = clientForInitialOpen.Create(
                     1,
                     1,
@@ -85,14 +81,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 ulong messageId;
                 ulong sessionId;
                 uint treeId;
-                logWriter.AddLog(LogLevel.Information, "Start second client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
+                logWriter.AddLog(DetectLogLevel.Information, "Start second client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT");
                 ConnectToShare(sharename, info, clientForReOpen, out messageId, out sessionId, out treeId);
 
                 try
                 {
                     // Test if a second client can close the previous open.
                     FILEID fileId;
-                    logWriter.AddLog(LogLevel.Information, "The second client opens the same file with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and same AppInstanceId.");
+                    logWriter.AddLog(DetectLogLevel.Information, "The second client opens the same file with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and same AppInstanceId.");
                     status = clientForReOpen.Create(
                         1,
                         1,
@@ -127,7 +123,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 }
                 catch (Exception ex)
                 {
-                    logWriter.AddLog(LogLevel.Information, "Create failed, reason: " + ex.Message);
+                    logWriter.AddLog(DetectLogLevel.Information, "Create failed, reason: " + ex.Message);
                     return DetectResult.UnSupported;
                 }
 
@@ -141,7 +137,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 // Write data using the first client
                 // If AppInstanceId is supported, then the open should be closed.
                 WRITE_Response writeResponse;
-                logWriter.AddLog(LogLevel.Information, "The first client writes to the file to check if the open is closed");
+                logWriter.AddLog(DetectLogLevel.Information, "The first client writes to the file to check if the open is closed");
                 status = clientForInitialOpen.Write(
                     1,
                     1,
@@ -163,11 +159,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 if (status == Smb2Status.STATUS_FILE_CLOSED)
                 {
                     result = DetectResult.Supported;
-                    logWriter.AddLog(LogLevel.Information, "The open is closed. So Create context AppInstanceId is supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "The open is closed. So Create context AppInstanceId is supported");
                 }
                 else
                 {
-                    logWriter.AddLog(LogLevel.Information, "The open is not closed. So Create context AppInstanceId is not supported");
+                    logWriter.AddLog(DetectLogLevel.Information, "The open is not closed. So Create context AppInstanceId is not supported");
                 }
                 return result;
             }
@@ -176,7 +172,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckCreateContexts_HandleV1BatchOplock(string sharename, DialectRevision smb2Dialect, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context HandleV1 with Batch oplock =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context HandleV1 with Batch oplock =====");
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageId;
@@ -191,7 +187,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 Smb2CreateContextResponse[] serverCreateContexts = null;
                 string fileName = "DurableHandleV1BatchOplock_" + Guid.NewGuid() + ".txt";
                 CREATE_Response createResponse;
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a durable handle v1 and batch oplock");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a durable handle v1 and batch oplock");
                 uint status = client.Create(
                     1,
                     1,
@@ -257,7 +253,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateDurableHandleResponse)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context HandleV1 with Batch oplock is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context HandleV1 with Batch oplock is supported");
                             return DetectResult.Supported;
                         }
                     }
@@ -265,7 +261,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
 
 
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "The returned Create response doesn't contain handle v1 context. So Create context HandleV1 with Batch oplock is not supported");
                 return DetectResult.UnSupported;
             }
@@ -273,7 +269,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckCreateContexts_LeaseV1(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context LeaseV1 =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context LeaseV1 =====");
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageId;
@@ -289,7 +285,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 Smb2CreateContextResponse[] serverCreateContexts = null;
                 string fileName = "LeaseV1_" + Guid.NewGuid() + ".txt";
                 CREATE_Response createResponse;
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a leaseV1 context");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a leaseV1 context");
                 client.Create(
                     1,
                     1,
@@ -356,20 +352,20 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateResponseLease)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context LeaseV1 is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context LeaseV1 is supported");
                             return DetectResult.Supported;
                         }
                     }
                 }
 
-                logWriter.AddLog(LogLevel.Information, "The returned Create response doesn't contain lease v1 context. So Create context LeaseV1 is not supported");
+                logWriter.AddLog(DetectLogLevel.Information, "The returned Create response doesn't contain lease v1 context. So Create context LeaseV1 is not supported");
                 return DetectResult.UnSupported;
             }
         }
 
         public DetectResult CheckCreateContexts_LeaseV2(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context LeaseV2 =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context LeaseV2 =====");
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageId;
@@ -385,7 +381,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 Smb2CreateContextResponse[] serverCreateContexts = null;
                 string fileName = "LeaseV2_" + Guid.NewGuid() + ".txt";
                 CREATE_Response createResponse;
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a leaseV2 context");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a leaseV2 context");
                 client.Create(
                     1,
                     1,
@@ -452,20 +448,20 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateResponseLeaseV2)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context LeaseV2 is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context LeaseV2 is supported");
                             return DetectResult.Supported;
                         }
                     }
                 }
 
-                logWriter.AddLog(LogLevel.Information, "The returned Create response doesn't contain lease v2 context. So Create context LeaseV2 is not supported");
+                logWriter.AddLog(DetectLogLevel.Information, "The returned Create response doesn't contain lease v2 context. So Create context LeaseV2 is not supported");
                 return DetectResult.UnSupported;
             }
         }
 
         public DetectResult CheckCreateContexts_HandleV1LeaseV1(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context HandleV1 with LeaseV1 =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context HandleV1 with LeaseV1 =====");
 
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
@@ -482,7 +478,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 Smb2CreateContextResponse[] serverCreateContexts = null;
                 string fileName = "DurableHandleV1LeaseV1_" + Guid.NewGuid() + ".txt";
                 CREATE_Response createResponse;
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a durable handle v1 and a leavse v1 context");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a durable handle v1 and a leavse v1 context");
                 client.Create(
                     1,
                     1,
@@ -553,13 +549,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateDurableHandleResponse)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context HandleV1 with LeaseV1 is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context HandleV1 with LeaseV1 is supported");
                             return DetectResult.Supported;
                         }
                     }
                 }
 
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "The returned Create response doesn't contain durable handle response. So Create context HandleV1 with LeaseV1 is not supported");
                 return DetectResult.UnSupported;
             }
@@ -567,7 +563,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckCreateContexts_HandleV2BatchOplock(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context HandleV2 with Batch oplock =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context HandleV2 with Batch oplock =====");
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageId;
@@ -582,7 +578,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 CREATE_Response createResponse;
                 Packet_Header header;
                 string fileName = "DurableHandleV2WithBatchOplock_" + Guid.NewGuid() + ".txt";
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a durable handle v2 and Batch oplock");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a durable handle v2 and Batch oplock");
                 client.Create(
                     1,
                     1,
@@ -646,13 +642,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateDurableHandleResponseV2)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context HandleV2 with Batch oplock is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context HandleV2 with Batch oplock is supported");
                             return DetectResult.Supported;
                         }
                     }
                 }
 
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "The returned Create response doesn't contain durable handle v2 response. So Create context HandleV2 with Batch oplock is not supported");
                 return DetectResult.UnSupported;
             }
@@ -660,7 +656,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckCreateContexts_HandleV2LeaseV1(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context HandleV2 with LeaseV1 =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context HandleV2 with LeaseV1 =====");
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageId;
@@ -675,7 +671,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 CREATE_Response createResponse;
                 Packet_Header header;
                 string fileName = "DurableHandleV2LeaseV1_" + Guid.NewGuid() + ".txt";
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a durable handle v2 and lease v1 context");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a durable handle v2 and lease v1 context");
                 client.Create(
                     1,
                     1,
@@ -745,13 +741,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateDurableHandleResponseV2)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context HandleV2 with LeaseV1 is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context HandleV2 with LeaseV1 is supported");
                             return DetectResult.Supported;
                         }
                     }
                 }
 
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "The returned Create response doesn't contain durable handle v2 response. So Create context HandleV2 with LeaseV1 is not supported");
                 return DetectResult.UnSupported;
             }
@@ -759,7 +755,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         public DetectResult CheckCreateContexts_HandleV2LeaseV2(string sharename, ref DetectionInfo info)
         {
-            logWriter.AddLog(LogLevel.Information, "===== Detecting create context HandleV2 with LeaseV2 =====");
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detecting create context HandleV2 with LeaseV2 =====");
             using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
             {
                 ulong messageId;
@@ -774,7 +770,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 CREATE_Response createResponse;
                 Packet_Header header;
                 string fileName = "DurableHandleV2LeaseV2_" + Guid.NewGuid() + ".txt";
-                logWriter.AddLog(LogLevel.Information, "Client opens file with a durable handle v2 and lease v2 context");
+                logWriter.AddLog(DetectLogLevel.Information, "Client opens file with a durable handle v2 and lease v2 context");
                 client.Create(
                     1,
                     1,
@@ -844,13 +840,13 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     {
                         if (ctx is Smb2CreateDurableHandleResponseV2)
                         {
-                            logWriter.AddLog(LogLevel.Information, "Create context HandleV2 with LeaseV2 is supported");
+                            logWriter.AddLog(DetectLogLevel.Information, "Create context HandleV2 with LeaseV2 is supported");
                             return DetectResult.Supported;
                         }
                     }
                 }
 
-                logWriter.AddLog(LogLevel.Information,
+                logWriter.AddLog(DetectLogLevel.Information,
                     "The returned Create response doesn't contain durable handle v2 response. So Create context HandleV2 with LeaseV2 is not supported");
                 return DetectResult.UnSupported;
             }
