@@ -57,6 +57,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private EnvironmentType env = EnvironmentType.Workgroup;
         private DetectionInfo detectionInfo = new DetectionInfo();
+        private DetectLogger logWriter = new DetectLogger();
 
         #endregion Variables
 
@@ -135,11 +136,16 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
         /// Run auto detection properly.
         /// </summary>
         /// <returns>Return true if the function succeeded.</returns>
-        public bool RunDetection()
+        public bool RunDetection(DetectContext context)
         {
+            logWriter.ApplyDetectContext(context);
+
             try
             {
-                DetectorUtil.WriteLog("Detect Client HostName...");
+                if (context.Token.IsCancellationRequested)
+                    return false;
+
+                logWriter.AddLog(DetectLogLevel.Information, "Detect Client HostName...");
 
                 // set config if properties changed
                 config.ServerName = properties[RDPValueDetector.ServerName];
@@ -152,15 +158,17 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 config.ServerUserName = properties[RDPValueDetector.ServerUserName];
                 config.ServerUserPassword = properties[RDPValueDetector.ServerUserPassword];
                 config.ClientName = Dns.GetHostName();
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
 
-                DetectorUtil.WriteLog("Finished!", false, LogStyle.StepPassed);
+                if (context.Token.IsCancellationRequested)
+                    return false;
 
                 if (!DetectSUTIPAddress())
                 {
                     return false;
                 }
-
-                using (var detector = new RDPDetector(detectionInfo))
+                
+                using (var detector = new RDPDetector(detectionInfo, logWriter))
                 {
                     if (!detector.DetectRDPFeature(config))
                     {
@@ -171,7 +179,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("RunDetection() threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("RunDetection() threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Information, ex.StackTrace);
                 return false;
             }
         }
@@ -270,7 +280,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
         private bool DetectSUTIPAddress()
         {
-            DetectorUtil.WriteLog("===== Detect Target SUT IP Address=====", true, LogStyle.Default);
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect Target SUT IP Address=====");
 
             try
             {
@@ -279,7 +289,7 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 //If SUT name is an ip address, skip to resolve, use the ip address directly
                 if (IPAddress.TryParse(detectionInfo.SUTName, out address))
                 {
-                    DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
+                    logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
                     return true;
                 }
                 else //DNS resolve the SUT IP address by SUT name
@@ -288,22 +298,24 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
                     if (null == addList)
                     {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true, LogStyle.Error);
-                        DetectorUtil.WriteLog("Failed", true, LogStyle.StepFailed);
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true);
+                        logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                         return false;
                     }
                     else
                     {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} can be resolved as :", addList.ToString()), true, LogStyle.Default);
-                        DetectorUtil.WriteLog("Finished", true, LogStyle.StepPassed);
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("The SUT name {0} can be resolved as :", addList.ToString()), true);
+                        logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
                         return true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(ex.Message, true, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Failed", true, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, ex.StackTrace, true);
+                logWriter.AddLog(DetectLogLevel.Error, ex.Message);
+
                 return false;
             }
         }

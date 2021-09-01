@@ -24,6 +24,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private EnvironmentType env = EnvironmentType.Workgroup;
         private DetectionInfo detectionInfo = new DetectionInfo();
+        private DetectLogger logWriter = new DetectLogger();
 
         #endregion Variables
 
@@ -210,16 +211,23 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// Runs property autodetection.
         /// </summary>
         /// <returns>Return true if the function is succeeded.</returns>
-        public bool RunDetection()
+        public bool RunDetection(DetectContext context)
         {
+            logWriter.ApplyDetectContext(context);
             try
             {
+                if (context.Token.IsCancellationRequested)
+                    return false;
+
                 if (!DetectSUTIPAddress())
                 {
                     return false;
                 }
 
-                using (var detector = new RDPDetector(detectionInfo))
+                if (context.Token.IsCancellationRequested)
+                    return false;
+
+                using (var detector = new RDPDetector(detectionInfo, logWriter))
                 {
                     if (!detector.DetectRDPFeature())
                     {
@@ -230,7 +238,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("RunDetection() threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Error, ex.Message);
                 return false;
             }
         }
@@ -391,7 +400,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private bool DetectSUTIPAddress()
         {
-            DetectorUtil.WriteLog("===== Detect Target SUT IP Address=====", true, LogStyle.Default);
+            logWriter.AddLog(DetectLogLevel.Information, "===== Detect Target SUT IP Address=====");
 
             try
             {
@@ -400,7 +409,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 //If SUT name is an ip address, skip to resolve, use the ip address directly
                 if (IPAddress.TryParse(detectionInfo.SUTName, out address))
                 {
-                    DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);                    
+                    logWriter.AddLog(DetectLogLevel.Warning, "Finished", true, LogStyle.StepPassed);
                     return true;
                 }
                 else //DNS resolve the SUT IP address by SUT name
@@ -409,20 +418,21 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
                     if (null == addList)
                     {
-                        DetectorUtil.WriteLog(string.Format("The SUT name {0} cannot be resolved.", detectionInfo.SUTName), true, LogStyle.Error);
+                        logWriter.AddLog(DetectLogLevel.Warning, "The SUT name {0} cannot be resolved.", true, LogStyle.StepFailed);
                         return false;
                     }
                     else
                     {
-                        DetectorUtil.WriteLog("SUT detection finished", true, LogStyle.StepPassed);
-                        
+                        logWriter.AddLog(DetectLogLevel.Warning, "SUT detection finished", true, LogStyle.StepPassed);
+
                         return true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(string.Format("Failed with error message:", ex.Message), true, LogStyle.StepFailed);               
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Error, ex.Message);
                 return false;
             }           
         }      
