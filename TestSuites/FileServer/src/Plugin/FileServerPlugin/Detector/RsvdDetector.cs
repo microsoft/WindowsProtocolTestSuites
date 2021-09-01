@@ -1,19 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rsvd;
-using System.Security.Principal;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using System;
 using System.Diagnostics;
 using System.IO;
-using Microsoft.Protocols.TestManager.Detector;
+using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.FileServerPlugin
 {
@@ -37,7 +32,14 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             string vhdOnSharePath = Path.Combine(info.targetShareFullPath, vhdName);
             try
             {
-                CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    CopyTestVHD(info.targetShareFullPath, vhdOnSharePath);
+                }
+                else
+                {
+                    CopyTestVHDByClient(info, vhdName);
+                }
             }
             catch (Exception e)
             {
@@ -49,7 +51,6 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             try
             {
                 #region RSVD version 2
-
                 bool versionTestRes = TestRsvdVersion(vhdName + fileNameSuffix, info.BasicShareName, RSVD_PROTOCOL_VERSION.RSVD_PROTOCOL_VERSION_2);
                 if (versionTestRes)
                 {
@@ -86,7 +87,15 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 logWriter.AddLog(DetectLogLevel.Information, @"Detect RSVD failed with exception: " + e.Message);
             }
 
-            DeleteTestVHD(info.targetShareFullPath, vhdOnSharePath);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                DeleteTestVHD(info.targetShareFullPath, vhdOnSharePath);
+            }
+            else
+            {
+                DeleteTestVHDByClient(info, vhdName);
+            }
+
             return result;
         }
 
@@ -271,19 +280,228 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             process.WaitForExit();
         }
 
+        private void CopyTestVHDByClient(DetectionInfo info, string vhdName)
+        {
+            using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+            {
+                ulong messageId = default;
+                ulong sessionId = default;
+                uint treeId = default;
+                FILEID fileId = default;
+
+                try
+                {
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
+                    ConnectToShare(info.BasicShareName, info, client, out messageId, out sessionId, out treeId);
+                }
+                catch
+                {
+                    // Show error to user.
+                    logWriter.AddLog(DetectLogLevel.Error, "Did not find shares on SUT. Please check the share setting and SUT password.");
+                }
+
+                var packetHeader = (info.smb2Info.IsRequireMessageSigning || info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE;
+
+                try
+                {
+                    var status = client.Create(
+                        1,
+                        1,
+                        packetHeader,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        vhdName,
+                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
+                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                        CreateDisposition_Values.FILE_OPEN_IF,
+                        File_Attributes.NONE,
+                        ImpersonationLevel_Values.Impersonation,
+                        SecurityFlags_Values.NONE,
+                        RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                        null,
+                        out fileId,
+                        out _,
+                        out _,
+                        out _);
+
+                    if (status == Smb2Status.STATUS_SUCCESS)
+                    {
+                        var content = File.ReadAllBytes(GetVhdSourcePath());
+                        var messageCount = content.Length % 65536 == 0 ? content.Length / 65536 : content.Length / 65536 + 1; // Simplify credit calculation.
+                        var offset = 0ul;
+
+                        while (messageCount > 0)
+                        {
+                            status = client.Write(
+                                1,
+                                1,
+                                packetHeader,
+                                messageId++,
+                                sessionId,
+                                treeId,
+                                offset,
+                                fileId,
+                                Channel_Values.CHANNEL_NONE,
+                                WRITE_Request_Flags_Values.None,
+                                new byte[0],
+                                content.Skip((int)offset).Take(65536).ToArray(),
+                                out _,
+                                out _);
+
+                            if (status == Smb2Status.STATUS_SUCCESS)
+                            {
+                                offset += 65536;
+                                messageCount--;
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        if (status != Smb2Status.STATUS_SUCCESS)
+                        {
+                            LogFailedStatus("WRITE", status);
+                            throw new Exception("WRITE failed with " + Smb2Status.GetStatusCode(status));
+                        }
+                    }
+                    else
+                    {
+                        LogFailedStatus("CREATE", status);
+                        throw new Exception("CREATE failed with " + Smb2Status.GetStatusCode(status));
+                    }
+                }
+                finally
+                {
+                    try
+                    {
+                        LogOffSession(client, packetHeader, messageId, sessionId, treeId, fileId);
+                    }
+                    catch (Exception ex)
+                    {
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("Exception thrown when logging off the share, reason {0}.", ex.Message));
+                    }
+                }
+            }
+        }
+
+        private void DeleteTestVHDByClient(DetectionInfo info, string vhdName)
+        {
+            using (Smb2Client client = new Smb2Client(new TimeSpan(0, 0, defaultTimeoutInSeconds)))
+            {
+                ulong messageId = default;
+                ulong sessionId = default;
+                uint treeId = default;
+                FILEID fileId = default;
+
+                try
+                {
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Try to connect share {0}.", info.BasicShareName));
+                    ConnectToShare(info.BasicShareName, info, client, out messageId, out sessionId, out treeId);
+                }
+                catch
+                {
+                    // Show error to user.
+                    logWriter.AddLog(DetectLogLevel.Error, "Did not find shares on SUT. Please check the share setting and SUT password.");
+                }
+
+                var packetHeader = (info.smb2Info.IsRequireMessageSigning || info.smb2Info.MaxSupportedDialectRevision == DialectRevision.Smb311) ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE;
+
+                try
+                {
+                    var status = client.Create(
+                        1,
+                        1,
+                        packetHeader,
+                        messageId++,
+                        sessionId,
+                        treeId,
+                        vhdName,
+                        AccessMask.GENERIC_READ | AccessMask.GENERIC_WRITE | AccessMask.DELETE,
+                        ShareAccess_Values.FILE_SHARE_READ | ShareAccess_Values.FILE_SHARE_WRITE | ShareAccess_Values.FILE_SHARE_DELETE,
+                        CreateOptions_Values.FILE_NON_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                        CreateDisposition_Values.FILE_OPEN_IF,
+                        File_Attributes.NONE,
+                        ImpersonationLevel_Values.Impersonation,
+                        SecurityFlags_Values.NONE,
+                        RequestedOplockLevel_Values.OPLOCK_LEVEL_NONE,
+                        null,
+                        out fileId,
+                        out _,
+                        out _,
+                        out _);
+
+                    if (status != Smb2Status.STATUS_SUCCESS)
+                    {
+                        LogFailedStatus("CREATE", status);
+                        throw new Exception("CREATE failed with " + Smb2Status.GetStatusCode(status));
+                    }
+                }
+                finally
+                {
+                    try
+                    {
+                        LogOffSession(client, packetHeader, messageId, sessionId, treeId, fileId);
+                    }
+                    catch (Exception ex)
+                    {
+                        logWriter.AddLog(DetectLogLevel.Information, string.Format("Exception thrown when logging off the share, reason {0}.", ex.Message));
+                    }
+                }
+            }
+        }
+
+        private void LogOffSession(Smb2Client client, Packet_Header_Flags_Values packetHeader, ulong messageId, ulong sessionId, uint treeId, FILEID fileId)
+        {
+            if (fileId.Persistent != 0 || fileId.Volatile != 0)
+            {
+                client.Close(
+                    1,
+                    1,
+                    packetHeader,
+                    messageId++,
+                    sessionId,
+                    treeId,
+                    fileId,
+                    Flags_Values.NONE,
+                    out _,
+                    out _);
+            }
+
+            client.TreeDisconnect(
+                1,
+                1,
+                packetHeader,
+                messageId++,
+                sessionId,
+                treeId,
+                out _,
+                out _);
+            client.LogOff(
+                1,
+                1,
+                packetHeader,
+                messageId++,
+                sessionId,
+                out _,
+                out _);
+        }
+
         private void CopyTestVHD(string sharePath, string vhdOnSharePath)
         {
             try
             {
                 ConnectShareByNetUse(sharePath);
 
-                if (System.IO.File.Exists(vhdOnSharePath))
+                if (File.Exists(vhdOnSharePath))
                 {
                     return;
                 }
 
                 string vhdxPath = GetVhdSourcePath();
-                System.IO.File.Copy(vhdxPath, vhdOnSharePath);
+                File.Copy(vhdxPath, vhdOnSharePath);
             }
             catch (Exception e)
             {
@@ -297,12 +515,12 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             {
                 ConnectShareByNetUse(sharePath);
 
-                if (!System.IO.File.Exists(vhdOnSharePath))
+                if (!File.Exists(vhdOnSharePath))
                 {
                     return;
                 }
 
-                System.IO.File.Delete(vhdOnSharePath);
+                File.Delete(vhdOnSharePath);
             }
             catch (Exception e)
             {
@@ -313,9 +531,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private string GetVhdSourcePath()
         {
             string res = string.Empty;
-            string assemblyPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string vhdxPath = System.IO.Path.Combine(System.IO.Directory.GetParent(assemblyPath).FullName, "Plugin", "data", vhdName);
-            if (System.IO.File.Exists(vhdxPath))
+            string assemblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string vhdxPath = Path.Combine(Directory.GetParent(assemblyPath).FullName, "Plugin", "data", vhdName);
+            if (File.Exists(vhdxPath))
             {
                 res = vhdxPath;
             }

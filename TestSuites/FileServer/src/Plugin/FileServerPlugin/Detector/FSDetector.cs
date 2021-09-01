@@ -757,15 +757,17 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         {
             string[] shareList = null;
 
-            try
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                shareList = ServerHelper.EnumShares(SUTName, Credential.AccountName, Credential.DomainName, Credential.Password);
+                try
+                {
+                    shareList = ServerHelper.EnumShares(SUTName, Credential.AccountName, Credential.DomainName, Credential.Password);
+                }
+                catch (Exception ex)
+                {
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
+                }
             }
-            catch (Exception ex)
-            {
-                logWriter.AddLog(DetectLogLevel.Information, string.Format("EnumShares failed, reason: {0}", ex.Message));
-            }
-
 
             if (shareList == null)
             {
@@ -785,7 +787,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     catch
                     {
                         // Show error to user.
-                        logWriter.AddLog(DetectLogLevel.Error, "Did not find shares on SUT. Please check share setting and SUT password.");
+                        logWriter.AddLog(DetectLogLevel.Error, "Did not find shares on SUT. Please check the share setting and SUT password.");
                     }
                 }
             }
@@ -813,7 +815,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                 catch
                 {
                     // Show error to user.
-                    logWriter.AddLog(DetectLogLevel.Error, string.Format("Cannot connect to cluster share {0}. Please check share setting and SUT password.", info.clusterShareFullPath));
+                    logWriter.AddLog(DetectLogLevel.Error, string.Format("Cannot connect to cluster share {0}. Please check the share setting and SUT password.", info.clusterShareFullPath));
                     return false;
                 }
             }
