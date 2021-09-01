@@ -103,7 +103,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                 Directory.Move(node.AbsolutePath, oldNodePath);
                 node.CopyFromNode(extractNode, true);
-                
+
                 testSuiteInstallation.Path = node.AbsolutePath;
                 testSuiteInstallation.Version = version;
             }
@@ -237,9 +237,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return adapterList;
         }
 
-        public RuleGroup[] LoadTestCaseFilter()
+        /// <summary>
+        /// Gets the TestCaseFilter object for current test suite.
+        /// </summary>
+        /// <returns>A TestCaseFilter object</returns>
+        public TestCaseFilter GetTestCaseFilter()
         {
-            TestCaseFilter filter = new TestCaseFilter();
+            var filter = new TestCaseFilter();
             XmlDocument doc = new XmlDocument();
             doc.Load(this.TestSuiteConfigFilePath);
             XmlNode configCaseRule = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.ConfigCaseRule);
@@ -250,6 +254,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 Kernel.RuleGroup gp = Kernel.RuleGroup.FromXmlNode(group);
                 filter.Add(gp);
             }
+            return filter;
+        }
+
+        public RuleGroup[] LoadTestCaseFilter()
+        {
+            var filter = GetTestCaseFilter();
 
             var ruleGroups = new List<RuleGroup>();
 
@@ -282,7 +292,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             XmlNode featureMappingNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.FeatureMapping);
             if(featureMappingNode == null)
-            {                
+            {
                 return;
             }
 
@@ -298,7 +308,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
                 targetFilterIndex = _targetFilterIndex;
                 mappingFilterIndex = _mappingFilterIndex;
-            }            
+            }
         }
 
         /// <summary>

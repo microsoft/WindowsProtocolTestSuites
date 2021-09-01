@@ -299,12 +299,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 cts.Dispose();
             }
-
+            
             UtilCallBackFunctions.WriteLog = (message, newline, style) =>
             {
                 if (DetectLogCallback != null) DetectLogCallback(message, style);
             };
-
+            
             stepsLocker.EnterWriteLock();
             try
             {
@@ -365,9 +365,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules</param>
         /// <param name="properties">The ptfconfig properties.</param>
-        public void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties)
+        /// <param name="targetFilterIndex">Target filter index</param>
+        /// <param name="mappingFilterIndex">Mapping filter index</param>
+        public void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties, int targetFilterIndex, int mappingFilterIndex)
         {
-            ApplyDetectedRules(out ruleGroupsBySelectedRules);
+            ApplyDetectedRules(out ruleGroupsBySelectedRules, targetFilterIndex, mappingFilterIndex);
             ApplyDetectedValues(ref properties);
         }
 
@@ -375,119 +377,202 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Apply the test case selection rules detected by the plug-in.
         /// </summary>
         /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules.</param>
-        private void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules)
+        /// <param name="targetFilterIndex">Target filter index</param>
+        /// <param name="mappingFilterIndex">Mapping filter index</param>
+        private void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, int targetFilterIndex, int mappingFilterIndex)
         {
-            var ruleGroups = TestSuite.LoadTestCaseFilter();
-            var selectedRules = ValueDetector.GetSelectedRules();
-            var tempRuleGroups = new List<Common.Types.RuleGroup>();
-            foreach (var ruleGroup in ruleGroups)
+            // Get the filter.
+            var filter = TestSuite.GetTestCaseFilter();
+            // create mapping table for the filter.
+            CreateMappingTableForTestCaseFilter(filter,targetFilterIndex, mappingFilterIndex);
+            // Update selected rules for the filter.
+            foreach (var rule in ValueDetector.GetSelectedRules())
             {
-                List<Common.Types.Rule> rules = GetSelectedRules(ruleGroup.Name, ruleGroup.Rules.ToList(), selectedRules.Where(i => i.Status == RuleStatus.Selected).ToList());
-                if (rules.Count > 0)
+                Kernel.Rule r = filter.FindRuleByName(rule.Name);
+                if (r == null) throw new Exception(string.Format("Cannot find rule by name {0}.", rule.Name));
+                switch (rule.Status)
                 {
-                    tempRuleGroups.Add(new Common.Types.RuleGroup
-                    {
-                        DisplayName = ruleGroup.DisplayName,
-                        Name = ruleGroup.Name,
-                        Rules = rules.ToArray(),
-                    });
+                    case Microsoft.Protocols.TestManager.Detector.RuleStatus.Selected:
+                        r.SelectStatus = Kernel.RuleSelectStatus.Selected;
+                        r.Status = RuleSupportStatus.Selected;
+                        break;
+                    case Microsoft.Protocols.TestManager.Detector.RuleStatus.NotSupported:
+                        r.SelectStatus = Kernel.RuleSelectStatus.UnSelected;
+                        r.Status = RuleSupportStatus.NotSupported;
+                        break;
+                    case Microsoft.Protocols.TestManager.Detector.RuleStatus.Unknown:
+                        r.SelectStatus = Kernel.RuleSelectStatus.UnSelected;
+                        r.Status = RuleSupportStatus.Unknown;
+                        break;
+                    default:
+                        r.SelectStatus = Kernel.RuleSelectStatus.UnSelected;
+                        r.Status = RuleSupportStatus.Default;
+                        break;
                 }
             }
-            ruleGroupsBySelectedRules = tempRuleGroups.ToArray();
-        }
-
-        private List<Common.Types.Rule> GetSelectedRules(string ruleGroupName, List<Common.Types.Rule> rules, List<CaseSelectRule> selectedRules)
-        {
-            List<Common.Types.Rule> myRules = new List<Common.Types.Rule>();
-            foreach (var rule in rules)
+            // Update filter to ruleGroups
+            var ruleGroups = new List<Common.Types.RuleGroup>();
+            foreach (var group in filter)
             {
-                Common.Types.Rule myRule = new Common.Types.Rule()
+                Common.Types.RuleGroup ruleGroup = new Common.Types.RuleGroup()
                 {
-                    Name = rule.Name,
-                    DisplayName = rule.DisplayName,
-                    Categories = rule.Categories,
-                    SelectStatus = rule.SelectStatus
+                    Name = group.Name,
+                    DisplayName = group.Name,
+                    Rules = new List<Common.Types.Rule>()
                 };
-                string ruleName = ruleGroupName + '.' + myRule.Name;
-                if (rule.Count > 0)
-                {
-                    // myRule.Rules is not null means it is parent rule and contains sub rules,
-                    var selectedRulesList = GetSelectedRules(ruleName, rule.ToList(), selectedRules);
-                    myRule.Clear();
-                    foreach (var s in selectedRulesList)
-                    {
-                        myRule.Add(s);
-                    }
-                    if (selectedRules.Where(i => ruleName.Contains(i.Name) || i.Name.Contains(ruleName)).Count() > 0)
-                    {
-                        // 1. ruleName is sub rule of selectedRules: ruleName.Contains(i.Name)
-                        // e.g. ruleName:Priority.Non-BVT.Negative, i.Name: Priority.Non-BVT
-                        // 2. ruleName is parent rule of selectedRules: i.Name.Contains(ruleName)
-                        // e.g. ruleName:SMB Dialect (Please select all supported dialects).SMB Dialects, i.Name: SMB Dialect (Please select all supported dialects).SMB Dialects.SMB 202
-
-                        // If rule.Count > myRule.Count means its sub rules contains unselected item(s),
-                        // so 'myRule' is partial selected, and set IsSelected to null; otherwise set IsSelected to true.
-                        myRule.SelectStatus = rule.Count > myRule.Count ? Common.Types.RuleSelectStatus.Partial : Common.Types.RuleSelectStatus.Selected;
-                        myRules.Add(myRule);
-                    }
-                }
-                else
-                {
-                    // myRule.Rules is null means it has no sub rules, if ruleName's parent rule is in selectedRules then set IsSelected to true.
-                    // e.g. ruleName:Priority.Non-BVT.Positive,i.Name: Priority.Non-BVT
-                    if (selectedRules.Where(i => ruleName.Contains(i.Name)).Count() > 0)
-                    {
-                        myRule.SelectStatus = Common.Types.RuleSelectStatus.Selected;
-                        myRules.Add(myRule);
-                    }
-                }
+                AddItems(ruleGroup.Rules, group);
+                ruleGroups.Add(ruleGroup);
             }
-            return myRules;
+            // Update the selected rule groups.
+            ruleGroupsBySelectedRules = ruleGroups;
         }
 
-        private void ApplyDetectedValues(ref IEnumerable<PropertyGroup> properties)
+        public void CreateMappingTableForTestCaseFilter(TestCaseFilter filter, int targetFilterIndex, int mappingFilterIndex)
         {
-            Dictionary<string, List<string>> propertiesByDetector;
-            ValueDetector.GetDetectedProperty(out propertiesByDetector);
-            List<PropertyGroup> updatedPropertyGroupList = new List<PropertyGroup>();
-            foreach (var ptfconfigProperty in properties)
+            if (targetFilterIndex == -1 ||
+                mappingFilterIndex == -1)
             {
-                PropertyGroup newPropertyGroup = new PropertyGroup()
-                {
-                    Name = ptfconfigProperty.Name,
-                    Items = ptfconfigProperty.Items,
-                };
+                return;
+            }
+            else
+            {
+                Dictionary<string, List<Kernel.Rule>> featureMappingTableForKernel = new Dictionary<string, List<Kernel.Rule>>();
+                Dictionary<string, List<Kernel.Rule>> reverseMappingTableForKernel = new Dictionary<string, List<Kernel.Rule>>();
+                Kernel.RuleGroup targetFilterGroup = filter[targetFilterIndex];
+                Kernel.RuleGroup mappingFilterGroup = filter[mappingFilterIndex];
+                Dictionary<string, Kernel.Rule> mappingRuleTable = CreateRuleTableFromRuleGroupForKernel(mappingFilterGroup);
+                Dictionary<string, Kernel.Rule> targetRuleTable = CreateRuleTableFromRuleGroupForKernel(targetFilterGroup);
 
-                foreach (var item in ptfconfigProperty.Items)
+                var testCaseList = TestSuite.GetTestCases(null);
+
+                foreach (TestManager.Common.TestCaseInfo testCase in testCaseList)
                 {
-                    var propertyFromDetctor = propertiesByDetector.Where(i => i.Key == item.Key);
-                    if (propertyFromDetctor.Count() > 0)
+                    List<string> categories = testCase.Category.ToList();
+                    foreach (string target in targetRuleTable.Keys)
                     {
-                        var detectorPropertyValue = propertyFromDetctor.FirstOrDefault().Value;
-                        var newProperty = newPropertyGroup.Items.Where(i => i.Key == item.Key).FirstOrDefault();
-                        if (detectorPropertyValue.Count() == 1)
+                        if (categories.Contains(target))
                         {
-                            newProperty.Value = detectorPropertyValue[0];
-                        }
-                        else if (detectorPropertyValue.Count() > 0)
-                        {
-                            newProperty.Choices = detectorPropertyValue;
-                            newProperty.Value = detectorPropertyValue[0];
+                            Kernel.Rule currentRule;
+                            foreach (string category in categories)
+                            {
+                                if (!category.Equals(target))
+                                {
+                                    mappingRuleTable.TryGetValue(category, out currentRule);
+                                    if (currentRule == null)
+                                    {
+                                        continue;
+                                    }
+                                    UpdateMappingTableForKernel(featureMappingTableForKernel, target, currentRule);
+                                    // Add item to reverse mapping table
+                                    UpdateMappingTableForKernel(reverseMappingTableForKernel, category, targetRuleTable[target]);
+                                }
+                            }
+                            break;
                         }
                     }
                 }
 
-                updatedPropertyGroupList.Add(newPropertyGroup);
+                targetFilterGroup.featureMappingTable = featureMappingTableForKernel;
+                targetFilterGroup.mappingRuleGroup = mappingFilterGroup;
+
+                mappingFilterGroup.reverseFeatureMappingTable = reverseMappingTableForKernel;
+                mappingFilterGroup.targetRuleGroup = targetFilterGroup;
             }
-            properties = updatedPropertyGroupList.ToArray();
         }
 
-        #endregion
+        private Dictionary<string, Kernel.Rule> CreateRuleTableFromRuleGroupForKernel(Kernel.RuleGroup ruleGroup)
+        {
+            Dictionary<string, Kernel.Rule> ruleTable = new Dictionary<string, Kernel.Rule>();
+            Stack<Kernel.Rule> ruleStack = new Stack<Kernel.Rule>();
+            foreach (Kernel.Rule r in ruleGroup) ruleStack.Push(r);
+            while (ruleStack.Count > 0)
+            {
+                Kernel.Rule r = ruleStack.Pop();
+                if (r.CategoryList.Count != 0 &&
+                    !ruleTable.ContainsKey(r.CategoryList[0]))
+                {
+                    ruleTable.Add(r.CategoryList[0], r);
+                }
+                foreach (Kernel.Rule childRule in r) ruleStack.Push(childRule);
+            }
+            return ruleTable;
+        }
+
+        private void UpdateMappingTableForKernel(Dictionary<string, List<Kernel.Rule>> mappingTable, string target, Kernel.Rule currentRule)
+        {
+            if (mappingTable.ContainsKey(target))
+            {
+                if (!mappingTable[target].Contains(currentRule))
+                {
+                    mappingTable[target].Add(currentRule);
+                }
+            }
+            else
+            {
+                mappingTable[target] = new List<Kernel.Rule> { currentRule };
+            }
+        }
+
+    private void AddItems(IList<Common.Types.Rule> displayRules, List<Kernel.Rule> rules)
+    {
+        foreach (var rule in rules)
+        {
+            Common.Types.Rule displayRule = new Common.Types.Rule()
+            {
+                DisplayName = rule.Name,
+                Name = rule.Name,
+                Categories = rule.CategoryList.ToArray(),
+                SelectStatus = rule.SelectStatus==Kernel.RuleSelectStatus.Selected ? Common.Types.RuleSelectStatus.Selected : (rule.SelectStatus == Kernel.RuleSelectStatus.Partial ? Common.Types.RuleSelectStatus.Partial : Common.Types.RuleSelectStatus.UnSelected),
+            };
+
+            if (rule.Count > 0)
+            {
+                AddItems(displayRule, rule);
+            }
+            displayRules.Add(displayRule);
+        }
+    }
+
+    private void ApplyDetectedValues(ref IEnumerable<PropertyGroup> properties)
+    {
+        Dictionary<string, List<string>> propertiesByDetector;
+        ValueDetector.GetDetectedProperty(out propertiesByDetector);
+        List<PropertyGroup> updatedPropertyGroupList = new List<PropertyGroup>();
+        foreach (var ptfconfigProperty in properties)
+        {
+            PropertyGroup newPropertyGroup = new PropertyGroup()
+            {
+                Name = ptfconfigProperty.Name,
+                Items = ptfconfigProperty.Items,
+            };
+
+            foreach (var item in ptfconfigProperty.Items)
+            {
+                var propertyFromDetctor = propertiesByDetector.Where(i => i.Key == item.Key);
+                if (propertyFromDetctor.Count() > 0)
+                {
+                    var detectorPropertyValue = propertyFromDetctor.FirstOrDefault().Value;
+                    var newProperty = newPropertyGroup.Items.Where(i => i.Key == item.Key).FirstOrDefault();
+                    if (detectorPropertyValue.Count() == 1)
+                    {
+                        newProperty.Value = detectorPropertyValue[0];
+                    }
+                    else if (detectorPropertyValue.Count() > 0)
+                    {
+                        newProperty.Choices = detectorPropertyValue;
+                        newProperty.Value = detectorPropertyValue[0];
+                    }
+                }
+            }
+
+            updatedPropertyGroupList.Add(newPropertyGroup);
+        }
+        properties = updatedPropertyGroupList.ToArray();
+    }
+
+    #endregion
 
         #region Private Methods
-        /// <summary>
-        /// Apply the test case selection rules detected by the plug-in.
-        /// </summary>
 
         /// <summary>
         /// Gets the properties required for auto-detection.
