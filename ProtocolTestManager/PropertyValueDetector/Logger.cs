@@ -36,23 +36,11 @@ namespace Microsoft.Protocols.TestManager.Detector
             switch (level)
             {
                 case DetectLogLevel.Information:
+                    ProcessStepStatus(style);
                     DetectorUtil.WriteLog(msg, startNewLine, style);
                     break;
                 case DetectLogLevel.Warning:
-                    if (this.DetectContext != null
-                        && this.DetectContext.StepStatusChanged != null
-                        && (!stepStatus.ContainsKey(StepIndex) || stepStatus[StepIndex] != style))
-                    {
-                        this.DetectContext.StepStatusChanged(this.DetectContext.Id, StepIndex, style);
-                        this.stepStatus[StepIndex] = style;
-                    }
-
-                    if (style != LogStyle.Default)
-                    {
-                        StepIndex++;
-                    }
-
-                    DetectorUtil.WriteLog(msg, startNewLine, style);
+                    ProcessStepStatus(style);
                     break;
                 case DetectLogLevel.Error:
                     AddLog(DetectLogLevel.Information, msg);
@@ -95,6 +83,22 @@ namespace Microsoft.Protocols.TestManager.Detector
             this.DetectContext = detectContext;
             StepIndex = 0;
             stepStatus.Clear();
+        }
+
+        private void ProcessStepStatus(LogStyle style)
+        {
+            if (this.DetectContext != null
+                        && this.DetectContext.StepStatusChanged != null
+                        && (!stepStatus.ContainsKey(StepIndex) || stepStatus[StepIndex] != style))
+            {
+                this.DetectContext.StepStatusChanged(this.DetectContext.Id, StepIndex, style);
+                this.stepStatus[StepIndex] = style;
+            }
+
+            if (style != LogStyle.Default)
+            {
+                StepIndex++;
+            }
         }
     }
 }

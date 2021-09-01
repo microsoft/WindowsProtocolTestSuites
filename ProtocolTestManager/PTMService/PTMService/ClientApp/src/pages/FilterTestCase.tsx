@@ -15,8 +15,9 @@ import { ConfigurationsDataSrv } from '../services/Configurations'
 import { FilterTestCaseActions } from '../actions/FilterTestCaseAction'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
-import { Link, PrimaryButton, Stack } from '@fluentui/react'
+import { PrimaryButton, Stack } from '@fluentui/react'
 import { ConfigurationMethod_AutoDetection } from './ConfigureMethod'
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 export function FilterTestCase(props: any) {
@@ -55,6 +56,7 @@ export function FilterTestCase(props: any) {
 
   const onNextButtonClick = () => {
     dispatch(ConfigurationsDataSrv.setRules(() => {
+      dispatch(PropertyGroupsActions.setUpdatedAction(false))
       wizardProps.nextStep()
     }))
   }

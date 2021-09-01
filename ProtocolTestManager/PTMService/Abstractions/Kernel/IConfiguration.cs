@@ -71,9 +71,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         public IEnumerable<RuleGroup> SelectedRules { get; }
 
         /// <summary>
-        /// The properties of configuration.
+        /// Get the properties of configuration.
         /// </summary>
-        public IEnumerable<PropertyGroup> Properties { get; set; }
+        public IEnumerable<PropertyGroup> GetProperties(IAutoDetection detector);
+
+        /// <summary>
+        /// Set the properties of configuration.
+        /// </summary>
+        public void SetProperties(IEnumerable<PropertyGroup> groups);
 
         /// <summary>
         /// The adapters of configuration.

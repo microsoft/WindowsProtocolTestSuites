@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
@@ -29,6 +30,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         private List<DetectingItem> detectSteps;
 
         private ITestSuite TestSuite { get; set; }
+
+        private IConfiguration Configuration { get; set; }
+
+        private PtfConfig PtfConfig { get; set; }
 
         private CancellationTokenSource cts = null;
 
@@ -65,11 +70,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         public DetectLog DetectLogCallback;
 
-        private AutoDetection(ITestSuite testSuite)
+        private AutoDetection(IConfiguration configuration)
         {
-            TestSuite = testSuite;
+            TestSuite = configuration.TestSuite;
+            Configuration = configuration;
 
-            InitializeDetector(TestSuite.Id);
+            InitializeDetector();
 
             detectSteps = ValueDetector.GetDetectionSteps();
 
@@ -91,9 +97,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        public static AutoDetection Create(ITestSuite testSuite)
+        public static AutoDetection Create(IConfiguration configuration)
         {
-            var instance = new AutoDetection(testSuite);
+            var instance = new AutoDetection(configuration);
 
             return instance;
         }
@@ -167,22 +173,23 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             alc.Unload(); 
         }
 
-        public void InitializeDetector(int testSuiteId)
+        public void InitializeDetector()
         {
-            var ptfconfig = LoadPtfconfig();
+            var ptfConfigStorage = Configuration.StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
+            PtfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
 
             UtilCallBackFunctions.GetPropertyValue = (string name) =>
             {
-                var property = ptfconfig.GetPropertyNodeByName(name);
+                var property = this.PtfConfig.GetPropertyNodeByName(name);
                 if (property != null) return property.Value;
                 return null;
             };
 
             UtilCallBackFunctions.GetPropertiesByFile = (filename) =>
             {
-                if (!ptfconfig.FileProperties.ContainsKey(filename))
+                if (!this.PtfConfig.FileProperties.ContainsKey(filename))
                     return null;
-                return ptfconfig.FileProperties[filename];
+                return this.PtfConfig.FileProperties[filename];
             };
 
             detectorAssembly = TestSuite.GetDetectorAssembly();
@@ -292,12 +299,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 cts.Dispose();
             }
-            
+
             UtilCallBackFunctions.WriteLog = (message, newline, style) =>
             {
                 if (DetectLogCallback != null) DetectLogCallback(message, style);
             };
-            
+
             stepsLocker.EnterWriteLock();
             try
             {
@@ -482,21 +489,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// Apply the test case selection rules detected by the plug-in.
         /// </summary>
 
-        private PtfConfig LoadPtfconfig()
-        {
-            try
-            {
-                var ptfConfigFiles = TestSuite.GetConfigurationFiles().ToList();
-                var ptfconfig = new PtfConfig(ptfConfigFiles);
-
-                return ptfconfig;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(string.Format(AutoDetectionConsts.LoadPtfconfigError, e.Message));
-            }
-        }
-
         /// <summary>
         /// Gets the properties required for auto-detection.
         /// </summary>
@@ -530,7 +522,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         /// <param name="rules">Test case selection rules</param>
         /// <returns>A list of properties to hide.</returns>
-        private List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules)
+        public List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules)
         {
             return ValueDetector.GetHiddenProperties(rules);
         }
@@ -591,17 +583,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     var resultStatus = ValueDetector.RunDetection(context) ? DetectionStatus.Finished : DetectionStatus.Error;
                     SetDetectionStatus(resultStatus);
                     detectedException = null;
+
+                    if (cts.IsCancellationRequested)
+                    {
+                        SetDetectStepCurrentStatus(DetectingStatus.Cancelled);
+                    }
                 }
                 catch (Exception ex)
                 {
                     SetDetectionStatus(DetectionStatus.Error);
                     detectedException = ex;
-                    StopDetection();
                 }
 
-                if (StepIndex < GetDetectedSteps().Count - 1)
+                if ((StepIndex < GetDetectedSteps().Count - 1) && !cts.IsCancellationRequested)
                 {
-                    SetDetectStepCurrentStatus(DetectingStatus.Failed);
+                    SetDetectStepCurrentStatus(DetectingStatus.Pending);
                 }
 
                 CloseLogger();
@@ -744,6 +740,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 stepsLocker.ExitWriteLock();
             }
         }
+
         #endregion
     }
 }

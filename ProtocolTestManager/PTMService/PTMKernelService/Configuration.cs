@@ -33,6 +33,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             StorageRoot = storageRoot;
 
+            var ptfConfigStorage = StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
+            PtfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
+
             LoadFeatureMappingFromXml();
         }
 
@@ -79,10 +82,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                     if (group.Rules != null && group.Rules.Count > 0)
                     {
-                        Stack<KeyValuePair<Common.Types.Rule,string>> ruleStack = new Stack<KeyValuePair<Common.Types.Rule, string>>();
+                        Stack<KeyValuePair<Common.Types.Rule, string>> ruleStack = new Stack<KeyValuePair<Common.Types.Rule, string>>();
                         foreach (var rule in group.Rules)
                         {
-                            ruleStack.Push(new KeyValuePair<Common.Types.Rule, string>(rule,group.Name));
+                            ruleStack.Push(new KeyValuePair<Common.Types.Rule, string>(rule, group.Name));
                         }
                         while (ruleStack.Count > 0)
                         {
@@ -121,17 +124,36 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
                 using var xmlTextWriter = new XmlTextWriter(profileXmlPath, Encoding.UTF8);
                 xmlDoc.Save(xmlTextWriter);
+                this.selectedRules = null;
             }
         }
 
         public IEnumerable<RuleGroup> SelectedRules
         {
-            get { return this.selectedRules; }
+            get
+            {
+                if (this.selectedRules == null)
+                {
+                    var profileStorage = StorageRoot.GetNode(ConfigurationConsts.ProfileConfig);
+                    if (Directory.Exists(profileStorage.AbsolutePath))
+                    {
+                        var query = profileStorage.GetFiles().ToList().Where(f => f.EndsWith(Path.Combine(profileStorage.AbsolutePath, ConfigurationConsts.Profile)));
+                        if (query.Any())
+                        {
+                            RuleGroup[] ruleGroups = TestSuite.LoadTestCaseFilter();
+
+                            LoadSelectedRules(ruleGroups, query.First());
+                        }
+                    }
+                }
+                
+                return this.selectedRules;
+            }
         }
 
-        public int TargetFilterIndex 
-        { 
-            get { return this.targetFilterIndex; } 
+        public int TargetFilterIndex
+        {
+            get { return this.targetFilterIndex; }
         }
 
         public int MappingFilterIndex
@@ -192,7 +214,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                 }
                                 updateMappingTable(featureMappingTable, target, currentRule);
                                 // Add item to reverse mapping table
-                                updateMappingTable(reverseMappingTable, category, targetRuleTable[target]);                                
+                                updateMappingTable(reverseMappingTable, category, targetRuleTable[target]);
                             }
                         }
                         break;
@@ -237,66 +259,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 foreach (Rule childRule in r) ruleStack.Push(childRule);
             }
             return ruleTable;
-        }
-        public IEnumerable<PropertyGroup> Properties
-        {
-            get
-            {
-                var ptfConfigStorage = StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
-
-                var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
-
-                var result = ptfConfig.FileProperties.Values.SelectMany(property => property).Select(property =>
-                {
-                    var configItem = ptfConfig.GetPropertyNodeByName(property);
-
-                    return new Property
-                    {
-                        Key = property,
-                        Name = property.Split('.').Last(),
-                        Choices = configItem.ChoiceItems,
-                        Description = configItem.Description,
-                        Value = configItem.Value,
-                    };
-                }).GroupBy(property =>
-                {
-                    var parts = property.Key.Split('.');
-
-                    if (parts.Length == 1)
-                    {
-                        return ConfigurationConsts.DefaultGroup;
-                    }
-                    else
-                    {
-                        return parts.SkipLast(1).Last();
-                    }
-                }).Select(group =>
-                {
-                    return new PropertyGroup
-                    {
-                        Name = group.Key,
-                        Items = group,
-                    };
-                });
-
-                return result;
-            }
-
-            set
-            {
-                var ptfConfigStorage = StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
-
-                var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
-
-                var properties = value.SelectMany(i => i.Items);
-
-                foreach (var property in properties)
-                {
-                    ptfConfig.SetPropertyValue(property.Key, property.Value);
-                }
-
-                ptfConfig.Save();
-            }
         }
 
         public IEnumerable<Adapter> Adapters
@@ -435,6 +397,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public IStorageNode StorageRoot { get; private init; }
 
+        public PtfConfig PtfConfig { get; private set; }
+
         public ITestSuite TestSuite { get; private init; }
 
         public static Configuration Create(TestSuiteConfiguration testSuiteConfiguration, ITestSuite testSuite, IStoragePool storagePool)
@@ -475,6 +439,49 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var result = TestSuite.GetTestCases(null).Select(testCaseInfo => testCaseInfo.FullName);
 
             return result;
+        }
+
+        public IEnumerable<PropertyGroup> GetProperties(IAutoDetection detector)
+        {
+            List<Detector.CaseSelectRule> selectedRules = new List<Detector.CaseSelectRule>();
+
+            foreach (string rule in GetSelectedRuleList(this.SelectedRules))
+            {
+                selectedRules.Add(new Detector.CaseSelectRule()
+                {
+                    Name = rule,
+                    Status = Detector.RuleStatus.Selected
+                });
+
+            }
+            var hiddenProperties = detector.GetHiddenPropertiesInValueDetectorAssembly(selectedRules);
+
+            PtfPropertyView view = PtfConfig.CreatePtfPropertyView(hiddenProperties);
+
+            List<PropertyGroup> groups = new List<PropertyGroup>();
+            view.ForEach(item =>
+            {
+                var group = new PropertyGroup() { Name = item.Name };
+
+                var propertyList = GetPropertyList(item);
+                
+                group.Items = propertyList;
+                groups.Add(group);
+            });
+
+            return groups;
+        }
+
+        public void SetProperties(IEnumerable<PropertyGroup> groups)
+        {
+            var properties = groups.SelectMany(i => i.Items);
+
+            foreach (var property in properties)
+            {
+                PtfConfig.SetPropertyValue(property.Key, property.Value);
+            }
+
+            PtfConfig.Save();
         }
 
         private bool LoadSelectedRules(RuleGroup[] ruleGroups, string profilePath)
@@ -554,6 +561,44 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
             }
             return null;
+        }
+
+        private List<string> GetSelectedRuleList(IEnumerable<Common.Types.RuleGroup> ruleGroup)
+        {
+            List<string> ruleList = new List<string>();
+
+            foreach (RuleGroup g in ruleGroup)
+            {
+                ruleList.AddRange(g.Rules.Select(r => r.Name).ToList());
+            }
+            return ruleList;
+        }
+
+        private List<Property> GetPropertyList(PtfPropertyView propertyView, string parentGroupName = null)
+        {
+            var propertyList = new List<Property>();
+            propertyView.ForEach(item =>
+            {
+                if (item.ControlType == ControlType.Group)
+                {
+                    propertyList.AddRange(GetPropertyList(item, propertyView.Name));
+                }
+                else
+                {
+                    string groupName = string.IsNullOrEmpty(parentGroupName) ? propertyView.Name : string.Format("{0}.{1}", parentGroupName, propertyView.Name);
+
+                    propertyList.Add(new Property()
+                    {
+                        Key = string.Format("{0}.{1}", groupName, item.Name),
+                        Name = item.Name,
+                        Choices = item.ChoiceItems,
+                        Description = item.Description,
+                        Value = item.Value,
+                    });
+                }
+            });
+
+            return propertyList;
         }
     }
 }

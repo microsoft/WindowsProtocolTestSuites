@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.Collections.Generic;
-using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
@@ -17,13 +17,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public int CreateAutoDetector(int configurationId)
         {
             var configuration = GetConfiguration(configurationId);
+            var ptfConfigStorage = configuration.StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
 
             var testSuite = configuration.TestSuite;
 
             cacheLock.EnterWriteLock();
             try
             {
-                var autoDetector = AutoDetection.Create(testSuite);
+                var autoDetector = AutoDetection.Create(configuration);
                 AutoDetectionPool.AddOrUpdate(configurationId, _ => autoDetector, (_, _) => autoDetector);
             }
             finally
@@ -93,7 +94,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var detector = GetAutoDetection(configurationId);
 
             IEnumerable<RuleGroup> ruleGroupsBySelectedRules;
-            IEnumerable<PropertyGroup> properties = configuration.Properties;
+            IEnumerable<PropertyGroup> properties = GetConfigurationProperties(configurationId);
 
             // Get ruleGroupsBySelectedRules and ptfconfig properties values by detector.
             detector.ApplyDetectionResult(out ruleGroupsBySelectedRules, ref properties);
@@ -102,7 +103,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             configuration.Rules = ruleGroupsBySelectedRules;
 
             // Save ptfconfig files.
-            configuration.Properties = properties;
+            SetConfigurationProperties(configurationId, properties);
         }
 
         public List<ResultItemMap> GetDetectionSummary(int configurationId)
@@ -113,6 +114,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public string GetDetectionLog(int configurationId)
         {
             return GetAutoDetection(configurationId).GetDetectionLog();
+        }
+
+        public IEnumerable<PropertyGroup> GetConfigurationProperties(int configurationId)
+        {
+            var configuration = GetConfiguration(configurationId);
+            return configuration.GetProperties(GetAutoDetection(configurationId));
+        }
+
+        public void SetConfigurationProperties(int configurationId, IEnumerable<PropertyGroup> propertyGroupes)
+        {
+            var configuration = GetConfiguration(configurationId);
+            configuration.SetProperties(propertyGroupes);
         }
     }
 }
