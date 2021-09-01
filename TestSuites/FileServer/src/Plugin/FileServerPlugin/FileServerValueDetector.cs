@@ -228,7 +228,6 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.targetSUT,
                 new AccountCredential(detectionInfo.domainName, detectionInfo.userName, detectionInfo.password),
                 detectionInfo.securityPackageType);
-            logWriter.AddLog(DetectLogLevel.Information, "" + context.Token.IsCancellationRequested);
 
             List<Func<bool>> detectActions = new List<Func<bool>>();
             detectActions.Add(() => DetectSUTConnection(detector));

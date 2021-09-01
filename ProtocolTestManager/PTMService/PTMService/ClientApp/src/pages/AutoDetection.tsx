@@ -35,7 +35,7 @@ import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 const getStyle = (status: DetectionStepStatus): CSSProperties => {
-  if (status === 'Failed') {
+  if (status === 'Failed' || status === 'Cancelled') {
     return { paddingLeft: 5, color: 'red' }
   } else if (status === 'Finished') {
     return { paddingLeft: 5, color: 'green' }

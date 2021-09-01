@@ -583,17 +583,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     var resultStatus = ValueDetector.RunDetection(context) ? DetectionStatus.Finished : DetectionStatus.Error;
                     SetDetectionStatus(resultStatus);
                     detectedException = null;
+
+                    if (cts.IsCancellationRequested)
+                    {
+                        SetDetectStepCurrentStatus(DetectingStatus.Cancelled);
+                    }
                 }
                 catch (Exception ex)
                 {
                     SetDetectionStatus(DetectionStatus.Error);
                     detectedException = ex;
-                    StopDetection();
                 }
 
-                if (StepIndex < GetDetectedSteps().Count - 1)
+                if ((StepIndex < GetDetectedSteps().Count - 1) && !cts.IsCancellationRequested)
                 {
-                    SetDetectStepCurrentStatus(DetectingStatus.Failed);
+                    SetDetectStepCurrentStatus(DetectingStatus.Pending);
                 }
 
                 CloseLogger();
