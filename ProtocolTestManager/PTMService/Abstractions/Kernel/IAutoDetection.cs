@@ -32,6 +32,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         string GetDetectionLog();
 
-        IEnumerable<PropertyGroup> ConfigurationProperties { get; set; }
+        List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules);
     }
 }

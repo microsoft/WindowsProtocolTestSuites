@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Detector;
+using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.Collections.Generic;
-using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
@@ -118,12 +118,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public IEnumerable<PropertyGroup> GetConfigurationProperties(int configurationId)
         {
-            return GetAutoDetection(configurationId).ConfigurationProperties;
+            var configuration = GetConfiguration(configurationId);
+            return configuration.GetProperties(GetAutoDetection(configurationId));
         }
 
         public void SetConfigurationProperties(int configurationId, IEnumerable<PropertyGroup> propertyGroupes)
         {
-            GetAutoDetection(configurationId).ConfigurationProperties = propertyGroupes;
+            var configuration = GetConfiguration(configurationId);
+            configuration.SetProperties(propertyGroupes);
         }
     }
 }

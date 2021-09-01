@@ -356,51 +356,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return ValueDetector.GetSUTSummary();
         }
 
-        public IEnumerable<PropertyGroup> ConfigurationProperties
-        {
-            get
-            {
-                var selectedRules = ValueDetector.GetSelectedRules();
-                var hiddenProperties = this.GetHiddenPropertiesInValueDetectorAssembly(selectedRules);
-
-                PtfPropertyView view = this.PtfConfig.CreatePtfPropertyView(hiddenProperties);
-
-                List<PropertyGroup> groups = new List<PropertyGroup>();
-                view.ForEach(item =>
-                {
-                    var group = new PropertyGroup() { Name = item.Name };
-
-                    var propertyList = new List<Property>();
-                    item.ForEach(child =>
-                    {
-                        propertyList.Add(new Property()
-                        {
-                            Key = string.Format("{0}.{1}", group.Name, child.Name),
-                            Name = child.Name,
-                            Choices = child.ChoiceItems,
-                            Description = child.Description,
-                            Value = child.Value,
-                        });
-                    });
-                    group.Items = propertyList;
-                    groups.Add(group);
-                });
-
-                return groups;
-            }
-            set
-            {
-                var properties = value.SelectMany(i => i.Items);
-
-                foreach (var property in properties)
-                {
-                    this.PtfConfig.SetPropertyValue(property.Key, property.Value);
-                }
-
-                this.PtfConfig.Save();
-            }
-        }
-
         #region Apply Detection Summary to xml
 
         /// <summary>
@@ -565,7 +520,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         /// <param name="rules">Test case selection rules</param>
         /// <returns>A list of properties to hide.</returns>
-        private List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules)
+        public List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules)
         {
             return ValueDetector.GetHiddenProperties(rules);
         }

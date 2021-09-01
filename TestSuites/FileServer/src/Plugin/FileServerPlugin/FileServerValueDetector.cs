@@ -643,22 +643,16 @@ namespace Microsoft.Protocols.TestManager.Detector
                     {
                         isSMB2Selected = true;
                     }
-                    if (ruleName.Contains("HVRS"))
+                    if (ruleName.Contains("HVRS") && (rule.Status == RuleStatus.Selected))
                     {
-                        if (rule.Status == RuleStatus.Selected)
-                        {
-                            isHvrsSelected = true;
-                        }
+                        isHvrsSelected = true;
                     }
                 }
                 else if (ruleName.StartsWith("Feature.Others.FSA (File System Algorithms)"))
                 {
-                    if (ruleName.Contains("HVRS"))
+                    if (ruleName.Contains("HVRS") && (rule.Status == RuleStatus.Selected))
                     {
-                        if (rule.Status == RuleStatus.Selected)
-                        {
-                            isHvrsSelected = true;
-                        }
+                        isHvrsSelected = true;
                     }
                 }
                 else if ((ruleName == "Feature.Cluster Required.File Server Failover"
@@ -669,34 +663,17 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     isClusterSwnFsrvpSelected = true;
                 }
-                else if (ruleName == "Feature.Others.DFSC (Distributed File System Referral)")
+                else if (ruleName == "Feature.Others.DFSC (Distributed File System Referral)" && (rule.Status == RuleStatus.Selected))
                 {
-                    if (rule.Status == RuleStatus.Selected)
-                    {
-                        isDfscSelected = true;
-                    }
-                    else
-                    {
-                        hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-DFSC_ServerTestSuite.deployment.ptfconfig"));
-                    }
+                    isDfscSelected = true;
                 }
-                else if (ruleName.StartsWith("Feature.Cluster Required.RSVD"))
+                else if (ruleName.StartsWith("Feature.Cluster Required.RSVD") && (rule.Status == RuleStatus.Selected))
                 {
-                    if (rule.Status == RuleStatus.Selected)
-                    {
-                        isRsvdSelected = true;
-                    }
+                    isRsvdSelected = true;
                 }
-                else if (ruleName == "Feature.Cluster Required.SQOS (Storage Quality of Service)")
+                else if (ruleName == "Feature.Cluster Required.SQOS (Storage Quality of Service)" && (rule.Status == RuleStatus.Selected))
                 {
-                    if (rule.Status == RuleStatus.Selected)
-                    {
-                        isSqosSelected = true;
-                    }
-                    else
-                    {
-                        hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SQOS_ServerTestSuite.deployment.ptfconfig"));
-                    }
+                    isSqosSelected = true;
                 }
                 else if (ruleName.StartsWith("Feature.Others.Auth") && rule.Status == RuleStatus.Selected)
                 {
@@ -789,6 +766,16 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (!isRsvdSelected)
             {
                 hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-RSVD_ServerTestSuite.deployment.ptfconfig"));
+            }
+
+            if (!isDfscSelected)
+            {
+                hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-DFSC_ServerTestSuite.deployment.ptfconfig"));
+            }
+
+            if (!isSqosSelected)
+            {
+                hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("MS-SQOS_ServerTestSuite.deployment.ptfconfig"));
             }
 
             // Both Cluster, SWN and FSRVP cases depend on ServerFailoverTestSuite.deployment.ptfconfig

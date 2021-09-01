@@ -17,6 +17,7 @@ import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
 import { PrimaryButton, Stack } from '@fluentui/react'
 import { ConfigurationMethod_AutoDetection } from './ConfigureMethod'
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 
 export function FilterTestCase(props: any) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
@@ -44,6 +45,7 @@ export function FilterTestCase(props: any) {
 
   const onNextButtonClick = () => {
     dispatch(ConfigurationsDataSrv.setRules(() => {
+      dispatch(PropertyGroupsActions.setUpdatedAction(false))
       wizardProps.nextStep()
     }))
   }
