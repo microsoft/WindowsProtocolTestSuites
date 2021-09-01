@@ -344,6 +344,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             {
                 propertiesDic.Add("Common.IsEncryptionSupported", new List<string>() { detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION).ToString().ToLower() });
             }
+            propertiesDic.Add("Common.SutSupportedEncryptionAlgorithms", new List<string>() { String.Join(";", detectionInfo.smb2Info.SutSupportedEncryptionAlgorithms.Select(encryptionAlgorithm => encryptionAlgorithm.ToString())) });
             propertiesDic.Add("Common.IsRequireMessageSigning", new List<string>() { detectionInfo.smb2Info.IsRequireMessageSigning.ToString().ToLower() });
             propertiesDic.Add("Common.IsMultiCreditSupported", new List<string>() { detectionInfo.smb2Info.SupportedCapabilities.HasFlag(Capabilities_Values.GLOBAL_CAP_LARGE_MTU).ToString().ToLower() });
             propertiesDic.Add("Common.UnsupportedIoCtlCodes", new List<string>() { GetUnsupportedItems(detectionInfo.unsupportedIoctlCodes) });

@@ -15,13 +15,16 @@ import { ConfigurationsDataSrv } from '../services/Configurations'
 import { FilterTestCaseActions } from '../actions/FilterTestCaseAction'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
-import { PrimaryButton, Stack } from '@fluentui/react'
+import { Link, PrimaryButton, Stack } from '@fluentui/react'
 import { ConfigurationMethod_AutoDetection } from './ConfigureMethod'
+import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 export function FilterTestCase(props: any) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
 
   const dispatch = useDispatch()
+  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+  const configuration = useSelector((state: AppState) => state.configurations)
   const filterInfo = useSelector((state: AppState) => state.filterInfo)
   const configureMethod = useSelector((state: AppState) => state.configureMethod)
 
@@ -33,6 +36,14 @@ export function FilterTestCase(props: any) {
     dispatch(ConfigurationsDataSrv.getRules())
     dispatch(TestSuitesDataSrv.getTestSuiteTestCases())
   }, [dispatch])
+
+  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+    return <InvalidAppStateNotification
+        testSuite={testSuiteInfo.selectedTestSuite}
+        configuration={configuration.selectedConfiguration}
+        wizard={wizard}
+        wizardProps={wizardProps} />
+  }
 
   const onPreviousButtonClick = () => {
     if (configureMethod && configureMethod.selectedMethod && configureMethod.selectedMethod === ConfigurationMethod_AutoDetection) {

@@ -35,6 +35,9 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             // Add compression capabilities
             AddCompressionCapabilities(detectionInfo);
 
+            // Add encryption capabilities
+            AddSMB2EncryptionAlgorithms(detectionInfo);
+
             // Add/Update detected IoCtl codes
             AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_READ, this.info.F_CopyOffload[0]);
             AddIoctlCode(CtlCode_Values.FSCTL_OFFLOAD_WRITE, this.info.F_CopyOffload[1]);
@@ -78,6 +81,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             resultItemMapList.Add(dialectsItems);
             resultItemMapList.Add(capabilitiesItems);
             resultItemMapList.Add(compressionItems);
+            resultItemMapList.Add(encryptionAlgorithmItems);
             resultItemMapList.Add(ioctlCodesItems);
             resultItemMapList.Add(createContextsItems);
             resultItemMapList.Add(rsvdItems);
@@ -97,6 +101,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private const string rsvdDescription = "\"RSVD Implementation\" is detected by sending Create Request with SVHDX_OPEN_DEVICE_CONTEXT\\SVHDX_OPEN_DEVICE_CONTEXT_V2.";
         private const string sqosDescription = "\"SQOS Implementation\" is detected by sending SQOS get status request.";
         private const string compressionDescription = "\"Supported SMB2 compression algorithms\" is detected by sending NEGOTIATE request with compression negotiate context when SMB2 dialect is greater than 3.1.1.";
+        private const string encryptionAlgorithmsDescription = "\"Supported SMB2 encryption algorithms\" is detected by sending NEGOTIATE request with encryption negotiate context when SMB2 dialect is greater than 3.1.1";
 
         private ResultItemMap dialectsItems = new ResultItemMap() { Header = "Max Smb Version Supported", Description = dialectsDescription };
         private ResultItemMap capabilitiesItems = new ResultItemMap() { Header = "Capabilities", Description = capabilitiesDescription };
@@ -107,6 +112,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         private ResultItemMap sqosItems = new ResultItemMap() { Header = "Storage Quality of Service (SQOS)", Description = sqosDescription };
 
         private ResultItemMap compressionItems = new ResultItemMap() { Header = "SMB2 Compression Feature", Description = compressionDescription };
+
+        private ResultItemMap encryptionAlgorithmItems = new ResultItemMap() { Header = "SMB2 Encryption Algorithms", Description = encryptionAlgorithmsDescription };
 
         private List<ResultItemMap> resultItemMapList = new List<ResultItemMap>();
 
@@ -257,6 +264,29 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
             var chainedCompressionResult = info.smb2Info.IsChainedCompressionSupported ? DetectResult.Supported : DetectResult.UnSupported;
 
             AddResultItem(ref this.compressionItems, "Chained compression", chainedCompressionResult);
+        }
+
+        private void AddSMB2EncryptionAlgorithms(DetectionInfo info)
+        {
+            var excludedEncryptionAlogrithms = new EncryptionAlgorithm[]
+            {
+                EncryptionAlgorithm.ENCRYPTION_NONE,
+                EncryptionAlgorithm.ENCRYPTION_INVALID,
+            };
+
+            var possibleEncryptionAlogrithms = Enum.GetValues(typeof(EncryptionAlgorithm)).Cast<EncryptionAlgorithm>().Except(excludedEncryptionAlogrithms);
+
+            foreach (var encryptionAlgorithm in possibleEncryptionAlogrithms)
+            {
+                if (info.smb2Info.SutSupportedEncryptionAlgorithms.Contains(encryptionAlgorithm))
+                {
+                    AddResultItem(ref this.encryptionAlgorithmItems, encryptionAlgorithm.ToString(), DetectResult.Supported);
+                }
+                else
+                {
+                    AddResultItem(ref this.encryptionAlgorithmItems, encryptionAlgorithm.ToString(), DetectResult.UnSupported);
+                }
+            }
         }
         #endregion
     }

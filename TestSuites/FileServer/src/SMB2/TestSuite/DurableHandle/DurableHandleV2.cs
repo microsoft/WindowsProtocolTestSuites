@@ -727,6 +727,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 "2. The client disconnects from the server");
             clientBeforeDisconnection.Disconnect();
 
+            //If an Open entry is found, and if all the following conditions are satisfied, the server SHOULD<276> fail the request with STATUS_FILE_NOT_AVAILABLE.
+            // Open.IsPersistent is TRUE
+            // Open.Connection is NULL
+            //<276> Section 3.3.5.9:  If Open.ClientGuid is not equal to the ClientGuid of the connection that received this request, Open.Lease.LeaseState is equal to RWH, or Open.OplockLevel is equal to SMB2_OPLOCK_LEVEL_BATCH,
+            // Windows-based servers will attempt to break the lease/oplock and return STATUS_PENDING to process the create request asynchronously. Otherwise, if Open.Lease.LeaseState does not include SMB2_LEASE_HANDLE_CACHING and
+            // Open.OplockLevel is not equal to SMB2_OPLOCK_LEVEL_BATCH, Windows-based servers return STATUS_FILE_NOT_AVAILABLE.
+
             // Open from another client
             Smb2FunctionalClient anotherClient = new Smb2FunctionalClient(testConfig.Timeout, testConfig, this.Site);
             BaseTestSite.Log.Add(
@@ -753,10 +760,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 shareAccess: ShareAccess_Values.NONE,
                 checker: (header, response) =>
                 {
-                    BaseTestSite.Assert.AreEqual(
+                    if (TestConfig.Platform == Platform.NonWindows)
+                    {
+                        BaseTestSite.Assert.AreNotEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "The server SHOULD fail the request with STATUS_FILE_NOT_AVAILABLE.");
+                    }
+                    else
+                    {
+                        BaseTestSite.Assert.AreEqual(
                         Smb2Status.STATUS_FILE_NOT_AVAILABLE,
                         header.Status,
-                        "The server MUST fail the request with STATUS_FILE_NOT_AVAILABLE.");
+                        "The server SHOULD fail the request with STATUS_FILE_NOT_AVAILABLE.");
+                    }
                 });
         }
 
