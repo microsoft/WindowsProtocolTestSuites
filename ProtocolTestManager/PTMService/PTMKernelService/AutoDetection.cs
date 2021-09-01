@@ -599,7 +599,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     StopDetection();
                 }
 
-                if (StepIndex < GetDetectedSteps().Count)
+                if (StepIndex < GetDetectedSteps().Count - 1)
                 {
                     SetDetectStepCurrentStatus(DetectingStatus.Failed);
                 }
@@ -674,9 +674,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 stepIndexLocker.EnterReadLock();
                 try
                 {
-                    int stepIndex = 0;
-                    detectStepIndexes.TryGetValue(latestDetectorInstanceId, out stepIndex); // if failed use default value.
-                    return stepIndex;
+                    return detectStepIndexes[latestDetectorInstanceId];
                 }
                 finally
                 {

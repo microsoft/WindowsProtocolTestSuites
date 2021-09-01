@@ -230,80 +230,35 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.securityPackageType);
             logWriter.AddLog(DetectLogLevel.Information, "" + context.Token.IsCancellationRequested);
 
-            if (context.Token.IsCancellationRequested)
-                return false;
+            List<Func<bool>> detectActions = new List<Func<bool>>();
+            detectActions.Add(() => DetectSUTConnection(detector));
+            detectActions.Add(() => DetectLocalNetworkInfo(detector));
+            detectActions.Add(() => DetectSMB2Info(detector));
+            detectActions.Add(() => CheckUsernamePassword(detector));
+            detectActions.Add(() => { DetectPlatformAndUserAccount(detector); return true; });
+            detectActions.Add(() => DetectShareInfo(detector));
+            detectActions.Add(() => { DetermineSymboliclink(detector); return true; });
+            detectActions.Add(()=> { detectionInfo.detectExceptions = new Dictionary<string, string>(); return true; });
+            detectActions.Add(() => { DetectClusterShare(detector); return true; });
+            detectActions.Add(() => { DetectIoctlCodes(detector); return true; });
+            detectActions.Add(() => { DetectCreateContexts(detector); return true; });
+            detectActions.Add(() => { DetectRSVD(detector); return true; });
+            detectActions.Add(() => { DetectSQOS(detector); return true; });
 
-            // Terminate the whole detection if any exception happens in the following processes
-            if (!DetectSUTConnection(detector))
-                return false;
+            foreach(Func<bool> func in detectActions)
+            {
+                if (context.Token.IsCancellationRequested)
+                {
+                    logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                    return false;
+                }
 
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            if (!DetectLocalNetworkInfo(detector))
-                return false;
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            if (!DetectSMB2Info(detector))
-                return false;
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            if (!CheckUsernamePassword(detector))
-                return false;
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            // Do not interrupt auto-detection 
-            // Even if detecting platform and useraccount failed
-            DetectPlatformAndUserAccount(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            if (!DetectShareInfo(detector))
-                return false;
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            DetermineSymboliclink(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            detectionInfo.detectExceptions = new Dictionary<string, string>();
-
-            DetectClusterShare(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            // Detect IoctlCodes and Create Contexts
-            // If any exceptions, just ignore
-            DetectIoctlCodes(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            DetectCreateContexts(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            DetectRSVD(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
-
-            DetectSQOS(detector);
-
-            if (context.Token.IsCancellationRequested)
-                return false;
+                if (!func())
+                {
+                    return false;
+                }
+            }
+            detectActions.Clear();
 
             logWriter.AddLog(DetectLogLevel.Information, "===== End detecting =====");
             return true;

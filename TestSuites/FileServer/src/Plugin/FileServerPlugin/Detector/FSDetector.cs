@@ -679,7 +679,7 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
             var possibleEncryptionAlogrithms = Enum.GetValues(typeof(EncryptionAlgorithm)).Cast<EncryptionAlgorithm>().Except(excludedEncryptionAlogrithms);
 
-            logWriter.AddLog(LogLevel.Information, $"Available EncryptionAlgorithms ==> {String.Join(";", possibleEncryptionAlogrithms.Select(encryptionAlgorithm => encryptionAlgorithm.ToString()))}");
+            logWriter.AddLog(DetectLogLevel.Information, $"Available EncryptionAlgorithms ==> {String.Join(";", possibleEncryptionAlogrithms.Select(encryptionAlgorithm => encryptionAlgorithm.ToString()))}");
 
             // Iterate all the possible encryption algorithms since we get back only one encryption algorithm in response.
             var result = possibleEncryptionAlogrithms.Where(encryptionAlgorithm =>
@@ -712,12 +712,12 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
                     if (status == Smb2Status.STATUS_SUCCESS && client.SelectedCipherID == encryptionAlgorithm)
                     {
-                        logWriter.AddLog(LogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is supported by SUT.");
+                        logWriter.AddLog(DetectLogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is supported by SUT.");
                         return true;
                     }
                     else
                     {
-                        logWriter.AddLog(LogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is not supported by SUT.");
+                        logWriter.AddLog(DetectLogLevel.Information, $"Encryption algorithm: {encryptionAlgorithm} is not supported by SUT.");
                         return false;
                     }
                 }
