@@ -601,7 +601,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             var signingAlgorithms = TestConfig.SupportedSigningAlgorithmList.ToArray();
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SUT supported signing algorithms.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with supported signing algorithms (HMAC-SHA256, AES-CMAC, AES-GMAC).");
             NegotiateWithNegotiateContexts(
                 DialectRevision.Smb311,
                 new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },

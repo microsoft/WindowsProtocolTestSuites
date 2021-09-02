@@ -716,7 +716,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         {
             if (SupportedSigningAlgorithmList.Count == 0)
             {
-                Site.Assert.Inconclusive("SUT does not support signing!");
+                Site.Assert.Inconclusive("The number of signing algorithms provided by client MUST be greater than zero");
             }
 
             if (signingAlgorithm != null)
