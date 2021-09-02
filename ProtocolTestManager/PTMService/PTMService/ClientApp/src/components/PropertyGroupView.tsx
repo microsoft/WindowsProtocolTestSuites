@@ -95,7 +95,7 @@ export const PropertyGroupView: FunctionComponent<PropertyGroupViewProps> = (pro
 
   useLayoutEffect(() => {
     const max = props.propertyGroup.Items.reduce((currMax, curr) => {
-      const calculatedWidth = (curr.Name.length + 1) * 7
+      const calculatedWidth = (curr.Name.length + 1) * 9
       return Math.max(calculatedWidth, currMax)
     }, 0)
 

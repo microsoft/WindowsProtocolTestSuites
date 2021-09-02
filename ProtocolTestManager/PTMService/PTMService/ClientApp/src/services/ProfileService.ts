@@ -62,7 +62,7 @@ export const ProfileDataSrv = {
       onError: ConfigureMethodActions.saveProfileAction_Failure
     }).then((data: Blob | undefined) => downloadProfile(getFileNameWithExtension(`${testResultId}`), data))
   },
-  importProfile: (request: ProfileUploadRequest, callback: (data: boolean) => void): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch) => {
+  importProfile: (request: ProfileUploadRequest, callback: (data: boolean | undefined) => void): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch) => {
     const postData = new FormData()
     postData.append('Package', request.Package)
     postData.append('TestSuiteId', request.TestSuiteId.toString())
@@ -72,7 +72,7 @@ export const ProfileDataSrv = {
       url: `api/testsuite/${request.TestSuiteId}/profile/${request.ConfigurationId}`,
       method: RequestMethod.POST,
       body: postData,
-      headers: { },
+      headers: {},
       dispatch,
       onRequest: ConfigureMethodActions.importProfileAction_Request,
       onComplete: ConfigureMethodActions.importProfileAction_Success,
