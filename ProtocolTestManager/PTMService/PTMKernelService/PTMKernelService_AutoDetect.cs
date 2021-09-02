@@ -93,15 +93,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var configuration = GetConfiguration(configurationId);
             var detector = GetAutoDetection(configurationId);
 
-            IEnumerable<RuleGroup> ruleGroupsBySelectedRules;
-            IEnumerable<PropertyGroup> properties = GetConfigurationProperties(configurationId);
-
             // Get ruleGroupsBySelectedRules and ptfconfig properties values by detector.
-            detector.ApplyDetectionResult(out ruleGroupsBySelectedRules, ref properties, configuration.TargetFilterIndex, configuration.MappingFilterIndex);
-
+            detector.ApplyDetectedRules(out IEnumerable<RuleGroup>  ruleGroupsBySelectedRules, configuration.TargetFilterIndex, configuration.MappingFilterIndex);
             // Save profile.xml
             configuration.Rules = ruleGroupsBySelectedRules;
 
+            IEnumerable<PropertyGroup> properties = GetConfigurationProperties(configurationId);
+            detector.ApplyDetectedValues(ref properties);
             // Save ptfconfig files.
             SetConfigurationProperties(configurationId, properties);
         }

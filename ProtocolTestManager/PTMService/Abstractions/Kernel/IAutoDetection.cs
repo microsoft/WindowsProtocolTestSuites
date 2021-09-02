@@ -28,7 +28,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         void Reset();
 
-        void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties, int targetFilterIndex, int mappingFilterIndex);
+        void ApplyDetectedValues(ref IEnumerable<PropertyGroup> properties);
+
+        void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, int targetFilterIndex, int mappingFilterIndex);
 
         string GetDetectionLog();
 
