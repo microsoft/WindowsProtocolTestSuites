@@ -94,7 +94,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var detector = GetAutoDetection(configurationId);
 
             // Get ruleGroupsBySelectedRules and ptfconfig properties values by detector.
-            detector.ApplyDetectedRules(out IEnumerable<RuleGroup>  ruleGroupsBySelectedRules, configuration.TargetFilterIndex, configuration.MappingFilterIndex);
+            detector.ApplyDetectedRules(out IEnumerable<RuleGroup> ruleGroupsBySelectedRules, configuration.TargetFilterIndex, configuration.MappingFilterIndex);
             // Save profile.xml
             configuration.Rules = ruleGroupsBySelectedRules;
 
