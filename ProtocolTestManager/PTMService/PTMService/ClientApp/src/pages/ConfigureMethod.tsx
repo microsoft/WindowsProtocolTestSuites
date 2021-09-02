@@ -28,7 +28,7 @@ export function ConfigureMethod(props: StepWizardProps) {
   const configuration = useSelector((state: AppState) => state.configurations)
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
   const [hideAutoDetectionWarningDialog, { toggle: toggleAutoDetectionWarningDialog }] = useBoolean(true)
-  const [importingErrMsg, setImportingErrMsg] = useState('')
+  const [importingErrMsg, setImportingErrMsg] = useState<string | undefined>(undefined)
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
@@ -120,14 +120,14 @@ export function ConfigureMethod(props: StepWizardProps) {
 
   const onConfigurationCreate = () => {
     if (file != null) {
-      setImportingErrMsg('')
+      setImportingErrMsg(undefined)
       const testSuiteId = testSuites.selectedTestSuite?.Id
       const configId = configurations.selectedConfiguration?.Id
       dispatch(ProfileDataSrv.importProfile({
         Package: file.File,
         TestSuiteId: testSuiteId ?? 0,
         ConfigurationId: configId ?? 0
-      }, (data: boolean) => {
+      }, (data: boolean | undefined) => {
         if (data === undefined && configureMethod.errorMsg === undefined) {
           setImportingErrMsg('Profile did not work. Try again.')
         }
@@ -135,7 +135,7 @@ export function ConfigureMethod(props: StepWizardProps) {
         if (configureMethod.errorMsg) {
           setImportingErrMsg(configureMethod.errorMsg)
         } else if (data) {
-          setImportingErrMsg('')
+          setImportingErrMsg(undefined)
           toggleHideDialog()
           wizardProps.goToStep(RunSteps.RUN_SELECTED_TEST_CASE)
         }
@@ -180,13 +180,14 @@ export function ConfigureMethod(props: StepWizardProps) {
             label="Package"
             onSuccess={onFileUploadSuccess}
             maxFileCount={1}
+            disabled={configureMethod.isUploadingProfile}
             suffix={['.ptm']}
             placeholder="Select .ptm file"
           />
         </Stack>
         <DialogFooter>
-          <PrimaryButton onClick={onConfigurationCreate} text={configureMethod.isProfileUploading ? 'Uploading...' : 'Load Profile'} disabled={configureMethod.isProfileUploading} />
-          <DefaultButton onClick={toggleHideDialog} text="Close" disabled={configureMethod.isProfileUploading} />
+          <PrimaryButton onClick={onConfigurationCreate} text={configureMethod.isUploadingProfile ? 'Uploading...' : 'Load Profile'} disabled={configureMethod.isUploadingProfile} />
+          <DefaultButton onClick={toggleHideDialog} text="Close" disabled={configureMethod.isUploadingProfile} />
         </DialogFooter>
       </Dialog>
 

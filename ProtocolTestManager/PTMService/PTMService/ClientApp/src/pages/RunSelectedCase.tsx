@@ -157,7 +157,7 @@ export function RunSelectedCase(props: StepWizardProps) {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
   const [isUploadingPlaylist, setIsUploadingPlaylist] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
-  const [importingErrMsg, setImportingErrMsg] = useState('')
+  const [importingErrMsg, setImportingErrMsg] = useState<string | undefined>(undefined)
   const [file, setFile] = useState<IFile>()
 
   const onFileUploadSuccess = (files: IFile[]): void => {
@@ -179,19 +179,19 @@ export function RunSelectedCase(props: StepWizardProps) {
           const selectedKey: string = i.getAttribute('Test')?.toString() ?? ''
           if (selectedKey !== '') tests.push(selectedKey)
         })
-        // Disable onSelectionChanged to avoid render long time.
+        // Disable onSelectionChanged to avoid long rendering time.
         selection.setChangeEvents(false, true)
-        // Select the imported items
+        // Select the imported items.
         const selectionItems = selection.getItems().map(item => item.key)
         tests.forEach(test => { if (selectionItems.includes(test)) selection.setKeySelected(test, true, false); })
-        // Enable onSelectionChanged
+        // Enable onSelectionChanged.
         selection.setChangeEvents(true, false)
         // Update selection.
         setSelectedItems(selection.getSelection().map(item => item.key as string))
         setSelection(selection)
         // Update states.
         setShowSuccess(true)
-        setImportingErrMsg('')
+        setImportingErrMsg(undefined)
         setIsUploadingPlaylist(false)
         // Force update.
         forceUpdate()
@@ -328,7 +328,7 @@ export function RunSelectedCase(props: StepWizardProps) {
   }
 
   const onShowImportDialog = () => {
-    setImportingErrMsg('')
+    setImportingErrMsg(undefined)
     setIsUploadingPlaylist(false)
     setShowSuccess(false)
     toggleHideDialog()
@@ -431,6 +431,7 @@ export function RunSelectedCase(props: StepWizardProps) {
                 label="Package"
                 onSuccess={onFileUploadSuccess}
                 maxFileCount={1}
+                disabled={isUploadingPlaylist}
                 suffix={['.playlist']}
                 placeholder="Select .playlist file"
               />

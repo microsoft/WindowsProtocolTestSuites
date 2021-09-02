@@ -3,33 +3,31 @@
 
 import {
   SET_CONFIGURATION_METHOD,
-  TestSuiteConfigureMethodActionTypes,
   SAVE_PROFILE_REQUEST,
   SAVE_PROFILE_SUCCESS,
   SAVE_PROFILE_FAILURE,
   IMPORT_PROFILE_REQUEST,
   IMPORT_PROFILE_SUCCESS,
-  IMPORT_PROFILE_FAILURE
+  IMPORT_PROFILE_FAILURE,
+  TestSuiteConfigureMethodActionTypes
 } from '../actions/ConfigureMethodAction'
 
 export interface ConfigureMethodState {
-  isLoading: boolean
   errorMsg?: string
   selectedMethod?: string
   isPosting: boolean
-  isProfileImport: boolean
-  isProfileUploading: boolean
-  profileLocation?: any
+  isProfileImported: boolean
+  isUploadingProfile: boolean
+  profileLocation?: string
 }
 
 const initialConfigureMethodState: ConfigureMethodState = {
-  isLoading: false,
   errorMsg: undefined,
   selectedMethod: undefined,
   isPosting: false,
-  profileLocation: undefined,
-  isProfileImport: false,
-  isProfileUploading: false
+  isProfileImported: false,
+  isUploadingProfile: false,
+  profileLocation: undefined
 }
 
 export const getConfigureMethodReducer = (state = initialConfigureMethodState, action: TestSuiteConfigureMethodActionTypes): ConfigureMethodState => {
@@ -37,7 +35,6 @@ export const getConfigureMethodReducer = (state = initialConfigureMethodState, a
     case SET_CONFIGURATION_METHOD:
       return {
         ...state,
-        isLoading: true,
         errorMsg: undefined,
         selectedMethod: action.selectedMethod
       }
@@ -67,7 +64,8 @@ export const getConfigureMethodReducer = (state = initialConfigureMethodState, a
       return {
         ...state,
         isPosting: true,
-        isProfileUploading: true,
+        isUploadingProfile: true,
+        isProfileImported: false,
         errorMsg: undefined
       }
 
@@ -75,16 +73,16 @@ export const getConfigureMethodReducer = (state = initialConfigureMethodState, a
       return {
         ...state,
         isPosting: false,
-        isProfileUploading: false,
-        isProfileImport: action.payload
+        isUploadingProfile: false,
+        isProfileImported: action.payload
       }
 
     case IMPORT_PROFILE_FAILURE:
       return {
         ...state,
         isPosting: false,
-        isProfileUploading: false,
-        isProfileImport: false,
+        isUploadingProfile: false,
+        isProfileImported: false,
         errorMsg: action.errorMsg
       }
 

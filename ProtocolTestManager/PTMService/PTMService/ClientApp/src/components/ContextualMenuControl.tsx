@@ -42,8 +42,6 @@ export const ContextualMenuControl: React.FunctionComponent<ContextualMenuProps>
         ]
   }), [props])
 
-
-
   const menuProps = useMemo<IContextualMenuProps>(() => ({
     shouldFocusOnMount: props.shouldFocusOnMount,
     items: menuItems

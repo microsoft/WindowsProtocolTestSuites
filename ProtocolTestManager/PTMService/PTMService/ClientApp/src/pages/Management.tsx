@@ -235,16 +235,20 @@ export function Management(props: any) {
               <TextField
                 label="Test Suite Name"
                 value={testSuiteName}
+                disabled={managementState.isProcessing}
                 onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Name, newValue) }} />
               <FileUploader
                 label="Package"
                 onSuccess={onFileUploadSuccess}
-                maxFileCount={1} suffix={['.zip', '.gz']}
+                disabled={managementState.isProcessing}
+                maxFileCount={1}
+                suffix={['.zip', '.gz']}
                 placeholder="Please click to upload test suite package" />
               <TextField
                 label="Description"
                 multiline={true}
                 value={testSuiteDescription}
+                disabled={managementState.isProcessing}
                 errorMessage={testSuiteErrorMsg}
                 onChange={(event: any, newValue?: string) => { onFieldChange(ElementType.Description, newValue) }} />
             </Stack>
