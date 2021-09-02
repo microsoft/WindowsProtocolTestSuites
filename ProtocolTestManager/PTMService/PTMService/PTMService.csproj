@@ -7,6 +7,7 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -27,7 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ScriptFiles Include="Scripts\*.*"/>
+    <ScriptFiles Include="Scripts\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\AssemblyInfo\PTMAssemblyInfo.cs" Link="PTMAssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,7 +70,7 @@
   </Target>
 
   <Target Name="CopyCustomContent" AfterTargets="Publish">
-    <Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(PublishDir)"/>
+    <Copy SourceFiles="@(ScriptFiles)" DestinationFolder="$(PublishDir)" />
   </Target>
 
 </Project>
