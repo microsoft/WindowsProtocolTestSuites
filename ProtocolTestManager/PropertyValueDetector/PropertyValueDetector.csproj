@@ -3,6 +3,7 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<AssemblyName>PropertyValueDetector</AssemblyName>
 		<RootNamespace>Microsoft.Protocols.TestManager.Detector</RootNamespace>
+		<Version>1.0.0</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="System.DirectoryServices" Version="5.0.0" />
