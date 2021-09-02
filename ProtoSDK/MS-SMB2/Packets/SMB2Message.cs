@@ -5329,7 +5329,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// Control code for SVHDX_META_OPERATION_START_REQUEST
         /// </summary>
-        FSCTL_SVHDX_ASYNC_TUNNEL_REQUEST = 0x00090364
+        FSCTL_SVHDX_ASYNC_TUNNEL_REQUEST = 0x00090364,
+
+        /// <summary>
+        /// Control code for FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT
+        /// </summary>
+        FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT = 0x00090440,
     }
 
     /// <summary>
@@ -11594,7 +11599,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The volume is write-protected and changes to it cannot be made. 
         /// </summary>
         public const uint STATUS_MEDIA_WRITE_PROTECTED = 0xC00000A2;
-
+        
         #endregion
 
         public static string GetStatusCode(uint status)
