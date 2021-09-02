@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isObjectIdIoCtlRequestSupported;
         private bool isOpenHasManageVolumeAccessSupported;
         private bool isStreamRenameSupported;
-        private bool isSnapshotManagementImplemented;
+        private bool isStreamSnapshotManagementImplemented;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -178,9 +178,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return isShortNameSupported; }
         }
 
-        public bool IsSnapshotManagementImplemented
+        public bool IsStreamSnapshotManagementImplemented
         {
-            get { return isSnapshotManagementImplemented; }
+            get { return isStreamSnapshotManagementImplemented; }
         }
 
         public uint ClusterSizeInKB
@@ -328,7 +328,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isObjectIdIoCtlRequestSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectIdIoCtlRequest").Contains(this.fileSystem.ToString());
             this.isOpenHasManageVolumeAccessSupported = testConfig.GetProperty("WhichFileSystemSupport_OpenHasManageVolumeAccess").Contains(this.fileSystem.ToString());
             this.isStreamRenameSupported = testConfig.GetProperty("WhichFileSystemSupport_StreamRename").Contains(this.fileSystem.ToString());
-            this.isSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_SnapshotManagement").Contains(this.fileSystem.ToString());
+            this.isStreamSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_StreamSnapshotManagement").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));

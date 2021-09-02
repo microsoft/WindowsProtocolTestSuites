@@ -16,7 +16,7 @@
         </Description>
       </Property>
 
-      <Property name="FileSystem" value="REFS">
+      <Property name="FileSystem" value="NTFS">
         <Choice>NTFS, REFS, FAT32, OTHERFS</Choice>
         <Description>
           File System Under Test.
@@ -131,7 +131,7 @@
       <Property name="WhichFileSystemSupport_ObjectIdIoCtlRequest" value="NTFS" />
       <Property name="WhichFileSystemSupport_OpenHasManageVolumeAccess" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_StreamRename" value="NTFS;" />
-      <Property name="WhichFileSystemSupport_SnapshotManagement" value="REFS;" />
+      <Property name="WhichFileSystemSupport_StreamSnapshotManagement" value="REFS;" />
 
 
       <Property name="NTFS_ClusterSizeInKB" value="4">
