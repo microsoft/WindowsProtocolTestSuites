@@ -11,7 +11,7 @@ export const AutoDetectionDataSrv = {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/prerequisites`,
+      url: `api/configuration/${configurationId}/autodetect/prerequisites`,
       method: RequestMethod.GET,
       dispatch,
       onRequest: AutoDetectionActions.getAutoDetectionPrerequisiteAction_Request,
@@ -23,7 +23,7 @@ export const AutoDetectionDataSrv = {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
+      url: `api/configuration/${configurationId}/autodetect/detectionsteps`,
       method: RequestMethod.GET,
       dispatch,
       onRequest: AutoDetectionActions.getAutoDetectionStepsAction_Request,
@@ -40,7 +40,7 @@ export const AutoDetectionDataSrv = {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/detectionsteps`,
+      url: `api/configuration/${configurationId}/autodetect/detectionsteps`,
       method: RequestMethod.GET,
       dispatch,
       onRequest: AutoDetectionActions.updateAutoDetectionStepsAction_Request,
@@ -57,7 +57,7 @@ export const AutoDetectionDataSrv = {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/log`,
+      url: `api/configuration/${configurationId}/autodetect/log`,
       method: RequestMethod.GET,
       dispatch,
       onRequest: AutoDetectionActions.getAutoDetectionLogAction_Request,
@@ -77,7 +77,7 @@ export const AutoDetectionDataSrv = {
     const configurationId = state.configurations.selectedConfiguration?.Id
     const body = state.autoDetection.prerequisite?.Properties
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/start`,
+      url: `api/configuration/${configurationId}/autodetect/start`,
       method: RequestMethod.POST,
       dispatch,
       onRequest: AutoDetectionActions.startAutoDetectionAction_Request,
@@ -95,7 +95,7 @@ export const AutoDetectionDataSrv = {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/stop`,
+      url: `api/configuration/${configurationId}/autodetect/stop`,
       method: RequestMethod.POST,
       dispatch,
       onRequest: AutoDetectionActions.stopAutoDetectionAction_Request,
@@ -108,7 +108,7 @@ export const AutoDetectionDataSrv = {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/apply`,
+      url: `api/configuration/${configurationId}/autodetect/apply`,
       method: RequestMethod.POST,
       dispatch,
       onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
