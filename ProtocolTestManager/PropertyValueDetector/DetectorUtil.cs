@@ -217,6 +217,10 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <summary>
         /// The status means user cancelled the detection.
         /// </summary>
-        Canceling
+        Canceling,
+        /// <summary>
+        /// The status means a step in the auto-dection Cancelled
+        /// </summary>
+        Cancelled
     }
 }

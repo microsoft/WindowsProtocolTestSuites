@@ -72,13 +72,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         {
             var configuration = PTMKernelService.GetConfiguration(id);
             var groups = RuleGroup.FromKernalRuleGroups(configuration.Rules);
-            groups = RuleGroup.UpdateByMappingTable(groups, configuration.TargetFilterIndex, configuration.FeatureMappingTable, configuration.SelectedRules);
-            groups = RuleGroup.UpdateByMappingTable(groups, configuration.MappingFilterIndex, configuration.ReverseMappingTable, configuration.SelectedRules);
+            var selectedRules = configuration.SelectedRules;
+            groups = RuleGroup.UpdateByMappingTable(groups, configuration.TargetFilterIndex, configuration.FeatureMappingTable, selectedRules);
+            groups = RuleGroup.UpdateByMappingTable(groups, configuration.MappingFilterIndex, configuration.ReverseMappingTable, selectedRules);
 
             return new TestSuiteRules()
             {
                 AllRules = groups,
-                SelectedRules = RuleGroup.FromKernalRuleGroups(configuration.SelectedRules),
+                SelectedRules = RuleGroup.FromKernalRuleGroups(selectedRules),
                 TargetFilterIndex = configuration.TargetFilterIndex,
                 MappingFilterIndex = configuration.MappingFilterIndex
             };
@@ -109,9 +110,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpGet]
         public PropertyGetItemGroup[] GetProperties(int id)
         {
-            var configuration = PTMKernelService.GetConfiguration(id);
+            var properties = PTMKernelService.GetConfigurationProperties(id);
 
-            var result = configuration.Properties.Select(group => new PropertyGetItemGroup
+            var result = properties.Select(group => new PropertyGetItemGroup
             {
                 Name = group.Name,
                 Items = group.Items.Select(property => new PropertyGetItem
@@ -137,9 +138,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPut]
         public IActionResult SetProperties(int id, PropertySetItemGroup[] properties)
         {
-            var configuration = PTMKernelService.GetConfiguration(id);
-
-            configuration.Properties = properties.Select(group => new PropertyGroup
+            PTMKernelService.SetConfigurationProperties(id, properties.Select(group => new PropertyGroup
             {
                 Name = group.Name,
                 Items = group.Items.Select(item => new Property
@@ -147,7 +146,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                     Key = item.Key,
                     Value = item.Value,
                 }),
-            });
+            }));
 
             return Ok();
         }

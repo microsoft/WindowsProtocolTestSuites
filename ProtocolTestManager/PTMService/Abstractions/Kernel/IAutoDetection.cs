@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
     public interface IAutoDetection
     {
-        void InitializeDetector(int testSuiteId);
+        void InitializeDetector();
 
         PrerequisiteView GetPrerequisites();
 
@@ -28,8 +28,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         void Reset();
 
-        void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties);
+        void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties, int targetFilterIndex, int mappingFilterIndex);
 
         string GetDetectionLog();
+
+        List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules);
     }
 }

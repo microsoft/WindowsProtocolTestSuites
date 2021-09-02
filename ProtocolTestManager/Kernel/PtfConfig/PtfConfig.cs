@@ -431,7 +431,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public PtfProperty GetPropertyNodeByName(string propertyName)
         {
             string searchName = "." + propertyName;
-            string[] groups = propertyName.Split('.');
 
             //Property
             Stack<PtfProperty> s = new Stack<PtfProperty>();

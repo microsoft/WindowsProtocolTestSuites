@@ -16,6 +16,7 @@ import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
 import { IStackItemTokens, IStackTokens, PrimaryButton, Stack } from '@fluentui/react'
 import { ConfigurationMethod_AutoDetection } from './ConfigureMethod'
+import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 export const FilterTestCase: React.FC<any> = (props: any) => {
@@ -53,6 +54,7 @@ export const FilterTestCase: React.FC<any> = (props: any) => {
 
   const onNextButtonClick: React.MouseEventHandler<unknown> = () => {
     dispatch(ConfigurationsDataSrv.setRules(() => {
+      dispatch(PropertyGroupsActions.setUpdatedAction(false))
       wizardProps.nextStep()
     }))
   }
