@@ -202,7 +202,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         protected Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable = new Dictionary<ulong, Smb2CryptoInfo>();
         private Smb2CompressionInfo compressionInfo;
-        private SigningAlgorithm signingId;
+        private SigningAlgorithm selectedSigningAlgorithm;
         private Smb2Decoder decoder;
 
         private bool disposed;
@@ -351,7 +351,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         {
             get
             {
-                return signingId;
+                return selectedSigningAlgorithm;
             }
         }
         #endregion
@@ -372,7 +372,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             cipherId = EncryptionAlgorithm.ENCRYPTION_NONE;
 
-            signingId = SigningAlgorithm.HMAC_SHA256;
+            selectedSigningAlgorithm = SigningAlgorithm.HMAC_SHA256;
         }
 
         #endregion
@@ -1229,7 +1229,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                         throw new InvalidOperationException("Algorithm count is more than expected");
                     } 
 
-                    this.signingId = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
+                    this.selectedSigningAlgorithm = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
                 }
 
                 // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 
