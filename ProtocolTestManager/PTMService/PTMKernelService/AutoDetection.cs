@@ -359,20 +359,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         }
 
         #region Apply Detection Summary to xml
-
-        /// <summary>
-        /// Apply Detection Result
-        /// </summary>
-        /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules</param>
-        /// <param name="properties">The ptfconfig properties.</param>
-        /// <param name="targetFilterIndex">Target filter index</param>
-        /// <param name="mappingFilterIndex">Mapping filter index</param>
-        public void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties, int targetFilterIndex, int mappingFilterIndex)
-        {
-            ApplyDetectedRules(out ruleGroupsBySelectedRules, targetFilterIndex, mappingFilterIndex);
-            ApplyDetectedValues(ref properties);
-        }
-
         /// <summary>
         /// Apply the test case selection rules detected by the plug-in.
         /// </summary>
