@@ -1051,13 +1051,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
                 if (signingAlgorithms != null)
                 {
-                    BaseTestSite.Assert.IsTrue(TestConfig.SupportedSigningAlgorithmList.Contains(client.SelectedSigningId),
+                    BaseTestSite.Assert.IsTrue(TestConfig.SupportedSigningAlgorithmList.Contains(client.SelectedSigningAlgorithm),
                     "[MS-SMB2] 3.3.5.4 The server MUST set Connection.SigningAlgorithmId to the supported signing algorithm " +
                     "common to both client and server in the SigningAlgorithms field");
                 }
                 else
                 {
-                    BaseTestSite.Assert.AreEqual(SigningAlgorithm.HMAC_SHA256, client.SelectedSigningId,
+                    BaseTestSite.Assert.AreEqual(SigningAlgorithm.HMAC_SHA256, client.SelectedSigningAlgorithm,
                         "[MS-SMB2] If the server does not support any of the signing algorithms provided by the client, " +
                         "Connection.SigningAlgorithmId MUST be set to zero.");
                 }
@@ -1150,11 +1150,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // Check platform
             if (TestConfig.IsWindowsPlatform)
             {
-                BaseTestSite.Assert.IsFalse(TestConfig.Platform < Platform.WindowsServer2022, "Windows 10 v20H2 operating system and prior and Windows Server v20H2 operating system and prior do not send or process SMB2_SIGNING_CAPABILITIES.");
+                BaseTestSite.Assert.IsFalse(TestConfig.Platform < Platform.WindowsServer2021, "Windows 10 v20H2 operating system and prior and Windows Server v20H2 operating system and prior do not send or process SMB2_SIGNING_CAPABILITIES.");
 
                 if (isSigningRequired)
                 {
-                    BaseTestSite.Assert.IsTrue(TestConfig.Platform >= Platform.WindowsServer2022, "Only Windows 10 v21H1 operating system and later and Windows Server 2022 operating system and later operating systems support signing capabilities");
+                    BaseTestSite.Assert.IsTrue(TestConfig.Platform >= Platform.WindowsServer2021, "Only Windows 10 v21H1 operating system and later and Windows Server 2022 operating system and later operating systems support signing capabilities");
                 }
             }
 

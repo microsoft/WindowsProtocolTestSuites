@@ -347,7 +347,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
         }
 
-        public SigningAlgorithm SelectedSigningId
+        public SigningAlgorithm SelectedSigningAlgorithm
         {
             get
             {
@@ -1224,13 +1224,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 }
                 if (response.NegotiateContext_SIGNING != null)
                 {
-                    if (response.NegotiateContext_SIGNING.Value.SigningAlgorithmCount > 1)
+                    if (response.NegotiateContext_SIGNING.Value.SigningAlgorithmCount != 1)
                     {
                         throw new InvalidOperationException("Algorithm count is more than expected");
-                    } else
-                    {
-                        this.signingId = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
-                    }
+                    } 
+
+                    this.signingId = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
                 }
 
                 // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 

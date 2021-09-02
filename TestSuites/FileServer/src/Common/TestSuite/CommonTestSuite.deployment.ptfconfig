@@ -254,7 +254,9 @@
 
       <Property name="Platform" value="WindowsServer2016">
         <Choice>
-          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,WindowsServerV1709,WindowsServerV1803,WindowsServer2019,WindowsServerV1903,WindowsServerV1909,WindowsServerV2004,WindowsServer2022
+          NonWindows,WindowsServer2008,WindowsServer2008R2,WindowsServer2012,WindowsServer2012R2,WindowsServer2016,
+          WindowsServerV1709,WindowsServerV1803,WindowsServer2019,WindowsServerV1903,WindowsServerV1909,
+          WindowsServerV2004,WindowsServer2020,WindowsServer2021,WindowsServer2022
         </Choice>
         <Description>
           Platform type of the SUT
@@ -277,11 +279,11 @@
         </Description>
       </Property>
 
-      <Property name="SutSupportedEncryptionAlgorithms" value="ENCRYPTION_AES128_GCM;ENCRYPTION_AES128_CCM;ENCRYPTION_AES256_GCM;ENCRYPTION_AES256_CCM">
+      <Property name="SupportedEncryptionAlgorithms" value="ENCRYPTION_AES128_GCM;ENCRYPTION_AES128_CCM;ENCRYPTION_AES256_GCM;ENCRYPTION_AES256_CCM">
         <Description>
-          List all supported encryption algorithms, possible values: ENCRYPTION_AES128_GCM, ENCRYPTION_AES128_CCM, ENCRYPTION_AES256_GCM, ENCRYPTION_AES256_CCM
-          Multiple values should be separated by semicolons
-          If it is not applicable, leave it blank
+            List all supported encryption algorithms, possible values: ENCRYPTION_AES128_GCM, ENCRYPTION_AES128_CCM, ENCRYPTION_AES256_GCM, ENCRYPTION_AES256_CCM
+            Multiple values should be separated by semicolons
+            If it is not applicable, leave it blank
         </Description>
       </Property>
 
@@ -325,23 +327,6 @@
         <Choice>true,false</Choice>
         <Description>
           Set to true if SUT supports chained compression, otherwise set it to false.
-        </Description>
-      </Property>
-
-      <Property name="DisableEncryptionOverSecureTransport" value="false">
-        <Choice>true,false</Choice>
-        <Description>
-          Set to true if SUT supports a secured transport protocol like QUIC.
-          Windows 10 v21H1 OS and Windows Server 2022 set this to TRUE
-        </Description>
-      </Property>
-
-      <Property name="SupportedSigningAlgorithms" value="HMAC_SHA256;AES_CMAC;AES_GMAC">
-        <Description>
-          List of all client supported signing algorithms in order of preference from most to least.
-          Possible values: HMAC-SHA256, AES-CMAC, AES-GMAC.
-          Multiple values should be separated by semicolons.
-          If it is not applicable, leave it as blank or "NONE".
         </Description>
       </Property>
     </Group>

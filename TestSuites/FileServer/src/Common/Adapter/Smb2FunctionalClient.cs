@@ -304,11 +304,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// <summary>
         /// The server selected signing algorithm
         /// </summary>
-        public SigningAlgorithm SelectedSigningId
+        public SigningAlgorithm SelectedSigningAlgorithm
         {
             get
             {
-                return client.SelectedSigningId;
+                return client.SelectedSigningAlgorithm;
             }
         }
 

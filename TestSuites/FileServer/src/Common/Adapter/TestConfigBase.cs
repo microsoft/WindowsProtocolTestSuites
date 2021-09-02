@@ -724,8 +724,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 if (!SupportedSigningAlgorithmList.Contains(signingAlgorithm.Value))
                 {
                     Site.Assert.Inconclusive("The specified signing algorithm {0} is not supported by SUT", signingAlgorithm);
-                }
-               
+                }               
             }
         }
 
@@ -879,8 +878,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         WindowsServerV2004 = 0x1000000E,
 
         /// <summary>
+        /// Windows Server v2020
+        /// </summary>
+        WindowsServer2020 = 0x1000000F,
+
+        /// <summary>
+        /// Windows Server v2021
+        /// </summary>
+        WindowsServer2021 = 0x10000010,
+
+        /// <summary>
         /// Windows Server v2022
         /// </summary>
-        WindowsServer2022 = 0x1000000F,
+        WindowsServer2022 = 0x10000011,
     }
 }
