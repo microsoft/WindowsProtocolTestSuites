@@ -2,6 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
+  SAVE_PROFILE_REQUEST,
+  SAVE_PROFILE_SUCCESS,
+  SAVE_PROFILE_FAILURE,
+  TestSuiteConfigureMethodActionTypes
+} from '../actions/ConfigureMethodAction'
+
+import {
   CREATE_RUNREQUEST_REQUEST,
   CREATE_RUNREQUEST_SUCCESS,
   CREATE_RUNREQUEST_FAILURE,
@@ -45,8 +52,28 @@ const initialTestCaseResultState: TestCaseResultState = {
   selectedTestCaseResult: undefined
 }
 
-export const getTestCaseResultReducer = (state = initialTestCaseResultState, action: TestCaseResultActionTypes | SelectedTestCasesActionTypes | TestResultsActionTypes): TestCaseResultState => {
+export const getTestCaseResultReducer = (state = initialTestCaseResultState, action: TestCaseResultActionTypes | TestSuiteConfigureMethodActionTypes | SelectedTestCasesActionTypes | TestResultsActionTypes): TestCaseResultState => {
   switch (action.type) {
+    case SAVE_PROFILE_REQUEST:
+      return {
+        ...state,
+        isPosting: true,
+        errorMsg: undefined
+      }
+
+    case SAVE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        isPosting: false
+      }
+
+    case SAVE_PROFILE_FAILURE:
+      return {
+        ...state,
+        isPosting: false,
+        errorMsg: action.errorMsg
+      }
+
     case CREATE_RUNREQUEST_REQUEST:
       return {
         ...state,

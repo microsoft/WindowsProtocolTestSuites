@@ -23,7 +23,7 @@ import { AppState } from '../store/configureStore'
 
 type NumberValueKeysOf<T> = { [P in keyof T]-?: T[P] extends number ? P : never }[keyof T]
 
-function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>> (items: TItem[], keyName: NumberValueKeysOf<TItem>) {
+function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>>(items: TItem[], keyName: NumberValueKeysOf<TItem>) {
   return items.reduce((dict: { [key: number]: TItem }, item) => {
     const keyValue: number = item[keyName]
     dict[keyValue] = item
@@ -147,30 +147,30 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
       isPadded: true,
       onRender: (item: TestResultOverview, _, __) => {
         return (
-                    <Stack horizontal tokens={StackGap10}>
-                        {
-                            item.Status === 'Created' || item.Status === 'Running'
-                              ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
-                              : null
-                        }
-                        {
-                            !props.isTestSuiteRemoved(item.ConfigurationId)
-                              ? <Stack horizontal tokens={StackGap10}>
-                                    {
-                                        item.Status !== 'Created' && item.Status !== 'Running'
-                                          ? <PrimaryButton onClick={() => { props.onRerun(item.Id, item.ConfigurationId) }}>Rerun</PrimaryButton>
-                                          : null
-                                    }
-                                    <PrimaryButton onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
-                                </Stack>
-                              : null
-                        }
-                        {
-                            item.Status !== 'Created'
-                              ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
-                              : null
-                        }
-                    </Stack>
+          <Stack horizontal tokens={StackGap10}>
+            {
+              item.Status === 'Created' || item.Status === 'Running'
+                ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
+                : null
+            }
+            {
+              !props.isTestSuiteRemoved(item.ConfigurationId)
+                ? <Stack horizontal tokens={StackGap10}>
+                  {
+                    item.Status !== 'Created' && item.Status !== 'Running'
+                      ? <PrimaryButton onClick={() => { props.onRerun(item.Id, item.ConfigurationId) }}>Rerun</PrimaryButton>
+                      : null
+                  }
+                  <PrimaryButton onClick={() => { props.onExportProfile(item.Id) }}>Export Profile</PrimaryButton>
+                </Stack>
+                : null
+            }
+            {
+              item.Status !== 'Created'
+                ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
+                : null
+            }
+          </Stack>
         )
       }
     }
@@ -221,7 +221,7 @@ const renderStatus = (status: TestResultState) => {
   return <div style={{ color: getTestResultStateColor(status), fontSize: 'large' }}>{status}</div>
 }
 
-export function TaskHistory (props: any) {
+export function TaskHistory(props: any) {
   const winSize = useWindowSize()
 
   const history = useHistory()
@@ -274,9 +274,9 @@ export function TaskHistory (props: any) {
   const renderId = useCallback((testResultId: number) => {
     if (latestTestResultId !== undefined && latestTestResultId === testResultId) {
       return <Stack horizontal>
-                <div style={{ color: '#ff4949', fontSize: 'large', fontWeight: 'bold' }}>New!</div>
-                <div style={{ paddingLeft: 5, fontSize: 'large' }}>{testResultId}</div>
-            </Stack>
+        <div style={{ color: '#ff4949', fontSize: 'large', fontWeight: 'bold' }}>New!</div>
+        <div style={{ paddingLeft: 5, fontSize: 'large' }}>{testResultId}</div>
+      </Stack>
     } else {
       return <div style={{ fontSize: 'large' }}>{testResultId}</div>
     }
@@ -290,12 +290,12 @@ export function TaskHistory (props: any) {
     const testSuite = testSuiteDict[configurationDict[configurationId].TestSuiteId]
     if (testSuite.Removed) {
       return <div style={{ color: 'rgba(0, 0, 0, 0.5)', fontSize: 'large', textDecorationLine: 'line-through' }}>
-                {`${testSuite.Name} ${testSuite.Version}`}
-            </div>
+        {`${testSuite.Name} ${testSuite.Version}`}
+      </div>
     } else {
       return <div style={{ fontSize: 'large' }}>
-                {`${testSuite.Name} ${testSuite.Version}`}
-            </div>
+        {`${testSuite.Name} ${testSuite.Version}`}
+      </div>
     }
   }, [testSuiteDict, configurationDict])
 
@@ -313,25 +313,25 @@ export function TaskHistory (props: any) {
     }
 
     return <div style={{ fontSize: 'large' }}>
-            {configurationDict[configurationId].Name}
-        </div>
+      {configurationDict[configurationId].Name}
+    </div>
   }, [configurationDict])
 
   const renderDialogContent = useCallback((testResult: TestResultOverview | undefined) => {
     return (
-            <div>
-                {
-                    testResult !== undefined
-                      ? <div style={{ fontSize: 'large' }}>
-                            <Stack tokens={StackGap5}>
-                                <Stack horizontal><div style={{ paddingRight: 5 }}>TestSuite:</div>{renderTestSuite(testResult.ConfigurationId)}</Stack>
-                                <Stack horizontal><div style={{ paddingRight: 5 }}>Configuration:</div>{renderConfiguration(testResult.ConfigurationId)}</Stack>
-                                <Stack horizontal><div style={{ paddingRight: 5 }}>Status:</div><div>{testResult.Status}</div></Stack>
-                            </Stack>
-                        </div>
-                      : null
-                }
+      <div>
+        {
+          testResult !== undefined
+            ? <div style={{ fontSize: 'large' }}>
+              <Stack tokens={StackGap5}>
+                <Stack horizontal><div style={{ paddingRight: 5 }}>TestSuite:</div>{renderTestSuite(testResult.ConfigurationId)}</Stack>
+                <Stack horizontal><div style={{ paddingRight: 5 }}>Configuration:</div>{renderConfiguration(testResult.ConfigurationId)}</Stack>
+                <Stack horizontal><div style={{ paddingRight: 5 }}>Status:</div><div>{testResult.Status}</div></Stack>
+              </Stack>
             </div>
+            : null
+        }
+      </div>
     )
   }, [renderTestSuite, renderConfiguration])
 
@@ -364,7 +364,7 @@ export function TaskHistory (props: any) {
       dispatch(() => history.push('/Tasks/TestResult', { from: 'TaskHistory' }))
     },
     onExportProfile: (testResultId: number) => {
-      dispatch(ProfileDataSrv.saveProfileByResultId(testResultId))
+      dispatch(ProfileDataSrv.saveProfile(testResultId))
     }
   })
 
@@ -384,80 +384,80 @@ export function TaskHistory (props: any) {
   }
 
   return (
-        <div>
-            <FullWidthPanel isLoading={testResults.isLoading} errorMsg={testResults.errorMsg} >
-                <Toggle
-                    label="Show results of removed test suites"
-                    inlineLabel
-                    checked={testResults.showRemovedTestSuites}
-                    onChange={(_, checked) => {
-                      dispatch(TestResultsActions.setShowRemovedTestSuitesAction(checked ?? false))
-                      dispatch(TestResultsDataSrv.listTestResults())
-                    }} />
-                <Stack horizontal horizontalAlign="end" style={{ marginTop: -34, paddingRight: 10 }} tokens={StackGap10}>
-                    <SearchBox
-                        style={{ minWidth: 300 }}
-                        placeholder="Input your query phrase..."
-                        onChange={(_, newValue) => setTempQuery(newValue)}
-                        onSearch={onSearchChanged}
-                        onClear={onSearchClear} />
-                    <PrimaryButton onClick={() => onSearchChanged(tempQuery)}>Search</PrimaryButton>
-                </Stack>
-                <hr style={{ border: '1px solid #d9d9d9' }} />
-                <div style={{ height: winSize.height - 180, overflowY: 'auto' }}>
-                    {
-                        testResults.allTestSuites.length > 0 && testResults.allConfigurations.length > 0 && testResults.currentPageResults.length > 0
-                          ? <DetailsList
-                                items={testResults.currentPageResults}
-                                columns={columns}
-                                selectionMode={SelectionMode.none}
-                                layoutMode={DetailsListLayoutMode.justified}
-                                isHeaderVisible={true}
-                            />
-                          : testResults.pageCount > 0
-                            ? <div>
-                                    <Spinner size={SpinnerSize.medium} />
-                                    <p style={{ color: '#fa8c16' }}>Loading...</p>
-                                </div>
-                            : <p>There are no results found currently.</p>
-                    }
+    <div>
+      <FullWidthPanel isLoading={testResults.isLoading} errorMsg={testResults.errorMsg} >
+        <Toggle
+          label="Show results of removed test suites"
+          inlineLabel
+          checked={testResults.showRemovedTestSuites}
+          onChange={(_, checked) => {
+            dispatch(TestResultsActions.setShowRemovedTestSuitesAction(checked ?? false))
+            dispatch(TestResultsDataSrv.listTestResults())
+          }} />
+        <Stack horizontal horizontalAlign="end" style={{ marginTop: -34, paddingRight: 10 }} tokens={StackGap10}>
+          <SearchBox
+            style={{ minWidth: 300 }}
+            placeholder="Input your query phrase..."
+            onChange={(_, newValue) => setTempQuery(newValue)}
+            onSearch={onSearchChanged}
+            onClear={onSearchClear} />
+          <PrimaryButton onClick={() => onSearchChanged(tempQuery)}>Search</PrimaryButton>
+        </Stack>
+        <hr style={{ border: '1px solid #d9d9d9' }} />
+        <div style={{ height: winSize.height - 180, overflowY: 'auto' }}>
+          {
+            testResults.allTestSuites.length > 0 && testResults.allConfigurations.length > 0 && testResults.currentPageResults.length > 0
+              ? <DetailsList
+                items={testResults.currentPageResults}
+                columns={columns}
+                selectionMode={SelectionMode.none}
+                layoutMode={DetailsListLayoutMode.justified}
+                isHeaderVisible={true}
+              />
+              : testResults.pageCount > 0
+                ? <div>
+                  <Spinner size={SpinnerSize.medium} />
+                  <p style={{ color: '#fa8c16' }}>Loading...</p>
                 </div>
-                <hr style={{ border: '1px solid #d9d9d9' }} />
-                <div className='buttonPanel'>
-                    <Stack horizontal horizontalAlign='center' tokens={StackGap10}>
-                        <Pagination
-                            styles={{
-                              pageNumber: {
-                                fontSize: 'large',
-                                marginTop: -10
-                              }
-                            }}
-                            selectedPageIndex={testResults.pageNumber}
-                            pageCount={testResults.pageCount}
-                            onPageChange={onChangePageNumber}
-                            format='buttons'
-                        />
-                    </Stack>
-                </div>
-            </FullWidthPanel>
-            <Dialog
-                hidden={dialogHidden}
-                onDismiss={toggleDialogHidden}
-                dialogContentProps={{
-                  type: DialogType.normal,
-                  title: `Abort Test Run ${testResultToAbort?.Id}?`
-                }}
-                modalProps={{
-                  isBlocking: true
-                }}>
-                <Stack horizontalAlign='start'>
-                    {renderDialogContent(testResultToAbort)}
-                </Stack>
-                <DialogFooter>
-                    <PrimaryButton onClick={toggleDialogHidden} text="Cancel" />
-                    <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogAbortButtonClick} text="Abort" />
-                </DialogFooter>
-            </Dialog>
+                : <p>There are no results found currently.</p>
+          }
         </div>
+        <hr style={{ border: '1px solid #d9d9d9' }} />
+        <div className='buttonPanel'>
+          <Stack horizontal horizontalAlign='center' tokens={StackGap10}>
+            <Pagination
+              styles={{
+                pageNumber: {
+                  fontSize: 'large',
+                  marginTop: -10
+                }
+              }}
+              selectedPageIndex={testResults.pageNumber}
+              pageCount={testResults.pageCount}
+              onPageChange={onChangePageNumber}
+              format='buttons'
+            />
+          </Stack>
+        </div>
+      </FullWidthPanel>
+      <Dialog
+        hidden={dialogHidden}
+        onDismiss={toggleDialogHidden}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: `Abort Test Run ${testResultToAbort?.Id}?`
+        }}
+        modalProps={{
+          isBlocking: true
+        }}>
+        <Stack horizontalAlign='start'>
+          {renderDialogContent(testResultToAbort)}
+        </Stack>
+        <DialogFooter>
+          <PrimaryButton onClick={toggleDialogHidden} text="Cancel" />
+          <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogAbortButtonClick} text="Abort" />
+        </DialogFooter>
+      </Dialog>
+    </div>
   )
 }

@@ -16,6 +16,13 @@ import {
 } from '../actions/TestSuiteConfigurationAction'
 
 import {
+  SAVE_PROFILE_REQUEST,
+  SAVE_PROFILE_SUCCESS,
+  SAVE_PROFILE_FAILURE,
+  TestSuiteConfigureMethodActionTypes
+} from '../actions/ConfigureMethodAction'
+
+import {
   CREATE_RUNREQUEST_REQUEST,
   CREATE_RUNREQUEST_SUCCESS,
   CREATE_RUNREQUEST_FAILURE,
@@ -115,7 +122,7 @@ const getUpdatedRequiredConfigurations = (state: TestResultsState, newConfigurat
   return [...updatedRequiredConf, ...newRequiredConf]
 }
 
-export const getTestResultsReducer = (state = initialTestResultsState, action: TestResultsActionTypes | TestSuitesActionTypes | TestSuiteConfigurationActionTypes | SelectedTestCasesActionTypes): TestResultsState => {
+export const getTestResultsReducer = (state = initialTestResultsState, action: TestResultsActionTypes | TestSuitesActionTypes | TestSuiteConfigurationActionTypes | TestSuiteConfigureMethodActionTypes | SelectedTestCasesActionTypes): TestResultsState => {
   switch (action.type) {
     case GET_TESTSUITES_REQUEST:
       return {
@@ -153,6 +160,26 @@ export const getTestResultsReducer = (state = initialTestResultsState, action: T
       }
 
     case GET_TESTSUITE_CONFIGURATIONS_FAILURE:
+      return {
+        ...state,
+        isPosting: false,
+        errorMsg: action.errorMsg
+      }
+
+    case SAVE_PROFILE_REQUEST:
+      return {
+        ...state,
+        isPosting: true,
+        errorMsg: undefined
+      }
+
+    case SAVE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        isPosting: false
+      }
+
+    case SAVE_PROFILE_FAILURE:
       return {
         ...state,
         isPosting: false,

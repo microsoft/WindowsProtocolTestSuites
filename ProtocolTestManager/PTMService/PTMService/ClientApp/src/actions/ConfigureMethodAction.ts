@@ -15,20 +15,20 @@ export const IMPORT_PROFILE_FAILURE = 'CONFIGUREMETHOD/IMPORT_PROFILE_FAILURE'
 interface SetConfigurationMethodType { type: typeof SET_CONFIGURATION_METHOD, selectedMethod: string }
 
 // save profile actions
-interface SetSaveProfileActionRequestType { type: typeof SAVE_PROFILE_REQUEST, payload: number }
-interface SetSaveProfileActionSuccessType { type: typeof SAVE_PROFILE_SUCCESS, payload: string }
-interface SetSaveProfileActionFailureType { type: typeof SAVE_PROFILE_FAILURE, errorMsg: string }
+interface SaveProfileActionRequestType { type: typeof SAVE_PROFILE_REQUEST, testResultId: number, selectedTestCases?: string[] }
+interface SaveProfileActionSuccessType { type: typeof SAVE_PROFILE_SUCCESS, payload: string }
+interface SaveProfileActionFailureType { type: typeof SAVE_PROFILE_FAILURE, errorMsg: string }
 
 // import profile actions
-interface ImportProfileActionRequestType { type: typeof IMPORT_PROFILE_REQUEST, filename: string, testSuiteId: number }
+interface ImportProfileActionRequestType { type: typeof IMPORT_PROFILE_REQUEST }
 interface ImportProfileActionSuccessType { type: typeof IMPORT_PROFILE_SUCCESS, payload: boolean }
 interface ImportProfileActionFailureType { type: typeof IMPORT_PROFILE_FAILURE, errorMsg: string }
 
 export type TestSuiteConfigureMethodActionTypes =
   SetConfigurationMethodType |
-  SetSaveProfileActionRequestType |
-  SetSaveProfileActionSuccessType |
-  SetSaveProfileActionFailureType |
+  SaveProfileActionRequestType |
+  SaveProfileActionSuccessType |
+  SaveProfileActionFailureType |
   ImportProfileActionRequestType |
   ImportProfileActionSuccessType |
   ImportProfileActionFailureType
@@ -41,10 +41,11 @@ export const ConfigureMethodActions = {
       selectedMethod: key
     }
   },
-  saveProfileAction_Request: (testSuiteId: number): TestSuiteConfigureMethodActionTypes => {
+  saveProfileAction_Request: (testResultId: number, selectedTestCases?: string[]): TestSuiteConfigureMethodActionTypes => {
     return {
       type: SAVE_PROFILE_REQUEST,
-      payload: testSuiteId
+      testResultId: testResultId,
+      selectedTestCases: selectedTestCases
     }
   },
   saveProfileAction_Success: (fileLocation: string): TestSuiteConfigureMethodActionTypes => {
@@ -59,11 +60,9 @@ export const ConfigureMethodActions = {
       errorMsg: errorMsg
     }
   },
-  importProfileAction_Request: (filename: string, testSuiteId: number): TestSuiteConfigureMethodActionTypes => {
+  importProfileAction_Request: (): TestSuiteConfigureMethodActionTypes => {
     return {
-      type: IMPORT_PROFILE_REQUEST,
-      filename: filename,
-      testSuiteId: testSuiteId
+      type: IMPORT_PROFILE_REQUEST
     }
   },
   importProfileAction_Success: (resp: boolean): TestSuiteConfigureMethodActionTypes => {

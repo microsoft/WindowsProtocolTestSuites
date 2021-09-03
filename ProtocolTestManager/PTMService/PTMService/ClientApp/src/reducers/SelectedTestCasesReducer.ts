@@ -9,14 +9,12 @@ import {
 } from '../actions/SelectedTestCasesAction'
 
 export interface SelectedTestCasesState {
-  isLoading: boolean;
-  isPosting: boolean;
-  errorMsg?: string;
-  testResultId: number | undefined;
+  isPosting: boolean
+  errorMsg?: string
+  testResultId: number | undefined
 }
 
 const initialSelectedTestCasesState: SelectedTestCasesState = {
-  isLoading: false,
   isPosting: false,
   errorMsg: undefined,
   testResultId: undefined

@@ -18,10 +18,11 @@ import { TestCaseResultDataSrv } from '../services/TestCaseResult'
 import { TestResultsDataSrv } from '../services/TestResults'
 import { ProfileDataSrv } from '../services/ProfileService'
 import { AppState } from '../store/configureStore'
+import { ContextualMenuControl, ContextualMenuItemProps } from '../components/ContextualMenuControl'
 
 interface GroupKeys {
   KeyName: string
-  Keys: Array<{ key: string, name: string }>,
+  Keys: Array<{ key: string, name: string }>
   KeyComparer: (result: TestCaseOverview, key: string) => boolean
 }
 
@@ -84,7 +85,7 @@ interface TestCaseResultViewProps {
   result: TestCaseResult | undefined
 }
 
-const lineHeader = /\d{4}\-\d{2}\-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(?<kind>\w+)\]/g
+const lineHeader = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(?<kind>\w+)\]/g
 
 const getLineBackgroundColor = (kind: string) => {
   if (kind.includes('Failed')) {
@@ -110,24 +111,24 @@ const renderOutputLines = (lines: string[]) => {
   }, [])
 }
 
-function TestCaseResultView (props: TestCaseResultViewProps) {
+function TestCaseResultView(props: TestCaseResultViewProps) {
   return (
     props.result !== undefined
       ? <Stack tokens={StackGap10}>
-                <Label style={{ fontWeight: 'bold', color: '#337ab7', alignSelf: 'center' }}>{props.result.Overview.FullName}</Label>
-                <Label>Start Time: {props.result.StartTime}</Label>
-                <Label>End Time: {props.result.EndTime}</Label>
-                <Label>State: {props.result.Overview.State}</Label>
-                {
-                    props.result.Output !== null
-                      ? <div style={{ border: '1px solid #d9d9d9', height: props.winSize.height - 300, overflowY: 'auto' }}>
-                            <div style={{ paddingLeft: 5 }}>
-                                {renderOutputLines(props.result.Output.split('\n').map((line) => line.trim()))}
-                            </div>
-                        </div>
-                      : null
-                }
-            </Stack >
+        <Label style={{ fontWeight: 'bold', color: '#337ab7', alignSelf: 'center' }}>{props.result.Overview.FullName}</Label>
+        <Label>Start Time: {props.result.StartTime}</Label>
+        <Label>End Time: {props.result.EndTime}</Label>
+        <Label>State: {props.result.Overview.State}</Label>
+        {
+          props.result.Output !== null
+            ? <div style={{ border: '1px solid #d9d9d9', height: props.winSize.height - 300, overflowY: 'auto' }}>
+              <div style={{ paddingLeft: 5 }}>
+                {renderOutputLines(props.result.Output.split('\n').map((line) => line.trim()))}
+              </div>
+            </div>
+            : null
+        }
+      </Stack >
       : <div>Please select a test case result to view...</div>
   )
 }
@@ -137,21 +138,21 @@ interface SelectedTestCasesViewProps {
   results: TestCaseOverview[]
 }
 
-function SelectedTestCasesView (props: SelectedTestCasesViewProps) {
+function SelectedTestCasesView(props: SelectedTestCasesViewProps) {
   return (
-        <div>
-            <Label style={{ fontWeight: 'bold', color: '#337ab7', fontSize: 'large' }}>Selected {props.results.length} Test Case Results:</Label>
-            <div style={{ border: '1px solid #d9d9d9', height: props.winSize.height - 180, overflowY: 'auto' }}>
-                <ul>
-                    {
-                        props.results.sort((a, b) => a.FullName.localeCompare(b.FullName))
-                          .map((item, index) => {
-                            return <li key={index}>{item.FullName}</li>
-                          })
-                    }
-                </ul>
-            </div>
-        </div>
+    <div>
+      <Label style={{ fontWeight: 'bold', color: '#337ab7', fontSize: 'large' }}>Selected {props.results.length} Test Case Results:</Label>
+      <div style={{ border: '1px solid #d9d9d9', height: props.winSize.height - 180, overflowY: 'auto' }}>
+        <ul>
+          {
+            props.results.sort((a, b) => a.FullName.localeCompare(b.FullName))
+              .map((item, index) => {
+                return <li key={index}>{item.FullName}</li>
+              })
+          }
+        </ul>
+      </div>
+    </div>
   )
 }
 
@@ -161,7 +162,7 @@ interface RerunContextualMenuProps {
   onRerun: (kind: 'All' | 'Failed' | 'Selected') => () => void
 }
 
-function RerunContextualMenu (props: RerunContextualMenuProps) {
+function RerunContextualMenu(props: RerunContextualMenuProps) {
   const menuProps = useMemo<IContextualMenuProps>(() => ({
     shouldFocusOnMount: true,
     items: [
@@ -189,7 +190,7 @@ function RerunContextualMenu (props: RerunContextualMenuProps) {
   return <PrimaryButton menuProps={menuProps}>Rerun</PrimaryButton>
 }
 
-export function TestResultDetail (props: any) {
+export function TestResultDetail(props: any) {
   const winSize = useWindowSize()
 
   const history = useHistory()
@@ -225,7 +226,6 @@ export function TestResultDetail (props: any) {
   const [selectedItems, setSelectedItems] = useState<TestCaseOverview[] | undefined>(undefined)
 
   const testResults = useSelector((state: AppState) => state.testResults)
-  const configureMethod = useSelector((state: AppState) => state.configureMethod)
   const testCaseResult = useSelector((state: AppState) => state.testCaseResult)
 
   const testCaseResults = useMemo(() => testResults.selectedTestResult?.Results ?? [], [testResults.selectedTestResult])
@@ -376,10 +376,42 @@ export function TestResultDetail (props: any) {
     }
   }
 
-  const onExportProfile = () => {
-    if (selectedItems !== undefined) {
-      dispatch(ProfileDataSrv.saveProfile(selectedItems.map(item => item.FullName)))
+  const onExportProfile = (kind: 'All' | 'Selected') => () => {
+    if (testResults.selectedTestResult?.Results === undefined) {
+      return
     }
+
+    switch (kind) {
+      case 'All': {
+        dispatch(ProfileDataSrv.saveProfile(testResults.selectedTestResult.Overview.Id))
+        return
+      }
+
+      case 'Selected': {
+        if (selectedItems === undefined || selectedItems.length === 0) {
+          return
+        }
+
+        dispatch(ProfileDataSrv.saveProfile(testResults.selectedTestResult.Overview.Id, selectedItems.map(item => item.FullName)))
+      }
+    }
+  }
+
+  const getExportProfileMenuItems = (): ContextualMenuItemProps[] => {
+    return [
+      {
+        key: 'ExportAll',
+        text: 'Export All Test Cases to Profile',
+        disabled: testCaseResults.length === 0,
+        menuAction: onExportProfile('All')
+      },
+      {
+        key: 'ExportSelected',
+        text: 'Export Selected Test Cases to Profile',
+        disabled: selectedItems === undefined || selectedItems.length === 0,
+        menuAction: onExportProfile('Selected')
+      }
+    ]
   }
 
   const onGoBackClick = () => {
@@ -429,200 +461,200 @@ export function TestResultDetail (props: any) {
   }
 
   return (
-        <div>
-            <FullWidthPanel isLoading={testCaseResult.isLoading} errorMsg={testCaseResult.errorMsg} >
-                <Stack horizontal tokens={{ childrenGap: 20 }}>
-                    <div style={{ maxWidth: winSize.width * 0.30, height: winSize.height - 140 }}>
-                        <SelectionZone selection={selection} selectionMode={SelectionMode.multiple}>
-                            <Stack tokens={StackGap10}>
-                                <SearchBox
-                                    style={{ width: 280 }}
-                                    placeholder='Filter by Name...'
-                                    onChange={(_, newValue) => onFilterPhraseChanged(newValue)}
-                                    onReset={onFilterPhraseClear}
-                                />
-                                <div style={{ width: winSize.width * 0.30, height: winSize.height - 180, overflowY: 'auto' }}>
-                                    {
-                                        filteredResults !== undefined
-                                          ? <MarqueeSelection selection={selection}>
-                                                <DetailsList
-                                                    items={filteredResults}
-                                                    columns={[
-                                                      {
-                                                        key: 'Name',
-                                                        name: 'Name',
-                                                        minWidth: 360,
-                                                        isRowHeader: true,
-                                                        isResizable: true,
-                                                        onRender: (item: TestCaseOverview | undefined, index: number | undefined) => {
-                                                          if (item != undefined && index != undefined) {
-                                                            const startIndex = item.FullName.lastIndexOf('.') + 1
-                                                            const caseName = item.FullName.substring(startIndex)
-                                                            return <div>{caseName}</div>
-                                                          } else {
-                                                            return null
-                                                          }
-                                                        }
-                                                      }
-                                                    ]}
-                                                    layoutMode={DetailsListLayoutMode.justified}
-                                                    selection={selection}
-                                                    selectionMode={SelectionMode.multiple}
-                                                    selectionPreservedOnEmptyClick={true}
-                                                    setKey='set'
-                                                    getKey={(item: TestCaseOverview) => item.FullName}
-                                                    groups={getUpdatedGroups(filteredResults)}
-                                                    groupProps={{
-                                                      headerProps: {
-                                                        onToggleCollapse: onToggleGroupCollapse
-                                                      }
-                                                    }}
-                                                    compact={true}
-                                                    isHeaderVisible={false}
-                                                />
-                                            </MarqueeSelection>
-                                          : testResults.selectedTestResultId !== undefined
-                                            ? <div>
-                                                    <Spinner size={SpinnerSize.medium} />
-                                                    <p style={{ color: '#fa8c16' }}>Loading...</p>
-                                                </div>
-                                            : <p>Please select a test result on the Task History page.</p>
-                                    }
-                                </div>
-                            </Stack>
-                        </SelectionZone>
-                    </div>
-                    <div style={{ borderLeft: '2px solid #bae7ff', minHeight: winSize.height - 140 }}>
-                        <div style={{ paddingLeft: 20, width: winSize.width * 0.66 }}>
+    <div>
+      <FullWidthPanel isLoading={testCaseResult.isLoading} errorMsg={testCaseResult.errorMsg} >
+        <Stack horizontal tokens={{ childrenGap: 20 }}>
+          <div style={{ maxWidth: winSize.width * 0.30, height: winSize.height - 140 }}>
+            <SelectionZone selection={selection} selectionMode={SelectionMode.multiple}>
+              <Stack tokens={StackGap10}>
+                <SearchBox
+                  style={{ width: 280 }}
+                  placeholder='Filter by Name...'
+                  onChange={(_, newValue) => onFilterPhraseChanged(newValue)}
+                  onReset={onFilterPhraseClear}
+                />
+                <div style={{ width: winSize.width * 0.30, height: winSize.height - 180, overflowY: 'auto' }}>
+                  {
+                    filteredResults !== undefined
+                      ? <MarqueeSelection selection={selection}>
+                        <DetailsList
+                          items={filteredResults}
+                          columns={[
                             {
-                                selectedItems !== undefined && selectedItems.length > 1
-                                  ? <SelectedTestCasesView
-                                        winSize={winSize}
-                                        results={selectedItems} />
-                                  : <TestCaseResultView
-                                        winSize={winSize}
-                                        result={testCaseResult.selectedTestCaseResult} />
+                              key: 'Name',
+                              name: 'Name',
+                              minWidth: 360,
+                              isRowHeader: true,
+                              isResizable: true,
+                              onRender: (item: TestCaseOverview | undefined, index: number | undefined) => {
+                                if (item !== undefined && index !== undefined) {
+                                  const startIndex = item.FullName.lastIndexOf('.') + 1
+                                  const caseName = item.FullName.substring(startIndex)
+                                  return <div>{caseName}</div>
+                                } else {
+                                  return null
+                                }
+                              }
                             }
+                          ]}
+                          layoutMode={DetailsListLayoutMode.justified}
+                          selection={selection}
+                          selectionMode={SelectionMode.multiple}
+                          selectionPreservedOnEmptyClick={true}
+                          setKey='set'
+                          getKey={(item: TestCaseOverview) => item.FullName}
+                          groups={getUpdatedGroups(filteredResults)}
+                          groupProps={{
+                            headerProps: {
+                              onToggleCollapse: onToggleGroupCollapse
+                            }
+                          }}
+                          compact={true}
+                          isHeaderVisible={false}
+                        />
+                      </MarqueeSelection>
+                      : testResults.selectedTestResultId !== undefined
+                        ? <div>
+                          <Spinner size={SpinnerSize.medium} />
+                          <p style={{ color: '#fa8c16' }}>Loading...</p>
                         </div>
-                    </div>
+                        : <p>Please select a test result on the Task History page.</p>
+                  }
+                </div>
+              </Stack>
+            </SelectionZone>
+          </div>
+          <div style={{ borderLeft: '2px solid #bae7ff', minHeight: winSize.height - 140 }}>
+            <div style={{ paddingLeft: 20, width: winSize.width * 0.66 }}>
+              {
+                selectedItems !== undefined && selectedItems.length > 1
+                  ? <SelectedTestCasesView
+                    winSize={winSize}
+                    results={selectedItems} />
+                  : <TestCaseResultView
+                    winSize={winSize}
+                    result={testCaseResult.selectedTestCaseResult} />
+              }
+            </div>
+          </div>
+        </Stack>
+        <hr style={{ border: '1px solid #d9d9d9' }} />
+        <div className='buttonPanel'>
+          <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
+            {
+              testResults.selectedTestResult === undefined
+                ? null
+                : testResults.selectedTestResult.Overview.Status === 'Running'
+                  ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={toggleAbortDialogHidden}>Abort</PrimaryButton>
+                  : null
+            }
+            {
+              testResults.selectedTestResultSummary !== undefined && !testResults.selectedTestResultSummary.TestSuite.Removed
+                ? <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
+                  {
+                    testResults.selectedTestResult === undefined
+                      ? null
+                      : testResults.selectedTestResult.Overview.Status !== 'Created' && testResults.selectedTestResult.Overview.Status !== 'Running'
+                        ? <RerunContextualMenu
+                          testResult={testResults.selectedTestResult}
+                          selectedItems={selectedItems}
+                          onRerun={onRerunClick} />
+                        : null
+                  }
+                  {
+                    testResults.selectedTestResult === undefined
+                      ? null
+                      : testResults.selectedTestResult.Overview.Status === 'Failed' || testResults.selectedTestResult.Overview.Status === 'Finished'
+                        ? <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden}>Export Report</PrimaryButton>
+                        : null
+                  }
+                  {
+                    testResults.selectedTestResult === undefined
+                      ? null
+                      : <ContextualMenuControl text="Export Profile" shouldFocusOnMount={true} menuItems={getExportProfileMenuItems()} />
+                  }
                 </Stack>
-                <hr style={{ border: '1px solid #d9d9d9' }} />
-                <div className='buttonPanel'>
-                    <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
-                        {
-                            testResults.selectedTestResult === undefined
-                              ? null
-                              : testResults.selectedTestResult.Overview.Status === 'Running'
-                                ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={toggleAbortDialogHidden}>Abort</PrimaryButton>
-                                : null
-                        }
-                        {
-                            testResults.selectedTestResultSummary !== undefined && !testResults.selectedTestResultSummary.TestSuite.Removed
-                              ? <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
-                                    {
-                                        testResults.selectedTestResult === undefined
-                                          ? null
-                                          : testResults.selectedTestResult.Overview.Status !== 'Created' && testResults.selectedTestResult.Overview.Status !== 'Running'
-                                            ? <RerunContextualMenu
-                                                    testResult={testResults.selectedTestResult}
-                                                    selectedItems={selectedItems}
-                                                    onRerun={onRerunClick} />
-                                            : null
-                                    }
-                                    {
-                                        testResults.selectedTestResult === undefined
-                                          ? null
-                                          : testResults.selectedTestResult.Overview.Status === 'Failed' || testResults.selectedTestResult.Overview.Status === 'Finished'
-                                            ? <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden}>Export Report</PrimaryButton>
-                                            : null
-                                    }
-                                    {
-                                        testResults.selectedTestResult === undefined
-                                          ? null
-                                          : <PrimaryButton onClick={onExportProfile}>Export Profile</PrimaryButton>
-                                    }
-                                </Stack>
-                              : null
-                        }
-                        <PrimaryButton onClick={onGoBackClick}>Go Back</PrimaryButton>
-                    </Stack>
-                </div>
-            </FullWidthPanel>
-            <Dialog
-                hidden={abortDialogHidden}
-                onDismiss={toggleAbortDialogHidden}
-                dialogContentProps={{
-                  type: DialogType.normal,
-                  title: `Abort Test Run ${testResults.selectedTestResultId}?`
-                }}
-                modalProps={{
-                  isBlocking: true
-                }}>
-                <div style={{ fontSize: 'large' }}>
-                    <Stack horizontalAlign='start' tokens={StackGap5}>
-                        <Stack horizontal><div style={{ paddingRight: 5 }}>TestSuite:</div>{testResults.selectedTestResultSummary?.TestSuite.Name + ' ' + testResults.selectedTestResultSummary?.TestSuite.Version}</Stack>
-                        <Stack horizontal><div style={{ paddingRight: 5 }}>Configuration:</div>{testResults.selectedTestResultSummary?.Configuration}</Stack>
-                        <Stack horizontal><div style={{ paddingRight: 5 }}>Status:</div><div>{testResults.selectedTestResult?.Overview.Status}</div></Stack>
-                    </Stack>
-                </div>
-                <DialogFooter>
-                    <PrimaryButton onClick={toggleAbortDialogHidden} text="Cancel" />
-                    <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onAbortDialogAbortButtonClick} text="Abort" />
-                </DialogFooter>
-            </Dialog>
-            <Dialog
-                hidden={reportDialogHidden}
-                onDismiss={toggleReportDialogHidden}
-                dialogContentProps={{
-                  type: DialogType.normal,
-                  title: `Export Report for Test Run ${testResults.selectedTestResultId}?`
-                }}
-                modalProps={{
-                  isBlocking: true
-                }}>
-                <div style={{ fontSize: 'large' }}>
-                    <Stack horizontalAlign='start' tokens={StackGap10}>
-                        {
-                            !reportDialogShowMsg
-                              ? null
-                              : <MessageBar
-                                    messageBarType={MessageBarType.error}
-                                    onDismiss={() => setReportDialogShowMsg(false)}>
-                                    {testResults.errorMsg}
-                                </MessageBar>
-                        }
-                        <Label>Outcome</Label>
-                        {
-                            testResults.selectedTestResult !== undefined
-                              ? reportOutcomes.map(state => {
-                                const isCheckboxEnabled = testResults.selectedTestResult?.Results.some(res => res.State === state)
-                                return <Checkbox
-                                        key={state}
-                                        disabled={!isCheckboxEnabled}
-                                        label={`${state} Test Cases`}
-                                        checked={isCheckboxEnabled && reportedStates.includes(state)}
-                                        onChange={(_, checked) => onReportDialogCheckboxChange(state, checked!)}
-                                    />
-                              })
-                              : null
-                        }
-                        <Stack horizontal tokens={StackGap10}>
-                            <Label>Format</Label>
-                            <Dropdown
-                                style={{ alignSelf: 'center', minWidth: 180 }}
-                                placeholder='Select a report format'
-                                selectedKey={reportFormat}
-                                options={reportFormatOptions}
-                                onChange={(_, newValue, __) => setReportFormat(newValue?.text! as ReportFormat)}
-                            />
-                        </Stack>
-                    </Stack>
-                </div>
-                <DialogFooter>
-                    <PrimaryButton disabled={reportedStates.length === 0 || testResults.isDownloading} onClick={onReportDialogExportButtonClick} text="Export" />
-                    <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden} text="Cancel" />
-                </DialogFooter>
-            </Dialog>
+                : null
+            }
+            <PrimaryButton onClick={onGoBackClick}>Go Back</PrimaryButton>
+          </Stack>
         </div>
+      </FullWidthPanel>
+      <Dialog
+        hidden={abortDialogHidden}
+        onDismiss={toggleAbortDialogHidden}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: `Abort Test Run ${testResults.selectedTestResultId}?`
+        }}
+        modalProps={{
+          isBlocking: true
+        }}>
+        <div style={{ fontSize: 'large' }}>
+          <Stack horizontalAlign='start' tokens={StackGap5}>
+            <Stack horizontal><div style={{ paddingRight: 5 }}>TestSuite:</div>{testResults.selectedTestResultSummary?.TestSuite.Name + ' ' + testResults.selectedTestResultSummary?.TestSuite.Version}</Stack>
+            <Stack horizontal><div style={{ paddingRight: 5 }}>Configuration:</div>{testResults.selectedTestResultSummary?.Configuration}</Stack>
+            <Stack horizontal><div style={{ paddingRight: 5 }}>Status:</div><div>{testResults.selectedTestResult?.Overview.Status}</div></Stack>
+          </Stack>
+        </div>
+        <DialogFooter>
+          <PrimaryButton onClick={toggleAbortDialogHidden} text="Cancel" />
+          <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onAbortDialogAbortButtonClick} text="Abort" />
+        </DialogFooter>
+      </Dialog>
+      <Dialog
+        hidden={reportDialogHidden}
+        onDismiss={toggleReportDialogHidden}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: `Export Report for Test Run ${testResults.selectedTestResultId}?`
+        }}
+        modalProps={{
+          isBlocking: true
+        }}>
+        <div style={{ fontSize: 'large' }}>
+          <Stack horizontalAlign='start' tokens={StackGap10}>
+            {
+              !reportDialogShowMsg
+                ? null
+                : <MessageBar
+                  messageBarType={MessageBarType.error}
+                  onDismiss={() => setReportDialogShowMsg(false)}>
+                  {testResults.errorMsg}
+                </MessageBar>
+            }
+            <Label>Outcome</Label>
+            {
+              testResults.selectedTestResult !== undefined
+                ? reportOutcomes.map(state => {
+                  const isCheckboxEnabled = testResults.selectedTestResult?.Results.some(res => res.State === state)
+                  return <Checkbox
+                    key={state}
+                    disabled={!isCheckboxEnabled}
+                    label={`${state} Test Cases`}
+                    checked={isCheckboxEnabled && reportedStates.includes(state)}
+                    onChange={(_, checked) => onReportDialogCheckboxChange(state, checked!)}
+                  />
+                })
+                : null
+            }
+            <Stack horizontal tokens={StackGap10}>
+              <Label>Format</Label>
+              <Dropdown
+                style={{ alignSelf: 'center', minWidth: 180 }}
+                placeholder='Select a report format'
+                selectedKey={reportFormat}
+                options={reportFormatOptions}
+                onChange={(_, newValue, __) => setReportFormat(newValue?.text! as ReportFormat)}
+              />
+            </Stack>
+          </Stack>
+        </div>
+        <DialogFooter>
+          <PrimaryButton disabled={reportedStates.length === 0 || testResults.isDownloading} onClick={onReportDialogExportButtonClick} text="Export" />
+          <PrimaryButton disabled={testResults.isDownloading} onClick={toggleReportDialogHidden} text="Cancel" />
+        </DialogFooter>
+      </Dialog>
+    </div>
   )
 }
