@@ -36,10 +36,10 @@ export function ConfigureMethod(props: StepWizardProps) {
 
   if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
     return <InvalidAppStateNotification
-        testSuite={testSuiteInfo.selectedTestSuite}
-        configuration={configuration.selectedConfiguration}
-        wizard={wizard}
-        wizardProps={wizardProps} />
+      testSuite={testSuiteInfo.selectedTestSuite}
+      configuration={configuration.selectedConfiguration}
+      wizard={wizard}
+      wizardProps={wizardProps} />
   }
 
   const items: MethodItemProp[] = [{
@@ -118,7 +118,7 @@ export function ConfigureMethod(props: StepWizardProps) {
     wizardProps.goToStep(RunSteps.AUTO_DETECTION)
   }
 
-  const onConfigurationCreate = () => {
+  const onImportProfile = () => {
     if (file != null) {
       setImportingErrMsg(undefined)
       const testSuiteId = testSuites.selectedTestSuite?.Id
@@ -186,7 +186,7 @@ export function ConfigureMethod(props: StepWizardProps) {
           />
         </Stack>
         <DialogFooter>
-          <PrimaryButton onClick={onConfigurationCreate} text={configureMethod.isUploadingProfile ? 'Uploading...' : 'Load Profile'} disabled={configureMethod.isUploadingProfile} />
+          <PrimaryButton onClick={onImportProfile} text={configureMethod.isUploadingProfile ? 'Uploading...' : 'Load Profile'} disabled={configureMethod.isUploadingProfile} />
           <DefaultButton onClick={toggleHideDialog} text="Close" disabled={configureMethod.isUploadingProfile} />
         </DialogFooter>
       </Dialog>

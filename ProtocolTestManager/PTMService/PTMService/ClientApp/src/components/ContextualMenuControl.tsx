@@ -21,25 +21,25 @@ export const ContextualMenuControl: React.FunctionComponent<ContextualMenuProps>
   const menuItems: IContextualMenuItem[] = useMemo(() => props.menuItems.flatMap((item: ContextualMenuItemProps, index: number) => {
     return index !== props.menuItems.length - 1
       ? [
-          {
-            key: item.key,
-            text: item.text,
-            disabled: item.disabled,
-            onClick: item.menuAction
-          },
-          {
-            key: `divider_${item.key}`,
-            itemType: ContextualMenuItemType.Divider
-          }
-        ]
+        {
+          key: item.key,
+          text: item.text,
+          disabled: item.disabled,
+          onClick: item.menuAction
+        },
+        {
+          key: `${item.key}Divider`,
+          itemType: ContextualMenuItemType.Divider
+        }
+      ]
       : [
-          {
-            key: item.key,
-            text: item.text,
-            disabled: item.disabled,
-            onClick: item.menuAction
-          }
-        ]
+        {
+          key: item.key,
+          text: item.text,
+          disabled: item.disabled,
+          onClick: item.menuAction
+        }
+      ]
   }), [props])
 
   const menuProps = useMemo<IContextualMenuProps>(() => ({

@@ -10,7 +10,7 @@ export const DetectionResultSrv = {
     const state = getState();
     const configurationId = state.configurations.selectedConfiguration?.Id;
     await FetchService({
-      url: `api/testsuite/${configurationId}/autodetect/summary`,
+      url: `api/configuration/${configurationId}/autodetect/summary`,
       method: RequestMethod.GET,
       dispatch,
       onRequest: DetectionResultActions.getDetectionSummaryAction_Request,

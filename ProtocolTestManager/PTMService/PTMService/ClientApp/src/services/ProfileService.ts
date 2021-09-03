@@ -21,41 +21,16 @@ const downloadProfile = (fileName: string, blob: Blob | undefined) => {
 
 const getFileNameWithExtension = (id: string) => {
   const datetime = new Date()
-  return `ProfileExport${datetime.getTime()}${id}.ptm`
-}
-
-const getHeaders = () => {
-  return { Accept: 'application/xml', 'Content-Type': 'application/json' }
+  return `ProfileExported${datetime.getTime()}${id}.ptm`
 }
 
 export const ProfileDataSrv = {
-  saveProfile: (selectedTestCases: string[]): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch, getState) => {
-    const state = getState()
-    const testsuiteId = state.testSuiteInfo.selectedTestSuite?.Id
-    const configurationId = state.configurations.selectedConfiguration?.Id
-
-    const request: ProfileExportRequest = {
-      TestSuiteId: testsuiteId!,
-      ConfigurationId: configurationId!,
-      SelectedTestCases: selectedTestCases
-    }
-
+  saveProfile: (testResultId: number, selectedTestCases?: string[]): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch) => {
     await FetchService({
-      url: 'api/testsuite/profile/export/',
-      headers: getHeaders(),
+      url: `api/testresult/${testResultId}/profile`,
+      headers: { Accept: 'application/xml', 'Content-Type': 'application/json' },
       method: RequestMethod.POST,
-      body: JSON.stringify(request),
-      dispatch,
-      onRequest: ConfigureMethodActions.saveProfileAction_Request,
-      onComplete: ConfigureMethodActions.saveProfileAction_Success,
-      onError: ConfigureMethodActions.saveProfileAction_Failure
-    }).then((data: Blob | undefined) => downloadProfile(getFileNameWithExtension(`${configurationId}`), data))
-  },
-  saveProfileByResultId: (testResultId: number): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch) => {
-    await FetchService({
-      url: `api/testsuite/${testResultId}/profile/export`,
-      headers: getHeaders(),
-      method: RequestMethod.POST,
+      body: JSON.stringify({ SelectedTestCases: selectedTestCases } as ProfileExportRequest),
       dispatch,
       onRequest: ConfigureMethodActions.saveProfileAction_Request,
       onComplete: ConfigureMethodActions.saveProfileAction_Success,
@@ -65,11 +40,9 @@ export const ProfileDataSrv = {
   importProfile: (request: ProfileUploadRequest, callback: (data: boolean | undefined) => void): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch) => {
     const postData = new FormData()
     postData.append('Package', request.Package)
-    postData.append('TestSuiteId', request.TestSuiteId.toString())
-    postData.append('ConfigurationId', request.ConfigurationId.toString())
 
     await FetchService({
-      url: `api/testsuite/${request.TestSuiteId}/profile/${request.ConfigurationId}`,
+      url: `api/testsuite/${request.TestSuiteId}/profile?configurationId=${request.ConfigurationId}`,
       method: RequestMethod.POST,
       body: postData,
       headers: {},

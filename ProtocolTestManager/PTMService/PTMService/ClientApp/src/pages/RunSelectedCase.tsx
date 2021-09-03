@@ -352,20 +352,20 @@ export function RunSelectedCase(props: StepWizardProps) {
   const getMenuItems = (): ContextualMenuItemProps[] => {
     return [
       {
-        key: 'export_all',
-        text: 'Export All Test Cases to Playlist ...',
+        key: 'ExportAll',
+        text: 'Export All Test Cases to Playlist',
         disabled: filterInfo.listSelectedCases.length === 0,
         menuAction: exportTestCases
       },
       {
-        key: 'export_checked',
-        text: 'Export Checked Test Cases to Playlist ...',
+        key: 'ExportSelected',
+        text: 'Export Selected Test Cases to Playlist',
         disabled: selectedItems.length === 0,
         menuAction: exportCheckedTestCases
       },
       {
-        key: 'import',
-        text: 'Import Playlist ...',
+        key: 'Import',
+        text: 'Import Playlist...',
         disabled: false,
         menuAction: onShowImportDialog
       }
@@ -373,7 +373,7 @@ export function RunSelectedCase(props: StepWizardProps) {
   }
 
   return (
-    <StepPanel leftNav={wizard} isLoading={selectedTestCases.isLoading} errorMsg={selectedTestCases.errorMsg}>
+    <StepPanel leftNav={wizard} isLoading={filterInfo.isCasesLoading} errorMsg={filterInfo.errorMsg ?? selectedTestCases.errorMsg}>
       <Stack style={{ paddingLeft: 10 }}>
         <Fabric>
           <Stack horizontal tokens={StackGap10}>
@@ -411,7 +411,7 @@ export function RunSelectedCase(props: StepWizardProps) {
           <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
             <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || filterInfo.listSelectedCases.length === 0} onClick={onRunAllCasesClick} />
             <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
-            <ContextualMenuControl text="Import/Export" shouldFocusOnMount={true} menuItems={getMenuItems()} />
+            <ContextualMenuControl text="Import/Export Playlist" shouldFocusOnMount={true} menuItems={getMenuItems()} />
             <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
           </Stack>
         </div>

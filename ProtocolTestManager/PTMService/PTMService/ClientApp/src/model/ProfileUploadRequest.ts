@@ -1,16 +1,10 @@
 export interface ProfileUploadRequest {
-  /// <summary>
-  /// Test suite id.
-  /// </summary>
+  // Test suite id.
   TestSuiteId: number
 
-  /// <summary>
   // Configuration id.
-  /// </summary>
   ConfigurationId: number
 
-  /// <summary>
-  /// Profile package.
-  /// </summary>
+  // Profile package.
   Package: Blob
 }

@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
+using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
@@ -191,6 +192,40 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 ReportFormat.Json => "text/plain",
                 ReportFormat.XUnit => "application/xml",
                 _ => throw new InvalidOperationException($"\"{format}\" is not a valid report format.")
+            };
+        }
+
+        /// <summary>
+        /// Endpoint to save profile by test result id.
+        /// </summary>
+        /// <param name="id">Test result id.</param>
+        /// <param name="request">The request from front end.</param>
+        /// <returns>The profile generate by the test result id.</returns>
+        [Route("{id}/profile")]
+        [HttpPost]
+        public IActionResult SaveProfile(int id, [FromBody] ProfileExportRequest request = null)
+        {
+            ProfileExportRequest profileRequest = null;
+            if (request != null && request.SelectedTestCases != null)
+            {
+                var testRun = PTMKernelService.GetTestRun(id);
+                profileRequest = new ProfileExportRequest()
+                {
+                    FileName = PTMKernelService.EnsureProfileName(null),
+                    TestSuiteId = testRun.Configuration.TestSuite.Id,
+                    ConfigurationId = testRun.Configuration.Id,
+                    TestResultId = id,
+                    SelectedTestCases = request.SelectedTestCases
+                };
+            }
+
+            string profileLocation = profileRequest == null ? PTMKernelService.SaveProfileSettingsByTestResult(id) : PTMKernelService.SaveProfileSettings(profileRequest);
+
+            var profileStream = new FileStream(profileLocation, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            return new FileStreamResult(profileStream, System.Net.Mime.MediaTypeNames.Text.Xml)
+            {
+                FileDownloadName = Path.GetFileName(profileLocation)
             };
         }
 

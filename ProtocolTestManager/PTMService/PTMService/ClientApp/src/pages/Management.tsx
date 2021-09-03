@@ -119,6 +119,7 @@ export function Management(props: any) {
 
   const onTestSuiteUpdate = () => {
     if (currentTestSuite !== undefined && testSuiteName && (file != null)) {
+      setTestSuiteErrorMsg('')
       dispatch(ManagementDataSrv.updateTestSuite(currentTestSuite.Id, {
         TestSuiteName: testSuiteName,
         Description: testSuiteDescription,
@@ -128,7 +129,6 @@ export function Management(props: any) {
         setCurrentTestSuite(undefined)
         setTestSuiteName('')
         setTestSuiteDescription('')
-        setTestSuiteErrorMsg('')
         dispatch(ManagementDataSrv.getTestSuiteList())
       }))
     } else {
