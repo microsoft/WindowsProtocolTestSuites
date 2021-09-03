@@ -418,10 +418,29 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 File.Copy(file, Path.Combine(ptfConfigStorage.AbsolutePath, name));
             }
 
+            var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
+            var scriptAdapters = ptfConfig.adapterTable.Select(kvp =>
+            {
+                var node = kvp.Value;
+                string type = node.Attributes[ConfigurationConsts.AdapterKindAttributeName].Value;
+                if (type == ConfigurationConsts.AdapterKindPowerShell)
+                {
+                    return node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value;
+                }
+                return null;                
+            }).Where(x => x != null).ToList();
+           
+            foreach (string dir in scriptAdapters)
+            {
+                var source = Path.Combine(testSuite.StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, dir);
+                var target = Path.Combine(ptfConfigStorage.AbsolutePath, dir);
+                Kernel.Utility.DirectoryCopy(source, target, true);
+            }
+
             var result = new Configuration(testSuiteConfiguration, testSuite, configurationNode);
 
             return result;
-        }
+        }        
 
         public static Configuration Open(TestSuiteConfiguration testSuiteConfiguration, ITestSuite testSuite, IStoragePool storagePool)
         {
