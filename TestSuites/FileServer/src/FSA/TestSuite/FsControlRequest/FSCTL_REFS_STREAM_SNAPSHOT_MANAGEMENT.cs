@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 "Write must be successful.");
 
             //Step 3: FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT
-            string snapshotName = "anyname";
+            string snapshotName = "sn";
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
@@ -47,7 +47,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             refsStreamSnapshotManagementInput.Reserved = Guid.Parse("00000000-0000-0000-0000-000000000000").ToByteArray();
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT.");
-            status = this.fsaAdapter.FsCtlRefsStreamSnapshotManagement(refsStreamSnapshotManagementInput, 1024, out _, out _);
+            uint outputBufferSize = 0;
+            status = this.fsaAdapter.FsCtlRefsStreamSnapshotManagement(refsStreamSnapshotManagementInput, outputBufferSize, out _, out _);
 
             //Step 4: Verify test result
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify returned NTStatus code.");

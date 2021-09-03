@@ -2437,7 +2437,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case FsControlRequestType.FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT:
-                    // According to FSCC 2.3, the ctlCode must be set  0x900ef
+                    // According to FSCC 2.3, the ctlCode must be set  0x90440
                     ctlCode = 0x90440;
                     break;
 
