@@ -54,7 +54,6 @@ export const FilterTestCase: React.FC<any> = (props: any) => {
 
   const onNextButtonClick: React.MouseEventHandler<unknown> = () => {
     dispatch(ConfigurationsDataSrv.setRules(() => {
-      dispatch(PropertyGroupsActions.setUpdatedAction(false))
       wizardProps.nextStep()
     }))
   }

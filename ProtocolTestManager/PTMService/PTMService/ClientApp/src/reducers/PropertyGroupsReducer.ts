@@ -2,6 +2,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import {
+  SET_SELECTED_RULES,
+  FilterTestCaseActionTypes
+} from '../actions/FilterTestCaseAction'
+
+import {
   GET_PROPERTYGROUPS_REQUEST,
   GET_PROPERTYGROUPS_SUCCESS,
   GET_PROPERTYGROUPS_FAILURE,
@@ -64,15 +69,23 @@ const getUpdatedPropertyGroups = (state: PropertyGroupsState) => {
   })
 }
 
-export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, action: PropertyGroupsActionTypes): PropertyGroupsState => {
+export const getPropertyGroupsReducer = (state = initialPropertyGroupsState, action: PropertyGroupsActionTypes | FilterTestCaseActionTypes): PropertyGroupsState => {
   switch (action.type) {
+    case SET_SELECTED_RULES:
+      return {
+        ...state,
+        updated: false
+      }
+
     case GET_PROPERTYGROUPS_REQUEST:
       return {
         ...state,
         isLoading: true,
         errorMsg: undefined,
         latestPropertyGroups: [],
-        propertyGroups: []
+        propertyGroups: [],
+        editingPropertyGroupIndex: 0,
+        editingPropertyGroup: undefined
       }
 
     case GET_PROPERTYGROUPS_SUCCESS:

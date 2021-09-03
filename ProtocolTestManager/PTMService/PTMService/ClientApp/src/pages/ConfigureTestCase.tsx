@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
-import { LoadingPanel } from '../components/LoadingPanel'
 import { PropertyGroupView } from '../components/PropertyGroupView'
 import { StepPanel } from '../components/StepPanel'
 import { useWindowSize } from '../components/UseWindowSize'
@@ -29,17 +28,17 @@ export function ConfigureTestCase(props: StepWizardProps) {
   const winSize = useWindowSize()
 
   useEffect(() => {
-    if (!propertyGroups.updated) {
+    if (!propertyGroups.updated || propertyGroups.propertyGroups.length === 0) {
       dispatch(PropertyGroupsDataSrv.getPropertyGroups())
     }
   }, [dispatch])
 
   if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
     return <InvalidAppStateNotification
-        testSuite={testSuiteInfo.selectedTestSuite}
-        configuration={configuration.selectedConfiguration}
-        wizard={wizard}
-        wizardProps={wizardProps} />
+      testSuite={testSuiteInfo.selectedTestSuite}
+      configuration={configuration.selectedConfiguration}
+      wizard={wizard}
+      wizardProps={wizardProps} />
   }
 
   const onPropertyValueChange = (updatedProperty: Property) => {
@@ -92,14 +91,13 @@ export function ConfigureTestCase(props: StepWizardProps) {
             </Stack>
             <div style={{ paddingLeft: 30, width: winSize.width, height: winSize.height - 160, overflowY: 'auto' }}>
               {
-                propertyGroups.editingPropertyGroup === undefined
-                  ? <LoadingPanel />
-                  : <PropertyGroupView
+                propertyGroups.editingPropertyGroup !== undefined
+                  ? <PropertyGroupView
                     winSize={winSize}
                     latestPropertyGroup={propertyGroups.latestPropertyGroups[propertyGroups.editingPropertyGroupIndex]}
                     propertyGroup={propertyGroups.editingPropertyGroup}
-                    onValueChange={onPropertyValueChange}
-                  />
+                    onValueChange={onPropertyValueChange} />
+                  : null
               }
             </div>
           </Stack>
