@@ -3,7 +3,11 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<AssemblyName>PropertyValueDetector</AssemblyName>
 		<RootNamespace>Microsoft.Protocols.TestManager.Detector</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Include="..\..\AssemblyInfo\PTMDetectorAssemblyInfo.cs" Link="PTMDetectorAssemblyInfo.cs" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="System.DirectoryServices" Version="5.0.0" />
 		<PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.0" />
