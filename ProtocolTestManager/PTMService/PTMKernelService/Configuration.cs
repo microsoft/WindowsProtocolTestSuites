@@ -422,8 +422,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var scriptAdapters = ptfConfig.adapterTable.Select(kvp =>
             {
                 var node = kvp.Value;
-                if (node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName] != null &&
-                !string.IsNullOrEmpty(node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value))
+                string type = node.Attributes[ConfigurationConsts.AdapterKindAttributeName].Value;
+                if (type == ConfigurationConsts.AdapterKindPowerShell)
                 {
                     return node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value;
                 }
