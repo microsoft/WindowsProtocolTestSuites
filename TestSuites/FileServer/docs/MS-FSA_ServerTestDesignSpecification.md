@@ -911,15 +911,15 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test FSCTL request: **FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT**|
-| | Note: Support for this read operation is optional.|
+| | Note: Support for this operation is optional.|
 | | Test environment: ReFS|
-| | Test object: DataFile, DirectoryFile|
+| | Test object: DataFile|
 | | Test coverage:|
-| | FsCtl: FSCTL_OFFLOAD_READ|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
 | | Supporting test:|
 | | If not implement, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
 | | Input parameter test:|
-| | Test with different parameter, verify server returns different status code accordingly: **STATUS_NOT_SUPPORTED**, **STATUS_INVALID_PARAMETER**, **STATUS_INSUFFICIENT_RESOURCES**, **STATUS_DISK_FULL**, **STATUS_MEDIA_WRITE_PROTECTED**, **STATUS_BUFFER_TOO_SMALL**, **STATUS_INSUFFICIENT_RESOURCES**, **STATUS_DISK_FULL**, **STATUS_MEDIA_WRITE_PROTECTED**, **STATUS_ACCESS_DENIED**, **STATUS_OBJECT_NAME_NOT_FOUND**.|
+| | Test with different parameter, verify server returns different status code accordingly: **STATUS_NOT_SUPPORTED**, **STATUS_INVALID_PARAMETER**, **STATUS_INSUFFICIENT_RESOURCES**, **STATUS_DISK_FULL**, **STATUS_MEDIA_WRITE_PROTECTED**, **STATUS_BUFFER_TOO_SMALL**, **STATUS_ACCESS_DENIED**, **STATUS_OBJECT_NAME_NOT_FOUND**.|
 | | Operation test:|
 | | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
 | Message Sequence| CreateFile.|
