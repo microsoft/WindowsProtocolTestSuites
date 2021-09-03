@@ -464,7 +464,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 var group = new PropertyGroup() { Name = item.Name };
 
                 var propertyList = GetPropertyList(item);
-                
+
                 group.Items = propertyList;
                 groups.Add(group);
             });

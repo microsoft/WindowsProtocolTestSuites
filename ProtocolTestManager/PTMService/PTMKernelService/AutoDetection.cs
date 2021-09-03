@@ -170,7 +170,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     break;
                 }
             }
-            alc.Unload(); 
+            alc.Unload();
         }
 
         public void InitializeDetector()
@@ -299,12 +299,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 cts.Dispose();
             }
-            
+
             UtilCallBackFunctions.WriteLog = (message, newline, style) =>
             {
                 if (DetectLogCallback != null) DetectLogCallback(message, style);
             };
-            
+
             stepsLocker.EnterWriteLock();
             try
             {
@@ -359,32 +359,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         }
 
         #region Apply Detection Summary to xml
-
-        /// <summary>
-        /// Apply Detection Result
-        /// </summary>
-        /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules</param>
-        /// <param name="properties">The ptfconfig properties.</param>
-        /// <param name="targetFilterIndex">Target filter index</param>
-        /// <param name="mappingFilterIndex">Mapping filter index</param>
-        public void ApplyDetectionResult(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, ref IEnumerable<PropertyGroup> properties, int targetFilterIndex, int mappingFilterIndex)
-        {
-            ApplyDetectedRules(out ruleGroupsBySelectedRules, targetFilterIndex, mappingFilterIndex);
-            ApplyDetectedValues(ref properties);
-        }
-
         /// <summary>
         /// Apply the test case selection rules detected by the plug-in.
         /// </summary>
         /// <param name="ruleGroupsBySelectedRules">The rule groups by selected rules.</param>
         /// <param name="targetFilterIndex">Target filter index</param>
         /// <param name="mappingFilterIndex">Mapping filter index</param>
-        private void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, int targetFilterIndex, int mappingFilterIndex)
+        public void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, int targetFilterIndex, int mappingFilterIndex)
         {
             // Get the filter.
             var filter = TestSuite.GetTestCaseFilter();
             // create mapping table for the filter.
-            CreateMappingTableForTestCaseFilter(filter,targetFilterIndex, mappingFilterIndex);
+            CreateMappingTableForTestCaseFilter(filter, targetFilterIndex, mappingFilterIndex);
             // Update selected rules for the filter.
             foreach (var rule in ValueDetector.GetSelectedRules())
             {
@@ -513,64 +499,64 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-    private void AddItems(IList<Common.Types.Rule> displayRules, List<Kernel.Rule> rules)
-    {
-        foreach (var rule in rules)
+        private void AddItems(IList<Common.Types.Rule> displayRules, List<Kernel.Rule> rules)
         {
-            Common.Types.Rule displayRule = new Common.Types.Rule()
+            foreach (var rule in rules)
             {
-                DisplayName = rule.Name,
-                Name = rule.Name,
-                Categories = rule.CategoryList.ToArray(),
-                SelectStatus = rule.SelectStatus==Kernel.RuleSelectStatus.Selected ? Common.Types.RuleSelectStatus.Selected : (rule.SelectStatus == Kernel.RuleSelectStatus.Partial ? Common.Types.RuleSelectStatus.Partial : Common.Types.RuleSelectStatus.UnSelected),
-            };
-
-            if (rule.Count > 0)
-            {
-                AddItems(displayRule, rule);
-            }
-            displayRules.Add(displayRule);
-        }
-    }
-
-    private void ApplyDetectedValues(ref IEnumerable<PropertyGroup> properties)
-    {
-        Dictionary<string, List<string>> propertiesByDetector;
-        ValueDetector.GetDetectedProperty(out propertiesByDetector);
-        List<PropertyGroup> updatedPropertyGroupList = new List<PropertyGroup>();
-        foreach (var ptfconfigProperty in properties)
-        {
-            PropertyGroup newPropertyGroup = new PropertyGroup()
-            {
-                Name = ptfconfigProperty.Name,
-                Items = ptfconfigProperty.Items,
-            };
-
-            foreach (var item in ptfconfigProperty.Items)
-            {
-                var propertyFromDetctor = propertiesByDetector.Where(i => i.Key == item.Key);
-                if (propertyFromDetctor.Count() > 0)
+                Common.Types.Rule displayRule = new Common.Types.Rule()
                 {
-                    var detectorPropertyValue = propertyFromDetctor.FirstOrDefault().Value;
-                    var newProperty = newPropertyGroup.Items.Where(i => i.Key == item.Key).FirstOrDefault();
-                    if (detectorPropertyValue.Count() == 1)
+                    DisplayName = rule.Name,
+                    Name = rule.Name,
+                    Categories = rule.CategoryList.ToArray(),
+                    SelectStatus = rule.SelectStatus == Kernel.RuleSelectStatus.Selected ? Common.Types.RuleSelectStatus.Selected : (rule.SelectStatus == Kernel.RuleSelectStatus.Partial ? Common.Types.RuleSelectStatus.Partial : Common.Types.RuleSelectStatus.UnSelected),
+                };
+
+                if (rule.Count > 0)
+                {
+                    AddItems(displayRule, rule);
+                }
+                displayRules.Add(displayRule);
+            }
+        }
+
+        public void ApplyDetectedValues(ref IEnumerable<PropertyGroup> properties)
+        {
+            Dictionary<string, List<string>> propertiesByDetector;
+            ValueDetector.GetDetectedProperty(out propertiesByDetector);
+            List<PropertyGroup> updatedPropertyGroupList = new List<PropertyGroup>();
+            foreach (var ptfconfigProperty in properties)
+            {
+                PropertyGroup newPropertyGroup = new PropertyGroup()
+                {
+                    Name = ptfconfigProperty.Name,
+                    Items = ptfconfigProperty.Items,
+                };
+
+                foreach (var item in ptfconfigProperty.Items)
+                {
+                    var propertyFromDetctor = propertiesByDetector.Where(i => i.Key == item.Key);
+                    if (propertyFromDetctor.Count() > 0)
                     {
-                        newProperty.Value = detectorPropertyValue[0];
-                    }
-                    else if (detectorPropertyValue.Count() > 0)
-                    {
-                        newProperty.Choices = detectorPropertyValue;
-                        newProperty.Value = detectorPropertyValue[0];
+                        var detectorPropertyValue = propertyFromDetctor.FirstOrDefault().Value;
+                        var newProperty = newPropertyGroup.Items.Where(i => i.Key == item.Key).FirstOrDefault();
+                        if (detectorPropertyValue.Count() == 1)
+                        {
+                            newProperty.Value = detectorPropertyValue[0];
+                        }
+                        else if (detectorPropertyValue.Count() > 0)
+                        {
+                            newProperty.Choices = detectorPropertyValue;
+                            newProperty.Value = detectorPropertyValue[0];
+                        }
                     }
                 }
+
+                updatedPropertyGroupList.Add(newPropertyGroup);
             }
-
-            updatedPropertyGroupList.Add(newPropertyGroup);
+            properties = updatedPropertyGroupList.ToArray();
         }
-        properties = updatedPropertyGroupList.ToArray();
-    }
 
-    #endregion
+        #endregion
 
         #region Private Methods
 
@@ -591,15 +577,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         private bool SetPrerequisitesInValueDetectorAssembly(Dictionary<string, string> properties)
         {
             return ValueDetector.SetPrerequisiteProperties(properties);
-        }
-
-        /// <summary>
-        /// Gets the case selection rules suggested by the detector.
-        /// </summary>
-        /// <returns>A list of the rules</returns>
-        private List<CaseSelectRule> GetRulesInValueDetectorAssembly()
-        {
-            return ValueDetector.GetSelectedRules();
         }
 
         /// <summary>
