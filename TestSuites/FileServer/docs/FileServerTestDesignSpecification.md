@@ -5313,6 +5313,15 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server sets Connection.CipherId to 0 from the response.|
 |**Cleanup**||
 
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_SigningCapability|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_SIGNING_CAPABILITIES context and with SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_SIGNING_CAPABILITIES context and SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set SigningAlgorithmId to value: 0x0000.|
+||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
+|**Cleanup**||
+
 
 |||
 |---|---|
