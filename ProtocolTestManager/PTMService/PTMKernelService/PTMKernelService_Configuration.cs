@@ -55,15 +55,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             pool.Save().Wait();
 
             int id = testSuiteConfiguration.Id;
-
-            var configuration = Configuration.Create(testSuiteConfiguration, tesSuite, StoragePool);
-
-            repo.Update(testSuiteConfiguration);
-
-            pool.Save().Wait();
-
-            ConfigurationPool.AddOrUpdate(id, _ => configuration, (_, _) => configuration);
-
+            try
+            {
+                var configuration = Configuration.Create(testSuiteConfiguration, tesSuite, StoragePool);
+                repo.Update(testSuiteConfiguration);
+                ConfigurationPool.AddOrUpdate(id, _ => configuration, (_, _) => configuration);
+            }
+            catch
+            {
+                repo.Remove(testSuiteConfiguration);
+                throw;
+            }
+            finally
+            {
+                pool.Save().Wait();
+            }
             return id;
         }
 

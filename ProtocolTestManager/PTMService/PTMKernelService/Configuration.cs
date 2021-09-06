@@ -429,14 +429,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
                 return null;                
             }).Where(x => x != null).ToList();
-           
-            foreach (string dir in scriptAdapters)
-            {
-                var source = Path.Combine(testSuite.StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, dir);
-                var target = Path.Combine(ptfConfigStorage.AbsolutePath, dir);
-                Kernel.Utility.DirectoryCopy(source, target, true);
+            
+            try
+            {                
+                foreach (string dir in scriptAdapters)
+                {
+                    var source = Kernel.Utility.CombineToNormalizedPath(testSuite.StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, dir);
+                    var target = Kernel.Utility.CombineToNormalizedPath(ptfConfigStorage.AbsolutePath, dir);
+                    Kernel.Utility.DirectoryCopy(source, target, true);
+                }
             }
-
+            catch(Exception e)
+            {
+                storagePool.GetKnownNode(KnownStorageNodeNames.Configuration).RemoveNode(testSuiteConfiguration.Id.ToString());
+                throw;
+            }
             var result = new Configuration(testSuiteConfiguration, testSuite, configurationNode);
 
             return result;

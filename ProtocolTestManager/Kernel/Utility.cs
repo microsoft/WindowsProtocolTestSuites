@@ -30,6 +30,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private int mappingFilterIndex = -1;
         private DateTime sessionStartTime;
         private string ptfconfigDirectory = null;
+        private static char[] directorySeparators = new char[] { '/', '\\' };
 
         public Utility()
         {
@@ -244,6 +245,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
                 }
             }
+        }
+
+        public static string CombineToNormalizedPath(string basePath, params string[] pathsToAppend)
+        {
+            var splits = pathsToAppend.SelectMany(s => s.Split(directorySeparators)).ToArray();
+            var totalLength = splits.Length;
+            var segments = new string[totalLength + 1];
+            segments[0] = basePath;
+            var i = 0;
+            foreach (var split in splits)
+            {
+                i++;
+                segments[i] = split;
+            }
+            return Path.Combine(segments);
         }
 
         #endregion
