@@ -46,6 +46,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return GetTestRunInternal(id, null);
         }
 
+        public bool IsTestSuiteRunning()
+        {
+            using var instance = ScopedServiceFactory.GetInstance();
+
+            var pool = instance.ScopedServiceInstance;
+
+            var repo = pool.Get<TestResult>();
+
+            return repo.Get(q => q.Where(r => r.State == TestResultState.Running)).Any();
+        }
+
         private ITestRun GetTestRunInternal(int id, TestResult testResult)
         {
             if (!TestRunPool.ContainsKey(id))

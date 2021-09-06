@@ -101,6 +101,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         ITestRun[] QueryTestRuns(int pageSize, int pageIndex, Func<TestResult, bool> queryFunc, out int totalPage);
 
         /// <summary>
+        /// return if any test suite is running
+        /// </summary>
+        /// <returns>true if any test suite is running</returns>
+        bool IsTestSuiteRunning();
+
+        /// <summary>
         /// Get a test run.
         /// </summary>
         /// <param name="id">The test run Id.</param>

@@ -34,7 +34,8 @@ export const PropertyGroupsDataSrv = {
       body: JSON.stringify(state.propertyGroups.propertyGroups),
       onRequest: PropertyGroupsActions.setPropertyGroupsAction_Request,
       onComplete: PropertyGroupsActions.setPropertyGroupsAction_Success,
-      onError: PropertyGroupsActions.setPropertyGroupsAction_Failure
-    }).then(completeCallback)
+      onError: PropertyGroupsActions.setPropertyGroupsAction_Failure,
+      onCompleteCallback: completeCallback
+    })
   }
 }

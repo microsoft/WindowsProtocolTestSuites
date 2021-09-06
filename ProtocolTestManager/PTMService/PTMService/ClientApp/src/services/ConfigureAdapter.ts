@@ -27,7 +27,8 @@ export const AdapterDataSrv = {
       dispatch,
       onRequest: AdapterActions.setAdapterAction_Request,
       onComplete: AdapterActions.setAdapterAction_Success,
-      onError: AdapterActions.setAdapterAction_Failure
-    }).then(completeCallback)
+      onError: AdapterActions.setAdapterAction_Failure,
+      onCompleteCallback: completeCallback
+    })
   }
 }

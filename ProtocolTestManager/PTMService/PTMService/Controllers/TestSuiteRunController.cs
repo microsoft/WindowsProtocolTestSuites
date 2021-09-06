@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
+using System;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
@@ -46,6 +47,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public int Run(RunRequest request)
         {
+            if (PTMKernelService.IsTestSuiteRunning())
+            {
+                throw new NotSupportedException("PTMService does not support parallel run right now, please wait for the current running job to be completed and then try again.");
+            }
+
             var result = PTMKernelService.CreateTestRun(request.ConfigurationId, request.SelectedTestCases);
 
             return result;
@@ -65,6 +71,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             testRun.Abort();
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Check if any test suite is running
+        /// </summary>
+        /// <returns></returns>
+        [Route("check")]
+        [HttpGet]
+        public IActionResult Check()
+        {
+            return Ok(PTMKernelService.IsTestSuiteRunning());
         }
     }
 }

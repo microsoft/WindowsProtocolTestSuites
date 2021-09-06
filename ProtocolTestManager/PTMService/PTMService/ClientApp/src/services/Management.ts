@@ -33,8 +33,9 @@ export const ManagementDataSrv = {
       dispatch,
       onRequest: ManagementActions.installTestSuiteAction_Request,
       onComplete: ManagementActions.installTestSuiteAction_Success,
-      onError: ManagementActions.installTestSuiteAction_Failure
-    }).then(callback)
+      onError: ManagementActions.installTestSuiteAction_Failure,
+      onCompleteCallback: callback
+    })
   },
   updateTestSuite: (id: number, request: InstallRequest, callback: () => void): AppThunkAction<ManagementActionTypes> => async (dispatch) => {
     const postData = new FormData()
@@ -52,8 +53,9 @@ export const ManagementDataSrv = {
       dispatch,
       onRequest: ManagementActions.updateTestSuiteAction_Request,
       onComplete: ManagementActions.updateTestSuiteAction_Success,
-      onError: ManagementActions.updateTestSuiteAction_Failure
-    }).then(callback)
+      onError: ManagementActions.updateTestSuiteAction_Failure,
+      onCompleteCallback: callback
+    })
   },
   removeTestSuite: (id: number, callback: () => void): AppThunkAction<ManagementActionTypes> => async (dispatch) => {
     await FetchService({
@@ -63,7 +65,8 @@ export const ManagementDataSrv = {
       dispatch,
       onRequest: ManagementActions.removeTestSuiteAction_Request,
       onComplete: ManagementActions.removeTestSuiteAction_Success,
-      onError: ManagementActions.removeTestSuiteAction_Failure
-    }).then(callback)
+      onError: ManagementActions.removeTestSuiteAction_Failure,
+      onCompleteCallback: callback
+    })
   }
 }

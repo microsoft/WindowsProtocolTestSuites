@@ -22,8 +22,9 @@ export const SelectedTestCasesDataSrv = {
       body: JSON.stringify(runRequest),
       onRequest: SelectedTestCasesActions.createRunRequestAction_Request,
       onComplete: SelectedTestCasesActions.createRunRequestAction_Success,
-      onError: SelectedTestCasesActions.createRunRequestAction_Failure
-    }).then(completeCallback)
+      onError: SelectedTestCasesActions.createRunRequestAction_Failure,
+      onCompleteCallback: completeCallback
+    })
   },
   abortRunRequest: (testResultId: number, completeCallback?: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
     await FetchService({
@@ -32,7 +33,8 @@ export const SelectedTestCasesDataSrv = {
       dispatch,
       onRequest: SelectedTestCasesActions.abortRunRequestAction_Request,
       onComplete: SelectedTestCasesActions.abortRunRequestAction_Success,
-      onError: SelectedTestCasesActions.abortRunRequestAction_Failure
-    }).then(completeCallback)
+      onError: SelectedTestCasesActions.abortRunRequestAction_Failure,
+      onCompleteCallback: completeCallback
+    })
   }
 }
