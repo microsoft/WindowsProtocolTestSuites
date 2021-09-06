@@ -232,6 +232,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FSCTL_SET_INTEGRITY_INFORMATION = 0x9C280,
 
         /// <summary>
+        /// The FSCTL_SET_INTEGRITY_INFORMATION_EX Request message requests that the server set the integrity state of
+        /// the file or directory associated with the handle on which this FSCTL was invoked.
+        /// </summary>
+        FSCTL_SET_INTEGRITY_INFORMATION_EX = 0x90380,
+
+        /// <summary>
         /// This message sets the object identifier for the file or directory associated with the handle on which this 
         ///   FSCTL was invoked. The message contains a FILE_OBJECTID_BUFFER (section 2.1.3) data element. Either a  
         /// Type 1 or a Type 2 buffer is valid. 
