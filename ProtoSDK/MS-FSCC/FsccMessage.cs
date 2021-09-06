@@ -2935,7 +2935,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// the server. All operational codes larger than 
         /// this numerical value will be failed.
         /// </summary>
-        REFS_STREAM_SNAPSHOT_OPERATION_MAX = 0x00000007,
+        REFS_STREAM_SNAPSHOT_OPERATION_MAX = 0x00000006,
     }
     
     /// <summary>
