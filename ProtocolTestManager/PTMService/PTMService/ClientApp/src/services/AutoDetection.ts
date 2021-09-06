@@ -31,9 +31,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure,
       onCompleteCallback: () => {
         const currState = getState()
-        if (currState.autoDetection.errorMsg === undefined) {
-          completeCallback(currState.autoDetection)
-        }
+        completeCallback(currState.autoDetection)
       }
     })
   },
@@ -49,9 +47,7 @@ export const AutoDetectionDataSrv = {
       onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure,
       onCompleteCallback: () => {
         const currState = getState()
-        if (currState.autoDetection.errorMsg === undefined) {
-          completeCallback(currState.autoDetection)
-        }
+        completeCallback(currState.autoDetection)
       }
     })
   },
@@ -87,12 +83,7 @@ export const AutoDetectionDataSrv = {
       onComplete: AutoDetectionActions.startAutoDetectionAction_Success,
       onError: AutoDetectionActions.startAutoDetectionAction_Failure,
       body: JSON.stringify(body),
-      onCompleteCallback: () => {
-        const currState = getState()
-        if (currState.autoDetection.errorMsg === undefined) {
-          completeCallback()
-        }
-      }
+      onCompleteCallback: completeCallback
     })
   },
   stopAutoDetection: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
@@ -118,12 +109,7 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
       onComplete: AutoDetectionActions.applyAutoDetectionResultAction_Success,
       onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure,
-      onCompleteCallback: () => {
-        const currState = getState()
-        if (currState.autoDetection.errorMsg === undefined) {
-          completeCallback()
-        }
-      }
+      onCompleteCallback: completeCallback
     })
   }
 }
