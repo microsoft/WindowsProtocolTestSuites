@@ -17,9 +17,11 @@ export interface FetchOption<T> {
   onRequest?: Function
   onComplete?: Function
   onError?: Function
+  onCompleteCallback?: Function
 }
 
-export async function FetchService<T> (requestOption: FetchOption<T>) {
+export async function FetchService<T>(requestOption: FetchOption<T>) {
+  let isCallFailed: boolean = false
   try {
     if (requestOption.onRequest !== undefined) {
       requestOption.dispatch(requestOption.onRequest())
@@ -32,9 +34,9 @@ export async function FetchService<T> (requestOption: FetchOption<T>) {
         headers: (requestOption.headers != null)
           ? requestOption.headers
           : {
-              Accept: 'application/json',
-              'Content-Type': 'application/json'
-            }
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
       })
       if (response.status >= 400 && response.status < 600) {
         const data = await parseJson(response)
@@ -54,17 +56,25 @@ export async function FetchService<T> (requestOption: FetchOption<T>) {
 
       // TODO: Find out how to pass in a useful onComplete callback when the response isn't json
       requestOption.dispatch(requestOption.onComplete())
+      isCallFailed = false
       return await response.blob()
     }
-  } catch (errorMsg) {
-    console.error(errorMsg)
-    if ((errorMsg !== undefined) && requestOption.onError !== undefined) {
-      requestOption.dispatch(requestOption.onError(errorMsg.message))
+  } catch (error) {
+    isCallFailed = true
+    console.error(error)
+    if ((error !== undefined) && requestOption.onError !== undefined) {
+      requestOption.dispatch(requestOption.onError(error.message))
+    }
+  } finally {
+    if (isCallFailed) {
+      if (requestOption.onCompleteCallback) {
+        requestOption.onCompleteCallback()
+      }
     }
   }
 }
 
-async function parseJson (response: Response) {
+async function parseJson(response: Response) {
   return await response.text().then(function (text: string) {
     return text ? JSON.parse(text) : {}
   })

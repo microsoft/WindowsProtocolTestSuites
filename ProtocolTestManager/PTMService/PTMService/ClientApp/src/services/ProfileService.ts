@@ -34,8 +34,9 @@ export const ProfileDataSrv = {
       dispatch,
       onRequest: ConfigureMethodActions.saveProfileAction_Request,
       onComplete: ConfigureMethodActions.saveProfileAction_Success,
-      onError: ConfigureMethodActions.saveProfileAction_Failure
-    }).then((data: Blob | undefined) => downloadProfile(getFileNameWithExtension(`${testResultId}`), data))
+      onError: ConfigureMethodActions.saveProfileAction_Failure,
+      onCompleteCallback: (data: Blob | undefined) => downloadProfile(getFileNameWithExtension(`${testResultId}`), data)
+    })
   },
   importProfile: (request: ProfileUploadRequest, callback: (data: boolean | undefined) => void): AppThunkAction<TestSuiteConfigureMethodActionTypes> => async (dispatch) => {
     const postData = new FormData()
@@ -49,7 +50,8 @@ export const ProfileDataSrv = {
       dispatch,
       onRequest: ConfigureMethodActions.importProfileAction_Request,
       onComplete: ConfigureMethodActions.importProfileAction_Success,
-      onError: ConfigureMethodActions.importProfileAction_Failure
-    }).then(callback)
+      onError: ConfigureMethodActions.importProfileAction_Failure,
+      onCompleteCallback: callback
+    })
   }
 }

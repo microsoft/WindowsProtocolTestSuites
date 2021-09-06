@@ -70,8 +70,8 @@ export const TestResultsDataSrv = {
 
     await FetchService({
       url: `api/testresult?pageSize=${pageSize}&pageNumber=${pageNumber}` +
-                (query === undefined ? '' : `&query=${query}`) +
-                (!showAll ? '' : `&showAll=${showAll}`),
+        (query === undefined ? '' : `&query=${query}`) +
+        (!showAll ? '' : `&showAll=${showAll}`),
       method: RequestMethod.GET,
       dispatch,
       onRequest: TestResultsActions.listTestResultsAction_Request,
@@ -86,8 +86,9 @@ export const TestResultsDataSrv = {
       dispatch,
       onRequest: TestResultsActions.getTestResultDetailAction_Request,
       onComplete: TestResultsActions.getTestResultDetailAction_Success,
-      onError: TestResultsActions.getTestResultDetailAction_Failure
-    }).then(completeCallback)
+      onError: TestResultsActions.getTestResultDetailAction_Failure,
+      onCompleteCallback: completeCallback
+    })
   },
   getTestRunReport: (testResultId: number, reportRequest: ReportRequest): AppThunkAction<TestResultsActionTypes> => async (dispatch, getState) => {
     await FetchService({
@@ -98,7 +99,8 @@ export const TestResultsDataSrv = {
       dispatch,
       onRequest: TestResultsActions.getTestRunReportAction_Request,
       onComplete: TestResultsActions.getTestRunReportAction_Success,
-      onError: TestResultsActions.getTestRunReportAction_Failure
-    }).then((data: Blob | undefined) => downloadBlob(getFileNameWithExtension(`${testResultId}`, reportRequest.Format), data))
+      onError: TestResultsActions.getTestRunReportAction_Failure,
+      onCompleteCallback: (data: Blob | undefined) => downloadBlob(getFileNameWithExtension(`${testResultId}`, reportRequest.Format), data)
+    })
   }
 }

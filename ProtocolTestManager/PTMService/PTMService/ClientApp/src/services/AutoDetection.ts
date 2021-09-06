@@ -28,11 +28,12 @@ export const AutoDetectionDataSrv = {
       dispatch,
       onRequest: AutoDetectionActions.getAutoDetectionStepsAction_Request,
       onComplete: AutoDetectionActions.getAutoDetectionStepsAction_Success,
-      onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure
-    }).then(() => {
-      const currState = getState()
-      if (currState.autoDetection.errorMsg === undefined) {
-        completeCallback(currState.autoDetection)
+      onError: AutoDetectionActions.getAutoDetectionStepsAction_Failure,
+      onCompleteCallback: () => {
+        const currState = getState()
+        if (currState.autoDetection.errorMsg === undefined) {
+          completeCallback(currState.autoDetection)
+        }
       }
     })
   },
@@ -45,11 +46,12 @@ export const AutoDetectionDataSrv = {
       dispatch,
       onRequest: AutoDetectionActions.updateAutoDetectionStepsAction_Request,
       onComplete: AutoDetectionActions.updateAutoDetectionStepsAction_Success,
-      onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure
-    }).then(() => {
-      const currState = getState()
-      if (currState.autoDetection.errorMsg === undefined) {
-        completeCallback(currState.autoDetection)
+      onError: AutoDetectionActions.updateAutoDetectionStepsAction_Failure,
+      onCompleteCallback: () => {
+        const currState = getState()
+        if (currState.autoDetection.errorMsg === undefined) {
+          completeCallback(currState.autoDetection)
+        }
       }
     })
   },
@@ -63,12 +65,13 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.getAutoDetectionLogAction_Request,
       onComplete: AutoDetectionActions.getAutoDetectionLogAction_Success,
       onError: AutoDetectionActions.getAutoDetectionLogAction_Failure,
-      headers: { 'Content-Type': 'text/plain' }
-    }).then(async (logBlob: Blob | undefined) => {
-      if (logBlob !== undefined) {
-        const logText = await logBlob.text()
-        dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
-        completeCallback()
+      headers: { 'Content-Type': 'text/plain' },
+      onCompleteCallback: async (logBlob: Blob | undefined) => {
+        if (logBlob !== undefined) {
+          const logText = await logBlob.text()
+          dispatch(AutoDetectionActions.setAutoDetectionLogAction(logText))
+          completeCallback()
+        }
       }
     })
   },
@@ -83,11 +86,12 @@ export const AutoDetectionDataSrv = {
       onRequest: AutoDetectionActions.startAutoDetectionAction_Request,
       onComplete: AutoDetectionActions.startAutoDetectionAction_Success,
       onError: AutoDetectionActions.startAutoDetectionAction_Failure,
-      body: JSON.stringify(body)
-    }).then(() => {
-      const currState = getState()
-      if (currState.autoDetection.errorMsg === undefined) {
-        completeCallback()
+      body: JSON.stringify(body),
+      onCompleteCallback: () => {
+        const currState = getState()
+        if (currState.autoDetection.errorMsg === undefined) {
+          completeCallback()
+        }
       }
     })
   },
@@ -113,11 +117,12 @@ export const AutoDetectionDataSrv = {
       dispatch,
       onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
       onComplete: AutoDetectionActions.applyAutoDetectionResultAction_Success,
-      onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure
-    }).then(() => {
-      const currState = getState()
-      if (currState.autoDetection.errorMsg === undefined) {
-        completeCallback()
+      onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure,
+      onCompleteCallback: () => {
+        const currState = getState()
+        if (currState.autoDetection.errorMsg === undefined) {
+          completeCallback()
+        }
       }
     })
   }
