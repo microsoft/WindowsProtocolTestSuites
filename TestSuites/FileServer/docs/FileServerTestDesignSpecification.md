@@ -1740,7 +1740,23 @@ This is used to test SMB2 common user scenarios.
 |                          | 13. Server sends encrypted TREE\_DISCONNECT response                                                         |
 |                          | 14. Client sends LOGOFF request                                                                              |
 |                          | 15. Server sends LOGOFF response                                                                             |
-| **Cleanup**              |                                                                                                              |
+| **Cleanup**              ||
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Signing_VerifyAesGmacSigning																												   |
+| **Description**          | This test case is designed to test whether outgoing and incoming messages are correctly signed and verified using aes-gmac signing algorithm. |
+| **Prerequisites**        |																																			   |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES and SMB2\_SIGNING\_CAPABILITIES								   |
+|                          | 2.  Server sends NEGOTIATE response with SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES and SMB2\_SIGNING\_CAPABILITIES							   |
+|                          | 3.  Client sends SESSION\_SETUP request																								       |
+|                          | 4.  Server sends SESSION\_SETUP response																							           |
+|                          | 5.  According to response header from above step, server responds with a signed flag														   |
+|                          | 6.  Client sends TREE\_CONNECT request to connect to a share																				   |
+|                          | 7.  Server sends TREE\_CONNECT response with a signing flag																			       |
+|                          | 12. Client sends TREE\_DISCONNECT request																									   |
+|                          | 13. Server sends TREE\_DISCONNECT response																									   |
+|                          | 14. Client sends LOGOFF request																											   |
+|                          | 15. Server sends LOGOFF response																											  s |
+| **Cleanup**              ||
 
 
 #### <a name="3.1.21"> TreeMgmt

@@ -948,7 +948,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             null,
                             preauthHashValue,
                             cipherId,
-                            signingId));
+                            selectedSigningAlgorithm));
                 }
                 else
                 {
