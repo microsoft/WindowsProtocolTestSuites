@@ -3344,6 +3344,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// </summary>
         FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF = 0x00000001
     }
+
     /// <summary>
     /// The FSCTL_SET_INTEGRITY_INFORMATION Request message requests that the server set the integrity state 
     /// of the file or directory associated with the handle on which this FSCTL was invoked.
@@ -3368,6 +3369,110 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
     #endregion
 
+    #region FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER
+
+    /// <summary>
+    /// EnableIntegrity for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// This field MUST be one of the following values:
+    /// </summary>
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_ENABLEINTEGRITY : byte
+    {
+        /// <summary>
+        /// The file or directory is set to not use integrity.
+        /// </summary>
+        DISABLE_INTEGRITY = 0x00,
+
+        /// <summary>
+        /// The file or directory is set to provide integrity using 
+        /// CRC32 or CRC64 checksum.
+        /// </summary>
+        ENABLE_INTEGRITY = 0x01,
+    }
+
+    /// <summary>
+    /// KeepIntegrityStateUnchanged for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// This field MUST be one of the following values:
+    /// </summary>
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_KEEPINTEGRITYSTATEUNCHANGED : byte
+    {
+        /// <summary>
+        /// The file or directory integrity state must not change.
+        /// </summary>
+        KEEP_INTEGRITY = 0x00,
+
+        /// <summary>
+        /// The file or directory integrity state should change 
+        /// based on the EnableIntegrity parameter.
+        /// </summary>
+        CHANGE_INTEGRITY = 0x01,
+    }
+
+    /// <summary>
+    /// Flags for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
+    /// Flag values that are unspecified in the following table SHOULD be set to 0 and MUST be ignored.
+    /// </summary>
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_FLAGS : uint
+    {
+        NONE = 0,
+
+        /// <summary>
+        /// When set, if a checksum does not match, the associated I/O operation will not be failed.
+        /// </summary>
+        FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF = 0x00000001
+    }
+
+    /// <summary>
+    /// Version for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// This field MUST be set to 1.
+    /// </summary>
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_VERSION : byte
+    {
+        /// <summary>
+        /// Only value. 
+        /// </summary>
+        V1 = 1
+    }
+
+    /// <summary>
+    /// The FSCTL_SET_INTEGRITY_INFORMATION_EX Request message requests that the server set the 
+    /// integrity state of the file or directory associated with the handle on which this FSCTL was 
+    /// invoked.
+    /// </summary>
+    public partial struct FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER
+    {
+        /// <summary>
+        /// 1 byte. See enum.
+        /// </summary>
+        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_ENABLEINTEGRITY EnableIntegrity;
+
+        /// <summary>
+        /// 1 byte. See enum.
+        /// </summary>
+        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_KEEPINTEGRITYSTATEUNCHANGED KeepIntegrityStateUnchanged;
+
+        /// <summary>
+        /// 2 bytes. A 16-bit reserved value. This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        public ushort Reserved1;
+
+        /// <summary>
+        /// 4 bytes. See enum.
+        /// </summary>
+        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_FLAGS Flags;
+
+        /// <summary>
+        /// 1 byte. See enum.
+        /// </summary>
+        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_VERSION Version;
+
+        /// <summary>
+        /// A 56-bit reserved value. This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        [StaticSize(7, StaticSizeMode.Elements)]
+        public byte[] Reserved2;
+    }
+    #endregion
 
     /// <summary>
     /// [MS-SMB2] 2.2.37.1   SMB2_QUERY_QUOTA_INFO
