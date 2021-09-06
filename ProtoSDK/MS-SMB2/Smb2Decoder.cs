@@ -983,7 +983,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
                     {
                         var initializationVector = Smb2Utility.ComputeNonce(packet, this.decodeRole);
-                        computedSignature = AesGmac128.ComputeHash(cryptoInfo.SigningKey, initializationVector);
+                        var (ciphertext, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, initializationVector, bytesToCompute);
+
+                        computedSignature = tag;
                     }
                     else
                     {
