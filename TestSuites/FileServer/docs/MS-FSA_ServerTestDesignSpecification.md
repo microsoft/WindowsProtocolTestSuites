@@ -224,7 +224,7 @@
             * [FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero](#FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero)
             * [FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero)
             * [FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned](#FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned)
-            * [FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero](#FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero)
+            * [FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferSizeNotZero](#FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferSizeNotZero)
             * [FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero)
             * [FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero](#FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero)
             * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero)
@@ -3409,16 +3409,16 @@ There are 343 test cases in total:
 | | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and SnapshotNameLength not aligned.|
 | | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
 
-##### <a name="FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero"/>FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferSizeNotZero"/>FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferSizeNotZero
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| Send invalid OutputBufferLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS STATUS_INVALID_PARAMETER.|
+| Description| Send invalid OutputBufferSize of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS STATUS_INVALID_PARAMETER.|
 | | Note: This is only implemented by the **REFS** file system file system.|
 | | Test environment: ReFS|
 | | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
 | Message Sequence| Create test file (DataFile)|
-| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and OutputBufferLength equals zero.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and OutputBufferSize equals zero.|
 | | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
 
 ##### <a name="FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero"/>FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero
