@@ -2862,7 +2862,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    public enum Operation_Values : uint
+    public enum RefsStreamSnapshotOperation_Values : uint
     {
         /// <summary>
         /// All requests with this operational code MUST 
@@ -2950,7 +2950,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// This field specifies the operation and MUST contain one of the following values:
         /// </summary>
-        public Operation_Values Operation;
+        public RefsStreamSnapshotOperation_Values Operation;
 
         /// <summary>
         /// An unsigned integer representing the length in bytes of the 
@@ -3151,7 +3151,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// A value representing the properties for this VCN to LCN mapping. The value 
         /// MUST be one of the following:
         /// </summary>
-        public Properties_Values Properties;
+        public RefsStreamExtentProperties_Values Properties;
     }  
 
     /// <summary>
@@ -3160,7 +3160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// </summary>
     [Flags()]
     [SuppressMessage("Microsoft.Design", "CA1028:EnumStorageShouldBeInt32")]
-    public enum Properties_Values : uint
+    public enum RefsStreamExtentProperties_Values : uint
     {
         /// <summary>
         /// The metadata extent is considered valid, where the 
