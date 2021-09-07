@@ -61,12 +61,7 @@ export const ConfigurationsDataSrv = {
       onRequest: FilterTestCaseActions.setRulesAction_Request,
       onComplete: FilterTestCaseActions.setRulesAction_Success,
       onError: FilterTestCaseActions.setRulesAction_Failure,
-      onCompleteCallback: () => {
-        const state = getState()
-        if (state.filterInfo.errorMsg === undefined) {
-          completeCallback()
-        }
-      }
+      onCompleteCallback: completeCallback
     })
   }
 }
