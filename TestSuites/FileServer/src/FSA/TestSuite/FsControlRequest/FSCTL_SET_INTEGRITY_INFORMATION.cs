@@ -468,6 +468,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with CHECKSUM_TYPE_UNCHANGED.");
             status = fsaAdapter.FsCtlSetIntegrityInfo(integrityInfo, inputBufferSize);
 
+            // Check if Integrity is supported
+            if (!IsCurrentTransportSupportIntegrity(status)) return;
+            if (fsaAdapter.IsIntegritySupported == false)
+            {
+                fsaAdapter.AssertAreEqual(Manager, MessageStatus.INVALID_DEVICE_REQUEST, status, "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
+                return;
+            }
+
             //Step 6: FSCTL request FSCTL_GET_INTEGRITY_INFORMATION
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
             status = fsaAdapter.FsCtlGetIntegrityInfo(outputBufferSize, out _, out outputBuffer);
@@ -529,6 +537,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with CHECKSUM_TYPE_UNCHANGED.");
             status = fsaAdapter.FsCtlSetIntegrityInfo(integrityInfo, inputBufferSize);
+
+            // Check if Integrity is supported
+            if (!IsCurrentTransportSupportIntegrity(status)) return;
+            if (fsaAdapter.IsIntegritySupported == false)
+            {
+                fsaAdapter.AssertAreEqual(Manager, MessageStatus.INVALID_DEVICE_REQUEST, status, "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
+                return;
+            }
 
             //Step 6: FSCTL request FSCTL_GET_INTEGRITY_INFORMATION
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
