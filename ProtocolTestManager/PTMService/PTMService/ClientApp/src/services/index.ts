@@ -21,8 +21,8 @@ export interface FetchOption<T> {
 }
 
 export async function FetchService<T>(requestOption: FetchOption<T>) {
-  let isCallSucceded: boolean = true
-  let result: any = undefined
+  let isCallSuccessful: boolean = true
+  let result: T | Blob | undefined = undefined
   try {
     if (requestOption.onRequest !== undefined) {
       requestOption.dispatch(requestOption.onRequest())
@@ -34,10 +34,7 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
         body: requestOption.body,
         headers: (requestOption.headers != null)
           ? requestOption.headers
-          : {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          }
+          : { Accept: 'application/json', 'Content-Type': 'application/json' }
       })
       if (response.status >= 400 && response.status < 600) {
         const data = await parseJson(response)
@@ -57,18 +54,18 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
 
       // TODO: Find out how to pass in a useful onComplete callback when the response isn't json
       requestOption.dispatch(requestOption.onComplete())
-      isCallSucceded = true
-      return await response.blob()
+      result = await response.blob()
+      return result
     }
-  } catch (error) {
-    isCallSucceded = false
+  } catch (error: any) {
+    isCallSuccessful = false
     console.error(error)
     if ((error !== undefined) && requestOption.onError !== undefined) {
       requestOption.dispatch(requestOption.onError(error.message))
     }
   } finally {
-    if (isCallSucceded && requestOption.onCompleteCallback !== undefined) {
-      requestOption.onCompleteCallback(result)
+    if (isCallSuccessful && requestOption.onCompleteCallback !== undefined) {
+      await requestOption.onCompleteCallback(result)
     }
   }
 }
