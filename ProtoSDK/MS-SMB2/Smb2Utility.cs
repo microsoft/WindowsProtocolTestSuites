@@ -1530,21 +1530,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <returns></returns>
         public static byte[] ComputeNonce(Smb2SinglePacket packet, Smb2Role decodeRole)
         {
-            var initializationVector = new byte[12];
-            BitConverter.GetBytes(packet.Header.MessageId).CopyTo(initializationVector, 0);
+            var nonce = new byte[12];
+            BitConverter.GetBytes(packet.Header.MessageId).CopyTo(nonce, 0);
 
             // Set least significant bit to 0 if sender is a client or otherwise
             if (decodeRole.Equals(Smb2Role.Server))
             {
-                initializationVector[initializationVector.Length - 1] = 1;
+                nonce[nonce.Length - 1] = 1;
             }
             // If the message is SMB2 CANCEL request, the penultimate bit is set to 1
             if (packet.Header.Command.Equals(Smb2Command.CANCEL))
             {
-                initializationVector[initializationVector.Length - 2] = 1;
+                nonce[nonce.Length - 2] = 1;
             }
 
-            return initializationVector;
+            return nonce;
         }
     }
 }

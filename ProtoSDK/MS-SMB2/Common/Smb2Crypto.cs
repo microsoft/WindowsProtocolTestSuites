@@ -219,9 +219,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             {
                 // [MS-SMB2] 3.1.4.1
                 // 1. If Connection.Dialect belongs to the SMB 3.x dialect family and Connection.SigningAlgorithmId is AES-GMAC, 
-                // compute a 16-byte has using the AES-GMAC over the entire message using nonce as specified
-                var initializationVection = Smb2Utility.ComputeNonce(original, role);
-                var (ciphertext, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, initializationVection, original.ToBytes());
+                // compute a 16-byte hash using the AES-GMAC over the entire message using nonce as specified
+                var nonce = Smb2Utility.ComputeNonce(original, role);
+                var (_ciphertext, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, nonce, original.ToBytes());
 
                 return tag;
             }   

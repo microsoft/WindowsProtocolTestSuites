@@ -216,7 +216,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2636       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2638       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -1741,6 +1741,7 @@ This is used to test SMB2 common user scenarios.
 |                          | 14. Client sends LOGOFF request                                                                              |
 |                          | 15. Server sends LOGOFF response                                                                             |
 | **Cleanup**              ||
+
 |--------------------------|--------------------------------------------------------------------------------------------------------------|
 | **Test ID**              | Signing_VerifyAesGmacSigning																												   |
 | **Description**          | This test case is designed to test whether outgoing and incoming messages are correctly signed and verified using aes-gmac signing algorithm. |
@@ -1755,9 +1756,8 @@ This is used to test SMB2 common user scenarios.
 |                          | 12. Client sends TREE\_DISCONNECT request																									   |
 |                          | 13. Server sends TREE\_DISCONNECT response																									   |
 |                          | 14. Client sends LOGOFF request																											   |
-|                          | 15. Server sends LOGOFF response																											  s |
+|                          | 15. Server sends LOGOFF response																											   |
 | **Cleanup**              ||
-
 
 #### <a name="3.1.21"> TreeMgmt
 
