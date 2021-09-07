@@ -107,10 +107,16 @@ if($volume -eq $null)
 	$diskPartCmd += "select disk $diskNum"
 	$diskPartCmd += "select partition $partitionId"
 	$diskPartCmd += "shrink minimum=5120"
-    # the extended partition should be enough to contain both ReFS and FAT32
-	$diskPartCmd += "create partition extended size=4096"
+
     # assign 2000MB for ReFS, and save 2000MB for FAT32
-	$diskPartCmd += "create partition logical size=2000"
+    if((Get-Disk -Number $diskNum).PartitionStyle -eq "GPT") {
+        # Logical and extended partitions cannot be created on a GPT disk.
+        $diskPartCmd += "create partition primary size=2000"
+    } else {
+        # Only MBR supports extended disk, and the extended partition should be enough to contain both ReFS and FAT32
+        $diskPartCmd += "create partition extended size=4096"
+        $diskPartCmd += "create partition logical size=2000"
+    }
 	$diskPartCmd += "select partition $newPartitionId"
     if ($OSVersion.Major -ge 10)
     {
