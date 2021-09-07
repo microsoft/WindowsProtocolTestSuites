@@ -82,6 +82,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create DataFile");
             status = fsaAdapter.CreateFile(FileType.DataFile);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to create the file.");
 
             //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new()
@@ -108,6 +109,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
             status = fsaAdapter.FsCtlGetIntegrityInfo(outputBufferSize, out _, out byte[] outputBuffer);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 4: Verify ChecksumAlgorithm is correctly set
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
@@ -118,6 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 5: Write some data so that the file is not empty
             status = fsaAdapter.WriteFile(0, 10240, out _);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to write to the file.");
 
             //Step 6: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             integrityInfo.ChecksumAlgorithm = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_NONE;
@@ -250,6 +253,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
             status = fsaAdapter.CreateFile(fileType);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to create the file.");
 
             //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new()
@@ -285,6 +289,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
             status = fsaAdapter.CreateFile(fileType);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to create the file.");
 
             //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new()
@@ -321,6 +326,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
             status = fsaAdapter.CreateFile(fileType);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to create the file.");
 
             //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new()
@@ -420,6 +426,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
             status = fsaAdapter.CreateFile(fileType);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to create the file.");
 
             //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with CHECKSUM_TYPE_NONE
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new()
@@ -445,6 +452,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
             status = fsaAdapter.FsCtlGetIntegrityInfo(outputBufferSize, out _, out byte[] outputBuffer);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 4: Verify ChecksumAlgorithm
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
@@ -463,6 +471,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 6: FSCTL request FSCTL_GET_INTEGRITY_INFORMATION
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
             status = fsaAdapter.FsCtlGetIntegrityInfo(outputBufferSize, out _, out outputBuffer);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 7: Verify ChecksumAlgorithm
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
@@ -480,6 +489,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
             status = fsaAdapter.CreateFile(fileType);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to create the file.");
 
             //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new()
@@ -505,6 +515,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
             status = fsaAdapter.FsCtlGetIntegrityInfo(outputBufferSize, out _, out byte[] outputBuffer);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 4: Verify ChecksumAlgorithm
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
@@ -522,6 +533,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 6: FSCTL request FSCTL_GET_INTEGRITY_INFORMATION
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "6. FSCTL request FSCTL_GET_INTEGRITY_INFORMATION.");
             status = fsaAdapter.FsCtlGetIntegrityInfo(outputBufferSize, out _, out outputBuffer);
+            fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 7: Verify ChecksumAlgorithm
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
