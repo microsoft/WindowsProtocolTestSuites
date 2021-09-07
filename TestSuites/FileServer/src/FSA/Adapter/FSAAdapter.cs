@@ -5954,8 +5954,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
             else
             {
-                string comments = string.Format("expected '{0}', actual '{1}' which is not equal to STATUS_SUCCESS. ({2})", expected.ToString(), actual.ToString(), context);
-                this.site.Assert.AreNotEqual(MessageStatus.SUCCESS, actual, comments);
+                /// All error codes are equivalent.
+                if (expected == MessageStatus.SUCCESS || actual == MessageStatus.SUCCESS)
+                {
+                    TestManagerHelpers.AssertAreEqual(manager, expected, actual, context);
+                }
             }
         }
 
