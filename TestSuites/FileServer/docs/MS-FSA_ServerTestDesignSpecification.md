@@ -44,7 +44,7 @@
         * [FsCtl_Query_File_Regions](#FsCtl_Query_File_Regions)
         * [FsCtl_Get_Compression](#FsCtl_Get_Compression)
         * [FsCtl_Set_Compression](#FsCtl_Set_Compression)
-        * [FsCtl_IsRefsStreamSnapshotManagementSupported](#FsCtl_IsRefsStreamSnapshotManagementSupported)
+        * [FsCtl_RefsStreamSnapshotManagement](#FsCtl_RefsStreamSnapshotManagement)
     * [Scenarios for QuotaInformation](#Scenarios-for-QuotaInformation)
         * [QuotaInfo_IsQuotaInfoSupported](#QuotaInfo_IsQuotaInfoSupported)
     * [Scenarios for Alternate Data Stream](#Scenarios-for-Alternate-Data-Stream)
@@ -217,7 +217,25 @@
             * [BVT_FsCtl_Query_File_Regions](#BVT_FsCtl_Query_File_Regions)
             * [BVT_FsCtl_Query_File_Regions_WithInputData](#BVT_FsCtl_Query_File_Regions_WithInputData)
         * [IsRefsStreamSnapshotManagementSupported](#IsRefsStreamSnapshotManagementSupported)
-            * [FsCtl_Snapshot_Operation_Create_IsRefsStreamSnapshotManagementSupported](#FsCtl_Snapshot_Operation_Create_IsRefsStreamSnapshotManagementSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_Create_IsSupported](#FsCtl_RefsStreamSnapshotManagement_Create_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_List_IsSupported](#FsCtl_RefsStreamSnapshotManagement_List_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported](#FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported](#FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported](#FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported](#FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported](#FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported)
+            * [FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero](#FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero)
+            * [FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero)
+            * [FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned](#FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned)
+            * [FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero](#FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero)
+            * [FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero)
+            * [FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero](#FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero)
+            * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero)
+            * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OperationBufferLengthInvalid](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OperationBufferLengthInvalid)
+            * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OutputBufferSizeZero](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OutputBufferSizeZero)
+            * [FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute](#FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute)
+            * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute)
+            * [FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute](#FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute)
     * [Test cases for QuotaInformation](#Test-cases-for-QuotaInformation)
         * [IsQuotaInfoSupported](#IsQuotaInfoSupported)
             * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported)
@@ -355,7 +373,7 @@ There are 170 test cases in total:
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 45 (15) |
+| Scenarios for FsControlRequest | 13 | 63 (21) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -906,7 +924,7 @@ There are 343 test cases in total:
 | | FSCTL request with **FSCTL_SET_COMPRESSION**.|
 | | Verify server responses correctly.|
 
-#### <a name="FsCtl_IsRefsStreamSnapshotManagementSupported"/>FsCtl_IsRefsStreamSnapshotManagementSupported
+#### <a name="FsCtl_RefsStreamSnapshotManagement"/>FsCtl_RefsStreamSnapshotManagement
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -919,7 +937,7 @@ There are 343 test cases in total:
 | | Supporting test:|
 | | If not implement, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
 | | Input parameter test:|
-| | Test with different parameter, verify server returns different status code accordingly: **STATUS_NOT_SUPPORTED**, **STATUS_INVALID_PARAMETER**, **STATUS_INSUFFICIENT_RESOURCES**, **STATUS_DISK_FULL**, **STATUS_MEDIA_WRITE_PROTECTED**, **STATUS_BUFFER_TOO_SMALL**, **STATUS_ACCESS_DENIED**, **STATUS_OBJECT_NAME_NOT_FOUND**.|
+| | Test with different REFS_STREAM_SNAPSHOT_OPERATION, verify server returns success status code accordingly: **REFS_STREAM_SNAPSHOT_OPERATION_INVALID**, **REFS_STREAM_SNAPSHOT_OPERATION_CREATE**, **REFS_STREAM_SNAPSHOT_OPERATION_LIST**, **REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS**, **REFS_STREAM_SNAPSHOT_OPERATION_REVERT**, **REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE**, **REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE**.|
 | | Operation test:|
 | | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
 | Message Sequence| CreateFile.|
@@ -3288,25 +3306,270 @@ There are 343 test cases in total:
 | | 4. Length of the FILE_REGION_INFO data element should be the size we wrote to the file.|
 | | 5. FILE_REGION_USAGE_VALID_CACHED_DATA should be set for NTFS, or FILE_REGION_USAGE_VALID_NONCACHED_DATA should be set for REFS.|
 
-#### <a name="IsRefsStreamSnapshotManagementSupported"/>IsRefsStreamSnapshotManagementSupported
+#### <a name="RefsStreamSnapshotManagement"/>RefsStreamSnapshotManagement
 
-##### <a name="FsCtl_Snapshot_Operation_Create_IsRefsStreamSnapshotManagementSupported"/>FsCtl_Snapshot_Operation_Create_IsRefsStreamSnapshotManagementSupported
-
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Create_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_Create_IsSupported
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT is supported.|
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE is supported.|
 | | Note: This is only implemented by the **REFS** file system file system.|
 | | Test environment: ReFS|
 | | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
-| Message Sequence| Create test file (DataFile) and fill it up with random data.|
-| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT.|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE.|
 | | Verify returned NT_STATUS|
 | | If (IsRefsStreamSnapshotManagementSupported == True) {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
 | | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_List_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_List_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_LIST is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_REVERT is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_REVERT.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported"/>FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_INVALID is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_INVALID.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**INVALID_PARAMETER**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero"/>FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send invalid buffer size of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a file and expect BUFFER_TOO_SMALL.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and invalid buffer size.|
+| | Verify returned NT_STATUS is STATUS_BUFFER_TOO_SMALL|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero"/>FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and SnapshotNameLength equals zero.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned"/>FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send unaligned SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and SnapshotNameLength not aligned.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero"/>FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send invalid OutputBufferLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE and OutputBufferLength equals zero.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero"/>FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send invalid SnapshortNameLength FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST and SnapshortNameLength equals zero.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero"/>FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send invalid OutputBufferSize FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST and OutputBufferSize equals zero.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero"/>FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| "Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS and SnapshotNameLength equals zero.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OperationBufferLengthInvalid"/>FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OperationBufferLengthInvalid
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| "Send invalid OperationBufferLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS and invalid OperationBufferLength.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OutputBufferSizeZero"/>FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OutputBufferSizeZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| "Send invalid OutputBufferSize of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS and OutputBufferSize equal to zero.|
+| | Verify returned NT_STATUS is STATUS_INVALID_PARAMETER|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute"/>FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| "Create data file without Read Attribute then send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to the file and expect NTSTATUS is ACCESS_DENIED.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile) without Read Attribute|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST|
+| | Verify returned NT_STATUS is STATUS_ACCESS_DENIED|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute"/>FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| "Create data file without Read Attribute then send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to the file and expect NTSTATUS is ACCESS_DENIED.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile) without Read Attribute|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS|
+| | Verify returned NT_STATUS is STATUS_ACCESS_DENIED|
+
+##### <a name="FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute"/>FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| "Create data file without Write Attribute then send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to the file and expect NTSTATUS is ACCESS_DENIED.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile) without Write Attribute|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| | Verify returned NT_STATUS is STATUS_ACCESS_DENIED|
 ### <a name="Test-cases-for-QuotaInformation"/>Test cases for QuotaInformation
 
 #### <a name="IsQuotaInfoSupported"/>IsQuotaInfoSupported

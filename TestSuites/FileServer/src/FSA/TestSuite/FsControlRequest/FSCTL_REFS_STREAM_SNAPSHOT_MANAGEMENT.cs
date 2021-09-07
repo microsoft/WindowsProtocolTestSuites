@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect STATUS_SUCCESS.")]
         public void FsCtl_RefsStreamSnapshotManagement_Create_IsSupported()
         {
-            string snapshotName = "abcd";
+            string snapshotName = GetRandomString(4);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect STATUS_SUCCESS.")]
         public void FsCtl_RefsStreamSnapshotManagement_List_IsSupported()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST;
@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_REVERT to a data file and expect STATUS_SUCCESS.")]
         public void FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_REVERT;
@@ -90,9 +90,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE to a data file and expect STATUS_SUCCESS.")]
-        public void FsCtl_RefsStreamSnapshotManagement_Set_ShadowTree_IsSupported()
+        public void FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE;
@@ -112,9 +112,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE to a data file and expect STATUS_SUCCESS.")]
-        public void FsCtl_RefsStreamSnapshotManagement_Clear_ShadowTree_IsSupported()
+        public void FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE;
@@ -139,8 +139,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             string fileName;
             ushort snapshotNameLength;
             byte[] snapshotNameBytes;
-            FileAccess fileAccess;
-            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, out fileAccess);
+            FileAccess fileAccess = FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES;
+            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, fileAccess);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
 
             REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = new REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER();
@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_INVALID to a data file and expect STATUS_SUCCESS.")]
         public void FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported()
         {
-            string snapshotName = "abcd";
+            string snapshotName = GetRandomString(4);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_INVALID;
@@ -196,11 +196,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid buffer size of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a file and expect BUFFER_TOO_SMALL.")]
         public void FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero()
         {
-            string snapshotName = "snc";
+            string snapshotName = GetRandomString(4);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = 2;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
-            refsStreamSnapshotManagementInput.OperationInputBufferLength = 1;
+            refsStreamSnapshotManagementInput.OperationInputBufferLength = 2;
             refsStreamSnapshotManagementInput.NameAndInputBuffer = Encoding.ASCII.GetBytes(snapshotName);
             refsStreamSnapshotManagementInput.Reserved = Guid.Parse("00000000-0000-0000-0000-000000000000").ToByteArray();
             uint outputBufferSize = 0;
@@ -218,7 +218,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = 0;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
@@ -240,7 +240,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned()
         {
-            string snapshotName = "abc";
+            string snapshotName = GetRandomString(3);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
@@ -263,7 +263,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid OutputBufferLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferLengthNotZero()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
@@ -285,7 +285,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid SnapshortNameLength FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = 0;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST;
@@ -304,10 +304,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
-        [Description("Send invalid SnapshortNameLength FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.")]
+        [Description("Send invalid OutputBufferSize FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);//"sn";
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST;
@@ -332,8 +332,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             string fileName;
             ushort snapshotNameLength;
             byte[] snapshotNameBytes;
-            FileAccess fileAccess;
-            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, out fileAccess);
+            FileAccess fileAccess = FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES;
+            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, fileAccess);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
 
             REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = new REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER();
@@ -358,21 +358,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             Fsctl_Refs_Stream_Snapshot_Management(fileName, refsStreamSnapshotManagementInput, outputBufferSize, fileAccess, MessageStatus.INVALID_PARAMETER);
         }
 
-
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
-        [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
+        [Description("Send invalid OperationBufferLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OperationBufferLengthInvalid()
         {
             string fileName;
             ushort snapshotNameLength;
             byte[] snapshotNameBytes;
-            FileAccess fileAccess;
-            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, out fileAccess);
+            FileAccess fileAccess = FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES;
+            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, fileAccess);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
 
             REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = new REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER();
@@ -403,14 +402,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
-        [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
+        [Description("Send invalid OutputBufferSize of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OutputBufferSizeZero()
         {
             string fileName;
             ushort snapshotNameLength;
             byte[] snapshotNameBytes;
-            FileAccess fileAccess;
-            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, out fileAccess);
+            FileAccess fileAccess = FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES;            
+            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, fileAccess);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
 
             REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = new REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER();
@@ -444,7 +443,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Create data file without Read Attribute then send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to the file and expect NTSTATUS is ACCESS_DENIED.")]
         public void FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST;
@@ -457,6 +456,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             Fsctl_Refs_Stream_Snapshot_Management(fileName, refsStreamSnapshotManagementInput, outputBufferSize, fileAccess, MessageStatus.ACCESS_DENIED);
         }
 
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Create data file without Read Attribute then send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to the file and expect NTSTATUS is ACCESS_DENIED.")]
+        public void FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute()
+        {
+            string fileName;
+            ushort snapshotNameLength;
+            byte[] snapshotNameBytes;
+            FileAccess fileAccess = FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES;
+            PrepareSnapshotQueryDeltas(out fileName, out snapshotNameLength, out snapshotNameBytes, fileAccess);
+            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
+
+            REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = new REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER();
+            refsStreamSnapshotQueryDeltasInputBuffer.Flags = 0;
+            refsStreamSnapshotQueryDeltasInputBuffer.Reserved = 0;
+            refsStreamSnapshotQueryDeltasInputBuffer.StartingVcn = 0;
+            byte[] queryDetalsInputBuffer = TypeMarshal.ToBytes(refsStreamSnapshotQueryDeltasInputBuffer);
+            ushort queryDetalsInputBufferLength = (ushort)queryDetalsInputBuffer.Length;
+
+            byte[] nameAndInputBuffer = new byte[snapshotNameLength + queryDetalsInputBufferLength];
+            Buffer.BlockCopy(snapshotNameBytes, 0, nameAndInputBuffer, 0, snapshotNameLength);
+            Buffer.BlockCopy(queryDetalsInputBuffer, 0, nameAndInputBuffer, snapshotNameLength, queryDetalsInputBufferLength);
+
+            refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
+            refsStreamSnapshotManagementInput.SnapshotNameLength = snapshotNameLength;
+            refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS;
+            refsStreamSnapshotManagementInput.OperationInputBufferLength = queryDetalsInputBufferLength;
+            refsStreamSnapshotManagementInput.NameAndInputBuffer = nameAndInputBuffer;
+            refsStreamSnapshotManagementInput.Reserved = Guid.Parse("00000000-0000-0000-0000-000000000000").ToByteArray();
+
+            uint outputBufferSize = this.fsaAdapter.transBufferSize;
+            Fsctl_Refs_Stream_Snapshot_Management(fileName, refsStreamSnapshotManagementInput, outputBufferSize, fileAccess, MessageStatus.ACCESS_DENIED);
+        }
+
         [TestMethod()] 
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
@@ -466,7 +503,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Create data file without Write Attribute then send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to the file and expect NTSTATUS is ACCESS_DENIED.")]
         public void FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute()
         {
-            string snapshotName = "sn";
+            string snapshotName = GetRandomString(2);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
             refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
             refsStreamSnapshotManagementInput.Operation = Operation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
@@ -550,22 +587,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.STATUS_NOT_IMPLEMENTED, status,
                     "Operation is not implemented");
             }
-            else if (status == MessageStatus.OBJECT_NAME_NOT_FOUND)
-            {
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.OBJECT_NAME_NOT_FOUND, status,
-                    "Given a DataStream (A) and InputBuffer.SnapshotName representing the name of a file attribute referencing a DataStream(B)."
-                    +" If no such B exists, the request must be failed with STATUS_OBJECT_NAME_NOT_FOUND.");
-            }
             else
             {
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "Status set to STATUS_SUCCESS.");
             }
         }
 
-        public void PrepareSnapshotQueryDeltas(out string fileName, out ushort snapshotNameLength, out byte[] snapshotNameBytes, out FileAccess fileAccess)
+        public void PrepareSnapshotQueryDeltas(out string fileName, out ushort snapshotNameLength, out byte[] snapshotNameBytes, FileAccess fileAccess)
         {
             fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            string snapshotName = "abcdefgh";
+            string snapshotName = GetRandomString(8);//"abcdefgh";
 
             //Create snapshot
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
@@ -575,7 +606,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             refsStreamSnapshotManagementInput.NameAndInputBuffer = Encoding.ASCII.GetBytes(snapshotName);
             refsStreamSnapshotManagementInput.Reserved = Guid.Parse("00000000-0000-0000-0000-000000000000").ToByteArray();
             uint outputBufferSize = 0;
-            fileAccess = FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES;
             Fsctl_Refs_Stream_Snapshot_Management(fileName, refsStreamSnapshotManagementInput, outputBufferSize, fileAccess, MessageStatus.SUCCESS);
 
             //Query snapshot
@@ -584,7 +614,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             Buffer.BlockCopy(snapshotNameActualBytes, 0, snapshotNameBytes, 0, snapshotNameActualBytes.Length);
             snapshotNameLength = (ushort)snapshotNameBytes.Length;
         }
+        
+        private string GetRandomString(int length)
+        {
+            Random random = new Random();
+            StringBuilder stringBuilder = new StringBuilder();
+            int randomNumber = 0;
 
+            for (int i = 0; i < length; i++)
+            {
+                lock (random)
+                {
+                    randomNumber = random.Next(1, 52);
+                }
+                var chosenLetter = (char)(97 + randomNumber % 26);
+                stringBuilder.Append(chosenLetter);
+            }
+
+            return stringBuilder.ToString();
+        }
         #endregion
     }
 }
