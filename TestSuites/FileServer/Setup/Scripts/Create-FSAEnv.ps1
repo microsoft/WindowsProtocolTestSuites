@@ -46,7 +46,12 @@ function CreateFAT32VolumeForFSA()
         $diskPartCmd = @()
         $diskPartCmd += "select disk $diskNum"
         # assign the left 2000MB for FAT32
-        $diskPartCmd += "create partition logical size=2000"
+        if((Get-Disk -Number $diskNum).PartitionStyle -eq "GPT") {
+            # Logical and extended partitions cannot be created on a GPT disk.
+            $diskPartCmd += "create partition primary size=2000"
+        } else {
+            $diskPartCmd += "create partition logical size=2000"
+        }
         $diskPartCmd += "select partition $newPartitionId"
         Write-Info.ps1 "FAT32 in Windows vNext, Windows Server vNext, and beyond uses a default cluster size of 4 KB. FAT32 also supports a 32-KB cluster size."
         Write-Info.ps1 "For current test suite, we use default 4-KB cluster size."
