@@ -80,9 +80,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string DocDirectory { get; set; }
 
         /// <summary>
-        /// The location of the etc directory
+        /// The location of the Plugin directory
         /// </summary>
-        public string EtcDirectory { get; set; }
+        public string PluginDirectory { get; set; }
 
         /// <summary>
         /// The directory to save the data used by plugin.
@@ -157,11 +157,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public string VSTestArguments;
 
         /// <summary>
-        /// The setting of test.
-        /// </summary>
-        public string TestSetting;
-
-        /// <summary>
         /// WelcomePage
         /// </summary>
         public List<string> TestSuiteIntroduction { get; set; }
@@ -211,7 +206,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.XmlResolver = null;
             settings.DtdProcessing = DtdProcessing.Prohibit;
-            XmlReader xmlReader = XmlReader.Create(System.IO.Path.Combine(config.EtcDirectory, StringResource.ConfigFilename), settings);
+            XmlReader xmlReader = XmlReader.Create(System.IO.Path.Combine(config.PluginDirectory, StringResource.ConfigFilename), settings);
             doc.Load(xmlReader);
             //Config File
             XmlNode ptfFileNamesNode = doc.DocumentElement.SelectSingleNode("PtfFileNames");
@@ -258,12 +253,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             foreach (XmlNode xn in DllFileNamesNode.SelectNodes("DllFileName"))
             {
                 string name = xn.InnerText.Trim();
-                name = name.Replace('\\', Path.DirectorySeparatorChar);
-                config.TestSuiteAssembly.Add(System.IO.Path.Combine(testSuiteDir, name));
+                config.TestSuiteAssembly.Add(System.IO.Path.Combine(testSuiteDir, "Bin", name));
             }
-
-            //TestSetting
-            config.TestSetting = doc.DocumentElement.SelectSingleNode("TestSetting").InnerText.Trim();
 
             //Config Test Engine
             config.VSTestPath = LoadTestEngine();
@@ -273,13 +264,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 config.VSTestArguments += " " + singleDllpath;
             }
-            config.VSTestArguments += " /Settings:\"" + config.TestSetting + "\"";
 
             // TestCategories
             var testCategoryNode = doc.DocumentElement.SelectSingleNode("TestCategories");
             if (testCategoryNode != null)
             {
-                string categoryConfigFile = System.IO.Path.Combine(config.EtcDirectory, testCategoryNode.InnerText.Trim());
+                string categoryConfigFile = System.IO.Path.Combine(config.PluginDirectory, testCategoryNode.InnerText.Trim());
                 config.TestCategory = GetTestCategoryFromConfig(categoryConfigFile);
             }
             else
@@ -386,8 +376,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             TestSuiteDirectory = testSuiteDir;
             PtmInstallDirectory = installDir;
-            DocDirectory = Path.Combine(installDir, "doc", TestSuiteName);
-            EtcDirectory = Path.Combine(installDir, "etc", TestSuiteName);
+            PluginDirectory = Path.Combine(testSuiteDir, "Plugin");
+            DocDirectory = Path.Combine(PluginDirectory, "doc");
             AppDataDirectory = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "Protocol Test Manager",

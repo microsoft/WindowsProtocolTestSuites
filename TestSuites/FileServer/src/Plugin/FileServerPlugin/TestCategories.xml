@@ -1,0 +1,386 @@
+<TestCategories>
+  <TestCase name="EncryptionTestCaseS988">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS863">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS920">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS748">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS808">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS613">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS683">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5368">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5427">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS543">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5264">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5318">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5190">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5236">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5036">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5060">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5083">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5107">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5140">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4940">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4968">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4990">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS5012">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS487">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4905">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4776">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4811">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4838">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4869">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4695">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4749">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4602">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4648">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4672">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4482">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4516">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4550">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4575">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4419">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4450">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4325">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4352">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4374">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS425">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4271">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4150">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4197">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4226">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4071">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4098">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4123">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3987">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS4024">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3885">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3913">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3944">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3787">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3822">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3858">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3719">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3753">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS364">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3646">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3680">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3568">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3598">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3626">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3456">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3500">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3533">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3375">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3411">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3283">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3328">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3174">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3211">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3256">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3074">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3114">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3148">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS304">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS3040">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2951">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2994">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2824">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2861">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2901">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2756">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2783">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2660">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2694">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2583">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2624">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2509">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2542">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2419">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2459">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2326">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2373">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS227">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2287">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2202">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2251">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2063">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2112">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2160">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS2015">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1919">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1968">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1824">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1870">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1777">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1676">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1727">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1578">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1626">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1527">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS146">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1475">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1423">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1330">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1371">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1261">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1210">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1104">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1160">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS1049">
+    <Category name="Positive" />
+  </TestCase>
+  <TestCase name="EncryptionTestCaseS0">
+    <Category name="Positive" />
+  </TestCase>
+</TestCategories>

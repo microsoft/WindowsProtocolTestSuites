@@ -1,12 +1,16 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
+using System.Threading;
 using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
@@ -17,7 +21,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private TestSuiteLogManager tsLogManager;
         public string PipeName { get; set; }
         public List<string> TestAssemblies { get; set; }
-        public string TestSetting { get; set; }
         public string WorkingDirectory { get; set; }
         public string ResultOutputFolder { get; set; }
 
@@ -28,6 +31,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private List<TestCase> testcases;
 
         private List<TestCase> filteredTestcases;
+
+        private const int ProcessWaitInterval = 100;
 
         public TestEngine(string enginePath)
         {
@@ -110,12 +115,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
 
-            args.AppendFormat("--results-directory {0} ", ResultOutputFolder);
+            args.AppendFormat("--results-directory \"{0}\" ", ResultOutputFolder);
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
             args.AppendFormat("--logger html ");
 
             ConstructRunSettings(RunSettingsPath);
-            args.AppendFormat("--settings {0} ", RunSettingsPath);
+            args.AppendFormat("--settings \"{0}\" ", RunSettingsPath);
 
             if (caseStack != null)
             {
@@ -189,10 +194,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             if (!String.IsNullOrEmpty(filterExpression))
             {
-                args.AppendFormat("--filter {0} ", filterExpression);
+                args.AppendFormat("--filter \"{0}\" ", filterExpression);
             }
 
-            args.AppendFormat("--results-directory {0} ", outputDirectory);
+            args.AppendFormat("--results-directory \"{0}\" ", outputDirectory);
             args.AppendFormat("--test-adapter-path {0} ", AppDomain.CurrentDomain.BaseDirectory);
             args.AppendFormat("--logger Discovery ");
             args.AppendFormat("--list-tests");
@@ -210,6 +215,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="caseStack">Test Cases</param>
         public void RunByCase(Stack<TestCase> caseStack)
         {
+            using var cancellationTokenSource = new CancellationTokenSource();
+
+            RunByCase(caseStack, cancellationTokenSource.Token);
+        }
+
+        /// <summary>
+        /// Runs the specified test cases in the test suite.
+        /// </summary>
+        /// <param name="caseStack">The test cases.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        public void RunByCase(Stack<TestCase> caseStack, CancellationToken cancellationToken)
+        {
             runningCaseStack = caseStack;
 
             var exception = new List<Exception>();
@@ -217,8 +234,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 while (caseStack != null && caseStack.Count > 0)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     StringBuilder args = ConstructVstestArgs(caseStack);
-                    var innerException = Run(args.ToString());
+                    var innerException = Run(args.ToString(), cancellationToken);
                     if (innerException != null)
                     {
                         exception.Add(innerException);
@@ -234,17 +253,27 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private Exception Run(string runArgs)
         {
+            using var cancellationTokenSource = new CancellationTokenSource();
+
+            return Run(runArgs, cancellationTokenSource.Token);
+        }
+
+        private Exception Run(string runArgs, CancellationToken cancellationToken)
+        {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 vstestProcess = new Process()
                 {
                     StartInfo = new ProcessStartInfo()
                     {
                         WorkingDirectory = WorkingDirectory,
                         FileName = EnginePath,
-                        UseShellExecute = true,
+                        UseShellExecute = false,
                         CreateNoWindow = false,
                         Arguments = "test " + runArgs,
+                        RedirectStandardError = true,
                     }
                 };
 
@@ -252,12 +281,29 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 PipeSinkServer.Start(PipeName);
 
                 vstestProcess.Start();
-                vstestProcess.WaitForExit();
+
+                while (true)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        TerminateProcessTree(vstestProcess.Id);
+
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
+
+                    if (vstestProcess.WaitForExit(ProcessWaitInterval))
+                    {
+                        break;
+                    }
+                }
+
                 int err = vstestProcess.ExitCode;
                 if (err != 0)
                 {
+                    string errorMsg = vstestProcess.StandardError.ReadToEnd();
                     Console.Error.WriteLine();
                     Console.Error.WriteLine(StringResource.RunCaseError);
+                    Console.Error.WriteLine(errorMsg);
                 };
             }
             catch (Exception exception)
@@ -393,6 +439,170 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>The test case list.</returns>
         public List<TestCase> LoadTestCases(string filterExpression = null)
         {
+            return filterExpression == null ? LoadAllTestCases() : LoadFilteredTestCases(filterExpression);
+        }
+
+        /// <summary>
+        /// Load test cases of given dll files.
+        /// </summary>
+        /// <param name="dllPath">The dll path.</param>
+        /// <returns>The loaded test cases.</returns>
+        private IEnumerable<TestCase> LoadDlls(string[] dllPath)
+        {
+            if (dllPath.Length == 0) throw new Exception("TestEngine LoadDlls failed due to no dllPath.");
+            var _testCaseList = new List<TestCase>();
+
+            // We use individual AssemblyLoadContext for each testsuite, so we can isolate different versions of assemblies with the same name in different testsuites without exceptions.
+            // e.g. the version of Microsoft.Protocols.TestTools.dll is 2.1.0.0 in RDPServer testsuite, but its version is 2.2.0.0 in FileServer testsuite.
+            // After we got the assemblies information, we can unload the assemblies in current AssemblyLoadContext.
+            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext();
+            string assembleDirPath = Directory.GetParent(dllPath[0]).FullName;
+            alc.Resolving += (context, assembleName) =>
+            {
+                string assemblyPath = Path.Combine(assembleDirPath, $"{assembleName.Name}.dll");
+                if (assemblyPath != null)
+                    return context.LoadFromAssemblyPath(assemblyPath);
+                return null;
+            };
+
+            foreach (string DllFileName in dllPath)
+            {
+                Assembly assembly = alc.LoadFromAssemblyPath(DllFileName);
+                Type[] types = assembly.GetTypes();
+
+                foreach (Type type in types)
+                {
+                    // Search for class, interfaces and other type
+                    if (type.IsClass)
+                    {
+                        MethodInfo[] methods = type.GetMethods();
+                        foreach (MethodInfo method in methods)
+                        {
+                            // Search for methods with TestMethodAttribute
+                            object[] attributes = method.GetCustomAttributes(false);
+                            bool isTestMethod = false;
+                            bool isIgnored = false;
+                            foreach (object attribute in attributes)
+                            {
+                                string name = attribute.GetType().Name;
+                                // Break the loop when "IgnoreAttribute" is found
+                                if (name == "IgnoreAttribute")
+                                {
+                                    isIgnored = true;
+                                    break;
+                                }
+
+                                // Do not break the loop when "TestMethodAttribute" is found
+                                // It's possible to have "IgnoreAttribute" after "TestMethodAttribute"
+                                if (name == "TestMethodAttribute")
+                                {
+                                    isTestMethod = true;
+                                }
+
+                                // Ignore test case with TestCategory "Disabled"
+                                if (name == "TestCategoryAttribute")
+                                {
+                                    PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
+                                    var category = property.GetValue(attribute, null) as List<string>;
+                                    foreach (string str in category)
+                                    {
+                                        if (str == "Disabled")
+                                        {
+                                            isIgnored = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (isTestMethod && !isIgnored)
+                            {
+                                // Get categories and description
+                                List<string> categories = new List<string>();
+                                string description = null;
+                                string caseFullName = method.DeclaringType.FullName + "." + method.Name;
+                                foreach (object attribute in attributes)
+                                {
+                                    // Record TestCategories
+                                    if (attribute.GetType().Name == "TestCategoryAttribute")
+                                    {
+                                        PropertyInfo property = attribute.GetType().GetProperty("TestCategories");
+                                        var category = property.GetValue(attribute, null) as List<string>;
+                                        foreach (string str in category)
+                                        {
+                                            categories.Add(str);
+                                        }
+                                    }
+
+                                    // Record Description
+                                    if (attribute.GetType().Name == "DescriptionAttribute")
+                                    {
+                                        var descriptionProp = attribute.GetType().GetProperty("Description");
+                                        description = descriptionProp.GetValue(attribute, null) as string;
+                                    }
+                                }
+
+                                var testcase = new TestCase()
+                                {
+                                    FullName = caseFullName,
+                                    Category = categories.ToList(),
+                                    Description = description,
+                                    Name = method.Name
+                                };
+
+                                var testcaseToolTipBuilder = new StringBuilder();
+                                testcaseToolTipBuilder.Append(testcase.Name);
+                                if (testcase.Category.Any())
+                                {
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Category:");
+                                    foreach (var category in testcase.Category)
+                                    {
+                                        testcaseToolTipBuilder.Append(Environment.NewLine + "  " + category);
+                                    }
+                                }
+                                if (!string.IsNullOrEmpty(testcase.Description))
+                                {
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "Description:");
+                                    testcaseToolTipBuilder.Append(Environment.NewLine + "  " + testcase.Description);
+                                }
+                                testcase.ToolTipOnUI = testcaseToolTipBuilder.ToString();
+
+                                _testCaseList.Add(testcase);
+                            }
+                        }
+                    }
+                }
+            }
+
+            alc.Unload();
+
+            return _testCaseList;
+        }
+
+        /// <summary>
+        /// Load all test cases.
+        /// </summary>
+        /// <returns>The test case list.</returns>
+        private List<TestCase> LoadAllTestCases()
+        {
+            try
+            {
+                return LoadDlls(TestAssemblies.ToArray()).ToList();
+            }
+            catch (Exception e)
+            {
+                Utility.LogException(new List<Exception> { e });
+
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Load filtered test cases.
+        /// </summary>
+        /// <param name="filterExpression">The filter expression. If it is null, no filter will be used.</param>
+        /// <returns>The test case list.</returns>
+        private List<TestCase> LoadFilteredTestCases(string filterExpression)
+        {
             try
             {
                 string tempPath = Path.GetTempFileName();
@@ -412,12 +622,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
                         UseShellExecute = false,
                         CreateNoWindow = true,
                         Arguments = "test " + args,
+                        RedirectStandardError = true,
                     }
                 };
 
                 vstestProcess.Start();
                 vstestProcess.WaitForExit();
-
+                if (vstestProcess.HasExited && vstestProcess.ExitCode != 0)
+                {
+                    string errorContent = vstestProcess.StandardError.ReadToEnd();
+                    Directory.Delete(tempPath, true);
+                    throw new Exception(errorContent);
+                }
                 string infoPath = Path.Combine(tempPath, "TestCaseInfo.json");
 
                 var content = File.ReadAllText(infoPath);

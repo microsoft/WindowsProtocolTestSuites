@@ -5,31 +5,19 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Spng</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\Asn1Base\Asn1Base.csproj">
-      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
-      <Name>Asn1Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\KerberosLib\KerberosLib.csproj">
-      <Project>{f1eda208-50b6-4501-a9d8-d18d3434d587}</Project>
-      <Name>KerberosLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MS-NLMP\Nlmp.csproj">
-      <Project>{5E53E71E-52D1-4BF0-99C0-608437EC446C}</Project>
-      <Name>Nlmp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SspiLib\SspiLib.csproj">
-      <Project>{e64bf20f-11d2-49f6-a25b-f4378ab38180}</Project>
-      <Name>SspiLib</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Asn1Base\Asn1Base.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\KerberosLib\KerberosLib.csproj" />
+    <ProjectReference Include="..\MS-NLMP\Nlmp.csproj" />
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj" />
   </ItemGroup>
+
 </Project>

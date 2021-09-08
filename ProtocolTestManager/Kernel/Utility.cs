@@ -30,6 +30,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         private int mappingFilterIndex = -1;
         private DateTime sessionStartTime;
         private string ptfconfigDirectory = null;
+        private static char[] directorySeparators = new char[] { '/', '\\' };
 
         public Utility()
         {
@@ -208,6 +209,57 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     mappingFilterGroup.targetRuleGroup = targetFilterGroup;
                 }
             }
+        }
+
+        public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            // Get the subdirectories for the specified directory.
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // If the destination directory doesn't exist, create it.       
+            Directory.CreateDirectory(destDirName);
+
+            // Get the files in the directory and copy them to the new location.
+            FileInfo[] files = dir.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(tempPath, true);
+            }
+
+            // If copying subdirectories, copy them and their contents to new location.
+            if (copySubDirs)
+            {
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    string tempPath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryCopy(subdir.FullName, tempPath, copySubDirs);
+                }
+            }
+        }
+
+        public static string CombineToNormalizedPath(string basePath, params string[] pathsToAppend)
+        {
+            var splits = pathsToAppend.SelectMany(s => s.Split(directorySeparators)).ToArray();
+            var totalLength = splits.Length;
+            var segments = new string[totalLength + 1];
+            segments[0] = basePath;
+            var i = 0;
+            foreach (var split in splits)
+            {
+                i++;
+                segments[i] = split;
+            }
+            return Path.Combine(segments);
         }
 
         #endregion
@@ -883,7 +935,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 WorkingDirectory = testSuiteDir,
                 TestAssemblies = appConfig.TestSuiteAssembly,
-                TestSetting = appConfig.TestSetting,
                 ResultOutputFolder = "HtmlTestResults",
                 PtfConfigDirectory = ptfconfigDirectory,
                 RunSettingsPath = Path.Combine(Directory.GetCurrentDirectory(), $"{appConfig.TestSuiteName}-{sessionStartTime.ToString("yyyy-MM-dd-HH-mm-ss")}.runsettings"),
