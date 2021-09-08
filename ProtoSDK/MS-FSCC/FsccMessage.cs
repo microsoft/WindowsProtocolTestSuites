@@ -2970,7 +2970,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         public ushort OperationInputBufferLength;
 
         /// <summary>
-        /// This field MUST be set to zero and MUST be ignored. Now
+        /// This field MUST be set to zero and MUST be ignored.
         /// </summary>
         [StaticSize(16)]
         public byte[] Reserved;
