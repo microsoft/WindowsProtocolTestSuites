@@ -214,12 +214,12 @@ Function Config-Proxy()
 	#-----------------------------------------------------------------------------------------------
 	# Create self-signed certificate and bind
     #-----------------------------------------------------------------------------------------------
-    $hostname=hostname
     if(Test-Path -Path $dataFile2)
 	{
         [xml]$configFile = Get-Content -Path $dataFile2
         $proxyNode=$configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
         $domainName=$proxyNode.domain
+        $hostname=$proxyNode.name
     }
     $DnsName=$hostname+"."+$domainName
     $FilePath="c:\$DnsName.cer"
