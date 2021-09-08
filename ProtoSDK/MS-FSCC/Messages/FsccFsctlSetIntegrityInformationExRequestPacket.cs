@@ -8,7 +8,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// <summary>
     /// the request packet of FSCTL_SET_INTEGRITY_INFORMATION_EX
     /// </summary>
-    public class FsccFsctlSetIntegrityInformationExRequestPacket : FsccStandardPacket<FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER>
+    public class FsccFsctlSetIntegrityInformationExRequestPacket : FsccStandardPacket<FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX>
     {
         #region Properties
 

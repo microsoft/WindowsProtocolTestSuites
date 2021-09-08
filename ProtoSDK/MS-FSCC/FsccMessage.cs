@@ -3252,6 +3252,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         CHECKSUM_TYPE_NONE = 0x0000,
 
         /// <summary>
+        /// The file or directory is configured to use a CRC32 checksum to provide integrity.
+        /// </summary>
+        CHECKSUM_TYPE_CRC32 = 0x0001,
+
+        /// <summary>
         /// The file or directory is configured to use a CRC64 checksum to provide integrity.
         /// </summary>
         CHECKSUM_TYPE_CRC64 = 0x0002,
@@ -3369,13 +3374,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
     #endregion
 
-    #region FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER
+    #region FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX
 
     /// <summary>
-    /// EnableIntegrity for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// EnableIntegrity for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
     /// This field MUST be one of the following values:
     /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_ENABLEINTEGRITY : byte
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY : byte
     {
         /// <summary>
         /// The file or directory is set to not use integrity.
@@ -3390,10 +3395,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
 
     /// <summary>
-    /// KeepIntegrityStateUnchanged for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// KeepIntegrityStateUnchanged for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
     /// This field MUST be one of the following values:
     /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_KEEPINTEGRITYSTATEUNCHANGED : byte
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED : byte
     {
         /// <summary>
         /// The file or directory integrity state must not change.
@@ -3408,11 +3413,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
 
     /// <summary>
-    /// Flags for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// Flags for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
     /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
     /// Flag values that are unspecified in the following table SHOULD be set to 0 and MUST be ignored.
     /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_FLAGS : uint
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS : uint
     {
         NONE = 0,
 
@@ -3423,10 +3428,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
 
     /// <summary>
-    /// Version for FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER.
+    /// Version for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
     /// This field MUST be set to 1.
     /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_VERSION : byte
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION : byte
     {
         /// <summary>
         /// Only value. 
@@ -3439,17 +3444,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     /// integrity state of the file or directory associated with the handle on which this FSCTL was 
     /// invoked.
     /// </summary>
-    public partial struct FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER
+    public partial struct FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX
     {
         /// <summary>
         /// 1 byte. See enum.
         /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_ENABLEINTEGRITY EnableIntegrity;
+        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY EnableIntegrity;
 
         /// <summary>
         /// 1 byte. See enum.
         /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_KEEPINTEGRITYSTATEUNCHANGED KeepIntegrityStateUnchanged;
+        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED KeepIntegrityStateUnchanged;
 
         /// <summary>
         /// 2 bytes. A 16-bit reserved value. This field MUST be set to zero and MUST be ignored.
@@ -3459,12 +3464,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// 4 bytes. See enum.
         /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_FLAGS Flags;
+        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS Flags;
 
         /// <summary>
         /// 1 byte. See enum.
         /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_VERSION Version;
+        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION Version;
 
         /// <summary>
         /// A 56-bit reserved value. This field MUST be set to zero and MUST be ignored.

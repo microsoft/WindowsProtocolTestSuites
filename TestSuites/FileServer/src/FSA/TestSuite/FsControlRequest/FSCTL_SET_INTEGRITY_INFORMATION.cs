@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a file and check if server responses correctly when InputBufferSize is less than IntegrityBuffer.")]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a file and check if server responds correctly when the input buffer length is less than the size, in bytes, of the FSCTL_SET_INTEGRITY_INFORMATION_BUFFER element.")]
         public void FsCtl_Set_IntegrityInformation_File_InputBufferSizeLessThanIntegrityBuffer()
         {
             FsCtl_Set_IntegrityInformation_InputBufferSizeLessThanIntegrityBuffer(FileType.DataFile);
@@ -58,7 +58,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory and check if server responses correctly when InputBufferSize is less than IntegrityBuffer.")]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory and check if server responds correctly when the input buffer length is less than the size, in bytes, of the FSCTL_SET_INTEGRITY_INFORMATION_BUFFER element.")]
         public void FsCtl_Set_IntegrityInformation_Dir_InputBufferSizeLessThanIntegrityBuffer()
         {
             FsCtl_Set_IntegrityInformation_InputBufferSizeLessThanIntegrityBuffer(FileType.DirectoryFile);
@@ -113,9 +113,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 4: Verify ChecksumAlgorithm is correctly set
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
-            bool isChecksumTypeNone = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
+            bool isChecksumTypeCRC64 = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm is correctly set.");
-            fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeNone, "ChecksumAlgorithm is CHECKSUM_TYPE_NONE.");
+            fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeCRC64, "ChecksumAlgorithm should be CHECKSUM_TYPE_CRC64.");
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Write some data so that the file is not empty.");
 
             //Step 5: Write some data so that the file is not empty
