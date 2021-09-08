@@ -23,6 +23,18 @@ if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
+$PluginDir = "$OutDir/Plugin"
+New-Item -ItemType Directory $PluginDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Plugin/FileServerPlugin/*.xml" -Destination $PluginDir -Recurse -Force
+
+$TargetDir = "$PluginDir/doc"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Plugin/FileServerPlugin/Docs/*" -Destination $TargetDir -Recurse -Force
+
+$TargetDir = "$PluginDir/data"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Plugin/FileServerPlugin/Data/*" -Destination $TargetDir -Recurse -Force
+
 New-Item -ItemType Directory $OutDir/Batch -Force
 Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.sh" -Destination "$OutDir/Batch/" -Recurse -Force
 Copy-Item "$TestSuiteRoot/TestSuites/FileServer/src/Batch/*.ps1" -Destination "$OutDir/Batch/" -Recurse -Force

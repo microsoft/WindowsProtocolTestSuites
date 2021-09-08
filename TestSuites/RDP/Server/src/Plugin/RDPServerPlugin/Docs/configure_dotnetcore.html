@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Workgroup Environment Network Setup</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 0.0625rem solid black;
+            border-collapse: collapse;
+            font-size: small;
+        }
+
+        div.Title {
+            font-family: Arial;
+            font-size: larger;
+            margin-bottom: 0.625rem;
+        }
+
+        div.Context {
+            font-family: 'Segoe UI';
+            font-size: medium;
+            margin-top: auto;
+        }
+
+        .icon {
+            font-family: 'Segoe UI';
+            font-size: larger;
+            font-weight: bold;
+            margin-top: 5rem;
+        }
+
+        .List {
+            margin-top: 0.25rem;
+        }
+
+        .img {
+            vertical-align: text-top;
+        }
+
+        .hidden-detail {
+            color: #383838;
+            font-size: small;
+            display: none;
+        }
+    </style>
+    <script type="text/javascript">
+        function toggle_visibility(targetID) {
+            var target = document.getElementById(targetID);
+            if (target.style.display == 'block') {
+                target.style.display = 'none';
+            }
+            else {
+                target.style.display = 'block';
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="Context">
+        <div>
+            <h1>
+                Computer Setup
+            </h1>
+        </div>
+        <p>
+            This section explains how to set up the computers for the test environment.
+        </p>
+        <p>
+            For workgroup environments, skip tasks that are related to the setup and configuration of DC.
+        </p>
+        <h2>
+            Set Up the Driver Computer
+        </h2>
+        <p>
+            To set up the driver computer:
+        </p>
+        <p>
+            1. Download the test suite source code package from <a
+                href="https://github.com/Microsoft/WindowsProtocolTestSuites"> GitHub </a> to the driver computer.
+        </p>
+        <p>
+            2. Extract the files of the test suite from the package.
+        </p>
+        <p>
+            3. Install the required and optional software following <a
+                href="https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/README.md"> GitHub Readme</a>.
+        </p>
+        <p>
+            4. Unzip <strong>RDP-TestSuite-ServerEP.zip</strong> to the <strong>C:\RDP-TestSuite-ServerEP</strong>
+            folder on the driver computer.
+        </p>
+        <h2>
+            Set Up a Windows-Based SUT
+        </h2>
+        <p>
+            To set up a Windows-based SUT:
+        </p>
+        <p>
+            1. Copy the test suite package to the Windows-based SUT.
+        </p>
+        <p>
+            2. Extract the files of the test suite from the package.
+        </p>
+        <p>
+            3. Unzip <strong>RDP-TestSuite-ServerEP.zip</strong> to the <strong>C:\RDP-TestSuite-ServerEP</strong> on
+            the Windows-based SUT.
+        </p>
+        <p>
+            To set up a SUT that is not based on the Windows operating system, see Configuring Computers that are Not
+            Based on Windows.
+        </p>
+        <h2>
+            Set Up a Windows-Based Domain Controller (DC)
+        </h2>
+        <p>
+            DC is optional. Skip this step if the test environment is workgroup.
+        </p>
+        <p>
+            To set up a Windows-based DC:
+        </p>
+        <p>1. Install Active Directory Domain Services.</p>
+
+        <p>
+            To set up a DC that is not based on the Windows operating system, see Configuring Computers that are Not
+            Based on Windows.
+        </p>
+
+        <div>
+            <h1>
+                Configuration
+            </h1>
+        </div>
+        <p>
+            This section explains how to configure the test environment.
+        </p>
+        <p>
+            For workgroup environments, skip tasks that are related to the setup and configuration of DC.
+        </p>
+        <h2>
+            Configuring Windows-based Computers
+        </h2>
+        <p>
+            This section explains how to configure computers for a Windows-based test environment. For general
+            information about configuring computers that are not
+            based on Windows, see Configuring Computers that are Not Based on Windows.
+        </p>
+        <p>
+            Note:
+        </p>
+        <p>
+            The property values of the .ptfconfig file are automatically set during the configuration process. For this
+            reason, in a Windows-based test environment,
+            configure the SUT and any other servers before you configure the driver computer.
+        </p>
+
+        <p>To configure the SUT: </p>
+        <p>
+            1. Log on to the SUT as <strong>Administrator</strong>. Enable the Administrator account if it is disabled.
+            <a href="javascript:void(0)" onclick="toggle_visibility('enableadminonsut');">See details.</a>
+        </p>
+        <div id="enableadminonsut" class="hidden-detail">
+            <p>
+                a. In <strong>Control Panel</strong>, open <strong>Administrative Tools</strong> and then open
+                <strong>Computer Management</strong>.
+            </p>
+            <p>
+                b. In the left panel, open <strong>Local Users and</strong> <strong>Groups </strong>under <strong>System
+                    Tools,</strong> and then select <strong>Users</strong>.
+            </p>
+            <p>
+                c. In the right panel, double click <strong>Administrator</strong> and then uncheck the <strong>Account
+                    is disabled</strong> box.
+            </p>
+        </div>
+        <p>
+            2. Go to C:\RDP-TestSuite-ServerEP\Scripts, and open the Protocol.xml file.
+        </p>
+        <p>
+            3. Review the properties shown in the xml file, updating the property values as necessary.
+        </p>
+        <p>
+            4. Run <strong>Windows PowerShell</strong> as <strong>Administrator</strong>.
+        </p>
+        <p>
+            5. At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press <strong>Enter</strong>.
+        </p>
+        <p>
+            6. Type cd C:\RDP-TestSuite-ServerEP\Scripts, and press <strong>Enter</strong>.
+        </p>
+        <p>
+            7. Type .\PostConfig-SUT.ps1 and press <strong>Enter</strong>.
+        </p>
+
+        <p>To configure the driver computer: </p>
+        <p>
+            1. Log on to the SUT as <strong>Administrator</strong>. Enable the Administrator account if it is disabled.
+            <a href="javascript:void(0)" onclick="toggle_visibility('enableadminondriver');">See details.</a>
+        </p>
+        <div id="enableadminondriver" class="hidden-detail">
+            <p>
+                a. In <strong>Control Panel</strong>, open <strong>Administrative Tools</strong> and then open
+                <strong>Computer Management</strong>.
+            </p>
+            <p>
+                b. In the left panel, open <strong>Local Users and</strong> <strong>Groups </strong>under <strong>System
+                    Tools,</strong> and then select <strong>Users</strong>.
+            </p>
+            <p>
+                c. In the right panel, double click <strong>Administrator</strong> and then uncheck the <strong>Account
+                    is disabled</strong> box.
+            </p>
+        </div>
+        <p>
+            2. Go to C:\RDP-TestSuite-ServerEP\Scripts, and open the Protocol.xml file.
+        </p>
+        <p>
+            3. Review the properties shown in the xml file, updating the property values as necessary.
+        </p>
+        <p>
+            4. Run <strong>Windows PowerShell</strong> as <strong>Administrator</strong>.
+        </p>
+        <p>
+            5. At the command prompt, type Set-ExecutionPolicy Unrestricted -F, and press <strong>Enter</strong>.
+        </p>
+        <p>
+            6. Type cd C:\RDP-TestSuite-ServerEP\Scripts, and press <strong>Enter</strong>.
+        </p>
+        <p>
+            7. Type .\PostConfig-Driver.ps1 and press <strong>Enter</strong>.
+        </p>
+    </div>
+</body>
+
+</html>

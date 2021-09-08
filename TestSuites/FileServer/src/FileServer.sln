@@ -95,6 +95,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SspiService", "..\..\..\Pro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileServerPlugin", "Plugin\FileServerPlugin\FileServerPlugin.csproj", "{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PtmUtil", "PtmUtil", "{7480B52A-A6DF-4114-BEEE-23B3DABD62C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropertyValueDetector", "..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -455,6 +461,22 @@ Global
 		{16B76101-C213-4C61-91E6-BF0FF92BE2C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{16B76101-C213-4C61-91E6-BF0FF92BE2C0}.Release|x64.ActiveCfg = Release|Any CPU
 		{16B76101-C213-4C61-91E6-BF0FF92BE2C0}.Release|x64.Build.0 = Release|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Debug|x64.Build.0 = Debug|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Release|x64.ActiveCfg = Release|Any CPU
+		{15AE9903-DF5F-46A6-BFB8-7DFFAAC30990}.Release|x64.Build.0 = Release|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Debug|x64.ActiveCfg = Debug|x64
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Debug|x64.Build.0 = Debug|x64
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|x64.ActiveCfg = Release|x64
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -486,6 +508,7 @@ Global
 		{E64BF20F-11D2-49F6-A25B-F4378AB38180} = {5F940ACA-EA97-4236-95D7-E191E7349FC6}
 		{1FC8C336-EF82-4F7C-9532-AB8AB268916E} = {5F940ACA-EA97-4236-95D7-E191E7349FC6}
 		{16B76101-C213-4C61-91E6-BF0FF92BE2C0} = {5F940ACA-EA97-4236-95D7-E191E7349FC6}
+		{7982ACF0-F1A4-4996-A339-641CAFA093CE} = {7480B52A-A6DF-4114-BEEE-23B3DABD62C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E7652FA6-7A2E-40FC-A886-AC5E19EB7843}
