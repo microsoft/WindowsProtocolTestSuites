@@ -170,6 +170,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Signing)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether outgoing and incoming messages " +
             "are correctly signed and verified using aes-gmac signing algorithm.")]
         public void Signing_VerifyAesGmacSigning()
