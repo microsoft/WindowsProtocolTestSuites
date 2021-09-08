@@ -595,6 +595,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
         [TestCategory(TestCategories.Signing)]
+        [TestCategory(TestCategories.Positive)]
         [Description("This test case is designed to test whether server can handle NEGOTIATE with " +
             "Smb 3.11 dialect, with SMB2_SIGNING_CAPABILITIES context and with SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.")]
         public void Negotiate_SMB311_SigningCapability()
