@@ -21,7 +21,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect STATUS_SUCCESS.")]
         public void BVT_FsCtl_RefsStreamSnapshotManagement_Create_IsSupported()
         {
@@ -35,7 +34,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect STATUS_SUCCESS.")]
         public void BVT_FsCtl_RefsStreamSnapshotManagement_List_IsSupported()
         {
@@ -50,7 +48,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_INVALID to a data file and expect STATUS_SUCCESS.")]
         public void BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported()
         {
@@ -64,7 +61,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [TestCategory(TestCategories.Positive)]
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a data file and expect STATUS_SUCCESS.")]
         public void BVT_FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported()
         {
@@ -102,7 +98,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -117,7 +112,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -131,7 +125,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -146,7 +139,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -162,7 +154,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -176,7 +167,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -196,7 +186,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -224,7 +213,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -251,7 +239,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -267,7 +254,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -296,7 +282,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]

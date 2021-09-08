@@ -2857,7 +2857,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     #region REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER    
 
     /// <summary>
-    /// A value representing the properties for this VCN to LCN mapping. The value 
+    /// A value representing the operations for REFS_STREAM_SNAPSHOT_MANAGEMENT request. The value 
     /// MUST be one of the following:
     /// </summary>
     [Flags()]
@@ -2948,7 +2948,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     public partial struct REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER
     {
         /// <summary>
-        /// This field specifies the operation and MUST contain one of the following values:
+        /// This field specifies the operation and MUST contain one of the following values in RefsStreamSnapshotOperation_Values
         /// </summary>
         public RefsStreamSnapshotOperation_Values Operation;
 
