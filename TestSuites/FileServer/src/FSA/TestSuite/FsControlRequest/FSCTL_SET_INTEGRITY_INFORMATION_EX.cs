@@ -89,7 +89,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 EnableIntegrity = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY.ENABLE_INTEGRITY,
                 KeepIntegrityStateUnchanged = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED.CHANGE_INTEGRITY,
-                Flags = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF,
                 Version = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION.V1,
                 Reserved2 = new byte[7],
             };
@@ -267,6 +266,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 EnableIntegrity = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY.ENABLE_INTEGRITY,
                 KeepIntegrityStateUnchanged = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED.CHANGE_INTEGRITY,
+                Flags = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF,
                 Version = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION.V1,
                 Reserved2 = new byte[7],
             };
@@ -392,7 +392,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX integrityInfo = new()
             {
                 KeepIntegrityStateUnchanged = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED.KEEP_INTEGRITY,
-                Flags = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF,
                 Version = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION.V1,
                 Reserved2 = new byte[7],
             };
@@ -439,7 +438,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 EnableIntegrity = enableIntegrity,
                 KeepIntegrityStateUnchanged = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED.CHANGE_INTEGRITY,
-                Flags = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF,
                 Version = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION.V1,
                 Reserved2 = new byte[7],
             };
