@@ -130,12 +130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Encryptio
         /// <summary>
         /// Indicates connect to unencrypted share
         /// </summary>
-        ConnectToUnEncryptedShare,
-
-        /// <summary>
-        /// Indicates connect to share with compression enabled
-        /// </summary>
-        ConnectToCompressedShare
+        ConnectToUnEncryptedShare
     }
 
     /// <summary>
