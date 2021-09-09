@@ -932,14 +932,15 @@ There are 343 test cases in total:
 | | Test coverage:|
 | | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
 | | Supporting test:|
-| | If not implement, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | If not supported by operating system, failed with **STATUS_NOT_SUPPORTED**.|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
 | | Input parameter test:|
-| | Test with different REFS_STREAM_SNAPSHOT_OPERATION, verify server returns success status code accordingly: **REFS_STREAM_SNAPSHOT_OPERATION_INVALID**, **REFS_STREAM_SNAPSHOT_OPERATION_CREATE**, **REFS_STREAM_SNAPSHOT_OPERATION_LIST**, **REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS**, **REFS_STREAM_SNAPSHOT_OPERATION_REVERT**, **REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE**, **REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE**.|
+| | Test with different REFS_STREAM_SNAPSHOT_OPERATION parameter, verify server returns status code accordingly: **STATUS_NOT_SUPPORTED**, **STATUS_INVALID_DEVICE_REQUEST**, **STATUS_INVALID_PARAMETER**, **STATUS_BUFFER_TOO_SMALL**, **STATUS_ACCESS_DENIED**, **STATUS_SUCCESS**.|
 | | Operation test:|
 | | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
 | Message Sequence| CreateFile.|
 | | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT**.|
-| | Verify server responses accordingly to input parameters.|
+| | Verify server responds according to input parameters.|
 
 ### <a name="Scenarios-for-QuotaInformation"/>Scenarios for QuotaInformation
 
@@ -3318,10 +3319,13 @@ There are 343 test cases in total:
 | | Verify returned NT_STATUS|
 | | If (IsRefsStreamSnapshotManagementSupported == True) {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
-| | } Else {|
-| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
-| | }|
-
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
 ##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_List_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_List_IsSupported
 
 | &#32;| &#32; |
@@ -3335,9 +3339,13 @@ There are 343 test cases in total:
 | | Verify returned NT_STATUS|
 | | If (IsRefsStreamSnapshotManagementSupported == True) {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
-| | } Else {|
-| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
-| | }|
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
 
 ##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported
 
@@ -3352,9 +3360,13 @@ There are 343 test cases in total:
 | | Verify returned NT_STATUS|
 | | If (IsRefsStreamSnapshotManagementSupported == True) {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
-| | } Else {|
-| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
-| | }|
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
 
 ##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported
 
@@ -3369,9 +3381,13 @@ There are 343 test cases in total:
 | | Verify returned NT_STATUS|
 | | If (IsRefsStreamSnapshotManagementSupported == True) {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
-| | } Else {|
-| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
-| | }|
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
 
 ##### <a name="FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero"/>FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero
 

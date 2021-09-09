@@ -328,7 +328,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 3: Verify test result
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify returned NTStatus code.");
-            if (this.fsaAdapter.IsStreamSnapshotManagementImplemented == false)
+
+            //MS-SMB2 <352> Windows 10 v21H1 and later and Windows Server 2022 and later allow the additional CtlCode value, 
+            //as specified in [MS-FSCC].
+            if (this.fsaAdapter.TestConfig.Platform < Platform.WindowsServer2022)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.NOT_SUPPORTED, status,
+                    "The operation as requested is not supported, or the file system does not support snapshot operations.");
+            }
+            else if (this.fsaAdapter.IsStreamSnapshotManagementImplemented == false)
             {
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_DEVICE_REQUEST, status,
                     "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
