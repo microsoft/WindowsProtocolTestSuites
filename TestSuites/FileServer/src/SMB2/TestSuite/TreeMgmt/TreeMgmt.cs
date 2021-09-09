@@ -274,7 +274,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             client.TreeConnect(compressedSharePath, out treeId,
                 (header, response) =>
                 {
-                    BaseTestSite.Log.Add(LogEntryKind.TestStep, $"---- response.ShareFlags ==> {(uint)response.ShareFlags:X8}");
                     BaseTestSite.Assert.AreEqual(
                         Smb2Status.STATUS_SUCCESS,
                         header.Status,
