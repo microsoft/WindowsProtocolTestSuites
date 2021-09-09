@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE, 
-                snapshotNameLength:2, operationInputBufferLength: 2);
+                snapshotNameLength: (ushort)Test_Lengths.ALIGN_HALF, operationInputBufferLength: (ushort)Test_Lengths.ALIGN_HALF);
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.BUFFER_TOO_SMALL);
         }
 
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE, 
-                snapshotNameLength:0, operationInputBufferLength: 4);
+                snapshotNameLength: (ushort)Test_Lengths.ZERO, operationInputBufferLength: (ushort)Test_Lengths.ALIGN);
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.INVALID_PARAMETER);
         }
 
@@ -117,10 +117,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.")]
-        public void FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotAligned()
+        public void FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthNotALIGN()
         {
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
-                GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE, 3, 3);
+                GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE, (ushort)Test_Lengths.NOT_ALIGN, (ushort)Test_Lengths.NOT_ALIGN);
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.INVALID_PARAMETER);
         }
 
@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE);
-            uint outputBufferSize = 1;
+            uint outputBufferSize = this.fsaAdapter.transBufferSize;
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.INVALID_PARAMETER, outputBufferSize);
         }
 
@@ -148,7 +148,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST, 
-                snapshotNameLength: 0, operationInputBufferLength: 4);
+                snapshotNameLength: (ushort)Test_Lengths.ZERO, operationInputBufferLength: (ushort)Test_Lengths.ALIGN);
             uint outputBufferSize = this.fsaAdapter.transBufferSize;
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.INVALID_PARAMETER, outputBufferSize);
         }
@@ -180,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS,
-                snapshotNameLength: 0, operationInputBufferLength: queryDetalsInputBufferLength, nameAndInputBuffer: queryDetalsInputBuffer);
+                snapshotNameLength: (ushort)Test_Lengths.ZERO, operationInputBufferLength: queryDetalsInputBufferLength, nameAndInputBuffer: queryDetalsInputBuffer);
             uint outputBufferSize = this.fsaAdapter.transBufferSize;
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.INVALID_PARAMETER, outputBufferSize);
         }
@@ -308,7 +308,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {            
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
-            fileName = fileName == "" ? this.fsaAdapter.ComposeRandomFileName(8) : fileName;
+            fileName = fileName == "" ? this.fsaAdapter.ComposeRandomFileName((int)Test_Lengths.ALIGN) : fileName;
 
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create Data File.");
@@ -369,28 +369,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileAccess fileAccess = FileAccess.GENERIC_READ | FileAccess.GENERIC_WRITE | FileAccess.FILE_WRITE_DATA | FileAccess.FILE_WRITE_ATTRIBUTES
             )
         {
-            fileName = this.fsaAdapter.ComposeRandomFileName(8);
-            string snapshotName = fsaAdapter.ComposeRandomFileName(8);
+            fileName = this.fsaAdapter.ComposeRandomFileName((int)Test_Lengths.ALIGN);
+            string snapshotName = fsaAdapter.ComposeRandomFileName((int)Test_Lengths.ALIGN);
             snapshotNameBytes = Encoding.ASCII.GetBytes(snapshotName);
 
             //Create snapshot
-            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = new REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER();
-            refsStreamSnapshotManagementInput.SnapshotNameLength = (ushort)Encoding.ASCII.GetBytes(snapshotName).Length;
-            refsStreamSnapshotManagementInput.Operation = RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE;
-            refsStreamSnapshotManagementInput.OperationInputBufferLength = 0;
-            refsStreamSnapshotManagementInput.NameAndInputBuffer = snapshotNameBytes;
-            refsStreamSnapshotManagementInput.Reserved = Guid.Parse("00000000-0000-0000-0000-000000000000").ToByteArray();            
+            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput = GetRefsStreamSnapshotManagement(
+                RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE, 
+                (ushort)Test_Lengths.ALIGN, (ushort)Test_Lengths.ALIGN, 
+                nameAndInputBuffer: snapshotNameBytes);
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.SUCCESS, fileAccess: fileAccess, fileName: fileName);
-
+            
             //Prepare to Query Deltas
             snapshotNameLength = (ushort)snapshotNameBytes.Length;
         }
 
         public REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER GetRefsStreamSnapshotManagement(
             RefsStreamSnapshotOperation_Values operation_Values,
-            ushort snapshotNameStringLength = 4, 
-            ushort snapshotNameLength = 4, 
-            ushort operationInputBufferLength = 0,
+            ushort snapshotNameStringLength = (ushort)Test_Lengths.ALIGN, 
+            ushort snapshotNameLength = (ushort)Test_Lengths.ALIGN, 
+            ushort operationInputBufferLength = (ushort)Test_Lengths.ZERO,
             byte[] nameAndInputBuffer = null
             )
         {
@@ -412,6 +410,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             refsStreamSnapshotQueryDeltasInputBuffer.Reserved = 0;
             refsStreamSnapshotQueryDeltasInputBuffer.StartingVcn = 0;
             return refsStreamSnapshotQueryDeltasInputBuffer;
+        }
+
+        public enum Test_Lengths: ushort
+        {
+            ZERO = 0,
+            ALIGN = 8,
+            ALIGN_HALF = 4,
+            NOT_ALIGN = 3,
         }
 
         #endregion
