@@ -1227,7 +1227,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     if (response.NegotiateContext_SIGNING.Value.SigningAlgorithmCount != 1)
                     {
-                        throw new InvalidOperationException("Signing algorithm count should be 1, actual value is {response.NegotiateContext_SIGNING.Value.SigningAlgorithmCount}");
+                        throw new InvalidOperationException($"Signing algorithm count should be 1, actual value is {response.NegotiateContext_SIGNING.Value.SigningAlgorithmCount}");
                     } 
 
                     this.selectedSigningAlgorithm = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
