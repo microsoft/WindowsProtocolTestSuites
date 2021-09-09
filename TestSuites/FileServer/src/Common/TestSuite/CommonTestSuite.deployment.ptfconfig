@@ -114,6 +114,13 @@
         </Description>
       </Property>
 
+      <Property name="CompressedFileShare" value="SMBCompressed">
+        <Description>
+            Name for file share with compression enabled
+            If SUT does not have such share, leave it blank
+        </Description>
+      </Property>
+
       <Property name="MaxSmbVersionSupported" value="Smb311">
         <Choice>Smb2002, Smb21, Smb30, Smb302, Smb311</Choice>
         <Description>

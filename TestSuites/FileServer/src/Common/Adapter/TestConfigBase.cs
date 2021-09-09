@@ -238,6 +238,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public string CompressedFileShare
+        {
+            get
+            {
+                return GetProperty("CompressedFileShare");
+            }
+        }
+
         public string CAShareName
         {
             get
