@@ -216,7 +216,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2636       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2637       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -1784,6 +1784,18 @@ This is used to test SMB2 common user scenarios.
 |**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP (with domain credential).|
 ||Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and SMB2_REMOTED_IDENTITY_TREE_CONNECT context (with another domain account passed in the context) and expects STATUS_SUCCESS.|
 ||Client sends CREATE request and expects STATUS_SUCCESS.|
+||Tear down the client.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|TreeMgmt_SMB311_COMPRESS_DATA|
+|**Description**|This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_COMPRESS_DATA successfully. It is required that the server has a share with SMB compression enabled |
+|**Prerequisites**|The server implements dialect 3.11 and the share has SMB Compression enabled|
+|**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP (with domain credential).|
+||Client sends TREE_CONNECT request and expects server response with share flag SHAREFLAG_COMPRESS_DATA enabled.|
+||Client sends CREATE request and expects share flag SHAREFLAG_COMPRESS_DATA enabled.|
 ||Tear down the client.|
 |**Cleanup**||
 

@@ -263,40 +263,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             #endregion
 
             var compressedSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.CompressedFileShare);
-            var compressionAlgorithms = TestConfig.SupportedCompressionAlgorithmList.ToArray();
-            if (compressionAlgorithms.Count() == 0)
-                Assert.Inconclusive("This test requires at least one SupportedCompressionAlgorithm");
-            var capabilities = Capabilities_Values.NONE;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP");
-            //var client = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
-            //client.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
-            client.NegotiateWithContexts(
-                Packet_Header_Flags_Values.NONE,
-                TestConfig.RequestDialects,
-                preauthHashAlgs: new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
-                compressionAlgorithms: compressionAlgorithms,
-                compressionFlags: SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
-                capabilityValue: capabilities,
-                checker: (Packet_Header header, NEGOTIATE_Response response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
 
-                    if (TestConfig.IsWindowsPlatform)
-                    {
-                        var firstSupportedCompressionAlgorithm = Smb2Utility.GetSupportedCompressionAlgorithms(compressionAlgorithms.ToArray()).Take(1);
-
-                        var firstSupportedPatternScanningAlgorithm = Smb2Utility.GetSupportedPatternScanningAlgorithms(compressionAlgorithms.ToArray()).Take(1);
-
-                        var expectedCompressionAlgorithms = firstSupportedCompressionAlgorithm.Concat(firstSupportedPatternScanningAlgorithm);
-
-                        bool isExpectedWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds.OrderBy(compressionAlgorithm => compressionAlgorithm), expectedCompressionAlgorithms.OrderBy(compressionAlgorithm => compressionAlgorithm));
-
-                        BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v2004 and Windows Server v2004 select a common pattern scanning algorithm and the first common compression algorithm, specified in section 2.2.3.1.3, supported by the client and server.");
-                    }
-                });
-
-            //client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled, capabilityValue: Capabilities_Values.);
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_COMPRESS_DATA and expects STATUS_SUCCESS.");
