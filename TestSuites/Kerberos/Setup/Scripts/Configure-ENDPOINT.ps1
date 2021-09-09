@@ -44,7 +44,7 @@ $SignalFileFullPath      = "$WorkingPath\Configure-ENDPOINT.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
-$DataFile2                = "$WorkingPath\Scripts\Protocol.xml"
+$DataFile2                = "$WorkingPath\Protocol.xml"
 [xml]$KrbParams2          = $null
 
 #------------------------------------------------------------------------------------------
