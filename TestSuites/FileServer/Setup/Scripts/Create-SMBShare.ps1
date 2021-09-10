@@ -51,7 +51,12 @@ CMD /C "icacls $Path /grant $FullAccess`:(OI)(CI)(F)" 2>&1 | Write-Host
 $smbShare = Get-SmbShare | Where-Object {$_.Name -eq "$Name" -and $_.Path -eq "$Path"}
 if($null -eq $smbShare)
 {        
-    New-SMBShare -name "$Name" -Path "$Path" -FullAccess "$FullAccess" -CachingMode $CachingMode -EncryptData $EncryptData -CompressData $CompressData
+    New-SMBShare -name "$Name" -Path "$Path" -FullAccess "$FullAccess" -CachingMode $CachingMode -EncryptData $EncryptData
+
+    if($CompressData)
+    {
+        Set-SmbShare -Name "$Name" -CompressData $true
+    }
 }
 
 
