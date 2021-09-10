@@ -251,7 +251,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Tree)]
         [TestCategory(TestCategories.Positive)]
-        [Description("This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_COMPRESS_DATA successfully.")]
+        [Description("This test case is designed to test server responds with SHAREFLAG_COMPRESS_DATA to a TreeConnect request for a share that supports compression.")]
         public void TreeMgmt_SMB311_COMPRESS_DATA()
         {
             #region Check Applicability
@@ -268,7 +268,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_COMPRESS_DATA and expects STATUS_SUCCESS.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request and expects STATUS_SUCCESS with flag SMB2_SHAREFLAG_COMPRESS_DATA.");
             uint treeId;
 
             client.TreeConnect(compressedSharePath, out treeId,
@@ -278,11 +278,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
                         Smb2Status.STATUS_SUCCESS,
                         header.Status,
                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
-
-                    BaseTestSite.Assert.AreEqual(
-                        ShareFlags_Values.SHAREFLAG_COMPRESS_DATA,
-                        ShareFlags_Values.SHAREFLAG_COMPRESS_DATA & response.ShareFlags,
-                        "Server should set SHAREFLAG_COMPRESS_DATA for ShareFlags field in TREE_CONNECT response");
 
                     BaseTestSite.Assert.IsTrue(
                         response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_COMPRESS_DATA),
