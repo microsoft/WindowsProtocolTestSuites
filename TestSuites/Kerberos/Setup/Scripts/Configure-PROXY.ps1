@@ -217,12 +217,13 @@ Function Config-Proxy()
     if(Test-Path -Path $dataFile2)
 	{
         [xml]$configFile = Get-Content -Path $dataFile2
-        $proxyNode=$configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
-        $domainName=$proxyNode.domain
-        $hostname=$proxyNode.name
+        $proxyNode = $configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
+        $domainName = $proxyNode.domain
+        $hostname = $proxyNode.name
+        $role = $proxyNode.role
     }
-    $DnsName=$hostname+"."+$domainName
-    $FilePath="c:\$DnsName.cer"
+    $DnsName=$role+"."+$domainName
+    $FilePath = "c:\$DnsName.cer"
 	Write-ConfigLog "Create self-signed certificate and bind" -ForegroundColor Yellow
 	Import-Module WebAdministration
 	$cert = New-SelfSignedCertificate -DnsName $DnsName -CertStoreLocation cert:\LocalMachine\My

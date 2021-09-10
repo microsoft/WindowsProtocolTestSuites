@@ -999,6 +999,7 @@ Function Main
 		$proxyNode = $configFile2.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
 		$hostname = $proxyNode.name
 		$domainName = $proxyNode.domain
+		$role = $proxyNode.role
 		$remotePassword = $proxyNode.password
 		$userName = $proxyNode.username
 		$remoteUserName = $hostname + "\" + $userName
@@ -1007,7 +1008,7 @@ Function Main
 		Write-ConfigLog "`$remoteUserName = $remoteUserName"
 		Write-ConfigLog "`$domainName = $domainName"
 		net use "\\$hostname\C$" $remotePassword /User:$remoteUserName
-		$certificatFile = "\\$hostname\c$\$hostname.$domainName.cer"
+		$certificatFile = "\\$hostname\c$\$role.$domainName.cer"
 		Write-ConfigLog "`$certificatFile = $certificatFile"
 		Import-Certificate -FilePath $certificatFile  -CertStoreLocation 'Cert:\LocalMachine\Root'
     }
