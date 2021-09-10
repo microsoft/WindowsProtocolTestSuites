@@ -4848,6 +4848,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The Data field contains the server name to which the client connects.
         /// </summary>
         SMB2_NETNAME_NEGOTIATE_CONTEXT_ID = 0x0005,
+
+        /// <summary>
+        /// The Data field contains the list of signing algorithms, as specified in section 2.2.3.1.7
+        /// </summary>
+        SMB2_SIGNING_CAPABILITIES = 0x0008,
     }
 
     /// <summary>
@@ -5094,6 +5099,52 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
     }
 
+    public enum SigningAlgorithm : short
+    {
+        /// <summary>
+        /// HMAC-SHA256 signing algorithm
+        /// </summary>
+        HMAC_SHA256 = 0x0000,
+
+        /// <summary>
+        /// AES-CMAC signing algorithm
+        /// </summary>
+        AES_CMAC = 0x0001,
+
+        /// <summary>
+        /// AES-GMAC signing algorithm
+        /// </summary>
+        AES_GMAC = 0x0002,
+    }
+
+    public struct SMB2_SIGNING_CAPABILITIES
+    {
+        /// <summary>
+        /// Header
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// The number of signing algorithms in the SigningAlgorithms array. This value MUST be greater zero
+        /// </summary>
+        public ushort SigningAlgorithmCount;
+
+        /// <summary>
+        /// An array of 16-bit integer IDs specifying the supported signing algorithms. 
+        /// These IDs MUST be in an order such that the most preferred signing algorithm MUST be 
+        /// at the beginning of the array and least preferred signing algorithm at the end of the array. 
+        /// </summary>
+        [Size("SigningAlgorithmCount")]
+        public SigningAlgorithm[] SigningAlgorithms;
+
+        public int GetDataLength()
+        {
+            int dataLength = sizeof(ushort); // SigningAlgorithmCount
+            if (SigningAlgorithms != null) dataLength += SigningAlgorithms.Length * sizeof(SigningAlgorithm);
+
+            return dataLength;
+        }
+    }
 
     /// <summary>
     ///  The SMB2 CANCEL Request packet is sent by the client
