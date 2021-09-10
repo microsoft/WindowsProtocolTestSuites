@@ -399,7 +399,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             refsStreamSnapshotManagementInput.Operation = operation_Values;
             refsStreamSnapshotManagementInput.OperationInputBufferLength = operationInputBufferLength;
             refsStreamSnapshotManagementInput.NameAndInputBuffer = nameAndInputBuffer;
-            refsStreamSnapshotManagementInput.Reserved = Guid.Parse("00000000-0000-0000-0000-000000000000").ToByteArray();
+            refsStreamSnapshotManagementInput.Reserved = Guid.Empty.ToByteArray();
             return refsStreamSnapshotManagementInput;
         }
 
