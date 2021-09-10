@@ -2202,52 +2202,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             return status;
         }
         
-
-        public uint RefsStreamSnapshotManagement(
-            uint treeId,
-            FILEID fileId,
-            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER inputBuffer,
-            out byte[] respOutput,
-            ResponseChecker<IOCTL_Response> checker = null)
-        {            
-            uint status = 0;
-            Packet_Header header;
-            IOCTL_Response ioCtlResponse;            
-            byte[] buffer = TypeMarshal.ToBytes<REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER>(inputBuffer);
-            byte[] respInput;
-
-            ulong messageId = generateMessageId(sequenceWindow);
-            ushort creditCharge = generateCreditCharge(1);
-
-            // Need to consume credit from sequence window first according to TD
-            ConsumeCredit(messageId, creditCharge);
-
-            status = client.IoCtl(
-                creditCharge,
-                generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
-                messageId,
-                sessionId,
-                treeId,
-                CtlCode_Values.FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT,
-                fileId,
-                0,
-                buffer,
-                DefaultMaxOutputResponse,
-                IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL,
-                out respInput,
-                out respOutput,
-                out header,
-                out ioCtlResponse,
-                sessionChannelSequence);
-
-            ProduceCredit(messageId, header);
-
-            InnerResponseChecker(checker, header, ioCtlResponse);
-
-            return status;
-        }
-
         #endregion
 
         #region Query Directory
