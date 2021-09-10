@@ -565,4 +565,360 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
     {
 
     }
+
+    
+    #region REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER    
+
+    /// <summary>
+    /// A value representing the operations for REFS_STREAM_SNAPSHOT_MANAGEMENT request. The value 
+    /// MUST be one of the following:
+    /// </summary>
+    [Flags()]
+    public enum RefsStreamSnapshotOperation_Values : uint
+    {
+        /// <summary>
+        /// All requests with this operational code MUST 
+        /// be failed by the server.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_INVALID = 0x00000000,
+
+        /// <summary>
+        /// This request message requests the server 
+        /// create a new snapshot of the UNICODE name 
+        /// contained within NameAndInputBuffer, 
+        /// saving a point-in-time view of the data 
+        /// stream represented by the handle the 
+        /// request is being sent on.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_CREATE = 0x00000001,
+
+        /// <summary>
+        /// This request message requests the server 
+        /// return a list of all snapshots of the set 
+        /// containing the data stream represented by 
+        /// the handle the request is being sent on, and 
+        /// matching a given regular expression query 
+        /// string contained in NameAndInputBuffer.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_LIST = 0x00000002,
+
+        /// <summary>
+        /// This request message requests the server 
+        /// return a list of all metadata extents that have 
+        /// incurred modifying operations between the 
+        /// data stream represented by the handle the 
+        /// request is being sent on, and the data 
+        /// stream represented by the UNICODE name 
+        /// contained in NameAndInputBuffer. The data 
+        /// stream represented by the handle must be of 
+        /// a newer creation time than the data stream 
+        /// represented by the UNICODE name.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS = 0x00000003,
+
+        /// <summary>
+        /// This request message requests the server 
+        /// revert the data stream represented by the 
+        /// handle the request is being sent on to a 
+        /// point-in-time snapshot view represented by 
+        /// the UNICODE name contained within 
+        /// NameAndInputBuffer.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_REVERT = 0x00000004,
+
+        /// <summary>
+        /// This request message requests the server 
+        /// create a shadow data stream on the data 
+        /// stream represented by the handle the 
+        /// request is being sent on.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE = 0x00000005,
+
+        /// <summary>
+        /// This request message requests the server 
+        /// remove a shadow data stream on the data 
+        /// stream represented by the handle the 
+        /// request is being sent on.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE = 0x00000006,
+
+        /// <summary>
+        /// The maximum operational code supported by
+        /// the server. All operational codes larger than 
+        /// this numerical value will be failed.
+        /// </summary>
+        REFS_STREAM_SNAPSHOT_OPERATION_MAX = 0x00000006,
+    }
+    
+    /// <summary>
+    /// The FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request message requests that the server 
+    /// perform a specific stream snapshot operation on a given data stream contained in a file. The operation 
+    /// performed is dependent on the value defined in REFS_STREAM_SNAPSHOT_OPERATION. The request 
+    /// message takes the form of a REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER structure.
+    /// The REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER is as follows.
+    /// </summary>
+    public partial struct REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER
+    {
+        /// <summary>
+        /// This field specifies the operation and MUST contain one of the following values in RefsStreamSnapshotOperation_Values
+        /// </summary>
+        public RefsStreamSnapshotOperation_Values Operation;
+
+        /// <summary>
+        /// An unsigned integer representing the length in bytes of the 
+        /// unicode name contained within NameAndInputBuffer field. If no such name is present in the 
+        /// message, then this value is set to zero.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort SnapshotNameLength;
+
+        /// <summary>
+        /// An unsigned integer representing the length in bytes of 
+        /// the operational control structure present in the message and contained within 
+        /// NameAndInputBuffer field. If no such control structure is present in the message, then this 
+        /// value is set to zero.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort OperationInputBufferLength;
+
+        /// <summary>
+        /// This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        [StaticSize(16)]
+        public byte[] Reserved;
+
+        /// <summary>
+        /// An array of bytes optionally containing a unicode name as well as 
+        /// an operational control buffer. When a unicode name is present, it is located immediately within the 
+        /// first byte of NameAndInputBuffer. When an operational control buffer is present, it is located at 
+        /// the next quad aligned boundary past the end of the unicode name. If no such unicode name is 
+        /// present, then the operational control buffer is located at the first byte of NameAndInputBuffer.
+        /// </summary>
+        [Size("SnapshotNameLength + OperationInputBufferLength")]
+        public byte[] NameAndInputBuffer;
+    }
+
+    #endregion
+    
+    #region REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER
+
+    /// <summary>
+    /// The REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER is as follows:
+    /// </summary>
+    public partial struct REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER
+    {
+        /// <summary>
+        /// A signed integer representing the starting VCN for which to perform the 
+        /// request on.
+        /// </summary>
+        public long StartingVcn;
+
+        /// <summary>
+        /// An unsigned integer representing flags to modify the behavior of the request. This 
+        /// field must be set to zero.
+        /// </summary>
+        public uint Flags;
+
+        /// <summary>
+        /// This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        public uint Reserved;
+    }
+
+    #endregion
+
+    #region REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER
+    /// FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT Reply returns the result of the FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request.
+
+    /// <summary>
+    /// The REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER is as follows:
+    /// </summary>
+    public partial struct REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER
+    {
+        /// <summary>
+        /// An unsigned integer representing the number of entries contained within the 
+        /// Entries field.
+        /// </summary>
+        public int EntryCount;
+
+        /// <summary>
+        /// An unsigned integer representing the total number of 
+        /// bytes to fully satisfy the request. This value is accurate upon returning STATUS_SUCCESS as well 
+        /// as STATUS_BUFFER_OVERFLOW
+        /// </summary>
+        public uint BufferSizeRequiredForQuery;
+
+        /// <summary>
+        /// This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        public uint Reserved;
+
+        /// <summary>
+        ///  An array of REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER_ENTRY structs.
+        /// </summary>
+        [Size("EntryCount")]
+        public REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER_ENTRY[] Entries;
+    }
+
+    /// <summary>
+    /// The REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER_ENTRY is as follows:
+    /// </summary>
+    public partial struct REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER_ENTRY
+    {
+        /// <summary>
+        /// An unsigned integer representing the offset in bytes to the next 
+        /// REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER_ENTRY structure. When this value is zero 
+        /// there are no more entries in the array.
+        /// </summary>
+        public uint NextEntryOffset;
+
+        /// <summary>
+        /// A unsigned integer representing the length of the UNICODE name 
+        /// contained in SnapshotName in bytes.
+        /// </summary>
+        public ushort SnapshotNameLength;
+
+        /// <summary>
+        /// An unsigned integer representing a FILETIME structure 
+        /// containing the creation time of the snapshot.
+        /// </summary>
+        public ulong SnapshotCreationTime;
+
+        /// <summary>
+        /// An unsigned integer representing the End-Of-File marker of the data stream 
+        /// represented by this entry.
+        /// </summary>
+        public ulong StreamSize;
+
+        /// <summary>
+        /// An unsigned integer representing the size in bytes used by the 
+        /// data owned by the data stream represented by this entry. 
+        /// </summary>
+        public ulong StreamAllocationSize;
+
+        /// <summary>
+        /// This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        public ulong Reserved;
+
+        /// <summary>
+        /// An array of WCHARs, as specified in [MS-DTYP] section 2.2.60, 
+        /// representing the UNICODE name for the snapshot representing this entry. The size of the array is 
+        /// defined in the SnapshotNameLength field.
+        /// </summary>
+        [Size("SnapshotNameLength")]
+        public byte[] SnapshotName;
+    }
+
+    #endregion
+
+    #region REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER
+
+    /// <summary>
+    /// The REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER is as follows:
+    /// </summary>
+    public partial struct REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER
+    {
+        /// <summary>
+        /// An unsigned integer representing the number of REFS_STREAM_EXTENT 
+        /// structs contained in the Extents field.
+        /// </summary>
+        public uint ExtentCount;
+
+        /// <summary>
+        /// This field MUST be set to zero and MUST be ignored.
+        /// </summary>
+        public ulong Reserved;
+
+        /// <summary>
+        /// An array of REFS_STREAM_EXTENT structs.
+        /// </summary>
+        public REFS_STREAM_EXTENT Extents;
+    }
+
+    /// <summary>
+    /// The REFS_STREAM_EXTENT is as follows:
+    /// </summary>
+    public partial struct REFS_STREAM_EXTENT
+    {
+        /// <summary>
+        /// A signed integer representing a VCN within a data stream. This value will always be 
+        /// greater than zero
+        /// </summary>
+        public ulong Vcn;
+
+        /// <summary>
+        /// A signed integer representing the LCN mapping to Vcn in a data stream. This value 
+        /// will always be greater than zero.
+        /// </summary>
+        public ulong Lcn;
+
+        /// <summary>
+        /// A signed integer representing the contiguous length in clusters for which the VCN 
+        /// to LCN mapping holds. This value will always be greater than zero.
+        /// </summary>
+        public ulong Length;
+
+        /// <summary>
+        /// A value representing the properties for this VCN to LCN mapping. The value 
+        /// MUST be one of the following:
+        /// </summary>
+        public RefsStreamExtentProperties_Values Properties;
+    }  
+
+    /// <summary>
+    /// A value representing the properties for this VCN to LCN mapping. The value 
+    /// MUST be one of the following:
+    /// </summary>
+    [Flags()]
+    public enum RefsStreamExtentProperties_Values : uint
+    {
+        /// <summary>
+        /// The metadata extent is considered valid, where the 
+        /// VCN to LCN mapping represents a written or zeroed 
+        /// extent.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_VALID = 0x0010,
+
+        /// <summary>
+        /// The metadata extent does not map to an LCN, but 
+        /// instead contains a token representation an allocation 
+        /// reservation.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_STREAM_RESERVED = 0x0020,
+
+        /// <summary>
+        /// The metadata extent references data that is 
+        /// checksumed with the CRC32 algorithm.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_CRC32 = 0x0080,
+
+        /// <summary>
+        /// The metadata extent references data that is 
+        /// checksumed with the CRC64 algorithm.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_CRC64 = 0x0100,
+
+        /// <summary>
+        /// The metadata extent contains a ghosted recall buffer.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_GHOSTED = 0x0200,
+
+        /// <summary>
+        /// The metadata extent is a cached copy of a different 
+        /// metadata extent. This extent is immutable, and the 
+        /// LCN it references is not writable via this extent.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_READONLY = 0x0400,
+
+        /// <summary>
+        /// The metadata extent represents a sparse range within 
+        /// the stream. The range represented by this extent is 
+        /// analogous to a sparse hole in the stream table.
+        /// </summary>
+        REFS_STREAM_EXTENT_PROPERTY_SPARSE = 0x0008,
+    }
+    
+    #endregion  
+
 }
