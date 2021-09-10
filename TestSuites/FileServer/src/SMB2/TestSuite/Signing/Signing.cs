@@ -166,6 +166,67 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             client.TreeDisconnect(treeId);
             client.LogOff();
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Signing)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether outgoing and incoming messages " +
+            "are correctly signed and verified using aes-gmac signing algorithm.")]
+        public void Signing_VerifyAesGmacSigning()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            TestConfig.CheckSigning();
+            #endregion
+
+            var signingAlgorithms = new SigningAlgorithm[] { SigningAlgorithm.AES_GMAC };
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends NEGOTIATE with the Aes-GMAC signing algorithm and NEGOTIATE_SIGNING_REQUIRED.");
+            client.NegotiateWithContexts(
+                Packet_Header_Flags_Values.NONE,
+                Smb2Utility.GetDialects(DialectRevision.Smb311),
+                SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED,
+                preauthHashAlgs: new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                compressionFlags: SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
+                signingAlgorithms: signingAlgorithms,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
+                });
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends SESSION_SETUP request and expects response.");
+            client.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken,
+                SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED);
+
+            string uncSharepath =
+                Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
+            uint treeId;
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT to share: {0}", uncSharepath);
+            client.TreeConnect(
+                uncSharepath,
+                out treeId,
+                (Packet_Header header, TREE_CONNECT_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "TreeConnect should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(header.Status));
+
+                    BaseTestSite.Assert.AreEqual(
+                    Packet_Header_Flags_Values.FLAGS_SIGNED,
+                    Packet_Header_Flags_Values.FLAGS_SIGNED & header.Flags,
+                    "Server should set SMB2_FLAGS_SIGNED bit in the Flags field of the SMB2 header");
+
+                });
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: TREE_DISCONNECT; LOG_OFF");
+            client.TreeDisconnect(treeId);
+            client.LogOff();
+        }
         #endregion
     }
 }

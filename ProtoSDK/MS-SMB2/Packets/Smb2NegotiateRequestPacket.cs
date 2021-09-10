@@ -64,6 +64,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         public SMB2_NETNAME_NEGOTIATE_CONTEXT_ID NegotiateContext_NETNAME;
 
+        /// <summary>
+        /// Indicates which signing algorithms the client supports.
+        /// </summary>
+        public SMB2_SIGNING_CAPABILITIES? NegotiateContext_SIGNING;
+
 
         /// <summary>
         /// Covert to a byte array
@@ -101,6 +106,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 Smb2Utility.Align8(ref messageData);
                 messageData = messageData.Concat(NegotiateContext_NETNAME.Marshal()).ToArray();
+            }
+
+            if (NegotiateContext_SIGNING != null)
+            {
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_SIGNING_CAPABILITIES>(NegotiateContext_SIGNING.Value)).ToArray();
             }
 
             return messageData;
@@ -158,6 +169,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     this.NegotiateContext_NETNAME = SMB2_NETNAME_NEGOTIATE_CONTEXT_ID.Unmarshal(data, ref consumedLen);
                 }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_SIGNING_CAPABILITIES)
+                {
+                    this.NegotiateContext_SIGNING = TypeMarshal.ToStruct<SMB2_SIGNING_CAPABILITIES>(data, ref consumedLen);
+                }
             }
 
             expectedLen = 0;
@@ -192,6 +207,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 foreach (var alg in NegotiateContext_ENCRYPTION.Value.Ciphers)
                 {
                     sb.Append(alg.ToString() + ",");
+                }
+                sb.Length--;
+                sb.Append("}");
+            }
+            if (NegotiateContext_SIGNING != null)
+            {
+                sb.Append(", SigningAlgorithms={");
+                foreach (var signingId in NegotiateContext_SIGNING.Value.SigningAlgorithms)
+                {
+                    sb.Append(signingId.ToString() + ",");
                 }
                 sb.Length--;
                 sb.Append("}");
