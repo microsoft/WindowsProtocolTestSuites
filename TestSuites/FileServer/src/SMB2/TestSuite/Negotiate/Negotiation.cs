@@ -592,6 +592,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Signing)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with " +
+            "Smb 3.11 dialect, with SMB2_SIGNING_CAPABILITIES context and with SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.")]
+        public void Negotiate_SMB311_SigningCapability()
+        {
+            CheckSigningCompatibility();
+
+            var signingAlgorithms = TestConfig.SupportedSigningAlgorithmList.ToArray();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with supported signing algorithms (HMAC-SHA256, AES-CMAC, AES-GMAC).");
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                signingAlgorithms: signingAlgorithms,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
+
+                    CheckNegotiateResponse(header, response, DialectRevision.Smb311, null, false, signingAlgorithms);
+                });
+        }
+
+        [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
@@ -945,7 +971,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             CompressionAlgorithm[] compressionAlgorithms = null,
             SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
             bool addNetNameContextId = false,
-            ResponseChecker<NEGOTIATE_Response> checker = null)
+            ResponseChecker<NEGOTIATE_Response> checker = null,
+            SigningAlgorithm[] signingAlgorithms = null)
         {
             // ensure clientMaxDialectSupported higher than 3.11
             if (clientMaxDialectSupported < DialectRevision.Smb311) clientMaxDialectSupported = DialectRevision.Smb311;
@@ -960,13 +987,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             status = client.NegotiateWithContexts(
                 Packet_Header_Flags_Values.NONE,
-                negotiateDialects,
+                negotiateDialects, 
+                securityMode: SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED,
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
                 compressionAlgorithms: compressionAlgorithms,
                 compressionFlags: compressionFlags,
                 addNetNameContextId: addNetNameContextId,
-                checker: checker);
+                checker: checker,
+                signingAlgorithms: signingAlgorithms);
         }
 
         private void CheckNegotiateResponse(
@@ -974,7 +1003,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             NEGOTIATE_Response response,
             DialectRevision clientMaxDialectSupported,
             EncryptionAlgorithm[] encryptionAlgs,
-            bool checkCompression = false)
+            bool checkCompression = false,
+            SigningAlgorithm[] signingAlgorithms = null)
         {
             DialectRevision expectedDialect = clientMaxDialectSupported < TestConfig.MaxSmbVersionSupported
                         ? clientMaxDialectSupported : TestConfig.MaxSmbVersionSupported;
@@ -1020,6 +1050,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                         bool isExpectedNonWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds, TestConfig.SupportedCompressionAlgorithmList);
                         BaseTestSite.Assert.IsTrue(isExpectedNonWindowsCompressionContext, "[MS-SMB2] section 3.3.5.4: Non-Windows implementation MUST set CompressionAlgorithms to the CompressionIds in request if they are all supported by SUT.");
                     }
+                }
+
+                if (signingAlgorithms != null)
+                {
+                    BaseTestSite.Assert.IsTrue(TestConfig.SupportedSigningAlgorithmList.Contains(client.SelectedSigningAlgorithm),
+                    "[MS-SMB2] 3.3.5.4 The server MUST set Connection.SigningAlgorithmId to the supported signing algorithm " +
+                    "common to both client and server in the SigningAlgorithms field");
+                }
+                else
+                {
+                    BaseTestSite.Assert.AreEqual(SigningAlgorithm.HMAC_SHA256, client.SelectedSigningAlgorithm,
+                        "[MS-SMB2] If the server does not support any of the signing algorithms provided by the client, " +
+                        "Connection.SigningAlgorithmId MUST be set to zero.");
                 }
             }
             else
@@ -1102,6 +1145,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
                     "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_ENCRYPTION set.");
+            }
+        }
+
+        private void CheckSigningCompatibility(bool isSigningRequired = false)
+        {
+            // Check platform
+            if (TestConfig.IsWindowsPlatform)
+            {
+                BaseTestSite.Assert.IsFalse(TestConfig.Platform < Platform.WindowsServerV21H1, "Windows 10 v20H2 operating system and prior and Windows Server v20H2 operating system and prior do not send or process SMB2_SIGNING_CAPABILITIES.");
+
+                if (isSigningRequired)
+                {
+                    BaseTestSite.Assert.IsTrue(TestConfig.Platform >= Platform.WindowsServerV21H1, "Only Windows 10 v21H1 operating system and later and Windows Server 2022 operating system and later operating systems support signing capabilities");
+                }
+            }
+
+            // Check SUT supported signing algorithms
+            TestConfig.CheckSigningAlgorithm();
+
+            if (isSigningRequired)
+            {
+                BaseTestSite.Assume.IsTrue(TestConfig.IsServerSigningRequired, "This test case is only applicable when SUT supports signing.");
             }
         }
 

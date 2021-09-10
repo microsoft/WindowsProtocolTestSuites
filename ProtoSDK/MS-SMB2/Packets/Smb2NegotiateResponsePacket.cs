@@ -44,6 +44,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public SMB2_COMPRESSION_CAPABILITIES? NegotiateContext_COMPRESSION;
 
         /// <summary>
+        /// Indicates which signing algorithms the server supports.
+        /// </summary>
+        public SMB2_SIGNING_CAPABILITIES? NegotiateContext_SIGNING;
+
+        /// <summary>
         /// Covert to a byte array
         /// </summary>
         /// <returns>The byte array</returns>
@@ -74,6 +79,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_COMPRESSION_CAPABILITIES>(NegotiateContext_COMPRESSION.Value)).ToArray();
             }
 
+            if (NegotiateContext_SIGNING != null)
+            {
+                // 8-byte align
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_SIGNING_CAPABILITIES>(NegotiateContext_SIGNING.Value)).ToArray();
+            }
+
             return messageData;
         }
 
@@ -89,6 +101,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             consumedLen = 0;
             this.NegotiateContext_ENCRYPTION = null;
             this.NegotiateContext_PREAUTH = null;
+            this.NegotiateContext_SIGNING = null;
             this.Header = TypeMarshal.ToStruct<Packet_Header>(data, ref consumedLen);
 
             byte[] tempData = data.Skip(consumedLen).ToArray();
@@ -128,6 +141,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     if (this.NegotiateContext_COMPRESSION != null) throw new Exception("More than one SMB2_COMPRESSION_CAPABILITIES are present.");
                     this.NegotiateContext_COMPRESSION = TypeMarshal.ToStruct<SMB2_COMPRESSION_CAPABILITIES>(data, ref consumedLen);
                 }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_SIGNING_CAPABILITIES)
+                {
+                    if (this.NegotiateContext_SIGNING != null) throw new Exception("More than one SMB2_SIGNING_CAPABILITIES are present.");
+                    this.NegotiateContext_SIGNING = TypeMarshal.ToStruct<SMB2_SIGNING_CAPABILITIES>(data, ref consumedLen);
+                }
                 else
                 {
                     throw new Exception(string.Format("Unknow Negotiate Context: {0}.", (ushort)contextType));
@@ -165,6 +183,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     foreach (var alg in NegotiateContext_ENCRYPTION.Value.Ciphers)
                     {
                         sb.Append(alg.ToString() + ",");
+                    }
+                    sb.Length--;
+                    sb.Append("}");
+                }
+                if (NegotiateContext_SIGNING != null)
+                {
+                    sb.Append(", SigningAlgorithms={");
+                    foreach (var signingId in NegotiateContext_SIGNING.Value.SigningAlgorithms)
+                    {
+                        sb.Append(signingId.ToString() + ",");
                     }
                     sb.Length--;
                     sb.Append("}");

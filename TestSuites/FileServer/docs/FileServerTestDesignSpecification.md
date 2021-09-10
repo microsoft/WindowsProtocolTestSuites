@@ -216,7 +216,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2636       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2638       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -1740,8 +1740,24 @@ This is used to test SMB2 common user scenarios.
 |                          | 13. Server sends encrypted TREE\_DISCONNECT response                                                         |
 |                          | 14. Client sends LOGOFF request                                                                              |
 |                          | 15. Server sends LOGOFF response                                                                             |
-| **Cleanup**              |                                                                                                              |
+| **Cleanup**              ||
 
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Signing_VerifyAesGmacSigning																												   |
+| **Description**          | This test case is designed to test whether outgoing and incoming messages are correctly signed and verified using aes-gmac signing algorithm. |
+| **Prerequisites**        |																																			   |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES and SMB2\_SIGNING\_CAPABILITIES								   |
+|                          | 2.  Server sends NEGOTIATE response with SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES and SMB2\_SIGNING\_CAPABILITIES							   |
+|                          | 3.  Client sends SESSION\_SETUP request																								       |
+|                          | 4.  Server sends SESSION\_SETUP response																							           |
+|                          | 5.  According to response header from above step, server responds with a signed flag														   |
+|                          | 6.  Client sends TREE\_CONNECT request to connect to a share																				   |
+|                          | 7.  Server sends TREE\_CONNECT response with a signing flag																			       |
+|                          | 12. Client sends TREE\_DISCONNECT request																									   |
+|                          | 13. Server sends TREE\_DISCONNECT response																									   |
+|                          | 14. Client sends LOGOFF request																											   |
+|                          | 15. Server sends LOGOFF response																											   |
+| **Cleanup**              ||
 
 #### <a name="3.1.21"> TreeMgmt
 
@@ -5311,6 +5327,15 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Prerequisites**|The server implements dialect 3.11.|
 |**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_ENCRYPTION_CAPABILITIES context and set Cipher to an invalid value: 0xFFFF.|
 ||Verify that server sets Connection.CipherId to 0 from the response.|
+|**Cleanup**||
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_SigningCapability|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_SIGNING_CAPABILITIES context and with SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_SIGNING_CAPABILITIES context and SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set SigningAlgorithmId to value: 0x0000.|
+||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
 |**Cleanup**||
 
 
