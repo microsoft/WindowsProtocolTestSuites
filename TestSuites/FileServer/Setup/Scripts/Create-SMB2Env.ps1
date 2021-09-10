@@ -82,8 +82,8 @@ Create-SMBShare.ps1 -name "ShareForceLevel2" -Path "$systemDrive\ShareForceLevel
 Write-Info.ps1 "Create share folder: $systemDrive\SMBEncrypted"
 Create-SMBShare.ps1 -name "SMBEncrypted" -Path "$systemDrive\SMBEncrypted" -FullAccess "$fullAccessAccount"  -EncryptData $true
 
-Write-Info.ps1 "Create share folder: $systemDrive\CompressedFileShare"
-Create-SMBShare.ps1 -name "CompressedFileShare" -Path "$systemDrive\CompressedFileShare" -FullAccess "$fullAccessAccount" -CompressData $true
+Write-Info.ps1 "Create share folder: $systemDrive\SMBCompressed"
+Create-SMBShare.ps1 -name "SMBCompressed" -Path "$systemDrive\SMBCompressed" -FullAccess "$fullAccessAccount" -CompressData $true
 
 Write-Info.ps1 "Create Volume for SMBReFSShare"
 
