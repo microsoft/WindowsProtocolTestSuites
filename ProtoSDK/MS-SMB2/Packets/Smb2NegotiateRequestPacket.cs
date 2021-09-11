@@ -69,6 +69,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         public SMB2_SIGNING_CAPABILITIES? NegotiateContext_SIGNING;
 
+        /// <summary>
+        /// Indicate whether RDMA transforms is supported when data is sent over RDMA.
+        /// </summary>
+        public SMB2_RDMA_TRANSFORM_CAPABILITIES? NegotiateContext_RDMA;
 
         /// <summary>
         /// Covert to a byte array
@@ -112,6 +116,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 Smb2Utility.Align8(ref messageData);
                 messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_SIGNING_CAPABILITIES>(NegotiateContext_SIGNING.Value)).ToArray();
+            }
+
+            if (NegotiateContext_RDMA != null)
+            {
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_RDMA_TRANSFORM_CAPABILITIES>(NegotiateContext_RDMA.Value)).ToArray();
             }
 
             return messageData;
@@ -173,6 +183,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     this.NegotiateContext_SIGNING = TypeMarshal.ToStruct<SMB2_SIGNING_CAPABILITIES>(data, ref consumedLen);
                 }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_RDMA_TRANSFORM_CAPABILITIES)
+                {
+                    this.NegotiateContext_RDMA = TypeMarshal.ToStruct<SMB2_RDMA_TRANSFORM_CAPABILITIES>(data, ref consumedLen);
+                }
             }
 
             expectedLen = 0;
@@ -217,6 +231,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 foreach (var signingId in NegotiateContext_SIGNING.Value.SigningAlgorithms)
                 {
                     sb.Append(signingId.ToString() + ",");
+                }
+                sb.Length--;
+                sb.Append("}");
+            }
+            if (NegotiateContext_RDMA != null)
+            {
+                sb.Append(", TransformIds={");
+                foreach (var transformId in NegotiateContext_RDMA.Value.RDMATransformIds)
+                {
+                    sb.Append(transformId.ToString() + ",");
                 }
                 sb.Length--;
                 sb.Append("}");
