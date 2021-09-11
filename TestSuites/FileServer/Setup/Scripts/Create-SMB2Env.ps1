@@ -82,6 +82,14 @@ Create-SMBShare.ps1 -name "ShareForceLevel2" -Path "$systemDrive\ShareForceLevel
 Write-Info.ps1 "Create share folder: $systemDrive\SMBEncrypted"
 Create-SMBShare.ps1 -name "SMBEncrypted" -Path "$systemDrive\SMBEncrypted" -FullAccess "$fullAccessAccount"  -EncryptData $true
 
+if ($OSVersion.Major -ge 10) {
+    Write-Info.ps1 "Create share folder: $systemDrive\SMBCompressed"
+    Create-SMBShare.ps1 -name "SMBCompressed" -Path "$systemDrive\SMBCompressed" -FullAccess "$fullAccessAccount" -CompressData $true
+}
+else {
+    Write-Info.ps1 "-CompressData only support on Win2004 or later version."
+}
+
 Write-Info.ps1 "Create Volume for SMBReFSShare"
 
 $volume = Get-WmiObject -Class Win32_Volume | Where-Object {$_.FileSystem -eq "REFS" -and $_.Label -eq "REFS"}

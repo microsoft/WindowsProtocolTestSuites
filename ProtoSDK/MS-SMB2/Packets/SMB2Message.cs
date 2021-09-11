@@ -237,6 +237,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// as specified in section 2.2.9.2.1.
         /// </summary>
         SHAREFLAG_IDENTITY_REMOTING = 0x00040000,
+
+        /// <summary>
+        /// If set, The server supports compression of read/write messages on this share.
+        /// This flag is only valid for the SMB 3.1.1 dialect.
+        /// </summary>
+        SHAREFLAG_COMPRESS_DATA = 0x00100000,
     }
 
     /// <summary>
