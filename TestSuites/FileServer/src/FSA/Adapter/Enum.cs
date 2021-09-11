@@ -1592,6 +1592,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         FSCTL_SET_SHORT_NAME_BEHAVIOR,
 
         /// <summary>
+        /// Request message requests that the server perform a specific stream snapshot operation 
+        /// on a given data stream contained in a file. The operation performed is dependent on 
+        /// the value defined in REFS_STREAM_SNAPSHOT_OPERATION.
+        /// </summary>
+        FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT = 0x90440,
+
+        /// <summary>
         /// Requests a Byte-Range Lock
         /// </summary>
         RequestsbyteRangeLock,
