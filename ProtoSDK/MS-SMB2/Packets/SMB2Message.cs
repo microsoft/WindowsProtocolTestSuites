@@ -4853,6 +4853,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The Data field contains the list of signing algorithms, as specified in section 2.2.3.1.7
         /// </summary>
         SMB2_SIGNING_CAPABILITIES = 0x0008,
+
+        /// <summary>
+        /// The Data field contains a list of RDMA transforms, as specified in section 2.2.3.1.6
+        /// </summary>
+        SMB2_RDMA_TRANSFORM_CAPABILITIES = 0x0007,
     }
 
     /// <summary>
@@ -5145,6 +5150,66 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             return dataLength;
         }
     }
+
+    /// <summary>
+    /// The SMB2_RDMA_TRANSFORM_CAPABILITIES context is specified in an SMB2 NEGOTIATE request 
+    /// by the client to indicate transforms supported when data is sent over RDMA
+    /// </summary>
+    public struct SMB2_RDMA_TRANSFORM_CAPABILITIES
+    {
+        /// <summary>
+        /// Header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        // <summary>
+        // The number of elements in RDMATransformIds array
+        // </summary>
+        [StaticSize(2)]
+        public ushort TransformCount;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. 
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Reserved1;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. 
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved2;
+
+        // <summary>
+        // An array of 16-bit integer IDs specifying the supported RDMA transforms
+        // </summary>
+        [Size("TransformCount")]
+        public Smb2RDMATransformId[] RDMATransformIds;
+
+        /// <summary>
+        /// Get the data length
+        /// </summary>
+        /// <returns>The data length of this context.</returns>
+        public int GetDataLength()
+        {
+            int dataLength = Marshal.SizeOf(TransformCount) + sizeof(ushort) + sizeof(uint);
+            if (RDMATransformIds != null) dataLength += sizeof(Smb2RDMATransformId) * RDMATransformIds.Length;
+            return dataLength;
+        }
+    }
+
+
+    public enum Smb2RDMATransformId : ushort
+    {
+        SMB2_RDMA_TRANSFORM_NONE = 0x0000,
+
+        SMB2_RDMA_TRANSFORM_ENCRYPTION = 0x0001,
+
+        SMB2_RDMA_TRANSFORM_SIGNING = 0x0002,
+    }
+
 
     /// <summary>
     ///  The SMB2 CANCEL Request packet is sent by the client

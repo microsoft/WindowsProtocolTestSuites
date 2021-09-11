@@ -9,7 +9,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 
@@ -1109,6 +1108,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              PreauthIntegrityHashID[] preauthHashAlgs = null,
              EncryptionAlgorithm[] encryptionAlgs = null,
              CompressionAlgorithm[] compressionAlgorithms = null,
+             Smb2RDMATransformId[] rdmaTransformIds = null,
              SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
              bool addDefaultEncryption = false,
@@ -1192,6 +1192,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 request.PayLoad.NegotiateContextCount++;
             }
 
+            if (rdmaTransformIds != null)
+            {
+                var rdmaTransformCapabilities = new SMB2_RDMA_TRANSFORM_CAPABILITIES();
+                rdmaTransformCapabilities.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_RDMA_TRANSFORM_CAPABILITIES;
+                rdmaTransformCapabilities.RDMATransformIds = rdmaTransformIds;
+                rdmaTransformCapabilities.Reserved1 = 0;
+                rdmaTransformCapabilities.Reserved2 = 0;
+                rdmaTransformCapabilities.TransformCount = (ushort)rdmaTransformCapabilities.RDMATransformIds.Length;
+                rdmaTransformCapabilities.Header.DataLength = (ushort)rdmaTransformCapabilities.GetDataLength();
+
+                request.NegotiateContext_RDMA = rdmaTransformCapabilities;
+                request.PayLoad.NegotiateContextCount++;
+            }
+
             if (request.PayLoad.NegotiateContextCount > 0)
             {
                 request.PayLoad.NegotiateContextOffset = (uint)(64 + // Header
@@ -1267,6 +1281,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              PreauthIntegrityHashID[] preauthHashAlgs = null,
              EncryptionAlgorithm[] encryptionAlgs = null,
              CompressionAlgorithm[] compressionAlgorithms = null,
+             Smb2RDMATransformId[] rdmaTransformIds = null,
              SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
              bool addDefaultEncryption = false,
@@ -1276,7 +1291,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Smb2NegotiateRequestPacket request;
             Smb2NegotiateResponsePacket response;
             Negotiate(creditCharge, creditRequest, flags, messageId, dialects, securityMode, capabilities, clientGuid, out selectedDialect, out gssToken, out request, out response,
-                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, compressionFlags, netNameContext, addDefaultEncryption, signingAlgorithms);
+                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, rdmaTransformIds, compressionFlags, netNameContext, addDefaultEncryption, signingAlgorithms);
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;

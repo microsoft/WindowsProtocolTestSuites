@@ -929,6 +929,142 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     BaseTestSite.Assert.IsFalse(client.Smb2Client.CompressionInfo.SupportChainedCompression, "If SUT does not support chained compression and SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit is set in Flags field of negotiate request context, SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit MUST NOT be set in Flags field.");
                 });
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Bvt)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_RDMA_TRANSFORM_CAPABILITES Context " +
+            "with all flags set.")]
+        public void BVT_Negotiate_SMB311_RdmaTransformCapabilities_IsSupported()
+        {
+            CheckRdmaCompatibility(true);
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send NEGOTIATE request with dialect SMB 3.11 and SMB2_RDMA_TRANSFORM_CAPABILITIES context.");
+
+            Smb2RDMATransformId[] rdmaTransformIds = new Smb2RDMATransformId[] {
+                Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION,
+                Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING,
+            };
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with all flags");
+
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                rdmaTransformIds: rdmaTransformIds,
+                responseChecker: (Packet_Header header, Smb2NegotiateResponsePacket response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "[MS-SMB2] The Server MUST return STATUS_SUCCESS for a successfully negotiation"
+                    );
+
+                    BaseTestSite.Assert.IsNotNull(
+                        response.NegotiateContext_RDMA, 
+                        "SMB2_RDMA_TRANSFORM_CAPABILITIES context is NOT supported on the server");
+
+                    SMB2_RDMA_TRANSFORM_CAPABILITIES rdmaResponse = response.NegotiateContext_RDMA.Value;
+                    BaseTestSite.Assert.IsFalse(
+                        rdmaResponse.TransformCount > rdmaTransformIds.Length,
+                    "[MS-SMB2] 3.2.5.2 If the received TransformCount is greater than TransformCount sent in the request, the client MUST return an error to the calling application"
+                        );
+
+                    BaseTestSite.Assert.IsTrue(
+                        rdmaResponse.RDMATransformIds.Length == rdmaTransformIds.Length,
+                        "The server SUPPORTS all RDMA TRANSFORM CAPABILITIES"
+                    );
+
+                    BaseTestSite.Assert.AreEqual(
+                        rdmaTransformIds,
+                        rdmaResponse.RDMATransformIds,
+                        "[MS-SMB2] 3.2.5.2 If any of the values in the received RDMATransformIds do not match the transform identifiers sent in the request, the client MUST return an error to the calling application");
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_RDMA_TRANSFORM_CAPABILITES Context " +
+            "with empty transform ids.")]
+        public void Negotiate_SMB311_RdmaTransformCapabilities_EmptyTransformIds()
+        {
+            CheckRdmaCompatibility(true);
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send NEGOTIATE request with dialect SMB 3.11 and SMB2_RDMA_TRANSFORM_CAPABILITIES context.");
+
+            Smb2RDMATransformId[] rdmaTransformIds = new Smb2RDMATransformId[] { };
+
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                rdmaTransformIds: rdmaTransformIds,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status, "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, if TransformCount is equal to zero.");
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_RDMA_TRANSFORM_CAPABILITIES " +
+             "context having an invalid DataLength field.")]
+        public void Negotiate_SMB311_RdmaTransformCapabilities_InvalidDataLength()
+        {
+            CheckRdmaCompatibility(true);
+
+            BaseTestSite.Log.Add(
+               LogEntryKind.TestStep,
+               "Send NEGOTIATE request with dialect SMB 3.11 and SMB2_RDMA_TRANSFORM_CAPABILITIES context.");
+
+            Smb2RDMATransformId[] rdmaTransformIds = new Smb2RDMATransformId[] {
+                Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION,
+                Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING,
+            };
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with invalid DataLength field, which is less than the size of SMB2_RDMA_TRANSFORM_CAPABILITIES structure, in SMB2_RDMA_TRANSFORM_CAPABILITIES context.");
+
+            Action<Smb2Packet> negotiatePacketModifier = packet =>
+            {
+                if (packet is Smb2NegotiateRequestPacket)
+                {
+                    var negotiateRequest = packet as Smb2NegotiateRequestPacket;
+
+                    // Modify DataLength to be less than the size of SMB2_RDMA_TRANSFORM_CAPABILITIES
+                    var rdmaTransformContext = negotiateRequest.NegotiateContext_RDMA.Value;
+                    rdmaTransformContext.Header.DataLength = 2;
+
+                    negotiateRequest.NegotiateContext_RDMA = rdmaTransformContext;
+                }
+            };
+
+            client.Smb2Client.PacketSending += negotiatePacketModifier;
+
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                rdmaTransformIds: rdmaTransformIds,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_INVALID_PARAMETER,
+                    header.Status,
+                    "[MS-SMB2] 3.3.5.4 The Server MUST return STATUS_INVALID_PARAMETER if the DataLength of the negotiate context " +
+                    " is less than the size of the SMB2_RDMA_TRANSFORM_CAPABILITIES structure"
+                    );
+                });
+
+            client.Smb2Client.PacketSending -= negotiatePacketModifier;
+        }
+
         #endregion
 
         #region private methods
@@ -969,10 +1105,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             PreauthIntegrityHashID[] preauthHashAlgs,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
+            Smb2RDMATransformId[] rdmaTransformIds = null,
             SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
             bool addNetNameContextId = false,
             ResponseChecker<NEGOTIATE_Response> checker = null,
-            SigningAlgorithm[] signingAlgorithms = null)
+            SigningAlgorithm[] signingAlgorithms = null,
+            ResponseChecker<Smb2NegotiateResponsePacket> responseChecker = null)
         {
             // ensure clientMaxDialectSupported higher than 3.11
             if (clientMaxDialectSupported < DialectRevision.Smb311) clientMaxDialectSupported = DialectRevision.Smb311;
@@ -991,6 +1129,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 securityMode: SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED,
                 preauthHashAlgs: preauthHashAlgs,
                 encryptionAlgs: encryptionAlgs,
+                rdmaTransformIds: rdmaTransformIds,
                 compressionAlgorithms: compressionAlgorithms,
                 compressionFlags: compressionFlags,
                 addNetNameContextId: addNetNameContextId,
@@ -1215,6 +1354,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v2004 and Windows Server v2004 select a common pattern scanning algorithm and the first common compression algorithm, specified in section 2.2.3.1.3, supported by the client and server.");
             }
         }
+
+        private void CheckRdmaCompatibility(bool isRdmaCapabilitySupported = false)
+        {
+            if (TestConfig.IsWindowsPlatform)
+            {
+                BaseTestSite.Assume.IsFalse(TestConfig.Platform <= Platform.WindowsServerV2004, "Windows 10 v2004 operating system and prior and Windows Server v2004 operating system and prior do not send or process SMB2_RDMA_TRANSFORM_CAPABILITIES.");
+
+                if (isRdmaCapabilitySupported)
+                {
+                    BaseTestSite.Assume.IsTrue(TestConfig.Platform > Platform.WindowsServerV2004, "Only operating systems greater than Windows 10 v2004 and operating systems greater than Windows server v2004 support RDMA transforms.");
+                }
+            }
+
+            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces support to process SMB2_RDMA_TRANSFORM_CAPABILITIES");
+
+            if (isRdmaCapabilitySupported)
+            {
+                BaseTestSite.Assume.IsTrue(TestConfig.IsRDMATransformSupported, "This test case is only applicable when SUT supports RDMA transform capabilities");
+            }
+        }
+
         #endregion
     }
 }

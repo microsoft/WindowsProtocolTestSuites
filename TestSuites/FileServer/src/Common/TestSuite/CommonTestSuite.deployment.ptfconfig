@@ -193,6 +193,13 @@
         </Description>
       </Property>
 
+      <Property name="IsRDMATransformSupported" value="false">
+        <Choice>true,false</Choice>
+        <Description>
+          Set true if SUT supports RDMA tranforms, otherwise set it to false
+        </Description>
+      </Property>
+
       <Property name="IsMultiCreditSupported" value="true">
         <Choice>true,false</Choice>
         <Description>
@@ -288,9 +295,9 @@
 
       <Property name="SutSupportedEncryptionAlgorithms" value="ENCRYPTION_AES128_GCM;ENCRYPTION_AES128_CCM;ENCRYPTION_AES256_GCM;ENCRYPTION_AES256_CCM">
         <Description>
-            List all supported encryption algorithms, possible values: ENCRYPTION_AES128_GCM, ENCRYPTION_AES128_CCM, ENCRYPTION_AES256_GCM, ENCRYPTION_AES256_CCM
-            Multiple values should be separated by semicolons
-            If it is not applicable, leave it blank
+          List all supported encryption algorithms, possible values: ENCRYPTION_AES128_GCM, ENCRYPTION_AES128_CCM, ENCRYPTION_AES256_GCM, ENCRYPTION_AES256_CCM
+          Multiple values should be separated by semicolons
+          If it is not applicable, leave it blank
         </Description>
       </Property>
 

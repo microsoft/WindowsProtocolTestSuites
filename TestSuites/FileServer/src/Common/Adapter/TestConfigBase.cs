@@ -452,6 +452,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public bool IsRDMATransformSupported
+        {
+            get
+            {
+                return Boolean.Parse(GetProperty("IsRDMATransformSupported"));
+            }
+        }
+
         #endregion
 
         #endregion
