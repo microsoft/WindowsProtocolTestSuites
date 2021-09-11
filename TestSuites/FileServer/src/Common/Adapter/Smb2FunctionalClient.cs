@@ -2214,7 +2214,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             return status;
         }
-
+        
         #endregion
 
         #region Query Directory
