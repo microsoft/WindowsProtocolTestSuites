@@ -220,9 +220,8 @@ Function Config-Proxy()
         $proxyNode = $configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
         $domainName = $proxyNode.domain
         $hostname = $proxyNode.name
-        $role = $proxyNode.role
     }
-    $DnsName=$role+"."+$domainName
+    $DnsName = $hostname + "."+$domainName
     $FilePath = "c:\$DnsName.cer"
 	Write-ConfigLog "Create self-signed certificate and bind" -ForegroundColor Yellow
 	Import-Module WebAdministration
