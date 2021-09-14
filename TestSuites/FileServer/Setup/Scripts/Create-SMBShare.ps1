@@ -55,7 +55,7 @@ if($null -eq $smbShare)
 
     if($CompressData)
     {
-        Set-SmbShare -Name "$Name" -CompressData $true
+        Set-SmbShare -Name "$Name" -CompressData $true -Force
     }
 }
 
