@@ -92,14 +92,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 return;
             }
 
-            if (this.fsaAdapter.IsFileLinkInfoSupported == false)
+            if((this.fsaAdapter.FileSystem == FileSystem.NTFS) || (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServer2022))
             {
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.NOT_SUPPORTED, status, "FileLinkInfo is not supported.");
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "The operation returns STATUS_SUCCESS.");
             }
             else
             {
-
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "The operation returns STATUS_SUCCESS.");
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.NOT_SUPPORTED, status, "FileLinkInfo is not supported.");
             }
         }
 
