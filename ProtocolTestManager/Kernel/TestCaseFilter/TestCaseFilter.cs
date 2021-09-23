@@ -90,7 +90,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     foreach (XmlNode ruleNode in ruleGroupNode.SelectNodes("Rule"))
                     {
                         string ruleName = ruleNode.Attributes["name"].Value;
-                        Rule rule = FindRuleByName(ruleName);
+                        string searchRuleName = ruleName.Contains('%') ?
+                            ruleName.Split('%')[0] :
+                            ruleName;
+                        Rule rule = FindRuleByName(searchRuleName);
                         if (rule != null)
                         {
                             // When loading profile, do not refresh feature mapping table
