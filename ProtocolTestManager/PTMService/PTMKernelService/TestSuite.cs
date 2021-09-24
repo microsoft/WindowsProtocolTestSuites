@@ -61,6 +61,34 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public string Name { get; set; }
 
+        private string testSuiteName;
+
+        public string TestSuiteName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(testSuiteName))
+                {
+                    var doc = new XmlDocument();
+                    doc.Load(this.TestSuiteConfigFilePath);
+                    var testSuiteNameNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.TestSuiteName);
+
+                    // Fall back to test suite installation name when test suite name is not provided.
+                    if (testSuiteNameNode == null)
+                    {
+                        testSuiteName = Name;
+                    }
+                    else
+                    {
+                        testSuiteName = testSuiteNameNode.InnerText;
+                    }
+
+                }
+
+                return testSuiteName;
+            }
+        }
+
         public string Description { get; set; }
 
         public bool Removed { get; set; }
@@ -76,7 +104,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             return result;
         }
 
-        public static ITestSuite Create(string testEnginePath, TestSuiteInstallation testSuiteInstallation,IStorageNode testSuiteNode)
+        public static ITestSuite Create(string testEnginePath, TestSuiteInstallation testSuiteInstallation, IStorageNode testSuiteNode)
         {
             return new TestSuite(testEnginePath, testSuiteInstallation, testSuiteNode);
         }
@@ -291,7 +319,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var groups = configCaseRule.SelectNodes("Group");
 
             XmlNode featureMappingNode = doc.DocumentElement.SelectSingleNode(TestSuiteConsts.FeatureMapping);
-            if(featureMappingNode == null)
+            if (featureMappingNode == null)
             {
                 return;
             }
@@ -299,7 +327,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             // Parse Config section
             var featureMappingConfig = featureMappingNode.SelectSingleNode("Config");
             Dictionary<string, int> configTable = GetFeatureMappingConfigFromXmlNode(featureMappingConfig);
-            if(configTable.TryGetValue("targetFilterIndex", out int _targetFilterIndex) && configTable.TryGetValue("mappingFilterIndex", out int _mappingFilterIndex))
+            if (configTable.TryGetValue("targetFilterIndex", out int _targetFilterIndex) && configTable.TryGetValue("mappingFilterIndex", out int _mappingFilterIndex))
             {
                 if ((_targetFilterIndex == _mappingFilterIndex) ||
                 (_targetFilterIndex >= groups.Count || _mappingFilterIndex >= groups.Count))

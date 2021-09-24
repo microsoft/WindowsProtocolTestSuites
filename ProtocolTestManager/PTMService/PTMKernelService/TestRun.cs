@@ -200,6 +200,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 CancellationTokenSource.Cancel();
                 RunTask.Wait();
             }
+            else
+            {
+                State = TestResultState.Failed;
+                UpdateItem();
+            }
         }
 
         public IDictionary<string, TestCaseOverview> GetRunningStatus()
@@ -231,11 +236,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     try
                     {
-                        var testCaseResult = GetTestCaseResultInternal(test);
+                        var (found, testCaseResult) = GetTestCaseResultInternal(test);
+                        if (!found)
+                        {
+                            return new TestCaseOverview
+                            {
+                                FullName = test,
+                                State = TestCaseState.NotRun,
+                            };
+                        }
 
                         return testCaseResult.Overview;
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         return new TestCaseOverview
                         {
@@ -280,7 +293,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 try
                 {
-                    var testCaseResult = GetTestCaseResultInternal(name);
+                    var (found, testCaseResult) = GetTestCaseResultInternal(name);
+                    if (!found)
+                    {
+                        return new TestCaseResult
+                        {
+                            Overview = new TestCaseOverview
+                            {
+                                FullName = name,
+                                State = TestCaseState.NotRun,
+                            },
+                        };
+                    }
 
                     return testCaseResult;
                 }
@@ -298,16 +322,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        public TestCaseDetail GetTestCaseDetail(string name)
+        public (bool found, TestCaseDetail detail) GetTestCaseDetail(string name)
         {
-            string filePath = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{name}.html", SearchOption.AllDirectories).First();
+            var filePaths = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{name}.html", SearchOption.AllDirectories);
+            if (!filePaths.Any())
+            {
+                return (false, null);
+            }
 
+            var filePath = filePaths.First();
             var content = File.ReadAllLines(filePath);
 
             var detailLine = content.Where(l => l.StartsWith(AppConfig.DetailKeyword));
-            string detailStr;
-
-            detailStr = detailLine.First();
+            var detailStr = detailLine.First();
 
             int startIndex = AppConfig.DetailKeyword.Length;
             int endIndex = detailStr.Length - 1;
@@ -315,7 +342,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             var detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
 
-            return detail;
+            return (true, detail);
         }
 
         private void UpdateItem()
@@ -353,11 +380,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     // Need to wait before HTML file is generated.
                     Task.Delay(5000).Wait();
 
-                    var testCaseResult = GetTestCaseResultInternal(testCase.FullName);
+                    var (found, testCaseResult) = GetTestCaseResultInternal(testCase.FullName);
+                    if (found)
+                    {
+                        var info = new TestCaseInfo(state, testCaseResult, null);
 
-                    var info = new TestCaseInfo(state, testCaseResult, null);
-
-                    runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
+                        runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
+                    }
                 });
 
                 var info = new TestCaseInfo(state, null, task);
@@ -372,9 +401,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        private TestCaseResult GetTestCaseResultInternal(string name)
+        private (bool found, TestCaseResult result) GetTestCaseResultInternal(string name)
         {
-            var detail = GetTestCaseDetail(name);
+            var (found, detail) = GetTestCaseDetail(name);
+            if (!found)
+            {
+                return (false, null);
+            }
 
             var state = detail.Result switch
             {
@@ -396,7 +429,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 Output = String.Join("\n", detail.StandardOut.Select(output => output.Content)),
             };
 
-            return result;
+            return (true, result);
         }
     }
 }

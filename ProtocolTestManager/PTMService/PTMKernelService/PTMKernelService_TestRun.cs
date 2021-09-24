@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public string GetTestRunReport(int testResultId, ReportFormat format, string[] testCases)
         {
             var testRun = GetTestRun(testResultId);
-            var testCaseDetails = testCases.Select(testRun.GetTestCaseDetail);
+            var testCaseDetails = testCases.Select(testRun.GetTestCaseDetail).Where(e => e.found).Select(e => e.detail);
 
             Dictionary<string, string> descriptionDict = null;
             if (format == ReportFormat.Json)

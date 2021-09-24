@@ -47,11 +47,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nlmp", "..\..\..\..\ProtoSD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{16B76101-C213-4C61-91E6-BF0FF92BE2C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PtmUtil", "PtmUtil", "{CC959E06-785A-4E91-8264-19DD24191B2D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PTMUtil", "PTMUtil", "{CC959E06-785A-4E91-8264-19DD24191B2D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyValueDetector", "..\..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj", "{7982ACF0-F1A4-4996-A339-641CAFA093CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RDPServerPlugin", "Plugin\RDPServerPlugin\RDPServerPlugin.csproj", "{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPServerPlugin", "Plugin\RDPServerPlugin\RDPServerPlugin.csproj", "{4DDC6D1E-6DEA-4DA5-AFF9-D8F5CB90800F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

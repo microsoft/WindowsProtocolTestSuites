@@ -62,9 +62,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 baseNode.RemoveNode(filenameWithoutExtension);
             }
-            
+
             var profileNode = baseNode.CreateNode(filenameWithoutExtension);
-            
+
             profileNode.CreateFile(request.FileName, request.Stream);
 
             string fullName = Path.Combine(profileNode.AbsolutePath, request.FileName);
@@ -82,9 +82,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                         throw new InvalidDataException(string.Format
                             (
                                 StringMessages.ProfileNotMatchError,
-                                profile.Info.TestSuiteName, 
+                                profile.Info.TestSuiteName,
                                 profile.Info.Version,
-                                testSuite.Name, 
+                                testSuite.Name,
                                 testSuite.Version
                             )
                         );
@@ -112,7 +112,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 configurationNode.CreateFile(playlistDestinationPath, profile.PlaylistStream);
 
                 string ptfConfigsDestinationDir = GetPtfConfigBasePath(request.ConfigurationId, configurationNode.AbsolutePath);
-                
+
                 profile.SavePtfCfgTo(ptfConfigsDestinationDir);
             }
         }
@@ -159,7 +159,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             var cases = status.Values.ToArray();
 
-            foreach(var testCase in cases)
+            foreach (var testCase in cases)
             {
                 testCases.Add(new TestCase()
                 {
@@ -201,7 +201,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var testSuite = GetTestSuite(request.TestSuiteId);
 
             using (ProfileUtil profile = ProfileUtil.CreateProfile(
-                request.FileName, testSuite.Name, testSuite.Version))
+                request.FileName, testSuite.TestSuiteName, testSuite.Version))
             {
                 string configBasePath = GetConfigurationsPath(request.ConfigurationId, configurationNode.AbsolutePath);
                 string profileSourceFile = Path.Combine(configBasePath, ConfigurationConsts.Profile);
@@ -217,10 +217,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     profile.AddPtfCfg(settingsConfigFile);
                 }
 
-
                 if (request.SelectedTestCases != null)
                 {
-                    foreach(var testCaseName in request.SelectedTestCases)
+                    foreach (var testCaseName in request.SelectedTestCases)
                     {
                         var testCase = new TestCase()
                         {

@@ -96,6 +96,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Profile
         /// <returns>Returns true if the version and test suite name matches. If the package does not contains the version information returns false.</returns>
         public bool VerifyVersion(string version)
         {
+            // TODO: Test suite name validation may be useful when test suite installation name and test suite name are separated.
             if (Info == null) return false;
             if (Info.Version == version) return true;
             return false;
@@ -107,7 +108,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Profile
         public void Close()
         {
             if (profileUtilClosed) throw new InvalidOperationException("Package closed.");
-            
+
             profileUtilClosed = true;
 
             if (IsValid)
@@ -185,7 +186,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Common.Profile
             CopyStream(profileStream, destinationStream);
 
             profileStream.Flush();
-            
+
             profileStream.Close();
         }
 
