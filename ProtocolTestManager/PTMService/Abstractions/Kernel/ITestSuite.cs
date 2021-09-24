@@ -18,9 +18,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         int Id { get; }
 
         /// <summary>
-        /// The name of test suite.
+        /// The name of test suite installation.
         /// </summary>
         string Name { get; set; }
+
+        /// <summary>
+        /// The name of test suite.
+        /// </summary>
+        string TestSuiteName { get; }
 
         /// <summary>
         /// The version of test suite.

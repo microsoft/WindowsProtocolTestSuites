@@ -1,4 +1,5 @@
 <Config>
+  <TestSuiteName>RDP-Server</TestSuiteName>
   <PtfFileNames>
     <PtfFileName>RDP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
     <PtfFileName>RDP_ServerTestSuite.ptfconfig</PtfFileName>

@@ -76,7 +76,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             string domain = DetectorUtil.GetPropertyValue("Common.DomainName");
             string user = DetectorUtil.GetPropertyValue("Common.AdminUserName");
             string password = DetectorUtil.GetPropertyValue("Common.PasswordForAllUsers");
-            string clusterShare = string.Format(@"\\{0}\{1}",DetectorUtil.GetPropertyValue("Common.CAShareServerName"), DetectorUtil.GetPropertyValue("Common.CAShareName"));
+            string clusterShare = string.Format(@"\\{0}\{1}", DetectorUtil.GetPropertyValue("Common.CAShareServerName"), DetectorUtil.GetPropertyValue("Common.CAShareName"));
 
             List<string> domainList = new List<string>();
             List<string> SUTList = new List<string>();
@@ -104,7 +104,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             clusterShareList.Add(clusterShare);
 
-            propertiesDic.Add(targetShareTitle, SUTList);          
+            propertiesDic.Add(targetShareTitle, SUTList);
             propertiesDic.Add(clusterShareTitle, clusterShareList);
             propertiesDic.Add(domainTitle, domainList);
             propertiesDic.Add(userTitle, userList);
@@ -237,14 +237,14 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectActions.Add(() => { DetectPlatformAndUserAccount(detector); return true; });
             detectActions.Add(() => DetectShareInfo(detector));
             detectActions.Add(() => { DetermineSymboliclink(detector); return true; });
-            detectActions.Add(()=> { detectionInfo.detectExceptions = new Dictionary<string, string>(); return true; });
+            detectActions.Add(() => { detectionInfo.detectExceptions = new Dictionary<string, string>(); return true; });
             detectActions.Add(() => { DetectClusterShare(detector); return true; });
             detectActions.Add(() => { DetectIoctlCodes(detector); return true; });
             detectActions.Add(() => { DetectCreateContexts(detector); return true; });
             detectActions.Add(() => { DetectRSVD(detector); return true; });
             detectActions.Add(() => { DetectSQOS(detector); return true; });
 
-            foreach(Func<bool> func in detectActions)
+            foreach (Func<bool> func in detectActions)
             {
                 if (context.Token.IsCancellationRequested)
                 {
@@ -392,10 +392,10 @@ namespace Microsoft.Protocols.TestManager.Detector
             }
 
             propertiesDic.Add("SMB2.FileShareSupportingIntegrityInfo", CreateShareList(detectionInfo.shareSupportingIntegrityInfo));
+
             #endregion
 
             #region SMB2 Model
-
 
             propertiesDic.Add("SMB2.SpecialShare", CreateShareList(GetSpecialShare()));
 
@@ -414,9 +414,11 @@ namespace Microsoft.Protocols.TestManager.Detector
             // If there's no directory which has the same name with the default symboliclink, leave it blank to let user input the proper name
             propertiesDic.Add("SMB2.Symboliclink", new List<string>() { detectionInfo.SymbolicLink });
             propertiesDic.Add("SMB2.SymboliclinkInSubFolder", new List<string>() { detectionInfo.SymboliclinkInSubFolder });
+
             #endregion
 
             #region RSVD
+
             if (detectionInfo.RsvdSupport == DetectResult.Supported)
             {
                 string versionvalue = "0x00000001";
@@ -428,13 +430,16 @@ namespace Microsoft.Protocols.TestManager.Detector
                 propertiesDic.Add("RSVD.ServerServiceVersion", new List<string>() { versionvalue });
                 propertiesDic.Add("RSVD.FileServerIPContainingSharedVHD", new List<string>() { detectionInfo.networkInfo.SUTIpList[0].ToString() });
             }
+
             #endregion
 
             #region SQOS
+
             if (detectionInfo.SqosSupport == DetectResult.Supported)
             {
                 propertiesDic.Add("SQOS.SqosClientDialect", new List<string>() { detectionInfo.SqosVersion.ToString() });
             }
+
             #endregion
 
             #region AUTH
@@ -447,38 +452,6 @@ namespace Microsoft.Protocols.TestManager.Detector
 
             #endregion
 
-            // Add every property whose name contains "share" and does not contain "server"
-            string[] cfgFiles = {"CommonTestSuite.deployment.ptfconfig",
-                                 "MS-SMB2_ServerTestSuite.deployment.ptfconfig",
-                                 "MS-SMB2Model_ServerTestSuite.deployment.ptfconfig",
-                                 "MS-FSRVP_ServerTestSuite.deployment.ptfconfig",
-                                 "ServerFailoverTestSuite.deployment.ptfconfig",
-                                 "MS-DFSC_ServerTestSuite.deployment.ptfconfig",
-                                 "MS-RSVD_ServerTestSuite.deployment.ptfconfig",
-                                 "MS-FSA_ServerTestSuite.deployment.ptfconfig",
-                                 "MS-FSAModel_ServerTestSuite.deployment.ptfconfig"};
-            foreach (string cfgFile in cfgFiles)
-            {
-                foreach (string property in DetectorUtil.GetPropertiesByFile(cfgFile))
-                {
-                    // Exclude the irrelevant properties
-                    if (property.Equals("SMB2.ShareTypeInclude_STYPE_CLUSTER_SOFS")
-                        || property.Equals("Cluster.OptimumNodeOfAsymmetricShare")
-                        || property.Equals("Cluster.NonOptimumNodeOfAsymmetricShare"))
-                        continue;
-
-                    if (propertiesDic.ContainsKey(property))
-                        continue;
-
-                    if (detectionInfo.shareInfo != null
-                        && property.ToLower().Contains("share")
-                        && !property.ToLower().Contains("server")
-                        && detectionInfo.platform == Platform.NonWindows)  // For windows, keep the default value
-                    {
-                        propertiesDic.Add(property, CreateShareList(string.Empty));
-                    }
-                }
-            }
             return true;
         }
 
@@ -510,7 +483,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                     }
                 }
             }
-            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.File Server Failover", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported)? RuleStatus.Selected: RuleStatus.Unknown });
+            selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.File Server Failover", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported) ? RuleStatus.Selected : RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.FSRVP (File Server Remote VSS)", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported) ? RuleStatus.Selected : RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Cluster Required.SWN (Service Witness)", Status = detectionInfo.ClusterSupport.HasFlag(DetectResult.Supported) ? RuleStatus.Selected : RuleStatus.Unknown });
             selectedRuleList.Add(new CaseSelectRule() { Name = "Feature.Others.DFSC (Distributed File System Referral)", Status = RuleStatus.Unknown });
@@ -1035,9 +1008,9 @@ namespace Microsoft.Protocols.TestManager.Detector
 
         private void DetermineSymboliclink(FSDetector detector)
         {
-            if(detector.DetectShareExistence(detectionInfo,detectionInfo.BasicShareName) != DetectResult.Supported)
+            if (detector.DetectShareExistence(detectionInfo, detectionInfo.BasicShareName) != DetectResult.Supported)
             {
-                logWriter.AddLog(DetectLogLevel.Information, string.Format("The share {0} does not exist.",detectionInfo.BasicShareName));
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("The share {0} does not exist.", detectionInfo.BasicShareName));
                 logWriter.AddLog(DetectLogLevel.Information, "Failed", false, LogStyle.StepFailed);
                 logWriter.AddLineToLog(DetectLogLevel.Information);
                 return;
@@ -1067,7 +1040,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 {
                     detectionInfo.SymboliclinkInSubFolder = symboliclinkInSubFolder;
                 }
-            }            
+            }
         }
 
         private bool DetectIoctlCodes(FSDetector detector)
@@ -1107,7 +1080,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                 detectionInfo.F_IntegrityInfo = new DetectResult[] { DetectResult.DetectFail, DetectResult.DetectFail };
                 logWriter.AddLog(DetectLogLevel.Information, string.Format("Exception was thrown out when check share {0} exsitence. All IOCTL will be marked as detect failed. Will exit IOCTL detection and return with all IOCTL unsupported.", detectionInfo.BasicShareName));
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
-                logWriter.AddLineToLog(DetectLogLevel.Information);                
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return false;
             }
 
@@ -1268,8 +1241,8 @@ namespace Microsoft.Protocols.TestManager.Detector
                 }
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
                 logWriter.AddLineToLog(DetectLogLevel.Information);
-                return; 
-            }            
+                return;
+            }
 
             if (detectionInfo.CheckHigherDialect(detectionInfo.smb2Info.MaxSupportedDialectRevision, DialectRevision.Smb30))
             {
@@ -1449,7 +1422,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             else
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-            }            
+            }
             logWriter.AddLineToLog(DetectLogLevel.Information);
             return;
         }
@@ -1478,10 +1451,10 @@ namespace Microsoft.Protocols.TestManager.Detector
             if (detectionInfo.SqosSupport == DetectResult.DetectFail)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);
-            }          
-            else 
+            }
+            else
             {
-                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);                
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
             }
             logWriter.AddLineToLog(DetectLogLevel.Information);
         }
@@ -1489,7 +1462,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         private void DetectClusterShare(FSDetector detector)
         {
             logWriter.AddLog(DetectLogLevel.Information, "===== Detect Cluster Share Existence =====");
-            
+
             try
             {
                 if (detector.FetchClusterShareInfo(detectionInfo))
@@ -1500,9 +1473,9 @@ namespace Microsoft.Protocols.TestManager.Detector
             catch (Exception e)
             {
                 logWriter.AddLog(DetectLogLevel.Information, string.Format("Detect Cluster Share failed: {0}", e.Message));
-                detectionInfo.ClusterSupport = DetectResult.DetectFail;                
+                detectionInfo.ClusterSupport = DetectResult.DetectFail;
             }
-            
+
             if (detectionInfo.ClusterSupport == DetectResult.DetectFail)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepFailed);

@@ -18,22 +18,31 @@ InvocationPath=$(dirname "$0")
 
 TestSuiteRoot="$InvocationPath/../../.."
 
-if [ -z $Configuration ]
-then
+if [ -z $Configuration ]; then
     Configuration="Release"
 fi
 
-if [ -z $OutDir ]
-then
+if [ -z $OutDir ]; then
     OutDir="$TestSuiteRoot/drop/TestSuites/FileServer"
 fi
 
 declare -a CommonScripts=("Get-OSVersionNumber.ps1" "Write-Error.ps1" "Write-Info.ps1")
 
-if [ -d $OutDir -a "$OutDir" != "/" ]
-then
+if [ -d $OutDir -a "$OutDir" != "/" ]; then
     rm -rf $OutDir
 fi
+
+PluginDir="$OutDir/Plugin"
+mkdir -p $PluginDir
+cp $TestSuiteRoot/TestSuites/FileServer/src/Plugin/FileServerPlugin/*.xml "$PluginDir/" -f
+
+TargetDir="$PluginDir/doc"
+mkdir -p $TargetDir
+cp $TestSuiteRoot/TestSuites/FileServer/src/Plugin/FileServerPlugin/Docs/* "$TargetDir/" -f
+
+TargetDir="$PluginDir/data"
+mkdir -p $TargetDir
+cp $TestSuiteRoot/TestSuites/FileServer/src/Plugin/FileServerPlugin/Data/* "$TargetDir/" -f
 
 mkdir -p $OutDir/Batch
 cp $TestSuiteRoot/TestSuites/FileServer/src/Batch/*.sh $OutDir/Batch/ -f
@@ -42,8 +51,7 @@ cp $TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.* $OutDir/Batch/ -f
 
 mkdir -p $OutDir/Scripts
 cp -R $TestSuiteRoot/TestSuites/FileServer/Setup/Scripts/* $OutDir/Scripts/ -f
-for curr in "${CommonScripts[@]}"
-do
+for curr in "${CommonScripts[@]}"; do
     cp $TestSuiteRoot/CommonScripts/$curr $OutDir/Scripts/ -f
 done
 
@@ -55,8 +63,7 @@ Cmd="dotnet publish \"$TestSuiteRoot/TestSuites/FileServer/ShareUtil/ShareUtil.s
 
 eval $Cmd
 
-if [ $? -ne 0 ]
-then
+if [ $? -ne 0 ]; then
     echo "Failed to build ShareUtil tool"
     exit 1
 fi
@@ -65,8 +72,7 @@ Cmd="dotnet publish \"$TestSuiteRoot/TestSuites/FileServer/src/FileServer.sln\" 
 
 eval $Cmd
 
-if [ $? -ne 0 ]
-then
+if [ $? -ne 0 ]; then
     echo "Failed to build FileServer test suite"
     exit 1
 fi

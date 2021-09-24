@@ -1,5 +1,6 @@
 <!--  TODO:   Update TestListName, AutoDetectionDllName -->
 <Config>
+  <TestSuiteName>FileServer</TestSuiteName>
   <Adapters>
     <Adapter displayname="SUT Protocol control adapter" name="ISutProtocolControlAdapter">
       <Adapter type="managed" name="ISutProtocolControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutProtocolControlAdapter" />

@@ -1,4 +1,5 @@
 <Config>
+  <TestSuiteName>RDP-Client</TestSuiteName>
   <Adapters>
     <Adapter displayname="Basic RDP SUT Control Adapter" name="IRdpSutControlAdapter">
       <Adapter type="powershell" name="IRdpSutControlAdapter" scriptdir=".\"/>

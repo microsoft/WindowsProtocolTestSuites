@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public const string PluginConfigXml = "config.xml";
 
+        public const string TestSuiteName = "TestSuiteName";
+
         public const string DllFileNames = "DllFileNames";
 
         public const string DllFileName = "DllFileName";
@@ -80,7 +82,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     public static class StringMessages
     {
         public const string InvalidProfile = "It is not a valid PTM test profile";
-        
+
         public const string ProfileNotMatchError = "The profile does not match the installed test suite. The profile is for {0} {1}. The test suite is {2} {3}.";
     }
 
@@ -89,7 +91,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string LoadProfileError = "Error in loading profile: {0}";
 
         public const string LoadingAutoDetectorFailed = "Loading auto-detector assembly failed.";
-        
+
         public const string LoadPtfconfigError = "Failed to load the PTFConfig files: {0}";
     }
 }
