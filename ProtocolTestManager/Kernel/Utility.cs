@@ -1568,9 +1568,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 var binPath = Path.Combine(path, "Bin");
 
-                var files = Directory.GetFiles(binPath, "*.dll", SearchOption.TopDirectoryOnly);
+                var files = Directory.GetFiles(binPath, "*.dll", SearchOption.TopDirectoryOnly).Where(p => !p.Contains("PropertyValueDetector.dll"));
 
-                if (files.Length == 0)
+                if (files.Count() == 0)
                 {
                     return null;
                 }
