@@ -50,9 +50,9 @@ You should install the software listed below based on your testing purpose, incl
 
 <a name="footnote1">1</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
 
-1. [Protocol Test Framework v2.1 (build 2.1.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.1.0)
+1. [Protocol Test Framework v2.2 (build 2.2.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.2.0)
 
-   Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.1.0).
+   Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.2.0).
 
 1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=36043)
 
@@ -125,7 +125,7 @@ After the build succeeds, the common folder structure should be generated in the
 Before running a test suite, you need do either of below:
 
 * Download the test suite archive you want to run from [Releases](https://github.com/microsoft/WindowsProtocolTestSuites/releases), and extract it to some path you have access.
-* Build the test suite according to [Build a test suite](#build-a-test-suite).
+* Build the test suite according to [Build a test suite](#build).
 
 ### Run test suite by batch
 
