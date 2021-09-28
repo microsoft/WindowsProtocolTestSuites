@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SQOS.TestSuite
             client = new SqosClient(TestConfig.Timeout);
 
             // Copy the data used in test cases to the share of the SUT, e.g. the shared virtual disk files.
-            sutProtocolController.CopyFile(TestConfig.FullPathShareContainingSharedVHD, @"data\*.*");
+            sutProtocolController.CopyFile(TestConfig.FullPathShareContainingSharedVHD, @"Data\*.*");
         }
 
         protected override void TestCleanup()

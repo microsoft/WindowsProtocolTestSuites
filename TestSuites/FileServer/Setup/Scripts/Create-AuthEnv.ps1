@@ -9,6 +9,7 @@ $env:Path += ";$scriptPath;$scriptPath\Scripts"
 $systemDrive = $ENV:SystemDrive
 $fullAccessAccount = "BUILTIN\Administrators"
 $buildinUsers = "BUILTIN\Users"
+$authenticatedUsers="NT AUTHORITY\Authenticated Users"
 
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
@@ -93,6 +94,9 @@ foreach($shareName in $shareNames)
         
     Write-Info.ps1 "Remove $buildinUsers from Acl."
     RemoveAcl -folder "$filePath" -user "$buildinUsers"
+
+    Write-Info.ps1 "Remove Authenticated Users Access Rule."
+    RemoveAcl -folder "$filePath" -user "$authenticatedUsers"
 }
 
 Write-Info.ps1 "Create shared folder: AzShare"

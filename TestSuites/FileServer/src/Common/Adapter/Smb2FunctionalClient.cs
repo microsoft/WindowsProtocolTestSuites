@@ -302,6 +302,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         }
 
         /// <summary>
+        /// The server selected signing algorithm
+        /// </summary>
+        public SigningAlgorithm SelectedSigningAlgorithm
+        {
+            get
+            {
+                return client.SelectedSigningAlgorithm;
+            }
+        }
+
+        /// <summary>
         /// The server selected hash ID for Preauth Integrity.
         /// </summary>
         public PreauthIntegrityHashID SelectedPreauthIntegrityHashID
@@ -612,6 +623,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 preauthHashAlgs,
                 encryptionAlgs,
                 null,
+                null,
                 SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
                 checker,
                 ifHandleRejectUnencryptedAccessSeparately,
@@ -630,12 +642,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             PreauthIntegrityHashID[] preauthHashAlgs = null,
             EncryptionAlgorithm[] encryptionAlgs = null,
             CompressionAlgorithm[] compressionAlgorithms = null,
+            Smb2RDMATransformId[] rdmaTransformIds = null,
             SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
             bool addDefaultEncryption = false,
-            bool addNetNameContextId = false
+            bool addNetNameContextId = false,
+            SigningAlgorithm[] signingAlgorithms = null,
+            ResponseChecker<Smb2NegotiateResponsePacket> responseChecker = null
             )
         {
             SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null;
@@ -694,9 +709,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                preauthHashAlgs: preauthHashAlgs,
                encryptionAlgs: encryptionAlgs,
                compressionAlgorithms: compressionAlgorithms,
+               rdmaTransformIds: rdmaTransformIds,
                compressionFlags: compressionFlags,
                addDefaultEncryption: addDefaultEncryption,
-               netNameContext: netNameContext
+               netNameContext: netNameContext,
+               signingAlgorithms: signingAlgorithms
                );
 
             if (!ifHandleRejectUnencryptedAccessSeparately)
@@ -719,7 +736,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SetCreditGoal();
 
             ProduceCredit(messageId, negotiateResponse.Header);
-            InnerResponseChecker(checker, negotiateResponse.Header, negotiateResponse.PayLoad);
+
+            if (responseChecker != null)
+            {
+                // Return the full response object that contains the negotiate context
+                InnerResponseChecker(responseChecker, negotiateResponse.Header, negotiateResponse);
+            }
+
+            if (checker != null)
+            {
+                InnerResponseChecker(checker, negotiateResponse.Header, negotiateResponse.PayLoad);
+            }
+
             testConfig.CheckNegotiateContext(negotiateRequest, negotiateResponse);
 
             return status;
@@ -2201,7 +2229,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             return status;
         }
-
+        
         #endregion
 
         #region Query Directory

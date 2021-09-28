@@ -107,8 +107,9 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <summary>
         /// Runs property autodetection.
         /// </summary>
+        /// <param name="context">Detection Context.</param>
         /// <returns>Return true if the function is succeeded.</returns>
-        bool RunDetection();
+        bool RunDetection(DetectContext context);
 
         /// <summary>
         /// Gets the detect result.
@@ -126,7 +127,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// Gets a summary of the detect result.
         /// </summary>
         /// <returns>Detect result.</returns>
-        object GetSUTSummary();
+        List<ResultItemMap> GetSUTSummary();
 
         /// <summary>
         /// Gets the list of properties that will be hidder in the configure page.

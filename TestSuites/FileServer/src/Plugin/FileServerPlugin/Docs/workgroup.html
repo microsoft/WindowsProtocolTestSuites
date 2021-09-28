@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Workgroup Environment Network Setup</title>
+    <style>
+        table, th, td
+        {
+            border:0.0625rem solid black;
+            border-collapse:collapse;
+        }
+        div.Title
+        {
+            font-family:Arial;
+            font-size:larger;
+            margin-bottom:0.625rem;
+        }
+        div.Context
+        {
+            font-family:'Segoe UI';
+            font-size:medium;
+            margin-top:auto;
+        }
+        .icon
+        {
+            font-family:'Segoe UI';
+            font-size:larger;
+            font-weight:bold;
+            margin-top:5rem;
+        }
+        .List
+        {
+            margin-top: 0.25rem;
+        }
+        .img
+        {
+            vertical-align:text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        The workgroup environment requires interactions between the following computers and server roles. <br />
+        <ul class="List">
+            <li>The driver computer runs the test cases by sending requests over the wire in the form of protocol messages. </li>
+            <li>The SUT runs an implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.</li>
+        </ul>
+        <div class="Context">
+            <div style="font-weight:600"><img class="img" src="note.png"/>Note</div>
+            &nbsp;&nbsp;&nbsp;&nbsp;Below part applies both Windows based computers and Non-Windows based computers in the test environment.
+        </div>
+        <div style="margin-left:2.5rem;margin-right:auto;width:26.25rem">
+            <table style="text-align:center">
+                <tr>
+                    <th>Machine Name /<br /> Access Point</th>
+                    <th>NIC</th>
+                    <th>IPv4</th>
+                    <th>Subnet Mask</th>
+                </tr>
+                <tr>
+                    <td rowspan="2">Client01</td>
+                    <td>External1</td>
+                    <td>192.168.1.111</td>
+                    <td>255.255.255.0</td>
+                </tr>
+                <tr>
+                    <td>External2</td>
+                    <td>192.168.1.112</td>
+                    <td>255.255.255.0</td>
+                </tr>
+                <tr>
+                    <td rowspan="2">Node01</td>
+                    <td>External1</td>
+                    <td>192.168.1.11</td>
+                    <td>255.255.255.0</td>
+                </tr>
+                <tr>
+                    <td>External2</td>
+                    <td>192.168.1.12</td>
+                    <td>255.255.255.0</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="icon" style ="margin-top:1.25rem">
+        <img class="img" src="arrow_right.png" /><a href="workgroup_setupSUT.html">Set up SUT</a>
+    </div>
+</body>
+</html>

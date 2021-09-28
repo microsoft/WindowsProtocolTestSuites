@@ -215,8 +215,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 94         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2636       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 95         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2640       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -593,6 +593,39 @@ This is used to test SMB2 common user scenarios.
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 |                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED set in Flags field. |
 | **Cleanup**              |                                                                                                                                                                                           |
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | BVT_Negotiate_SMB311_RdmaTransformCapabilities_IsSupported |
+| **Description**          | This test case is designed to test whether server that supports RDMA transform can handle NEGOTIATE with SMB2_RDMA_TRANSFORM_CAPABILITIES context. |
+| **Prerequisites**        | The server implements dialect 3.11 |
+|						   | Minimum required windows version is Windows 10 v20H2 and later and Windows Server v20H2 and later. |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_RDMA_TRANSFORM_CAPABILITIES context with all supported transform Ids. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with the supported rdma transform IDs in the SMB2_RDMA_TRANSFORM_CAPABILITIES context if rdma transform feature is supported |
+| **Cleanup**              
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Negotiate_SMB311_RdmaTransformCapabilities_EmptyTransformIds |
+| **Description**          | This test case is designed to test whether server that supports RDMA transform can handle NEGOTIATE with empty SMB2_RDMA_TRANSFORM_CAPABILITIES context. |
+| **Prerequisites**        | The server implements dialect 3.11 |
+|						   | Minimum required windows version is Windows 10 v20H2 and later and Windows Server v20H2 and later. |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_RDMA_TRANSFORM_CAPABILITIES context with empty list of transform ids. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with STATUS_INVALID_PARAMETER and fails the request. |
+| **Cleanup**              
+
+
+|                          |                                                                                                                                                       |
+|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Negotiate_SMB311_RdmaTransformCapabilities_InvalidDataLength |
+| **Description**          | This test case is designed to test whether server that supports RDMA transform can handle NEGOTIATE with invalid data length for SMB2_RDMA_TRANSFORM_CAPABILITIES context. |
+| **Prerequisites**        | The server implements dialect 3.11 |
+|						   | Minimum required windows version is Windows 10 v20H2 and later and Windows Server v20H2 and later. |
+| **Test Execution Steps** | 1.  Client sends Negotiate request with dialect SMB 3.11, SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and SMB2_RDMA_TRANSFORM_CAPABILITIES with an invalid data length. |
+|                          | 2.  Server returns SMB2 NEGOTIATE response with STATUS_INVALID_PARAMETER |
+| **Cleanup**              
 
 
 
@@ -1740,8 +1773,24 @@ This is used to test SMB2 common user scenarios.
 |                          | 13. Server sends encrypted TREE\_DISCONNECT response                                                         |
 |                          | 14. Client sends LOGOFF request                                                                              |
 |                          | 15. Server sends LOGOFF response                                                                             |
-| **Cleanup**              |                                                                                                              |
+| **Cleanup**              ||
 
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Test ID**              | Signing_VerifyAesGmacSigning																												   |
+| **Description**          | This test case is designed to test whether outgoing and incoming messages are correctly signed and verified using aes-gmac signing algorithm. |
+| **Prerequisites**        |																																			   |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES and SMB2\_SIGNING\_CAPABILITIES								   |
+|                          | 2.  Server sends NEGOTIATE response with SMB2\_PREAUTH\_INTEGRITY\_CAPABILITIES and SMB2\_SIGNING\_CAPABILITIES							   |
+|                          | 3.  Client sends SESSION\_SETUP request																								       |
+|                          | 4.  Server sends SESSION\_SETUP response																							           |
+|                          | 5.  According to response header from above step, server responds with a signed flag														   |
+|                          | 6.  Client sends TREE\_CONNECT request to connect to a share																				   |
+|                          | 7.  Server sends TREE\_CONNECT response with a signing flag																			       |
+|                          | 12. Client sends TREE\_DISCONNECT request																									   |
+|                          | 13. Server sends TREE\_DISCONNECT response																									   |
+|                          | 14. Client sends LOGOFF request																											   |
+|                          | 15. Server sends LOGOFF response																											   |
+| **Cleanup**              ||
 
 #### <a name="3.1.21"> TreeMgmt
 
@@ -1784,6 +1833,18 @@ This is used to test SMB2 common user scenarios.
 |**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP (with domain credential).|
 ||Client sends TREE_CONNECT request with flag SMB2_SHAREFLAG_EXTENSION_PRESENT and SMB2_REMOTED_IDENTITY_TREE_CONNECT context (with another domain account passed in the context) and expects STATUS_SUCCESS.|
 ||Client sends CREATE request and expects STATUS_SUCCESS.|
+||Tear down the client.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|TreeMgmt_SMB311_COMPRESS_DATA|
+|**Description**|This test case is designed to test server can handle a TreeConnect request with flag SMB2_SHAREFLAG_COMPRESS_DATA successfully. It is required that the server has a share with SMB compression enabled |
+|**Prerequisites**|The server implements dialect 3.11 and the share has SMB Compression enabled|
+|**Test Execution Steps**|Start a client by sending the following requests: NEGOTIATE (dialect 3.11); SESSION_SETUP (with domain credential).|
+||Client sends TREE_CONNECT request and expects server response with share flag SHAREFLAG_COMPRESS_DATA enabled.|
+||Client sends CREATE request and expects share flag SHAREFLAG_COMPRESS_DATA enabled.|
 ||Tear down the client.|
 |**Cleanup**||
 
@@ -5313,14 +5374,13 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server sets Connection.CipherId to 0 from the response.|
 |**Cleanup**||
 
-
 |||
 |---|---|
-|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
-|**Description**|This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.|
-|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
-|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
-||Verify that server returns a Negotiate response, setting SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to "NONE".|
+|**Test ID**|Negotiate_SMB311_SigningCapability|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with Smb 3.11 dialect, with SMB2_SIGNING_CAPABILITIES context and with SMB2_PREAUTH_INTEGRITY_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_SIGNING_CAPABILITIES context and SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set SigningAlgorithmId to value: 0x0000.|
+||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
 |**Cleanup**||
 
 
@@ -5387,7 +5447,6 @@ Scenario see section [Scenario](#3.1.6.1).
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 |                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
 |**Cleanup**||
-
 
 
 #### <a name="3.2.10">Oplock

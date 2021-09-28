@@ -54,6 +54,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isObjectIdIoCtlRequestSupported;
         private bool isOpenHasManageVolumeAccessSupported;
         private bool isStreamRenameSupported;
+        private bool isStreamSnapshotManagementImplemented;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -175,6 +176,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public bool IsShortNameSupported
         {
             get { return isShortNameSupported; }
+        }
+
+        public bool IsStreamSnapshotManagementImplemented
+        {
+            get { return isStreamSnapshotManagementImplemented; }
         }
 
         public uint ClusterSizeInKB
@@ -322,6 +328,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isObjectIdIoCtlRequestSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectIdIoCtlRequest").Contains(this.fileSystem.ToString());
             this.isOpenHasManageVolumeAccessSupported = testConfig.GetProperty("WhichFileSystemSupport_OpenHasManageVolumeAccess").Contains(this.fileSystem.ToString());
             this.isStreamRenameSupported = testConfig.GetProperty("WhichFileSystemSupport_StreamRename").Contains(this.fileSystem.ToString());
+            this.isStreamSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_StreamSnapshotManagement").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -2429,6 +2436,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     ctlCode = 0x900ef;
                     break;
 
+                case FsControlRequestType.FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT:
+                    // According to FSCC 2.3, the ctlCode must be set  0x90440
+                    ctlCode = 0x90440;
+                    break;
+
                 default:
                     break;
             }
@@ -2829,6 +2841,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        #endregion
+
+        #region 3.1.5.9.36   FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT
+
+        /// <summary>
+        /// Implementation of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT
+        /// </summary>
+        /// <param name="inputBuffer">An array of bytes containing a single REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER structure.</param>
+        /// <param name="outputBufferSize">The number of bytes in OutputBuffer.</param>
+        /// <param name="bytesReturned">The number of bytes written to OutputBuffer.</param>
+        /// <param name="outputBuffer">An array of bytes that contains a single REFS_STREAM_SNAPSHOT_LIST_OUTPUT_BUFFER or REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER structure.</param>
+        /// <returns>An NTSTATUS code that specifies the result.</returns>
+        public MessageStatus FsCtlRefsStreamSnapshotManagement(REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER inputBuffer, uint outputBufferSize, out long bytesReturned, out byte[] outputBuffer)
+        {
+            outputBuffer = null;
+            FsccFsctlRefsStreamSnapshotManagementRequestPacket fsccPacket = new FsccFsctlRefsStreamSnapshotManagementRequestPacket();
+            fsccPacket.Payload = inputBuffer;
+
+            MessageStatus returnedStatus = this.transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT,
+                outputBufferSize,
+                fsccPacket.ToBytes(),
+                out outputBuffer);
+
+            bytesReturned = ((outputBuffer == null) ? 0 : outputBuffer.Length);
+
+            return returnedStatus;
+        }
         #endregion
 
         #region 3.1.5.9.12   FSCTL_GET_RETRIEVAL_POINTERS

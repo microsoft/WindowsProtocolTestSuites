@@ -82,6 +82,14 @@ Create-SMBShare.ps1 -name "ShareForceLevel2" -Path "$systemDrive\ShareForceLevel
 Write-Info.ps1 "Create share folder: $systemDrive\SMBEncrypted"
 Create-SMBShare.ps1 -name "SMBEncrypted" -Path "$systemDrive\SMBEncrypted" -FullAccess "$fullAccessAccount"  -EncryptData $true
 
+if ($OSVersion.Major -ge 10) {
+    Write-Info.ps1 "Create share folder: $systemDrive\SMBCompressed"
+    Create-SMBShare.ps1 -name "SMBCompressed" -Path "$systemDrive\SMBCompressed" -FullAccess "$fullAccessAccount" -CompressData $true
+}
+else {
+    Write-Info.ps1 "-CompressData only support on Win2004 or later version."
+}
+
 Write-Info.ps1 "Create Volume for SMBReFSShare"
 
 $volume = Get-WmiObject -Class Win32_Volume | Where-Object {$_.FileSystem -eq "REFS" -and $_.Label -eq "REFS"}
@@ -107,10 +115,16 @@ if($volume -eq $null)
 	$diskPartCmd += "select disk $diskNum"
 	$diskPartCmd += "select partition $partitionId"
 	$diskPartCmd += "shrink minimum=5120"
-    # the extended partition should be enough to contain both ReFS and FAT32
-	$diskPartCmd += "create partition extended size=4096"
+
     # assign 2000MB for ReFS, and save 2000MB for FAT32
-	$diskPartCmd += "create partition logical size=2000"
+    if((Get-Disk -Number $diskNum).PartitionStyle -eq "GPT") {
+        # Logical and extended partitions cannot be created on a GPT disk.
+        $diskPartCmd += "create partition primary size=2000"
+    } else {
+        # Only MBR supports extended disk, and the extended partition should be enough to contain both ReFS and FAT32
+        $diskPartCmd += "create partition extended size=4096"
+        $diskPartCmd += "create partition logical size=2000"
+    }
 	$diskPartCmd += "select partition $newPartitionId"
     if ($OSVersion.Major -ge 10)
     {

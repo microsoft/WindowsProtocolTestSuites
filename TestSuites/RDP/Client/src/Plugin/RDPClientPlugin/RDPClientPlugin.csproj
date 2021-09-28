@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Protocols.TestSuites.RDPClientPlugin</RootNamespace>
+    <AssemblyName>RDPClientPlugin</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEGFX\Rdpegfx.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEGT\Rdpegt.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEI\Rdpei.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEMT\Rdpemt.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEUDP\Rdpeudp.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEUSB\Rdpeusb.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEVOR\Rdpevor.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj" />
+  </ItemGroup>
+
+</Project>

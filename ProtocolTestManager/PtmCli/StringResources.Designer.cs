@@ -127,7 +127,7 @@ namespace Microsoft.Protocols.TestManager.CLI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Report file is generate under {1}.
+        ///   Looks up a localized string similar to Report file is generate under {0}.
         /// </summary>
         internal static string ReportFilePath {
             get {

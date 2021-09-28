@@ -1,0 +1,411 @@
+<!--  TODO:   Update TestListName, AutoDetectionDllName -->
+<Config>
+  <TestSuiteName>FileServer</TestSuiteName>
+  <Adapters>
+    <Adapter displayname="SUT Protocol control adapter" name="ISutProtocolControlAdapter">
+      <Adapter type="managed" name="ISutProtocolControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutProtocolControlAdapter" />
+      <Adapter type="powershell" name="ISutProtocolControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutProtocolControlAdapter"/>
+    </Adapter>
+    <Adapter displayname="Common SUT control adapter" name="ISutCommonControlAdapter">
+      <Adapter type="managed" name="ISutCommonControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.SutCommonControlAdapter"/>
+      <Adapter type="powershell" name="ISutCommonControlAdapter" scriptdir=".\SutCommonControlAdapter" />
+    </Adapter>
+    <Adapter  displayname="Failover SUT control adapter" name="ISutControlAdapter">
+      <Adapter type="powershell" name="ISutControlAdapter" scriptdir=".\"/>
+      <Adapter type="shell" name="ISutControlAdapter" scriptdir=".\"/>
+      <Adapter type="interactive" name="ISutControlAdapter"/>
+    </Adapter>
+  </Adapters>
+  <PtfFileNames>
+    <PtfFileName>CommonTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>CommonTestSuite.ptfconfig</PtfFileName>
+    <PtfFileName>ServerFailoverTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>ServerFailoverTestSuite.ptfconfig</PtfFileName>
+    <PtfFileName>MS-DFSC_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-FSA_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-FSAModel_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-FSRVP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-RSVD_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-SQOS_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>Auth_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-SMB2_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-SMB2Model_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>ServerFailoverTestSuite.dll</DllFileName>
+    <DllFileName>MS-DFSC_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-FSA_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-FSAModel_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-FSRVP_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-RSVD_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-SQOS_ServerTestSuite.dll</DllFileName>
+    <DllFileName>Auth_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-SMB2_ServerTestSuite.dll</DllFileName>
+    <DllFileName>MS-SMB2Model_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>FileServerPlugin.dll</AutoDetectionDllName>
+  <ConfigCaseRule>
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "Non-BVT">
+        <Rule name = "Positive">
+          <Category name = "Positive"/>
+        </Rule>
+        <Rule name = "Negative">
+          <Rule name = "Compatibility">
+            <Category name = "Compatibility"/>
+          </Rule>
+          <Rule name = "InvalidIdentifier">
+            <Category name = "InvalidIdentifier"/>
+          </Rule>
+          <Rule name = "OutOfBoundary">
+            <Category name = "OutOfBoundary"/>
+          </Rule>
+          <Rule name = "UnexpectedContext">
+            <Category name = "UnexpectedContext"/>
+          </Rule>
+          <Rule name = "UnexpectedFields">
+            <Category name = "UnexpectedFields"/>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Group>
+
+    <Group name = "SMB Dialect (Please select all supported dialects)">
+      <Rule name = "SMB Dialects">
+        <Rule name = "SMB 2.0.2">
+          <Category name = "Smb2002"/>
+        </Rule>
+        <Rule name = "SMB 2.1">
+          <Category name = "Smb21"/>
+        </Rule>
+        <Rule name = "SMB 3.0">
+          <Category name = "Smb30"/>
+        </Rule>
+        <Rule name = "SMB 3.0.2">
+          <Category name = "Smb302"/>
+        </Rule>
+        <Rule name = "SMB 3.1.1">
+          <Category name = "Smb311"/>
+        </Rule>
+      </Rule>
+      <Rule name = "Non-SMB Protocol Test Cases">
+        <Category name = "NonSmb"/>
+      </Rule>
+    </Group>
+
+    <Group name ="Feature">
+      <Rule name = "Cluster Required">
+        <Rule name = "RSVD (Remote Shared Virtual Disk)">
+          <Rule name = "RSVDVersion1">
+            <Category name = "RSVDVersion1"/>
+          </Rule>
+          <Rule name = "RSVDVersion2">
+            <Category name = "RSVDVersion2"/>
+          </Rule>
+        </Rule>
+        <Rule name = "SQOS (Storage Quality of Service)">
+          <Category name = "SQOS"/>
+        </Rule>
+        <Rule name = "File Server Failover">
+          <Category name = "Failover"/>
+        </Rule>
+        <Rule name = "SWN (Service Witness)">
+          <Category name = "SWN"/>
+        </Rule>
+        <Rule name = "SMB2&amp;3">
+          <Rule name = "Oplock">
+            <Rule name = "OplockOnShareWithForceLevel2AndSOFS">
+              <Category name = "OplockOnShareWithForceLevel2AndSOFS" />
+            </Rule>
+            <Rule name = "OplockOnShareWithoutForceLevel2WithSOFS">
+              <Category name = "OplockOnShareWithoutForceLevel2WithSOFS" />
+            </Rule>
+          </Rule>
+          <Rule name = "DurableHandle">
+            <Rule name = "PersistentHandle">
+              <Category name = "PersistentHandle"/>
+            </Rule>
+          </Rule>
+          <Rule name = "CombinedFeature">
+            <Category name = "CombinedFeature"/>
+          </Rule>
+          <Rule name = "OperateOneFileFromTwoNodes">
+            <Category name = "OperateOneFileFromTwoNodes"/>
+          </Rule>
+        </Rule>
+        <Rule name = "FSRVP (File Server Remote VSS)">
+          <Category name = "FSRVP"/>
+        </Rule>
+
+      </Rule>
+      <Rule name = "Others">
+        <Rule name = "Auth (Authentication and Authorization)">
+          <Rule name = "Authentication">
+            <Rule name = "KerberosAuthentication">
+              <Category name = "KerberosAuthentication" />
+            </Rule>
+          </Rule>
+          <Rule name = "Authorization">
+            <Rule name = "File Access Check">
+              <Category name = "FileAccessCheck" />
+            </Rule>
+            <Rule name = "Folder Access Check">
+              <Category name = "FolderAccessCheck" />
+            </Rule>
+            <Rule name = "Share Access Check">
+              <Category name = "ShareAccessCheck" />
+            </Rule>
+            <Rule name = "Claim Based Access Control">
+              <Category name = "CBAC" />
+            </Rule>
+          </Rule>
+        </Rule>
+        <Rule name = "SMB2&amp;3">
+          <Rule name = "Negotiate">
+            <Category name = "Negotiate"/>
+          </Rule>
+          <Rule name = "Replay">
+            <Category name = "Replay"/>
+          </Rule>
+          <Rule name = "Credit">
+            <Category name = "Credit"/>
+          </Rule>
+          <Rule name = "Signing">
+            <Category name = "Signing"/>
+          </Rule>
+          <Rule name = "Encryption">
+            <Category name = "Encryption"/>
+          </Rule>
+          <Rule name = "MultipleChannel">
+            <Category name = "MultipleChannel"/>
+          </Rule>
+          <Rule name = "Session">
+            <Category name = "Session"/>
+          </Rule>
+          <Rule name = "Tree">
+            <Category name = "Tree"/>
+          </Rule>
+          <Rule name = "CreateClose">
+            <Category name = "CreateClose"/>
+          </Rule>
+          <Rule name = "Oplock">
+            <Rule name = "OplockOnShareWithoutForceLevel2OrSOFS">
+              <Category name = "OplockOnShareWithoutForceLevel2OrSOFS" />
+            </Rule>
+            <Rule name = "OplockOnShareWithForceLevel2WithoutSOFS">
+              <Category name = "OplockOnShareWithForceLevel2WithoutSOFS" />
+            </Rule>
+          </Rule>
+          <Rule name = "DirectoryLeasing">
+            <Category name = "DirectoryLeasing"/>
+          </Rule>
+          <Rule name = "LeaseV1">
+            <Category name = "LeaseV1"/>
+          </Rule>
+          <Rule name = "LeaseV2">
+            <Category name = "LeaseV2"/>
+          </Rule>
+          <Rule name = "DurableHandle">
+            <Rule name = "DurableHandleV1BatchOplock">
+              <Category name = "DurableHandleV1BatchOplock"/>
+            </Rule>
+            <Rule name = "DurableHandleV1LeaseV1">
+              <Category name = "DurableHandleV1LeaseV1"/>
+            </Rule>
+            <Rule name = "DurableHandleV2BatchOplock">
+              <Category name = "DurableHandleV2BatchOplock"/>
+            </Rule>
+            <Rule name = "DurableHandleV2LeaseV1">
+              <Category name = "DurableHandleV2LeaseV1"/>
+            </Rule>
+            <Rule name = "DurableHandleV2LeaseV2">
+              <Category name = "DurableHandleV2LeaseV2"/>
+            </Rule>
+            <Rule name = "PersistentHandle">
+              <Category name = "PersistentHandleNonClusterRequired"/>
+            </Rule>
+          </Rule>
+          <Rule name = "Compound">
+            <Category name = "Compound"/>
+          </Rule>
+          <Rule name = "AppInstanceId">
+            <Category name = "AppInstanceId"/>
+          </Rule>
+          <Rule name = "AppInstanceVersion">
+            <Category name = "AppInstanceVersion"/>
+          </Rule>
+          <Rule name = "FSCTL/IOCTL">
+            <Rule name = "FsctlLmrRequestResiliency">
+              <Category name = "FsctlLmrRequestResiliency"/>
+            </Rule>
+            <Rule name = "FsctlFileLevelTrim">
+              <Category name = "FsctlFileLevelTrim"/>
+            </Rule>
+            <Rule name = "FsctlValidateNegotiateInfo">
+              <Category name = "FsctlValidateNegotiateInfo"/>
+            </Rule>
+            <Rule name = "FsctlSetGetIntegrityInformation">
+              <Category name = "FsctlSetGetIntegrityInformation"/>
+            </Rule>
+            <Rule name = "FsctlOffloadReadWrite">
+              <Category name = "FsctlOffloadReadWrite"/>
+            </Rule>
+            <Rule name = "FsctlEnumerateSnapShots">
+              <Category name = "FsctlEnumerateSnapShots"/>
+            </Rule>
+          </Rule>
+          <Rule name = "CombinedFeature">
+            <Category name = "CombinedFeatureNonClusterRequired"/>
+          </Rule>
+          <Rule name = "MixedOplockLease">
+            <Category name = "MixedOplockLease"/>
+          </Rule>
+          <Rule name = "ChangeNotify">
+            <Category name = "ChangeNotify"/>
+          </Rule>
+          <Rule name = "LockUnlock">
+            <Category name = "LockUnlock"/>
+          </Rule>
+          <Rule name = "QueryInfo">
+            <Category name = "QueryInfo"/>
+          </Rule>
+          <Rule name = "QueryDir">
+            <Category name = "QueryDir"/>
+          </Rule>
+          <Rule name = "QueryAndSetFileInfo">
+            <Category name = "QueryAndSetFileInfo"/>
+          </Rule>
+          <Rule name = "HVRS (Hyper-V Remote Storage)">
+            <Category name = "HVRS-SMB"/>
+          </Rule>
+          <Rule name = "Compression">
+            <Category name = "Compression"/>
+          </Rule>
+        </Rule>
+        <Rule name = "FSRVP (File Server Remote VSS)">
+          <Category name = "FSRVPNonClusterRequired"/>
+        </Rule>
+        <Rule name = "DFSC (Distributed File System Referral)">
+          <Category name = "DFSC"/>
+        </Rule>
+        <Rule name = "FSA (File System Algorithms)">
+          <Rule name = "OpenFile">
+            <Category name = "OpenFile"/>
+          </Rule>
+          <Rule name = "CreateFile">
+            <Category name = "CreateFile"/>
+          </Rule>
+          <Rule name = "ReadFile">
+            <Category name = "ReadFile"/>
+          </Rule>
+          <Rule name = "WriteFile">
+            <Category name = "WriteFile"/>
+          </Rule>
+          <Rule name = "CloseFile">
+            <Category name = "CloseFile"/>
+          </Rule>
+          <Rule name = "FlushCachedData">
+            <Category name = "FlushCachedData"/>
+          </Rule>
+          <Rule name = "LockAndUnlock">
+            <Category name = "LockAndUnlock"/>
+          </Rule>
+          <Rule name = "ChangeNotification">
+            <Category name = "ChangeNotification"/>
+          </Rule>
+          <Rule name = "IoCtlRequest">
+            <Category name = "IoCtlRequest"/>
+          </Rule>
+          <Rule name = "QueryDirectory">
+            <Category name = "QueryDirectory"/>
+          </Rule>
+          <Rule name = "QueryFileInformation">
+            <Category name = "QueryFileInformation"/>
+          </Rule>
+          <Rule name = "QueryFileSystemInformation">
+            <Category name = "QueryFileSystemInformation"/>
+          </Rule>
+          <Rule name = "QueryQuotaInformation">
+            <Category name = "QueryQuotaInformation"/>
+          </Rule>
+          <Rule name = "QuerySecurityInformation">
+            <Category name = "QuerySecurityInformation"/>
+          </Rule>
+          <Rule name = "SetFileInformation">
+            <Category name = "SetFileInformation"/>
+          </Rule>
+          <Rule name = "SetFileSystemInformation">
+            <Category name = "SetFileSystemInformation"/>
+          </Rule>
+          <Rule name = "SetQuotaInformation">
+            <Category name = "SetQuotaInformation"/>
+          </Rule>
+          <Rule name = "SetSecurityInformation">
+            <Category name = "SetSecurityInformation"/>
+          </Rule>
+          <Rule name = "AlternateDataStream">
+            <Category name = "AlternateDataStream"/>
+          </Rule>
+          <Rule name = "HVRS (Hyper-V Remote Storage)">
+            <Category name = "HVRS-FSA"/>
+          </Rule>
+          <Rule name = "FileAccess">
+            <Category name = "FileAccess"/>
+          </Rule>
+          <Rule name = "CommonAlgorithm">
+            <Category name = "CommonAlgorithm"/>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+
+  <FeatureMapping>
+    <Config>
+      <!--
+        Please be noted that there are 3 filters (groups in ConfigCaseRule) in FileServer:
+          Priority    (index=0)
+          SMB Dialect (index=1)
+          Feature     (index=2)
+      -->
+      <Config name="targetFilterIndex" index = "1"/>
+      <Config name="mappingFilterIndex" index = "2"/>
+      <!--
+        To use feature mapping, please make sure that
+        each testcase must have a test category in target filter and a test category in mapping filter.
+
+        When a category in target filter is selected,
+        categories in mapping filter that occur in the same testcase will be automatically selected.
+
+        SMB Dialect (index=1) is set as target filter and
+        Feature (index=2) is set as mapping filter.
+
+        For example, there are 3 test cases as follows:
+
+        [TestCategories.Smb2002]
+        [TestCategories.Negotiate]
+        TestCase1
+
+        [TestCategories.Smb2002]
+        [TestCategories.Encryption]
+        TestCase2
+
+        [TestCategories.NonSmb]
+        [TestCategories.Frsvp]
+        TestCase3
+
+        Suppose Smb2002 and NonSmb are categories in SMB Dialect filter (target filter)
+        while Negotiate, Encryption and Frsvp are categories in Feature filter (mapping filter).
+
+        If user selects Smb2002 in SMB Dialect filter,
+        Negotiate and Encryption will be automatically selected in Feature filter.
+
+        Frsvp will not be selected since Smb2002 is not in TestCase3.
+      -->
+    </Config>
+  </FeatureMapping>
+</Config>
