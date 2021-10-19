@@ -345,9 +345,9 @@ Function Config-Phase4()
 {
     Write-ConfigLog "Entering Phase 4..."
 
-    # Find PtfConfig files in both \bin and source\server\testcode\testsuite folders
-    Write-ConfigLog "Finding PtfConfig files in both \bin and source\server\testcode\testsuite folders..." -ForegroundColor Yellow
-    $PtfFiles = .\Find-PtfConfigFiles.ps1 -FileName "AD_ServerTestSuite.deployment.ptfconfig"
+    # Find PtfConfig files in \bin 
+    Write-ConfigLog "Finding PtfConfig files in \bin " -ForegroundColor Yellow
+    $PtfFiles = "$env:SystemDrive\ADFamily-TestSuite-ServerEP\Bin\AD_ServerTestSuite.deployment.ptfconfig"
 
     ##########################################################################
     # Modify PtfConfig file according to information retrieved from <Common> #
