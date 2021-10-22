@@ -45,6 +45,8 @@
         * [FsCtl_Get_Compression](#FsCtl_Get_Compression)
         * [FsCtl_Set_Compression](#FsCtl_Set_Compression)
         * [FsCtl_RefsStreamSnapshotManagement](#FsCtl_RefsStreamSnapshotManagement)
+        * [FsCtl_RefsStreamSnapshotOperationCreate](#FsCtl_RefsStreamSnapshotOperationCreate)
+        * [FsCtl_RefsStreamSnapshotOperationQueryDeltas](#FsCtl_RefsStreamSnapshotOperationQueryDeltas)
     * [Scenarios for QuotaInformation](#Scenarios-for-QuotaInformation)
         * [QuotaInfo_IsQuotaInfoSupported](#QuotaInfo_IsQuotaInfoSupported)
     * [Scenarios for Alternate Data Stream](#Scenarios-for-Alternate-Data-Stream)
@@ -233,6 +235,12 @@
             * [FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute](#FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute)
             * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute)
             * [FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute](#FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute)
+        * [RefsStreamSnapshotOperation_Create](#RefsStreamSnapshotOperation_Create)
+            * [BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive](#BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive)
+            * [FsCtl_RefsStreamSnapshotOperation_Create_Negative](#FsCtl_RefsStreamSnapshotOperation_Create_Negative)        
+        * [RefsStreamSnapshotOperation_QueryDeltas](#RefsStreamSnapshotOperation_QueryDeltas)
+            * [BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive](#BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive)
+            * [FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative](#FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative)
     * [Test cases for QuotaInformation](#Test-cases-for-QuotaInformation)
         * [IsQuotaInfoSupported](#IsQuotaInfoSupported)
             * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported)
@@ -370,7 +378,7 @@ There are 170 test cases in total:
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 60 (18) |
+| Scenarios for FsControlRequest | 13 | 64 (20) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -941,6 +949,48 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile.|
 | | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT**.|
 | | Verify server responds according to input parameters.|
+
+#### <a name="FsCtl_RefsStreamSnapshotOperationCreate"/>FsCtl_RefsStreamSnapshotOOperationCreate
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE**|
+| | Note: Support for this operation is optional.|
+| | Test environment: ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| | Supporting test:|
+| | If not supported by operating system, failed with **STATUS_NOT_SUPPORTED**.|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | Test with single snapshot created and duplicate snapshot name created.|
+| | Operation test:|
+| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile.|
+| | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE**.|
+| | Verify snapshot is created.|
+
+#### <a name="FsCtl_RefsStreamSnapshotOperationQueryDeltas"/>FsCtl_RefsStreamSnapshotOOperationQueryDeltas
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS**|
+| | Note: Support for this operation is optional.|
+| | Test environment: ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | FsCtl: REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS|
+| | Supporting test:|
+| | If not supported by operating system, failed with **STATUS_NOT_SUPPORTED**.|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | Test with modified file and unmodified file.|
+| | Operation test:|
+| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile and fill with random data.|
+| | FSCTL request with **REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS**.|
+| | Verify that modification extents are returned.|
 
 ### <a name="Scenarios-for-QuotaInformation"/>Scenarios for QuotaInformation
 
@@ -3532,6 +3582,63 @@ There are 343 test cases in total:
 | Message Sequence| Create test file (DataFile) without Write Attribute|
 | | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
 | | Verify returned NT_STATUS is STATUS_ACCESS_DENIED|
+
+#### <a name="RefsStreamSnapshotOperationCreate"/>RefsStreamSnapshotOperationCreate
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive"/>BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create snapshot with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE then send FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST using snapshot name and expect one entry returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST using snapshot name.|
+| | Verify returned NT_STATUS|
+| | Verify returned snapshot count is 1|
+
+##### <a name="FsCtl_RefsStreamSnapshotOperation_Create_Negative"/>FsCtl_RefsStreamSnapshotOperation_Create_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create two snapshots with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE using the same snapshot name and expect STATUS_OBJECT_NAME_COLLISION.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE using the same snapshot name.|
+| | Verify returned NT_STATUS  is OBJECT_NAME_COLLISION|
+
+#### <a name="RefsStreamSnapshotOperationQueryDeltas"/>RefsStreamSnapshotOperationQueryDeltas
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive"/>BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to modified data file and verify extent returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS|
+| Message Sequence| Create test file (DataFile) and fill with random data|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS.|
+| | Verify returned NT_STATUS|
+| | Verify returned extent count is greater than 0|
+
+##### <a name="FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative"/>FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to unmodified data file and verify no extent returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS.|
+| | Verify returned NT_STATUS|
+| | Verify returned extent count is 0|
 
 ### <a name="Test-cases-for-QuotaInformation"/>Test cases for QuotaInformation
 
