@@ -894,17 +894,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         WindowsServerV2004 = 0x1000000E,
 
         /// <summary>
-        /// Windows Server v2020
+        /// Windows Server v20H2
         /// </summary>
         WindowsServerV20H2 = 0x1000000F,
 
         /// <summary>
-        /// Windows Server v2021
+        /// Windows Server v21H1
         /// </summary>
         WindowsServerV21H1 = 0x10000010,
 
         /// <summary>
-        /// Windows Server v2022
+        /// Windows Server 2022
         /// </summary>
         WindowsServer2022 = 0x10000011,
     }
