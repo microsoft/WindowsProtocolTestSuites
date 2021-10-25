@@ -9,7 +9,7 @@ $invocationPath =  Split-Path $MyInvocation.MyCommand.Definition -Parent
 
 $script = Join-Path $invocationPath "RunTestCasesByFilter.ps1"
 
-$Filter="TestCategory=MS-ADTS-Security"
+$Filter="TestCategory=MS-ADTS-Security_ADDS"
 
 $cmd = "$script -Filter `$Filter -DryRun:`$(`$DryRun.IsPresent)"
 

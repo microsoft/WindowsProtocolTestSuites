@@ -11,7 +11,7 @@ switch -Wildcard ([environment]::OSVersion.Version)
         return
     }
 }
-cmd /c "$PSScriptRoot\RunDrsrCases_Win8.1.cmd"
+powershell "$PSScriptRoot\RunDrsrCases_Win8.1.ps1"
 
 # SIG # Begin signature block
 # MIIjegYJKoZIhvcNAQcCoIIjazCCI2cCAQExDzANBglghkgBZQMEAgEFADB5Bgor
