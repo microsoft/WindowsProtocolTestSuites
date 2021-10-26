@@ -172,12 +172,12 @@ Function Config-DC02()
 		Test-Connection contoso.com
 		If ($? -ne "True")
 		{
-			break
+			$Times = $Times - 1
+			Start-Sleep -s 60
 		}
 		else
 		{
-			$Times = $Times - 1
-			Start-Sleep -s 60
+			break
 		}
 	}
 	
