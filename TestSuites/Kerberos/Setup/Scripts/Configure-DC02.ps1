@@ -166,7 +166,21 @@ Function Config-DC02()
 	#Create forest trust on local side
 	#-----------------------------------------------------------------------------------------------
 	Write-ConfigLog "Create forest trust relationship on local side ..." -ForegroundColor Yellow
-
+	$Times = 20
+	while($Times -ge 0)
+	{
+		Test-Connection contoso.com
+		If ($? -ne "True")
+		{
+			break
+		}
+		else
+		{
+			$Times = $Times - 1
+			Start-Sleep -s 60
+		}
+	}
+	
 	$LocalForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
 	try
 	{
