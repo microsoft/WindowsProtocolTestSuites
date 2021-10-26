@@ -66,11 +66,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             CreateRefsStreamSnapshot(baseName + "01", MessageStatus.SUCCESS);
             CreateRefsStreamSnapshot(baseName + "01", MessageStatus.OBJECT_NAME_COLLISION);
         }
-
         #endregion
 
         #region Utility
-
         public void CreateRefsStreamSnapshot(string snapshotName, MessageStatus expectedStatus)
         {
             byte[] nameAndInputBuffer = Encoding.ASCII.GetBytes(snapshotName);
@@ -93,7 +91,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
             else
             {
-                this.fsaAdapter.AssertAreEqual(this.Manager, expectedStatus, status, "Create snapshot must succeed.");
+                this.fsaAdapter.AssertAreEqual(this.Manager, expectedStatus, status, $"Create snapshot must return {expectedStatus}.");
             }
         }
         #endregion

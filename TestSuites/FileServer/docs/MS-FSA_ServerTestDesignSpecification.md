@@ -3610,7 +3610,7 @@ There are 343 test cases in total:
 | Message Sequence| Create test file (DataFile)|
 | | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE.|
 | | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE using the same snapshot name.|
-| | Verify returned NT_STATUS  is OBJECT_NAME_COLLISION|
+| | Verify returned NT_STATUS is OBJECT_NAME_COLLISION|
 
 #### <a name="RefsStreamSnapshotOperationQueryDeltas"/>RefsStreamSnapshotOperationQueryDeltas
 

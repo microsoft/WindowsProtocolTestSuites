@@ -130,6 +130,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status,
                     "Write data to file should succeed");
         }
+
         public void CreateFile(string fileName)
         {
             MessageStatus status = this.fsaAdapter.CreateFile(

@@ -56,13 +56,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             CreateRefsStreamSnapshot(snapshotName, MessageStatus.SUCCESS);
 
             //Step 3: Modify file
-            if(modifyFile)
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Modify file if required");
+            if (modifyFile)
             {
                 WriteDataToFile();
             }
 
             //Step 4: Query and verify extent metadata.
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Query and verify extent metadata.");
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Query and verify extent metadata.");
 
             ushort snapshotNameLength = (ushort) snapshotName.Length;
             byte[] snapshotNameBytes = Encoding.ASCII.GetBytes(snapshotName);
@@ -99,7 +100,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             else
             {
                 //Verify that QUERY DELTAS operation succeeds
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "Snapshot Operation list should succeed");
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "Snapshot Operation query deltas should succeed");
             }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, outputBufferSize+"Output buffer length: " + outputBuffer.Length);
