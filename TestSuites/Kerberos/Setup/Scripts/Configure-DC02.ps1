@@ -164,13 +164,13 @@ Function Config-DC02()
 	$trustedDomain = $KrbParams.Parameters.LocalRealm.RealmName
 
 	#-----------------------------------------------------------------------------------------------
-	#Ensure $KrbParams.Parameters.LocalRealm.RealmName can be accessed
+	#Ensure $trustedDomain can be accessed
 	#-----------------------------------------------------------------------------------------------
 	$Times = 20
 	while($Times -ge 0)
 	{
-		Test-Connection $trustedDomain
-		If ($? -ne "True")
+		$domain = Get-ADDomain $trustedDomain
+		If ($domain -ne $null)
 		{
 			Write-ConfigLog "Waiting to be able to access $trustedDomain."
 			$Times = $Times - 1
