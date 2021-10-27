@@ -45,7 +45,6 @@ $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
 $DataFile2                = "$WorkingPath\Protocol.xml"
-[xml]$KrbParams2          = $null
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -109,14 +108,6 @@ Function Read-ConfigParameters()
     {
         Write-ConfigLog "$DataFile not found. Will keep the default setting of all the test context info..."
 	}
-	if(Test-Path -Path $DataFile2)
-    {
-        [xml]$Script:KrbParams2 = Get-Content -Path $DataFile2
-    }
-    else
-    {
-        Write-ConfigLog "$DataFile2 not found. Will keep the default setting of all the test context info..."
-    }
 }
 
 #------------------------------------------------------------------------------------------
