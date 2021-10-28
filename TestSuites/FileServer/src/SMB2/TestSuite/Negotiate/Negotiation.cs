@@ -779,6 +779,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status, "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, if CompressionAlgorithmCount is equal to zero.");
+
+                },
+                responseChecker: (Packet_Header header, Smb2NegotiateResponsePacket response) =>
+                {
+                    CheckCompressionAlgorithmsForWindowsImplementationWithEmptyCompressions(response);
                 });
         }
 
@@ -1304,6 +1309,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 bool isExpectedWindowsCompressionContext = Enumerable.SequenceEqual(client.Smb2Client.CompressionInfo.CompressionIds.OrderBy(compressionAlgorithm => compressionAlgorithm), expectedCompressionAlgorithms.OrderBy(compressionAlgorithm => compressionAlgorithm));
 
                 BaseTestSite.Assert.IsTrue(isExpectedWindowsCompressionContext, "Windows 10 v2004 and Windows Server v2004 select a common pattern scanning algorithm and the first common compression algorithm, specified in section 2.2.3.1.3, supported by the client and server.");
+            }
+        }
+
+        private void CheckCompressionAlgorithmsForWindowsImplementationWithEmptyCompressions(Smb2NegotiateResponsePacket response)
+        {
+            if (TestConfig.IsWindowsPlatform)
+            {
+                if (TestConfig.Platform >= Platform.WindowsServerV2004 && TestConfig.Platform <= Platform.WindowsServerV20H2)
+                {
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 0, "[MS-SMB2] section 3.3.5.4 <265> Windows 10 v2004, Windows 10 v20H2, and Windows Server v20H2 operating system without [MSKB-5001391] set CompressionAlgorithmCount to 0");
+
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.Count() == 0, "[MS-SMB2] section 3.3.5.4 <266> Windows 10 v2004, Windows 10 v20H2, and Windows Server v20H2 operating system without [MSKB-5001391] set CompressionAlgorithms to empty");
+                }
+                else
+                {
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 1, "[MS-SMB2] section 3.3.5.4 The server SHOULD <265> set CompressionAlgorithmsCount to 1.");
+
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms[0] == CompressionAlgorithm.NONE, "[MS-SMB2] section 3.3.5.4 The server SHOULD <266> set CompressionAlgorithms to NONE.");
+                }
             }
         }
 
