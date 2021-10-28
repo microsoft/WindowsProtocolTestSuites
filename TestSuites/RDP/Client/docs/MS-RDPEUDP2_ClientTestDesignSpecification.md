@@ -216,7 +216,7 @@ The following table shows the number of test cases for each scenario.
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
 | -------------| -------------| -------------| -------------| -------------| ------------- |
-| S3_DataTransfer_v2| 3| 5| 3| 0| 0| 
+| S3_DataTransfer_v2| 4| 1| 3| 0| 0| 
 
 ### <a name="_Toc350342313"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -245,7 +245,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
 |  **Test ID**| S3_DataTransfer_v2_ClientReceiveData| 
-|  **Priority**| P0| 
+|  **Priority**| BVT| 
 |  **Description** | Verify the RDP client can acknowledge the receipt of data from RDP-UDP connection| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| For Reliable  mode, do the following:| 
@@ -291,6 +291,20 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Expect a RDPUDP2 Packet to acknowledge the receipt of all  **RDPUDP2 Packets**  | 
 |  **Cleanup**| N/A| 
 
+
+|  **S3_DataTransfer_v2**| | 
+| -------------| ------------- |
+|  **Test ID**| S3_DataTransfer_v2_DataPacketWithACK| 
+|  **Priority**| P0| 
+|  **Description** | Verify that the final OnWire version of the RDP2 Packet sent is evaluated to a specific output as shared in Section 4.4.6 of the RDPEUDP2 document| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
+| | Test suite trigger RDP client to create a RDP-UDP, reliable (as MS-RDPEUDP2 only supports reliable UDP mode) transport mode | 
+| | Establish the RDPEMT connection.| 
+| | In the RDP-UDP connection, test suite prepare one **RDPUDP2 Packet** with the packet values given in section 4.4 of the RDPEUDAP2 document| 
+| | Before sending the packet, verify that the on-wire version has been evaluated to the output given in section 4.4.6| 
+| | Expect a RDPUDP2 Packet to acknowledge the receipt of all  **RDPUDP2 Packets**  | 
+|  **Cleanup**| N/A| 
 
 ## <a name="_Toc350342315"/>Appendix
 
