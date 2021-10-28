@@ -23,8 +23,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to modified data file and verify extent returned.")]
         public void BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive()
         {
-            ulong expectedExtentCount = 137438953472;
-            Fsctl_Refs_Stream_Snapshot_Operation_QueryDeltas(true, expectedExtentCount);
+            Fsctl_Refs_Stream_Snapshot_Operation_QueryDeltas(true);
         }
 
         [TestMethod()]
@@ -35,13 +34,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to unmodified data file and verify no extent returned.")]
         public void FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative()
         {
-            ulong expectedExtentCount = 0;
-            Fsctl_Refs_Stream_Snapshot_Operation_QueryDeltas(false, expectedExtentCount);
+            Fsctl_Refs_Stream_Snapshot_Operation_QueryDeltas(false);
         }
         #endregion
 
         #region Utility
-        public void Fsctl_Refs_Stream_Snapshot_Operation_QueryDeltas(bool modifyFile, ulong expectedExtentCount)
+        public void Fsctl_Refs_Stream_Snapshot_Operation_QueryDeltas(bool modifyFile)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             string fileName = this.fsaAdapter.ComposeRandomFileName((int)Test_Lengths.ALIGN);
@@ -101,21 +99,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 //Verify that QUERY DELTAS operation succeeds
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "Snapshot Operation query deltas should succeed");
-            }
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, outputBufferSize+"Output buffer length: " + outputBuffer.Length);
-            //Verify that meta detas are returned
-            uint defaultOutputBufferSize = 16;
-            if (outputBuffer.Length > defaultOutputBufferSize)
-            {
-                REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER queryDeltasOutpuBuffer = TypeMarshal.ToStruct<REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER>(outputBuffer);
-                ulong extentsCount = queryDeltasOutpuBuffer.Extents.Length;
-                this.fsaAdapter.AssertAreEqual(this.Manager, expectedExtentCount, extentsCount, $"Number of extent should be {expectedExtentCount}");
-            }
-            else
-            {
-                ulong noExtentReturned = 0;
-                this.fsaAdapter.AssertAreEqual(this.Manager, expectedExtentCount, noExtentReturned, $"Number of extent should be {expectedExtentCount}");
+                //Verify that meta detas are returned
+                uint defaultOutputBufferSize = 16;
+                ulong extentsCount = 0;
+                ulong zeroExtentReturned = 0;
+
+                if (outputBuffer != null && outputBuffer.Length > defaultOutputBufferSize)
+                {
+                    REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER queryDeltasOutpuBuffer = TypeMarshal.ToStruct<REFS_STREAM_SNAPSHOT_QUERY_DELTAS_OUTPUT_BUFFER>(outputBuffer);
+                    extentsCount = queryDeltasOutpuBuffer.Extents.Length;
+                }
+
+                if (modifyFile)
+                {
+                    BaseTestSite.Assert.AreNotEqual(zeroExtentReturned, extentsCount, "Number of extent should be greater than zero");
+                }
+                else
+                {
+                    BaseTestSite.Assert.AreEqual(zeroExtentReturned, extentsCount, $"Number of extent should be zero");
+                }
             }
         }
 
