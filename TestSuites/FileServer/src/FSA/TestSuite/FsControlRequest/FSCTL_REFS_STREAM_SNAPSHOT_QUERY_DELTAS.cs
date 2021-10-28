@@ -83,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             MessageStatus status = this.fsaAdapter.FsCtlRefsStreamSnapshotManagement(refsStreamSnapshotManagementInput,
                 outputBufferSize, out _, out outputBuffer);
 
-            //MS-SMB2 <352> Windows 10 v21H1 and later and Windows Server 2022 and later allow the additional CtlCode value, 
+            //MS-SMB2 <353> Windows 10 v21H1 and later and Windows Server 2022 and later allow the additional CtlCode value, 
             //as specified in [MS-FSCC].
             if (this.fsaAdapter.TestConfig.Platform < Platform.WindowsServer2022)
             {
