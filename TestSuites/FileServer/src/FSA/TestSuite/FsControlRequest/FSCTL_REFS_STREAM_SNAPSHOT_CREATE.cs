@@ -71,10 +71,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         #region Utility
         public void CreateRefsStreamSnapshot(string snapshotName, MessageStatus expectedStatus)
         {
-            byte[] nameAndInputBuffer = Encoding.ASCII.GetBytes(snapshotName);
+            byte[] snapshotNameByte = Encoding.Unicode.GetBytes(snapshotName);
+            ushort snapshotNameByteLength = (ushort)snapshotNameByte.Length;
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE,
-                snapshotNameLength: (ushort)snapshotName.Count(), nameAndInputBuffer: nameAndInputBuffer);
+                snapshotNameLength: snapshotNameByteLength, nameAndInputBuffer: snapshotNameByte);
             MessageStatus status = this.fsaAdapter.FsCtlRefsStreamSnapshotManagement(refsStreamSnapshotManagementInput, 0, out _, out _);
 
             //MS-SMB2 <352> Windows 10 v21H1 and later and Windows Server 2022 and later allow the additional CtlCode value, 

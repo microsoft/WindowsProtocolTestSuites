@@ -63,19 +63,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //Step 4: Query and verify extent metadata.
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Query and verify extent metadata.");
 
-            ushort snapshotNameLength = (ushort) snapshotName.Length;
-            byte[] snapshotNameBytes = Encoding.ASCII.GetBytes(snapshotName);
+            byte[] snapshotNameByte = Encoding.Unicode.GetBytes(snapshotName);
+            ushort snapshotNameByteLength = (ushort)snapshotNameByte.Length;
 
             REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = GetQueryDeltasInputBuffer();
             byte[] queryDetalsInputBuffer = TypeMarshal.ToBytes(refsStreamSnapshotQueryDeltasInputBuffer);
             ushort queryDetalsInputBufferLength = (ushort)queryDetalsInputBuffer.Length;
 
-            byte[] nameAndInputBuffer = new byte[snapshotNameLength + queryDetalsInputBufferLength];
-            Buffer.BlockCopy(snapshotNameBytes, 0, nameAndInputBuffer, 0, snapshotNameLength);
-            Buffer.BlockCopy(queryDetalsInputBuffer, 0, nameAndInputBuffer, snapshotNameLength, queryDetalsInputBufferLength);
+            byte[] nameAndInputBuffer = new byte[snapshotNameByteLength + queryDetalsInputBufferLength];
+            Buffer.BlockCopy(snapshotNameByte, 0, nameAndInputBuffer, 0, snapshotNameByteLength);
+            Buffer.BlockCopy(queryDetalsInputBuffer, 0, nameAndInputBuffer, snapshotNameByteLength, queryDetalsInputBufferLength);
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS,
-                snapshotNameLength: snapshotNameLength, operationInputBufferLength: queryDetalsInputBufferLength, nameAndInputBuffer: nameAndInputBuffer);
+                snapshotNameLength: snapshotNameByteLength, operationInputBufferLength: queryDetalsInputBufferLength, nameAndInputBuffer: nameAndInputBuffer);
 
             uint outputBufferSize = this.fsaAdapter.transBufferSize;
             byte[] outputBuffer;

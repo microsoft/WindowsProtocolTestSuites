@@ -91,10 +91,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         public void Fsctl_Refs_Stream_Snapshot_Operation_List(string regExpression, ushort expectedCount)
         {
+            byte[] snapshotnameByte = Encoding.Unicode.GetBytes(regExpression);
+            ushort snapshotNameByteLength = (ushort)snapshotnameByte.Length;
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST,
-                snapshotNameLength: (ushort)regExpression.Count(),
-                nameAndInputBuffer: Encoding.ASCII.GetBytes(regExpression));
+                snapshotNameLength: snapshotNameByteLength,
+                nameAndInputBuffer: snapshotnameByte);
             uint outputBufferSize = this.fsaAdapter.transBufferSize;
             byte[] outputBuffer;
             MessageStatus status = this.fsaAdapter.FsCtlRefsStreamSnapshotManagement(refsStreamSnapshotManagementInput,
