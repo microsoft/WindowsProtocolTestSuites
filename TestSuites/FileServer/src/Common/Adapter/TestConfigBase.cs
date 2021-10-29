@@ -899,18 +899,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         WindowsServerV20H2 = 0x1000000F,
 
         /// <summary>
-        /// Windows Server v2021
-        /// </summary>
-        WindowsServerV21H1 = 0x10000010,
-
-        /// <summary>
         /// Windows 10 v21H1
         /// </summary>
-        Windows10V21H1 = 0x10000011,
+        Windows10V21H1 = 0x10000010,
 
         /// <summary>
         /// Windows Server v2022
         /// </summary>
-        WindowsServer2022 = 0x10000012,
+        WindowsServer2022 = 0x10000011,
     }
 }

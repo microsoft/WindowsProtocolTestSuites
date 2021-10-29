@@ -104,7 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //MS-SMB2 <35> Windows 10 v21H1 and later and Windows Server 2022 and later allow the additional CtlCode value, 
             //as specified in [MS-FSCC].
-            if (this.fsaAdapter.TestConfig.Platform < Platform.WindowsServer2022)
+            if (this.fsaAdapter.TestConfig.Platform < Platform.Windows10V21H1)
             {
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.NOT_SUPPORTED, status,
                     "The operation as requested is not supported, or the file system does not support snapshot operations.");
