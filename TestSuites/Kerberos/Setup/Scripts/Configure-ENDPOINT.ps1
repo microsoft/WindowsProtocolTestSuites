@@ -44,7 +44,7 @@ $SignalFileFullPath      = "$WorkingPath\Configure-ENDPOINT.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
-$DataFile2                = "$WorkingPath\Protocol.xml"
+$configFilePath                = "$WorkingPath\Protocol.xml"
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -984,9 +984,9 @@ Function Main
 	UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 	
 	# Import Certificate
-	if(Test-Path -Path $DataFile2)
+	if(Test-Path -Path $configFilePath)
     {
-		[xml]$configFile2 = Get-Content -Path $DataFile2
+		[xml]$configFile2 = Get-Content -Path $configFilePath
 		$proxyNode = $configFile2.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
 		$hostname = $proxyNode.name
 		$domainName = $proxyNode.domain

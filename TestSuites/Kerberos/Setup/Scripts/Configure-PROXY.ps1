@@ -45,7 +45,7 @@ $SignalFileFullPath      = "$WorkingPath\Configure-PROXY.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
-$DataFile2                = "$WorkingPath\Protocol.xml"
+$configFilePath          = "$WorkingPath\Protocol.xml"
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -205,15 +205,15 @@ Function Config-Proxy()
 	#-----------------------------------------------------------------------------------------------
 	# Create self-signed certificate and bind
     #-----------------------------------------------------------------------------------------------
-    if(Test-Path -Path $dataFile2)
+    if(Test-Path -Path $configFilePath)
 	{
-        [xml]$configFile = Get-Content -Path $dataFile2
+        [xml]$configFile = Get-Content -Path $configFilePath
         $proxyNode = $configFile.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
         $domainName = $proxyNode.domain
         $hostname = $proxyNode.name
     }
     $DnsName = $hostname + "."+$domainName
-    $FilePath = "c:\$DnsName.cer"
+    $proxyCertFilePath = "c:\$DnsName.cer"
 	Write-ConfigLog "Create self-signed certificate and bind" -ForegroundColor Yellow
 	Import-Module WebAdministration
 	$cert = New-SelfSignedCertificate -DnsName $DnsName -CertStoreLocation cert:\LocalMachine\My
@@ -222,7 +222,7 @@ Function Config-Proxy()
 	$certhash = $cert.GetCertHashString()
 	New-WebBinding -Name "Default Web Site" -IP $IP -Port 443 -Protocol https
     Get-Item cert:\LocalMachine\MY\$certhash | new-item $IP!443
-    Export-Certificate -Cert $cert -FilePath $FilePath
+    Export-Certificate -Cert $cert -FilePath $proxyCertFilePath
 	Pop-Location
 }
 
