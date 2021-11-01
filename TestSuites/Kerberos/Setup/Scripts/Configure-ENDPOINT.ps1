@@ -44,6 +44,7 @@ $SignalFileFullPath      = "$WorkingPath\Configure-ENDPOINT.finished.signal"
 $LogFileFullPath         = "$ScriptFileFullPath.log"
 $DataFile                = "$WorkingPath\Scripts\ParamConfig.xml"
 [xml]$KrbParams          = $null
+$configFilePath                = "$WorkingPath\Protocol.xml"
 
 #------------------------------------------------------------------------------------------
 # Function: Display-Help
@@ -106,7 +107,7 @@ Function Read-ConfigParameters()
     else
     {
         Write-ConfigLog "$DataFile not found. Will keep the default setting of all the test context info..."
-    }
+	}
 }
 
 #------------------------------------------------------------------------------------------
@@ -164,8 +165,7 @@ Function Complete-Configure
 
 Function Config-Driver
 {
-	$endPointPath = "$env:SystemDrive\MicrosoftProtocolTests\Kerberos\Server-Endpoint"
-	$version = Get-ChildItem $endPointPath | where {$_.Name -match "\d+\.\d+\.\d+\.\d+"} | Sort-Object Name -descending | Select-Object -first 1        
+	$endPointPath = "$env:SystemDrive\Kerberos-TestSuite-ServerEP"
 	$dataFile = "$WorkingPath\Scripts\ParamConfig.xml"
 
 	#-----------------------------------------------------------------------------------------------
@@ -464,7 +464,7 @@ Function Config-Driver
 	#-----------------------------------------------------------------------------------------------
 	# Modify PTF Config File
 	#-----------------------------------------------------------------------------------------------
-	$binPath = "$endPointPath\$version\Bin"
+	$binPath = "$endPointPath\Bin"
 	$DepPtfConfig = "$binPath\Kerberos_ServerTestSuite.deployment.ptfconfig"
 
 	Write-ConfigLog "TurnOff FileReadonly for $DepPtfConfig..."
@@ -946,8 +946,13 @@ Function Config-Driver
 	#-----------------------------------------------------------------------------------------------
 	# Copy updated ptfconfig file to TestSuite folder
 	#-----------------------------------------------------------------------------------------------
-	$ptfPath="$endPointPath\$version\Source\Server\TestCode\TestSuite"
+	$ptfPath="$endPointPath\Source\Server\TestCode\TestSuite"
 	Write-ConfigLog "Copy the updated ptfconfig file to $ptfPath" -ForegroundColor Yellow
+	# Check test result directory
+    if(!(Test-Path -Path $ptfPath))
+    {
+        mkdir $ptfPath
+    }
 	copy $DepPtfConfig $ptfPath
 
 	#-----------------------------------------------------------------------------------------------
@@ -978,6 +983,26 @@ Function Main
     # Update ParamConfig.xml
 	UpdateConfigFile.ps1 -WorkingPath $WorkingPath
 	
+	# Import Certificate
+	if(Test-Path -Path $configFilePath)
+    {
+		[xml]$configFile2 = Get-Content -Path $configFilePath
+		$proxyNode = $configFile2.lab.servers.vm | Where-Object{$_.role -match "PROXY01"}
+		$hostname = $proxyNode.name
+		$domainName = $proxyNode.domain
+		$remotePassword = $proxyNode.password
+		$userName = $proxyNode.username
+		$remoteUserName = $hostname + "\" + $userName
+		Write-ConfigLog "`$hostname = $hostname"
+		Write-ConfigLog "`$remotePassword = $remotePassword"
+		Write-ConfigLog "`$remoteUserName = $remoteUserName"
+		Write-ConfigLog "`$domainName = $domainName"
+		net use "\\$hostname\C$" $remotePassword /User:$remoteUserName
+		$certificatFile = "\\$hostname\c$\$hostname.$domainName.cer"
+		Write-ConfigLog "`$certificatFile = $certificatFile"
+		Import-Certificate -FilePath $certificatFile  -CertStoreLocation 'Cert:\LocalMachine\Root'
+    }
+
 	Config-Driver
 	
 	Complete-Configure
