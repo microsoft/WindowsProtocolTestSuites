@@ -6,6 +6,7 @@
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Messages</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">

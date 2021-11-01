@@ -161,17 +161,37 @@ Function Config-DC02()
 {
     Write-ConfigLog "Begin to config DC02 computer"
 	$domainName 	= $KrbParams.Parameters.TrustRealm.RealmName
+	$trustedDomain = $KrbParams.Parameters.LocalRealm.RealmName
 
+	#-----------------------------------------------------------------------------------------------
+	#Ensure $trustedDomain can be accessed
+	#-----------------------------------------------------------------------------------------------
+	$Times = 20
+	while($Times -ge 0)
+	{
+		$domain = Get-ADDomain $trustedDomain
+		If ($domain -ne $null)
+		{
+			Write-ConfigLog "Waiting to be able to access $trustedDomain."
+			$Times = $Times - 1
+			Start-Sleep -s 60
+		}
+		else
+		{
+			Write-ConfigLog "Can access $trustedDomain."
+			break
+		}
+	}
 	#-----------------------------------------------------------------------------------------------
 	#Create forest trust on local side
 	#-----------------------------------------------------------------------------------------------
 	Write-ConfigLog "Create forest trust relationship on local side ..." -ForegroundColor Yellow
-
+	
 	$LocalForest = [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest()
 	try
 	{
 		# Build trust relationship on local forest only
-		$LocalForest.CreateLocalSideOfTrustRelationship($KrbParams.Parameters.LocalRealm.RealmName, "Bidirectional", $KrbParams.Parameters.TrustPassword)
+		$LocalForest.CreateLocalSideOfTrustRelationship($trustedDomain, "Bidirectional", $KrbParams.Parameters.TrustPassword)
 	}
 	# If trust relationship already exists
 	catch [System.DirectoryServices.ActiveDirectory.ActiveDirectoryObjectExistsException]
@@ -260,7 +280,7 @@ Function Config-DC02()
 	# Define Claims transformation policy
 	#-----------------------------------------------------------------------------------------------
 	New-ADClaimTransformPolicy -Description:"Claims transformation policy to deny all claims except $claim" -Name:"DenyAllClaimsExceptTestedClaimPolicy" -DenyAllExcept:$claim -Server:"$domainName"
-	$trustedDomain = $KrbParams.Parameters.LocalRealm.RealmName
+	
 	Set-ADClaimTransformLink -Identity:"$trustedDomain" -Policy:"DenyAllClaimsExceptTestedClaimPolicy" -TrustRole:Trusting
 
 	#-----------------------------------------------------------------------------------------------

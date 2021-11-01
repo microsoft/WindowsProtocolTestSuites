@@ -5,6 +5,7 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Transport</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Transport</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

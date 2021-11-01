@@ -5,6 +5,7 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">

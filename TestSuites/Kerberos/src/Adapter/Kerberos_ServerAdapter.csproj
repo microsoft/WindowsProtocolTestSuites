@@ -4,13 +4,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocol.TestSuites.Kerberos.Adapter</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <CodeAnalysisRuleSet>Sdl7.0.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>  
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>

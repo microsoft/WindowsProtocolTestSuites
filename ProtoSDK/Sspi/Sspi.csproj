@@ -5,6 +5,7 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Sspi</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Sspi</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">

@@ -5,6 +5,7 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

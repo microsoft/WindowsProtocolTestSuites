@@ -5,6 +5,7 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
