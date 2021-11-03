@@ -5,32 +5,7 @@
 #        void RestoreNetlogonService(string pdcName, string tdcName);
 #
 ##get service object
-$serviceObj = get-service -computername $pdcName Netlogon
-##Judge the status of service.
-if($serviceObj.Status -eq "Paused")
-{
-    Resume-Service -inputObject $serviceObj
-}
-if($serviceObj.Status -eq "Stopped")
-{
-    Start-Service -inputObject $serviceObj
-}
-Sleep 10
-do
-{
-	Sleep 5
-	$serviceObj = get-service -computername $pdcName Netlogon
-}While($serviceObj.Status -ne "Running")
-Sleep 10
-$serviceObj.Close()
-[System.GC]::Collect();
-[System.GC]::WaitForPendingFinalizers();
-[System.GC]::Collect();
-
-if($tdcName)
-{
-	##get service object
-	$serviceObj = get-service -computername $tdcName Netlogon
+Invoke-Command -Computername $pdcName -Scriptblock { $serviceObj = Get-Service Netlogon
 	##Judge the status of service.
 	if($serviceObj.Status -eq "Paused")
 	{
@@ -39,15 +14,39 @@ if($tdcName)
 	if($serviceObj.Status -eq "Stopped")
 	{
 		Start-Service -inputObject $serviceObj
-	}	
-	sleep 10
-	do{
+	}
+	Sleep 10
+	do
+	{
 		Sleep 5
-		$serviceObj = get-service -computername $tdcName Netlogon
+		$serviceObj =Invoke-Command -Computername $pdcName -Scriptblock {Get-Service Netlogon} 
 	}While($serviceObj.Status -ne "Running")
 	Sleep 10
+}
+[System.GC]::Collect();
+[System.GC]::WaitForPendingFinalizers();
+[System.GC]::Collect();
 
-	$serviceObj.Close()
+if($tdcName)
+{
+	##get service object
+	Invoke-Command -Computername $tdcName -Scriptblock { $serviceObj = Get-Service Netlogon
+		##Judge the status of service.
+		if($serviceObj.Status -eq "Paused")
+		{
+			Resume-Service -inputObject $serviceObj
+		}
+		if($serviceObj.Status -eq "Stopped")
+		{
+			Start-Service -inputObject $serviceObj
+		}	
+		sleep 10
+		do{
+			Sleep 5
+			$serviceObj =Invoke-Command -Computername $tdcName -Scriptblock {Get-Service Netlogon} 
+		}While($serviceObj.Status -ne "Running")
+		Sleep 10
+	}
 
 	[System.GC]::Collect();
 	[System.GC]::WaitForPendingFinalizers();
