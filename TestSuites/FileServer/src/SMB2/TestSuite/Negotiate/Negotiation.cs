@@ -1255,13 +1255,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private void CheckSigningCompatibility(bool isSigningRequired = false)
         {
             // Check platform
-            if (TestConfig.IsWindowsPlatform)
+            if(TestConfig.Platform < Platform.Windows10V21H1)
             {
-                BaseTestSite.Assert.IsFalse(TestConfig.Platform < Platform.Windows10V21H1, "Windows 10 v20H2 operating system and prior and Windows Server v20H2 operating system and prior do not send or process SMB2_SIGNING_CAPABILITIES.");
-                if (isSigningRequired)
-                {
-                    BaseTestSite.Assert.IsTrue(TestConfig.Platform >= Platform.Windows10V21H1, "Only Windows 10 v21H1 operating system and later and Windows Server 2022 operating system and later operating systems support signing capabilities");
-                }
+                BaseTestSite.Assert.Inconclusive("Windows 10 v20H2 and prior and Windows Server v20H2 and prior do not send or process SMB2_SIGNING_CAPABILITIES negotiate context.");
             }
 
             // Check SUT supported signing algorithms
