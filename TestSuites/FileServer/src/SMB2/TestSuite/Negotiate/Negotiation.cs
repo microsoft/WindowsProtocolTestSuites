@@ -1255,13 +1255,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private void CheckSigningCompatibility(bool isSigningRequired = false)
         {
             // Check platform
-            if (TestConfig.IsWindowsPlatform)
+            if(TestConfig.IsWindowsPlatform && TestConfig.Platform < Platform.Windows10V21H1)
             {
-                BaseTestSite.Assert.IsFalse(TestConfig.Platform < Platform.Windows10V21H1, "Windows 10 v20H2 operating system and prior and Windows Server v20H2 operating system and prior do not send or process SMB2_SIGNING_CAPABILITIES.");
-                if (isSigningRequired)
-                {
-                    BaseTestSite.Assert.IsTrue(TestConfig.Platform >= Platform.Windows10V21H1, "Only Windows 10 v21H1 operating system and later and Windows Server 2022 operating system and later operating systems support signing capabilities");
-                }
+                BaseTestSite.Assert.Inconclusive("Windows 10 v20H2 and prior and Windows Server v20H2 and prior do not send or process SMB2_SIGNING_CAPABILITIES negotiate context.");
             }
 
             // Check SUT supported signing algorithms
@@ -1278,11 +1274,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // Check platform
             if (TestConfig.IsWindowsPlatform)
             {
-                BaseTestSite.Assume.IsFalse(TestConfig.Platform < Platform.WindowsServerV1903, "Windows 10 v1809 operating system and prior, Windows Server v1809 operating system and prior, and Windows Server 2019 and prior do not support compression.");
-
-                if (isChainedCompressionRequired)
+                if(TestConfig.Platform < Platform.WindowsServerV1903)
                 {
-                    BaseTestSite.Assume.IsTrue(TestConfig.Platform >= Platform.WindowsServerV2004, "Only Windows 10 v2004 operating system and later and Windows Server v2004 operating system and later operating systems support chained compression.");
+                    BaseTestSite.Assume.Inconclusive("Windows 10 v1809 operating system and prior, Windows Server v1809 operating system and prior, and Windows Server 2019 and prior do not support compression.");
+                }                
+
+                if (isChainedCompressionRequired && TestConfig.Platform < Platform.WindowsServerV2004)
+                {
+                    BaseTestSite.Assume.Inconclusive("Only Windows 10 v2004 operating system and later and Windows Server v2004 operating system and later operating systems support chained compression.");
                 }
             }
 
@@ -1340,14 +1339,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         private void CheckRdmaCompatibility(bool isRdmaCapabilitySupported = false)
         {
-            if (TestConfig.IsWindowsPlatform)
+            if (TestConfig.IsWindowsPlatform && TestConfig.Platform <= Platform.WindowsServerV2004)
             {
-                BaseTestSite.Assume.IsFalse(TestConfig.Platform <= Platform.WindowsServerV2004, "Windows 10 v2004 operating system and prior and Windows Server v2004 operating system and prior do not send or process SMB2_RDMA_TRANSFORM_CAPABILITIES.");
-
-                if (isRdmaCapabilitySupported)
-                {
-                    BaseTestSite.Assume.IsTrue(TestConfig.Platform > Platform.WindowsServerV2004, "Only operating systems greater than Windows 10 v2004 and operating systems greater than Windows server v2004 support RDMA transforms.");
-                }
+                BaseTestSite.Assume.Inconclusive("Windows 10 v2004 operating system and prior and Windows Server v2004 operating system and prior do not send or process SMB2_RDMA_TRANSFORM_CAPABILITIES.");
             }
 
             BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces support to process SMB2_RDMA_TRANSFORM_CAPABILITIES");
