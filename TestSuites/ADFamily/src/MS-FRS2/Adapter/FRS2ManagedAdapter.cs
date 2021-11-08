@@ -2735,7 +2735,7 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
 
             if ((!flagAsyncpollReq) && (flagAsyncpollRequested))
             {
-                AsyncThread.Abort();
+                AsyncThread.Interrupt();
             }
             else
             {
