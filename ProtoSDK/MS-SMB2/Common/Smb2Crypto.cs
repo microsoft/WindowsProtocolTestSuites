@@ -103,12 +103,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                             cryptoInfo = cryptoInfoTable[sessionId];
                         }
 
-                        packet.Header.Signature = Sign(cryptoInfo, packet.ToBytes());
+                        packet.Header.Signature = Sign(cryptoInfo, packet, role);
                     }
                 }
                 else
                 {
-                    (originalPacket as Smb2SinglePacket).Header.Signature = Sign(cryptoInfo, originalPacket.ToBytes());
+                    (originalPacket as Smb2SinglePacket).Header.Signature = Sign(cryptoInfo, originalPacket as Smb2SinglePacket, role);
                 }
             }
             #endregion
@@ -136,14 +136,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             {
                 throw new InvalidOperationException(
                     String.Format(
-                        "Flags/EncryptionAlgorithm field is invalid for encrypted message. Expected value 0x0001, actual {0}.",
+                        "[MS-SMB2] section 3.3.5.2.1.1 Flags/EncryptionAlgorithm field is invalid for encrypted message. Expected value 0x0001, actual {0}.",
                         (ushort)transformHeader.Flags
                     )
                 );
             }
 
             if (transformHeader.SessionId == 0 || !cryptoInfoTable.ContainsKey(transformHeader.SessionId))
-                throw new InvalidOperationException("Invalid SessionId in TRANSFORM_HEADER.");
+                throw new InvalidOperationException("[MS-SMB2] section 3.3.5.2.1.1 Invalid SessionId in TRANSFORM_HEADER.");
 
             Smb2CryptoInfo cryptoInfo = cryptoInfoTable[transformHeader.SessionId];
 
@@ -206,20 +206,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             return decrypted;
         }
 
-        private static byte[] Sign(Smb2CryptoInfo cryptoInfo, byte[] original)
+        private static byte[] Sign(Smb2CryptoInfo cryptoInfo, Smb2SinglePacket original, Smb2Role role)
         {
             if (Smb2Utility.IsSmb2Family(cryptoInfo.Dialect))
             {
                 // [MS-SMB2] 3.1.4.1 
                 // 3. If Connection.Dialect is "2.002" or "2.100", the sender MUST compute a 32-byte hash using HMAC-SHA256 over the entire message, 
                 HMACSHA256 hmacSha = new HMACSHA256(cryptoInfo.SigningKey);
-                return hmacSha.ComputeHash(original);
+                return hmacSha.ComputeHash(original.ToBytes());
             }
+            else if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
+            {
+                // [MS-SMB2] 3.1.4.1
+                // 1. If Connection.Dialect belongs to the SMB 3.x dialect family and Connection.SigningAlgorithmId is AES-GMAC, 
+                // compute a 16-byte hash using the AES-GMAC over the entire message using nonce as specified
+                var nonce = Smb2Utility.ComputeNonce(original, role);
+                var (_, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, nonce, original.ToBytes());
+
+                return tag;
+            }   
             else
             {
                 // [MS-SMB2] 3.1.4.1 
                 // 2. If Connection.Dialect belongs to the SMB 3.x dialect family, the sender MUST compute a 16-byte hash using AES-128-CMAC over the entire message
-                return AesCmac128.ComputeHash(cryptoInfo.SigningKey, original);
+                return AesCmac128.ComputeHash(cryptoInfo.SigningKey, original.ToBytes());
             }
         }
 

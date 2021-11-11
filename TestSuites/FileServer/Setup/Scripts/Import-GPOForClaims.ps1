@@ -51,8 +51,23 @@ $domain = Get-ADDomain $domainName
 if($domain.name -ne "contoso") {
     Get-ChildItem -Path $gpoBackupFolder -exclude *.pol -File -Recurse | ForEach-Object {
         $content =($_|Get-Content)
+        if ($content | Select-String -Pattern 'DC01.contoso.com') {
+            $content = $content -replace 'DC01.contoso.com',$domain.InfrastructureMaster
+            [IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+        }
+
+        if ($content | Select-String -Pattern 'contoso.com') {
+            $content = $content -replace 'contoso.com',$domain.Forest
+            [IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+        }
+
+        if ($content | Select-String -Pattern 'DC=contoso,DC=com') {
+            $content = $content -replace 'DC=contoso,DC=com',$domain.DistinguishedName
+            [IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
+        }
+
         if ($content | Select-String -Pattern 'contoso') {
-            $content = $content -replace 'contoso',$domain.name   
+            $content = $content -replace 'contoso',$domain.name
             [IO.File]::WriteAllText($_.FullName, ($content -join "`r`n"))
         }
     }

@@ -237,6 +237,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// as specified in section 2.2.9.2.1.
         /// </summary>
         SHAREFLAG_IDENTITY_REMOTING = 0x00040000,
+
+        /// <summary>
+        /// If set, The server supports compression of read/write messages on this share.
+        /// This flag is only valid for the SMB 3.1.1 dialect.
+        /// </summary>
+        SHAREFLAG_COMPRESS_DATA = 0x00100000,
     }
 
     /// <summary>
@@ -4842,6 +4848,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The Data field contains the server name to which the client connects.
         /// </summary>
         SMB2_NETNAME_NEGOTIATE_CONTEXT_ID = 0x0005,
+
+        /// <summary>
+        /// The Data field contains the list of signing algorithms, as specified in section 2.2.3.1.7
+        /// </summary>
+        SMB2_SIGNING_CAPABILITIES = 0x0008,
+
+        /// <summary>
+        /// The Data field contains a list of RDMA transforms, as specified in section 2.2.3.1.6
+        /// </summary>
+        SMB2_RDMA_TRANSFORM_CAPABILITIES = 0x0007,
     }
 
     /// <summary>
@@ -5088,6 +5104,112 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
     }
 
+    public enum SigningAlgorithm : short
+    {
+        /// <summary>
+        /// HMAC-SHA256 signing algorithm
+        /// </summary>
+        HMAC_SHA256 = 0x0000,
+
+        /// <summary>
+        /// AES-CMAC signing algorithm
+        /// </summary>
+        AES_CMAC = 0x0001,
+
+        /// <summary>
+        /// AES-GMAC signing algorithm
+        /// </summary>
+        AES_GMAC = 0x0002,
+    }
+
+    public struct SMB2_SIGNING_CAPABILITIES
+    {
+        /// <summary>
+        /// Header
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// The number of signing algorithms in the SigningAlgorithms array. This value MUST be greater zero
+        /// </summary>
+        public ushort SigningAlgorithmCount;
+
+        /// <summary>
+        /// An array of 16-bit integer IDs specifying the supported signing algorithms. 
+        /// These IDs MUST be in an order such that the most preferred signing algorithm MUST be 
+        /// at the beginning of the array and least preferred signing algorithm at the end of the array. 
+        /// </summary>
+        [Size("SigningAlgorithmCount")]
+        public SigningAlgorithm[] SigningAlgorithms;
+
+        public int GetDataLength()
+        {
+            int dataLength = sizeof(ushort); // SigningAlgorithmCount
+            if (SigningAlgorithms != null) dataLength += SigningAlgorithms.Length * sizeof(SigningAlgorithm);
+
+            return dataLength;
+        }
+    }
+
+    /// <summary>
+    /// The SMB2_RDMA_TRANSFORM_CAPABILITIES context is specified in an SMB2 NEGOTIATE request 
+    /// by the client to indicate transforms supported when data is sent over RDMA
+    /// </summary>
+    public struct SMB2_RDMA_TRANSFORM_CAPABILITIES
+    {
+        /// <summary>
+        /// Header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        // <summary>
+        // The number of elements in RDMATransformIds array
+        // </summary>
+        [StaticSize(2)]
+        public ushort TransformCount;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. 
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Reserved1;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. 
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved2;
+
+        // <summary>
+        // An array of 16-bit integer IDs specifying the supported RDMA transforms
+        // </summary>
+        [Size("TransformCount")]
+        public Smb2RDMATransformId[] RDMATransformIds;
+
+        /// <summary>
+        /// Get the data length
+        /// </summary>
+        /// <returns>The data length of this context.</returns>
+        public int GetDataLength()
+        {
+            int dataLength = Marshal.SizeOf(TransformCount) + sizeof(ushort) + sizeof(uint);
+            if (RDMATransformIds != null) dataLength += sizeof(Smb2RDMATransformId) * RDMATransformIds.Length;
+            return dataLength;
+        }
+    }
+
+
+    public enum Smb2RDMATransformId : ushort
+    {
+        SMB2_RDMA_TRANSFORM_NONE = 0x0000,
+
+        SMB2_RDMA_TRANSFORM_ENCRYPTION = 0x0001,
+
+        SMB2_RDMA_TRANSFORM_SIGNING = 0x0002,
+    }
+
 
     /// <summary>
     ///  The SMB2 CANCEL Request packet is sent by the client
@@ -5329,7 +5451,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <summary>
         /// Control code for SVHDX_META_OPERATION_START_REQUEST
         /// </summary>
-        FSCTL_SVHDX_ASYNC_TUNNEL_REQUEST = 0x00090364
+        FSCTL_SVHDX_ASYNC_TUNNEL_REQUEST = 0x00090364,
+
+        /// <summary>
+        /// Control code for FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT
+        /// </summary>
+        FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT = 0x00090440,
     }
 
     /// <summary>
@@ -11594,7 +11721,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The volume is write-protected and changes to it cannot be made. 
         /// </summary>
         public const uint STATUS_MEDIA_WRITE_PROTECTED = 0xC00000A2;
-
+        
         #endregion
 
         public static string GetStatusCode(uint status)

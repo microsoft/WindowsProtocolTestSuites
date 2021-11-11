@@ -411,6 +411,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Transform_Header transformHeader;
             var decryptedBytes = Smb2Crypto.Decrypt(messageBytes, cryptoInfoTable, decodeRole, out transformHeader);
 
+            if (transformHeader.OriginalMessageSize != decryptedBytes.Length)
+            {
+                throw new InvalidOperationException("[MS-SMB2] section 3.3.5.2.1.1 OriginalMessageSize in TRANSFORM_HEADER does not match received message size.");
+            }
+
             byte[] protocolVersion = new byte[sizeof(uint)];
             Array.Copy(decryptedBytes, 0, protocolVersion, 0, protocolVersion.Length);
 
@@ -979,7 +984,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
                     //TD has mentioned to use Session.SigningKey for SESSION_SETUP Response and Channel.SigningKey for other responses
                     //In the current SDK, the SigningKey is the Channel.SigningKey
-                    computedSignature = AesCmac128.ComputeHash(cryptoInfo.SigningKey, bytesToCompute);
+
+                    if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
+                    {
+                        var nonce = Smb2Utility.ComputeNonce(packet, this.decodeRole);
+                        var (_ciphertext, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, nonce, bytesToCompute);
+
+                        computedSignature = tag;
+                    }
+                    else
+                    {
+                        computedSignature = AesCmac128.ComputeHash(cryptoInfo.SigningKey, bytesToCompute);
+                    }
                 }
                 else
                 {

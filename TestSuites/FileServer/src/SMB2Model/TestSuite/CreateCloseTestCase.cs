@@ -3547,14 +3547,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c1, config, "config of CreateResponse, state S279");
             }
             catch (TransactionFailedException ) {
-                this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
+                this.Manager.Comment(@"This step would have covered ""[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
             this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
-            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
-                    " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
-                    "with STATUS_OBJECT_NAME_INVALID.\"");
+            this.Manager.Checkpoint("\"[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID.\"");
             this.Manager.Checkpoint("\"[TestInfo] The file name of the Create Request contains illegal character.\"");
             this.Manager.Checkpoint("\"[TestTag] UnexpectedFields\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -5789,14 +5787,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c1, config, "config of CreateResponse, state S454");
             }
             catch (TransactionFailedException ) {
-                this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
+                this.Manager.Comment(@"This step would have covered ""[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
             this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
-            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
-                    " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
-                    "with STATUS_OBJECT_NAME_INVALID.\"");
+            this.Manager.Checkpoint("\"[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID.\"");
             this.Manager.Checkpoint("\"[TestInfo] The file name of the Create Request contains illegal character.\"");
             this.Manager.Checkpoint("\"[TestTag] UnexpectedFields\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -6559,14 +6555,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c1, config, "config of CreateResponse, state S524");
             }
             catch (TransactionFailedException ) {
-                this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
+                this.Manager.Comment(@"This step would have covered ""[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
             this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
-            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
-                    " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
-                    "with STATUS_OBJECT_NAME_INVALID.\"");
+            this.Manager.Checkpoint("\"[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID.\"");
             this.Manager.Checkpoint("\"[TestInfo] The file name of the Create Request contains illegal character.\"");
             this.Manager.Checkpoint("\"[TestTag] UnexpectedFields\"");
             this.Manager.Comment("Unbinding variable \'c1\'");
@@ -6677,14 +6671,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite {
                 TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.c1, config, "config of CreateResponse, state S531");
             }
             catch (TransactionFailedException ) {
-                this.Manager.Comment(@"This step would have covered ""[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
+                this.Manager.Comment(@"This step would have covered ""[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID."", ""[TestInfo] The file name of the Create Request contains illegal character."", ""[TestTag] UnexpectedFields""");
                 throw;
             }
             TestManagerHelpers.AssertBind<Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreateClose.CreateCloseConfig>(this.Manager, this.v1, this.c1, "v1 == c1");
             this.Manager.Assert(TestManagerHelpers.Equality(((object)(((int)(this.v1.Value.Platform)))), ((object)(((int)(this.c.Value.Platform))))), "Fail to check the assumption : v1.Platform == c.Platform");
-            this.Manager.Checkpoint("\"[MS-SMB2] 3.3.5.9: If the file name fails to conform with the specification of a" +
-                    " relative pathname in [MS-FSCC] section 2.1.5, the server MUST fail the request " +
-                    "with STATUS_OBJECT_NAME_INVALID.\"");
+            this.Manager.Checkpoint("\"[MS-FSCC] 2.1.5.2: According to [MS-FSA] section 2.1.5.1, if the PathName is not valid, the operation MUST be failed with STATUS_OBJECT_NAME_INVALID.\"");
             this.Manager.Checkpoint("\"[TestInfo] The file name of the Create Request contains illegal character.\"");
             this.Manager.Checkpoint("\"[TestTag] UnexpectedFields\"");
             this.Manager.Comment("Unbinding variable \'c1\'");

@@ -246,5 +246,44 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             client.TreeDisconnect(treeId);
             client.LogOff();
         }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Tree)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("This test case is designed to test server responds with SHAREFLAG_COMPRESS_DATA to a TreeConnect request for a share that supports compression.")]
+        public void TreeMgmt_SMB311_COMPRESS_DATA()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb311);
+            TestConfig.CheckPlatform(Platform.WindowsServer2022);
+            if (string.IsNullOrEmpty(testConfig.CompressedFileShare))
+                Assert.Inconclusive("This test requires a share with compression enabled");
+            #endregion
+
+            var compressedSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.CompressedFileShare);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client by sending the following requests: NEGOTIATE; SESSION_SETUP");
+
+            client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends TREE_CONNECT request and expects STATUS_SUCCESS with flag SMB2_SHAREFLAG_COMPRESS_DATA.");
+            uint treeId;
+
+            client.TreeConnect(compressedSharePath, out treeId,
+                (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                       "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+
+                    BaseTestSite.Assert.IsTrue(
+                        response.ShareFlags.HasFlag(ShareFlags_Values.SHAREFLAG_COMPRESS_DATA),
+                        "The share should support compress data, actually server returns {0}.", response.ShareFlags.ToString());
+                });
+            client.TreeDisconnect(treeId);
+        }
     }
 }

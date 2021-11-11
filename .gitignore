@@ -17,6 +17,7 @@ bld/
 [Oo]bjd/
 [Oo]ut/
 [Ll]og/
+build/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -53,6 +54,10 @@ ipch/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
 
 # Compiled files of Test Suites
 drop/
@@ -115,3 +120,5 @@ TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.Web/wwwroot/Upload/
 TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.Web/wwwroot/Images/Decoded/
 TestSuites/RDP/Tools/RDPToolSet/RDPToolSet.Web/wwwroot/Images/Uploads/
 TestSuites/RDP/Tools/RDPToolSet/.nuget
+ProtocolTestManager/PTMService/PTMService/PTMService/ClientApp/.eslintcache
+ProtocolTestManager/PTMService/PTMService/ClientApp/.eslintcache

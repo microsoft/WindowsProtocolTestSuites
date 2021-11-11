@@ -448,8 +448,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                                 BaseTestSite.Assert.AreNotEqual(
                                     Smb2Status.STATUS_SUCCESS,
                                     header.Status,
-                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and any of the following conditions is TRUE, the server SHOULD<242> fail the request with STATUS_ACCESS_DENIED. " +
-                                    "DesiredAccess does not include DELETE or GENERIC_ALL. " +
+                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and Treeconnect.MaximalAccess does not include DELETE or GENERIC, the server SHOULD<283> fail the request with STATUS_ACCESS_DENIED. " +
                                     "Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                             }
                             else if (testConfig.Platform == Platform.WindowsServer2008 
@@ -463,8 +462,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                                 BaseTestSite.Assert.AreEqual(
                                     Smb2Status.STATUS_INVALID_PARAMETER,
                                     header.Status,
-                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and any of the following conditions is TRUE, the server SHOULD<242> fail the request with STATUS_ACCESS_DENIED. " +
-                                    "DesiredAccess does not include DELETE or GENERIC_ALL. " +
+                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and Treeconnect.MaximalAccess does not include DELETE or GENERIC, the server SHOULD<283> fail the request with STATUS_ACCESS_DENIED. " +
                                     "Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                             }
                             else 
@@ -473,8 +471,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                                 BaseTestSite.Assert.AreEqual(
                                     Smb2Status.STATUS_ACCESS_DENIED,
                                     header.Status,
-                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and any of the following conditions is TRUE, the server SHOULD<242> fail the request with STATUS_ACCESS_DENIED. " +
-                                    "DesiredAccess does not include DELETE or GENERIC_ALL. " +
+                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and Treeconnect.MaximalAccess does not include DELETE or GENERIC, the server SHOULD<283> fail the request with STATUS_ACCESS_DENIED. " +
                                     "Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                             }
                         }
@@ -486,8 +483,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                                 BaseTestSite.Assert.AreNotEqual(
                                     Smb2Status.STATUS_SUCCESS,
                                     header.Status,
-                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and any of the following conditions is TRUE, the server SHOULD<242> fail the request with STATUS_ACCESS_DENIED. " +
-                                    "Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL. " +
+                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and Treeconnect.MaximalAccess does not include DELETE or GENERIC, the server SHOULD<283> fail the request with STATUS_ACCESS_DENIED. " +
                                     "Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                             }
                             else if (testConfig.Platform == Platform.WindowsServer2008
@@ -501,8 +497,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                                 BaseTestSite.Assert.AreEqual(
                                     Smb2Status.STATUS_ACCESS_DENIED,
                                     header.Status,
-                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and any of the following conditions is TRUE, the server SHOULD<242> fail the request with STATUS_ACCESS_DENIED. " +
-                                    "Treeconnect.MaximalAccess does not include DELETE or GENERIC_ALL. " +
+                                    "3.3.5.9: If the FILE_DELETE_ON_CLOSE flag is set in CreateOptions and Treeconnect.MaximalAccess does not include DELETE or GENERIC, the server SHOULD<283> fail the request with STATUS_ACCESS_DENIED. " +
                                     "Actually server returns with {0}.", Smb2Status.GetStatusCode(header.Status));
                             }
                         }

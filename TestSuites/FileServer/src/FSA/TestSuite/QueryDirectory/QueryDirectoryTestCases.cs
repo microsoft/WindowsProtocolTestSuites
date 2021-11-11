@@ -336,8 +336,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, false);
-            //The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
-            if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
+            // [MS-FSA] 2.1.5.5.3.6: ... Entry.FileID SHOULD<69> be set to Open.Link.ParentFile.FileId64, otherwise MUST be set to zero
+            // <69> Section 2.1.5.5.3.6: The NTFS file system on versions prior to Windows 11 and Windows Server 2022,
+            // and non-NTFS file systems on all versions of Windows, always set the FileID field to zero in the ".." entry.
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS && this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId of the entry should not be 0.");
+            }
+            else if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
                 || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId of the entry should be 0.");
@@ -409,8 +415,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "", false);
-            //The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
-            if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
+            //[MS-FSA] 2.1.5.5.3.4: Entry.FileID SHOULD<65> be set to Open.Link.ParentFile.FileId64, otherwise MUST be set to zero
+            // <65> Section 2.1.5.5.3.4: The NTFS file system on versions prior to Windows 11 and Windows Server 2022,
+            // and non-NTFS file systems on all versions of Windows, always set the FileID field to zero in the ".." entry.
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS && this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId of the entry should not be 0.");
+            }
+            else if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
                 || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId of the entry should be 0.");
