@@ -494,48 +494,27 @@ Function Config-Phase4()
     .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "certFilewithPathSpec" -ProperyValue $($env:SystemDrive + "\" + $Parameters["primarydc"] + ".cer")
 
     # (b) Update TD XML paths [MS-ADTS-Schema]
-    foreach($PtfFile in $PtfFiles)
-    {
-        if($PtfFile.DirectoryName.Contains("Server\TestCode\TestSuite"))
-        {
-            $ParentPath = $PtfFile.DirectoryName.Replace("\Source\Server\TestCode\TestSuite","")
-            $TDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADA1\*,$ParentPath\Data\Common-TD-XML\MS-ADA2\*,$ParentPath\Data\Win8-TD-XML\MS-ADA2\*,$ParentPath\Data\Common-TD-XML\MS-ADA3\*,$ParentPath\Data\Common-TD-XML\MS-ADSC\*,$ParentPath\Data\Win8-TD-XML\MS-ADSC\*"
-            $LdsTDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADLS\*,$ParentPath\Data\Win8-TD-XML\MS-ADLS\* "
+    $ParentPath = $PtfFile.DirectoryName.Replace("\Bin","")
+    $TDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADA1\*,$ParentPath\Data\Common-TD-XML\MS-ADA2\*,$ParentPath\Data\Win8-TD-XML\MS-ADA2\*,$ParentPath\Data\Common-TD-XML\MS-ADA3\*,$ParentPath\Data\Common-TD-XML\MS-ADSC\*,$ParentPath\Data\Win8-TD-XML\MS-ADSC\*"
+    $LdsTDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADLS\*,$ParentPath\Data\Win8-TD-XML\MS-ADLS\* "
             
-            if ($PdcOsVersion -eq "Winv1803") {
-                $OpenXmlPath2016 = "$ParentPath\Data\Winv1803-TD-XML\DS\*"
-                $LdsOpenXmlPath2016 = "$ParentPath\Data\Winv1803-TD-XML\LDS\*"
-            }
-            else {
-                $OpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\DS\*"
-                $LdsOpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\LDS\*"
-            }
-        }
-        else
-        {
-            $ParentPath = $PtfFile.DirectoryName.Replace("\Bin","")
-            $TDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADA1\*,$ParentPath\Data\Common-TD-XML\MS-ADA2\*,$ParentPath\Data\Win8-TD-XML\MS-ADA2\*,$ParentPath\Data\Common-TD-XML\MS-ADA3\*,$ParentPath\Data\Common-TD-XML\MS-ADSC\*,$ParentPath\Data\Win8-TD-XML\MS-ADSC\*"
-            $LdsTDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADLS\*,$ParentPath\Data\Win8-TD-XML\MS-ADLS\* "
-            
-            if ($PdcOsVersion -eq "Winv1803") {
-                $OpenXmlPath2016 = "$ParentPath\Data\Winv1803-TD-XML\DS\*"
-                $LdsOpenXmlPath2016 = "$ParentPath\Data\Winv1803-TD-XML\LDS\*"
-            }
-            else {
-                $OpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\DS\*"
-                $LdsOpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\LDS\*"
-            }
-        }
-        if($DomainFuncLvl -ge "6")
-        {
-            $TDXmlPath = $TDXmlPath.Replace("Win8","WinBlue")
-            $LdsTDXmlPath = $LdsTDXmlPath.Replace("Win8","WinBlue")
-        }
-        .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "TDXmlPath" -ProperyValue $TDXmlPath
-        .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "LdsTDXmlPath" -ProperyValue $LdsTDXmlPath
-        .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "OpenXmlPath2016" -ProperyValue $OpenXmlPath2016
-        .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "LdsOpenXmlPath2016" -ProperyValue $LdsOpenXmlPath2016
+    if ($PdcOsVersion -eq "Winv1803") {
+        $OpenXmlPath2016 = "$ParentPath\Data\Winv1803-TD-XML\DS\*"
+        $LdsOpenXmlPath2016 = "$ParentPath\Data\Winv1803-TD-XML\LDS\*"
     }
+    else {
+        $OpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\DS\*"
+        $LdsOpenXmlPath2016 = "$ParentPath\Data\Win2016-TD-XML\LDS\*"
+    }
+    if($DomainFuncLvl -ge "6")
+    {
+        $TDXmlPath = $TDXmlPath.Replace("Win8","WinBlue")
+        $LdsTDXmlPath = $LdsTDXmlPath.Replace("Win8","WinBlue")
+    }
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "TDXmlPath" -ProperyValue $TDXmlPath
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "LdsTDXmlPath" -ProperyValue $LdsTDXmlPath
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "OpenXmlPath2016" -ProperyValue $OpenXmlPath2016
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "LdsOpenXmlPath2016" -ProperyValue $LdsOpenXmlPath2016
 }
 
 #------------------------------------------------------------------------------------------

@@ -332,11 +332,11 @@
     </Group>
     <Group name="MS_ADTS_Schema">
       <!--Path to the TDXml of ADA1, ADA2, ADA3 and ADSC-->
-      <Property name="TDXmlPath" value=".\\..\Data\Common-TD-XML\MS-ADA1\*,.\..\Data\Common-TD-XML\MS-ADA2\*,.\..\Data\WinBlue-TD-XML\MS-ADA2\*,.\..\Data\Common-TD-XML\MS-ADA3\*,.\..\Data\Common-TD-XML\MS-ADSC\*,.\..\Data\WinBlue-TD-XML\MS-ADSC\*" >
+      <Property name="TDXmlPath" value=".\..\Data\Common-TD-XML\MS-ADA1\*,.\..\Data\Common-TD-XML\MS-ADA2\*,.\..\Data\WinBlue-TD-XML\MS-ADA2\*,.\..\Data\Common-TD-XML\MS-ADA3\*,.\..\Data\Common-TD-XML\MS-ADSC\*,.\..\Data\WinBlue-TD-XML\MS-ADSC\*" >
         <Description>Type:string! Usage: Specify where the TD XMLs for AD DS locates.</Description>
       </Property>
       <!--Path to the TDXml of ADLS-->
-      <Property name="LdsTDXmlPath" value=".\..\Data\Common-TD-XML\MS-ADLS\*,.\..\Data\WinBlue-TD-XML\MS-ADLS\* " >
+      <Property name="LdsTDXmlPath" value=".\..\Data\Common-TD-XML\MS-ADLS\*,.\..\Data\WinBlue-TD-XML\MS-ADLS\*" >
         <Description>Type:string! Usage: Specify where the TD XMLs for AD LDS locates.</Description>
       </Property>
       <!--Path to the open XML of ADA1, ADA2, ADA3, ADSC for Win2016-->
