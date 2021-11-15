@@ -494,7 +494,7 @@ Function Config-Phase4()
     .\Modify-PtfConfigFiles.ps1 -Files $PtfFiles -ProperyName "certFilewithPathSpec" -ProperyValue $($env:SystemDrive + "\" + $Parameters["primarydc"] + ".cer")
 
     # (b) Update TD XML paths [MS-ADTS-Schema]
-    $ParentPath = $PtfFile.DirectoryName.Replace("\Bin","")
+    $ParentPath = $PtfFiles.DirectoryName.Replace("\Bin","")
     $TDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADA1\*,$ParentPath\Data\Common-TD-XML\MS-ADA2\*,$ParentPath\Data\Win8-TD-XML\MS-ADA2\*,$ParentPath\Data\Common-TD-XML\MS-ADA3\*,$ParentPath\Data\Common-TD-XML\MS-ADSC\*,$ParentPath\Data\Win8-TD-XML\MS-ADSC\*"
     $LdsTDXmlPath = "$ParentPath\Data\Common-TD-XML\MS-ADLS\*,$ParentPath\Data\Win8-TD-XML\MS-ADLS\* "
             
@@ -511,10 +511,10 @@ Function Config-Phase4()
         $TDXmlPath = $TDXmlPath.Replace("Win8","WinBlue")
         $LdsTDXmlPath = $LdsTDXmlPath.Replace("Win8","WinBlue")
     }
-    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "TDXmlPath" -ProperyValue $TDXmlPath
-    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "LdsTDXmlPath" -ProperyValue $LdsTDXmlPath
-    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "OpenXmlPath2016" -ProperyValue $OpenXmlPath2016
-    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFile) -ProperyName "LdsOpenXmlPath2016" -ProperyValue $LdsOpenXmlPath2016
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFiles) -ProperyName "TDXmlPath" -ProperyValue $TDXmlPath
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFiles) -ProperyName "LdsTDXmlPath" -ProperyValue $LdsTDXmlPath
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFiles) -ProperyName "OpenXmlPath2016" -ProperyValue $OpenXmlPath2016
+    .\Modify-PtfConfigFiles.ps1 -Files @($PtfFiles) -ProperyName "LdsOpenXmlPath2016" -ProperyValue $LdsOpenXmlPath2016
 }
 
 #------------------------------------------------------------------------------------------
