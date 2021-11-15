@@ -7029,6 +7029,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         ///  Japanese keyboard
         /// </summary>
         V7 = 7,
+
+        /// <summary>
+        ///  Korean keyboard
+        /// </summary>
+        V8 = 8,
     }
 
     /// <summary>
@@ -9534,6 +9539,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// The CSRSS process running in the remote session terminated unexpectedly.
         /// </summary>
         ERRINFO_SERVER_CSRSS_CRASH = 0x00000018,
+
+        /// <summary>
+        /// The remote server is busy shutting down.
+        /// </summary>
+        ERRINFO_SERVER_SHUTDOWN = 0x00000019,
+
+        /// <summary>
+        /// The remote server is busy rebooting.
+        /// </summary>
+        ERRINFO_SERVER_REBOOT = 0x00000020,
 
         /// <summary>
         /// An internal error has occurred in the Terminal Services licensing component.
@@ -18577,7 +18592,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// The type of ErrorNotificationType.
     /// </summary>
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    public enum ErrorNotificationType_Values : uint
+    public enum ErrorNotificationData_Values : uint
     {
 
         /// <summary>
@@ -18609,7 +18624,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
     /// <summary>
     /// ErrorNotificationData values
     /// </summary>
-    public enum ErrorNotificationData_Values : uint
+    public enum ErrorNotificationType_Values : uint
     {
         /// <summary>
         /// The"Disconnection Refused" dialog is being displayed by Winlogon. 
@@ -18639,7 +18654,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The logon process is continuing. 
         /// </summary>
-        LOGON_MSG_SESSION_CONTINUE = 0xFFFFFFFE
+        LOGON_MSG_SESSION_CONTINUE = 0xFFFFFFFE,
+
+        /// <summary>
+        /// The logon process failed and cannot proceed.
+        /// </summary>
+        LOGON_MSG_CODE_ACCESS_DENIED = 0xFFFFFFFF,
+
+        /// <summary>
+        /// The "Session is Busy" dialog is being displayed by Winlogon.
+        /// </summary>
+        LOGON_MSG_SESSION_BUSY_OPTIONS = 0xFFFFFFF8
 
     }
 
