@@ -347,7 +347,7 @@ Function Config-Phase4()
 
     # Find PtfConfig files in \bin 
     Write-ConfigLog "Finding PtfConfig files in \bin " -ForegroundColor Yellow
-    $PtfFiles = "$env:SystemDrive\ADFamily-TestSuite-ServerEP\Bin\AD_ServerTestSuite.deployment.ptfconfig"
+    $PtfFiles = dir "$env:SystemDrive\ADFamily-TestSuite-ServerEP" -Recurse | where{$_.Name -eq "AD_ServerTestSuite.deployment.ptfconfig"}
 
     ##########################################################################
     # Modify PtfConfig file according to information retrieved from <Common> #
