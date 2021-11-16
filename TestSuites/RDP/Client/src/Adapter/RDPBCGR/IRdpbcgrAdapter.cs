@@ -459,7 +459,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="notificationType">The Logon Notification type.</param>
         /// <param name="errorType">The Logon Error type. Only used when Notification Type is LogonError.</param>
-        void ServerSaveSessionInfo(LogonNotificationType notificationType, ErrorNotificationType_Values errorType);
+        void ServerSaveSessionInfo(LogonNotificationType notificationType, ErrorNotificationType_Values errorType = ErrorNotificationType_Values.LOGON_MSG_NO_PERMISSION);
 
         /// <summary>
         /// Send an Early User Authorization Result PDU
