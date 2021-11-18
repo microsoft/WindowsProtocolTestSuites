@@ -332,7 +332,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             #region Change packet.ackVectorHeader To Not Acknowledge The Receipt
 
             RDPUDP_ACK_VECTOR_HEADER ackVectorHeader = new RDPUDP_ACK_VECTOR_HEADER();
-            ackVectorHeader.AckVectorElement = null;
+            ackVectorHeader.AckVector = null;
             ackVectorHeader.uAckVectorSize = 0;
             packet.ackVectorHeader = ackVectorHeader;
             sequenceNumberForLossPacket = packet.fecHeader.snSourceAck;

@@ -403,7 +403,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             var ackVectorHeader = new RDPUDP_ACK_VECTOR_HEADER();
             ackVectorHeader.uAckVectorSize = 0;
-            ackVectorHeader.AckVectorElement = null;
+            ackVectorHeader.AckVector = null;
             ackVectorHeader.Padding = null;
             packet.ackVectorHeader = ackVectorHeader;
 
@@ -699,7 +699,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 {
                     if (expectAckVectors != null)
                     {
-                        if (!(ackPacket.ackVectorHeader.HasValue && CompareAckVectors(ackPacket.ackVectorHeader.Value.AckVectorElement, expectAckVectors)))
+                        if (!(ackPacket.ackVectorHeader.HasValue && CompareAckVectors(ackPacket.ackVectorHeader.Value.AckVector, expectAckVectors)))
                         {
                             continue;
                         }
