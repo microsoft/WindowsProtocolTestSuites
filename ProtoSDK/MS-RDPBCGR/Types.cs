@@ -9548,7 +9548,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// The remote server is busy rebooting.
         /// </summary>
-        ERRINFO_SERVER_REBOOT = 0x00000020,
+        ERRINFO_SERVER_REBOOT = 0x0000001A,
 
         /// <summary>
         /// An internal error has occurred in the Terminal Services licensing component.
