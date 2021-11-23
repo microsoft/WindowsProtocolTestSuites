@@ -356,9 +356,9 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
 
 
                         }
-                        if (0 == string.Compare(from.ToLower(), fromServer.ToLower()))
-                            return guid;
                     }
+                    if (0 == string.Compare(from.ToLower(), fromServer.ToLower()))
+                        return guid;
                 }
             }
             throw new Exception("Failed to find replication partner's NTDS Connection guid");

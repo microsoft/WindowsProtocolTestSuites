@@ -2087,7 +2087,8 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
                     flagAsyncpollReq = true;
                 }, cancellationToken.Token);
                 asyncTask.Start(); //Starting the Thread.
-                System.Threading.Thread.Sleep(Convert.ToInt32(ConfigStore.SleepTime));
+                //System.Threading.Thread.Sleep(Convert.ToInt32(ConfigStore.SleepTime));
+                asyncTask.Wait();
                 flagAsyncpollRequested = true;
                 FRSSite.Log.Add(LogEntryKind.Checkpoint, "AsyncPoll return value is {0}", m_asyncRetVal);
                 if (m_asyncRetVal == 9033)
