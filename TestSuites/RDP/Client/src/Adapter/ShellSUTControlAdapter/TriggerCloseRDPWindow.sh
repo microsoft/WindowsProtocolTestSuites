@@ -9,6 +9,6 @@
 
 # Print an integer at the end of script.
 # This number will be parsed as the return value of function
-# TriggerClientDisconnect(string caseName)
+# TriggerCloseRDPWindow(string caseName)
 # Using a positive value to indicate success
 echo 1
