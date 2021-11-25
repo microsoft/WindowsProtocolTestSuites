@@ -65,7 +65,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         [MethodHelp("Please disconnect a remote desktop session between the client and server.\r\n\r\n" +
                     "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
-        int TriggerClientDisconnect(string caseName);
+        int TriggerCloseRDPWindow(string caseName);
 
         /// <summary>
         /// This method is used to trigger RDP client to close all RDP connection to a server for clean up.

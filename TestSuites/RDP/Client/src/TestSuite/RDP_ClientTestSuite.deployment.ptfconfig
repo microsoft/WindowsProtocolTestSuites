@@ -152,6 +152,10 @@
       <Property name="TriggerClientDisconnectAll_Task" value="DisconnectAll">
         <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
       </Property>
+      <!-- The Windows task name for SUT Control interface:TriggerCloseRDPWindow. -->
+      <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
+        <Description>The Windows task name for SUT Control interface: TriggerCloseRDPWindow.</Description>
+      </Property>
       <!-- The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient. -->
       <Property name="TriggerOneTouchEvent_Task" value="TriggerOneTouchEvent" >
         <Description>The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient.</Description>
