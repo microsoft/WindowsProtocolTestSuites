@@ -18,7 +18,18 @@ if ([string]::IsNullOrEmpty($OutDir)) {
     $OutDir = "$TestSuiteRoot/drop/TestSuites/ADFamily"
 }
 
-$CommonScripts ="Add-AdRemoteUserToLocalGroup.ps1","Check-ReturnValue.ps1","Create-AdUserWithGroupMembership.ps1","Create-ManagedServiceAccount.ps1","Create-SelfSignedCert.ps1","Disable_Firewall.ps1","Enable-AdRecyleBin.ps1","Execute-RemoteScript.ps1","Find-PtfConfigFiles.ps1","Get-AdLdsInstanceId.ps1","Get-AvailablePort.ps1","Get-DomainGuid.ps1","Get-DomainNetbiosName.ps1","Get-DomainSid.ps1","Get-ForestFuncLvl.ps1","Get-OSVersion.ps1","GetVMNameByComputerName.ps1","Install-AdCertificateService-Feature.ps1","Install-AdLds-Feature.ps1","Install-AdLds-Instance.ps1","Install-DfsManagement-Feature.ps1","Install-Iis-Feature.ps1","Install-SelfSignedCert.ps1","Modify-PtfConfigFiles.ps1","Register-DbgSrv.ps1","Replicate-DomainNc.ps1","Set-AdComputerPassword.ps1","Set-AdComputerPasswordOnPDC.ps1","Set-AdUserPwdPolicy.ps1","Set-AlternateDns.ps1","Set-AutoLogon.ps1","Set-ExecutionPolicy-Unrestricted.ps1","Set-IisSslBinding.ps1","Set-KdcService.ps1","Set-MsDSAdditonalDnsHostName.ps1","Set-MsDsAllowToActOnBehalfOfOtherIdentity.ps1","Set-MsDsBehaviorVersion.ps1","Set-MsDsOtherSettings.ps1","Set-NetlogonRegKeyAndPolicy.ps1","Set-NetworkConfiguration.ps1","Set-SecurityLevel.ps1","Turnoff-UAC.ps1","Verify-ForestTrust.ps1"
+$CommonScripts ="Add-AdRemoteUserToLocalGroup.ps1","Check-ReturnValue.ps1","Create-AdUserWithGroupMembership.ps1",
+                "Create-ManagedServiceAccount.ps1","Create-SelfSignedCert.ps1","Disable_Firewall.ps1","Enable-AdRecyleBin.ps1",
+                "Execute-RemoteScript.ps1","Find-PtfConfigFiles.ps1","Get-AdLdsInstanceId.ps1","Get-AvailablePort.ps1",
+                "Get-DomainGuid.ps1","Get-DomainNetbiosName.ps1","Get-DomainSid.ps1","Get-ForestFuncLvl.ps1","Get-OSVersion.ps1",
+                "GetVMNameByComputerName.ps1","Install-AdCertificateService-Feature.ps1","Install-AdLds-Feature.ps1",
+                "Install-AdLds-Instance.ps1","Install-DfsManagement-Feature.ps1","Install-Iis-Feature.ps1","Install-SelfSignedCert.ps1",
+                "Modify-PtfConfigFiles.ps1","Register-DbgSrv.ps1","Replicate-DomainNc.ps1","Set-AdComputerPassword.ps1",
+                "Set-AdComputerPasswordOnPDC.ps1","Set-AdUserPwdPolicy.ps1","Set-AlternateDns.ps1","Set-AutoLogon.ps1",
+                "Set-ExecutionPolicy-Unrestricted.ps1","Set-IisSslBinding.ps1","Set-KdcService.ps1","Set-MsDSAdditonalDnsHostName.ps1",
+                "Set-MsDsAllowToActOnBehalfOfOtherIdentity.ps1","Set-MsDsBehaviorVersion.ps1","Set-MsDsOtherSettings.ps1",
+                "Set-NetlogonRegKeyAndPolicy.ps1","Set-NetworkConfiguration.ps1","Set-SecurityLevel.ps1","Turnoff-UAC.ps1",
+                "Verify-ForestTrust.ps1"
 
 if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force

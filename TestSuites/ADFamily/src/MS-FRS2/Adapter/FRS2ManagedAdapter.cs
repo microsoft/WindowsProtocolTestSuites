@@ -391,9 +391,12 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
         /// </summary>
         public string interfaceUUIDdrsuapi;
         /// <summary>
-        /// Asynchronous Thread.
+        /// Asynchronous Task.
         /// </summary>
         Task asyncTask;
+        /// <summary>
+        /// Propagates notification that operations should be canceled.
+        /// </summary>
         CancellationTokenSource cancellationToken;
         /// <summary>
         /// A GUID represents the Replication Group Id.
@@ -2050,7 +2053,7 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
                 m_asyncRetVal = 0;
                 // uint retVal = 0;
                 flagAsyncpollReq = false;
-                //Asyncpoll Thread.
+                //Asyncpoll Task.
                 if ((asyncTask != null) && asyncTask.Status == TaskStatus.Running)
                 {
                     try
@@ -2086,8 +2089,7 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
                     }
                     flagAsyncpollReq = true;
                 }, cancellationToken.Token);
-                asyncTask.Start(); //Starting the Thread.
-                //System.Threading.Thread.Sleep(Convert.ToInt32(ConfigStore.SleepTime));
+                asyncTask.Start(); //Starting the Task.
                 asyncTask.Wait();
                 flagAsyncpollRequested = true;
                 FRSSite.Log.Add(LogEntryKind.Checkpoint, "AsyncPoll return value is {0}", m_asyncRetVal);

@@ -149,6 +149,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             return ConcatenatedArray;
         }
 
+        //this method is used to replace _NewEncryptor method. 
         public byte[] EncryptData(byte[] data, int offset, int length, byte[] key, byte[] iv)
         {
             try
