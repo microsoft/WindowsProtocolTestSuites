@@ -507,7 +507,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             foreach (var property in properties)
             {
-                PtfConfig.SetPropertyValue(property.Name, property.Value);
+                PtfConfig.SetPropertyValue(property.Key, property.Value);
             }
 
             PtfConfig.Save();
