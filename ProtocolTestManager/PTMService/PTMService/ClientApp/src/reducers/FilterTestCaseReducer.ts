@@ -150,7 +150,7 @@ function getMappedCategories(rules: Rule[] | undefined, parent: string): { [key:
       if (rule.Rules) {
         return { ...dict, ...getMappedCategories(rule.Rules, curr) }
       } else {
-        dict[curr] = rule.Categories
+          dict[curr] = rule.Categories
         return dict
       }
     }, {})
@@ -159,7 +159,7 @@ function getMappedCategories(rules: Rule[] | undefined, parent: string): { [key:
 }
 
 function getFilteredTestCases(currSelectedRules: SelectedRuleGroup[], ruleGroup: RuleGroup[], listTestCases: TestCase[]): TestCase[] {
-  return currSelectedRules.reduce((filteredCases, g) => {
+    return currSelectedRules.reduce((filteredCases, g) => {
     const currRule = ruleGroup.find(o => o.Name === g.Name)?.Rules
     const ruleDict = getMappedCategories(currRule, AllNode.value)
     const cleanSelected = g.Selected.map(e => {
@@ -169,10 +169,18 @@ function getFilteredTestCases(currSelectedRules: SelectedRuleGroup[], ruleGroup:
         return e
       }
     })
-    const uniqueRules = [...new Set(cleanSelected)]
-    const matchedCategories = uniqueRules.flatMap(s => ruleDict[s])
-    return filteredCases.filter(x => {
-      return x.Category && x.Category.some(r => matchedCategories.includes(r))
+        const uniqueRules = [...new Set(cleanSelected)]
+        const matchedCategories = uniqueRules.flatMap(s => ruleDict[s]).filter(s => s?.charAt(0) != "!");
+
+        const category = uniqueRules.flatMap(s => ruleDict[s]).filter(s => s?.charAt(0) == "!").flatMap(s => s?.substring(1));
+
+        if (category.length > 0) {
+            return filteredCases.filter(x => {
+                return x.Category && (!x.Category.some(r => category.includes(r)) || x.Category.some(r => matchedCategories.includes(r)))
+            })
+        }
+      return filteredCases.filter(x => {
+          return x.Category && x.Category.some(r => matchedCategories.includes(r))
     })
   }, listTestCases)
 }

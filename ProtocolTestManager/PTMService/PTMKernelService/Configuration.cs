@@ -64,7 +64,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
 
                 // create mapping table
-                CreateMappingTable(ruleGroups);
+                if (targetFilterIndex != -1 && mappingFilterIndex != -1)
+                {
+                    CreateMappingTable(ruleGroups);
+                }
 
                 return ruleGroups;
             }
@@ -504,7 +507,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             foreach (var property in properties)
             {
-                PtfConfig.SetPropertyValue(property.Key, property.Value);
+                PtfConfig.SetPropertyValue(property.Name, property.Value);
             }
 
             PtfConfig.Save();

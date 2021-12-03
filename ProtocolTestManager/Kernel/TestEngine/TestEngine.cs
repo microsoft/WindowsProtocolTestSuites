@@ -455,8 +455,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             // We use individual AssemblyLoadContext for each testsuite, so we can isolate different versions of assemblies with the same name in different testsuites without exceptions.
             // e.g. the version of Microsoft.Protocols.TestTools.dll is 2.1.0.0 in RDPServer testsuite, but its version is 2.2.0.0 in FileServer testsuite.
             // After we got the assemblies information, we can unload the assemblies in current AssemblyLoadContext.
-            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext();
             string assembleDirPath = Directory.GetParent(dllPath[0]).FullName;
+            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext(assembleDirPath);
             alc.Resolving += (context, assembleName) =>
             {
                 string assemblyPath = Path.Combine(assembleDirPath, $"{assembleName.Name}.dll");
