@@ -221,7 +221,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// This value specifies the new sequence number from which the ACK vector starts encoding the state of the receiver queue. 
         /// </summary>
-        public uint snAckOfAcksSeqNum;
+        public uint snResetSeqNum;
     }
 
     /// <summary>
@@ -239,7 +239,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         ///  An array of ACK Vector elements. Each element is composed of a state, and the number of contiguous datagrams that share the same state.
         /// </summary>
-        public AckVector[] AckVectorElement;
+        public AckVector[] AckVector;
 
         ///
         /// A variable-sized array, of length zero or more, such that this structure ends on a DWORD ([MS-DTYP] section 2.2.9) boundary.
@@ -438,10 +438,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             {
                 // ACK
                 marshaler.WriteUInt16(ackVectorHeader.Value.uAckVectorSize);
-                if (ackVectorHeader.Value.AckVectorElement != null)
+                if (ackVectorHeader.Value.AckVector != null)
                 {
                     List<byte> ackVecElementList = new List<byte>();
-                    foreach (AckVector vec in ackVectorHeader.Value.AckVectorElement)
+                    foreach (AckVector vec in ackVectorHeader.Value.AckVector)
                     {
                         byte vecByte = 0;
                         vecByte |= vec.Length;
@@ -466,7 +466,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 // Ack of Acks.
                 if (ackOfAckVector.HasValue)
                 {
-                    marshaler.WriteUInt32(ackOfAckVector.Value.snAckOfAcksSeqNum);
+                    marshaler.WriteUInt32(ackOfAckVector.Value.snResetSeqNum);
                 }
             }
 
@@ -538,23 +538,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     // ACK.
                     RDPUDP_ACK_VECTOR_HEADER ackVector = new RDPUDP_ACK_VECTOR_HEADER();
                     ackVector.uAckVectorSize = marshaler.ReadUInt16();
-                    ackVector.AckVectorElement = new AckVector[ackVector.uAckVectorSize];
+                    ackVector.AckVector = new AckVector[ackVector.uAckVectorSize];
 
-                    List<byte> ackVecElementList = new List<byte>(marshaler.ReadBytes(ackVector.AckVectorElement.Length));
+                    List<byte> ackVecElementList = new List<byte>(marshaler.ReadBytes(ackVector.AckVector.Length));
                     ackVecElementList.Reverse();
 
-                    for (int i = 0; i < ackVector.AckVectorElement.Length; i++)
+                    for (int i = 0; i < ackVector.AckVector.Length; i++)
                     {
                         byte vecByte = ackVecElementList[i];
-                        ackVector.AckVectorElement[i].Length = (byte)(0x3F & vecByte);
-                        ackVector.AckVectorElement[i].State = (VECTOR_ELEMENT_STATE)(vecByte >> 6);
+                        ackVector.AckVector[i].Length = (byte)(0x3F & vecByte);
+                        ackVector.AckVector[i].State = (VECTOR_ELEMENT_STATE)(vecByte >> 6);
                     }
 
                     this.ackVectorHeader = ackVector;
 
                     // Padding (variable): A variable-sized array, of length zero or more, 
                     // such that this structure ends on a DWORD ([MS-DTYP] section 2.2.9) boundary.
-                    int padLen = 4 - (2 + ackVector.AckVectorElement.Length) % 4;
+                    int padLen = 4 - (2 + ackVector.AckVector.Length) % 4;
                     if (padLen > 0 && padLen != 4)
                     {
                         this.padding = marshaler.ReadBytes(padLen);
@@ -565,7 +565,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     if (fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS))
                     {
                         RDPUDP_ACK_OF_ACKVECTOR_HEADER aoaHeader = new RDPUDP_ACK_OF_ACKVECTOR_HEADER();
-                        aoaHeader.snAckOfAcksSeqNum = marshaler.ReadUInt32();
+                        aoaHeader.snResetSeqNum = marshaler.ReadUInt32();
                         this.ackOfAckVector = aoaHeader;
                     }
                 }

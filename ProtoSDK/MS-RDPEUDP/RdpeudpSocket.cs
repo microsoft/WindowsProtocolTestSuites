@@ -498,7 +498,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             {
                 // Not receive any source packet
                 ackVectorHeader.uAckVectorSize = 0;
-                ackVectorHeader.AckVectorElement = null;
+                ackVectorHeader.AckVector = null;
                 ackVectorHeader.Padding = null;
             }
             else
@@ -534,7 +534,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     }
                     ackVectorElements.Add(ackVectorElement);
                     ackVectorHeader.uAckVectorSize = (ushort)ackVectorElements.Count;
-                    ackVectorHeader.AckVectorElement = ackVectorElements.ToArray();
+                    ackVectorHeader.AckVector = ackVectorElements.ToArray();
 
                     // ACK Vector created for all received packet, set number of received packets for ACK to 0
                     sourceNumNotAcked = 0;
@@ -808,7 +808,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     uint currentposition = OutSnAckOfAcksSeqNum;
                     lock (outPacketDic)
                     {
-                        foreach (AckVector AckVectorElement in eudpPacket.ackVectorHeader.Value.AckVectorElement)
+                        foreach (AckVector AckVectorElement in eudpPacket.ackVectorHeader.Value.AckVector)
                         {
                             if (AckVectorElement.State == VECTOR_ELEMENT_STATE.DATAGRAM_RECEIVED)
                             {
@@ -887,7 +887,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         {
             if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS))
             {
-                InSnAckOfAcksSeqNum = eudpPacket.ackOfAckVector.Value.snAckOfAcksSeqNum;
+                InSnAckOfAcksSeqNum = eudpPacket.ackOfAckVector.Value.snResetSeqNum;
             }
         }
 
@@ -1116,7 +1116,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 {
                     newOutSnAckOfAcksSeqNum = SendWindowStartPosition - 1;
                     RDPUDP_ACK_OF_ACKVECTOR_HEADER ackOfAckVector = new RDPUDP_ACK_OF_ACKVECTOR_HEADER();
-                    ackOfAckVector.snAckOfAcksSeqNum = newOutSnAckOfAcksSeqNum.Value;
+                    ackOfAckVector.snResetSeqNum = newOutSnAckOfAcksSeqNum.Value;
                     eudpPacket.ackOfAckVector = ackOfAckVector;
                     eudpPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS | eudpPacket.fecHeader.uFlags;
                     seqNumofPacketWithAckOfAckVector = eudpPacket.sourceHeader.Value.snSourceStart;

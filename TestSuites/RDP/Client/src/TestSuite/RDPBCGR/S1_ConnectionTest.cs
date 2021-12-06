@@ -936,12 +936,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
-            this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
+            this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn);
 
             //Trigger SUT to initiate a disconnection
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger SUT to initiate a disconnection.");
-            int iResult = this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);//Trigger client disconnect the current session.
-            TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerClientDisconnect should be successful: {0}.", iResult);
+            int iResult = this.sutControlAdapter.TriggerCloseRDPWindow(this.TestContext.TestName);//Trigger client disconnect the current session.
+            TestSite.Assume.IsTrue(iResult >= 0, "SUT Control Adapter: TriggerCloseRDPWindow should be successful: {0}.", iResult);
             
             this.rdpbcgrAdapter.ExpectClientInitiatedDisconnect(waitTime, false, false);
             

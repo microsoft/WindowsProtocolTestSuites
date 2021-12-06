@@ -76,7 +76,7 @@
     <None Update="ShellSUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="ShellSUTControlAdapter\TriggerClientDisconnect.sh">
+    <None Update="ShellSUTControlAdapter\TriggerCloseRDPWindow.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="ShellSUTControlAdapter\TriggerClientDisconnectAll.sh">
@@ -109,7 +109,7 @@
     <None Update="SUTControlAdapter\TriggerClientAutoReconnect.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SUTControlAdapter\TriggerClientDisconnect.ps1">
+    <None Update="SUTControlAdapter\TriggerCloseRDPWindow.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SUTControlAdapter\TriggerClientDisconnectAll.ps1">
