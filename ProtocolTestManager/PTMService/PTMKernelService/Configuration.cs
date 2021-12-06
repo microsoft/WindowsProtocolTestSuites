@@ -64,7 +64,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
 
                 // create mapping table
-                CreateMappingTable(ruleGroups);
+                if (targetFilterIndex != -1 && mappingFilterIndex != -1)
+                {
+                    CreateMappingTable(ruleGroups);
+                }
 
                 return ruleGroups;
             }

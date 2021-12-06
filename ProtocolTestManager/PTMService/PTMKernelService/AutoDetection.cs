@@ -45,7 +45,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         private bool taskCanceled = false;
 
-        private string detectorAssembly = string.Empty;
+        private string detectorAssemblyFileName = string.Empty;
+
+        private Assembly detectorAssembly = null;
 
         private string detectorInstanceTypeName = string.Empty;
 
@@ -119,8 +121,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                             if (valueDetector == null)
                             {
                                 // Create an instance
-                                Assembly assembly = Assembly.LoadFrom(detectorAssembly);
-                                valueDetector = assembly.CreateInstance(detectorInstanceTypeName) as IValueDetector;
+                                //Assembly assembly = Assembly.LoadFrom(detectorAssemblyFileName);
+                                valueDetector = detectorAssembly.CreateInstance(detectorInstanceTypeName) as IValueDetector;
                             }
                         }
                         finally
@@ -141,23 +143,51 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// <summary>
         /// Loads the auto-detect plug-in from assembly file.
         /// </summary>
-        /// <param name="detectorAssembly">File name</param>
-        public void Load(string detectorAssembly)
+        /// <param name="detectorAssemblyFileName">File name</param>
+        public void Load(string detectorAssemblyFileName)
         {
             // Get CustomerInterface
             Type interfaceType = typeof(IValueDetector);
 
-            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext();
-            string assembleDirPath = Directory.GetParent(detectorAssembly).FullName;
-            alc.Resolving += (context, assembleName) =>
+            string assemblyDirPath = Directory.GetParent(detectorAssemblyFileName).FullName;
+            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext(detectorAssemblyFileName);
+
+            alc.Resolving += (context, assemblyName) =>
             {
-                string assemblyPath = Path.Combine(assembleDirPath, $"{assembleName.Name}.dll");
-                if (assemblyPath != null)
+                string assemblyPath = Path.Combine(assemblyDirPath, $"{assemblyName.Name}.dll");
+                if (File.Exists(assemblyPath))
+                {
                     return context.LoadFromAssemblyPath(assemblyPath);
+                }
+
                 return null;
             };
 
-            Assembly assembly = alc.LoadFromAssemblyPath(detectorAssembly);
+
+
+            //AssemblyLoadContext.Default.Resolving += (context, assemblyName) =>
+            //{
+            //    string assemblyPath = Path.Combine(assemblyDirPath, $"{assemblyName.Name}.dll");
+            //    if (File.Exists(assemblyPath))
+            //    {
+            //        return context.LoadFromAssemblyPath(assemblyPath);
+            //    }
+            //    else
+            //    {
+            //        var candicates = Directory.EnumerateFiles(assemblyDirPath, $"{assemblyName.Name}.dll", SearchOption.AllDirectories);
+            //        foreach (var candicate in candicates)
+            //        {
+            //            if (candicate.Contains("\\win\\"))
+            //            {
+            //                return context.LoadFromAssemblyPath(candicate);
+            //            }
+            //        }
+            //    }
+
+            //    return null;
+            //};
+
+            Assembly assembly = alc.LoadFromAssemblyPath(detectorAssemblyFileName);
 
             Type[] types = assembly.GetTypes();
 
@@ -170,7 +200,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     break;
                 }
             }
-            alc.Unload();
+
+            detectorAssembly = assembly;
+            //alc.Unload();
         }
 
         public void InitializeDetector()
@@ -192,9 +224,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 return this.PtfConfig.FileProperties[filename];
             };
 
-            detectorAssembly = TestSuite.GetDetectorAssembly();
+            detectorAssemblyFileName = TestSuite.GetDetectorAssembly();
 
-            Load(detectorAssembly);
+            Load(detectorAssemblyFileName);
         }
 
         #region Get/Set Prerequisites
