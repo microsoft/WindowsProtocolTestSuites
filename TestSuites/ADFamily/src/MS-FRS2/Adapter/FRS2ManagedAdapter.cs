@@ -17,6 +17,7 @@ using System.Security.AccessControl;
 using System.Security.Principal;
 using BKUPParser;
 using FileStreamDataParser;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.MS_FRS2
 {
@@ -390,9 +391,13 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
         /// </summary>
         public string interfaceUUIDdrsuapi;
         /// <summary>
-        /// Asynchronous Thread.
+        /// Asynchronous Task.
         /// </summary>
-        Thread AsyncThread;
+        Task asyncTask;
+        /// <summary>
+        /// Propagates notification that operations should be canceled.
+        /// </summary>
+        CancellationTokenSource cancellationToken;
         /// <summary>
         /// A GUID represents the Replication Group Id.
         /// </summary>
@@ -1343,11 +1348,12 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
             //reset any possible cross test case state variables
             updateCancelflag = false;
             m_inShutdown = false;
-            if (AsyncThread != null)
+            if ((asyncTask != null) && asyncTask.Status == TaskStatus.Running)
             {
                 try
                 {
-                    AsyncThread.Abort();
+                    cancellationToken.Cancel();
+                    asyncTask = null;
                 }
                 catch
                 {
@@ -1358,11 +1364,12 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
 
         protected override void Dispose(bool disposing)
         {
-            if (AsyncThread != null)
+            if ((asyncTask != null) && asyncTask.Status == TaskStatus.Running)
             {
                 try
                 {
-                    AsyncThread.Abort();
+                    cancellationToken.Cancel();
+                    asyncTask = null;
                 }
                 catch
                 {
@@ -2046,18 +2053,20 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
                 m_asyncRetVal = 0;
                 // uint retVal = 0;
                 flagAsyncpollReq = false;
-                //Asyncpoll Thread.
-                if (AsyncThread != null)
+                //Asyncpoll Task.
+                if ((asyncTask != null) && asyncTask.Status == TaskStatus.Running)
                 {
                     try
                     {
-                        AsyncThread.Abort();
+                        cancellationToken.Cancel();
+                        asyncTask = null;
                     }
                     catch
                     {
                     }
                 }
-                AsyncThread = new Thread(delegate()
+                cancellationToken = new CancellationTokenSource();
+                asyncTask = new Task(delegate()
                 {
                     try
                     {
@@ -2079,9 +2088,9 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
                         FRSSite.Assert.Fail("Failed on AsyncPoll: {0}", (e.InnerException == null ? e.Message : e.InnerException.Message));
                     }
                     flagAsyncpollReq = true;
-                });
-                AsyncThread.Start(); //Starting the Thread.
-                System.Threading.Thread.Sleep(Convert.ToInt32(ConfigStore.SleepTime));
+                }, cancellationToken.Token);
+                asyncTask.Start(); //Starting the Task.
+                asyncTask.Wait();
                 flagAsyncpollRequested = true;
                 FRSSite.Log.Add(LogEntryKind.Checkpoint, "AsyncPoll return value is {0}", m_asyncRetVal);
                 if (m_asyncRetVal == 9033)
@@ -2735,7 +2744,8 @@ namespace Microsoft.Protocols.TestSuites.MS_FRS2
 
             if ((!flagAsyncpollReq) && (flagAsyncpollRequested))
             {
-                AsyncThread.Abort();
+                cancellationToken.Cancel();
+                asyncTask = null;
             }
             else
             {

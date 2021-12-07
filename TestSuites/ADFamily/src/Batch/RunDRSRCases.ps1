@@ -5,8 +5,8 @@ switch -Wildcard ([environment]::OSVersion.Version)
 {
     "10.0.*"
     {
-        cmd /c "$PSScriptRoot\RunDRSRCases_Threshold.cmd"
+        powershell "$PSScriptRoot\RunDRSRCases_Threshold.ps1"
         return
     }
 }
-cmd /c "$PSScriptRoot\RunDrsrCases_Win8.1.cmd"
+powershell "$PSScriptRoot\RunDRSRCases_Win8.1.ps1"

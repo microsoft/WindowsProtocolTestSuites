@@ -7,16 +7,17 @@ $computerName = $PTFProp_Common_WritableDC1_NetbiosName
 #try
 #{
 	##get service object
-	$serviceObj = get-service -computername $computerName Netlogon
-	##restart.
-	Start-Service -inputObject $serviceObj -force
-	Sleep 10
-	$serviceObj = get-service -computername $computerName Netlogon
-	if($serviceObj.Status -ne "Running")
-	{
-		throw "service cannot start"
+	Invoke-Command -Computername $computerName -Scriptblock { $serviceObj = Get-Service Netlogon
+		##restart.
+		Start-Service -inputObject $serviceObj -force
+		Sleep 10
+		$serviceObj =Invoke-Command -Computername $computerName -Scriptblock {Get-Service Netlogon} 
+		if($serviceObj.Status -ne "Running")
+		{
+			throw "service cannot start"
+		}
+		Sleep 10
 	}
-	Sleep 10
 #}
 #catch
 #{
@@ -24,7 +25,6 @@ $computerName = $PTFProp_Common_WritableDC1_NetbiosName
 #}
 #finally
 #{
-	$serviceObj.Close()
 
 	[System.GC]::Collect();
 	[System.GC]::WaitForPendingFinalizers();
