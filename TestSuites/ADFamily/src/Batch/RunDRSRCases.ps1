@@ -1,3 +1,5 @@
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 switch -Wildcard ([environment]::OSVersion.Version)
 {
@@ -7,4 +9,4 @@ switch -Wildcard ([environment]::OSVersion.Version)
         return
     }
 }
-powershell "$PSScriptRoot\RunDrsrCases_Win8.1.ps1"
+powershell "$PSScriptRoot\RunDRSRCases_Win8.1.ps1"
