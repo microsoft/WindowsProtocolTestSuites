@@ -24,41 +24,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                //using (var runspace = RunspaceFactory.CreateOutOfProcessRunspace(null))
-                //{
-                //    var pathb = Environment.GetEnvironmentVariable("KEY_VAULT_NAME").Split(";");
-                //    var patha = Environment.GetEnvironmentVariable("PSModulePath").Split(";");
-
-                //    runspace.Open();
-                //    //runspace.SessionStateProxy.SetVariable("PtfProp_SUTName", DetectionInfo.SUTName);
-                //    //runspace.SessionStateProxy.SetVariable("PtfProp_DomainName", DetectionInfo.DomainName);
-                //    //runspace.SessionStateProxy.SetVariable("PtfProp_SUTUserName", DetectionInfo.UserName);
-                //    //runspace.SessionStateProxy.SetVariable("PtfProp_SUTUserPassword", DetectionInfo.Password);
-                //    using (var pipeline = runspace.CreatePipeline())
-                //    {
-                //        //pipeline.Commands.AddScript("install-Module WindowsCompatibility");
-                //        //pipeline.Commands.AddScript("Install-Module NetAdapter");
-
-                //        //pipeline.Commands.AddScript("Get-Module");
-                //        //pipeline.Commands.AddScript("Get-NetAdapter");
-                //        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                //        {
-                //            //set execution policy for Windows in order to load and run local script files
-                //            pipeline.Commands.AddScript("Set-ExecutionPolicy -Scope Process RemoteSigned");
-                //        }
-                //        string path = string.Format(". \"{0}\"", System.IO.Path.GetFullPath(scriptPath));
-                //        pipeline.Commands.AddScript(path);
-
-                //        var result = pipeline.Invoke();
-                //        error = null;
-                //        return null;
-                //        //var result = output.Select(element => ParsePSObject(element));
-
-
-                //        // output error
-
-                //    }
-                //}
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = @"powershell.exe";
                 startInfo.Arguments=@"" + System.IO.Path.GetFullPath(scriptPath) + " "+DetectionInfo.DomainName+" "+ DetectionInfo.SUTName+" "+ DetectionInfo.UserName+" "+DetectionInfo.Password+"";
@@ -71,6 +36,21 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 process.Start();
 
                 string output = process.StandardOutput.ReadToEnd();
+                string errorOutput = process.StandardError.ReadToEnd();
+
+                if (!string.IsNullOrEmpty(errorOutput))
+                {
+                    error = new string[] { errorOutput };
+                }
+                else
+                {
+                    error = null;
+                }
+                
+                if (string.IsNullOrEmpty(output))
+                {
+                    return new object[0];
+                }
 
                 using var doc = System.Text.Json.JsonDocument.Parse(output);
                 System.Text.Json.JsonElement root = doc.RootElement;
@@ -88,11 +68,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     result.Add(ParsePSObject(root));
                 }
-                //var test = System.Text.Json.JsonSerializer.Deserialize<List<object>>(output);
-                //var test = (JArray)JsonConvert.DeserializeObject(output);
-                //var result = test.Children<JObject>().Select(element => ParsePSObject(element));
-                //var result = test.Select(element => ParsePSObject(element));
-                error = new string[] { process.StandardError.ReadToEnd() };
+                
                 return result.ToArray();
             }
             catch (Exception ex)
@@ -112,23 +88,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 (ExpandoObject as IDictionary<string, Object>).Add(prop.Name, (prop.Value.ValueKind == System.Text.Json.JsonValueKind.True || prop.Value.ValueKind == System.Text.Json.JsonValueKind.False) ? prop.Value.GetBoolean() : prop.Value.GetString());
             }
             return ExpandoObject;
-        }
-
-        private object ParsePSObject(PSObject psObject)
-        {
-            if (psObject.BaseObject is PSCustomObject)
-            {
-                var result = new ExpandoObject();
-                foreach (var property in psObject.Properties)
-                {
-                    (result as IDictionary<string, Object>).Add(property.Name, property.Value);
-                }
-                return result;
-            }
-            else
-            {
-                return psObject.BaseObject;
-            }
         }
     }
 }

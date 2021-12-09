@@ -17,7 +17,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool GetRemoteAdapters()
         {
-            DetectorUtil.WriteLog("Get the remote adapters...");
+            logWriter.AddLog(DetectLogLevel.Information, "Get the remote adapters...");
 
             bool result = false;
 
@@ -26,10 +26,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             // try all reachable SUT IP address
             foreach (var ip in ipList)
             {
-                if (!IsSameNet(DetectionInfo.DriverNonRdmaNICIPAddress, ip.ToString(), DetectionInfo.SUTNonRdmaNICSUBNETMask))
-                {
-                    continue;
-                }
                 result = GetRemoteNetworkInterfaceInformation(ip);
                 if (result)
                 {
@@ -39,41 +35,18 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
         }
-        public bool IsSameNet(string driveIP, string sutIP, string mask)
-        {
-            if (string.IsNullOrEmpty(driveIP) || string.IsNullOrEmpty(sutIP))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(mask))
-            {
-                mask = "0.0.0.0";
-            }
-            string[] maskList = mask.Split('.');
-            string[] gatewayList = driveIP.Split('.');
-            string[] ipList = sutIP.Split('.');
-            if (maskList.Length != 4 || gatewayList.Length != 4 || ipList.Length != 4)
-            {
-                return false;
-            }
-            for (int j = 0; j < maskList.Length; j++)
-            {
-                if ((int.Parse(gatewayList[j]) & int.Parse(maskList[j])) != (int.Parse(ipList[j]) & int.Parse(maskList[j])))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+
         private bool GetRemoteNetworkInterfaceInformation(IPAddress ip)
         {
             try
@@ -109,7 +82,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("GetRemoteNetworkInterfaceInformation failed for {0}: {1}.", ip.ToString(), ex.ToString()));
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("GetRemoteNetworkInterfaceInformation failed for {0}: {1}.", ip.ToString(), ex.ToString()));
                 return false;
             }
         }
@@ -118,7 +91,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             if (DetectionInfo.DriverNonRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Skip detecting any non-RDMA network interface of SUT since no corresponding selected for driver computer!");
+                logWriter.AddLog(DetectLogLevel.Information, "Skip detecting any non-RDMA network interface of SUT since no corresponding selected for driver computer!");
                 DetectionInfo.SUTNonRdmaNICIPAddress = null;
             }
             else
@@ -128,29 +101,30 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
                 if (nonRdmaNetworkInterfaceCount == 0)
                 {
-                    DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface of SUT!");
+                    logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any non-RDMA network interface of SUT!");
                 }
                 else if (nonRdmaNetworkInterfaceCount == 1)
                 {
-                    if (IsSameNet(DetectionInfo.DriverNonRdmaNICIPAddress, nonRdmaNetworkInterfaces.First().IpAddress, DetectionInfo.SUTNonRdmaNICSUBNETMask))
-                    {
-                        DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
-                        DetectorUtil.WriteLog(string.Format("Choose {0} as non-RDMA IP address of SUT.", DetectionInfo.SUTNonRdmaNICIPAddress));
-                    }
-                    else
-                    {
-                        DetectorUtil.WriteLog(string.Format("No non-RDMA IP Address of SUT in the same subnet as non-RDMA IP Address of Drive was found."));
-                    }
+                    DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaNetworkInterfaces.First().IpAddress;
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Choose {0} as non-RDMA IP address of SUT.", DetectionInfo.SUTNonRdmaNICIPAddress));
                 }
                 else
                 {
                     foreach (var nonRdmaInterface in nonRdmaNetworkInterfaces)
                     {
-                        if (IsSameNet(DetectionInfo.DriverNonRdmaNICIPAddress, nonRdmaInterface.IpAddress, DetectionInfo.SUTNonRdmaNICSUBNETMask))
+                        try
                         {
-                            DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaInterface.IpAddress;
-                            DetectorUtil.WriteLog(string.Format("Choose {0} as non-RDMA IP address of SUT.", DetectionInfo.SUTNonRdmaNICIPAddress));
-                            break;
+                            using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
+                            {
+                                client.Connect(IPAddress.Parse(nonRdmaInterface.IpAddress), IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
+                                DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaInterface.IpAddress;
+                                logWriter.AddLog(DetectLogLevel.Information, string.Format("Choose {0} as non-RDMA IP address of SUT.", DetectionInfo.SUTNonRdmaNICIPAddress));
+                                break;
+                            }
+                        }
+                        catch
+                        {
+
                         }
                     }
                 }
@@ -158,7 +132,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (DetectionInfo.DriverRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Skip detecting any RDMA network interface of SUT since no corresponding selected for driver computer!");
+                logWriter.AddLog(DetectLogLevel.Information, "Skip detecting any RDMA network interface of SUT since no corresponding selected for driver computer!");
                 DetectionInfo.SUTRdmaNICIPAddress = null;
             }
             else
@@ -168,29 +142,30 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
                 if (rdmaNetworkInterfaceCount == 0)
                 {
-                    DetectorUtil.WriteLog("Failed to detect any RDMA network interface of SUT!");
+                    logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any RDMA network interface of SUT!");
                 }
                 else if (rdmaNetworkInterfaceCount == 1)
                 {
-                    if (IsSameNet(DetectionInfo.DriverRdmaNICIPAddress, rdmaNetworkInterfaces.First().IpAddress, DetectionInfo.SUTRdmaNICSUBNETMask))
-                    {
-                        DetectionInfo.SUTRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
-                        DetectorUtil.WriteLog(string.Format("Choose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
-                    }
-                    else
-                    {
-                        DetectorUtil.WriteLog(string.Format("No RDMA IP Address of SUT in the same subnet as RDMA IP Address of Drive was found."));
-                    }
+                    DetectionInfo.SUTRdmaNICIPAddress = rdmaNetworkInterfaces.First().IpAddress;
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Choose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
                 }
                 else
                 {
                     foreach (var rdmaInterface in rdmaNetworkInterfaces)
                     {
-                        if (IsSameNet(DetectionInfo.DriverRdmaNICIPAddress, rdmaInterface.IpAddress, DetectionInfo.SUTRdmaNICSUBNETMask))
+                        try
                         {
-                            DetectionInfo.SUTRdmaNICIPAddress = rdmaInterface.IpAddress;
-                            DetectorUtil.WriteLog(string.Format("Choose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
-                            break;
+                            using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
+                            {
+                                client.Connect(IPAddress.Parse(rdmaInterface.IpAddress), IPAddress.Parse(DetectionInfo.DriverRdmaNICIPAddress));
+                                DetectionInfo.SUTRdmaNICIPAddress = rdmaInterface.IpAddress;
+                                logWriter.AddLog(DetectLogLevel.Information, string.Format("Choose {0} as RDMA IP address of SUT.", DetectionInfo.SUTRdmaNICIPAddress));
+                                break;
+                            }
+                        }
+                        catch
+                        {
+
                         }
                     }
                 }

@@ -15,23 +15,25 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             if (DetectionInfo.SUTNonRdmaNICIPAddress == null || DetectionInfo.DriverNonRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Connect to share through non-RDMA transport skipped since not available.", true, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Information, "Connect to share through non-RDMA transport skipped since not available.", true, LogStyle.StepSkipped);
                 return false;
             }
 
-            DetectorUtil.WriteLog("Connect to share through non-RDMA transport...");
+            logWriter.AddLog(DetectLogLevel.Information, "Connect to share through non-RDMA transport...");
 
             bool result = ConnectToShare(DetectionInfo.SUTNonRdmaNICIPAddress, DetectionInfo.DriverNonRdmaNICIPAddress);
 
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
         }
@@ -40,23 +42,25 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             if (DetectionInfo.SUTRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Connect to share through RDMA transport skipped since not available.", true, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Information, "Connect to share through RDMA transport skipped since not available.", true, LogStyle.StepSkipped);
                 return false;
             }
 
-            DetectorUtil.WriteLog("Connect to share through RDMA transport...");
+            logWriter.AddLog(DetectLogLevel.Information, "Connect to share through RDMA transport...");
 
             bool result = ConnectToShare(DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.DriverRdmaNICIPAddress);
 
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
         }
@@ -99,7 +103,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
                     if (!result)
                     {
-                        DetectorUtil.WriteLog("The content of read and write is inconsistent.");
+                        logWriter.AddLog(DetectLogLevel.Information, "The content of read and write is inconsistent.");
                     }
 
                     return result;
@@ -107,7 +111,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("ConnectToShare threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("ConnectToShare threw exception: {0}", ex));
                 return false;
             }
         }

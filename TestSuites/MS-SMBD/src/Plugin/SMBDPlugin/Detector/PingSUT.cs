@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
     {
         public bool PingSUT()
         {
-            DetectorUtil.WriteLog("Ping Target SUT...");
+            logWriter.AddLog(DetectLogLevel.Information, "Ping Target SUT...");
 
             Ping pingSender = new Ping();
             PingOptions options = new PingOptions();
@@ -40,8 +40,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("Error: {0}", ex), false, LogStyle.Error);
-
+                logWriter.AddLog(DetectLogLevel.Warning, String.Format("Error: {0}", ex), false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("Error: {0}", ex));
                 return false;
             }
             foreach (var reply in replys)
@@ -51,13 +51,14 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             if (result)
             {
-                DetectorUtil.WriteLog("Passed", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Passed", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Passed");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
-                DetectorUtil.WriteLog("Target SUT doesn't respond.");
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Target SUT doesn't respond.");
                 return false;
             }
 
@@ -73,7 +74,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("Cannot get SUT IP addresses: {0}.", ex));
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("Cannot get SUT IP addresses: {0}.", ex));
                 return new IPAddress[0];
             }
         }

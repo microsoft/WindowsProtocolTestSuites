@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool CheckSmbDialect()
         {
-            DetectorUtil.WriteLog("Check the supported SMB dialects of SUT...");
+            logWriter.AddLog(DetectLogLevel.Information,"Check the supported SMB dialects of SUT...");
 
             bool result = false;
 
@@ -23,16 +23,12 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             var ipList = GetIPAdressOfSut();
             // try all reachable SUT IP address
             foreach (var ip in ipList)
-            {
-                if (!IsSameNet(DetectionInfo.DriverNonRdmaNICIPAddress, ip.ToString(), DetectionInfo.SUTNonRdmaNICSUBNETMask))
-                {
-                    continue;
-                }
+            {                
                 var supportedDialects = TryNegotiateDialects(ip, dialects);
                 if (supportedDialects.Length > 0)
                 {
                     DetectionInfo.SupportedSmbDialects = supportedDialects;
-                    DetectorUtil.WriteLog(String.Format("SMB dialects supported by SUT: {0}", String.Join(",", supportedDialects)));
+                    logWriter.AddLog(DetectLogLevel.Information, String.Format("SMB dialects supported by SUT: {0}", String.Join(",", supportedDialects)));
                     result = true;
                     break;
                 }
@@ -40,12 +36,14 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
         }
@@ -70,7 +68,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("TryNegotiateDialect threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("TryNegotiateDialect threw exception: {0}", ex));
                 return false;
             }
         }

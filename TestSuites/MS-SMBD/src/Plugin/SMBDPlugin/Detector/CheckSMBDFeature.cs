@@ -19,11 +19,12 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (DetectionInfo.SUTRdmaNICIPAddress == null || DetectionInfo.DriverRdmaNICIPAddress == null)
             {
-                DetectorUtil.WriteLog("Check the supported SMBD capabilities of SUT skipped since not available.", true, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Warning,"Check the supported SMBD capabilities of SUT skipped since not available.", true, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Information, "Check the supported SMBD capabilities of SUT skipped since not available.");
                 return false;
             }
 
-            DetectorUtil.WriteLog("Check the supported SMBD capabilities of SUT...");
+            logWriter.AddLog(DetectLogLevel.Information, "Check the supported SMBD capabilities of SUT...");
 
             bool result = CheckSMBDNegotiate(out rdmaAdapterInfo);
 
@@ -43,12 +44,14 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
         }
@@ -76,7 +79,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("CheckSMBDNegotiate threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("CheckSMBDNegotiate threw exception: {0}", ex));
 
                 rdmaAdapterInfo = null;
 
@@ -160,7 +163,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                DetectorUtil.WriteLog(String.Format("CheckSMBDReadWrite threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Information, String.Format("CheckSMBDReadWrite threw exception: {0}", ex));
                 return false;
             }
         }

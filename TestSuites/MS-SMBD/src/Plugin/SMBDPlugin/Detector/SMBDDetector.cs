@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
@@ -8,6 +9,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
     public partial class SMBDDetector
     {
         public DetectionInfo DetectionInfo { get; private set; }
+        private DetectLogger logWriter = new DetectLogger();
 
         public SMBDDetector(DetectionInfo detectionInfo)
         {
@@ -15,10 +17,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         }
 
 
-        public bool Detect()
+        public bool Detect(DetectContext context)
         {
             bool result;
 
+            logWriter.ApplyDetectContext(context);
+
+            logWriter.AddLog(DetectLogLevel.Information, "===== Start detecting =====");
+
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = PingSUT();
             if (!result)
             {
@@ -26,6 +37,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 return false;
             }
 
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = GetOSVersion();
             if (!result)
             {
@@ -36,7 +52,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 DetectionInfo.OSDetected = true;
             }
 
-
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = GetLocalAdapters();
             if (!result)
             {
@@ -44,6 +64,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 return false;
             }
 
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = CheckSmbDialect();
             if (!result)
             {
@@ -51,6 +76,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 return false;
             }
 
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = GetRemoteAdapters();
             if (!result)
             {
@@ -58,6 +88,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 return false;
             }
 
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = ConnectToShareNonRDMA();
             if (!result)
             {
@@ -68,6 +103,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 DetectionInfo.NonRDMATransportSupported = true;
             }
 
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             result = ConnectToShareRDMA();
             if (!result)
             {
@@ -79,6 +119,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 DetectionInfo.RDMATransportSupported = true;
             }
 
+            if (context.Token.IsCancellationRequested)
+            {
+                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
+                return false;
+            }
             RdmaAdapterInfo rdmaAdapterInfo;
 
             bool rdmaChannelV1Supported;
@@ -95,6 +140,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             DetectionInfo.RDMAChannelV1Supported = rdmaChannelV1Supported;
             DetectionInfo.RDMAChannelV1InvalidateSupported = rdmaChannelV1InvalidateSupported;
 
+            logWriter.AddLog(DetectLogLevel.Information, "===== End detecting =====");
             return result;
         }
 

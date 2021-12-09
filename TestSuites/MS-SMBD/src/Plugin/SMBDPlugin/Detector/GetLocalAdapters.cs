@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public bool GetLocalAdapters()
         {
-            DetectorUtil.WriteLog("Check the local adapters...");
+            logWriter.AddLog(DetectLogLevel.Information, "Check the local adapters...");
 
             string[] error;
 
@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             else
             {
-                DetectorUtil.WriteLog("Failed to detect any network interface!");
+                logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any network interface!");
                 result = false;
             }
 
@@ -39,7 +39,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
@@ -48,10 +49,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     foreach (var item in error)
                     {
-                        DetectorUtil.WriteLog(item.ToString());
+                        logWriter.AddLog(DetectLogLevel.Information, item.ToString());
                     }
                 }
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
         }
@@ -61,14 +63,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             string path = Assembly.GetExecutingAssembly().Location+ "/../../Plugin/script/GetLocalNetworkAdapters.ps1";
             var output = ExecutePowerShellCommand(path, out error);
-            if (error != null)
-            {
-                foreach (var item in error)
-                {
-                    DetectorUtil.WriteLog(item.ToString());
-                }
-            }
-            DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+
             if (output.Length != 0)
             {
                 var networkInterfaces = output
@@ -84,6 +79,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     var rdmaNetworkInterfaceIps = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable).Select(result => result.IpAddress);
                     return rdmaNetworkInterfaceIps.ToList();
                 }
+            }
+            else
+            {
+                if (error != null)
+                {
+                    foreach (var item in error)
+                    {
+                        logWriter.AddLog(DetectLogLevel.Information,item.ToString());
+                    }
+                }
+                logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any network interface!");
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
             }
             return new List<string>();
         }
@@ -102,56 +110,56 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
             if (nonRdmaNetworkInterfaceCount == 0)
             {
-                DetectorUtil.WriteLog("Failed to detect any non-RDMA network interface of driver computer!");
+                logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any non-RDMA network interface of driver computer!");
             }
             else if (nonRdmaNetworkInterfaceCount == 1)
             {
                 if (nonRdmaNetworkInterfaces.First().IpAddress != DetectionInfo.DriverNonRdmaNICIPAddress)
                 {
-                    DetectorUtil.WriteLog(string.Format("Can't Choose {0} as non-RDMA IP address of driver computer.Please use the default non-RDMA IP address", DetectionInfo.DriverNonRdmaNICIPAddress));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Can't Choose {0} as non-RDMA IP address of driver computer.Please Choose {1} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress, nonRdmaNetworkInterfaces.First().IpAddress));
                 }
                 else
                 {
-                    DetectorUtil.WriteLog(string.Format("Choose {0} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Choose {0} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress));
                 }
             }
             else
             {
                 if (!string.IsNullOrEmpty(DetectionInfo.DriverNonRdmaNICIPAddress) && nonRdmaNetworkInterfaces.Select(x => x.IpAddress).Contains(DetectionInfo.DriverNonRdmaNICIPAddress))
                 {
-                    DetectorUtil.WriteLog(string.Format("User choose {0} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("User choose {0} as non-RDMA IP address of driver computer.", DetectionInfo.DriverNonRdmaNICIPAddress));
                 }
                 else
                 {
-                    DetectorUtil.WriteLog("User skipped choosing non-RDMA network interface of driver computer.");
+                    logWriter.AddLog(DetectLogLevel.Information, "User skipped choosing non-RDMA network interface of driver computer.");
                 }
             }
 
             int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
             if (rdmaNetworkInterfaceCount == 0)
             {
-                DetectorUtil.WriteLog("Failed to detect any RDMA network interface of driver computer!");
+                logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any RDMA network interface of driver computer!");
             }
             else if (rdmaNetworkInterfaceCount == 1)
             {
                 if (rdmaNetworkInterfaces.First().IpAddress != DetectionInfo.DriverRdmaNICIPAddress)
                 {
-                    DetectorUtil.WriteLog(string.Format("Can't Choose {0} as RDMA IP address of driver computer.Please use the default RDMA IP address", DetectionInfo.DriverRdmaNICIPAddress));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Can't Choose {0} as RDMA IP address of driver computer.Please Choose {1} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress, rdmaNetworkInterfaces.First().IpAddress));
                 }
                 else
                 {
-                    DetectorUtil.WriteLog(string.Format("Choose {0} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("Choose {0} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress));
                 }
             }
             else
             {
                 if (!string.IsNullOrEmpty(DetectionInfo.DriverRdmaNICIPAddress) && rdmaNetworkInterfaces.Select(x => x.IpAddress).Contains(DetectionInfo.DriverRdmaNICIPAddress))
                 {
-                    DetectorUtil.WriteLog(string.Format("User choose {0} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("User choose {0} as RDMA IP address of driver computer.", DetectionInfo.DriverRdmaNICIPAddress));
                 }
                 else
                 {
-                    DetectorUtil.WriteLog("User skipped choosing RDMA network interface of driver computer.");
+                    logWriter.AddLog(DetectLogLevel.Information, "User skipped choosing RDMA network interface of driver computer.");
                 }
             }
         }

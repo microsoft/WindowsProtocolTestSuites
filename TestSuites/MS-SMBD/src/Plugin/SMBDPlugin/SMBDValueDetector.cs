@@ -19,10 +19,8 @@ namespace Microsoft.Protocols.TestManager.Detector
         public const string AUTHENTICATION = "Authentication";
         public const string SMBDPORT = "SMBD Port";
         public const string CONNECTIONTIMEOUT = "Connection Timeout";
-        public const string DriverNonRdmaNICIPAddress = "Driver NonRdmanIC IP Adress";
-        public const string DriverRdmaNICIPAddress = "Driver RdmanIC IP Adress";
-        public const string SUTNonRdmaNICSUBNETMask = "SUT NonRdmanIC Subnet Mask";
-        public const string SUTRdmaNICSUBNETMask = "SUT RdmanIC Subnet Mask";
+        public const string DriverNonRdmaNICIPAddress = "Driver NonRdma Network Interface IP Adress";
+        public const string DriverRdmaNICIPAddress = "Driver Rdma Network Interface IP Adress";
     }
 
     static class DeploymentPtfConfigConstant
@@ -56,8 +54,7 @@ namespace Microsoft.Protocols.TestManager.Detector
 
     public class SMBDValueDetector : IValueDetector
     {
-        private DetectionInfo detectionInfo;
-        private DetectLogger logWriter = new DetectLogger();
+        private DetectionInfo detectionInfo;       
 
         public SMBDValueDetector()
         {
@@ -210,9 +207,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             List<string> DriverRdmaNICIPAddress = detector.GetLocalInterfaceIps(false);
             prerequisites.Properties.Add(PropertyDictionaryConstant.DriverRdmaNICIPAddress, DriverRdmaNICIPAddress);
 
-            prerequisites.Properties.Add(PropertyDictionaryConstant.SUTNonRdmaNICSUBNETMask, new List<string> { });
-
-            prerequisites.Properties.Add(PropertyDictionaryConstant.SUTRdmaNICSUBNETMask, new List<string> { });
 
             return prerequisites;
         }
@@ -281,19 +275,11 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <returns>Return true if the function is succeeded.</returns>
         public bool RunDetection(DetectContext context)
         {
-            logWriter.ApplyDetectContext(context);
-            logWriter.AddLog(DetectLogLevel.Information, "===== Start detecting =====");
 
             var detector = new SMBDDetector(detectionInfo);
 
-            bool result = detector.Detect();
-
-            if (context.Token.IsCancellationRequested)
-            {
-                logWriter.AddLog(DetectLogLevel.Information, "===== Cancel detecting =====");
-                return false;
-            }
-            logWriter.AddLog(DetectLogLevel.Information, "===== End detecting =====");
+            bool result = detector.Detect(context);
+            
             return result;
         }
 
@@ -307,8 +293,6 @@ namespace Microsoft.Protocols.TestManager.Detector
             detectionInfo.Authentication = (SecurityPackageType)Enum.Parse(typeof(SecurityPackageType), properties[PropertyDictionaryConstant.AUTHENTICATION]);
             detectionInfo.DriverNonRdmaNICIPAddress = properties[PropertyDictionaryConstant.DriverNonRdmaNICIPAddress];
             detectionInfo.DriverRdmaNICIPAddress = properties[PropertyDictionaryConstant.DriverRdmaNICIPAddress];
-            detectionInfo.SUTNonRdmaNICSUBNETMask = properties[PropertyDictionaryConstant.SUTNonRdmaNICSUBNETMask];
-            detectionInfo.SUTRdmaNICSUBNETMask = properties[PropertyDictionaryConstant.SUTRdmaNICSUBNETMask];
             detectionInfo.SUTName = properties[PropertyDictionaryConstant.SUTNAME];
             detectionInfo.DomainName = properties[PropertyDictionaryConstant.DOMAINNAME];
             detectionInfo.UserName = properties[PropertyDictionaryConstant.SUTUSERNAME];

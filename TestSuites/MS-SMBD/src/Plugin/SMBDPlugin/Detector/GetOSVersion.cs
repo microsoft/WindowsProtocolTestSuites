@@ -15,12 +15,13 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             if (!DetectionInfo.IsWindowsImplementation)
             {
-                DetectorUtil.WriteLog("Skip for non-Windows", false, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Warning, "Skip for non-Windows", false, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Information, "Skip for non-Windows");
                 DetectionInfo.Platform = Platform.NonWindows;
                 return true;
             }
 
-            DetectorUtil.WriteLog("Check the OS version...");
+            logWriter.AddLog(DetectLogLevel.Information, "Check the OS version...");
 
             string[] error;
             string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetRemoteOSVersion.ps1";
@@ -30,7 +31,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 foreach (var item in error)
                 {
-                    DetectorUtil.WriteLog(item.ToString());
+                    logWriter.AddLog(DetectLogLevel.Information, item.ToString());
                 }
             }
 
@@ -51,23 +52,25 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 }
                 catch
                 {
-                    DetectorUtil.WriteLog("The format of return value is invalid!");
+                    logWriter.AddLog(DetectLogLevel.Information, "The format of return value is invalid!");
                 }
             }
             else
             {
-                DetectorUtil.WriteLog(string.Format("Set platform to {0}.", DetectionInfo.Platform));
-                DetectorUtil.WriteLog("The format of return value is invalid!");
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("Set platform to {0}.", DetectionInfo.Platform));
+                logWriter.AddLog(DetectLogLevel.Information, "The format of return value is invalid!");
             }
 
             if (result)
             {
-                DetectorUtil.WriteLog("Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
+                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
-                DetectorUtil.WriteLog("Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, "Failed");
                 return false;
             }
 
