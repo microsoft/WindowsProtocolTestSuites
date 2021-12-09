@@ -170,17 +170,17 @@ function getFilteredTestCases(currSelectedRules: SelectedRuleGroup[], ruleGroup:
       }
     })
         const uniqueRules = [...new Set(cleanSelected)]
-        const matchedCategories = uniqueRules.flatMap(s => ruleDict[s]).filter(s => s?.charAt(0) != "!");
+        const positiveCategories = uniqueRules.flatMap(s => ruleDict[s]).filter(s => s?.charAt(0) != "!");
 
-        const category = uniqueRules.flatMap(s => ruleDict[s]).filter(s => s?.charAt(0) == "!").flatMap(s => s?.substring(1));
+        const negativeCategories = uniqueRules.flatMap(s => ruleDict[s]).filter(s => s?.charAt(0) == "!").flatMap(s => s?.substring(1));
 
-        if (category.length > 0) {
+        if (negativeCategories.length > 0) {
             return filteredCases.filter(x => {
-                return x.Category && (!x.Category.some(r => category.includes(r)) || x.Category.some(r => matchedCategories.includes(r)))
+                return x.Category && (!x.Category.some(r => negativeCategories.includes(r)) || x.Category.some(r => positiveCategories.includes(r)))
             })
         }
       return filteredCases.filter(x => {
-          return x.Category && x.Category.some(r => matchedCategories.includes(r))
+          return x.Category && x.Category.some(r => positiveCategories.includes(r))
     })
   }, listTestCases)
 }
