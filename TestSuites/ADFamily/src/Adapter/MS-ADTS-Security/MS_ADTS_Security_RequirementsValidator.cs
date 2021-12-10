@@ -273,7 +273,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
         /// used as counter for Sicily Netmon requirements.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static int netmonReqValidated = 1;
+        public static int netmonReqValidated = 0;
 
         #endregion
 

@@ -90,8 +90,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         [TestCategory("DomainWin2012")]
         [TestCategory("ForestWin2012")]
         [TestCategory("PDC")]
-		[DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
-        [ExpectedException(typeof(NotImplementedException))]
+		//[DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
+        //[ExpectedException(typeof(NotImplementedException))]
         public void PublishDC_TestCaseSamLogonResponseEx()
         {
 //            #region Capture
@@ -418,8 +418,8 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         [TestCategory("DomainWin2012")]
         [TestCategory("ForestWin2012")]
         [TestCategory("PDC")]
-		[DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
-        [ExpectedException(typeof(NotImplementedException))]
+		//[DeploymentItem(@"C:\Program Files\Microsoft Message Analyzer\Microsoft.WindowsAzure.Storage.dll")]
+        //[ExpectedException(typeof(NotImplementedException))]
         public void PublishDC_TestCaseSamLogonResponse()
         {
             //#region Capture
