@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             Type interfaceType = typeof(IValueDetector);
 
             string assemblyDirPath = Directory.GetParent(detectorAssemblyFileName).FullName;
-            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext(detectorAssemblyFileName);
+            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext(detectorAssemblyFileName, "PropertyValueDetector", "Rdma");
 
             alc.Resolving += (context, assemblyName) =>
             {

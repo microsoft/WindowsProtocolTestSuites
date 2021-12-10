@@ -10,15 +10,19 @@ namespace Microsoft.Protocols.TestManager.Kernel
     public class CollectibleAssemblyLoadContext : AssemblyLoadContext
     {
         private AssemblyDependencyResolver _resolver;
+        private string _ignoredAssemblyName;
+        private string _missedAssemblyName;
 
-        public CollectibleAssemblyLoadContext(string mainAssemblyToLoadPath) : base(isCollectible: true)
+        public CollectibleAssemblyLoadContext(string mainAssemblyToLoadPath,string ignoredAssemblyName,string missedAssemblyName) : base(isCollectible: true)
         {
             _resolver = new AssemblyDependencyResolver(mainAssemblyToLoadPath);
+            _ignoredAssemblyName = ignoredAssemblyName;
+            _missedAssemblyName = missedAssemblyName;
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            if (assemblyName.Name.Contains("PropertyValueDetector"))
+            if (_ignoredAssemblyName.Split().Any(x=>assemblyName.Name.Contains(x)))
             {
                 return null;
             }
@@ -26,9 +30,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
             if (assemblyPath != null)
             {
-                if(assemblyPath.Contains("Rdma"))
+                if (_missedAssemblyName.Split().Any(x => assemblyPath.Contains(x)))
                 {
-                    if (AssemblyLoadContext.Default.Assemblies.Any(ass => ass.FullName.Contains("Rdma")))
+                    if (AssemblyLoadContext.Default.Assemblies.Any(ass => _missedAssemblyName.Split().Any(x => ass.FullName.Contains(x))))
                         return null;
                     return AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
                 }
