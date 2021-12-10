@@ -67,7 +67,7 @@ export const FilterTestCase: React.FC<any> = (props: any) => {
   }
 
   const stackItemTokens: IStackItemTokens = {
-    padding: '0 10'
+    padding: '0 10px'
   }
 
   return (
