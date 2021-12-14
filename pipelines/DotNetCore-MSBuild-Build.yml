@@ -1,4 +1,4 @@
-trigger: none 
+trigger: none
 
 variables:
   - group: Build Variables
@@ -10,15 +10,14 @@ resources:
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
       ref: AzurePipelines-main
 
-
-pool: 
+pool:
   vmImage: windows-2019
 
 jobs:
-- job:
-  displayName: DotNetCore Build
-  workspace:
-    clean: false
-  timeoutInMinutes: 0
-  steps:
-  - template: pipelines/build/DotNetCore-SMBD-Build-steps.yml@template
+  - job:
+    displayName: DotNetCore Build
+    workspace:
+      clean: false
+    timeoutInMinutes: 0
+    steps:
+      - template: pipelines/build/DotNetCore-MSBuild-Build-steps.yml@template
