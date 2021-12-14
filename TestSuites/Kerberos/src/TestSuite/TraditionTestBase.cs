@@ -212,7 +212,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
                 Guid.NewGuid(),
                 out selectedDialect);
 
-            //this is to check whether SMB2 negotiate is successful or failed, if not status is not equal to STATUS_SUCCESS then throw "Negotiate failed with error"
+            //Negotiate status should be STATUS_SUCCES
             BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Negotiate failed with error.");
 
             byte[] repToken;
@@ -228,7 +228,7 @@ namespace Microsoft.Protocol.TestSuites.Kerberos.TestSuite
             {
                 status = smb2Client.LogOff();
 
-                //this part checks whether client log off is successful, if the status is not equal to STATUS_SUCCESS then throw "Logoff failed with error"
+                //LogOff status should be STATUS_SUCCES
                 BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Logoff failed with error.");
             }
             smb2Client.Disconnect();
