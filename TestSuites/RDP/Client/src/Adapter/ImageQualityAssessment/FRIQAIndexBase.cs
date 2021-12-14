@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAccessment
+namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
 {
     /// <summary>
     /// The base class of FR-IQA (Full reference based image quality assessment).

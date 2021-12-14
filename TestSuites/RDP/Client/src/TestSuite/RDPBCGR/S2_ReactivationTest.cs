@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to connect
             //Trigger client to connect.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            TriggerClientRDPConnect(transportProtocol);
             #endregion
 
             //Waiting for the transport level connection request.
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #region Trigger client to connect
             //Trigger client to connect.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            TriggerClientRDPConnect(transportProtocol);
             #endregion
 
             //Waiting for the transport level connection request.
