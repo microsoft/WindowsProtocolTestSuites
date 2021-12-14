@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <targetframework>net5.0</targetframework>
-    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp</AssemblyName>
-    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2</AssemblyName>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
@@ -12,15 +12,8 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="RdpeudpSocket.*.cs">
-      <DependentUpon>RdpeudpSocket.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj" />
-    <ProjectReference Include="..\MS-RDPEUDP2\Rdpeudp2.csproj" />
   </ItemGroup>
 </Project>

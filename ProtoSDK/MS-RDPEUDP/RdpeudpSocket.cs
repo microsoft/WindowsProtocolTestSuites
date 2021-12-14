@@ -1,11 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Net;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using System.Threading;
 // using Microsoft.Protocols.TestTools.ExtendedLogging;
 
@@ -30,9 +29,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     {
         public OutPacketState()
         {
-            retransmitTimes = 0;
+            RetransmitTimes = 0;
             Acknowledged = false;
-            estimatedRTT = false;
+            EstimatedRTT = false;
         }
 
         /// <summary>
@@ -53,13 +52,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// Times that this packet have been retransmitted.
         /// </summary>
-        public int retransmitTimes;
+        public int RetransmitTimes;
 
         /// <summary>
         /// Whether this packet has been used to estimate RTT
         /// one packet only can be used to estimate RTT once
         /// </summary>
-        public bool estimatedRTT;
+        public bool EstimatedRTT;
     }
 
     /// <summary>
@@ -73,9 +72,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public RdpeudpPacket Packet;
     }
 
-    #endregion Type Definitions
+    #endregion
 
     #region Delegates definitions
+
     /// <summary>
     /// Delegation to receive packets from the specified remote endpoint.
     /// </summary>
@@ -83,45 +83,56 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     /// <param name="packet">Packet need to sent.</param>
     public delegate void RdpeudpSocketSender(IPEndPoint remoteEP, StackPacket packet);
 
+    /// <summary>
+    /// Delegation to invoke the receive data method of higher layer protocols.
+    /// </summary>
+    /// <param name="data">The data should be received by higher layer protocols.</param>
     public delegate void ReceiveData(byte[] data);
 
     /// <summary>
     /// The delegate used to handle disconnection.
     /// </summary>
     public delegate void DisconnectedHandler();
-    #endregion Delegates definitions
 
-    public class RdpeudpSocket : IDisposable
+    #endregion
+
+    public partial class RdpeudpSocket : IDisposable
     {
         #region Private variables
+
+        #region Locks
+
         // Used to make sure only one thread call this.ReceivePacket
-        private readonly Object receiveLock = new object();
+        protected readonly object receiveLock = new object();
+
         // Lock to protect CurSnCoded and CurSnSource
-        private readonly Object sequenceNumberLock = new object();
+        private readonly object sequenceNumberLock = new object();
+
         // Block send method if the new source packet is not in send window
         private AutoResetEvent sendWindowLock = new AutoResetEvent(false);
+
+        // Lock to update OutSnResetSeqNum
+        private readonly object updateOutSnResetSeqNumLock = new object();
+
+        #endregion
+
         // Method used to send packet
         private RdpeudpSocketSender packetSender;
 
-        private TimeSpan RTT;
-        private IPEndPoint remoteEndPoint;
+        protected TimeSpan RTT;
 
-        private bool connected;
-        private bool autoHandle;
-
-        protected List<RdpeudpPacket> unProcessedPacketBuffer = new List<RdpeudpPacket>();
+        protected List<RdpeudpPacket> unprocessedPacketBuffer = new List<RdpeudpPacket>();
 
         // Cache for sending source packets, only for reliable connection, packet will be cached after sent but not acknowledged received
         private Dictionary<uint, OutPacketState> outPacketDic = new Dictionary<uint, OutPacketState>();
         // Cache for received source packets.
         private Dictionary<uint, InPacketState> inPacketDic = new Dictionary<uint, InPacketState>();
 
-        // Variables used to update OutSnAckOfAcksSeqNum
+        // Variables used to update OutSnResetSeqNum
         // Sequence number with which the packet send an AckOfAckVector
-        private uint seqNumofPacketWithAckOfAckVector;
-        // new OutSnAckOfAcksSeqNum
-        private uint? newOutSnAckOfAcksSeqNum = null;
-        private readonly Object updateAckOfAckLock = new object();
+        private uint seqNumOfPacketWithAckOfAckVector;
+        // new OutSnResetSeqNum
+        private uint? newOutSnResetSeqNum = null;
 
         #region Timers
 
@@ -129,25 +140,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         private Timer retransmitTimer;
 
         // Timer used to manage keep alive
-        private Timer keepAliveTimer;
+        private Timer keepaliveTimer;
 
-        // Timer used to manage delay ack
-        private Timer delayACKTimer;
-        #endregion Timers
+        // Timer used to manage delayed ack
+        private Timer delayedAckTimer;
+
+        #endregion
 
         // Below two variables are used for keep alive timer
-        private DateTime LastSendDiagramTime;
-        private DateTime LastReceiveDiagramTime;
+        private DateTime latestDatagramSentAt;
+        private DateTime latestDatagramReceivedAt;
 
         // Number of received packets not ack yet, this value only be changed in Lock(inPacketDic) block so as to sync
         private int sourceNumNotAcked = 0;
-        private DateTime ReceiveTimeForFirstNotACKSource;
+        private DateTime receiveTimeForFirstNotACKSource;
 
         // public const DumpLevel DumpLevel_LayerTLS = (DumpLevel)10;
 
         #endregion Private variables
 
         #region Properties
+
+        private bool connected;
 
         /// <summary>
         /// Whether the socket is connected with remote endpoint
@@ -163,7 +177,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 if (connected != value)
                 {
                     connected = value;
-                    if (connected && autoHandle)
+                    if (connected && autoHandle && (!upgradedToRdpedup2))
                     {
                         // Timer will start when connect established
                         this.InitTimers();
@@ -171,6 +185,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 }
             }
         }
+
+        private IPEndPoint remoteEndPoint;
 
         /// <summary>
         /// Identity of Remote EndPoint
@@ -182,6 +198,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 return remoteEndPoint;
             }
         }
+
+        private bool autoHandle;
 
         /// <summary>
         /// Whether the RDPEUDP Socket is autoHandle
@@ -199,6 +217,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     autoHandle = value;
                     if (autoHandle)
                     {
+                        if (upgradedToRdpedup2)
+                        {
+                            rdpeudp2Handler.AutoHandle = true;
+                            return;
+                        }
+
                         if (connected)
                         {
                             InitTimers();
@@ -206,6 +230,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     }
                     else
                     {
+                        if (upgradedToRdpedup2)
+                        {
+                            rdpeudp2Handler.AutoHandle = false;
+                            return;
+                        }
+
                         // If autoHandle changed from true to false, stop timer
                         DisposeTimers();
                     }
@@ -215,7 +245,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         public uint SnInitialSequenceNumber { get; set; }
 
-        public uUdpVer_Values HighestVersion { get; set; }
+        public RDPUDP_PROTOCOL_VERSION HighestVersion { get; set; }
 
         // Used when send packet, current sequence number of Code Packet
         public uint CurSnCoded { get; set; }
@@ -239,9 +269,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         // this value is the highest sequence number of source data received
         public uint SnSourceAck { get; set; }
         // Start position of ACK vector to sent, which is used to create Ack vector
-        public uint InSnAckOfAcksSeqNum { get; set; }
+        public uint InSnResetSeqNum { get; set; }
         // Start position of ACK vector received, which is used to analyze received Ack vector
-        public uint OutSnAckOfAcksSeqNum { get; set; }
+        public uint OutSnResetSeqNum { get; set; }
 
         // Window size that Remote endpoint advised
         public ushort URemoteAdvisedWindowSize { get; set; }
@@ -254,6 +284,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         // Transport Mode: Reliable or Lossy
         public TransportMode TransMode { get; set; }
+
+        // Socket config for RDPEUDP transport, some of the values will be retained when transferring to RDPEUDP2 transport 
         public RdpeudpSocketConfig SocketConfig { get; set; }
 
         #endregion Properties
@@ -267,33 +299,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="remoteEp">The remote endpoint.</param>
         /// <param name="autoHandle">Decide if receiver will auto handle incoming packets.</param>
         /// <param name="sender">Sender Used to send packet</param>
-        public RdpeudpSocket(TransportMode mode, IPEndPoint remoteEp, bool autohandle, RdpeudpSocketSender sender)
+        public RdpeudpSocket(TransportMode mode, IPEndPoint remoteEp, bool autoHandle, RdpeudpSocketSender sender)
         {
             this.TransMode = mode;
             this.SocketConfig = new RdpeudpSocketConfig();
-            this.AutoHandle = autohandle;
+            this.AutoHandle = autoHandle;
             this.connected = false;
             remoteEndPoint = remoteEp;
 
             // Initial highestAckNumber as 0 because every hihestAckNumber will compare with Sequence Number of coming packet, and set as the bigger one.
             SnSourceAck = 0;
 
-            URemoteAdvisedWindowSize = SocketConfig.initialWindowSize;
-            USendWindowSize = SocketConfig.initialWindowSize;
-            UReceiveWindowSize = SocketConfig.initialWindowSize;
-            UUpStreamMtu = SocketConfig.initialStreamMtu;
-            UDownStreamMtu = SocketConfig.initialStreamMtu;
+            URemoteAdvisedWindowSize = SocketConfig.InitialWindowSize;
+            USendWindowSize = SocketConfig.InitialWindowSize;
+            UReceiveWindowSize = SocketConfig.InitialWindowSize;
+            UUpStreamMtu = SocketConfig.InitialStreamMtu;
+            UDownStreamMtu = SocketConfig.InitialStreamMtu;
 
-            OutSnAckOfAcksSeqNum = SocketConfig.initialAcksPosition;
-            InSnAckOfAcksSeqNum = SocketConfig.initialAcksPosition;
+            OutSnResetSeqNum = SocketConfig.InitialAckPosition;
+            InSnResetSeqNum = SocketConfig.InitialAckPosition;
 
-            ReceiveWindowStartPosition = SocketConfig.initialAcksPosition;
-            RTT = new TimeSpan(0, 0, 0, 0, this.SocketConfig.DelayAckTime);
+            ReceiveWindowStartPosition = SocketConfig.InitialAckPosition;
+            RTT = new TimeSpan(0, 0, 0, 0, this.SocketConfig.DelayedAckTime);
 
             packetSender = sender;
         }
 
-        #endregion Constructor
+        #endregion
 
         #region Methods for Auto-handle Socket
 
@@ -304,28 +336,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <returns>Return true if send success</returns>
         public bool Send(byte[] data)
         {
-            if (!Connected) return false;
+            if (!Connected)
+            {
+                return false;
+            }
+
+            if (upgradedToRdpedup2)
+            {
+                return rdpeudp2Handler.Send(data);
+            }
+
             List<byte> dataList = new List<byte>(data);
-            int payloadLength = 0;
             byte[] packetData;
             RdpeudpPacket packet;
             do
             {
-                packet = new RdpeudpPacket();                  // Fill in the common header.
-                packet.fecHeader.snSourceAck = SnSourceAck;
-                packet.fecHeader.uReceiveWindowSize = UReceiveWindowSize;
-                packet.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_DATA | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
-                packet.ackVectorHeader = CreateAckVectorHeader();
+                packet = new RdpeudpPacket(); // Fill in the common header.
+                packet.FecHeader.snSourceAck = SnSourceAck;
+                packet.FecHeader.uReceiveWindowSize = UReceiveWindowSize;
+                packet.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_DATA | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
+                packet.AckVectorHeader = CreateAckVectorHeader();
 
-                packet.sourceHeader = CreateSourcePayloadHeader();  // Generate SourceHeader.
+                packet.SourceHeader = CreateSourcePayloadHeader(); // Generate SourceHeader.
 
-                packetData = PduMarshaler.Marshal(packet, false);      // Measure the header lenght to figure out payload length.
-                payloadLength = Math.Min(UUpStreamMtu - packetData.Length, dataList.Count);
+                packetData = PduMarshaler.Marshal(packet, false); // Measure the header lenght to figure out payload length.
+                int payloadLength = Math.Min(UUpStreamMtu - packetData.Length, dataList.Count);
 
-                packet.payload = new byte[payloadLength];
-                dataList.CopyTo(0, packet.payload, 0, payloadLength);   // Copy the data in to packet payload.
+                packet.Payload = new byte[payloadLength];
+                dataList.CopyTo(0, packet.Payload, 0, payloadLength); // Copy the data in to packet payload.
 
-                string str = System.Text.Encoding.ASCII.GetString(packet.payload);
                 SendPacket(packet);
                 dataList.RemoveRange(0, payloadLength);
 
@@ -344,7 +383,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         public event DisconnectedHandler Disconnected;
 
-        #endregion Methods for Auto-handle Socket
+        #endregion
 
         #region Methods used only when AutoHandle is false
 
@@ -355,29 +394,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <returns></returns>
         public bool SendPacket(RdpeudpPacket packet)
         {
-            if (packet.sourceHeader.HasValue && AutoHandle)
-            {                                 // Deal with window area.
-
+            if (packet.SourceHeader.HasValue && AutoHandle)
+            {
+                // Deal with window area.
                 OutPacketState packetState = new OutPacketState();
                 packetState.Packet = packet;
                 packetState.Acknowledged = false;
 
-
                 DateTime endTime = DateTime.Now + this.SocketConfig.Timeout;
-                uint sendWindowsEndPos = SendWindowStartPosition + USendWindowSize;
+                uint sendWindowEndPos = SendWindowStartPosition + USendWindowSize;
 
                 while (DateTime.Now < endTime)
                 {
                     //If source sequence number is in send slide window, send the packet. Otherwise, wait a sendingInterval
-                    if (!IsInSendWindow(packet.sourceHeader.Value.snSourceStart))
+                    if (!IsInSendWindow(packet.SourceHeader.Value.snSourceStart))
                     {
-                        sendWindowLock.WaitOne(this.SocketConfig.sendingInterval);
+                        sendWindowLock.WaitOne(this.SocketConfig.SendingInterval);
                     }
                     else
                     {
                         break;
                     }
                 }
+
                 if (DateTime.Now > endTime)
                 {
                     // Time out.
@@ -385,18 +424,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 }
 
                 packetState.SendTime = DateTime.Now;
-                lock (outPacketDic) outPacketDic[packet.sourceHeader.Value.snSourceStart] = packetState;
+                lock (outPacketDic)
+                {
+                    outPacketDic[packet.SourceHeader.Value.snSourceStart] = packetState;
+                }
 
                 // Add RDPUDP_ACK_OF_ACKVECTOR_HEADER Structure if necessary
-                UpdateOutSnAckOfAcksSeqNum(packet);
-
+                UpdateOutSnResetSeqNum(packet);
             }
 
             byte[] data = PduMarshaler.Marshal(packet, false);
-            SendBytesByUDP(data);
+            SendBytesByUdp(data);
 
             // Update Last send time, which is used for keep alive timer
-            LastSendDiagramTime = DateTime.Now;
+            latestDatagramSentAt = DateTime.Now;
 
             return true;
         }
@@ -405,13 +446,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// Send bytes via UDP transport
         /// </summary>
         /// <param name="data"></param>
-        public void SendBytesByUDP(byte[] data)
+        public void SendBytesByUdp(byte[] data)
         {
             StackPacket stackPacket = new RdpeudpBasePacket(data);
             packetSender(remoteEndPoint, stackPacket);
 
             // ETW Provider Dump Message
-            string messageName = "RDPEUDP:SentPDU";
+            // string messageName = "RDPEUDP:SentPDU";
             // ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, typeof(RdpeudpPacket).Name, data);
         }
 
@@ -420,12 +461,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             DateTime endtime = DateTime.Now + timeout;
             while (DateTime.Now < endtime)
             {
-                lock (unProcessedPacketBuffer)
+                lock (unprocessedPacketBuffer)
                 {
-                    if (unProcessedPacketBuffer.Count > 0)
+                    if (unprocessedPacketBuffer.Count > 0)
                     {
-                        RdpeudpPacket eudpPacket = unProcessedPacketBuffer[0];
-                        unProcessedPacketBuffer.RemoveAt(0);
+                        RdpeudpPacket eudpPacket = unprocessedPacketBuffer[0];
+                        unprocessedPacketBuffer.RemoveAt(0);
                         return eudpPacket;
                     }
                 }
@@ -440,21 +481,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        public RdpeudpPacket ExpectACKPacket(TimeSpan timeout)
+        public RdpeudpPacket ExpectAckPacket(TimeSpan timeout)
         {
             DateTime endtime = DateTime.Now + timeout;
             while (DateTime.Now < endtime)
             {
-                lock (unProcessedPacketBuffer)
+                lock (unprocessedPacketBuffer)
                 {
-                    for (int i = 0; i < unProcessedPacketBuffer.Count; i++)
+                    for (int i = 0; i < unprocessedPacketBuffer.Count; i++)
                     {
-                        RdpeudpPacket eudpPacket = unProcessedPacketBuffer[i];
-                        if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK))
+                        RdpeudpPacket eudpPacket = unprocessedPacketBuffer[i];
+                        if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK))
                         {
-                            if (!Connected || (eudpPacket.ackVectorHeader.HasValue && eudpPacket.ackVectorHeader.Value.uAckVectorSize > 0))
+                            if (!Connected || (eudpPacket.AckVectorHeader.HasValue && eudpPacket.AckVectorHeader.Value.uAckVectorSize > 0))
                             {
-                                unProcessedPacketBuffer.RemoveAt(i);
+                                unprocessedPacketBuffer.RemoveAt(i);
                                 return eudpPacket;
                             }
                         }
@@ -476,14 +517,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 return null;
             }
 
-            RdpeudpPacket packet = new RdpeudpPacket();                  // Fill in the common header.
-            packet.fecHeader.snSourceAck = SnSourceAck;
-            packet.fecHeader.uReceiveWindowSize = UReceiveWindowSize;
-            packet.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_DATA | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
-            packet.ackVectorHeader = CreateAckVectorHeader();
+            RdpeudpPacket packet = new RdpeudpPacket(); // Fill in the common header.
+            packet.FecHeader.snSourceAck = SnSourceAck;
+            packet.FecHeader.uReceiveWindowSize = UReceiveWindowSize;
+            packet.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_DATA | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
+            packet.AckVectorHeader = CreateAckVectorHeader();
 
-            packet.sourceHeader = CreateSourcePayloadHeader();
-            packet.payload = data;
+            packet.SourceHeader = CreateSourcePayloadHeader();
+            packet.Payload = data;
             return packet;
         }
 
@@ -506,14 +547,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 lock (inPacketDic)
                 {
                     // Generate an ACK header.
-                    List<AckVector> ackVectorElements = new List<AckVector>();
-                    VECTOR_ELEMENT_STATE currentState = inPacketDic.ContainsKey(InSnAckOfAcksSeqNum) ? VECTOR_ELEMENT_STATE.DATAGRAM_RECEIVED : VECTOR_ELEMENT_STATE.DATAGRAM_NOT_YET_RECEIVED;
-                    AckVector ackVectorElement = new AckVector();
+                    List<AckVectorElement> ackVectorElements = new List<AckVectorElement>();
+                    VECTOR_ELEMENT_STATE currentState = inPacketDic.ContainsKey(InSnResetSeqNum) ? VECTOR_ELEMENT_STATE.DATAGRAM_RECEIVED : VECTOR_ELEMENT_STATE.DATAGRAM_NOT_YET_RECEIVED;
+                    AckVectorElement ackVectorElement = new AckVectorElement();
                     ackVectorElement.State = currentState;
                     ackVectorElement.Length = 0;
 
                     // RLE encoding.
-                    for (uint i = InSnAckOfAcksSeqNum + 1; i <= SnSourceAck; i++)
+                    for (uint i = InSnResetSeqNum + 1; i <= SnSourceAck; i++)
                     {
                         currentState = inPacketDic.ContainsKey(i) ? VECTOR_ELEMENT_STATE.DATAGRAM_RECEIVED : VECTOR_ELEMENT_STATE.DATAGRAM_NOT_YET_RECEIVED;
 
@@ -522,7 +563,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                         {
                             // If current state differs from last state, assign a new ack vector.
                             ackVectorElements.Add(ackVectorElement);
-                            ackVectorElement = new AckVector();
+                            ackVectorElement = new AckVectorElement();
                             ackVectorElement.State = currentState;
                             ackVectorElement.Length = 0;
                         }
@@ -552,10 +593,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         {
             RDPUDP_SOURCE_PAYLOAD_HEADER sourceHeader = new RDPUDP_SOURCE_PAYLOAD_HEADER();
 
-            Monitor.Enter(sequenceNumberLock);
-            sourceHeader.snCoded = ++CurSnCoded;
-            sourceHeader.snSourceStart = ++CurSnSource;
-            Monitor.Exit(sequenceNumberLock);
+            lock (sequenceNumberLock)
+            {
+                sourceHeader.snCoded = ++CurSnCoded;
+                sourceHeader.snSourceStart = ++CurSnSource;
+            }
 
             return sourceHeader;
         }
@@ -571,9 +613,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         {
             RDPUDP_FEC_PAYLOAD_HEADER fecPayloadHeader = new RDPUDP_FEC_PAYLOAD_HEADER();
 
-            Monitor.Enter(sequenceNumberLock);
-            fecPayloadHeader.snCoded = ++CurSnCoded;
-            Monitor.Exit(sequenceNumberLock);
+            lock (sequenceNumberLock)
+            {
+                fecPayloadHeader.snCoded = ++CurSnCoded;
+            }
 
             fecPayloadHeader.snSourceStart = snSourceStart;
             fecPayloadHeader.uRange = uSourceRange;
@@ -590,7 +633,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <returns></returns>
         public RDPUDP_SYNDATA_PAYLOAD CreateSynData(uint? initialSequenceNumber = null)
         {
-            RDPUDP_SYNDATA_PAYLOAD SynData = new RDPUDP_SYNDATA_PAYLOAD();
+            RDPUDP_SYNDATA_PAYLOAD synData = new RDPUDP_SYNDATA_PAYLOAD();
             if (initialSequenceNumber == null)
             {
                 Random random = new Random();
@@ -600,36 +643,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             {
                 SnInitialSequenceNumber = initialSequenceNumber.Value;
             }
-            SynData.snInitialSequenceNumber = SnInitialSequenceNumber;
-            SynData.uUpStreamMtu = UUpStreamMtu;
-            SynData.uDownStreamMtu = UDownStreamMtu;
-            CurSnCoded = SynData.snInitialSequenceNumber;
-            CurSnSource = SynData.snInitialSequenceNumber;
-            SendWindowStartPosition = SynData.snInitialSequenceNumber + 1;
+            synData.snInitialSequenceNumber = SnInitialSequenceNumber;
+            synData.uUpStreamMtu = UUpStreamMtu;
+            synData.uDownStreamMtu = UDownStreamMtu;
+            CurSnCoded = synData.snInitialSequenceNumber;
+            CurSnSource = synData.snInitialSequenceNumber;
+            SendWindowStartPosition = synData.snInitialSequenceNumber + 1;
 
-            return SynData;
+            return synData;
         }
 
         /// <summary>
         /// Create RDPUDP_SYNDATAEX_PAYLOAD Structure
         /// </summary>
         /// <returns></returns>
-        public RDPUDP_SYNDATAEX_PAYLOAD CreateSynExData(uUdpVer_Values version)
+        public RDPUDP_SYNDATAEX_PAYLOAD CreateSynExData(RDPUDP_PROTOCOL_VERSION version)
         {
-            RDPUDP_SYNDATAEX_PAYLOAD SynExData = new RDPUDP_SYNDATAEX_PAYLOAD();
-            SynExData.uSynExFlags = uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID;
+            RDPUDP_SYNDATAEX_PAYLOAD synExData = new RDPUDP_SYNDATAEX_PAYLOAD();
+            synExData.uSynExFlags = RDPUDP_VERSION_INFO.RDPUDP_VERSION_INFO_VALID;
 
             //The uUdpVer field MUST be set to the highest RDP-UDP protocol version supported by both endpoints
-            if ((version & uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2) != 0)
+            if (version >= RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_3)
             {
-                SynExData.uUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2;
+                synExData.uUdpVer = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_3;
+            }
+            else if (version >= RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2)
+            {
+                synExData.uUdpVer = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2;
             }
             else
             {
-                SynExData.uUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
+                synExData.uUdpVer = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_1;
             }
 
-            return SynExData;
+            return synExData;
         }
 
         public byte[] CreateFECPayload(RdpeudpPacket[] sourcePackets, out byte uFecIndex)
@@ -644,33 +691,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         public bool RetransmitPacket(RdpeudpPacket packet)
         {
-            if (!connected ||
-                packet.sourceHeader == null) return false;
-
-            if (!outPacketDic.ContainsKey(packet.sourceHeader.Value.snSourceStart))
+            if (!connected || packet.SourceHeader == null)
             {
                 return false;
             }
 
-            if (outPacketDic[packet.sourceHeader.Value.snSourceStart].retransmitTimes >= this.SocketConfig.retransmitLimit)
+            if (!outPacketDic.ContainsKey(packet.SourceHeader.Value.snSourceStart))
+            {
+                return false;
+            }
+
+            if (outPacketDic[packet.SourceHeader.Value.snSourceStart].RetransmitTimes >= this.SocketConfig.RetransmitLimit)
             {
                 //If a datagram has been retransmitted five times without a response, the sender terminates the connection
                 this.Close();
             }
-            RDPUDP_SOURCE_PAYLOAD_HEADER sourceHeader = packet.sourceHeader.Value;
-            Monitor.Enter(sequenceNumberLock);
-            sourceHeader.snCoded = ++CurSnCoded;
-            Monitor.Exit(sequenceNumberLock);
-            packet.sourceHeader = sourceHeader;
+            RDPUDP_SOURCE_PAYLOAD_HEADER sourceHeader = packet.SourceHeader.Value;
+            lock (sequenceNumberLock)
+            {
+                sourceHeader.snCoded = ++CurSnCoded;
+            }
+            packet.SourceHeader = sourceHeader;
 
             byte[] data = PduMarshaler.Marshal(packet, false);
-            SendBytesByUDP(data);
+            SendBytesByUdp(data);
 
             // Deal with outPacketDic and retransmit packet.
-            if (outPacketDic.ContainsKey(packet.sourceHeader.Value.snSourceStart))
+            if (outPacketDic.ContainsKey(packet.SourceHeader.Value.snSourceStart))
             {
-                outPacketDic[packet.sourceHeader.Value.snSourceStart].retransmitTimes++;
-                outPacketDic[packet.sourceHeader.Value.snSourceStart].SendTime = DateTime.Now;
+                outPacketDic[packet.SourceHeader.Value.snSourceStart].RetransmitTimes++;
+                outPacketDic[packet.SourceHeader.Value.snSourceStart].SendTime = DateTime.Now;
             }
             return true;
         }
@@ -679,20 +729,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// Send an ACK Datagrams
         /// </summary>
         /// <returns></returns>
-        public bool SendAcKPacket(bool delayACK = false)
+        public bool SendAckPacket(bool delayACK = false)
         {
-            if (!connected) return false;
+            if (!connected)
+            {
+                return false;
+            }
+
             RdpeudpPacket AckPacket = new RdpeudpPacket();
-            AckPacket.fecHeader.snSourceAck = SnSourceAck;
-            AckPacket.fecHeader.uReceiveWindowSize = UReceiveWindowSize;
-            AckPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK;
+            AckPacket.FecHeader.snSourceAck = SnSourceAck;
+            AckPacket.FecHeader.uReceiveWindowSize = UReceiveWindowSize;
+            AckPacket.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK;
 
             if (delayACK)
             {
-                AckPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK | RDPUDP_FLAG.RDPUDP_FLAG_ACKDELAYED;
+                AckPacket.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK | RDPUDP_FLAG.RDPUDP_FLAG_ACKDELAYED;
             }
 
-            AckPacket.ackVectorHeader = CreateAckVectorHeader();
+            AckPacket.AckVectorHeader = CreateAckVectorHeader();
 
             SendPacket(AckPacket);
 
@@ -705,6 +759,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="packet"></param>
         public void ReceivePacket(StackPacket packet)
         {
+            lock (receiveLock)
+            {
+                if (upgradedToRdpedup2)
+                {
+                    if (!connected || rdpeudp2Handler == null)
+                    {
+                        rdpeudp2UpgradeBuffer.Add(packet);
+                        return;
+                    }
+
+                    if (rdpeudp2UpgradeBuffer.Any())
+                    {
+                        foreach (var p in rdpeudp2UpgradeBuffer)
+                        {
+                            rdpeudp2Handler.ReceivePacket(p);
+                        }
+
+                        rdpeudp2UpgradeBuffer.Clear();
+                    }
+
+                    rdpeudp2Handler.ReceivePacket(packet);
+                    return;
+                }
+            }
+
             // Transfer packet to 
             RdpeudpPacket eudpPacket = new RdpeudpPacket();
             byte[] packetBytes = packet.ToBytes();
@@ -714,7 +793,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             }
 
             // ETW Provider Dump Message
-            string messageName = "RDPEUDP:ReceivedPDU";
+            // string messageName = "RDPEUDP:ReceivedPDU";
             // ExtendedLogger.DumpMessage(messageName, DumpLevel_LayerTLS, eudpPacket.GetType().Name, packetBytes);
 
             ReceivePacket(eudpPacket);
@@ -727,41 +806,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public void ReceivePacket(RdpeudpPacket eudpPacket)
         {
             // Update last receive time, which is used for keep alive timer
-            LastReceiveDiagramTime = DateTime.Now;
+            latestDatagramReceivedAt = DateTime.Now;
 
-            Monitor.Enter(receiveLock);
-
-            if (!connected || !AutoHandle)
+            lock (receiveLock)
             {
-                // If connection haven't been setuped, or Auto handle is false, this packet will not be processed automatically by this method. 
-                // It will buffer it for others to use it.
-                lock (unProcessedPacketBuffer) unProcessedPacketBuffer.Add(eudpPacket);
+                if (!connected || !AutoHandle)
+                {
+                    // If connection haven't been setuped, or Auto handle is false, this packet will not be processed automatically by this method. 
+                    // It will buffer it for others to use it.
+                    lock (unprocessedPacketBuffer)
+                    {
+                        unprocessedPacketBuffer.Add(eudpPacket);
+                    }
+                }
+                else
+                {
+                    // Process the received packet
+                    // In case the advised window size was updated
+                    URemoteAdvisedWindowSize = eudpPacket.FecHeader.uReceiveWindowSize;
+                    // This value should be updated when receiving ACK if congestion algorithm is implemented
+                    USendWindowSize = URemoteAdvisedWindowSize;
+                    // Process Ack Vector Header if the packet contained
+                    ProcessAckVectorHeader(eudpPacket);
+                    // Process Source Data if the packet contained
+                    ProcessSourceData(eudpPacket);
+                    // Process FEC Payload data if the packet contained
+                    ProcessFECPayloadData(eudpPacket);
+                    // Process RDPUDP_ACK_OF_ACKVECTOR_HEADER Structure if the packet contained
+                    ProcessAckOfAckVectorHeader(eudpPacket);
+                    // Process RDPUPD_SYNDATAEX_PAYLOAD
+                    ProcessSynDataExPayload(eudpPacket);
+
+                    //TODO: Congestion control function
+                }
             }
-            else
-            {
-                // Process the received packet
-                // In case the advised window size updated
-                URemoteAdvisedWindowSize = eudpPacket.fecHeader.uReceiveWindowSize;
-                // this value should update when receiving ACK if congestion algorithm is implemented
-                USendWindowSize = URemoteAdvisedWindowSize;
-                // Process Ack Vector Header if the packet contained
-                ProcessAckVectorHeader(eudpPacket);
-                // Process Source Data if the packet contained
-                ProcessSourceData(eudpPacket);
-                // Process FEC Payload data if the packet contained
-                ProcessFECPayloadData(eudpPacket);
-                // Process RDPUDP_ACK_OF_ACKVECTOR_HEADER Structure if the packet contained
-                ProcessAckOfAckVectorHeader(eudpPacket);
-                // Process RDPUPD_SYNDATAEX_PAYLOAD
-                ProcessSynDataExPayload(eudpPacket);
-
-                //TODO: Congestion control function
-
-            }
-            Monitor.Exit(receiveLock);
-
         }
-        #endregion Methods used only when AutoHandle is false
+
+        #endregion
 
         #region Other Public Methods
 
@@ -771,6 +852,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         public void Close()
         {
             connected = false;
+
+            Rdpeudp2Handler?.Close();
 
             Disconnected?.Invoke();
 
@@ -787,7 +870,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 Close();
             }
         }
-        #endregion Other Public Methods
+        #endregion
 
         #region Private/Internal methods
 
@@ -797,18 +880,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="eudpPacket"></param>
         private void ProcessAckVectorHeader(RdpeudpPacket eudpPacket)
         {
-            // Update OutSnAckOfAcksSeqNum if necessary
-            UpdateOutSnAckOfAcksSeqNum(eudpPacket.fecHeader.snSourceAck);
+            // Update OutSnResetSeqNum if necessary
+            UpdateOutSnResetSeqNum(eudpPacket.FecHeader.snSourceAck);
 
-            if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK) && !eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYN))
+            if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK) && !eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYN))
             {
                 //Contains ack, analyze ack value, update outPacketDic, caculate RTT, and move send window
-                if (eudpPacket.ackVectorHeader.Value.uAckVectorSize > 0)    // Deal with ack vector.
+                if (eudpPacket.AckVectorHeader.Value.uAckVectorSize > 0)    // Deal with ack vector.
                 {
-                    uint currentposition = OutSnAckOfAcksSeqNum;
+                    uint currentposition = OutSnResetSeqNum;
                     lock (outPacketDic)
                     {
-                        foreach (AckVector AckVectorElement in eudpPacket.ackVectorHeader.Value.AckVector)
+                        foreach (AckVectorElement AckVectorElement in eudpPacket.AckVectorHeader.Value.AckVector)
                         {
                             if (AckVectorElement.State == VECTOR_ELEMENT_STATE.DATAGRAM_RECEIVED)
                             {
@@ -820,7 +903,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                                         outPacketDic[currentposition].Acknowledged = true;
                                     }
                                 }
-
                             }
                             else
                             {
@@ -828,14 +910,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                             }
                         }
 
-                        // If this packet is not a delay ack, calculate RTT, only the last acknowleged source packet is used to caculate RTT
+                        // If this packet is not a delayed ack, calculate RTT, only the last acknowleged source packet is used to caculate RTT
                         if (outPacketDic.ContainsKey(currentposition - 1))
                         {
-                            if (!eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACKDELAYED)
-                                && !outPacketDic[currentposition - 1].estimatedRTT) // Also make sure this packet has not been used to estimate RTT. If the packet has been used to estimated RTT, this packet may be a resent ACK for keep alive
+                            if (!eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACKDELAYED)
+                                && !outPacketDic[currentposition - 1].EstimatedRTT) // Also make sure this packet has not been used to estimate RTT. If the packet has been used to estimated RTT, this packet may be a resent ACK for keep alive
                             {
                                 RTT = new TimeSpan(RTT.Ticks / 8 * 7 + (DateTime.Now - outPacketDic[currentposition - 1].SendTime).Ticks / 8);  // Count the RTT.
-                                outPacketDic[currentposition - 1].estimatedRTT = true;
+                                outPacketDic[currentposition - 1].EstimatedRTT = true;
                             }
                         }
 
@@ -853,16 +935,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="eudpPacket"></param>
         public void ProcessSourceData(RdpeudpPacket eudpPacket)
         {
-            if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_DATA) && !eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_FEC))
+            if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_DATA) && !eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_FEC))
             {
                 lock (inPacketDic)
                 {
-                    if (IsInReceiveWindow(eudpPacket.sourceHeader.Value.snSourceStart))
+                    if (IsInReceiveWindow(eudpPacket.SourceHeader.Value.snSourceStart))
                     {
-                        SnSourceAck = Math.Max(SnSourceAck, eudpPacket.sourceHeader.Value.snSourceStart);
+                        SnSourceAck = Math.Max(SnSourceAck, eudpPacket.SourceHeader.Value.snSourceStart);
                         InPacketState inPacketState = new InPacketState();
                         inPacketState.Packet = eudpPacket;
-                        inPacketDic[eudpPacket.sourceHeader.Value.snSourceStart] = inPacketState;
+                        inPacketDic[eudpPacket.SourceHeader.Value.snSourceStart] = inPacketState;
 
                         UpdateReceiveWindow();
                     }
@@ -870,12 +952,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     // Increase received source packet numbers not be ack
                     if (sourceNumNotAcked == 0)
                     {
-                        ReceiveTimeForFirstNotACKSource = DateTime.Now;
+                        receiveTimeForFirstNotACKSource = DateTime.Now;
                     }
                     sourceNumNotAcked++;
                 }
                 // Send ACK diagram if necessary.
-                AckPacketReceived();
+                SendAckPacketBack();
             }
         }
 
@@ -885,9 +967,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="eudpPacket"></param>
         public void ProcessAckOfAckVectorHeader(RdpeudpPacket eudpPacket)
         {
-            if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS))
+            if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS))
             {
-                InSnAckOfAcksSeqNum = eudpPacket.ackOfAckVector.Value.snResetSeqNum;
+                InSnResetSeqNum = eudpPacket.AckOfAckVector.Value.snResetSeqNum;
             }
         }
 
@@ -897,7 +979,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="eudpPacket"></param>
         public void ProcessFECPayloadData(RdpeudpPacket eudpPacket)
         {
-            if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_FEC))
+            if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_FEC))
             {
                 // TODO: process FEC payload, calculate lost packet with FEC data
                 // then use UpdateReceiveWindow function to update window and process received data
@@ -910,15 +992,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         public void ProcessSynDataExPayload(RdpeudpPacket eudpPacket)
         {
-            if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) && eudpPacket.SynDataEx != null)
+            if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) && eudpPacket.SynDataEx != null)
             {
-                if (eudpPacket.SynDataEx.Value.uUdpVer.HasFlag(uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2))
+                if (eudpPacket.SynDataEx.Value.uUdpVer.HasFlag(RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_3))
                 {
-                    HighestVersion = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2;
+                    HighestVersion = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_3;
+                    return;
+                }
+                else if (eudpPacket.SynDataEx.Value.uUdpVer.HasFlag(RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2))
+                {
+                    HighestVersion = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2;
                     return;
                 }
             }
-            HighestVersion = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
+            HighestVersion = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_1;
         }
 
 
@@ -928,15 +1015,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="eudpPacket"></param>
         public void ProcessSynPacket(RdpeudpPacket eudpPacket)
         {
-            if (eudpPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYN)
-                || eudpPacket.fecHeader.uFlags.Equals(RDPUDP_FLAG.RDPUDP_FLAG_SYN | RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY)) // Make sure this packet is a SYN Packet
+            if (eudpPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_SYN)
+                || eudpPacket.FecHeader.uFlags.Equals(RDPUDP_FLAG.RDPUDP_FLAG_SYN | RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY)) // Make sure this packet is a SYN Packet
             {
                 UDownStreamMtu = (ushort)(Math.Min(Math.Min(eudpPacket.SynData.Value.uUpStreamMtu, UDownStreamMtu), (ushort)1232));
                 UUpStreamMtu = (ushort)(Math.Min(Math.Min(eudpPacket.SynData.Value.uDownStreamMtu, UUpStreamMtu), (ushort)1232));
-                USendWindowSize = eudpPacket.fecHeader.uReceiveWindowSize;
+                USendWindowSize = eudpPacket.FecHeader.uReceiveWindowSize;
                 SnSourceAck = eudpPacket.SynData.Value.snInitialSequenceNumber;
 
-                InSnAckOfAcksSeqNum = eudpPacket.SynData.Value.snInitialSequenceNumber + 1;
+                InSnResetSeqNum = eudpPacket.SynData.Value.snInitialSequenceNumber + 1;
                 ReceiveWindowStartPosition = eudpPacket.SynData.Value.snInitialSequenceNumber + 1;
             }
         }
@@ -966,7 +1053,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                 // process the packet
                 if (Received != null)
                 {
-                    Received(inPacketDic[ReceiveWindowStartPosition].Packet.payload);
+                    Received(inPacketDic[ReceiveWindowStartPosition].Packet.Payload);
                 }
                 // Set the packet to null, but not remove it so as to create ACK vector 
                 inPacketDic[ReceiveWindowStartPosition].Packet = null;
@@ -1002,7 +1089,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                         {
                             if (Received != null)
                             {
-                                Received(inPacketDic[ReceiveWindowStartPosition].Packet.payload);
+                                Received(inPacketDic[ReceiveWindowStartPosition].Packet.Payload);
                             }
                             // Set the packet to null, but not remove it so as to create ACK vector 
                             inPacketDic[ReceiveWindowStartPosition].Packet = null;
@@ -1018,14 +1105,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="maxAckSeqNum"></param>
         private void UpdateSendWindow()
         {
-
             while (outPacketDic.ContainsKey(SendWindowStartPosition) && (outPacketDic[SendWindowStartPosition].Acknowledged))
             {
                 outPacketDic.Remove(SendWindowStartPosition); // Client has receive the packet, Remove it from outPacketDic.
                 SendWindowStartPosition++;
             }
 
-            // For lossy connection, Lossy connection mark a packet as lost if received 3 ack of packets after it, so should check states from SendWindowStartPosition to CurSnSource
+            // For lossy connection, Lossy connection mark a packet as lost if received 3 ack of packets after it, so should check states from SendeWindowStartPosition to CurSnSource
             if (TransMode == TransportMode.Lossy &&
                 IsInSendWindow(CurSnSource)) // If all sent sources have been Acknowledged, CurSnSource should not in send window
             {
@@ -1102,54 +1188,56 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         }
 
         /// <summary>
-        /// Used during sending source packet, Add RDPUDP_ACK_OF_ACKVECTOR_HEADER structure into the packet to update OutSnAckOfAcksSeqNum 
+        /// Used during sending source packet, Add RDPUDP_ACK_OF_ACKVECTOR_HEADER structure into the packet to update OutSnResetSeqNum
         /// </summary>
         /// <param name="eudpPacket">Packet to be sent</param>
-        private void UpdateOutSnAckOfAcksSeqNum(RdpeudpPacket eudpPacket)
+        private void UpdateOutSnResetSeqNum(RdpeudpPacket eudpPacket)
         {
-            if (newOutSnAckOfAcksSeqNum == null
-                && SendWindowStartPosition - 1 - OutSnAckOfAcksSeqNum > this.SocketConfig.changeSnAckOfAcksSeqNumInterval)
+            if (newOutSnResetSeqNum == null
+                && SendWindowStartPosition - 1 - OutSnResetSeqNum > this.SocketConfig.ChangeSnResetSeqNumInterval)
             {
-                Monitor.Enter(updateAckOfAckLock);
-                if (newOutSnAckOfAcksSeqNum == null
-                    && SendWindowStartPosition - 1 - OutSnAckOfAcksSeqNum > this.SocketConfig.changeSnAckOfAcksSeqNumInterval)
+                lock (updateOutSnResetSeqNumLock)
                 {
-                    newOutSnAckOfAcksSeqNum = SendWindowStartPosition - 1;
-                    RDPUDP_ACK_OF_ACKVECTOR_HEADER ackOfAckVector = new RDPUDP_ACK_OF_ACKVECTOR_HEADER();
-                    ackOfAckVector.snResetSeqNum = newOutSnAckOfAcksSeqNum.Value;
-                    eudpPacket.ackOfAckVector = ackOfAckVector;
-                    eudpPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS | eudpPacket.fecHeader.uFlags;
-                    seqNumofPacketWithAckOfAckVector = eudpPacket.sourceHeader.Value.snSourceStart;
+                    if (newOutSnResetSeqNum == null
+                        && SendWindowStartPosition - 1 - OutSnResetSeqNum > this.SocketConfig.ChangeSnResetSeqNumInterval)
+                    {
+                        newOutSnResetSeqNum = SendWindowStartPosition - 1;
+                        RDPUDP_ACK_OF_ACKVECTOR_HEADER ackOfAckVector = new RDPUDP_ACK_OF_ACKVECTOR_HEADER();
+                        ackOfAckVector.snResetSeqNum = newOutSnResetSeqNum.Value;
+                        eudpPacket.AckOfAckVector = ackOfAckVector;
+                        eudpPacket.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_ACK_OF_ACKS | eudpPacket.FecHeader.uFlags;
+                        seqNumOfPacketWithAckOfAckVector = eudpPacket.SourceHeader.Value.snSourceStart;
+                    }
                 }
-                Monitor.Exit(updateAckOfAckLock);
             }
         }
 
         /// <summary>
         /// Used during receiving packet, if snSourceAck of received packet is larger than seqNumofPacketWithAckOfAckVector
-        /// Update the OutSnAckOfAcksSeqNum to new one
+        /// Update the OutSnResetSeqNum to new one
         /// </summary>
         /// <param name="receivedSnSourceAck">snSourceAck of received packet</param>
-        private void UpdateOutSnAckOfAcksSeqNum(uint receivedSnSourceAck)
+        private void UpdateOutSnResetSeqNum(uint receivedSnSourceAck)
         {
-            if (newOutSnAckOfAcksSeqNum != null
-                && receivedSnSourceAck >= seqNumofPacketWithAckOfAckVector)
+            if (newOutSnResetSeqNum != null
+                && receivedSnSourceAck >= seqNumOfPacketWithAckOfAckVector)
             {
-                Monitor.Enter(updateAckOfAckLock);
-                if (newOutSnAckOfAcksSeqNum != null
-                    && receivedSnSourceAck >= seqNumofPacketWithAckOfAckVector)
+                lock (updateOutSnResetSeqNumLock)
                 {
-                    OutSnAckOfAcksSeqNum = newOutSnAckOfAcksSeqNum.Value;
-                    newOutSnAckOfAcksSeqNum = null;
+                    if (newOutSnResetSeqNum != null
+                        && receivedSnSourceAck >= seqNumOfPacketWithAckOfAckVector)
+                    {
+                        OutSnResetSeqNum = newOutSnResetSeqNum.Value;
+                        newOutSnResetSeqNum = null;
+                    }
                 }
-                Monitor.Exit(updateAckOfAckLock);
             }
         }
 
         /// <summary>
-        /// Send Ack packet if necessary.
+        /// Send Ack packet back to the sender if necessary.
         /// </summary>
-        private void AckPacketReceived()
+        private void SendAckPacketBack()
         {
             if (!Connected || !AutoHandle)
             {
@@ -1158,55 +1246,47 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
             if (this.sourceNumNotAcked >= this.SocketConfig.AckSourcePacketsNumber)
             {
-                this.SendAcKPacket();
+                this.SendAckPacket();
             }
 
-            TimeSpan delayAckDuration = SocketConfig.DelayAckDuration_V1;
-            if (HighestVersion == uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2)
+            TimeSpan delayedAckDuration = SocketConfig.DelayedAckDurationV1;
+            if (HighestVersion == RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2)
             {
                 TimeSpan half = new TimeSpan(RTT.Ticks / 2);
                 // RDPUDP_PROTOCOL_VERSION_2: the delayed ACK time-out is 50 ms or half the RTT, whichever is longer, up to a maximum of 200 ms.
-                delayAckDuration = SocketConfig.DelayAckDuration_V2 > half ? SocketConfig.DelayAckDuration_V2 : half;
-                delayAckDuration = delayAckDuration > SocketConfig.DelayAckDuration_Max ? SocketConfig.DelayAckDuration_Max : delayAckDuration;
+                delayedAckDuration = SocketConfig.DelayedAckDurationV2 > half ? SocketConfig.DelayedAckDurationV2 : half;
+                delayedAckDuration = delayedAckDuration > SocketConfig.DelayedAckDurationMax ? SocketConfig.DelayedAckDurationMax : delayedAckDuration;
             }
 
             if (this.sourceNumNotAcked > 0 &&
-                ReceiveTimeForFirstNotACKSource + delayAckDuration <= DateTime.Now)
+                receiveTimeForFirstNotACKSource + delayedAckDuration <= DateTime.Now)
             {
                 // Send ACK diagram, and set RDPUDP_FLAG_ACKDELAYED flag 
-                this.SendAcKPacket(true);
+                this.SendAckPacket(true);
             }
         }
 
-        #region Methods for Timer
+        #region Methods for Timers
+
         /// <summary>
         /// Create Timers for RDPEUDP socket
         /// </summary>
         private void InitTimers()
         {
             // Wrap handlers in try-catch blocks to ignore exceptions thrown in handler threads.
-            retransmitTimer = new Timer((object state) => { try { ManageRetransmit(state); } catch { } }, null, 0, this.SocketConfig.retransmitTimerInterval);
-            keepAliveTimer = new Timer((object state) => { try { ManageKeepLive(state); } catch { } }, null, 0, this.SocketConfig.keepAliveTimerInterval);
-            delayACKTimer = new Timer((object state) => { try { ManageDelayAck(state); } catch { } }, null, 0, this.SocketConfig.delayAckInterval);
+            retransmitTimer = new Timer((object state) => { try { ManageRetransmit(state); } catch { } }, null, 0, this.SocketConfig.RetransmitTimerInterval);
+            keepaliveTimer = new Timer((object state) => { try { ManageKeepalive(state); } catch { } }, null, 0, this.SocketConfig.KeepaliveTimerInterval);
+            delayedAckTimer = new Timer((object state) => { try { ManageDelayedAck(state); } catch { } }, null, 0, this.SocketConfig.DelayedAckInterval);
         }
 
         /// <summary>
-        /// Dispose Times of RDPEUDP socket
+        /// Dispose Timers of RDPEUDP socket
         /// </summary>
-        private void DisposeTimers()
+        protected void DisposeTimers()
         {
-            if (retransmitTimer != null)
-            {
-                retransmitTimer.Dispose();
-            }
-            if (keepAliveTimer != null)
-            {
-                keepAliveTimer.Dispose();
-            }
-            if (delayACKTimer != null)
-            {
-                delayACKTimer.Dispose();
-            }
+            retransmitTimer?.Dispose();
+            keepaliveTimer?.Dispose();
+            delayedAckTimer?.Dispose();
         }
 
         /// <summary>
@@ -1229,10 +1309,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             // This timer MUST fire at the minimum retransmit time-out or twice the RTT, whichever is longer, after the datagram is first transmitted
             // RDPUDP_PROTOCOL_VERSION_1: the minimum retransmit time-out is 500 ms.
             // RDPUDP_PROTOCOL_VERSION_2: the minimum retransmit time-out is 300 ms.
-            TimeSpan _retransmitDuration = SocketConfig.RetransmitDuration_V1;
-            if (HighestVersion == uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2)
+            TimeSpan _retransmitDuration = SocketConfig.RetransmitDurationV1;
+            if (HighestVersion == RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2)
             {
-                _retransmitDuration = SocketConfig.RetransmitDuration_V2;
+                _retransmitDuration = SocketConfig.RetransmitDurationV2;
             }
 
             TimeSpan retransmitDuration = ((RTT + RTT) > _retransmitDuration) ? (RTT + RTT) : _retransmitDuration;
@@ -1241,7 +1321,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
             {
                 uint curpos = SendWindowStartPosition;
                 while (outPacketDic.ContainsKey(curpos)
-                    && (outPacketDic[curpos].retransmitTimes > 0 || outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now))
+                    && (outPacketDic[curpos].RetransmitTimes > 0 || outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now))
                 {
                     if (outPacketDic[curpos].SendTime + retransmitDuration <= DateTime.Now)
                     {
@@ -1256,41 +1336,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// Function used to manage keep alive timer
         /// </summary>
         /// <param name="state"></param>
-        private void ManageKeepLive(object state)
+        private void ManageKeepalive(object state)
         {
             if (!Connected)
             {
                 return;
             }
 
-            if (LastReceiveDiagramTime + this.SocketConfig.LostConnectionTimeOut <= DateTime.Now)
+            if (latestDatagramReceivedAt + this.SocketConfig.LostConnectionTimeout <= DateTime.Now)
             {
                 // If the sender does not receive any ACK from the receiver after 65 seconds, the connection is terminated.
                 this.Close();
             }
 
-            if (LastSendDiagramTime + this.SocketConfig.KeepaliveDuration <= DateTime.Now)
+            if (latestDatagramSentAt + this.SocketConfig.KeepaliveDuration <= DateTime.Now)
             {
                 // Send an ACK packet to keep alive
-                this.SendAcKPacket();
+                this.SendAckPacket();
             }
         }
 
         /// <summary>
-        /// Function used to manage Delay ACK timer
+        /// Function used to manage Delayed ACK timer
         /// </summary>
         /// <param name="state"></param>
-        private void ManageDelayAck(object state)
+        private void ManageDelayedAck(object state)
         {
             if (!Connected)
             {
                 return;
             }
 
-            AckPacketReceived();
+            SendAckPacketBack();
         }
 
-        #endregion Methods for Timer
-        #endregion Private/Internal methods
+        #endregion
+
+        #endregion
     }
 }
