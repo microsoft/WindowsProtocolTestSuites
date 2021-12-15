@@ -339,6 +339,57 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        /// <summary>
+        /// Expect a transport level (TCP) non connection
+        /// </summary>
+        /// <param name="sessionType">The type of session to be established.</param>
+        public void ExpectNonTransportConnection(RDPSessionType sessionType)
+        {
+            this.pduCache.Clear();
+            RdpbcgrServerSessionContext oldSession = sessionContext;
+
+            TimeSpan leftTime = pduWaitTimeSpan;
+            DateTime expiratedTime = DateTime.Now + pduWaitTimeSpan;
+            bool isRecieved = false;
+            while (!isRecieved && leftTime.CompareTo(new TimeSpan(0)) > 0)
+            {
+                try
+                {
+                    sessionContext = rdpbcgrServerStack.ExpectConnect(leftTime);
+                    if (oldSession == null)
+                    {
+                        isRecieved = true;
+                        break;
+                    }
+                    else if (oldSession.Identity.ToString() != sessionContext.Identity.ToString())
+                    {
+                        isRecieved = true;
+                        break;
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    site.Assert.Fail("Timeout when expecting Connection");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    //break;
+                    site.Log.Add(LogEntryKind.Warning, "Excetpion thrown out when expect Connection. {0}", ex.Message);
+                }
+                finally
+                {
+                    System.Threading.Thread.Sleep(100);//Wait some time for next packet.
+                    leftTime = expiratedTime - DateTime.Now;
+                }
+
+            }
+            if (isRecieved)
+            {
+                site.Assert.Fail("Timeout when expecting Connection");
+            }
+
+            site.Log.Add(LogEntryKind.Debug, "A RDP client initiates a connection. The local endpoint is {0}. The remote endpoint is {1}", sessionContext.LocalIdentity, sessionContext.Identity.ToString());
+        }
 
         /// <summary>
         /// 2.2.1.1 - 2.2.1.2

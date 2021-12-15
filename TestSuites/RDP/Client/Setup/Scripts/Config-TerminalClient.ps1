@@ -145,6 +145,14 @@ if (Test-Path -Path "$dataPath\Base\Negotiate.RDP")
     Copy-Item $dataPath\Negotiate.RDP $dataPath\Base\Negotiate.RDP -Force
 }
 
+if (Test-Path -Path "$dataPath\Base\NegotiateInvalidAccount.RDP")
+{
+    Copy-Item $dataPath\Base\NegotiateInvalidAccount.RDP $dataPath\NegotiateInvalidAccount.RDP -Force
+}else
+{
+    Copy-Item $dataPath\NegotiateInvalidAccount.RDP $dataPath\Base\NegotiateInvalidAccount.RDP -Force
+}
+
 if (Test-Path -Path "$dataPath\Base\NegotiateFullScreen.RDP")
 {
     Copy-Item $dataPath\Base\NegotiateFullScreen.RDP $dataPath\NegotiateFullScreen.RDP -Force
@@ -161,6 +169,14 @@ if (Test-Path -Path "$dataPath\Base\DirectCredSSP.RDP")
     Copy-Item $dataPath\DirectCredSSP.RDP $dataPath\Base\DirectCredSSP.RDP -Force
 }
 
+if (Test-Path -Path "$dataPath\Base\DirectCredSSPInvalidAccount.RDP")
+{
+    Copy-Item $dataPath\Base\DirectCredSSPInvalidAccount.RDP $dataPath\DirectCredSSPInvalidAccount.RDP -Force
+}else
+{
+    Copy-Item $dataPath\DirectCredSSPInvalidAccount.RDP $dataPath\Base\DirectCredSSPInvalidAccount.RDP -Force
+}
+
 if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
 {
     Copy-Item $dataPath\Base\DirectCredSSPFullScreen.RDP $dataPath\DirectCredSSPFullScreen.RDP -Force
@@ -171,16 +187,22 @@ if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
 
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
+"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
+"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
 
 "`n$compressionStr" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
+"`n$compressionStr" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
+"`n$compressionStr" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
 
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
+"`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
+"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
 
@@ -192,6 +214,12 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_RDPConnect /TR "$
 
 Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_RDPConnect /TR "$dataPath\DirectCredSSP.RDP" /IT /F
+
+Write-Host "Creating task to trigger client to initiate a RDP connection with Negotiation Approach and an Invalid Account..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_InvalidAccount_RDPConnect /TR "$dataPath\NegotiateInvalidAccount.RDP" /IT /F
+
+Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach and an Invalid Account..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_InvalidAccount_RDPConnect /TR "$dataPath\DirectCredSSPInvalidAccount.RDP" /IT /F
 
 Write-Host "Creating task to trigger client to initiate a full screen RDP connection with Negotiation Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_FullScreen_RDPConnect /TR "$dataPath\NegotiateFullScreen.RDP" /IT /F

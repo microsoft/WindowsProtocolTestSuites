@@ -176,6 +176,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         void ExpectTransportConnection(RDPSessionType sessionType);
 
         /// <summary>
+        /// Expect a transport level (TCP) non connection
+        /// </summary>
+        /// <param name="sessionType">The type of session to be established.</param>
+        void ExpectNonTransportConnection(RDPSessionType sessionType);
+
+        /// <summary>
         /// Send Server X_224 Connection Confirm Pdu to client
         /// </summary>
         /// <param name="protocol">Indicates the selected security protocol</param>

@@ -72,6 +72,49 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [Priority(0)]
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
+        [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
+        [Description(@"This test case tests: 1) The verification of the credentials (Username) to confirm a connection could not be initiated.")]
+        public void BVT_ConnectionTest_ConnectionInitiation_InvalidAccount_PositiveTest()
+        {
+            #region Test Description
+            /* 
+             This test case tests:
+             1) The correctness of Client X.224 Connection Request PDU.
+             2) SUT can process the valid Server X.224 Connection Confirm PDU correctly.
+
+             Test Execution Steps:
+             1.	Trigger SUT to initiate a RDP connection with sending a Client X.224 Connection Request PDU.
+             2.	Verify the received Client X.224 Connection Request PDU and respond a valid Server X.224 Connection Confirm PDU.
+             3.	Test Suite expects SUT continue the connection sequence with sending a Client MCS Connect Initial PDU 
+                with GCC Conference Create Request. 
+            */
+            #endregion
+
+            #region Test Sequence
+
+            //Start RDP listening.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
+            this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
+
+            #region Trigger client to initiate a RDP connection
+            //Trigger client to initiate a RDP connection.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
+            triggerClientRDPConnect(transportProtocol, false, true);
+            #endregion
+
+            //Expect the transport layer connection request.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
+            this.rdpbcgrAdapter.ExpectNonTransportConnection(RDPSessionType.Normal);
+
+            #endregion
+        }
+
+        [TestMethod]
+        [Priority(0)]
+        [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]        
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]

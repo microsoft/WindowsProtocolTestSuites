@@ -13,7 +13,7 @@
     <Property name="Version" value="2.0" >
       <Description>The version of test suite.</Description>
     </Property>
-
+	<Property name="AdapterInvokeTimeout" value="5" />
     <!--Property used for protocol-based SUT control adapter-->
     <Group name ="SUTControl">
       <!--IP addresses or host name of SUT control Agent, seperated by ";"-->    

@@ -43,6 +43,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             return Start_RDP_Connection(caseName, payload, helpMessage);
         }
 
+        public int RDPConnectWithDirectCredSSPInvalidAccount(string caseName)
+        {
+            // Get help message
+            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
+            // Create payload
+            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, true, false);
+
+            return Start_RDP_Connection(caseName, payload, helpMessage);
+        }
+
         /// <summary>
         /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
         /// and the client should use Direct Approach with CredSSP as the security protocol.
@@ -64,6 +74,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
         public int RDPConnectWithNegotiationApproach(string caseName)
+        {
+            // Get help message
+            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
+            // Create payload
+            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, false, false);
+
+            return Start_RDP_Connection(caseName, payload, helpMessage);
+        }
+
+        /// <summary>
+        /// This method used to trigger client to initiate a RDP connection from RDP client, 
+        /// and the client should use Negotiation-Based Approach to advertise the support for TLS, CredSSP or RDP standard security protocol using an Invalid Username.
+        /// </summary>
+        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
+        public int RDPConnectWithNegotiationApproachInvalidAccount(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -290,13 +315,27 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <returns></returns>
         private int Start_RDP_Connection(string caseName, byte[] payload, string helpMessage)
         {
-            ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION, caseName,
-                        reqId, helpMessage, payload);
+            //Return -1 If Connection Fails
+            int output = -1;
+            try
+            {
+                ushort reqId = controlHandler.GetNextRequestId();
+                this.Site.Log.Add(LogEntryKind.Comment, "Preparing RDP Connection To Server.");
+                SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.START_RDP_CONNECTION, caseName,
+                            reqId, helpMessage, payload);
 
-            byte[] resposePayload = null;
-            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
-            
+                byte[] resposePayload = null;
+
+                output = controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
+                this.Site.Log.Add(LogEntryKind.Comment, "Complete RDP Connection To Server.");
+            }
+            catch(Exception e)
+            {
+                this.Site.Log.Add(LogEntryKind.Comment, "RDP Connection: RDP Connection To SUT Failed:" + e.Message);
+                
+            }
+
+            return output;
         }
         
         /// <summary>

@@ -216,7 +216,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             return null;
         }
 
-        protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
+        protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false, bool invalidCredentials = false)
         {
             int iResult;
             string strMethod = null;
@@ -227,7 +227,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 case EncryptedProtocol.NegotiationCredSsp:
                 case EncryptedProtocol.NegotiationTls:
                     {
-                        if (fullScreen)
+                        if (invalidCredentials)
+                        {
+                            iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachInvalidAccount(this.TestContext.TestName);
+                        }
+
+                        else if (fullScreen)
                         {
                             iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(this.TestContext.TestName);
                         }
@@ -242,10 +247,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 // direct approach
                 case EncryptedProtocol.DirectCredSsp:
                     {
-                        if (fullScreen)
+                        if (invalidCredentials)
+                        {
+                            iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPInvalidAccount(this.TestContext.TestName);
+                        }
+
+                        else if (fullScreen)
+                        {
                             iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(this.TestContext.TestName);
+                        }
+
                         else
+                        {
                             iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP(this.TestContext.TestName);
+                        }
+
                         strMethod = "RDPConnectWithDirectCredSSP";
                     }
                     break;
