@@ -149,7 +149,7 @@ export function AutoDetection(props: StepWizardProps) {
 
     const onDetectButtonClick = () => {
         dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
-        dispatch(DetectionResultActions.setDetectionSummaryAction())
+        dispatch(DetectionResultActions.resetDetectionResultAction())
         if (autoDetection.detecting) {
             // Cancel
             dispatch(AutoDetectionDataSrv.stopAutoDetection())

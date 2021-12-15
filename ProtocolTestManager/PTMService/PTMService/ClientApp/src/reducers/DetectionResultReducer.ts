@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { GET_DETECTION_SUMMARY_REQUEST, GET_DETECTION_SUMMARY_SUCCESS, GET_DETECTION_SUMMARY_FAILURE, TestSuiteDetectionResultActionTypes, SET_DETECTION_SUMMARY } from "../actions/DetectionResultAction";
+import { GET_DETECTION_SUMMARY_REQUEST, GET_DETECTION_SUMMARY_SUCCESS, GET_DETECTION_SUMMARY_FAILURE, RESET_DETECTION_RESULT, TestSuiteDetectionResultActionTypes } from "../actions/DetectionResultAction";
 import { DetectionSummary } from '../model/DetectionResult';
 
 export interface DetectionResultState {
@@ -41,13 +41,14 @@ export const getDetectionResultReducer = (state = initialAutoDetectState, action
                 errorMsg: action.errorMsg
             }
 
-        case SET_DETECTION_SUMMARY:
+        case RESET_DETECTION_RESULT:
             return {
                 ...state,
                 detectionResult: undefined,
                 isDetectionResultLoading: false,
                 errorMsg: undefined
             }
+
         default:
             return state;
     }

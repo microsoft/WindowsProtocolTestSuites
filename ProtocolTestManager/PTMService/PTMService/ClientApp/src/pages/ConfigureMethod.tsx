@@ -116,7 +116,7 @@ export function ConfigureMethod(props: StepWizardProps) {
     const onRunAutoDetection = () => {
         dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
         dispatch(ConfigureMethodActions.setConfigurationMethodAction(ConfigurationMethod_AutoDetection))
-        dispatch(DetectionResultActions.setDetectionSummaryAction())
+        dispatch(DetectionResultActions.resetDetectionResultAction())
         wizardProps.goToStep(RunSteps.AUTO_DETECTION)
     }
 

@@ -18,19 +18,17 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
     const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
         let isEnabledStep = item.TargetStep <= wizardState.lastStep
         if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-            if ((wizardProps.currentStep === RunSteps.CONFIGURE_METHOD || wizardProps.currentStep === RunSteps.AUTO_DETECTION) &&
-                wizardProps.currentStep < wizardState.lastStep &&
+            if (wizardProps.currentStep < wizardState.lastStep &&
                 configureMethod &&
                 configureMethod.selectedMethod &&
                 configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {
-                if (item.TargetStep === RunSteps.DETECTION_RESULT && typeof (detectResult.detectionResult) == "undefined") {
-                    isEnabledStep = false;
-                }
-                else {
-                    isEnabledStep = true
-                }
+                isEnabledStep = true
             } else {
                 isEnabledStep = item.IsEnabled
+            }
+
+            if (item.TargetStep === RunSteps.DETECTION_RESULT && typeof (detectResult.detectionResult) === "undefined") {
+                isEnabledStep = false;
             }
         }
         if (item.IsActive) {
