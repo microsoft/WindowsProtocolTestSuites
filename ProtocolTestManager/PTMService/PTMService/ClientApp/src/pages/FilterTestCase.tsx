@@ -46,7 +46,7 @@ export const FilterTestCase: React.FC<any> = (props: any) => {
     }
 
     const onPreviousButtonClick: React.MouseEventHandler<unknown> = () => {
-        if (configureMethod?.selectedMethod === ConfigurationMethod_AutoDetection && typeof (detectionResult.detectionResult) !== "undefined") {
+        if (configureMethod?.selectedMethod === ConfigurationMethod_AutoDetection && detectionResult.detectionResult !== undefined) {
             wizardProps.previousStep()
         } else {
             wizardProps.goToStep(RunSteps.CONFIGURE_METHOD)

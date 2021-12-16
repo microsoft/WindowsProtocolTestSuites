@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { StepWizardChildProps } from 'react-step-wizard'
 import { ConfigureMethodActions } from '../actions/ConfigureMethodAction'
+import { DetectionResultActions } from '../actions/DetectionResultAction'
 import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { ConfigurationActions } from '../actions/TestSuiteConfigurationAction'
 import { WizardNavBarActions } from '../actions/WizardNavBarAction'
@@ -105,8 +106,11 @@ export function SelectConfiguration(props: any) {
                 dispatch(ConfigurationActions.setSelectedConfigurationAction(foundConfiguration))
                 if (id !== configurations.selectedConfiguration?.Id) {
                     dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+                    // Resets configureMethod and detectionResult after switching configurations
+                    dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+                    dispatch(DetectionResultActions.resetDetectionResultAction())
                 }
-                if (typeof (detectResult.detectionResult) === "undefined") {
+                if (detectResult.detectionResult === undefined) {
                     dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
                 }
                 // go to run step
@@ -120,6 +124,9 @@ export function SelectConfiguration(props: any) {
                 dispatch(ConfigurationActions.setSelectedConfigurationAction(foundConfiguration))
                 if (id !== configurations.selectedConfiguration?.Id) {
                     dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+                    // Resets configureMethod and detectionResult after switching configurations
+                    dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+                    dispatch(DetectionResultActions.resetDetectionResultAction())
                 }
                 // go to next step
                 wizardProps.nextStep()

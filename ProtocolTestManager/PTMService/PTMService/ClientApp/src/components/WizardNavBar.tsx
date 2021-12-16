@@ -27,7 +27,7 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
                 isEnabledStep = item.IsEnabled
             }
 
-            if (item.TargetStep === RunSteps.DETECTION_RESULT && typeof (detectResult.detectionResult) === "undefined") {
+            if (item.TargetStep === RunSteps.DETECTION_RESULT && detectResult.detectionResult === undefined) {
                 isEnabledStep = false;
             }
         }
