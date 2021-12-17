@@ -94,6 +94,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         //[ExpectedException(typeof(NotImplementedException))]
         public void PublishDC_TestCaseSamLogonResponseEx()
         {
+              Site.Assert.Inconclusive("The test case is not supported on .NET Core and .NET.");
 //            #region Capture
 //            MaAdapter.Reset();
 //            MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponseEx);
@@ -422,6 +423,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
         //[ExpectedException(typeof(NotImplementedException))]
         public void PublishDC_TestCaseSamLogonResponse()
         {
+            Site.Assert.Inconclusive("The test case is not supported on .NET Core and .NET.");
             //#region Capture
             //MaAdapter.Reset();
             //MaAdapter.StartCapture(publishDCAdapter.capturePath_SamLogonResponse);
@@ -438,7 +440,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc
             //string filter = publishDCAdapter.SamLogonResponseFilter + " and IPv4.Address == " + publishDCAdapter.PDCIPAddress;
             //Message message = MaAdapter.GetMessages(publishDCAdapter.capturePath_SamLogonResponse, filter)[0];
             //#endregion Capture
-            
+
             //#region NtVersion
             //object fieldValue = message.TryGetValue<object>(publishDCAdapter.NtVersionFilter);
             //Site.CaptureRequirementIfIsTrue(
