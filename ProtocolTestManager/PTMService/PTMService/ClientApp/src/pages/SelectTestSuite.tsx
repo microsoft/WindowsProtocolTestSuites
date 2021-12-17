@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { StepWizardChildProps } from 'react-step-wizard'
+import { ConfigureMethodActions } from '../actions/ConfigureMethodAction'
+import { DetectionResultActions } from '../actions/DetectionResultAction'
 import { TestSuiteInfoActions } from '../actions/TestSuiteInfoAction'
 import { WizardNavBarActions } from '../actions/WizardNavBarAction'
 import { StepPanel } from '../components/StepPanel'
@@ -37,7 +39,10 @@ export function SelectTestSuite(props: any) {
   const onSelectTestSuite = (testSuite: TestSuite) => {
     dispatch(TestSuiteInfoActions.setSelectedTestSuiteAction(testSuite))
     if (testSuite.Id !== testSuiteInfo.selectedTestSuite?.Id) {
-      dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+        dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
+        // Resets configureMethod and detectionResult after switching testSuite
+        dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+        dispatch(DetectionResultActions.resetDetectionResultAction())
     }
     wizardProps.nextStep()
   }
