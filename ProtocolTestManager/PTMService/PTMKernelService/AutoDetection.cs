@@ -3,19 +3,16 @@
 
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.Kernel;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Protocols.TestManager.Kernel;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {

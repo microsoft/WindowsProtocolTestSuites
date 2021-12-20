@@ -215,9 +215,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                 {
                                     continue;
                                 }
-                                PascalCase(featureMappingTable, target, currentRule);
+                                UpdateMappingTable(featureMappingTable, target, currentRule);
                                 // Add item to reverse mapping table
-                                PascalCase(reverseMappingTable, category, targetRuleTable[target]);
+                                UpdateMappingTable(reverseMappingTable, category, targetRuleTable[target]);
                             }
                         }
                         break;
@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        private void PascalCase(Dictionary<string, List<Rule>> mappingTable, string target, Rule currentRule)
+        private void UpdateMappingTable(Dictionary<string, List<Rule>> mappingTable, string target, Rule currentRule)
         {
             if (mappingTable.ContainsKey(target))
             {
