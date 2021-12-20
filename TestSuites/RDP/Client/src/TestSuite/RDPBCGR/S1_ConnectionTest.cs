@@ -109,6 +109,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.ExpectNonTransportConnection(RDPSessionType.Normal);
 
             #endregion
+
+            //Here
         }
 
         [TestMethod]
