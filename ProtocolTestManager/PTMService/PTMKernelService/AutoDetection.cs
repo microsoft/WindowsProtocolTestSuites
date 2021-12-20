@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Protocols.TestManager.Kernel;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -48,6 +49,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         private string detectorAssemblyFileName = string.Empty;
 
         private Assembly detectorAssembly = null;
+
+        private AssemblyLoadContext alc = null;
 
         private string detectorInstanceTypeName = string.Empty;
 
@@ -121,7 +124,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                             if (valueDetector == null)
                             {
                                 // Create an instance
-                                //Assembly assembly = Assembly.LoadFrom(detectorAssemblyFileName);
                                 valueDetector = detectorAssembly.CreateInstance(detectorInstanceTypeName) as IValueDetector;
                             }
                         }
@@ -150,7 +152,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             Type interfaceType = typeof(IValueDetector);
 
             string assemblyDirPath = Directory.GetParent(detectorAssemblyFileName).FullName;
-            AssemblyLoadContext alc = new CollectibleAssemblyLoadContext(detectorAssemblyFileName, "PropertyValueDetector", "Rdma");
+            alc = new CollectibleAssemblyLoadContext(detectorAssemblyFileName, AutoDetectionConsts.ignoredAssemblies, AutoDetectionConsts.mixedAssemblies);
 
             alc.Resolving += (context, assemblyName) =>
             {
@@ -162,30 +164,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                 return null;
             };
-
-
-
-            //AssemblyLoadContext.Default.Resolving += (context, assemblyName) =>
-            //{
-            //    string assemblyPath = Path.Combine(assemblyDirPath, $"{assemblyName.Name}.dll");
-            //    if (File.Exists(assemblyPath))
-            //    {
-            //        return context.LoadFromAssemblyPath(assemblyPath);
-            //    }
-            //    else
-            //    {
-            //        var candicates = Directory.EnumerateFiles(assemblyDirPath, $"{assemblyName.Name}.dll", SearchOption.AllDirectories);
-            //        foreach (var candicate in candicates)
-            //        {
-            //            if (candicate.Contains("\\win\\"))
-            //            {
-            //                return context.LoadFromAssemblyPath(candicate);
-            //            }
-            //        }
-            //    }
-
-            //    return null;
-            //};
 
             Assembly assembly = alc.LoadFromAssemblyPath(detectorAssemblyFileName);
 
@@ -202,7 +180,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
 
             detectorAssembly = assembly;
-            //alc.Unload();
         }
 
         public void InitializeDetector()
