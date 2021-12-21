@@ -94,12 +94,18 @@
     <None Update="SUTControlAdapter\RDPConnectWithDirectCredSSPFullScreen.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+	<None Update="SUTControlAdapter\RDPConnectWithDirectCredSSPInvalidAccount.ps1">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
     <None Update="SUTControlAdapter\RDPConnectWithNegotiationApproach.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SUTControlAdapter\RDPConnectWithNegotiationApproachFullScreen.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+	<None Update="SUTControlAdapter\RDPConnectWithNegotiationApproachInvalidAccount.ps1">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
     <None Update="SUTControlAdapter\Run-TaskWithPSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
